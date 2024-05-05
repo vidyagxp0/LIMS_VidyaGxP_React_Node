@@ -3,9 +3,15 @@
      height: 100vh;
 }
 
+#main-panel .content-block {
+     height: calc(100vh - 82px);
+     overflow: auto;
+}
+
 #main-panel .header-block {
      position: sticky;
      top: 0;
      left: 0;
      height: 82px;
+     z-index: 10;
 }

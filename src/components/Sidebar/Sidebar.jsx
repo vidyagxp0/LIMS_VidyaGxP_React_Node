@@ -17,10 +17,10 @@ function Sidebar() {
                          </CSidebarBrand>
                     </CSidebarHeader>
                     <CSidebarNav>
-                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Dashboard</CNavItem>
-                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Approval</CNavItem>
+                         <Link to="/dashboard"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Dashboard</CNavItem></Link>
+                         <Link to="/approval"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Approval</CNavItem></Link>
                          <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Storage Condition</CNavItem>
-                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Storage Location</CNavItem>
+                         <Link to="/storage-location"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Storage Location</CNavItem></Link>
                          <CNavGroup
                               toggler={
                                    <>
