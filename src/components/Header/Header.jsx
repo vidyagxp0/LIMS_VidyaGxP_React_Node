@@ -29,7 +29,7 @@ function Header() {
                                         <strong className="text-dark">E-Mail:&nbsp;</strong>admin@vidyagxp.com
                                    </div>
                                    <div className="small text-muted">
-                                        <strong className="text-dark">Mobile:&nbsp;</strong>+91 7354654474
+                                        <strong className="text-dark">Mobile:&nbsp;</strong>+91-7354654474
                                    </div>
                               </div>
                               <div className="col-md-2">
