@@ -21,15 +21,15 @@ function Header() {
                     <div className="container-fluid w-100">
                          <div className="row align-items-center">
                               <div className="col-md-4">
-                                   <h3 className="mb-0 fw-bold">Vidya Gxp - LIMS</h3>
+                                   <h3 className="mb-0 fw-bold">VidyaGxP-LIMS</h3>
                               </div>
                               <div className="col-md-4 px-0">
                                    <div className="small fw-bold">Laboratory Information Management System</div>
                                    <div className="small text-muted">
-                                        <strong className="text-dark">E-Mail:&nbsp;</strong>example@gmail.com
+                                        <strong className="text-dark">E-Mail:&nbsp;</strong>admin@vidyagxp.com
                                    </div>
                                    <div className="small text-muted">
-                                        <strong className="text-dark">Mobile:&nbsp;</strong>+91 0000000000
+                                        <strong className="text-dark">Mobile:&nbsp;</strong>+91 7354654474
                                    </div>
                               </div>
                               <div className="col-md-2">
