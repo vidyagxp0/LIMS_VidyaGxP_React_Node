@@ -1,0 +1,29 @@
+#div1{
+    /* border: 1px solid ; */
+    margin-top: 30px;
+    margin-left: 40px;
+}
+
+#div2{
+    /* border: 1px solid; */
+    display: flex;
+    align-items: center;
+    height: 100px;
+    justify-content: space-evenly;
+}
+#addstorage{
+    border: 1px solid ;
+    background-color: #0f93c3;
+    padding: 7px;
+    border-radius: 8px;
+}
+#addstorage button {
+    background-color: #0f93c3;
+    border: none;
+    font-weight: bold;
+    color: white;
+
+}
+
+
+
