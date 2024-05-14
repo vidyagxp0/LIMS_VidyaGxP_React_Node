@@ -7,6 +7,7 @@ import MainPanel from "./components/MainPanel/MainPanel"
 import Approval from "./Pages/Approval/Approval"
 import Details from "./Pages/Approval/Details"
 import StorageLocation from "./Pages/StorageLocation/StorageLocation"
+import Department from "./Pages/UserMangement/Department"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/approval" element={<Approval />} />
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />
+            <Route path="/department" element={ <Department/> }/>
           </Route>
         </Routes>
       </BrowserRouter>
