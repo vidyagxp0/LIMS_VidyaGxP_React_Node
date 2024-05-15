@@ -19,7 +19,7 @@ function Sidebar() {
                     <CSidebarNav>
                          <Link to="/dashboard"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Dashboard</CNavItem></Link>
                          <Link to="/approval"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Approval</CNavItem></Link>
-                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Storage Condition</CNavItem>
+                         <Link to="/stCondition"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Storage Condition</CNavItem></Link>
                          <Link to="/storage-location"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Storage Location</CNavItem></Link>
                          <CNavGroup
                               toggler={
@@ -29,7 +29,7 @@ function Sidebar() {
                               }
                          >
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem>
+                              <Link to="/UsersOfuserManagement"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem></Link>
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem>
                          </CNavGroup>
                          <CNavGroup

@@ -27,6 +27,8 @@ function App() {
             <Route path="/approval" element={<Approval />} />
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />
+            <Route path="/stCondition" element={<StorageCondition />} />
+            <Route path="/UsersOfuserManagement" element={<Users />} />
           </Route>
         </Routes>
       </BrowserRouter>
