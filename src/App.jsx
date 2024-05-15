@@ -7,23 +7,18 @@ import MainPanel from "./components/MainPanel/MainPanel"
 import Approval from "./Pages/Approval/Approval"
 import Details from "./Pages/Approval/Details"
 import StorageLocation from "./Pages/StorageLocation/StorageLocation"
-import { useState } from "react"
+import StorageCondition from "./Pages/StorageCondition/StorageCondition"
+import Users from "./Pages/users"
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
-
-  const setToast = (status) => {
-    setIsLogin(status)
-  }
-  
   return (
     <>
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login show={setToast}/>} />
+          <Route path="/" element={<Login />} />
           <Route path="" element={<MainPanel />}>
-            <Route path="/dashboard" element={<Dashboard show={isLogin} setShow={setToast}/>} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/approval" element={<Approval />} />
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />

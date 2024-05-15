@@ -1,0 +1,40 @@
+.card-container {
+  margin-top: 10px;
+  height: 150px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  margin: 10px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(248, 244, 244);
+  border-left: 10px solid;
+  border-right: 0;
+  border-top: 0; 
+  border-bottom: 0;
+  
+}
+.card-title {
+  font-size: 24px;
+}
+
+.justify-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.card-container {
+  justify-content: left;
+
+}
+
+
+#selectOption {
+  border: none;
+}

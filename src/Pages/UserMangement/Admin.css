@@ -1,0 +1,28 @@
+.status{
+    background-color: aqua;
+}
+
+.btn-left{
+    float: left;
+}
+.btn-right {
+    float: right;
+    color: #fff;
+    background-color: #0f93c3;
+
+}
+.btn-next{
+    border: solid 1px black;
+    text-align: center;
+    justify-content: space-between;
+
+}
+.btn-right:hover {
+    color: #fff;
+    background-color: #0f93c3;
+}
+
+.pagination {
+    justify-content: space-between;
+    
+}
