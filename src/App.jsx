@@ -8,6 +8,7 @@ import Approval from "./Pages/Approval/Approval"
 import Details from "./Pages/Approval/Details"
 import StorageLocation from "./Pages/StorageLocation/StorageLocation"
 import StorageCondition from "./Pages/StorageCondition/StorageCondition"
+import Users from "./Pages/users"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />
             <Route path="/stCondition" element={<StorageCondition />} />
+            <Route path="/UsersOfuserManagement" element={<Users />} />
           </Route>
         </Routes>
       </BrowserRouter>
