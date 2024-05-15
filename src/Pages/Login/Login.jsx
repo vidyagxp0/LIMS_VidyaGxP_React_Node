@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { CButton, CForm, CFormInput } from "@coreui/react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import './Login.css'
 
-function Login() {
+function Login(props) {
 	const [email, setEmail] = useState('');
 	const [passwd, setPasswd] = useState('');
 	const navigate = useNavigate();
@@ -11,12 +13,16 @@ function Login() {
 	const handleInputData = (data, setter) => {
 		setter(data.target.value);
 	}
-
+	  
 	const handleLogin = () => {
 		if (email === "Amit" && passwd === "Amit@121") {
 			navigate('/dashboard');
-		} else {
-			alert("Please enter valid credential!");
+			props.show(true);
+		} else if (email === "" || passwd === "") {
+			toast.warning("Enter required credentials");
+		}
+		else {
+			toast.error("Invalid Credentials");
 		}
 	}
 
@@ -65,6 +71,10 @@ function Login() {
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<div>
+				<ToastContainer />
 			</div>
 		</>
 	)

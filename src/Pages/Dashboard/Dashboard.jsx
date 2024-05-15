@@ -2,13 +2,28 @@ import { cilArrowTop, cilOptions } from "@coreui/icons"
 import CIcon from "@coreui/icons-react"
 import { CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CWidgetStatsA, CWidgetStatsE } from "@coreui/react"
 import { CChartBar, CChartLine } from "@coreui/react-chartjs"
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
-function Dashboard() {
+function Dashboard(props) {
+    useEffect(() => {
+        if (props.show) {
+            toast.success("Login successfully");
+            props.setShow(false)
+        }
+    }, [props.show]);
+
     return (
         <>
-            <div id="dashboard" className="py-3">
-                <div className="container-fluid">
-                    <div className="chart-widgets">
+            <div id="dashboard" className="mx-5">
+                <div className="sub-head my-5">
+                    <div className="title fw-bold fs-5">Dashboard</div>
+                </div>
+                <div className="d-flex gap-4">
+                    <div className="chart-widgets w-75">
                         <CRow>
                             <CCol sm={4}>
                                 <CWidgetStatsA
@@ -268,9 +283,10 @@ function Dashboard() {
                                     }
                                 />
                             </CCol>
-                            <CCol sm={4}>
+                            <CCol sm={6}>
                                 <CWidgetStatsE
-                                    className="mb-3"
+                                    className="mb-3 text-light"
+                                    color="danger"
                                     chart={
                                         <CChartBar
                                             className="mx-auto"
@@ -308,9 +324,10 @@ function Dashboard() {
                                     value="89.9%"
                                 />
                             </CCol>
-                            <CCol sm={4}>
+                            <CCol sm={6}>
                                 <CWidgetStatsE
-                                    className="mb-3"
+                                    className="mb-3 text-light"
+                                    color="primary"
                                     chart={
                                         <CChartLine
                                             className="mx-auto"
@@ -356,7 +373,7 @@ function Dashboard() {
                                     value="89.9%"
                                 />
                             </CCol>
-                            <CCol sm={4}>
+                            {/* <CCol sm={4}>
                                 <CWidgetStatsE
                                     className="mb-3"
                                     chart={
@@ -395,13 +412,95 @@ function Dashboard() {
                                     title="Widget title"
                                     value="89.9%"
                                 />
-                            </CCol>
+                            </CCol> */}
                         </CRow>
+
+                        <div className="d-flex gap-4 my-2">
+                            <div className="w-75 shadow rounded px-3">
+                                <div className="d-flex justify-content-between py-4">
+                                    <div className="py-2">Material</div>
+                                    <div className="mt-0 pt-0 fw-bolder fs-4">...</div>
+                                </div>
+
+                                <div className="d-flex gap-3">
+                                    <div className="d-flex">
+                                        <div className="rounded-circle bg-warning mt-1 mx-2" style={{width: '12px', height: '12px'}}>
+                                        </div>
+                                        <span>Pending</span>
+                                    </div>
+                                    <div className="d-flex">
+                                        <div className="rounded-circle bg-primary mt-1 mx-2" style={{width: '12px', height: '12px'}}>
+                                        </div>
+                                        <span>In-progess</span>
+                                    </div>
+                                    <div className="d-flex">
+                                        <div className="rounded-circle bg-success mt-1 mx-2" style={{width: '12px', height: '12px'}}>
+                                        </div>
+                                        <span>Approved</span>
+                                    </div>
+                                    <div className="d-flex">
+                                        <div className="rounded-circle bg-danger mt-1 mx-2" style={{width: '12px', height: '12px'}}>
+                                        </div>
+                                        <span>Dropped</span>
+                                    </div>
+                                </div>
+                                <div className="circullar-chart pt-5 w-25 h-25">
+                                    <CircularProgressbar className="" background backgroundPadding={6} value={70} text={"70%"} strokeWidth={5} styles={buildStyles({
+                                        backgroundColor: "#3e98c7",
+                                        textColor: "#fff",
+                                        pathColor: "yellow",
+                                        trailColor: "transparent"
+                                    })} />
+                                </div>
+
+                            </div>
+                            <div className="d-flex justify-content-between w-25 shadow rounded p-4">
+                                <div className="py-2">Analysis</div>
+                                <div className="mt-0 pt-0 fw-bolder fs-4">...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="d-flex flex-column gap-4 w-25">
+                        <div className="rounded shadow">
+                            <div className="h5 m-4">Latest Products</div>
+                            <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
+                                <li>Para</li>
+                                <li>Sacubitril</li>
+                                <li>Testamine</li>
+                                <li>Sulphuric Acid</li>
+                                <li>NACL</li>
+                                <li>CNCD</li>
+                                <li>CACO N</li>
+                                <li>Potting compound</li>
+                                <li>Vitamin A & D</li>
+                                <li>samp2</li>
+                            </ul>
+                        </div>
+                        <div className="rounded shadow">
+                            <div className="h5 m-4">AR Number</div>
+                            <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
+                                <li>ARIP0000095</li>
+                                <li>ARFFT0000094</li>
+                                <li>ARRW0000093</li>
+                                <li>ARRW0000092</li>
+                                <li>ARFFT0000091</li>
+                                <li>ARRW0000090</li>
+                                <li>ARFP0000089</li>
+                                <li>ARFFT0000088</li>
+                                <li>ARFFT0000087</li>
+                                <li>ARFFT0000086</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div>
+                <ToastContainer />
+            </div>
+
         </>
-    )
+    );
 }
 
 export default Dashboard

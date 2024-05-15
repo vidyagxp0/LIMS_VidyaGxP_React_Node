@@ -21,7 +21,10 @@ function Header() {
           top: "100%",
           right: 25,
           zIndex: 10,
-          width: "300px"
+          width: "300px",
+          height: "300px",
+          overflowX: "hidden",
+          overflowY: "auto"
      }
      return (
           <>
@@ -50,11 +53,11 @@ function Header() {
                                    <div className="d-flex justify-content-end">
                                         <div className="d-flex position-relative">
                                              <Link className="position-relative me-4" onClick={() => setNotification(!notification)}>
-                                                  <FontAwesomeIcon icon={faBell} className="fs-4" />
+                                                  <FontAwesomeIcon icon={faBell} className="fs-5" />
                                                   <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-bg-danger text-light" style={{ padding: '3px 4px' }}>12<span className="visually-hidden">unread messages</span></span>
                                              </Link>
                                              {notification &&
-                                                  <div className="border shadow bg-white list-group" style={notifyStyle}>
+                                                  <div className="border shadow bg-white list-group overflow-auto" style={notifyStyle}>
                                                        <a href="#" className="list-group-item list-group-item-action active" aria-current="true">
                                                             New Notifications
                                                        </a>
@@ -64,13 +67,37 @@ function Header() {
                                                        </a>
 
                                                        <a href="#" className="list-group-item list-group-item-action">
-                                                            Error occured during submition. <br />
+                                                            Error occured during submission. <br />
                                                             <small className="text-muted">02:56 pm</small>
+                                                       </a>
+                                                       <a href="#" className="list-group-item list-group-item-action">
+                                                            Stock exchanged successfully. <br />
+                                                            <small className="text-muted">09:47 am</small>
                                                        </a>
                                                        <a href="#" className="list-group-item list-group-item-action active">Unread Notifications</a>
                                                        <a href="#" className="list-group-item list-group-item-action">
                                                             Inventory registered successfully. <br />
+                                                            <small className="text-muted">12:47 am</small>
+                                                       </a>
+                                                       <a href="#" className="list-group-item list-group-item-action">
+                                                            Stock exchanged successfully. <br />
+                                                            <small className="text-muted">04:44 am</small>
+                                                       </a>
+                                                       <a href="#" className="list-group-item list-group-item-action">
+                                                            Stock exchanged successfully. <br />
+                                                            <small className="text-muted">01:23 am</small>
+                                                       </a>
+                                                       <a href="#" className="list-group-item list-group-item-action">
+                                                            Stock exchanged successfully. <br />
                                                             <small className="text-muted">09:47 am</small>
+                                                       </a>
+                                                       <a href="#" className="list-group-item list-group-item-action">
+                                                            Stock exchanged successfully. <br />
+                                                            <small className="text-muted">09:17 am</small>
+                                                       </a>
+                                                       <a href="#" className="list-group-item list-group-item-action">
+                                                            Stock exchanged successfully. <br />
+                                                            <small className="text-muted">09:00 am</small>
                                                        </a>
                                                   </div>
                                              }
