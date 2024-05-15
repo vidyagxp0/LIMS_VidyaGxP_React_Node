@@ -3,55 +3,82 @@ import './Department.css'
 
 const Department = () => {
     return (
-        <div>
-            <h1>Department</h1>
 
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Show
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">All</a>
-                    <a class="dropdown-item" href="#">Active</a>
-                    <a class="dropdown-item" href="#">Inactive</a>
+
+        <div className='container p-4'>
+            <div className="container-fluid">
+                <div className="main-head pt-4 pb-4">
+                    <h4 className="fw-bold mb-4 mt-3">Department</h4>
                 </div>
-            </div>
 
+                <div className="dropdown">
+                    <div>
+                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Show
+                            <select id='selectOption'>
+                                <option>All</option>
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
 
-            <div class="container">
-                <div class="card-container">
-                    <div class="card border border-left border-secondary 5px">
-                        <div class="card-body">
-                            <h5 class="card-title">Admin</h5>
-                            <p class="card-text">  12 Employee
-                                <a href="#" class="btn btn-primary"><img src='/images/plus-icon.svg' /></a></p>
-                        </div>
-                    </div>
-                    <div class="card border border-left border-danger 5px">
-                        <div class="card-body">
-                            <h5 class="card-title">Quality Assurance</h5>
-                            <p class="card-text">3 Employee
-                                <a href="#" class="btn btn-primary"><img src='/images/plus-icon.svg' /></a></p>
-                        </div>
-                    </div>
-                    <div class="card border-left border-warning ">
-                        <div class="card-body">
-                            <h5 class="card-title">Quality Check</h5>
-                            <p class="card-text">2 Employee
-                                <a href="#" class="btn btn-primary"><img src='/images/plus-icon.svg' /></a></p>
-                        </div>
-                    </div>
-                    <div class="card border-left border-secondary 5px">
-                        <div class="card-body">
-                            <h5 class="card-title">Store</h5>
-                            <p class="card-text">2 Employee
-                                <a href="#" class="btn btn-primary"><img src='/images/plus-icon.svg' /></a></p>
-                        </div>
+                        </button>
+
                     </div>
                 </div>
+
+
+                <div className="">
+                    <div className="card-container pt-4">
+                        <div className="card border-secondary">
+                            <div className="card-body">
+                                <h5 className="card-title">Admin</h5>
+                                <div className="justify-container">
+                                    <p className="card-text">  12 Employee</p>
+                                    <a href="admin" className="btn btn-secondary">
+                                        <img src='/images/plus-icon.svg' />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card border-danger">
+                            <div className="card-body">
+                                <h5 className="card-title">Quality Assurance</h5>
+                                <div className="justify-container">
+                                    <p className="card-text">3 Employee</p>
+                                    <a href="#" className="btn btn-danger">
+                                        <img src='/images/plus-icon.svg' />
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card   border-warning ">
+                            <div className="card-body">
+                                <h5 className="card-title">Quality Check</h5>
+                                <div className="justify-container">
+                                    <p className="card-text">2 Employee</p>
+                                    <a href="#" className="btn btn-warning">
+                                        <img src='/images/plus-icon.svg' />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card border-secondary ">
+                            <div className="card-body">
+                                <h5 className="card-title">Store</h5>
+                                <div className="justify-container">
+                                    <p className="card-text">2 Employee</p>
+                                    <a href="#" className="btn btn-secondary">
+                                        <img src='/images/plus-icon.svg' />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
-
-
         </div>
 
     )

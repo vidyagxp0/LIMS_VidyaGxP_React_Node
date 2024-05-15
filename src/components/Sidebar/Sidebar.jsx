@@ -25,12 +25,13 @@ function Sidebar() {
                               toggler={
                                    <>
                                         <CIcon customClassName="nav-icon" icon={cilPuzzle} /> User Management
+                                        
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem>
+                              <CNavItem href="/department"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem>
+                              <CNavItem href="users"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem>
+                              <CNavItem href="roles"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem>
                          </CNavGroup>
                          <CNavGroup
                               toggler={

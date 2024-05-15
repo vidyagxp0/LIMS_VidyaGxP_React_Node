@@ -8,6 +8,7 @@ import Approval from "./Pages/Approval/Approval"
 import Details from "./Pages/Approval/Details"
 import StorageLocation from "./Pages/StorageLocation/StorageLocation"
 import Department from "./Pages/UserMangement/Department"
+import Admin from "./Pages/UserMangement/Admin"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />
             <Route path="/department" element={ <Department/> }/>
+            <Route path='/admin' element={<Admin />} />
           </Route>
         </Routes>
       </BrowserRouter>
