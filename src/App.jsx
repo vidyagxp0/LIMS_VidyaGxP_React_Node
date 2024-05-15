@@ -9,16 +9,22 @@ import Details from "./Pages/Approval/Details"
 import StorageLocation from "./Pages/StorageLocation/StorageLocation"
 import StorageCondition from "./Pages/StorageCondition/StorageCondition"
 import Users from "./Pages/users"
+import { useState } from "react"
 
 function App() {
+  const [isLoggedIn, setIsLoggedin] = useState(false)
+  const checkLoggedIn = (data) => {
+    setIsLoggedin(data);
+  }
+
   return (
     <>
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Login show={checkLoggedIn}/>} />
           <Route path="" element={<MainPanel />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard setToast={checkLoggedIn} show={isLoggedIn}/>} />
             <Route path="/approval" element={<Approval />} />
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />

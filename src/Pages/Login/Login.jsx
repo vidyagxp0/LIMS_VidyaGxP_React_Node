@@ -13,7 +13,7 @@ function Login(props) {
 	const handleInputData = (data, setter) => {
 		setter(data.target.value);
 	}
-	  
+	
 	const handleLogin = () => {
 		if (email === "Amit" && passwd === "Amit@121") {
 			navigate('/dashboard');
