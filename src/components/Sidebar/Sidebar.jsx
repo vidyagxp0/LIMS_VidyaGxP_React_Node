@@ -40,9 +40,9 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation L1</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation L2</CNavItem>
+                              <Link to="/samplelogin"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login</CNavItem></Link>
+                              <Link to="/investigationl1"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation L1</CNavItem></Link>
+                              <Link to="/investigationl2"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation L2</CNavItem></Link>
                          </CNavGroup>
                          <CNavGroup
                               toggler={
