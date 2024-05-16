@@ -10,9 +10,8 @@ function Sidebar() {
                <CSidebar className="border-end app-sidebar h-100" colorScheme="dark">
                     <CSidebarHeader className="border-bottom">
                          <CSidebarBrand>
-                              <Link to="/dashboard" className="logo d-flex align-items-center" style={{ gap: "10px" }}>
-                                   <img src="/images/logo.png" alt="..." style={{ width: "50px" }} />
-                                   <div className="h5 mb-0 text-white">LIMS</div>
+                              <Link to="/dashboard" className="logo d-flex align-items-center" style={{ }}>
+                                   <img src="/images/vidhyaGxp.png" alt="..." style={{ width: "290px" ,marginRight:"90px", paddingRight:"70px",filter:"drop-shadow(0 0 0 white)"}} /> 
                               </Link>
                          </CSidebarBrand>
                     </CSidebarHeader>
