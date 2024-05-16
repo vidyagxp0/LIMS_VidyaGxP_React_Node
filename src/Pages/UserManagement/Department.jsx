@@ -34,7 +34,7 @@ const Department = () => {
                                 <h5 className="card-title">Admin</h5>
                                 <div className="justify-container">
                                     <p className="card-text">  12 Employee</p>
-                                    <a href="admin" className="btn btn-secondary">
+                                    <a href="/admin" className="btn btn-secondary">
                                         <img src='/images/plus-icon.svg' />
                                     </a>
                                 </div>
@@ -45,7 +45,7 @@ const Department = () => {
                                 <h5 className="card-title">Quality Assurance</h5>
                                 <div className="justify-container">
                                     <p className="card-text">3 Employee</p>
-                                    <a href="#" className="btn btn-danger">
+                                    <a href="/qualityAssurance" className="btn btn-danger">
                                         <img src='/images/plus-icon.svg' />
                                     </a>
 
@@ -57,7 +57,7 @@ const Department = () => {
                                 <h5 className="card-title">Quality Check</h5>
                                 <div className="justify-container">
                                     <p className="card-text">2 Employee</p>
-                                    <a href="#" className="btn btn-warning">
+                                    <a href="/qualityCheck" className="btn btn-warning">
                                         <img src='/images/plus-icon.svg' />
                                     </a>
                                 </div>
@@ -68,7 +68,7 @@ const Department = () => {
                                 <h5 className="card-title">Store</h5>
                                 <div className="justify-container">
                                     <p className="card-text">2 Employee</p>
-                                    <a href="#" className="btn btn-secondary">
+                                    <a href="/store" className="btn btn-secondary">
                                         <img src='/images/plus-icon.svg' />
                                     </a>
                                 </div>
