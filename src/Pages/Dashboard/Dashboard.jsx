@@ -1,7 +1,4 @@
-import { cilOptions } from "@coreui/icons"
-import CIcon from "@coreui/icons-react"
-import { CCol, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CRow, CWidgetStatsA } from "@coreui/react"
-import { CChartBar, CChartLine } from "@coreui/react-chartjs"
+import { CChart, CChartBar, CChartLine } from "@coreui/react-chartjs"
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +14,7 @@ function Dashboard(props) {
     }
   }, [props.show]);
 
-  const options = {
+  const analysisOptions = {
     tooltip: {
       trigger: 'axis'
     },
@@ -127,6 +124,238 @@ function Dashboard(props) {
     }
   };
 
+  const materialOption = {
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['Material']
+    },
+    grid: {
+      show: false,
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: true,
+      axisLine: {
+        show: true
+      },
+      axisTick: {
+        show: true
+      },
+      axisLabel: {
+        show: true
+      },
+      data: ['16 Jun 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '12 Feb 2023', '22 Mar 2023']
+    },
+    yAxis: {
+      type: 'value',
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      axisLabel: {
+        show: false
+      },
+      splitLine: {
+        show: false
+      }
+    },
+    series: [
+      {
+        name: 'Material',
+        type: 'bar',
+        stack: 'Total',
+        color: '#0089c8',
+        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+      }
+    ],
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    }
+  };
+
+  const instrumentOption = {
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['Category']
+    },
+    grid: {
+      show: false,
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: true,
+      axisLine: {
+        show: true
+      },
+      axisTick: {
+        show: true
+      },
+      axisLabel: {
+        show: true
+      },
+      data: ["chromatography", 'weighing balance']
+    },
+    yAxis: {
+      type: 'value',
+      axisLine: {
+        show: true
+      },
+      axisTick: {
+        show: true
+      },
+      axisLabel: {
+        show: true
+      },
+      splitLine: {
+        show: true
+      }
+    },
+    series: [
+      {
+        name: 'Category',
+        type: 'bar',
+        stack: 'Total',
+        color: '#0089c8',
+        data: [2, 7]
+      }
+    ],
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    }
+  };
+
+  const testStatsOption = {
+    title: {
+      text: 'Test Stats'
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    legend: {},
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: [0, 0.01]
+    },
+    yAxis: {
+      type: 'value',
+      data: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World']
+    },
+    series: [
+      {
+        name: '2011',
+        type: 'bar',
+        data: [18203, 23489, 29034, 104970, 131744, 630230]
+      },
+      {
+        name: '2012',
+        type: 'bar',
+        data: [19325, 23438, 31000, 121594, 134141, 681807]
+      }
+    ],
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    }
+  };
+
+  const option = {
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      data: ['Material', '2', '3', '4']
+    },
+    grid: {
+      show: false,
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: true,
+      axisLine: {
+        show: true
+      },
+      axisTick: {
+        show: true
+      },
+      axisLabel: {
+        show: true
+      },
+      data: ['16 Jun 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '12 Feb 2023', '22 Mar 2023']
+    },
+    yAxis: {
+      type: 'value',
+      axisLine: {
+        show: true
+      },
+      axisTick: {
+        show: true
+      },
+      axisLabel: {
+        show: true
+      },
+      splitLine: {
+        show: true
+      }
+    },
+    series: [
+      {
+        name: 'Material',
+        type: 'bar',
+        stack: 'Total',
+        color: '#0089c8',
+        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+      },
+      {
+        name: '2',
+        type: 'bar',
+        stack: 'Total',
+        color: '#0089c8',
+        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+      },
+      {
+        name: '3',
+        type: 'bar',
+        stack: 'Total',
+        color: '#0089c8',
+        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 4, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+      },
+      {
+        name: '4',
+        type: 'bar',
+        stack: 'Total',
+        color: '#0089c8',
+        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+      }
+    ],
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    }
+  };
 
   return (
     <>
@@ -136,397 +365,32 @@ function Dashboard(props) {
         </div>
         <div className="d-flex gap-4">
           <div className="chart-widgets w-75">
-            <CRow>
-              <CCol sm={4}>
-                <CWidgetStatsA
-                  className="mb-4"
-                  color="primary"
-                  value={
-                    <>
-                      On Going Test
-                    </>
-                  }
-                  title={<span className="fs-2 fw-bolder">277</span>}
-                  action={
-                    <CDropdown alignment="end">
-                      <CDropdownToggle color="transparent" caret={false} className="p-0">
-                        <CIcon icon={cilOptions} className="text-white" />
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem>Action</CDropdownItem>
-                        <CDropdownItem>Another action</CDropdownItem>
-                        <CDropdownItem>Something else here...</CDropdownItem>
-                        <CDropdownItem disabled>Disabled action</CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  }
-                  chart={
-                    <CChartLine
-                      className="mt-3 mx-3"
-                      style={{ height: '70px' }}
-                      data={{
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                        datasets: [
-                          {
-                            label: 'My First dataset',
-                            backgroundColor: 'transparent',
-                            borderColor: 'rgba(255,255,255,.55)',
-                            pointBackgroundColor: '#5856d6',
-                            data: [65, 59, 84, 84, 51, 55, 40],
-                          },
-                        ],
-                      }}
-                      options={{
-                        plugins: {
-                          legend: {
-                            display: false,
-                          },
-                        },
-                        maintainAspectRatio: false,
-                        scales: {
-                          x: {
-                            border: {
-                              display: false,
-                            },
-                            grid: {
-                              display: false,
-                              drawBorder: false,
-                            },
-                            ticks: {
-                              display: false,
-                            },
-                          },
-                          y: {
-                            min: 30,
-                            max: 89,
-                            display: false,
-                            grid: {
-                              display: false,
-                            },
-                            ticks: {
-                              display: false,
-                            },
-                          },
-                        },
-                        elements: {
-                          line: {
-                            borderWidth: 1,
-                            tension: 0.4,
-                          },
-                          point: {
-                            radius: 4,
-                            hitRadius: 10,
-                            hoverRadius: 4,
-                          },
-                        },
-                      }}
-                    />
-                  }
-                />
-              </CCol>
-              <CCol sm={4}>
-                <CWidgetStatsA
-                  className="mb-4"
-                  color="warning"
-                  value={
-                    <>
-                      Completed Test
-                    </>
-                  }
-                  title={<span className="fs-2 fw-bolder">48</span>}
-                  action={
-                    <CDropdown alignment="end">
-                      <CDropdownToggle color="transparent" caret={false} className="p-0">
-                        <CIcon icon={cilOptions} className="text-white" />
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem>Action</CDropdownItem>
-                        <CDropdownItem>Another action</CDropdownItem>
-                        <CDropdownItem>Something else here...</CDropdownItem>
-                        <CDropdownItem disabled>Disabled action</CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  }
-                  chart={
-                    <CChartLine
-                      className="mt-3"
-                      style={{ height: '70px' }}
-                      data={{
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                        datasets: [
-                          {
-                            label: 'My First dataset',
-                            backgroundColor: 'rgba(255,255,255,.2)',
-                            borderColor: 'rgba(255,255,255,.55)',
-                            data: [78, 81, 80, 45, 34, 12, 40],
-                            fill: true,
-                          },
-                        ],
-                      }}
-                      options={{
-                        plugins: {
-                          legend: {
-                            display: false,
-                          },
-                        },
-                        maintainAspectRatio: false,
-                        scales: {
-                          x: {
-                            display: false,
-                          },
-                          y: {
-                            display: false,
-                          },
-                        },
-                        elements: {
-                          line: {
-                            borderWidth: 2,
-                            tension: 0.4,
-                          },
-                          point: {
-                            radius: 0,
-                            hitRadius: 10,
-                            hoverRadius: 4,
-                          },
-                        },
-                      }}
-                    />
-                  }
-                />
-              </CCol>
-              <CCol sm={4}>
-                <CWidgetStatsA
-                  className="mb-4"
-                  color="danger"
-                  value={
-                    <>
-                      Pending Test
-                    </>
-                  }
-                  title={<span className="fs-2 fw-bolder">221</span>}
-                  action={
-                    <CDropdown alignment="end">
-                      <CDropdownToggle color="transparent" caret={false} className="p-0">
-                        <CIcon icon={cilOptions} className="text-white" />
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem>Action</CDropdownItem>
-                        <CDropdownItem>Another action</CDropdownItem>
-                        <CDropdownItem>Something else here...</CDropdownItem>
-                        <CDropdownItem disabled>Disabled action</CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  }
-                  chart={
-                    <CChartBar
-                      className="mt-3 mx-3"
-                      style={{ height: '70px' }}
-                      data={{
-                        labels: [
-                          'January',
-                          'February',
-                          'March',
-                          'April',
-                          'May',
-                          'June',
-                          'July',
-                          'August',
-                          'September',
-                          'October',
-                          'November',
-                          'December',
-                          'January',
-                          'February',
-                          'March',
-                          'April',
-                        ],
-                        datasets: [
-                          {
-                            label: 'My First dataset',
-                            backgroundColor: 'rgba(255,255,255,.2)',
-                            borderColor: 'rgba(255,255,255,.55)',
-                            data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-                            barPercentage: 0.6,
-                          },
-                        ],
-                      }}
-                      options={{
-                        maintainAspectRatio: false,
-                        plugins: {
-                          legend: {
-                            display: false,
-                          },
-                        },
-                        scales: {
-                          x: {
-                            grid: {
-                              display: false,
-                              drawTicks: false,
-                            },
-                            ticks: {
-                              display: false,
-                            },
-                          },
-                          y: {
-                            border: {
-                              display: false,
-                            },
-                            grid: {
-                              display: false,
-                              drawBorder: false,
-                              drawTicks: false,
-                            },
-                            ticks: {
-                              display: false,
-                            },
-                          },
-                        },
-                      }}
-                    />
-                  }
-                />
-              </CCol>
-              <CCol sm={6}>
-                <CWidgetStatsA
-                  className="mb-4"
-                  color="success"
-                  value={
-                    <>
-                      Instruments
-                    </>
-                  }
-                  title={<span className="fs-2 fw-bolder">9</span>}
-                  action={
-                    <CDropdown alignment="end">
-                      <CDropdownToggle color="transparent" caret={false} className="p-0">
-                        <CIcon icon={cilOptions} className="text-white" />
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem>Action</CDropdownItem>
-                        <CDropdownItem>Another action</CDropdownItem>
-                        <CDropdownItem>Something else here...</CDropdownItem>
-                        <CDropdownItem disabled>Disabled action</CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  }
-                  chart={
-                    <CChartLine
-                      className="mt-3"
-                      style={{ height: '70px' }}
-                      data={{
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                        datasets: [
-                          {
-                            label: 'My First dataset',
-                            backgroundColor: 'rgba(255,255,255,.2)',
-                            borderColor: 'rgba(255,255,255,.55)',
-                            data: [78, 81, 80, 45, 34, 12, 40],
-                            fill: true,
-                          },
-                        ],
-                      }}
-                      options={{
-                        plugins: {
-                          legend: {
-                            display: false,
-                          },
-                        },
-                        maintainAspectRatio: false,
-                        scales: {
-                          x: {
-                            display: false,
-                          },
-                          y: {
-                            display: false,
-                          },
-                        },
-                        elements: {
-                          line: {
-                            borderWidth: 2,
-                            tension: 0.4,
-                          },
-                          point: {
-                            radius: 0,
-                            hitRadius: 10,
-                            hoverRadius: 4,
-                          },
-                        },
-                      }}
-                    />
-                  }
-                />
-              </CCol>
-              <CCol sm={6}>
-                <CWidgetStatsA
-                  className="mb-4"
-                  color="info"
-                  value={
-                    <>
-                      Instrument Under Calibration
-                    </>
-                  }
-                  title={<span className="fs-2 fw-bolder">5</span>}
-                  action={
-                    <CDropdown alignment="end">
-                      <CDropdownToggle color="transparent" caret={false} className="p-0">
-                        <CIcon icon={cilOptions} className="text-white" />
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem>Action</CDropdownItem>
-                        <CDropdownItem>Another action</CDropdownItem>
-                        <CDropdownItem>Something else here...</CDropdownItem>
-                        <CDropdownItem disabled>Disabled action</CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  }
-                  chart={
-                    <CChartLine
-                      className="mt-3"
-                      style={{ height: '70px' }}
-                      data={{
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                        datasets: [
-                          {
-                            label: 'My First dataset',
-                            backgroundColor: 'rgba(255,255,255,.2)',
-                            borderColor: 'rgba(255,255,255,.55)',
-                            data: [78, 81, 80, 45, 34, 12, 40],
-                            fill: true,
-                          },
-                        ],
-                      }}
-                      options={{
-                        plugins: {
-                          legend: {
-                            display: false,
-                          },
-                        },
-                        maintainAspectRatio: false,
-                        scales: {
-                          x: {
-                            display: false,
-                          },
-                          y: {
-                            display: false,
-                          },
-                        },
-                        elements: {
-                          line: {
-                            borderWidth: 2,
-                            tension: 0.4,
-                          },
-                          point: {
-                            radius: 0,
-                            hitRadius: 10,
-                            hoverRadius: 4,
-                          },
-                        },
-                      }}
-                    />
-                  }
-                />
-              </CCol>
-            </CRow>
+            <div className="">
+              <div className="row">
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
+                  <div className="text-light fs-5">On Going Test</div>
+                  <div className="count fs-1 text-light fw-bolder">277</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
+                  <div className="text-light fs-5">Completed Test</div>
+                  <div className="count fs-1 text-light fw-bolder">48</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
+                  <div className="text-light fs-5">Pending Test</div>
+                  <div className="count fs-1 text-light fw-bolder">221</div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
+                  <div className="text-light fs-5">Instruments</div>
+                  <div className="count fs-1 text-light fw-bolder">9</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0dcaf0, #9ec5fe)' }}>
+                  <div className="text-light fs-5">Instrument Under Calibration</div>
+                  <div className="count fs-1 text-light fw-bolder">5</div>
+                </div>
+              </div>
+            </div>
             <div className="d-flex gap-4 my-2">
               <div className="w-75 shadow rounded px-3">
                 <div className="d-flex justify-content-between py-4">
@@ -571,7 +435,7 @@ function Dashboard(props) {
                   <CircularProgressbar className="w-75 h-75 p-3" background backgroundPadding={6} value={93.87} text={"93.87%"} strokeWidth={8} styles={buildStyles({
                     backgroundColor: "rgb(225 244 226)",
                     textColor: "black",
-                    pathColor: "#198754",
+                    pathColor: "rgb(0 184 98)",
                     trailColor: "transparent"
                   })} />
                   <CircularProgressbar className="w-75 h-75 p-3" background backgroundPadding={6} value={1} text={"1%"} strokeWidth={8} styles={buildStyles({
@@ -581,7 +445,6 @@ function Dashboard(props) {
                     trailColor: "transparent"
                   })} />
                 </div>
-
               </div>
               <div className="w-25 shadow rounded p-4">
                 <div className="d-flex justify-content-between">
@@ -589,14 +452,20 @@ function Dashboard(props) {
                   <div className="mt-0 pt-0 fw-bolder fs-4">...</div>
                 </div>
                 <div className="mt-4">
-                  <LineChart option={options} />
+                  <LineChart option={analysisOptions} />
                 </div>
               </div>
             </div>
-            <div className="shadow rounded">
+            <div className="my-4 shadow rounded">
               <div className="py-4 mx-3">Material Status</div>
-              <div className="py-4">
-                {/* Do this... */}
+              <div className="pt-4 mx-4">
+                <LineChart option={materialOption} />
+              </div>
+            </div>
+            <div className="my-4 shadow rounded">
+              <div className="py-4 mx-3">Category wise Instruments</div>
+              <div className="pt-4 mx-5">
+                <LineChart option={instrumentOption} />
               </div>
             </div>
           </div>
@@ -631,6 +500,24 @@ function Dashboard(props) {
                 <li>ARFFT0000086</li>
               </ul>
             </div>
+          </div>
+        </div>
+        <div className="mb-4 shadow rounded">
+          <div className="py-4 mx-3">Test Stats</div>
+          <div className="pt-4 mx-5">
+            <LineChart option={testStatsOption} />
+          </div>
+        </div>
+        <div className="mb-4 shadow rounded">
+          <div className="py-4 mx-3">Material Status</div>
+          <div className="pt-4 mx-4">
+            <LineChart option={materialOption} />
+          </div>
+        </div>
+        <div className="mb-4 shadow rounded">
+          <div className="py-4 mx-3">Test Stats</div>
+          <div className="pt-4 mx-5">
+            <LineChart option={testStatsOption} />
           </div>
         </div>
       </div>
