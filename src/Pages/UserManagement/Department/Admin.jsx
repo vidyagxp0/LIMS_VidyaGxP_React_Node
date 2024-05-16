@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './Admin.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { HiDotsHorizontal, HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
 

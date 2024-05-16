@@ -8,8 +8,10 @@ import Approval from "./Pages/Approval/Approval"
 import Details from "./Pages/Approval/Details"
 import StorageLocation from "./Pages/StorageLocation/StorageLocation"
 import StorageCondition from "./Pages/StorageCondition/StorageCondition"
-import Users from "./Pages/users"
 import { useState } from "react"
+import Department from "./Pages/UserManagement/Department"
+import Admin from "./Pages/UserManagement/Department/Admin"
+import Users from "./Pages/UserManagement/Users"
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false)
@@ -29,7 +31,10 @@ function App() {
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />
             <Route path="/stCondition" element={<StorageCondition />} />
-            <Route path="/UsersOfuserManagement" element={<Users />} />
+            <Route path="/department" element={<Department />} />
+            <Route path="/admin" element={<Admin/>}/>
+            <Route path="/users" element={<Users />} />
+
           </Route>
         </Routes>
       </BrowserRouter>

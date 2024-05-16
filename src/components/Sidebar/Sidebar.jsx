@@ -29,12 +29,10 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem>
-                              <Link to="/UsersOfuserManagement"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem></Link>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem>
+                              
                               <CNavItem href="/department"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem>
-                              <CNavItem href="users"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem>
-                              <CNavItem href="roles"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem>
+                              <CNavItem href="/users"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem>
+                              <CNavItem href="/roles"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem>
                          </CNavGroup>
                          <CNavGroup
                               toggler={
