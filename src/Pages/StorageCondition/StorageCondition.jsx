@@ -2,8 +2,22 @@ import React, { useState } from "react";
 import "./StorageCondition.css";
 import { CiSearch } from "react-icons/ci";
 import { CgAddR } from "react-icons/cg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function StorageCondition() {
+  const [storageName, setStorageName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleAddStorage = () => {
+    if (storageName.trim() === "") {
+      setErrorMessage("Storage condition is Required");
+    } else {
+      toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.")
+    }
+  };
+
+  const notify = () => toast("Wow so easy!");
   return (
     <>
       <div id="div1">
@@ -70,7 +84,19 @@ export default function StorageCondition() {
           <label id="line3" htmlFor="">
             Name
           </label>
-          <input id="line4" required type="text" placeholder="Storage Name" />
+          <input
+            id="line4"
+            required
+            type="text"
+            placeholder="Storage Name"
+            value={storageName}
+            onChange={(e) => setStorageName(e.target.value)}
+          />
+          {errorMessage && (
+            <div id="error" style={{ color: "red" ,fontSize:"10px",marginLeft:"30px"}}>
+              {errorMessage}
+            </div>
+          )}
 
           <div id="line5">
             <button
@@ -80,7 +106,10 @@ export default function StorageCondition() {
             >
               &lt; Back
             </button>
-            <button>Add</button>
+            <button onClick={handleAddStorage}>Add</button>
+          </div>
+          <div>
+            <ToastContainer/>
           </div>
         </div>
       </div>
