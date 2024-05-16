@@ -12,6 +12,13 @@ import { useState } from "react"
 import Department from "./Pages/UserManagement/Department"
 import Admin from "./Pages/UserManagement/Department/Admin"
 import Users from "./Pages/UserManagement/Users"
+import QualityAssurance from "./Pages/UserManagement/Department/QualityAssurance"
+import QualityCheck from "./Pages/UserManagement/Department/QualityCheck"
+import Store from "./Pages/UserManagement/Department/Store"
+import Roles from "./Pages/UserManagement/Roles"
+import Samplelogin from "./Pages/Samplelogin/Samplelogin"
+import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1"
+import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2"
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false)
@@ -33,7 +40,14 @@ function App() {
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/department" element={<Department />} />
             <Route path="/admin" element={<Admin/>}/>
+            <Route path="/qualityAssurance" element={<QualityAssurance/>} />
+            <Route path="/qualityCheck" element={< QualityCheck/>} />
+            <Route path="/store" element={< Store/>} />
             <Route path="/users" element={<Users />} />
+            <Route path="/roles" element={<Roles/>} />
+            <Route path="/samplelogin" element={<Samplelogin/>} />
+            <Route path="/investigationl1" element={<InvestigationL1/>} />
+            <Route path="/investigationl2" element={<InvestigationL2/>} />
 
           </Route>
         </Routes>
