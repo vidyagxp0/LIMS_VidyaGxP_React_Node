@@ -1,11 +1,10 @@
 import React,{useState} from 'react'
-import './Samplelogin.css'
 import { HiDotsHorizontal } from "react-icons/hi";
 import { CgAddR, CgCalendarDates } from 'react-icons/cg';
 import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
 
-export default function Samplelogin() {
+export default function Product() {
   const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
@@ -54,11 +53,10 @@ const nextToLastPage = () => {
   return (
     <>
      <div id="div1">
-        <h5>Sample Login</h5>
+        <h5>Products/Materials</h5>
       </div>
 
-      <div id="div2">
-         <input className="p-1 m-5" type="text"  placeholder='Ar. No.'/>
+      <div id="div2" className='p-5 '>
 
          <div className="dropdown">
                     <div>
@@ -69,7 +67,6 @@ const nextToLastPage = () => {
                                 <option>Initiated</option>
                                 <option>Approved</option>
                                 <option>Rejected</option>
-                                <option>Approved</option>
                                 <option>Reinitiated</option>
                                 <option>Droped</option>
                             </select>
@@ -81,13 +78,13 @@ const nextToLastPage = () => {
 
          <button
           id="sampleloginbtn"
-          className="btn btn-primary mr-0"
+          className="btn btn-primary"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
           >
-          <CgAddR />  <span>Add Sample Login</span>
+          <CgAddR />  <span>Add Product/Material</span>
         </button>
 
     </div>
@@ -100,7 +97,7 @@ const nextToLastPage = () => {
       >
         <div className="offcanvas-header ">
           <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-            Add Sample login
+            Add Product/Material
           </h5>
           <button
             id="closebtn"
@@ -111,40 +108,24 @@ const nextToLastPage = () => {
             ></button>
           </div>
         </div>
-          <p className='m-3'>Add information and add new sample login</p>
             
-        <label id="line3" htmlFor="">Client</label>
-        <input id="line4" required type="text" placeholder="Select..."/>
+        <label id="line3" htmlFor="">Name</label>
+        <input id="line4" required type="text" placeholder="Product Name"/>
 
-        <label id="line3" htmlFor="">Test Plan / Revision No.</label>
-        <input id="line4" required type="text" placeholder="Select..."/>
-
-        <label id="line3" htmlFor="">Product / Material</label>
-        <input id="line4" required type="text" placeholder="Prefix"/>
-
-        <label id="line3" htmlFor="">Product / Material Code</label>
-        <input id="line4" required type="text" placeholder=""/>
+        <label id="line3" htmlFor="">Unique Code</label>
+        <input id="line4" required type="text" placeholder="Product Code"/>
 
         <label id="line3" htmlFor="">Generic Name</label>
-        <input id="line4" required type="text" placeholder=""/> 
+        <input id="line4" required type="text" placeholder="Generic Name"/> 
         
-        <label id="line3" htmlFor="">Specification ID</label>
-        <input id="line4" required type="text" placeholder=""/>
-       
-        <label id="line3" htmlFor="">Copy Sample from</label>
-        <input id="line4" required type="text" placeholder="Select..."/>
-        
-        <label id="line3" htmlFor="">Sample Type</label>
-        <input id="line4" required type="text" placeholder=""/>
-        
-        <label id="line3" htmlFor="">Certificates (If any)</label>
-        <input id="line4" required type="text" placeholder="Select..."/>
+        <label id="line3" htmlFor="">Re-testing Period</label>
+        <input id="line4" required type="text" placeholder="Retesting Period"/>
 
          <div id="line5">
           <button type="button"
             data-bs-dismiss="offcanvas"
             aria-label="Close">&lt; Back</button>
-           <button>Add Sample</button>
+           <button>Add Product</button>
           </div>
            </div>
 
@@ -153,12 +134,12 @@ const nextToLastPage = () => {
                 <table className='table'>
                     <thead>
                         <tr>
-                            <th>S.No.</th>
-                            <th>Sample Type</th>
-                            <th>Product / Material</th>
-                            <th>A.R. No.</th>
+                            <th>Sr.no.</th>
+                            <th>Unique Code</th>
+                            <th>Product Name</th>
                             <th>Generic Name</th>
-                            <th>Specification code</th>
+                            <th>Re-Testing Period</th>
+                            <th>Add Date</th>
                             <th>Status</th>
                             <th>Actions </th>
                         </tr>

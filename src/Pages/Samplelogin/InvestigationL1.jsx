@@ -2,9 +2,12 @@ import React from 'react'
 import { CiSearch } from "react-icons/ci";
 import { CgAddR } from "react-icons/cg";
 import { IoEyeSharp } from "react-icons/io5";
+import { HiDotsHorizontal } from "react-icons/hi";
+
 
 
 export default function InvestigationL1() {
+  
   return (
     <>
     <div id="div1">
@@ -58,7 +61,7 @@ export default function InvestigationL1() {
       <td>WBL/FPS/FG/2893-T-25</td>
       <td>QUANTITATIVE</td>
       <td>13-07-2023</td>
-      <td><IoEyeSharp />...</td>
+      <td><HiDotsHorizontal /></td>
     </tr> 
   </tbody>
 </table>
