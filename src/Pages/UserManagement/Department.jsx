@@ -5,10 +5,11 @@ const Department = () => {
     return (
 
 
-        <div className='container p-4'>
-            <div className="container-fluid">
-                <div className="main-head pt-4 pb-4">
-                    <h4 className="fw-bold mb-4 mt-3">Department</h4>
+        <div className='mx-5'>
+            <div className="">
+                <div className="main-head py-5">
+                    
+                    <div className="title fw-bold fs-5">Department</div>
                 </div>
 
                 <div className="dropdown">
@@ -28,8 +29,8 @@ const Department = () => {
 
 
                 <div className="">
-                    <div className="card-container pt-4">
-                        <div className="card border-secondary">
+                    <div className="card-container py-5">
+                        <div className="card shadow border-secondary">
                             <div className="card-body">
                                 <h5 className="card-title">Admin</h5>
                                 <div className="justify-container">
@@ -40,7 +41,7 @@ const Department = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="card border-danger">
+                        <div className="card shadow border-danger">
                             <div className="card-body">
                                 <h5 className="card-title">Quality Assurance</h5>
                                 <div className="justify-container">
@@ -52,7 +53,7 @@ const Department = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="card   border-warning ">
+                        <div className="card shadow border-warning ">
                             <div className="card-body">
                                 <h5 className="card-title">Quality Check</h5>
                                 <div className="justify-container">
@@ -63,7 +64,7 @@ const Department = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="card border-secondary ">
+                        <div className="card shadow border-secondary ">
                             <div className="card-body">
                                 <h5 className="card-title">Store</h5>
                                 <div className="justify-container">

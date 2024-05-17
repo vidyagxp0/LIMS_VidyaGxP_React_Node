@@ -14,7 +14,7 @@
 .btn-next{
     border: solid 1px black;
     text-align: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 
 }
 .btn-right:hover {

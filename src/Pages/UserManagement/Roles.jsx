@@ -1,8 +1,6 @@
 
 import React, { useState } from 'react';
-import { FaArrowRight } from 'react-icons/fa';
 import '../UserManagement/Department/Admin.css';
-
 
 const Roles = () => {
    
@@ -44,27 +42,22 @@ const Roles = () => {
     };
 
     return (
-        <div className="container mt-4 pb-4">
-            <div className="row mb-4 p-4">
-                <div className="main-head">
-                    <h4 className="fw-bold mb-4 mt-4">Roles</h4>
+        <div className=" mx-5 ">
+        <div className="row my-5 ">
+                <div className="main-head"> 
+                    <div className="title fw-bold fs-5">Roles</div>
                 </div>
-                
-                
-               
+  
             </div>
 
             {/* Employee table */}
-            <div className='table-responsive p-4 container1'>
+            <div className=' shadow table-responsive p-4'>
                 <table className='table'>
                     <thead>
                         <tr>
-                            <th>S.No.</th>
-                            
-                            <th>Role</th>
-                            
-                            <th>Status</th>
-                            
+                            <th>S.No.</th>                            
+                            <th>Role</th>                            
+                            <th>Status</th>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -72,16 +65,8 @@ const Roles = () => {
                     </tbody>
                 </table>
             </div>
-
-            
-
         </div>
     );
 };
-
-
-
-
-
 
 export default Roles
