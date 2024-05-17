@@ -1,14 +1,18 @@
 
 import React, { useState } from 'react';
 import './Admin.css';
-import { HiDotsHorizontal, HiOutlineDotsHorizontal } from "react-icons/hi";
+import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
 import { CgAddR } from 'react-icons/cg';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
 
 const Admin = () => {
     const pageSize = 9; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
+    
     
 
     // data for the table
@@ -46,22 +50,10 @@ const Admin = () => {
                 <td>{employee.addedOn}</td>
                 <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-
-
-
-
-                    <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                            <span><HiDotsHorizontal /></span>
-                        </button>
-                        <div className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                            <ul className="link-list-opt no-bdr">
-                                <li id="updateUser"><span className="li-span-item"><em className="icon ni ni-edit"></em><span>Update User</span></span></li>
-                                <li id="removeUser"><span className="li-span-item"><em className="icon ni ni-trash"></em><span>Remove User</span></span></li>
-                            </ul>
-                        </div>
-                    </div>
+                <FontAwesomeIcon icon={faEye} />
+                <FontAwesomeIcon icon={faPenToSquare} />
+                <FontAwesomeIcon icon={faTrashCan} />
+                                                  
 
                 </td>
             </tr>
@@ -82,10 +74,10 @@ const Admin = () => {
     };
 
     return (
-        <div className="container mt-4 pb-4">
-            <div className="row mb-4 p-4">
+        <div className=" mx-5 ">
+            <div className="row my-5 ">
                 <div className="main-head">
-                    <h4 className="fw-bold mb-4 mt-4">Admin/Employee</h4>
+                    <div className="title fw-bold fs-5">Admin/Employee</div>
                 </div>
                 <div className="col-md-6 pt-4">
                     <div className="dropdown">
@@ -165,7 +157,7 @@ const Admin = () => {
             </div>
 
             {/* Employee table */}
-            <div className='table-responsive p-4 container1'>
+            <div className='table-responsive shadow p-4 container1'>
                 <table className='table'>
                     <thead>
                         <tr>
@@ -184,6 +176,9 @@ const Admin = () => {
                     </tbody>
                 </table>
             </div>
+
+
+            
 
             {/* Pagination */}
 

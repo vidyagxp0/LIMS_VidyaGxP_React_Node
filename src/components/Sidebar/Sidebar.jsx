@@ -29,9 +29,9 @@ function Sidebar() {
                               }
                          >
                               
-                              <CNavItem href="/department"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem>
-                              <CNavItem href="/users"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem>
-                              <CNavItem href="/roles"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem>
+                              <Link to="/department"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem></Link>
+                              <Link to="/users"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem></Link>
+                              <Link to="/roles"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem></Link>
                          </CNavGroup>
                          <CNavGroup
                               toggler={
@@ -51,19 +51,20 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Storage Condition</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Storage Chamber</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Chamber Condition Mapping</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Chamber Transfer</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stability protocol</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Storage</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>COA Template</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login Template</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Worksheet Header</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Summary Report Header</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Acceptance Template</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Acceptance</CNavItem>
+                              <Link to="/storageCondition1321"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Storage Condition</CNavItem></Link>
+                              <Link to="/standardProtocol"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Standard Protocol</CNavItem></Link>
+                              <Link to="/storageChamber"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Storage Chamber</CNavItem></Link>
+                              <Link to="/chamberConditionMapping"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Chamber Condition Mapping</CNavItem></Link>
+                              <Link to="/chamberTransfer"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Chamber Transfer</CNavItem></Link>
+                              <Link to="/stabilityProtocol"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stability protocol</CNavItem></Link>
+                              <Link to="/sampleStorage"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Storage</CNavItem></Link>
+                              <Link to="/coaTemplate"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>COA Template</CNavItem></Link>
+                              <Link to="/sampleLoginTemplate"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login Template</CNavItem></Link>
+                              <Link to="/worksheetHeader"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Worksheet Header</CNavItem></Link>
+                              <Link to="/summaryReportHeader"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Summary Report Header</CNavItem></Link>
+                              <Link to="/sampleAcceptanceTemplate"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Acceptance Template</CNavItem></Link>
+                              <Link to="/sampleLogin1321"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login</CNavItem></Link>
+                              <Link to="/sampleAcceptance"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Acceptance</CNavItem></Link>
                          </CNavGroup>
                          <CNavGroup
                               toggler={
@@ -72,14 +73,24 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Product/Material Master</CNavItem>
+                              <Link to="/Masters/Product"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Product/Material Master</CNavItem></Link>
+                              <Link to="/Masters/SampleType"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Type</CNavItem></Link>
+                              <Link to="/Masters/SpecificationType"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Specification Type</CNavItem></Link>
+                              <Link to="/Masters/Specifications"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Specifications</CNavItem></Link>
+                              <Link to="/Masters/TestCategories"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Categories</CNavItem></Link>
+                              <Link to="/Masters/TestRegistrations"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Registrations</CNavItem></Link>
+                              <Link to="/Masters/TestPlan"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Plan</CNavItem></Link>
+                              <Link to="/Masters/MyTests"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>My Tests</CNavItem></Link>
+
+
+                              {/* <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Product/Material Master</CNavItem>
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Type</CNavItem>
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Specification Type</CNavItem>
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Specifications</CNavItem>
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Categories</CNavItem>
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Registrations</CNavItem>
                               <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Plan</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>My Tests</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>My Tests</CNavItem> */}
                          </CNavGroup>
                          <CNavGroup
                               toggler={
@@ -88,11 +99,11 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling	Sampling Configuration</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Rule</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>E-Sampling</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Field</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Template</CNavItem>
+                              <Link to="/sampling/samplingConfiguration"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Sampling Configuration</CNavItem></Link>
+                              <Link to="/sampling/samplingRule"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Rule</CNavItem>
+                              <Link to="/sampling/eSamping"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>E-Sampling</CNavItem>
+                              <Link to="/sampling/samplingField"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Field</CNavItem>
+                              <Link to="/sampling/samplingTemplate"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Template</CNavItem>
 
                          </CNavGroup>
                          <CNavGroup

@@ -42,11 +42,7 @@ const Users = () => {
                 <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>{employee.addedBy}</td>
                 <td>
-                    {/* Action buttons */}
-
                     <HiDotsHorizontal />
-                    
-
                 </td>
                 
             </tr>
@@ -67,10 +63,11 @@ const Users = () => {
     };
 
     return (
-        <div className="container mt-4 pb-4">
-            <div className="row mb-4 p-4">
+        <div className=" mx-5 ">
+        <div className="row my-5 ">
                 <div className="main-head">
-                    <h4 className="fw-bold mb-4 mt-4">User Management/ Users</h4>
+                    
+                    <div className="title fw-bold fs-5">User Management/Users</div>
                 </div>
                 <div className="col-md-6 pt-4">
                     <div className="dropdown">
@@ -171,7 +168,7 @@ const Users = () => {
             </div>
 
             {/* Employee table */}
-            <div className='table-responsive p-4 container1'>
+            <div className='shadow table-responsive p-4 '>
                 <table className='table'>
                     <thead>
                         <tr>
@@ -196,7 +193,7 @@ const Users = () => {
 
 
 
-            <div className="pagination">
+            <div className="pagination my-5">
 
                 <div className="pagination">
                     <div className='mr-5'>
