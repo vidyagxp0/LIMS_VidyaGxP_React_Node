@@ -39,6 +39,19 @@ import ESampling from "./Pages/Sampling/ESampling";
 import SamplingField from "./Pages/Sampling/SamplingField";
 import SamplingTemplate from "./Pages/Sampling/SamplingTemplate";
 
+import Product from "./Pages/Masters/Product"
+import SampleType from "./Pages/Masters/SampleType"
+import SpecificationType from "./Pages/Masters/SpecificationType"
+import Specifications from "./Pages/Masters/Specifications"
+import TestCategories from "./Pages/Masters/TestCategories"
+import TestRegistrations from "./Pages/Masters/TestRegistrations"
+import TestPlan from "./Pages/Masters/TestPlan"
+import MyTests from "./Pages/Masters/MyTests"
+
+import StocksVerification from "./Pages/Stock Management/StocksVerification"
+import StocksOnboarding from "./Pages/Stock Management/StocksOnboarding"
+import Material from "./Pages/Stock Management/Material"
+import Inventory from "./Pages/Stock Management/Inventory"
 import Inventory from "./Pages/Inventory/Inventory";
 import Chemicals from "./Pages/Inventory/Chemicals";
 import Columns from "./Pages/Inventory/Columns";
@@ -150,6 +163,18 @@ function App() {
             />
             <Route path="/Masters/TestPlan" element={<TestPlan />} />
             <Route path="/Masters/MyTests" element={<MyTests />} />
+
+            <Route path="/sampling/samplingConfiguration" element={<SamplingConfiguration />} />
+            <Route path="/sampling/samplingRule" element={< SamplingRule />} />
+            <Route path="/sampling/eSamping" element={< ESampling />} />
+            <Route path="/sampling/samplingField" element={< SamplingField />} />
+            <Route path="/sampling/samplingTemplate" element={<SamplingTemplate />} />
+
+            <Route path="/stock-management/stocks-verification" element={< StocksVerification/>} />
+            <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding/>} />
+            <Route path="/stock-management/material" element={<Material/>} />
+            <Route path="/stock-management/inventory" element={<Inventory/>} />
+           
 
             <Route
               path="/sampling/samplingConfiguration"
