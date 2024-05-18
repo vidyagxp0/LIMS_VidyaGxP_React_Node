@@ -47,6 +47,15 @@ import TestCategories from "./Pages/Masters/TestCategories"
 import TestRegistrations from "./Pages/Masters/TestRegistrations"
 import TestPlan from "./Pages/Masters/TestPlan"
 import MyTests from "./Pages/Masters/MyTests"
+import Registration from "./Pages/Instruments Master/Registration"
+import InstrumentCategory from "./Pages/Instruments Master/InstrumentCategory"
+import InstrumentModule from "./Pages/Instruments Master/InstrumentModule"
+import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage"
+import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting"
+import InvestigationCoa from "./Pages/ReportsCertificate/InvestigationCoa"
+import ReleasedCoa from "./Pages/ReportsCertificate/ReleasedCoa"
+import Coa_Template from "./Pages/ReportsCertificate/Coa_Template"
+import ServiceReporting from "./Pages/ReportsCertificate/ServiceReporting"
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false)
@@ -108,6 +117,21 @@ function App() {
             <Route path="/sampling/eSamping" element={< ESampling />} />
             <Route path="/sampling/samplingField" element={< SamplingField />} />
             <Route path="/sampling/samplingTemplate" element={<SamplingTemplate />} />
+
+            <Route path="/instrumentMaster/registration" element={<Registration />} />
+            <Route path="/instrumentMaster/instrumentCategory" element={<InstrumentCategory />} />
+            <Route path="/instrumentMaster/instrumentModule" element={<InstrumentModule />} />
+            <Route path="/instrumentMaster/instrumentUsage" element={<InstrumentUsage />} />            
+
+            <Route path="/reportsCertification/problemReporting" element={< ProblemReporting/>} />
+            <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
+            <Route path="/reportsCertification/coaTemplate1321" element={< Coa_Template/>} />
+            <Route path="/reportsCertification/releasedCoa" element={<ReleasedCoa />} />
+            <Route path="/reportsCertification/investigationCoa" element={<InvestigationCoa />} />
+
+
+
+
            
 
           </Route>

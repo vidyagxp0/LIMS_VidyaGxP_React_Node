@@ -5,7 +5,7 @@ import { useState } from "react"
 import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
-function ChamberTransfer() {
+function InstrumentModule() {
     const [addModal, setAddModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
     return (
@@ -15,29 +15,31 @@ function ChamberTransfer() {
                 <div className="container-fluid my-5">
 
                     <div className="main-head">
-                        <h4 className="fw-bold mb-4 mt-3">Chamber Transfer</h4>
+                        <div className="title fw-bold fs-5">Instrument Module</div>
+
+
+                    </div>
+                    <div className="d-flex gap-4">
+
+
                     </div>
                     <div>
                         <CRow className="mb-3">
-                            <CCol sm={4}>
-                                <CFormInput
-                                    type="email"
-                                    placeholder="Search..."
-                                />
-                            </CCol>
                             <CCol sm={3}>
                                 <CFormSelect
                                     options={[
                                         'Select Status',
-                                        { label: 'Active', value: '1' },
-                                        { label: 'Inactive', value: '0' }
+                                        { label: 'Active' },
+                                        { label: 'Inactive' }
                                     ]}
                                 />
                             </CCol>
-                            <CCol sm={2}></CCol>
+
+                            <CCol sm={6}></CCol>
+
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Chamber Transfer</CButton>
+                                    <CButton color="dark" onClick={() => setAddModal(true)}>Add Module</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -46,26 +48,36 @@ function ChamberTransfer() {
                         <CTable align="middle" responsive className=" shadow">
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Condition Code</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Stability Condition</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Description</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Category</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Module</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Module Id</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Make</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Model</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Manufacturer No.</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Supplied By</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Install On</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Expires On</CTableHeaderCell>
                                     <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="row" className="text-center">
-                                        <input type="checkbox" />
-                                    </CTableHeaderCell>
-                                    <CTableDataCell>na-001</CTableDataCell>
-                                    <CTableDataCell>60°F</CTableDataCell>
-                                    <CTableDataCell></CTableDataCell>
-
-                                    <CTableDataCell className="d-flex">
-                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
+                                    <CTableDataCell>1</CTableDataCell>
+                                    <CTableDataCell>weighing balance</CTableDataCell>
+                                    <CTableDataCell>Weighing</CTableDataCell>
+                                    <CTableDataCell>wl/wb/m/001</CTableDataCell>
+                                    <CTableDataCell>Chemi Line</CTableDataCell>
+                                    <CTableDataCell>N/A</CTableDataCell>
+                                    <CTableDataCell>N/A</CTableDataCell>
+                                    <CTableDataCell>RK</CTableDataCell>
+                                    <CTableDataCell>May 31st 23</CTableDataCell>
+                                    <CTableDataCell>Nov 17th 24</CTableDataCell>
+                                    <CTableDataCell className="">
+                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
                                     </CTableDataCell>
+
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
                                             <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
@@ -76,16 +88,20 @@ function ChamberTransfer() {
                                 </CTableRow>
 
                                 <CTableRow>
-                                    <CTableHeaderCell scope="row" className="text-center">
-                                        <input type="checkbox" />
-                                    </CTableHeaderCell>
-                                    <CTableDataCell>na-002</CTableDataCell>
-                                    <CTableDataCell>30°C</CTableDataCell>
-                                    <CTableDataCell></CTableDataCell>
-
-                                    <CTableDataCell className="d-flex">
-                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
+                                    <CTableDataCell>2</CTableDataCell>
+                                    <CTableDataCell>chromatography</CTableDataCell>
+                                    <CTableDataCell>Weighing</CTableDataCell>
+                                    <CTableDataCell>wl/wb/m/002</CTableDataCell>
+                                    <CTableDataCell>Chemi Line</CTableDataCell>
+                                    <CTableDataCell>N/A</CTableDataCell>
+                                    <CTableDataCell>N/A</CTableDataCell>
+                                    <CTableDataCell>RK</CTableDataCell>
+                                    <CTableDataCell>Oct 1st 23</CTableDataCell>
+                                    <CTableDataCell>June 12th 24</CTableDataCell>
+                                    <CTableDataCell className="">
+                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
                                     </CTableDataCell>
+
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
                                             <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
@@ -94,7 +110,6 @@ function ChamberTransfer() {
                                         </div>
                                     </CTableDataCell>
                                 </CTableRow>
-
 
                             </CTableBody>
                         </CTable>
@@ -133,13 +148,10 @@ const StatusModal = (_props) => {
 
             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                 <CModalHeader>
-                    <CModalTitle>Stability Chamber Transfer</CModalTitle>
+                    <CModalTitle>Add Storage Chamber</CModalTitle>
                 </CModalHeader>
-
                 <CModalBody>
 
-                    <CModalTitle>From</CModalTitle>
-
                     <CFormInput
                         type="text"
                         label="Chamber ID"
@@ -147,34 +159,50 @@ const StatusModal = (_props) => {
                     />
                     <CFormInput
                         type="text"
-                        label="Storage Condition"
-                        placeholder=" "
-                    />
-
-                    <CModalTitle>To</CModalTitle>
-
-                    <CFormInput
-                        type="text"
-                        label="Chamber ID"
-                        placeholder="Chamber Id "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Storage Condition"
-                        placeholder=" "
+                        label="Description"
+                        placeholder="Enter Description "
                     />
 
                     <CFormInput
                         type="text"
-                        label="Product"
-                        placeholder=" "
+                        label="Make / Model"
+                        placeholder="Make / Model "
                     />
                     <CFormInput
                         type="text"
-                        label="Protocol"
-                        placeholder=" "
+                        label="Serial No."
+                        placeholder="Serial Number "
                     />
-
+                    <CFormInput
+                        type="text"
+                        label="Location"
+                        placeholder="Location "
+                    />
+                    <CFormTextarea
+                        type="text"
+                        label="Comments"
+                        placeholder=""
+                    />
+                    <CFormInput
+                        type="text"
+                        label="Stability Storage Condition"
+                        placeholder="Select... "
+                    />
+                    <CFormInput
+                        type="text"
+                        label="Number Of Racks"
+                        placeholder="Number Of Racks "
+                    />
+                    <CFormInput
+                        type="text"
+                        label="Number Of Shelfs"
+                        placeholder="Number Of Shelfs "
+                    />
+                    <CFormInput
+                        type="text"
+                        label="Maximum No. Of Positions For Shelf"
+                        placeholder="0"
+                    />
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
@@ -185,5 +213,4 @@ const StatusModal = (_props) => {
         </>
     )
 }
-
-export default ChamberTransfer
+export default InstrumentModule

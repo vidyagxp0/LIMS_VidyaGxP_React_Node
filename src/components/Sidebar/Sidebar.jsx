@@ -28,7 +28,6 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              
                               <Link to="/department"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Department</CNavItem></Link>
                               <Link to="/users"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Users</CNavItem></Link>
                               <Link to="/roles"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Roles</CNavItem></Link>
@@ -83,14 +82,7 @@ function Sidebar() {
                               <Link to="/Masters/MyTests"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>My Tests</CNavItem></Link>
 
 
-                              {/* <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Product/Material Master</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Type</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Specification Type</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Specifications</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Categories</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Registrations</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Test Plan</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>My Tests</CNavItem> */}
+                              
                          </CNavGroup>
                          <CNavGroup
                               toggler={
@@ -100,10 +92,10 @@ function Sidebar() {
                               }
                          >
                               <Link to="/sampling/samplingConfiguration"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Sampling Configuration</CNavItem></Link>
-                              <Link to="/sampling/samplingRule"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Rule</CNavItem>
-                              <Link to="/sampling/eSamping"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>E-Sampling</CNavItem>
-                              <Link to="/sampling/samplingField"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Field</CNavItem>
-                              <Link to="/sampling/samplingTemplate"></Link><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Template</CNavItem>
+                              <Link to="/sampling/samplingRule"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Rule</CNavItem></Link>
+                              <Link to="/sampling/eSamping"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>E-Sampling</CNavItem></Link>
+                              <Link to="/sampling/samplingField"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Field</CNavItem></Link>
+                              <Link to="/sampling/samplingTemplate"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sampling Template</CNavItem></Link>
 
                          </CNavGroup>
                          <CNavGroup
@@ -130,10 +122,10 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Registration</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Category</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Module</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Usage</CNavItem>
+                              <Link to="/instrumentMaster/registration"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Registration</CNavItem></Link>
+                              <Link to="/instrumentMaster/instrumentCategory"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Category</CNavItem></Link>
+                              <Link to="/instrumentMaster/instrumentModule"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Module</CNavItem></Link>
+                              <Link to="/instrumentMaster/instrumentUsage"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Usage</CNavItem></Link>
                          </CNavGroup>
                          <CNavGroup
                               toggler={
@@ -170,11 +162,11 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Problem Reporting</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Service Reporting</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Coa Template</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Relaesed Coa</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation Coa</CNavItem>
+                              <Link to="/reportsCertification/problemReporting"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Problem Reporting</CNavItem></Link>
+                              <Link to="/reportsCertification/serviceReporting"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Service Reporting</CNavItem></Link>
+                              <Link to="/reportsCertification/coaTemplate1321"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Coa Template</CNavItem></Link>
+                              <Link to="/reportsCertification/releasedCoa"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Relaesed Coa</CNavItem></Link>
+                              <Link to="/reportsCertification/investigationCoa"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation Coa</CNavItem></Link>
                          </CNavGroup>
                          <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Vendor</CNavItem>
                          <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Clients</CNavItem>

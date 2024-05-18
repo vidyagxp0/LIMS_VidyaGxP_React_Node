@@ -2,6 +2,7 @@ import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFoote
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
+import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 function SampleAcceptanceTemplate() {
@@ -12,10 +13,10 @@ function SampleAcceptanceTemplate() {
 
                <div id="approval-page" className="h-100 mx-5">
                     <div className="container-fluid my-5">
-                    
+
                          <div className="main-head">
-                         <div className="title fw-bold fs-5">Sample Acceptance Template</div>
-                         
+                              <div className="title fw-bold fs-5">Sample Acceptance Template</div>
+
                          </div>
                          <div>
                               <CRow className="mb-3">
@@ -35,13 +36,13 @@ function SampleAcceptanceTemplate() {
                                         />
                                    </CCol>
                                    <CCol sm={2}></CCol>
-                                   
+
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
                                              <CButton color="dark" onClick={() => setAddModal(true)}>Add Sample </CButton>
                                         </div>
                                    </CCol>
-                                   
+
                               </CRow>
                          </div>
                          <div className="bg-white mt-5">
@@ -66,8 +67,8 @@ function SampleAcceptanceTemplate() {
                                              <CTableDataCell>stmp1</CTableDataCell>
                                              <CTableDataCell>describe</CTableDataCell>
                                              <CTableDataCell>65°F</CTableDataCell>
-                                             <CTableDataCell>05-may-2024 20:50</CTableDataCell>                                           
-                                             
+                                             <CTableDataCell>05-may-2024 20:50</CTableDataCell>
+
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
                                                        <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
@@ -85,8 +86,8 @@ function SampleAcceptanceTemplate() {
                                              <CTableDataCell>testing</CTableDataCell>
                                              <CTableDataCell>Na</CTableDataCell>
                                              <CTableDataCell>65°C</CTableDataCell>
-                                             <CTableDataCell>15-may-2024 12:50</CTableDataCell>                                           
-                                             
+                                             <CTableDataCell>15-may-2024 12:50</CTableDataCell>
+
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
                                                        <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
@@ -104,8 +105,8 @@ function SampleAcceptanceTemplate() {
                                              <CTableDataCell>stmp5</CTableDataCell>
                                              <CTableDataCell>sample</CTableDataCell>
                                              <CTableDataCell>65°c</CTableDataCell>
-                                             <CTableDataCell>20-may-2024 15:20</CTableDataCell>                                           
-                                             
+                                             <CTableDataCell>20-may-2024 15:20</CTableDataCell>
+
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
                                                        <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
@@ -115,10 +116,29 @@ function SampleAcceptanceTemplate() {
                                              </CTableDataCell>
                                         </CTableRow>
 
-                                        
+
                                    </CTableBody>
                               </CTable>
                          </div>
+
+                         <div className="pagination">
+
+                              <div className="pagination">
+                                   <div className='mr-5'>
+                                        <button className="btn  mr-2" >&lt;&lt;</button>
+                                   </div>
+                                   <div className="current-page-number mr-2 bg-dark-subtle page-item">
+                                        <button className='btn rounded-circle'> 1 </button>
+                                   </div>
+                                   <div>
+                                        <button className="btn mr-2" >&gt;&gt;</button>
+
+                                   </div>
+
+                              </div>
+                              <button className="btn btn-next" > Next <FaArrowRight /></button>
+                         </div>
+
                     </div>
                </div>
 

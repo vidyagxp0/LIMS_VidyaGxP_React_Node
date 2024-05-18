@@ -2,6 +2,7 @@ import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFoote
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
+import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 function StandardProtocol() {
@@ -12,7 +13,7 @@ function StandardProtocol() {
 
                <div id="approval-page" className="h-100 mx-5">
                     <div className="container-fluid my-5">
-                    
+
                          <div className="main-head">
                               <h4 className="fw-bold mb-4 mt-3">Standard Protocol</h4>
                          </div>
@@ -115,9 +116,26 @@ function StandardProtocol() {
                                              </CTableDataCell>
                                         </CTableRow>
 
-                                        
+
                                    </CTableBody>
                               </CTable>
+                         </div>
+                         <div className="pagination">
+
+                              <div className="pagination">
+                                   <div className='mr-5'>
+                                        <button className="btn  mr-2" >&lt;&lt;</button>
+                                   </div>
+                                   <div className="current-page-number mr-2 bg-dark-subtle page-item">
+                                        <button className='btn rounded-circle'> 1 </button>
+                                   </div>
+                                   <div>
+                                        <button className="btn mr-2" >&gt;&gt;</button>
+
+                                   </div>
+
+                              </div>
+                              <button className="btn btn-next" > Next <FaArrowRight /></button>
                          </div>
                     </div>
                </div>

@@ -2,6 +2,7 @@ import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBo
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
+import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 function StorageChamber() {
@@ -12,40 +13,40 @@ function StorageChamber() {
 
                <div id="approval-page" className="h-100 mx-5">
                     <div className="container-fluid my-5">
-                    
-                         <div className="main-head">
-                    <div className="title fw-bold fs-5">Storage Chamber</div>
 
-                              
+                         <div className="main-head">
+                              <div className="title fw-bold fs-5">Storage Chamber</div>
+
+
                          </div>
                          <div className="d-flex gap-4">
-          <div className="chart-widgets w-100">
-            <div className="">
-              <div className="row">
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
-                  <div className="text-light fs-5">INITIATED</div>
-                  <div className="count fs-1 text-light fw-bolder">2</div>
-                </div>
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
-                  <div className="text-light fs-5">REINITIATED</div>
-                  <div className="count fs-1 text-light fw-bolder">0</div>
-                </div>
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
-                  <div className="text-light fs-5">APPROVED</div>
-                  <div className="count fs-1 text-light fw-bolder">1</div>
-                </div>
-              
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
-                  <div className="text-light fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">0</div>
-                </div>
-              </div>
-            </div>
-            
-          
-          </div>
-          
-        </div>
+                              <div className="chart-widgets w-100">
+                                   <div className="">
+                                        <div className="row">
+                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
+                                                  <div className="text-light fs-5">INITIATED</div>
+                                                  <div className="count fs-1 text-light fw-bolder">2</div>
+                                             </div>
+                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
+                                                  <div className="text-light fs-5">REINITIATED</div>
+                                                  <div className="count fs-1 text-light fw-bolder">0</div>
+                                             </div>
+                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
+                                                  <div className="text-light fs-5">APPROVED</div>
+                                                  <div className="count fs-1 text-light fw-bolder">1</div>
+                                             </div>
+
+                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
+                                                  <div className="text-light fs-5">REJECTED</div>
+                                                  <div className="count fs-1 text-light fw-bolder">0</div>
+                                             </div>
+                                        </div>
+                                   </div>
+
+
+                              </div>
+
+                         </div>
                          <div>
                               <CRow className="mb-3">
                                    <CCol sm={4}>
@@ -57,14 +58,14 @@ function StorageChamber() {
                                    <CCol sm={3}>
                                         <CFormSelect
                                              options={[
-                                                'Select Status',                                            
-                                                { label: 'All' },
-                                                { label: 'Initiated' },
-                                                { label: 'Approved' },
-                                                { label: 'Rejected' },
-                                                { label: 'Reinitiated' },
-                                                { label: 'Dropped' }
-                                           ]}
+                                                  'Select Status',
+                                                  { label: 'All' },
+                                                  { label: 'Initiated' },
+                                                  { label: 'Approved' },
+                                                  { label: 'Rejected' },
+                                                  { label: 'Reinitiated' },
+                                                  { label: 'Dropped' }
+                                             ]}
                                         />
                                    </CCol>
                                    <CCol sm={2}></CCol>
@@ -161,10 +162,30 @@ function StorageChamber() {
                                              </CTableDataCell>
                                         </CTableRow>
 
-                                        
+
                                    </CTableBody>
                               </CTable>
                          </div>
+
+                         <div className="pagination">
+
+                              <div className="pagination">
+                                   <div className='mr-5'>
+                                        <button className="btn  mr-2" >&lt;&lt;</button>
+                                   </div>
+                                   <div className="current-page-number mr-2 bg-dark-subtle page-item">
+                                        <button className='btn rounded-circle'> 1 </button>
+                                   </div>
+                                   <div>
+                                        <button className="btn mr-2" >&gt;&gt;</button>
+
+                                   </div>
+
+                              </div>
+                              <button className="btn btn-next" > Next <FaArrowRight /></button>
+                         </div>
+
+
                     </div>
                </div>
 
@@ -194,7 +215,7 @@ const StatusModal = (_props) => {
                               label="Description"
                               placeholder="Enter Description "
                          />
-                         
+
                          <CFormInput
                               type="text"
                               label="Make / Model"

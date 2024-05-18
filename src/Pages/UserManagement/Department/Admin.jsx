@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
 import './Admin.css';
-import { HiDotsHorizontal } from "react-icons/hi";
+
 import { FaArrowRight } from 'react-icons/fa';
 import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const Admin = () => {
@@ -50,9 +51,9 @@ const Admin = () => {
                 <td>{employee.addedOn}</td>
                 <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <FontAwesomeIcon icon={faEye} />
+                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
                 <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
+                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
                                                   
 
                 </td>

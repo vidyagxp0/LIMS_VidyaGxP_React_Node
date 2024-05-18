@@ -5,7 +5,7 @@ import { useState } from "react"
 import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
-function SampleStorage() {
+function Registration() {
      const [addModal, setAddModal] = useState(false)
      const badgeStyle = { background: "#cdffca" }
      return (
@@ -13,65 +13,41 @@ function SampleStorage() {
 
                <div id="approval-page" className="h-100 mx-5">
                     <div className="container-fluid my-5">
-
+                    
                          <div className="main-head">
-                              <div className="title fw-bold fs-5">Sample Storage</div>
+                    <div className="title fw-bold fs-5">Instrument Registration</div>
 
-
+                              
                          </div>
                          <div className="d-flex gap-4">
-                              <div className="chart-widgets w-100">
-                                   <div className="">
-                                        <div className="row">
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">INITIATED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">1</div>
-                                             </div>
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">REINITIATED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">0</div>
-                                             </div>
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">APPROVED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">1</div>
-                                             </div>
-
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">REJECTED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">1</div>
-                                             </div>
-                                        </div>
-                                   </div>
-
-
-                              </div>
-
-                         </div>
+          
+          
+        </div>
                          <div>
                               <CRow className="mb-3">
-                                   <CCol sm={4}>
-                                        <CFormInput
-                                             type="email"
-                                             placeholder="Search..."
+                              <CCol sm={3}>
+                                        <CFormSelect
+                                             options={[
+                                                'Select Status',                                            
+                                                { label: 'Active' },
+                                                { label: 'Inactive' }                                
+                                           ]}
                                         />
                                    </CCol>
                                    <CCol sm={3}>
                                         <CFormSelect
                                              options={[
-                                                  'Select Status',
-                                                  { label: 'All' },
-                                                  { label: 'Initiated' },
-                                                  { label: 'Approved' },
-                                                  { label: 'Rejected' },
-                                                  { label: 'Reinitiated' },
-                                                  { label: 'Dropped' }
-                                             ]}
+                                                'Select Instrument Category',                                            
+                                                { label: 'Chromatography' },
+                                                { label: 'weighing balance' }                                                
+                                           ]}
                                         />
                                    </CCol>
-                                   <CCol sm={2}></CCol>
+                                   <CCol sm={3}></CCol>
+                                   
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add Sample Storage</CButton>
+                                             <CButton color="dark" onClick={() => setAddModal(true)}>Instrument Registration</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -80,31 +56,36 @@ function SampleStorage() {
                               <CTable align="middle" responsive className=" shadow">
                                    <CTableHead>
                                         <CTableRow>
-                                             <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
                                              <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Product Name</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Chamber ID</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Actual Quantity</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Available Quantity</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Protocol Type</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Category</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Instrument ID</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Instrument</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Made</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Model</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Manu no.</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Installed At</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Expire On</CTableHeaderCell>
                                              <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Calibration Status</CTableHeaderCell>
                                              <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                                         </CTableRow>
                                    </CTableHead>
                                    <CTableBody>
                                         <CTableRow>
-                                             <CTableHeaderCell scope="row" className="text-center">
-                                                  <input type="checkbox" />
-                                             </CTableHeaderCell>
                                              <CTableDataCell>1</CTableDataCell>
-                                             <CTableDataCell>Sodium Propyl Paraben IP</CTableDataCell>
-                                             <CTableDataCell>EUR/SOP-AD-01</CTableDataCell>
-                                             <CTableDataCell>100</CTableDataCell>
-                                             <CTableDataCell>80</CTableDataCell>
-                                             <CTableDataCell>New001</CTableDataCell>
-
-                                             <CTableDataCell className="d-flex">
-                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>APPROVED</div>
+                                             <CTableDataCell>weighing balance</CTableDataCell>
+                                             <CTableDataCell>EN33/23</CTableDataCell>
+                                             <CTableDataCell>Weighing Balance 2</CTableDataCell>
+                                             <CTableDataCell>Shimadu</CTableDataCell>
+                                             <CTableDataCell>Ser33</CTableDataCell>
+                                             <CTableDataCell>adf3434</CTableDataCell>
+                                             <CTableDataCell>Lab 1</CTableDataCell>
+                                             <CTableDataCell>Nov 17th 24</CTableDataCell>
+                                             <CTableDataCell className="">
+                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
+                                             </CTableDataCell>
+                                             <CTableDataCell className="">
+                                                  <div className="py-2 px-3 small rounded fw-bold " style={badgeStyle}>Active</div>
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
@@ -116,18 +97,21 @@ function SampleStorage() {
                                         </CTableRow>
 
                                         <CTableRow>
-                                             <CTableHeaderCell scope="row" className="text-center">
-                                                  <input type="checkbox" />
-                                             </CTableHeaderCell>
+                                             
                                              <CTableDataCell>2</CTableDataCell>
-                                             <CTableDataCell>EM</CTableDataCell>
-                                             <CTableDataCell>EUR/SOP-AD-02</CTableDataCell>
-                                             <CTableDataCell>90</CTableDataCell>
-                                             <CTableDataCell>60</CTableDataCell>
-                                             <CTableDataCell>Test002</CTableDataCell>
-
-                                             <CTableDataCell className="d-flex">
-                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>DROPPED</div>
+                                             <CTableDataCell>chromatography</CTableDataCell>
+                                             <CTableDataCell>EQI/ENG/163</CTableDataCell>
+                                             <CTableDataCell>Pressure Gauge</CTableDataCell>
+                                             <CTableDataCell>Testo</CTableDataCell>
+                                             <CTableDataCell>625</CTableDataCell>
+                                             <CTableDataCell>2320474</CTableDataCell>
+                                             <CTableDataCell>Plant1</CTableDataCell>
+                                             <CTableDataCell>Jan 5th 24</CTableDataCell>
+                                             <CTableDataCell className="">
+                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
+                                             </CTableDataCell>
+                                             <CTableDataCell className="">
+                                                  <div className="py-2 px-3 small rounded fw-bold bg-danger " >Pending</div>
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
@@ -139,18 +123,21 @@ function SampleStorage() {
                                         </CTableRow>
 
                                         <CTableRow>
-                                             <CTableHeaderCell scope="row" className="text-center">
-                                                  <input type="checkbox" />
-                                             </CTableHeaderCell>
+                                             
                                              <CTableDataCell>3</CTableDataCell>
-                                             <CTableDataCell>Polycaprolactone IP</CTableDataCell>
-                                             <CTableDataCell>EUR/SOP-AD-03</CTableDataCell>
-                                             <CTableDataCell>80</CTableDataCell>
-                                             <CTableDataCell>80</CTableDataCell>
-                                             <CTableDataCell>New003</CTableDataCell>
-
-                                             <CTableDataCell className="d-flex">
-                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>INITIATED</div>
+                                             <CTableDataCell>weighing balance</CTableDataCell>
+                                             <CTableDataCell>ARZPH001</CTableDataCell>
+                                             <CTableDataCell>ARZ Ph Meter</CTableDataCell>
+                                             <CTableDataCell>PHMKE23</CTableDataCell>
+                                             <CTableDataCell>MKPJ32</CTableDataCell>
+                                             <CTableDataCell>MS4543</CTableDataCell>
+                                             <CTableDataCell>Plant A</CTableDataCell>
+                                             <CTableDataCell>09-may-2024</CTableDataCell>
+                                             <CTableDataCell className="">
+                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
+                                             </CTableDataCell>
+                                             <CTableDataCell className="">
+                                                  <div className="py-2 px-3 small rounded fw-bold " style={badgeStyle}>Active</div>
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
@@ -161,33 +148,32 @@ function SampleStorage() {
                                              </CTableDataCell>
                                         </CTableRow>
 
+                                        
 
-
-
+                                        
                                    </CTableBody>
                               </CTable>
                          </div>
+                <div className="pagination">
 
-                         <div className="pagination">
-
-                              <div className="pagination">
-                                   <div className='mr-5'>
-                                        <button className="btn  mr-2" >&lt;&lt;</button>
-                                   </div>
-                                   <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                                        <button className='btn rounded-circle'> 1 </button>
-                                   </div>
-                                   <div>
-                                        <button className="btn mr-2" >&gt;&gt;</button>
-
-                                   </div>
-
-                              </div>
-                              <button className="btn btn-next" > Next <FaArrowRight /></button>
-                         </div>
+                <div className="pagination">
+                    <div className='mr-5'>
+                        <button className="btn  mr-2" >&lt;&lt;</button>
+                    </div>
+                    <div className="current-page-number mr-2 bg-dark-subtle page-item">
+                        <button className='btn rounded-circle'> 1 </button>
+                    </div>
+                    <div>
+                        <button className="btn mr-2" >&gt;&gt;</button>
 
                     </div>
+
+                </div>
+                <button className="btn btn-next" > Next <FaArrowRight /></button>
+            </div>
+                    </div>
                </div>
+
 
                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
 
@@ -201,7 +187,7 @@ const StatusModal = (_props) => {
 
                <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                     <CModalHeader>
-                         <CModalTitle>Add Sample Storage</CModalTitle>
+                         <CModalTitle>Add Storage Chamber</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
 
@@ -215,7 +201,7 @@ const StatusModal = (_props) => {
                               label="Description"
                               placeholder="Enter Description "
                          />
-
+                         
                          <CFormInput
                               type="text"
                               label="Make / Model"
@@ -267,4 +253,4 @@ const StatusModal = (_props) => {
      )
 }
 
-export default SampleStorage
+export default Registration
