@@ -142,10 +142,10 @@ function Sidebar() {
                                    </>
                               }
                          >
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stocks Verification</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stocks Onboarding</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Material</CNavItem>
-                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Inventory</CNavItem>
+                             <Link to="/stock-management/stocks-verification"> <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stocks Verification</CNavItem></Link>
+                              <Link to="/stock-management/stocks-onboarding"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stocks Onboarding</CNavItem></Link>
+                              <Link to="/stock-management/material"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Material</CNavItem></Link>
+                              <Link to="/stock-management/inventory"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Inventory</CNavItem></Link>
                          </CNavGroup>
                          <CNavGroup
                               toggler={

@@ -48,6 +48,11 @@ import TestRegistrations from "./Pages/Masters/TestRegistrations"
 import TestPlan from "./Pages/Masters/TestPlan"
 import MyTests from "./Pages/Masters/MyTests"
 
+import StocksVerification from "./Pages/Stock Management/StocksVerification"
+import StocksOnboarding from "./Pages/Stock Management/StocksOnboarding"
+import Material from "./Pages/Stock Management/Material"
+import Inventory from "./Pages/Stock Management/Inventory"
+
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false)
   const checkLoggedIn = (data) => {
@@ -108,6 +113,11 @@ function App() {
             <Route path="/sampling/eSamping" element={< ESampling />} />
             <Route path="/sampling/samplingField" element={< SamplingField />} />
             <Route path="/sampling/samplingTemplate" element={<SamplingTemplate />} />
+
+            <Route path="/stock-management/stocks-verification" element={< StocksVerification/>} />
+            <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding/>} />
+            <Route path="/stock-management/material" element={<Material/>} />
+            <Route path="/stock-management/inventory" element={<Inventory/>} />
            
 
           </Route>

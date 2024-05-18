@@ -9,7 +9,7 @@ import { FaArrowRight } from 'react-icons/fa';
 
 
 
-export default function TestRegistrations() {
+export default function Material() {
   const [storageName, setStorageName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -23,7 +23,7 @@ export default function TestRegistrations() {
   const notify = () => toast("Wow so easy!");
 
 
-  const pageSize = 8; 
+  const pageSize = 4; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
       { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
@@ -31,11 +31,7 @@ export default function TestRegistrations() {
       {  user: 'CHPOIL',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
       {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
       {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
-      {user: 'PM-001',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      {user: 'TSTvl',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
+    
   ];
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
@@ -43,17 +39,12 @@ export default function TestRegistrations() {
   const renderRows = () => {
       return employees.slice(startIndex, endIndex).map((employee, index) => (
           <tr key={startIndex + index}>
+                <td><input type="checkbox" /></td>
               <td>{startIndex + index + 1}</td>
               <td>{employee.user}</td>
               <td>{employee.ProdName}</td>
               <td>{employee.SpecificID}</td>
-              <td>{employee.SpecificName}</td>
-              <td>{employee.SpecificName}</td>
-              <td>{employee.ProdName}</td>
-              <td>{employee.ProdName}</td>
-              {/* <td>{employee.EffectFrom}</td> */}
-              {/* <td>{employee.ReviewDate}</td> */}
-              <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+              <td id='edatabtn' className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
               <td>
                   &nbsp; &nbsp;  &nbsp;
                   <HiDotsHorizontal />
@@ -78,79 +69,54 @@ const nextToLastPage = () => {
   return (
     <>
       <div id="div1">
-        <h5>Test Resistrations</h5>
+        <h5>Inventory Labels</h5>
       </div>
 
-      <div  className="container mt-5">
-        <div className="row justify-content-between m-3">
-          <div className="col flex-item "> <select  className="p-1 rounded">
-                                <option>Select Sample Type</option>
-                                <option>Petrochemical</option>
-                                <option>HYO</option>
-                                <option>Semi Finished</option>
-                                <option>ABCD</option>
-                                <option>H2So4</option>
-                                <option>ATT108</option>
-                                <option>Micro Media </option>
-                                <option>Raw Smapling</option>
-                                <option>FG Templage</option>
-                                <option>water typ</option>
-                                <option>Sodium</option>
-                                <option>New Product Sample Type</option>
-                                <option>Packing Material</option>
-                                <option>Raw Material-1</option>
-                                <option>Finished Product</option>
-                            </select></div>
+      {/* <div id="div2"> */}
 
-                            <div className="col flex-item ">
-                            <select  className="p-1 rounded " >
-                                <option>Select Client</option>
-                                <option>Ravi Kandala</option>
-                            </select>
-                            </div>
-                            <div className="col flex-item ">
-                            <select className=" p-1 rounded">
-                                <option>Select Specification</option>
-                                <option>HOS 234 - Hydraulic Oil Spec</option>
-                                <option>CHPOIL001 - CHPOIL</option>
-                                <option>MB-PM-001/01 - Microbiology</option>
-                                <option>RPS-TSLV-00 - test</option>
-                                <option>H2So4</option>
-                              
-                            </select>
-                            </div>
+      <div id="div2">
+        
+        <div id="searchmain"> 
+          <div id="searchicon">
+            <CiSearch />
+          </div>
 
-                             <div className="col flex-item ">
-                        <button className="border p-1 rounded" type="button" >
-                            Show
+          <div className="">
+            <input type="text" className="" id="" placeholder="search" />
+          </div>
+        </div>
+        <div className="dropdown m-5">
+                                    </div>
+
+                <div className="dropdown">
+                    <div>
+                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            
                             <select id='selectOption'>
-                                <option>All</option>
+                            <option>All</option>
                                 <option>Initiated</option>
                                 <option>Approved</option>
                                 <option>Rejected</option>
                                 <option>Reinitiated</option>
-                                <option>Droped</option>
+                                <option>Inactive</option>
                             </select>
 
                         </button>
 
                     </div>
+                </div>
 
-
-           <div className="col flex-item ">
-
+           
         <button
           id="Addbtn"
-          className="btn btn-primary text-small"
+          className="btn btn-primary m-5"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
-          >
-          <CgAddR /> <span className="text-small">Add Registration</span>
+        >
+          <CgAddR /> <span>Add Material</span>
         </button>
-           </div>
-          </div>
 
         <div
           className="offcanvas offcanvas-end"
@@ -161,7 +127,7 @@ const nextToLastPage = () => {
           <div className="offcanvas-header">
             <div id="line1">
               <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Test Registration
+                Add Material
               </h5>
               <button
                 id="closebtn"
@@ -172,18 +138,13 @@ const nextToLastPage = () => {
               ></button>
             </div>
           </div>
-          <p id="line2">Add information Test Registration</p>
-          <label id="line3" htmlFor="">
-            Client
-          </label>
-          <input
-            id="line4"
-            required
-            type="text"
-            placeholder="Select..."
-            value={storageName}
-            onChange={(e) => setStorageName(e.target.value)}
-            />
+        
+        <label id="line3" htmlFor="">Material Name</label>
+        <input id="line4" required type="text" placeholder=""/>
+
+        <label id="line3" htmlFor="">Description</label>
+        <input id="line4" required type="text" placeholder=""/>
+
           {errorMessage && (
             <div id="error" style={{ color: "red" ,fontSize:"10px",marginLeft:"30px"}}>
               {errorMessage}
@@ -198,7 +159,7 @@ const nextToLastPage = () => {
             >
               &lt; Back
             </button>
-            <button onClick={handleAddStorage}>Add</button>
+            <button>Add Material</button>
           </div>
           <div>
             <ToastContainer/>
@@ -211,14 +172,11 @@ const nextToLastPage = () => {
                 <table className='table shadow '>
                     <thead>
                         <tr>
+                            <th><input type="checkbox" /></th>
                             <th>Sr.no.</th>
-                            <th>Specification ID</th>
-                            <th>Product Name</th>
-                            <th>Test Name</th>
-                            <th>Test Code</th>
-                            <th>Method</th>
-                            <th>Category</th>
-                            <th>Test type</th>
+                            <th>Unique Code</th>
+                            <th>Material Name</th>
+                            <th>Description</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
