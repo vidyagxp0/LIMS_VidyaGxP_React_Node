@@ -52,28 +52,48 @@ import InstrumentCategory from "./Pages/Instruments Master/InstrumentCategory"
 import InstrumentModule from "./Pages/Instruments Master/InstrumentModule"
 import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage"
 
-// import Inventory from "./Pages/Inventory/Inventory";
-import Chemicals from "./Pages/Inventory/Chemicals";
+
+import Inventory from './Pages/Inventory/Inventory.jsx'
 import Columns from "./Pages/Inventory/Columns";
-import CultureManagement from "./Pages/Inventory/CultureManagement";
+// import CultureManagement from "./Pages/Inventory/CultureManagement";
 import Environment from "./Pages/Inventory/Environment";
 import Media from "./Pages/Inventory/Media";
 import ReferenceStandards from "./Pages/Inventory/RefrenceStandards";
 import VolumeSolutions from "./Pages/Inventory/VolumeSolutions";
 import WaterManagement from "./Pages/Inventory/WaterManagement";
 import WorkingStandardIssue from "./Pages/Inventory/WorkingStandardIssue";
-// import WorkingStandard from "./Pages/Inventory/WorkingStandard";
 import WorkingStandardUsage from "./Pages/Inventory/WorkingStandardUsage";
 import InternalRegistration from "./Pages/Inventory/InternalRegistration";
 import SolutionPrepration from "./Pages/Inventory/SolutionPrepration";
 import SolutionTemplate from "./Pages/Inventory/SolutionTemplate";
 import SolutionStandardization from "./Pages/Inventory/SolutionStandardization.jsx";
 import SolutionUsage from "./Pages/Inventory/SolutionUsage.jsx";
+import ChemicalRegistration from "./Pages/Inventory/ChemicalRegistration.jsx"
+import ChemicalReagent from "./Pages/Inventory/ChemicalReagent.jsx"
+import LotRegistration from "./Pages/Inventory/LotRegistration.jsx"
+import ChemicalReagentReports from "./Pages/Inventory/ChemicalReagentReports.jsx"
+import ChemicalUsage from "./Pages/Inventory/ChemicalUsage.jsx"
+import ChemicalIssues from "./Pages/Inventory/ChemicalIssues.jsx"
+import ColumnApplication from "./Pages/Inventory/ColumnApplication.jsx"
+import ColumnRegistration from "./Pages/Inventory/ColumnRegistration.jsx"
+import PerformanceTest from "./Pages/Inventory/PerformanceTest.jsx"
+import Assignment from "./Pages/Inventory/Assignment.jsx"
+import Qualification from "./Pages/Inventory/Qualification.jsx"
+import ColumnUsage from "./Pages/Inventory/ColumnUsage.jsx"
+import BatchAssignment from "./Pages/Inventory/BatchAssignment.jsx"
+import StandardRegistration from "./Pages/Inventory/StandardRegistration.jsx"
+import InvLotRegistration from "./Pages/Inventory/InvLotRegistration.jsx"
+import UsageRegistration from "./Pages/Inventory/UsageRegistration.jsx"
+import CultureRegistration from "./Pages/Inventory/CultureRegistration.jsx"
+import RefrenceCulture from "./Pages/Inventory/RefrenceCulture.jsx"
+import CultureTemplateConfiguration from "./Pages/Inventory/CultureTemplateConfiguration.jsx"
+import RefrenceCultureLot from "./Pages/Inventory/RefrenceCultureLot.jsx"
+
 
 import StocksVerification from "./Pages/Stock Management/StocksVerification"
 import StocksOnboarding from "./Pages/Stock Management/StocksOnboarding"
 import Material from "./Pages/Stock Management/Material"
-import Inventory from "./Pages/Stock Management/Inventory"
+// import Inventory from "./Pages/Stock Management/Inventory"
 
 
 import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting"
@@ -153,13 +173,33 @@ function App() {
             <Route path="Inventory/SolutionPrepration" element={<SolutionPrepration/>}/>
             <Route path="Inventory/SolutionStandardization" element={<SolutionStandardization/>}/>
             <Route path="Inventory/SolutionUsage"element={<SolutionUsage/>}/>
-            <Route path="/Inventory/Chemicals" element={<Chemicals />} />
             <Route path="/Inventory/Columns" element={<Columns />} />
             <Route path="/Inventory/ReferenceStandards"  element={<ReferenceStandards />}/>
-            <Route path="/Inventory/CultureManagement" element={<CultureManagement />}/>
+            {/* <Route path="/Inventory/CultureManagement" element={<CultureManagement />}/> */}
             <Route path="/Inventory/Media" element={<Media />} />
             <Route path="/Inventory/WaterManagement" element={<WaterManagement />}/>
             <Route path="/Inventory/Environment" element={<Environment />} />
+            <Route path="Inventory/ChemicalRegistration" element={<ChemicalRegistration/>}/>
+            <Route path="Inventory/ChemicalReagent" element={<ChemicalReagent/>}/>
+            <Route path="Inventory/LotRegistration" element={<LotRegistration/>}/>
+            <Route path="Inventory/ChemicalReagentReports" element={<ChemicalReagentReports/>}/>
+            <Route path="Inventory/ChemicalUsage" element={<ChemicalUsage/>}/>
+            <Route path="Inventory/ChemicalIssues" element={<ChemicalIssues/>}/>
+            <Route path="Inventory/ColumnApplication" element={<ColumnApplication/>}/>
+            <Route path="Inventory/ColumnRegistration" element={<ColumnRegistration/>}/>
+            <Route path="Inventory/PerformanceTest" element={<PerformanceTest/>}/>
+            <Route path="Inventory/Assignment" element={<Assignment/>}/>
+            <Route path="Inventory/Qualification" element={<Qualification/>}/>
+            <Route path="Inventory/ColumnUsage" element={<ColumnUsage/>}/>
+            <Route path="Inventory/BatchAssignment" element={<BatchAssignment/>}/>
+            <Route path="Inventory/StandardRegistration" element={<StandardRegistration/>}/>
+            <Route path="Inventory/InvLotRegistration" element={<InvLotRegistration/>}/>
+            <Route path="Inventory/UsageRegistration" element={<UsageRegistration/>}/>
+            <Route path="Inventory/CultureRegistration" element={<CultureRegistration/>}/>
+            <Route path="Inventory/RefrenceCulture" element={<RefrenceCulture/>}/>
+            <Route path="Inventory/CultureTemplateConfiguration" element={<CultureTemplateConfiguration/>}/>
+            <Route path="Inventory/RefrenceCultureLot" element={<RefrenceCultureLot/>}/>
+            
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />
             <Route path="/instrumentMaster/instrumentCategory" element={<InstrumentCategory />} />
@@ -169,7 +209,7 @@ function App() {
             <Route path="/stock-management/stocks-verification" element={< StocksVerification/>} />
             <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding/>} />
             <Route path="/stock-management/material" element={<Material/>} />
-            <Route path="/stock-management/inventory" element={<Inventory/>}/>           
+            {/* <Route path="/stock-management/inventory" element={<Inventory/>}/>            */}
 
             <Route path="/reportsCertification/problemReporting" element={< ProblemReporting/>} />
             <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
