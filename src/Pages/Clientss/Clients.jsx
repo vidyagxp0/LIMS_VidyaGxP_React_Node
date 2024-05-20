@@ -6,20 +6,15 @@ import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 
 
-export default function Product() {
+export default function Clients() {
   const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
-      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
-      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
-      {  user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'},
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'},
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
-      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
+      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
+      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
+      {  user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
+      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'},
+      
   ];
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
@@ -55,7 +50,7 @@ const nextToLastPage = () => {
   return (
     <>
      <div id="div1">
-        <h5>Products/Materials</h5>
+        <h5>Clients</h5>
       </div>
 
       <div id="div2" className='p-5 '>
@@ -65,12 +60,9 @@ const nextToLastPage = () => {
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
                             <select id='selectOption'>
-                                <option>All</option>
-                                <option>Initiated</option>
-                                <option>Approved</option>
-                                <option>Rejected</option>
-                                <option>Reinitiated</option>
-                                <option>Droped</option>
+                                <option>Active</option>
+                                <option>In Active</option>
+                               
                             </select>
 
                         </button>
@@ -86,7 +78,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
           >
-          <CgAddR />  <span>Add Product/Material</span>
+          <CgAddR />  <span>Add Client</span>
         </button>
 
     </div>
@@ -99,7 +91,7 @@ const nextToLastPage = () => {
       >
         <div className="offcanvas-header ">
           <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-            Add Product/Material
+            Add Client
           </h5>
           <button
             id="closebtn"
@@ -107,27 +99,46 @@ const nextToLastPage = () => {
             className="btn-close"
             data-bs-dismiss="offcanvas"
             aria-label="Close"
-            ></button>
+            ></button> 
           </div>
         </div>
+            <p style={{marginLeft:'20px'}}>Add information and add new Client</p>
             
-        <label id="line3" htmlFor="">Name</label>
-        <input id="line4" required type="text" placeholder="Product Name"/>
+        <label id="line3" htmlFor="">Client Name</label>
+        <input id="line4" required type="text" placeholder="Bussiness Associate Name"/>
 
-        <label id="line3" htmlFor="">Unique Code</label>
-        <input id="line4" required type="text" placeholder="Product Code"/>
+        <label id="line3" htmlFor="">Alternate Name</label>
+        <input id="line4" required type="text" placeholder="Alternate Name"/>
 
-        <label id="line3" htmlFor="">Generic Name</label>
-        <input id="line4" required type="text" placeholder="Generic Name"/> 
+        <label id="line3" htmlFor="">Email</label>
+        <input id="line4" required type="email" placeholder="Email"/> 
         
-        <label id="line3" htmlFor="">Re-testing Period</label>
-        <input id="line4" required type="text" placeholder="Retesting Period"/>
+        <label id="line3" htmlFor="">Phone</label>
+        <input id="line4" required type="number" placeholder="Phone"/>    
+        
+        <label id="line3" htmlFor="">Address</label>
+        <input id="line4" required type="text" placeholder="Address"/>
+       
+        <label id="line3" htmlFor="">Contact Person</label>
+        <input id="line4" required type="text" placeholder="Contact Person"/>
+        
+        <label id="line3" htmlFor="">Contact Person Number</label>
+        <input id="line4" required type="text" placeholder="Contact Person Number"/>
+        
+        <label id="line3" htmlFor="">Tax Number</label>
+        <input id="line4" required type="text" placeholder="Tax Number"/> 
+        
+        <label id="line3" htmlFor="">Fax</label>
+        <input id="line4" required type="number" placeholder="Fax"/> 
+        
+        <label id="line3" htmlFor="">Website</label>
+        <input id="line4" required type="text" placeholder="Website"/>
 
          <div id="line5">
           <button type="button"
             data-bs-dismiss="offcanvas"
             aria-label="Close">&lt; Back</button>
-           <button>Add Product</button>
+           <button>Submit</button>
           </div>
            </div>
 
@@ -137,11 +148,11 @@ const nextToLastPage = () => {
                     <thead>
                         <tr>
                             <th>Sr.no.</th>
-                            <th>Unique Code</th>
-                            <th>Product Name</th>
-                            <th>Generic Name</th>
-                            <th>Re-Testing Period</th>
-                            <th>Add Date</th>
+                            <th>Client Name</th>
+                            <th>Email Address</th>
+                            <th>Contact Number</th>
+                            <th>Address</th>
+                            <th>Added On</th>
                             <th>Status</th>
                             <th>Actions </th>
                         </tr>

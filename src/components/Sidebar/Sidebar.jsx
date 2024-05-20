@@ -1174,10 +1174,174 @@ function Sidebar() {
               App Configuration
             </CNavItem>
           </CNavGroup>
-        </CSidebarNav>
-      </CSidebar>
-    </>
-  );
+      
+  
+                                   <Link to="/Inventory/SolutionUsage">
+                                        <CNavItem href="#">
+                                             <span className="nav-icon">
+                                                  <span className="nav-icon-bullet"></span>
+                                             </span>
+                                             Solution Usage
+                                        </CNavItem>
+                                   </Link>
+                              
+
+                              <Link to="/Inventory/Chemicals">
+                                   <CNavItem href="#">
+                                        <span className="nav-icon">
+                                             <span className="nav-icon-bullet"></span>
+                                        </span>
+                                        Chemicals
+                                   </CNavItem>
+                              </Link>
+                              <Link to="/Inventory/Columns">
+                                   <CNavItem href="#">
+                                        <span className="nav-icon">
+                                             <span className="nav-icon-bullet"></span>
+                                        </span>
+                                        Columns
+                                   </CNavItem>
+                              </Link>
+                              <Link to="/Inventory/ReferenceStandards">
+                                   <CNavItem href="#">
+                                        <span className="nav-icon">
+                                             <span className="nav-icon-bullet"></span>
+                                        </span>
+                                        Reference Standards
+                                   </CNavItem>
+                              </Link>
+                              <Link to="/Inventory/CultureManagement">
+                                   <CNavItem href="#">
+                                        <span className="nav-icon">
+                                             <span className="nav-icon-bullet"></span>
+                                        </span>
+                                        Culture Management
+                                   </CNavItem>
+                              </Link>
+                              <Link to="/Inventory/Media">
+                                   <CNavItem href="#">
+                                        <span className="nav-icon">
+                                             <span className="nav-icon-bullet"></span>
+                                        </span>
+                                        Media
+                                   </CNavItem>
+                              </Link>
+                              <Link to="/Inventory/WaterManagement">
+                                   <CNavItem href="#">
+                                        <span className="nav-icon">
+                                             <span className="nav-icon-bullet"></span>
+                                        </span>
+                                        Water Management
+                                   </CNavItem>
+                              </Link>
+                              <Link to="/Inventory/Environment">
+                                   <CNavItem href="#">
+                                        <span className="nav-icon">
+                                             <span className="nav-icon-bullet"></span>
+                                        </span>
+                                        Environment
+                                   </CNavItem>
+                              </Link>
+                        
+
+                         <CNavGroup
+                              toggler={
+                                   <>
+                                        <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Instrument Master
+                                   </>
+                              }
+                         >
+                              <Link to="/instrumentMaster/registration"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Registration</CNavItem></Link>
+                              <Link to="/instrumentMaster/instrumentCategory"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Category</CNavItem></Link>
+                              <Link to="/instrumentMaster/instrumentModule"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Module</CNavItem></Link>
+                              <Link to="/instrumentMaster/instrumentUsage"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Instrument Usage</CNavItem></Link>
+                         </CNavGroup>
+                         <CNavGroup
+                              toggler={
+                                   <>
+                                        <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Stock Management
+                                   </>
+                              }
+                         >
+                              <Link to="/stock-management/stocks-verification"> <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stocks Verification</CNavItem></Link>
+                              <Link to="/stock-management/stocks-onboarding"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Stocks Onboarding</CNavItem></Link>
+                              <Link to="/stock-management/material"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Material</CNavItem></Link>
+                              <Link to="/stock-management/inventory"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Inventory</CNavItem></Link>
+                         </CNavGroup>
+                         <CNavGroup
+                              toggler={
+                                   <>
+                                        <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Calibration
+                                   </>
+                              }
+                         >
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Type</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Frequency</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Data Sheet</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login Template</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Schedule</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Record</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login</CNavItem>
+                              <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Calendar</CNavItem>
+                         </CNavGroup>
+                         <CNavGroup
+                              toggler={
+                                   <>
+                                        <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Reports / Certificate
+                                   </>
+                              }
+                         >
+                              <Link to="/reportsCertification/problemReporting"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Problem Reporting</CNavItem></Link>
+                              <Link to="/reportsCertification/serviceReporting"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Service Reporting</CNavItem></Link>
+                              <Link to="/reportsCertification/coaTemplate1321"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Coa Template</CNavItem></Link>
+                              <Link to="/reportsCertification/releasedCoa"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Relaesed Coa</CNavItem></Link>
+                              <Link to="/reportsCertification/investigationCoa"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation Coa</CNavItem></Link>
+                         </CNavGroup>
+                         <Link to="/vender"> <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Vendor</CNavItem></Link>
+                         <Link to="/clients"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Clients</CNavItem></Link>
+                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Plants</CNavItem>
+                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Workflow</CNavItem>
+                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Audit Trail</CNavItem>
+                         <CNavGroup
+                              toggler={
+                                   <>
+                                        <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Settings
+                                   </>
+                              }
+                         >
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Business Associate</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Label Management</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Functional Grouping</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Worksheets</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Group Name</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Investigation Template</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Chemical Category</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Grade</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Handling Symbol</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Access Right</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Projects</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Template</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Training Confirmations</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Proposal</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Nominations</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Re-Qualification Request</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Resources</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Type of Section</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />WOS Test</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Service Provider</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />External Registration</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Test Techniques</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Instrument Regitration</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Stability</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Test History</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Vendor</CNavItem>
+                              <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />App Configuration</CNavItem>
+                         </CNavGroup>
+                    </CSidebarNav>
+               </CSidebar>
+
+          </>
+     )
 }
 
 export default Sidebar;

@@ -6,7 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
-
+import { IoEyeSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 
 export default function Material() {
@@ -46,7 +47,7 @@ export default function Material() {
               <td>{employee.SpecificID}</td>
               <td id='edatabtn' className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
               <td>
-                  &nbsp; &nbsp;  &nbsp;
+                  &nbsp; <Link to="/stock-management/stock-material-details"><IoEyeSharp/></Link>  &nbsp;&nbsp;
                   <HiDotsHorizontal />
               </td>
           </tr>

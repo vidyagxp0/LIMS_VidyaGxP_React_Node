@@ -4,12 +4,24 @@ import { CgAddR, CgCalendarDates } from 'react-icons/cg';
 import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
 import './StocksVerification.css';
+import { Link } from 'react-router-dom';
+
+
 
 export default function StocksVerification() {
-  const pageSize = 8; 
+  const pageSize = 18; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
       { user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
+      { user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu:'VERIFIED', DayComplete: '10', Status: 'APPROVED'  },
+      {  user: 'Initiated Product', Date: 'May 17th 24 14:34',Statu: 'PENDING', DayComplete: '10', Status: 'DROPPED'  },
+      {user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
+      {user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+      {user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu:'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+      {user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu:'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+      {user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu:'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+      {user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu:'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+      { user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu:'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
       { user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu:'VERIFIED', DayComplete: '10', Status: 'APPROVED'  },
       {  user: 'Initiated Product', Date: 'May 17th 24 14:34',Statu: 'PENDING', DayComplete: '10', Status: 'DROPPED'  },
       {user: 'Initiated Product',  Date: 'May 17th 24 14:34',Statu: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
@@ -37,10 +49,9 @@ export default function StocksVerification() {
               <td>{employee.DayComplete}</td>
               <td id='edatabtn' className={`rounded-5 ${employee.Status === 'APPROVED' ? 'bg-success' : 'bg-warning'} bg-opacity-25 text-${employee.Status === 'APPROVED' ? 'success' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.Status}</td>
               <td>
-                  &nbsp; &nbsp; 
-                  <IoEyeSharp/>
+                  &nbsp; 
+                  <Link to="/stock-management/stock-onboarding-details"><IoEyeSharp/></Link>  &nbsp;   <HiDotsHorizontal />
               </td>   
-              
           </tr>
       ));
   };
