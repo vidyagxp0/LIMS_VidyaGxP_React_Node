@@ -52,7 +52,7 @@ import InstrumentCategory from "./Pages/Instruments Master/InstrumentCategory"
 import InstrumentModule from "./Pages/Instruments Master/InstrumentModule"
 import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage"
 
-import Inventory from "./Pages/Inventory/Inventory";
+// import Inventory from "./Pages/Inventory/Inventory";
 import Chemicals from "./Pages/Inventory/Chemicals";
 import Columns from "./Pages/Inventory/Columns";
 import CultureManagement from "./Pages/Inventory/CultureManagement";
@@ -136,6 +136,7 @@ function App() {
             <Route path="/Masters/TestRegistrations" element={<TestRegistrations/>} />
             <Route path="/Masters/TestPlan" element={<TestPlan/>} />
             <Route path="/Masters/MyTests" element={<MyTests/>}/> 
+            
             <Route path="/sampling/samplingConfiguration" element={<SamplingConfiguration />} /> 
             <Route path="/sampling/samplingRule" element={< SamplingRule />} />
             <Route path="/sampling/eSamping" element={< ESampling />} />
@@ -163,7 +164,12 @@ function App() {
             <Route path="/instrumentMaster/registration" element={<Registration />} />
             <Route path="/instrumentMaster/instrumentCategory" element={<InstrumentCategory />} />
             <Route path="/instrumentMaster/instrumentModule" element={<InstrumentModule />} />
-            <Route path="/instrumentMaster/instrumentUsage" element={<InstrumentUsage />} />            
+            <Route path="/instrumentMaster/instrumentUsage" element={<InstrumentUsage />} /> 
+
+            <Route path="/stock-management/stocks-verification" element={< StocksVerification/>} />
+            <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding/>} />
+            <Route path="/stock-management/material" element={<Material/>} />
+            <Route path="/stock-management/inventory" element={<Inventory/>}/>           
 
             <Route path="/reportsCertification/problemReporting" element={< ProblemReporting/>} />
             <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
