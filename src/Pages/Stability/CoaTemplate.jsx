@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFooter, CFormInput, CFormSelect, CHeader, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -71,7 +71,7 @@ function CoaTemplate() {
                                    <CCol sm={2}></CCol>
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add COA Template</CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add COA Template</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -134,11 +134,6 @@ function CoaTemplate() {
                                              </CTableDataCell>
                                         </CTableRow>
 
-
-
-
-
-
                                    </CTableBody>
                               </CTable>
                          </div>
@@ -176,24 +171,91 @@ const StatusModal = (_props) => {
 
                <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                     <CModalHeader>
-                         <CModalTitle>New Condition</CModalTitle>
+                         <CModalTitle>Add Coa Template</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
 
-                         <CFormInput
+                         <CFormSelect
                               type="text"
-                              label="Stability Storage Condition"
-                              placeholder="°C °F "
+                              label="Sample Type"
+                              placeholder="Select..."
+                              options={[
+                                   "Select...",
+                                   { label: "HCL" },
+                                   { label: "Hydrochrolic Acid" },
+                                   { label: "Petrochemical" },
+                                   { label: "Initial Product" }
+                                 ]}
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Coa Type"
+                              placeholder="Select Coa Type"
+                              options={[
+                                   "Select Coa Type ",
+                                   { label: "With Specification" },
+                                   { label: "Without Specification" },
+                                   { label: "ERP" }
+                                   
+                                 ]}
                          />
                          <CFormInput
                               type="text"
-                              label="Description"
-                              placeholder=" "
+                              label="Report Title"
+                              placeholder=" Report Title"
                          />
+                         <CFormInput
+                              type="text"
+                              label="Product/Material Caption"
+                              placeholder=" Product"
+                         />
+                         <CFormInput
+                              type="text"
+                              label="Format No."
+                              placeholder=" Format No."
+                         />
+                         <CHeader className="bg-secondary">Header</CHeader>
+                         <CFormInput
+                              type="text"
+                              label="Rows"
+                              placeholder=" Rows"
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Columns"
+                              placeholder=" Columns"
+                              options={[
+                                   " Columns",
+                                   { label: "2" },
+                                   { label: "4" },
+                                   { label: "6" }
+                                   
+                                 ]}
+                         />
+                         <CFooter className="bg-secondary">Footer</CFooter>
+                         
+                         <CFormInput
+                              type="text"
+                              label="Rows"
+                              placeholder=" Rows"
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Columns"
+                              placeholder=" Columns"
+                              options={[
+                                   " Columns",
+                                   { label: "2" },
+                                   { label: "4" },
+                                   { label: "6" }
+                                   
+                                 ]}
+                         />
+
                     </CModalBody>
                     <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Add</CButton>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
                     </CModalFooter>
                </CModal>
 

@@ -39,7 +39,7 @@ function SampleAcceptanceTemplate() {
 
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add Sample </CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Sample Template </CButton>
                                         </div>
                                    </CCol>
 
@@ -51,10 +51,11 @@ function SampleAcceptanceTemplate() {
                                         <CTableRow>
                                              <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
                                              <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Chamber ID</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Current Storage Conditions</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Initiated On</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Unique Code</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">No. Of Check Items </CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Updated At</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Status</CTableHeaderCell>                                             
                                              <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                                         </CTableRow>
                                    </CTableHead>
@@ -65,9 +66,12 @@ function SampleAcceptanceTemplate() {
                                              </CTableHeaderCell>
                                              <CTableDataCell>1</CTableDataCell>
                                              <CTableDataCell>stmp1</CTableDataCell>
-                                             <CTableDataCell>describe</CTableDataCell>
-                                             <CTableDataCell>65°F</CTableDataCell>
+                                             <CTableDataCell>ACCC</CTableDataCell>
+                                             <CTableDataCell>6</CTableDataCell>
                                              <CTableDataCell>05-may-2024 20:50</CTableDataCell>
+                                             <CTableDataCell className="d-flex">
+                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
+                                             </CTableDataCell>
 
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
@@ -84,9 +88,12 @@ function SampleAcceptanceTemplate() {
                                              </CTableHeaderCell>
                                              <CTableDataCell>2</CTableDataCell>
                                              <CTableDataCell>testing</CTableDataCell>
-                                             <CTableDataCell>Na</CTableDataCell>
-                                             <CTableDataCell>65°C</CTableDataCell>
+                                             <CTableDataCell>ACC011</CTableDataCell>
+                                             <CTableDataCell>2</CTableDataCell>
                                              <CTableDataCell>15-may-2024 12:50</CTableDataCell>
+                                             <CTableDataCell className="d-flex">
+                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
+                                             </CTableDataCell>
 
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
@@ -103,9 +110,12 @@ function SampleAcceptanceTemplate() {
                                              </CTableHeaderCell>
                                              <CTableDataCell>3</CTableDataCell>
                                              <CTableDataCell>stmp5</CTableDataCell>
-                                             <CTableDataCell>sample</CTableDataCell>
-                                             <CTableDataCell>65°c</CTableDataCell>
+                                             <CTableDataCell>sample code</CTableDataCell>
+                                             <CTableDataCell>8</CTableDataCell>
                                              <CTableDataCell>20-may-2024 15:20</CTableDataCell>
+                                             <CTableDataCell className="d-flex">
+                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
+                                             </CTableDataCell>
 
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
@@ -143,6 +153,44 @@ function SampleAcceptanceTemplate() {
                </div>
 
                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+
+          </>
+     )
+}
+
+const StatusModal = (_props) => {
+     return (
+          <>
+
+               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+                    <CModalHeader>
+                         <CModalTitle>New Condition</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+
+                         <CFormInput
+                              type="text"
+                              label="Name"
+                              placeholder="Name "
+                         />
+                         <CFormInput
+                              type="text"
+                              label="Unique Code"
+                              placeholder=" Unique Code"
+                         />
+                         <CFormInput
+                              type="text"
+                              label="No. Of Check Items"
+                              placeholder="No. of Check Items"
+                         />
+                         <CButton className="bg-info text-white">Add</CButton>
+
+                    </CModalBody>
+                    <CModalFooter>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
+                    </CModalFooter>
+               </CModal>
 
           </>
      )
