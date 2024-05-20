@@ -6,7 +6,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 
 
-export default function Product() {
+export default function Vender() {
   const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
@@ -55,7 +55,7 @@ const nextToLastPage = () => {
   return (
     <>
      <div id="div1">
-        <h5>Products/Materials</h5>
+        <h5>Approved Vendors</h5>
       </div>
 
       <div id="div2" className='p-5 '>
@@ -86,7 +86,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
           >
-          <CgAddR />  <span>Add Product/Material</span>
+          <CgAddR />  <span>Add Approved Vender</span>
         </button>
 
     </div>
@@ -99,7 +99,7 @@ const nextToLastPage = () => {
       >
         <div className="offcanvas-header ">
           <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-            Add Product/Material
+            Add Approved Vendor
           </h5>
           <button
             id="closebtn"
@@ -107,27 +107,31 @@ const nextToLastPage = () => {
             className="btn-close"
             data-bs-dismiss="offcanvas"
             aria-label="Close"
-            ></button>
+            ></button> 
           </div>
         </div>
+            <p style={{marginLeft:'20px'}}>Add information and add new approved vendor</p>
             
-        <label id="line3" htmlFor="">Name</label>
+        <label id="line3" htmlFor="">Product/Material Name</label>
         <input id="line4" required type="text" placeholder="Product Name"/>
 
         <label id="line3" htmlFor="">Unique Code</label>
         <input id="line4" required type="text" placeholder="Product Code"/>
 
-        <label id="line3" htmlFor="">Generic Name</label>
-        <input id="line4" required type="text" placeholder="Generic Name"/> 
+        <label id="line3" htmlFor="">Vendor Name</label>
+        <input id="line4" required type="text" placeholder="Select venders"/> 
         
-        <label id="line3" htmlFor="">Re-testing Period</label>
-        <input id="line4" required type="text" placeholder="Retesting Period"/>
+        <label id="line3" htmlFor="">Qualification Criteria</label>
+        <input id="line4" required type="text" placeholder="Qualification Criteria"/>    
+        
+        <label id="line3" htmlFor="">Comments If Any</label>
+        <input id="line4" required type="text" placeholder="Comments If Any"/>
 
          <div id="line5">
           <button type="button"
             data-bs-dismiss="offcanvas"
             aria-label="Close">&lt; Back</button>
-           <button>Add Product</button>
+           <button>Submit</button>
           </div>
            </div>
 
@@ -137,11 +141,11 @@ const nextToLastPage = () => {
                     <thead>
                         <tr>
                             <th>Sr.no.</th>
-                            <th>Unique Code</th>
                             <th>Product Name</th>
-                            <th>Generic Name</th>
-                            <th>Re-Testing Period</th>
-                            <th>Add Date</th>
+                            <th>Unique Code</th>
+                            <th>Vendor Name</th>
+                            <th>Qualification Criteria</th>
+                            <th>Comments</th>
                             <th>Status</th>
                             <th>Actions </th>
                         </tr>

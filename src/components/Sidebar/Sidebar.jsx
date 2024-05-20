@@ -339,8 +339,8 @@ function Sidebar() {
                               <Link to="/reportsCertification/releasedCoa"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Relaesed Coa</CNavItem></Link>
                               <Link to="/reportsCertification/investigationCoa"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Investigation Coa</CNavItem></Link>
                          </CNavGroup>
-                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Vendor</CNavItem>
-                         <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Clients</CNavItem>
+                         <Link to="/vender"> <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Vendor</CNavItem></Link>
+                         <Link to="/clients"><CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Clients</CNavItem></Link>
                          <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Plants</CNavItem>
                          <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Workflow</CNavItem>
                          <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} />Audit Trail</CNavItem>

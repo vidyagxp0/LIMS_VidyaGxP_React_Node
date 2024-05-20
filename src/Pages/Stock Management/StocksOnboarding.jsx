@@ -6,6 +6,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
+import { IoEyeSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
+
 
 
 
@@ -54,7 +57,7 @@ export default function StocksOnboarding() {
               <td id='edatabtn' className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
               <td>{employee.EffectFrom}</td>
               <td>
-                  &nbsp; &nbsp;  &nbsp;
+                  &nbsp;<Link to="/stock-management/stock-onboarding-details"><IoEyeSharp/></Link> &nbsp;&nbsp;
                   <HiDotsHorizontal />
               </td>
           </tr>
@@ -146,22 +149,38 @@ const nextToLastPage = () => {
               ></button>
             </div>
           </div>
-          
-          <input
-            id="line4"
-            required
-            type="text"
-            placeholder="Storage Name"
-            value={storageName}
-            onChange={(e) => setStorageName(e.target.value)}
-          />
 
-          {errorMessage && (
-            <div id="error" style={{ color: "red" ,fontSize:"10px",marginLeft:"30px"}}>
-              {errorMessage}
-            </div>
-          )}
+          <div style={{marginLeft:'18px',}}>
+          <label>
+        <input
+          type="radio"
+          name="options"
+          value="option1"
+        
+        />
+        RM Stock
+      </label>
+      <br />
+      <label style={{padding:'7px 0'}}>
+        <input
+          type="radio"
+          name="options"
+          value="option2"
+        />
+        PM Stock
+      </label>
+      <br />
+      <label>
+        <input
+          type="radio"
+          name="options"
+          value="option3"
+        />
+        Chemical Stock
+      </label>
 
+      </div>
+         
           <div id="line5">
             <button
               type="button"
@@ -170,7 +189,7 @@ const nextToLastPage = () => {
             >
               &lt; Back
             </button>
-            <button onClick={handleAddStorage}>Add</button>
+            <button>Next</button>
           </div>
           <div>
             <ToastContainer/>

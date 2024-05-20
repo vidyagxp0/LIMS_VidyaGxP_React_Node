@@ -3,6 +3,14 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { CgAddR, CgCalendarDates } from 'react-icons/cg';
 import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 export default function SampleType() {
   const pageSize = 8; 
@@ -96,7 +104,7 @@ const nextToLastPage = () => {
       >
         <div className="offcanvas-header ">
           <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-            Add Product/Material
+            Add Sample Type
           </h5>
           <button
             id="closebtn"
@@ -108,23 +116,144 @@ const nextToLastPage = () => {
           </div>
         </div>
             
-        <label id="line3" htmlFor="">Name</label>
-        <input id="line4" required type="text" placeholder="Product Name"/>
+        <label id="line3" htmlFor="">Sample Name</label>
+        <input id="line4" required type="text" placeholder="ID"/>
 
-        <label id="line3" htmlFor="">Unique Code</label>
-        <input id="line4" required type="text" placeholder="Product Code"/>
+        <label id="line3" htmlFor="">Prefix</label>
+        <input id="line4" required type="text" placeholder="Model Number"/>
 
-        <label id="line3" htmlFor="">Generic Name</label>
-        <input id="line4" required type="text" placeholder="Generic Name"/> 
+        <label id="line3" htmlFor="">Days To Complete(Days)</label>
+        <input id="line4" required type="text" placeholder="Number"/> 
         
-        <label id="line3" htmlFor="">Re-testing Period</label>
-        <input id="line4" required type="text" placeholder="Retesting Period"/>
+        <label id="line3" htmlFor="">Selected Standard Fields Displays At Sample Registration</label>
+        <FormGroup style={{marginLeft:'20px'}}>
+  <FormControlLabel control={<Checkbox/>} label="Manufacturing Date" />
+  <FormControlLabel control={<Checkbox />} label="Expiry Date" />
+  <FormControlLabel control={<Checkbox />} label="Batch No." /> 
+  <FormControlLabel control={<Checkbox />} label="Batch Size" /> 
+  <FormControlLabel control={<Checkbox />} label="Packing Type" /> 
+  <FormControlLabel control={<Checkbox />} label="Project" /> 
+  <FormControlLabel control={<Checkbox />} label="Supplier" /> 
+  <FormControlLabel control={<Checkbox />} label="Customer" />
+  <FormControlLabel control={<Checkbox />} label="Manufacturer" />
+  <FormControlLabel control={<Checkbox />} label="Priority" />
+  <FormControlLabel control={<Checkbox />} label="Sampling Quantity" />
+  <FormControlLabel control={<Checkbox />} label="
+Sample Reference No" />
+  <FormControlLabel control={<Checkbox />} label="Recommended Reference Lot" />
+  <FormControlLabel control={<Checkbox />} label="W.S. Validity Period" />
+  <FormControlLabel control={<Checkbox />} label="Storage Condition" />
+  <FormControlLabel control={<Checkbox />} label="Storage Location" />
+  <FormControlLabel control={<Checkbox />} label="Comments" />
+</FormGroup>
+
+<FormControl style={{margin:'20px'}}>
+      <FormLabel id="demo-row-radio-buttons-group-label">Reserve Sample Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <FormLabel id="demo-row-radio-buttons-group-label">Sampling Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup> 
+
+      <FormLabel id="demo-row-radio-buttons-group-label">Analyst Level Investigation Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup> 
+
+      <FormLabel id="demo-row-radio-buttons-group-label">Sample Destruction Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+      
+      <FormLabel id="demo-row-radio-buttons-group-label">Sample Acceptance Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <FormLabel id="demo-row-radio-buttons-group-label">TCI Approval Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <FormLabel id="demo-row-radio-buttons-group-label">SI Approval Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <FormLabel id="demo-row-radio-buttons-group-label">MGR Approval Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <FormLabel id="demo-row-radio-buttons-group-label">QA Approval Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <FormLabel id="demo-row-radio-buttons-group-label">Reduced/Retesting Required</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Yes" />
+        <FormControlLabel value="male" control={<Radio />} label="No" />
+      </RadioGroup>
+    </FormControl>
 
          <div id="line5">
           <button type="button"
             data-bs-dismiss="offcanvas"
             aria-label="Close">&lt; Back</button>
-           <button>Add Product</button>
+           <button>Add Sample Type</button>
           </div>
            </div>
 
