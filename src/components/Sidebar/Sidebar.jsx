@@ -1318,7 +1318,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
           </CNavGroup>
-          <CNavItem href="#">
+          {/* <CNavItem href="#">
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
             Vendor
           </CNavItem>
@@ -1337,8 +1337,8 @@ function Sidebar() {
           <CNavItem href="#">
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
             Audit Trail
-          </CNavItem>
-          <CNavGroup
+          </CNavItem> */}
+          {/* <CNavGroup
             toggler={
               <>
                 <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Settings
@@ -1453,8 +1453,8 @@ function Sidebar() {
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               App Configuration
             </CNavItem>
-          </CNavGroup>
-
+          </CNavGroup> */}
+{/* 
           <Link to="/Inventory/SolutionUsage">
             <CNavItem href="#">
               <span className="nav-icon">
@@ -1519,7 +1519,7 @@ function Sidebar() {
               </span>
               Environment
             </CNavItem>
-          </Link>
+          </Link> */}
 
           <CNavGroup
             toggler={

@@ -123,14 +123,14 @@ import StockInventoryDetail from "./Pages/Stock Management/StockInventoryDetail.
 import StockMaterialDetail from "./Pages/Stock Management/StockMaterialDetail.jsx"
 import StockOnboardingDetails from "./Pages/Stock Management/StockOnboardingDetails.jsx"
 
-import CalibrationType from "./Pages/Calibration/CalibrationType.jsx"
-import CalibrationFrequency from "./Pages/Calibration/CalibrationFrequency.jsx"
-import CalibrationDataSheet from "./Pages/Calibration/CalibrationDataSheet.jsx"
-import CalibrationSampleLoginTemplate from "./Pages/Calibration/CalibrationSampleLoginTemplate.jsx"
-import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx"
-import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx"
-import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx"
-import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx"
+// import CalibrationType from "./Pages/Calibration/CalibrationType.jsx"
+// import CalibrationFrequency from "./Pages/Calibration/CalibrationFrequency.jsx"
+// import CalibrationDataSheet from "./Pages/Calibration/CalibrationDataSheet.jsx"
+// import CalibrationSampleLoginTemplate from "./Pages/Calibration/CalibrationSampleLoginTemplate.jsx"
+// import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx"
+// import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx"
+// import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx"
+// import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx"
 
 
 import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting"
@@ -309,14 +309,14 @@ function App() {
             <Route path="/stock-management/stock-material-details" element={<StockMaterialDetail />} />
             <Route path="/stock-management/stock-onboarding-details" element={<StockOnboardingDetails />} />
 
-            <Route path="/calibration/calibration-type" element={<CalibrationType />} />
+            {/* <Route path="/calibration/calibration-type" element={<CalibrationType />} />
             <Route path="/calibration/calibration-frequency" element={<CalibrationFrequency />} />
             <Route path="/calibration/calibration-data-sheet" element={<CalibrationDataSheet />} />
             <Route path="/calibration/sample-login-template" element={<CalibrationSampleLoginTemplate />} />
             <Route path="/calibration/calibration-schedule" element={<CalibrationSchedule />} />
             <Route path="/calibration/calibration-record" element={<CalibrationRecord />} />
             <Route path="/calibration/sample-login" element={<CalibrationSampleLogin />} />
-            <Route path="/calibration/calibration-calender" element={<CalibrationCalender />} />
+            <Route path="/calibration/calibration-calender" element={<CalibrationCalender />} /> */}
 
             <Route path="/reportsCertification/problemReporting" element={< ProblemReporting />} />
             <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
