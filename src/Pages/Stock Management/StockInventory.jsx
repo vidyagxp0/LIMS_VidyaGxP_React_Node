@@ -8,10 +8,13 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { IoEyeSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 
 
-export default function Inventory() {
+
+export default function StockInventory() {
     const top100Films = [
   { label: 'The Shawshank Redemption', year: 1994 },
   { label: 'The Godfather', year: 1972 },
@@ -58,7 +61,7 @@ export default function Inventory() {
               <td>{employee.ProdName}</td>
               <td id='edatabtn' className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
               <td>
-                  &nbsp; &nbsp;  &nbsp;
+                  &nbsp; <Link to="/stock-management/stock-inventory-details"><IoEyeSharp/></Link>  &nbsp;&nbsp;
                   <HiDotsHorizontal />
               </td>
           </tr>
@@ -131,7 +134,7 @@ const nextToLastPage = () => {
         </button>
 
         <div
-          className="offcanvas offcanvas-end"
+          className="offcanvas offcanvas-end overflow-y-scroll"
           tabIndex="-1"
           id="offcanvasRight"
           aria-labelledby="offcanvasRightLabel"
@@ -155,18 +158,26 @@ const nextToLastPage = () => {
         <input id="line4" required type="text" placeholder="Select"/>
 
         <label id="line3" htmlFor="">Received Date</label>
-        <input id="line4" required type="date" placeholder=""/> 
+        <input id="line4" style={{padding:'14px'}} required type="date" placeholder=""/> 
+        
         <label id="line3" htmlFor="">Supplier Name</label>
-        <input id="line4" required type="date" placeholder="select"/> 
-        <label id="line3" htmlFor="">Received Date</label>
-
         <Autocomplete
       disablePortal
       id="combo-box-demo"
       options={top100Films}
-      sx={{ width: 300 }}
+      sx={{ width: 370,margin:2 }}
       renderInput={(params) => <TextField {...params} label="" />}
     />
+        <label id="line3" htmlFor="">Truck No.</label>
+        <input id="line4" type="text" placeholder="Truck No." /> 
+        <label id="line3" htmlFor="">Ch No.</label>
+        <input id="line4" type="text" placeholder="Ch No." /> 
+        <label id="line3" htmlFor="">Invoice Number</label>
+        <input id="line4" type="text" placeholder="Invoice Number" /> 
+        <label id="line3" htmlFor="">Quantity In MT</label>
+        <input id="line4" type="text" placeholder="Quantity In MT" /> 
+        <label id="line3" htmlFor="">Remarks</label>
+        <input id="line4" type="text" placeholder="Remarks" />
 
           {errorMessage && (
             <div id="error" style={{ color: "red" ,fontSize:"10px",marginLeft:"30px"}}>
@@ -182,7 +193,7 @@ const nextToLastPage = () => {
             >
               &lt; Back
             </button>
-            <button>Add Material</button>
+            <button>Submit</button>
           </div>
           <div>
             <ToastContainer/>

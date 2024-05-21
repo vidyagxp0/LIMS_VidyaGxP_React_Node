@@ -1,13 +1,21 @@
 import {
   CButton,
   CCol,
-  // CFormCheck,
+  // CFormGroup,
+  CForm,
   CFormInput,
+  CFormCheck,
+  CFormLabel,
   CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
+  // CDropdownDivider,
   CModalTitle,
   CRow,
   CTable,
@@ -26,7 +34,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function CultureTemplateConfiguration() {
+function CultureLotAcceptance() {
+  const [selectedStatus, setSelectedStatus] = useState("Select Status");
+
+  const handleSelect = (status) => {
+    setSelectedStatus(status);
+  };
   const [addModal, setAddModal] = useState(false);
   const badgeStyle = { background: "#cdffca" };
   return (
@@ -34,7 +47,7 @@ function CultureTemplateConfiguration() {
       <div id="approval-page" className="h-100 mx-5">
         <div className="container-fluid my-5">
           <div className="main-head">
-            <div className="title fw-bold fs-5">Reference Culture Lot</div>
+            <div className="title fw-bold fs-5">Media Onboarding</div>
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
@@ -74,28 +87,36 @@ function CultureTemplateConfiguration() {
             </div>
           </div>
           <div>
-            <CRow className="mb-3">
-              <CCol sm={4}>
-                <CFormInput type="email" placeholder="Search..." />
-              </CCol>
-              <CCol sm={3}>
-                <CFormSelect
-                  options={[
-                    "All",
-                    { label: "All" },
-                    { label: "Initiated" },
-                    { label: "Approved" },
-                    { label: "Rejected" },
-                    { label: "Reinitiated" },
-                    { label: "Dropped" },
-                  ]}
-                />
-              </CCol>
+            <CRow className="mb-3 ">
+              <CDropdown
+                style={{
+                  width: "250px",
+                  border: "1px solid black",
+                  borderRadius: "5px",
+                }}
+              >
+                <CDropdownToggle color="" style={{ color: "gray" }}>
+                  Show {selectedStatus}
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem header>Select Status</CDropdownItem>
+                  <CDropdownItem onClick={() => handleSelect("Active")}>
+                    Active
+                  </CDropdownItem>
+                  <CDropdownItem onClick={() => handleSelect("Inactive")}>
+                    Inactive
+                  </CDropdownItem>
+                </CDropdownMenu>
+              </CDropdown>
               <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="info" onClick={() => setAddModal(true)}>
-                    Add Culture Lot
+                  <CButton
+                    color="info"
+                    style={{ marginLeft: "50px" }}
+                    onClick={() => setAddModal(true)}
+                  >
+                    Media Onboarding
                   </CButton>
                 </div>
               </CCol>
@@ -109,20 +130,17 @@ function CultureTemplateConfiguration() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">SNo.</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Media Name</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Media Prefix</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Reference Lot Code
+                    Storage Condition
                   </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">UOM </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Reference Culture
+                    Mode Of Preparation
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Received Quantity
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Batch No. </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Catalogue No.{" "}
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Valid Upto</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Added On </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Status </CTableHeaderCell>
 
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
@@ -137,6 +155,7 @@ function CultureTemplateConfiguration() {
                   <CTableDataCell>stmp1</CTableDataCell>
                   <CTableDataCell>describe</CTableDataCell>
                   <CTableDataCell>isubus111</CTableDataCell>
+                  <CTableDataCell>54255455</CTableDataCell>
                   <CTableDataCell>54255455</CTableDataCell>
                   <CTableDataCell>loc1</CTableDataCell>
 
@@ -173,7 +192,7 @@ function CultureTemplateConfiguration() {
                   <CTableDataCell>2</CTableDataCell>
                   <CTableDataCell>test21</CTableDataCell>
                   <CTableDataCell>NA</CTableDataCell>
-                  {/* <CTableDataCell>testing</CTableDataCell>*/}
+                  <CTableDataCell>testing</CTableDataCell>
                   <CTableDataCell>testing</CTableDataCell>
                   <CTableDataCell>25365488</CTableDataCell>
                   <CTableDataCell>Plant1</CTableDataCell>
@@ -211,7 +230,7 @@ function CultureTemplateConfiguration() {
                   <CTableDataCell>3</CTableDataCell>
                   <CTableDataCell>test</CTableDataCell>
                   <CTableDataCell>NA</CTableDataCell>
-                  {/* <CTableDataCell>testing525</CTableDataCell>*/}
+                  <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>25255488</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
@@ -248,7 +267,7 @@ function CultureTemplateConfiguration() {
                   <CTableDataCell>3</CTableDataCell>
                   <CTableDataCell>test</CTableDataCell>
                   <CTableDataCell>NA</CTableDataCell>
-                  {/* <CTableDataCell>NA</CTableDataCell>*/}
+                  <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>25255488</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
@@ -300,79 +319,70 @@ const StatusModal = (_props) => {
         onClose={_props.closeModal}
       >
         <CModalHeader>
-          <CModalTitle>Add Culture Lot</CModalTitle>
+          <CModalTitle>Add Media Onboarding</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Add information and Add Template</p>
-          <h3>Registration Initiation</h3>
+          <p>Add information and add new mediaOnboarding</p>
+          {/* <h3>Registration Initiation</h3> */}
           <CFormSelect
             type="text"
-            label="Reference Culture Lot Code
-
-
-
+            label="Media Name
             "
             placeholder=" "
           />
-          <CFormInput type="text" label="Reference Culture" placeholder="" />
-          <CFormInput type="text" label="Received Quantity" placeholder="" />
-          <CFormInput type="text" label="Received By" placeholder="" />
-          <CFormInput type="date" label="Received On" placeholder="" />{" "}
-          <CFormInput
-            type="date"
-            label="Valid Upto
-          "
-            placeholder=""
-          />
-          <CFormInput type="text" label="Delivery Receipt No" placeholder="" />
-          <CFormInput type="text" label="Supplied By" placeholder="" />
           <CFormInput
             type="text"
-            label="Certificate No
+            label="Media Prefix
             "
             placeholder=""
           />
-          <CFormInput type="text" label="Certificate" placeholder="" />
+         
+
           <CFormInput
             type="text"
-            label="Batch No. On Catalogue
-            "
+            label="Storage Condition"
             placeholder=""
           />
-          <CFormInput
+
+           <CFormInput
             type="text"
-            label="Catalogue No.
-            "
+            label="UOM"
             placeholder=""
           />
+           <CForm>
+            <CFormLabel>Mode of Prepration</CFormLabel>
+            <div>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="To be Prepared"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Ready Mode"
+                value="reject"
+              />
+            </div>
+          </CForm>
           <CFormInput
             type="text"
-            label="Packing Description
+            label="Refrence Document if Any"
+            placeholder="choose file"
+          />
 
 
-            "
-            placeholder=""
-          />
-          <CFormSelect
-            type="text"
-            label="Stored At
-
-            "
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            label="Comments
-            "
-            placeholder=""
-          />
+          
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
             Cancel
           </CButton>
           <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add Culture Lot
+            Submit
           </CButton>
         </CModalFooter>
       </CModal>
@@ -380,4 +390,4 @@ const StatusModal = (_props) => {
   );
 };
 
-export default CultureTemplateConfiguration;
+export default CultureLotAcceptance;

@@ -51,9 +51,12 @@ import Registration from "./Pages/Instruments Master/Registration"
 import InstrumentCategory from "./Pages/Instruments Master/InstrumentCategory"
 import InstrumentModule from "./Pages/Instruments Master/InstrumentModule"
 import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage"
+import MasterProductDetail from "./Pages/Masters/MasterProductDetail.jsx"
 
 
-import Inventory from './Pages/Inventory/Inventory.jsx'
+// import Inventory from './Pages/Inventory/Inventory.jsx'
+import Inventory from "./Pages/Inventory/Inventory";
+// import Chemicals from "./Pages/Inventory/Chemicals";
 import Columns from "./Pages/Inventory/Columns";
 // import CultureManagement from "./Pages/Inventory/CultureManagement";
 import Environment from "./Pages/Inventory/Environment";
@@ -88,12 +91,37 @@ import CultureRegistration from "./Pages/Inventory/CultureRegistration.jsx"
 import RefrenceCulture from "./Pages/Inventory/RefrenceCulture.jsx"
 import CultureTemplateConfiguration from "./Pages/Inventory/CultureTemplateConfiguration.jsx"
 import RefrenceCultureLot from "./Pages/Inventory/RefrenceCultureLot.jsx"
+import CultureLotAcceptance from "./Pages/Inventory/CultureLotAcceptance.jsx"
+import MediaOnboarding from "./Pages/Inventory/MediaOnboarding.jsx"
+import MediaContainerType from "./Pages/Inventory/MediaContainerType.jsx"
+import MediaTemplateConfiguration from "./Pages/Inventory/MediaTemplateConfiguration.jsx"
+import MediaLot from "./Pages/Inventory/MediaLot.jsx"
+import MediaLotContainerIssue from "./Pages/Inventory/MediaLotContainerIssue.jsx"
+import MediaLotAcceptance from "./Pages/Inventory/MediaLotAcceptance.jsx"
+import MediaLotUsage from "./Pages/Inventory/MediaLotUsage.jsx"
+import SampleArea from "./Pages/Inventory/SampleArea.jsx"
+import ProcessingSystem from "./Pages/Inventory/ProcessingSystem.jsx"
+import Schedule from "./Pages/Inventory/Schedule.jsx"
+import Unschedule from "./Pages/Inventory/Unschedule.jsx"
+import Acknowledgement from "./Pages/Inventory/Acknowledgement.jsx"
+import ScheduleTermination from "./Pages/Inventory/ScheduleTermination.jsx"
+import Facility from "./Pages/Inventory/Facility.jsx"
+import Location from "./Pages/Inventory/Location.jsx"
+import EMMoniteringDetails from "./Pages/Inventory/EMMoniteringDetails.jsx"
+import EMCOATemplate from "./Pages/Inventory/EMCOATemplate.jsx"
+import OOATemplate from "./Pages/Inventory/OOATemplate.jsx"
+import LocationSamples from "./Pages/Inventory/LocationSamples.jsx"
+
 
 
 import StocksVerification from "./Pages/Stock Management/StocksVerification"
 import StocksOnboarding from "./Pages/Stock Management/StocksOnboarding"
 import Material from "./Pages/Stock Management/Material"
 // import Inventory from "./Pages/Stock Management/Inventory"
+import StockInventory from "./Pages/Stock Management/StockInventory.jsx"
+import StockInventoryDetail from "./Pages/Stock Management/StockInventoryDetail.jsx"
+import StockMaterialDetail from "./Pages/Stock Management/StockMaterialDetail.jsx"
+import StockOnboardingDetails from "./Pages/Stock Management/StockOnboardingDetails.jsx"
 
 
 import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting"
@@ -101,6 +129,9 @@ import InvestigationCoa from "./Pages/ReportsCertificate/InvestigationCoa"
 import ReleasedCoa from "./Pages/ReportsCertificate/ReleasedCoa"
 import Coa_Template from "./Pages/ReportsCertificate/Coa_Template"
 import ServiceReporting from "./Pages/ReportsCertificate/ServiceReporting"
+
+import Vender from "./Pages/Vender/Vender.jsx"
+import Clients from "./Pages/Clientss/Clients.jsx"
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false)
@@ -156,6 +187,8 @@ function App() {
             <Route path="/Masters/TestRegistrations" element={<TestRegistrations/>} />
             <Route path="/Masters/TestPlan" element={<TestPlan/>} />
             <Route path="/Masters/MyTests" element={<MyTests/>}/> 
+            <Route path="/masters/product-details" element={<MasterProductDetail/>}/> 
+
             
             <Route path="/sampling/samplingConfiguration" element={<SamplingConfiguration />} /> 
             <Route path="/sampling/samplingRule" element={< SamplingRule />} />
@@ -191,6 +224,7 @@ function App() {
             <Route path="Inventory/Assignment" element={<Assignment/>}/>
             <Route path="Inventory/Qualification" element={<Qualification/>}/>
             <Route path="Inventory/ColumnUsage" element={<ColumnUsage/>}/>
+            {/* <Route path="Inventory/Chemicals" element={<Chemicals/>}/> */}
             <Route path="Inventory/BatchAssignment" element={<BatchAssignment/>}/>
             <Route path="Inventory/StandardRegistration" element={<StandardRegistration/>}/>
             <Route path="Inventory/InvLotRegistration" element={<InvLotRegistration/>}/>
@@ -199,6 +233,30 @@ function App() {
             <Route path="Inventory/RefrenceCulture" element={<RefrenceCulture/>}/>
             <Route path="Inventory/CultureTemplateConfiguration" element={<CultureTemplateConfiguration/>}/>
             <Route path="Inventory/RefrenceCultureLot" element={<RefrenceCultureLot/>}/>
+            <Route path="Inventory/CultureLotAcceptance" element={<CultureLotAcceptance/>}/>
+            <Route path="Inventory/MediaOnboarding" element={<MediaOnboarding/>}/>
+            <Route path="Inventory/MediaContainerType" element={<MediaContainerType/>}/>
+            <Route path="Inventory/MediaTemplateConfiguration" element={<MediaTemplateConfiguration/>}/>
+            <Route path="Inventory/MediaLot" element={<MediaLot/>}/>
+            <Route path="Inventory/MediaLotContainerIssue" element={<MediaLotContainerIssue/>}/>
+            <Route path="Inventory/MediaLotAcceptance" element={<MediaLotAcceptance/>}/>
+            <Route path="Inventory/MediaLotUsage" element={<MediaLotUsage/>}/>
+            <Route path="Inventory/SampleArea" element={<SampleArea/>}/>
+            <Route path="Inventory/ProcessingSystem" element={<ProcessingSystem/>}/>
+            <Route path="Inventory/Schedule" element={<Schedule/>}/>
+            <Route path="Inventory/Unschedule" element={<Unschedule/>}/>
+            <Route path="Inventory/Acknowledgement" element={<Acknowledgement/>}/>
+            <Route path="Inventory/ScheduleTermination" element={<ScheduleTermination/>}/>
+            <Route path="Inventory/Facility" element={<Facility/>}/>
+            <Route path="Inventory/Location" element={<Location/>}/>
+            <Route path="Inventory/EMMoniteringDetails" element={<EMMoniteringDetails/>}/>
+            <Route path="Inventory/EMCOATemplate" element={<EMCOATemplate/>}/>
+            <Route path="Inventory/OOATemplate" element={<OOATemplate/>}/>
+            <Route path="Inventory/LocationSamples" element={<LocationSamples/>}/>
+
+
+
+
             
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />
@@ -210,12 +268,20 @@ function App() {
             <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding/>} />
             <Route path="/stock-management/material" element={<Material/>} />
             {/* <Route path="/stock-management/inventory" element={<Inventory/>}/>            */}
+            <Route path="/stock-management/inventory" element={<StockInventory/>}/>
+             <Route path="/stock-management/stock-inventory-details" element={<StockInventoryDetail/>}/> 
+             <Route path="/stock-management/stock-material-details" element={<StockMaterialDetail/>}/> 
+             <Route path="/stock-management/stock-onboarding-details" element={<StockOnboardingDetails/>}/> 
+                       
 
             <Route path="/reportsCertification/problemReporting" element={< ProblemReporting/>} />
             <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
             <Route path="/reportsCertification/coaTemplate1321" element={< Coa_Template/>} />
             <Route path="/reportsCertification/releasedCoa" element={<ReleasedCoa />} />
             <Route path="/reportsCertification/investigationCoa" element={<InvestigationCoa />} />
+          
+            <Route path="/vender" element={<Vender/>} />
+            <Route path="/clients" element={<Clients/>} />
           </Route>
         </Routes>
       </BrowserRouter>
