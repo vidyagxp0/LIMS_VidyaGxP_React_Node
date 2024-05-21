@@ -17,6 +17,7 @@ import QualityCheck from "./Pages/UserManagement/Department/QualityCheck"
 import Store from "./Pages/UserManagement/Department/Store"
 import Roles from "./Pages/UserManagement/Roles"
 import Samplelogin from "./Pages/Samplelogin/Samplelogin"
+import View from "./Pages/Samplelogin/SampleloginView/View.jsx"
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1"
 import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2"
 import Storage_Condition from "./Pages/Stability/Storage_Condition"
@@ -161,6 +162,8 @@ function App() {
             <Route path="/roles" element={<Roles/>} />
 
             <Route path="/samplelogin" element={<Samplelogin/>} />
+            <Route path="/view" element={<View/>} />
+
             <Route path="/investigationl1" element={<InvestigationL1/>} />
             <Route path="/investigationl2" element={<InvestigationL2/>}/>
             
