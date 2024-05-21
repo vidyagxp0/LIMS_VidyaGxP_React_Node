@@ -6,6 +6,7 @@ import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const SamplingField = () => {
@@ -46,10 +47,15 @@ const SamplingField = () => {
                 <td>{employee.registeredOn}</td>
                 <td className={`rounded-5 ${employee.status === 'ACTIVE' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'ACTIVE' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <FontAwesomeIcon icon={faEye} />
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
-                                                  
+                <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />                
+                </span>
+                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>                              
 
                 </td>
             </tr>
@@ -109,7 +115,7 @@ const SamplingField = () => {
                 >
                     <div className="offcanvas-header ">
                         <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add User
+                            Add Fields
                         </h5>
                             <button
                                 id="closebtn"
@@ -120,25 +126,26 @@ const SamplingField = () => {
                             ></button>
                         </div>
                     </div>
-                    <p className='p-3'>Please Add User To fill This Details</p>
+                    
+                    <label id="line3" htmlFor="">Field Name</label>
+                    <input id="line4" required type="text" placeholder="Sample Type Name" />
 
-                    <label id="line3" htmlFor="">User Name</label>
-                    <input id="line4" required type="text" placeholder="Name here" />
+                    <label id="line3" htmlFor="">Field Type</label>
+                    <select id="line4"  required>
+                        <option value="">Select Field Type</option>
+                        <option value="option1">Radio Button</option>
+                        <option value="option2">Label</option>
+                        <option value="option3">Entry Field</option>
+                        <option value="option4">Date Field</option>
 
-                    <label id="line3" htmlFor="">Contact Number</label>
-                    <input id="line4" required type="text" placeholder="+91 0000000000" />
+                    </select>
 
-                    <label id="line3" htmlFor="">Gmail Address</label>
-                    <input id="line4" required type="text" placeholder="sample@gamail.com" />
-
-                    <label id="line3" htmlFor="">Address</label>
-                    <input id="line4" required type="text" placeholder="Name" />
-
+              
                     <div id="line5">
                         <button type="button"
                             data-bs-dismiss="offcanvas"
                             aria-label="Close">&lt; Back</button>
-                        <button>Add</button>
+                        <button>Submit</button>
 
 
                     </div>

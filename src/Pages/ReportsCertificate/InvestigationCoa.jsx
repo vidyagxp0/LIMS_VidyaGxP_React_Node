@@ -16,7 +16,7 @@ function InvestigationCoa() {
                 <div className="container-fluid my-5">
 
                     <div className="main-head">
-                        <div className="title fw-bold fs-5">investigation Coa </div>
+                        <div className="title fw-bold fs-5">Investigation Coa </div>
 
 
                     </div>
@@ -96,7 +96,7 @@ function InvestigationCoa() {
                                     <CTableDataCell>Polycaprolactone</CTableDataCell>
                                     <CTableDataCell>RPS-TSLV-00</CTableDataCell>
                                     <CTableDataCell className="">
-                                        <div className="py-2 px-3 small rounded fw-bold bg-info" >Approved</div>
+                                        <div className="py-2 px-3 small rounded fw-bold bg-info" >APPROVED</div>
                                     </CTableDataCell>
                                     
 

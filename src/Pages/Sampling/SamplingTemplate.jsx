@@ -7,6 +7,7 @@ import { CgAddR } from 'react-icons/cg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
+import { Link } from 'react-router-dom';
 
 
 const SamplingTemplate = () => {
@@ -47,9 +48,8 @@ const SamplingTemplate = () => {
         <td>{employee.registeredOn}</td>
         <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
         <td>
-          <FontAwesomeIcon icon={faEye} />
-          <FontAwesomeIcon icon={faPenToSquare} />
-          <FontAwesomeIcon icon={faTrashCan} />
+          <Link to="/approval/1321" ><FontAwesomeIcon icon={faEye} /></Link>          
+          <Link to="#" ><FontAwesomeIcon icon={faTrashCan} /></Link>
 
 
         </td>
@@ -141,7 +141,7 @@ const SamplingTemplate = () => {
         >
           <div className="offcanvas-header ">
             <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add User
+              Add Sampling Template
             </h5>
               <button
                 id="closebtn"
@@ -152,25 +152,30 @@ const SamplingTemplate = () => {
               ></button>
             </div>
           </div>
-          <p className='p-3'>Please Add User To fill This Details</p>
+          <p className='p-3'>Add Information Of Sampling Template</p>
 
-          <label id="line3" htmlFor="">User Name</label>
-          <input id="line4" required type="text" placeholder="Name here" />
+          <label id="line3" htmlFor="">Template Name</label>
+          <input id="line4" required type="text" placeholder="Template Name" />
 
-          <label id="line3" htmlFor="">Contact Number</label>
-          <input id="line4" required type="text" placeholder="+91 0000000000" />
+          <label id="line3" htmlFor="">Unique Code</label>
+          <input id="line4" required type="text" placeholder="Unique Code" />
 
-          <label id="line3" htmlFor="">Gmail Address</label>
-          <input id="line4" required type="text" placeholder="sample@gamail.com" />
+          <label id="line3" htmlFor="">Sample Type</label>
+                    <select id="line4"  required>
+                        <option value="">Select...</option>
+                        <option value="option1">Raw Material</option>
+                        <option value="option2">Hcl</option>
+                        <option value="option3">Hydrochloric Acid</option>
+                        <option value="option4">Petrochemical</option>
 
-          <label id="line3" htmlFor="">Address</label>
-          <input id="line4" required type="text" placeholder="Name" />
+                    </select>
 
+          
           <div id="line5">
             <button type="button"
               data-bs-dismiss="offcanvas"
               aria-label="Close">&lt; Back</button>
-            <button>Add</button>
+            <button>Submit</button>
 
 
           </div>

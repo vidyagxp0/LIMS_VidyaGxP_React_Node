@@ -5,6 +5,7 @@ import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const SamplingConfiguration = () => {
@@ -48,10 +49,16 @@ const SamplingConfiguration = () => {
                 <td>{employee.sampleRule}</td>
                 
                 <td>
-                <FontAwesomeIcon icon={faEye} />
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
-                                                  
+                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />                
+                </span>
+                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
 
                 </td>
             </tr>
@@ -122,8 +129,7 @@ const SamplingConfiguration = () => {
                             ></button>
                         </div>
                     </div>
-                    <p className='p-3'>Please Add User To fill This Details</p>
-
+                    
                     <label id="line3" htmlFor="">Test Plan / Revision No.</label>
                     <select id="line4" required>
                         <option value="">Select...</option>
@@ -132,8 +138,7 @@ const SamplingConfiguration = () => {
                         <option value="option3">TP-010110</option>
                     </select>
 
-                    <input id="line4" required type="select" placeholder="Name here" />
-
+                    
                     <label id="line3" htmlFor="">Specification ID</label>
                     <input id="line4" required type="text" placeholder="" disabled/>
 

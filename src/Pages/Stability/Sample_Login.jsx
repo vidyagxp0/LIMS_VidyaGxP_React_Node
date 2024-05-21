@@ -95,7 +95,9 @@ function Sample_Login() {
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <div className="p-2">
-                    <FaDownload />
+                  <CButton className="bg-danger bg-opacity-75 rounded" >
+                    <FaDownload/>
+                  </CButton>
                   </div>
                   <CButton
                     className="bg-info text-white"

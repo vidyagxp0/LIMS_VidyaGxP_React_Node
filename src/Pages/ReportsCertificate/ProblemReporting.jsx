@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -39,7 +39,7 @@ function ProblemReporting() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Add Problem</CButton>
+                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Problem</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -69,7 +69,7 @@ function ProblemReporting() {
                                     <CTableDataCell>AL001</CTableDataCell>
                                     <CTableDataCell>Test</CTableDataCell>
                                     <CTableDataCell>Nov 17th 23</CTableDataCell>
-                                    
+
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
@@ -89,7 +89,7 @@ function ProblemReporting() {
                                     <CTableDataCell>AL002</CTableDataCell>
                                     <CTableDataCell>Test</CTableDataCell>
                                     <CTableDataCell>oct 15th 23</CTableDataCell>
-                                    
+
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
@@ -138,73 +138,102 @@ function ProblemReporting() {
 const StatusModal = (_props) => {
     return (
         <>
-
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+            <CModal
+                alignment="center"
+                visible={_props.visible}
+                onClose={_props.closeModal}
+            >
                 <CModalHeader>
-                    <CModalTitle>Add Storage Chamber</CModalTitle>
+                    <CModalTitle>Add Problem Reporting</CModalTitle>
                 </CModalHeader>
+
                 <CModalBody>
 
-                    <CFormInput
+                    <CFormSelect
                         type="text"
-                        label="Chamber ID"
-                        placeholder="Chamber Id "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Description"
-                        placeholder="Enter Description "
-                    />
-
-                    <CFormInput
-                        type="text"
-                        label="Make / Model"
-                        placeholder="Make / Model "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Serial No."
-                        placeholder="Serial Number "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Location"
-                        placeholder="Location "
-                    />
-                    <CFormTextarea
-                        type="text"
-                        label="Comments"
-                        placeholder=""
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Stability Storage Condition"
+                        label="Instrument (Instrument ID)"
+                        options={[
+                            "Select...",
+                            { label: "eqi/eng/163" },
+                            { label: "arzph001" },
+                            { label: "arz003" },
+                            { label: "qc/bal/0011" },
+                            { label: "hplc" },
+                            { label: "qc/bal/02" }
+                        ]}
                         placeholder="Select... "
                     />
                     <CFormInput
                         type="text"
-                        label="Number Of Racks"
-                        placeholder="Number Of Racks "
+                        label="Instrument Category"
+                        placeholder="weighing balance "
+                        disabled
                     />
                     <CFormInput
                         type="text"
-                        label="Number Of Shelfs"
-                        placeholder="Number Of Shelfs "
+                        label="Supplied By"
+                        placeholder="Supplied By "
                     />
                     <CFormInput
                         type="text"
-                        label="Maximum No. Of Positions For Shelf"
-                        placeholder="0"
+                        label="Problem ID"
+                        placeholder="Problem ID"
                     />
+
+                    <label>Problem In</label>
+                    <CFormCheck
+                        type="radio"
+                        id="ProblemInInstrument"
+                        name="ProblemIn"
+                        label="Instrument"
+                    />
+                    <CFormCheck
+                        type="radio"
+                        id="ProblemInModule"
+                        name="ProblemIn"
+                        label="Module"
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Problem In Brief"
+                        placeholder=" Problem In Brief"
+                    />
+
+                    <CFormInput
+                        type="file"
+                        label="Reference Document"
+                        placeholder=" choose file"
+                    />
+
+                    <CFormInput
+                        type="date"
+                        label="Occured On"
+                        placeholder=" "
+                    />
+
+                    <CFormInput
+                        type="date"
+                        label="Reported On"
+                        placeholder=" "
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Problem In Details"
+                        placeholder=" Problem In Details"
+                    />
+
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                    <CButton color="dark">Add</CButton>
+                    <CButton color="light" onClick={_props.closeModal}>
+                        Back
+                    </CButton>
+                    <CButton className="bg-info text-white">Submit</CButton>
                 </CModalFooter>
             </CModal>
-
         </>
-    )
-}
+    );
+};
 
 export default ProblemReporting

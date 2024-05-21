@@ -5,9 +5,10 @@ import { useState } from "react"
 import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
-function InstrumentCategory() {
+function Plants() {
     const [addModal, setAddModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
+    
     return (
         <>
 
@@ -15,7 +16,7 @@ function InstrumentCategory() {
                 <div className="container-fluid my-5">
 
                     <div className="main-head">
-                        <div className="title fw-bold fs-5">Instrument Category</div>
+                        <div className="title fw-bold fs-5">Plant's </div>
 
 
                     </div>
@@ -26,7 +27,7 @@ function InstrumentCategory() {
                     <div>
                         <CRow className="mb-3">
                             <CCol sm={3}>
-                                <CFormSelect
+                            <CFormSelect
                                     options={[
                                         'Select Status',
                                         { label: 'Active' },
@@ -39,7 +40,7 @@ function InstrumentCategory() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Instrument Category</CButton>
+                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Plant</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -49,9 +50,10 @@ function InstrumentCategory() {
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Category Name</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Plant Code</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Plant Name</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Address</CTableHeaderCell>
+                                    <CTableHeaderCell scope="col">Register On</CTableHeaderCell>
                                     <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                                 </CTableRow>
@@ -59,17 +61,17 @@ function InstrumentCategory() {
                             <CTableBody>
                                 <CTableRow>
                                     <CTableDataCell>1</CTableDataCell>
-                                    <CTableDataCell>chromatography</CTableDataCell>
-                                    <CTableDataCell>chroma</CTableDataCell>
-
-                                    <CTableDataCell>Nov 17th 24</CTableDataCell>
+                                    <CTableDataCell>SHMDZ/102145</CTableDataCell>
+                                    <CTableDataCell>Master</CTableDataCell>
+                                    <CTableDataCell>Indore</CTableDataCell>
+                                    <CTableDataCell>feb 11th 23</CTableDataCell>
+                                    
                                     <CTableDataCell className="">
                                         <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
-                                    </CTableDataCell>
+                                    </CTableDataCell>                                   
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            {/* <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link> */}
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                             <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
                                         </div>
@@ -77,47 +79,23 @@ function InstrumentCategory() {
                                 </CTableRow>
 
                                 <CTableRow>
-
                                     <CTableDataCell>2</CTableDataCell>
-                                    <CTableDataCell>weighing balance</CTableDataCell>
-                                    <CTableDataCell>EQI</CTableDataCell>
-
-                                    <CTableDataCell>Jan 5th 24</CTableDataCell>
+                                    <CTableDataCell>hplc/0112</CTableDataCell>
+                                    <CTableDataCell>win_master</CTableDataCell>
+                                    <CTableDataCell>Maharashtra</CTableDataCell>
+                                    <CTableDataCell>oct 15th 23</CTableDataCell>
                                     <CTableDataCell className="">
-                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
+                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle} >Active</div>
                                     </CTableDataCell>
+                                    
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            {/* <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link> */}
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                             <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
                                         </div>
                                     </CTableDataCell>
                                 </CTableRow>
-
-                                <CTableRow>
-
-                                    <CTableDataCell>3</CTableDataCell>
-                                    <CTableDataCell>weighing balance</CTableDataCell>
-                                    <CTableDataCell>ARZPH001</CTableDataCell>
-
-                                    <CTableDataCell>09-may-2024</CTableDataCell>
-                                    <CTableDataCell className="">
-                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Active</div>
-                                    </CTableDataCell>
-
-                                    <CTableDataCell>
-                                        <div className="d-flex gap-3">
-                                            {/* <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link> */}
-                                            <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
-                                    </CTableDataCell>
-                                </CTableRow>
-
-
-
 
                             </CTableBody>
                         </CTable>
@@ -157,30 +135,36 @@ const StatusModal = (_props) => {
 
             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                 <CModalHeader>
-                    <CModalTitle>Add Instrument Category</CModalTitle>
+                    <CModalTitle>Add Plant</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
 
                     <CFormInput
                         type="text"
-                        label="Category Name"
-                        placeholder=" Category Name"
+                        label="Name"
+                        placeholder=" "
                     />
                     <CFormInput
                         type="text"
-                        label="Description"
-                        placeholder="Description "
+                        label="Plant Code"
+                        placeholder=""
                     />
-                                        
+
+                    <CFormInput
+                        type="text"
+                        label="Address"
+                        placeholder=" "
+                    />
+                    
+                    
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton className="bg-info text-white">Submit</CButton>
+                    <CButton className="bg-info text-white">Add</CButton>
                 </CModalFooter>
             </CModal>
 
         </>
     )
 }
-
-export default InstrumentCategory
+export default Plants
