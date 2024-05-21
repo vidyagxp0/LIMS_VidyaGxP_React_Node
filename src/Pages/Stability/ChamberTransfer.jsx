@@ -37,7 +37,7 @@ function ChamberTransfer() {
                             <CCol sm={2}></CCol>
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Chamber Transfer</CButton>
+                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Chamber Transfer</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -164,21 +164,40 @@ const StatusModal = (_props) => {
                         placeholder=" "
                     />
 
-                    <CFormInput
+                    <CFormSelect
                         type="text"
                         label="Product"
+                        options={[
+                            "",
+                            { label: "Glass" },
+                            { label: "Hydraulic Oil" },
+                            { label: "chpoil" },
+                            { label: "Feliconar" },
+                            { label: "Sacubitril" },
+                            { label: "Testamine" }                    
+                          ]}
                         placeholder=" "
                     />
-                    <CFormInput
+                    <CFormSelect
                         type="text"
                         label="Protocol"
+                        options={[
+                            "",
+                            { label: "asd3454" },
+                            { label: "STB2" },
+                            { label: "Btc1P" },
+                            { label: "Stab7654" }
+                            
+                          ]}
                         placeholder=" "
                     />
+                    
+                    <CButton className="bg-info text-white">Display</CButton>
 
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                    <CButton color="dark">Add</CButton>
+                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                    <CButton className="bg-info text-white">Submit</CButton>
                 </CModalFooter>
             </CModal>
 

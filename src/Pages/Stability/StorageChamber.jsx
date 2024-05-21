@@ -71,7 +71,7 @@ function StorageChamber() {
                                    <CCol sm={2}></CCol>
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add Chamber</CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Chamber</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -258,8 +258,8 @@ const StatusModal = (_props) => {
                          />
                     </CModalBody>
                     <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Add</CButton>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
                     </CModalFooter>
                </CModal>
 

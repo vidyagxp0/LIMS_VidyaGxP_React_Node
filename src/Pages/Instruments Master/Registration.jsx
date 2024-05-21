@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -47,7 +47,7 @@ function Registration() {
                                    
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Instrument Registration</CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Instrument Registration</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -147,10 +147,7 @@ function Registration() {
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
-
-                                        
-
-                                        
+     
                                    </CTableBody>
                               </CTable>
                          </div>
@@ -187,65 +184,121 @@ const StatusModal = (_props) => {
 
                <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                     <CModalHeader>
-                         <CModalTitle>Add Storage Chamber</CModalTitle>
+                         <CModalTitle>Add Instrument</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
 
-                         <CFormInput
+                         <CFormSelect
                               type="text"
-                              label="Chamber ID"
-                              placeholder="Chamber Id "
+                              label="Instrument Category"
+                              placeholder="Select... "                        
+                              options={[
+                                   " Select",
+                                   { label: "chromatography" },
+                                   { label: "weighing balance" }                                  
+                                   
+                                 ]}
                          />
                          <CFormInput
                               type="text"
-                              label="Description"
-                              placeholder="Enter Description "
+                              label="Instrument Category Description"
+                              placeholder="chroma "
+                              disabled
                          />
                          
                          <CFormInput
                               type="text"
-                              label="Make / Model"
-                              placeholder="Make / Model "
+                              label="Instrument"
+                              placeholder=" Instrument"
                          />
                          <CFormInput
                               type="text"
-                              label="Serial No."
-                              placeholder="Serial Number "
+                              label="Instrument ID"
+                              placeholder="Instrument ID "
                          />
                          <CFormInput
                               type="text"
-                              label="Location"
-                              placeholder="Location "
+                              label="Make"
+                              placeholder=" Make"
                          />
+                         <CFormInput
+                              type="text"
+                              label="Model"
+                              placeholder="Model "
+                         />
+                         <CButton className="bg-info text-white d-flex ">Add Fields</CButton>
+                         <CFormInput
+                              type="text"
+                              label="Manufacturer's Serial No."
+                              placeholder=" Manufacturer's Serial No."
+                         />
+                         <CFormInput
+                              type="text"
+                              label="Capacity Size"
+                              placeholder="Capacity Size "
+                         />
+                         <CFormInput
+                              type="text"
+                              label="Equip No."
+                              placeholder=" Equip No."
+                         />
+                         <CFormInput
+                              type="text"
+                              label="Installed At"
+                              placeholder="Installed At"
+                         />
+                         <CFormInput
+                              type="date"
+                              label="Installed On"
+                              placeholder=" "
+                         />
+                         <CFormInput
+                              type="date"
+                              label="Warranty Expires On"
+                              placeholder=" "
+                         />
+                         <CFormInput
+                              type="text"
+                              label="Supplied By"
+                              placeholder="Supplied By"
+                         />
+
+                         <label>Contains module ?</label>
+                         <CFormCheck
+                         type="radio"
+                         id="ContainsModuleYes"
+                         name="ContainsModule"
+                         label="Yes"
+                         />
+                         <CFormCheck
+                         type="radio"
+                         id="ContainsModuleNo"
+                         name="ContainsModule"
+                         label="No"
+                         />
+
+
+
+                         <CFormInput
+                              type="text"
+                              label="SOP No."
+                              placeholder="SOP Number"
+                         />
+                         <CFormInput
+                              type="text"
+                              label="Software"
+                              placeholder="Software"
+                         />
+
                          <CFormTextarea
                               type="text"
-                              label="Comments"
+                              label="Description"
                               placeholder=""
                          />
-                         <CFormInput
-                              type="text"
-                              label="Stability Storage Condition"
-                              placeholder="Select... "
-                         />
-                         <CFormInput
-                              type="text"
-                              label="Number Of Racks"
-                              placeholder="Number Of Racks "
-                         />
-                         <CFormInput
-                              type="text"
-                              label="Number Of Shelfs"
-                              placeholder="Number Of Shelfs "
-                         />
-                         <CFormInput
-                              type="text"
-                              label="Maximum No. Of Positions For Shelf"
-                              placeholder="0"
-                         />
+                         
                     </CModalBody>
                     <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Add</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
                     </CModalFooter>
                </CModal>
 

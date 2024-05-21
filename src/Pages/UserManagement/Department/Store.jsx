@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './Admin.css';
-import { HiDotsHorizontal, HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
 import { CgAddR } from 'react-icons/cg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const Store = () => {
@@ -44,9 +46,17 @@ const Store = () => {
                 <td>{employee.addedOn}</td>
                 <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                    
+                <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />
+                </span>
 
-                    <HiDotsHorizontal />
+                    <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+
 
                 </td>
             </tr>

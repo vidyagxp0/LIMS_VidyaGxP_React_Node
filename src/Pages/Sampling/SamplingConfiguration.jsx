@@ -5,6 +5,7 @@ import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const SamplingConfiguration = () => {
@@ -48,10 +49,16 @@ const SamplingConfiguration = () => {
                 <td>{employee.sampleRule}</td>
                 
                 <td>
-                <FontAwesomeIcon icon={faEye} />
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
-                                                  
+                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />                
+                </span>
+                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
 
                 </td>
             </tr>
@@ -122,20 +129,55 @@ const SamplingConfiguration = () => {
                             ></button>
                         </div>
                     </div>
-                    <p className='p-3'>Please Add User To fill This Details</p>
+                    
+                    <label id="line3" htmlFor="">Test Plan / Revision No.</label>
+                    <select id="line4" required>
+                        <option value="">Select...</option>
+                        <option value="option1">TP-010110</option>
+                        <option value="option2">TP-012122</option>
+                        <option value="option3">TP-010110</option>
+                    </select>
 
-                    <label id="line3" htmlFor="">User Name</label>
-                    <input id="line4" required type="text" placeholder="Name here" />
+                    
+                    <label id="line3" htmlFor="">Specification ID</label>
+                    <input id="line4" required type="text" placeholder="" disabled/>
 
-                    <label id="line3" htmlFor="">Contact Number</label>
-                    <input id="line4" required type="text" placeholder="+91 0000000000" />
+                    <label id="line3" htmlFor="">Product/Material Name</label>
+                    <input id="line4" required type="text" placeholder="Product/Material Name" disabled/>
 
-                    <label id="line3" htmlFor="">Gmail Address</label>
-                    <input id="line4" required type="text" placeholder="sample@gamail.com" />
+                    <label id="line3" htmlFor="">Product/Material Code</label>
+                    <input id="line4" required type="text" placeholder="Product/Material Code" disabled/>
 
-                    <label id="line3" htmlFor="">Address</label>
-                    <input id="line4" required type="text" placeholder="Name" />
+                    <label id="line3" htmlFor="">Sample Type</label>
+                    <input id="line4" required type="text" placeholder="" disabled/>
 
+                    <label id="line3" htmlFor="">Sampling Template</label>
+                    <select id="line4" required>
+                        <option value="">Select Test Category</option>
+                        <option value="option1">Raw Sampling</option>
+                        <option value="option2">Test Temp1</option>
+                        <option value="option3">Test temp2</option>
+                    </select>
+
+                    <label id="line3" htmlFor="">Sampling Rule</label>
+                    <select id="line4" required>
+                        <option value="">Select Sampling Rule</option>
+                        <option value="option1">C2</option>
+                        <option value="option2">Raw sample</option>
+                        <option value="option3">Sample C1</option>
+                    </select>
+
+                    <label id="line3" htmlFor="">Sampling Test</label>
+                    <select id="line4" required>
+                        <option value="">Select...</option>
+                        <option value="option1">No Options</option>
+                        
+                    </select>
+
+                    <label id="line3" htmlFor="">Comment</label>
+                    <input id="line4" required type="text" placeholder="Test Code" />
+
+                    
                     <div id="line5">
                         <button type="button"
                             data-bs-dismiss="offcanvas"

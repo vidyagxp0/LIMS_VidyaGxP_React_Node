@@ -39,7 +39,7 @@ function InstrumentModule() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Add Module</CButton>
+                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Module</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -148,65 +148,96 @@ const StatusModal = (_props) => {
 
             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                 <CModalHeader>
-                    <CModalTitle>Add Storage Chamber</CModalTitle>
+                    <CModalTitle>Add Instrument Module</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
 
-                    <CFormInput
+                    <CFormSelect
                         type="text"
-                        label="Chamber ID"
-                        placeholder="Chamber Id "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Description"
-                        placeholder="Enter Description "
+                        label="Instrument (Instrument ID)"
+                        placeholder="Select... "
+                        options={[
+                            "Select...",
+                            { label: "Weighing Balance 2" },
+                            { label: "Pressure Gauge" },
+                            { label: "ARZ ph Meter" },
+                            { label: "Ariz Balance" },
+                            { label: "Weighing Balance-1" },
+                            { label: "Weighing Balance" },
+                          ]}
                     />
 
                     <CFormInput
                         type="text"
-                        label="Make / Model"
-                        placeholder="Make / Model "
+                        label="Instruction Category"
+                        placeholder="Weighing Balance "
+                        disabled
+                    />
+
+                    <CFormInput
+                            type="text"
+                            label=" Module"
+                            placeholder="Module "
+                            disabled
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Module ID "
+                        placeholder="Module ID"
+                        disabled
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Make "
+                        placeholder="Shimadu "
+                        disabled
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Model"
+                        placeholder="Ser33"
+                        disabled
                     />
                     <CFormInput
                         type="text"
-                        label="Serial No."
-                        placeholder="Serial Number "
+                        label="Manufacturer's Serial No."
+                        placeholder="adf3434"
+                        disabled
                     />
                     <CFormInput
                         type="text"
-                        label="Location"
-                        placeholder="Location "
+                        label="Installed On"
+                        placeholder="05/10/2024"
+                        disabled
                     />
-                    <CFormTextarea
+
+                    <CFormInput
                         type="text"
-                        label="Comments"
-                        placeholder=""
+                        label="Warranty Expires On"
+                        placeholder="05/05/2023"
+                        disabled
+                    />
+
+                    
+                    <CFormInput
+                        type="text"
+                        label="Supplied By"
+                        placeholder="Arizona "
+                        disabled
                     />
                     <CFormInput
                         type="text"
-                        label="Stability Storage Condition"
-                        placeholder="Select... "
+                        label="SOP No."
+                        placeholder="ASTM6453 "
                     />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Racks"
-                        placeholder="Number Of Racks "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Shelfs"
-                        placeholder="Number Of Shelfs "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Maximum No. Of Positions For Shelf"
-                        placeholder="0"
-                    />
+                    
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                    <CButton color="dark">Add</CButton>
+                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                    <CButton className="bg-info text-white">Submit</CButton>
                 </CModalFooter>
             </CModal>
 

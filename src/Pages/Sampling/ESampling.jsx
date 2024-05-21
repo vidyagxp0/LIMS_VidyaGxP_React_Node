@@ -6,6 +6,7 @@ import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const ESampling = () => {
@@ -47,10 +48,16 @@ const ESampling = () => {
                 <td>{employee.samplingConclusion}</td>
                 <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <FontAwesomeIcon icon={faEye} />
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
-                                                  
+                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />                
+                </span>
+                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>                               
 
                 </td>
             </tr>
@@ -110,7 +117,7 @@ const ESampling = () => {
                 >
                     <div className="offcanvas-header ">
                         <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add User
+                            Add E-Sampling
                         </h5>
                             <button
                                 id="closebtn"
@@ -121,19 +128,69 @@ const ESampling = () => {
                             ></button>
                         </div>
                     </div>
-                    <p className='p-3'>Please Add User To fill This Details</p>
+                    
+                    <label id="line3" htmlFor="">Sampling Configuration</label>
+                    <select id="line4" required>
+                        <option value="">Select...</option>
+                        <option value="option1">TP-010110</option>
+                        <option value="option2">TP-012122</option>
+                        <option value="option3">TP-010110</option>
+                    </select>
 
-                    <label id="line3" htmlFor="">User Name</label>
-                    <input id="line4" required type="text" placeholder="Name here" />
+                    
+                    <label id="line3" htmlFor="">Product/Material Name</label>
+                    <input id="line4" required type="text" placeholder="Product" disabled/>
 
-                    <label id="line3" htmlFor="">Contact Number</label>
-                    <input id="line4" required type="text" placeholder="+91 0000000000" />
+                    <label id="line3" htmlFor="">Test Plan</label>
+                    <input id="line4" required type="text" placeholder="Test Plan" disabled/>
 
-                    <label id="line3" htmlFor="">Gmail Address</label>
-                    <input id="line4" required type="text" placeholder="sample@gamail.com" />
+                    <label id="line3" htmlFor="">A.R. No</label>
+                    <select id="line4" required>
+                        <option value="">A.R. No</option>
+                        <option value="option1">ARPC010110</option>
+                        <option value="option2">ARPC012122</option>
+                        <option value="option3">ARPC010111</option>
+                    </select>                  
 
-                    <label id="line3" htmlFor="">Address</label>
-                    <input id="line4" required type="text" placeholder="Name" />
+
+                    <label id="line3" htmlFor="">Total No. of containers</label>
+                    <input id="line4" required type="text" placeholder="No. of containers" />
+
+                    <label id="line3" htmlFor="">No. of containers to be sampled</label>
+                    <input id="line4" required type="text" placeholder="No. of containers to be sampled" />
+
+                    <label id="line3" htmlFor="">Containers sampled</label>
+                    <select id="line4" required>
+                        <option value="">No. Of Sampled Containers</option>
+                        <option value="option1">No Options</option>
+                        
+                    </select>
+
+                    {/* <label id="line3" htmlFor="">Sampling Conclusion</label>
+                    <input id="pass" name="samplingConclusion" type="radio" required  />
+                    <input id="Fail" name="samplingConclusion" type="radio" required  />
+
+                    <label id="line3" htmlFor="">Check point passed</label>
+                    <input id="yes" name="Checkpointpassed" type="radio" required  />
+                    <input id="no" name="Checkpointpassed" type="radio" required  />
+
+                    <label id='line3' for="fileInput">Upload File</label>
+                    <input id="fileInput" type="file" required placeholder='Upload File'/>
+
+
+                     */}
+
+
+                    <label id="line3" htmlFor="">Comments</label>
+                    <input id="line4" required type="text" placeholder="" />
+
+                    <label id="line3" htmlFor="">Initiated By</label>
+                    <input id="line4" required type="text" placeholder="Admin" disabled />
+
+                    <label id="line3" htmlFor="">Initiated On</label>
+                    <input id="line4" required type="text" placeholder="05/20/2024" disabled />
+
+
 
                     <div id="line5">
                         <button type="button"

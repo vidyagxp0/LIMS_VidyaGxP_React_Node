@@ -71,7 +71,7 @@ function SampleStorage() {
                                    <CCol sm={2}></CCol>
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add Sample Storage</CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Sample Storage</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -205,61 +205,95 @@ const StatusModal = (_props) => {
                     </CModalHeader>
                     <CModalBody>
 
-                         <CFormInput
+                         <CFormSelect
                               type="text"
-                              label="Chamber ID"
-                              placeholder="Chamber Id "
+                              label="Specification ID"
+                              placeholder="Select... "
+                              options={[
+                                   "",
+                                   { label: "HCL10132%" },
+                                   { label: "HOS 234" },
+                                   { label: "CHPOIL001" },
+                                   { label: "MB-PM-001/01" },
+                                   { label: "RPS-TSLV-00" },
+                                   { label: "rest0001" },
+                                 ]}
                          />
-                         <CFormInput
-                              type="text"
-                              label="Description"
-                              placeholder="Enter Description "
-                         />
+                              <CFormInput
+                                   type="text"
+                                   label="Product/Material Name"
+                                   placeholder="Testamine "
+                                   disabled
+                              />
+                              <CFormSelect
+                                   type="text"
+                                   label="Protocol ID"
+                                   placeholder="select... "
+                                   options={[
+                                        "select...",
+                                        { label: "asdf3453" },
+                                        { label: "001" },
+                                        { label: "STP132432" },
+                                        { label: "MB-PM-001/01" },
+                                        { label: "RPS-TSLV-00" },
+                                        { label: "rest0001" },
+                                      ]}
+                              />
+                              <CFormSelect
+                                   type="text"
+                                   label="Storage Conditions"
+                                   placeholder="select... "
+                                   options={[
+                                        "select...",
+                                        { label: "asdf3453" },
+                                        { label: "001" },
+                                        { label: "STP132432" },
+                                        { label: "MB-PM-001/01" },
+                                        { label: "RPS-TSLV-00" },
+                                        { label: "rest0001" },
+                                      ]}
+                              />
+                                   <CFormSelect
+                                        type="text"
+                                        label="Chamber ID"
+                                        placeholder="select... "
+                                   />
+                              <CFormInput
+                                   type="text"
+                                   label=" Actual Storage Quantity"
+                                   placeholder="Actual Storage Quantity "
+                              />
 
                          <CFormInput
                               type="text"
-                              label="Make / Model"
-                              placeholder="Make / Model "
+                              label="Available Storage Quantity"
+                              placeholder="Available Storage Quantity "
                          />
                          <CFormInput
                               type="text"
-                              label="Serial No."
-                              placeholder="Serial Number "
+                              label="Number Of Storage Positions"
+                              placeholder="Number Of Storage Positions"
                          />
                          <CFormInput
                               type="text"
-                              label="Location"
-                              placeholder="Location "
-                         />
-                         <CFormTextarea
-                              type="text"
-                              label="Comments"
-                              placeholder=""
+                              label="Number Of Storage Positions"
+                              placeholder="Number Of Positions"
                          />
                          <CFormInput
                               type="text"
-                              label="Stability Storage Condition"
-                              placeholder="Select... "
+                              label="Chamber Description"
+                              placeholder=" Chamber Description"
                          />
                          <CFormInput
                               type="text"
-                              label="Number Of Racks"
-                              placeholder="Number Of Racks "
+                              label="Chamber Location"
+                              placeholder=" Chamber Location"
                          />
-                         <CFormInput
-                              type="text"
-                              label="Number Of Shelfs"
-                              placeholder="Number Of Shelfs "
-                         />
-                         <CFormInput
-                              type="text"
-                              label="Maximum No. Of Positions For Shelf"
-                              placeholder="0"
-                         />
+                         
                     </CModalBody>
                     <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Add</CButton>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
                     </CModalFooter>
                </CModal>
 

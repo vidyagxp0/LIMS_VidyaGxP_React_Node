@@ -37,7 +37,7 @@ function Storage_Condition() {
                                    <CCol sm={2}></CCol>
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add Storage Location</CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Storage Location</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -62,7 +62,6 @@ function Storage_Condition() {
                                              <CTableDataCell>na-001</CTableDataCell>
                                              <CTableDataCell>60°F</CTableDataCell>
                                              <CTableDataCell></CTableDataCell>
-
                                              <CTableDataCell className="d-flex">
                                                   <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
                                              </CTableDataCell>
@@ -151,8 +150,8 @@ const StatusModal = (_props) => {
 
                     </CModalBody>
                     <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Add</CButton>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Add</CButton>
                     </CModalFooter>
                </CModal>
 

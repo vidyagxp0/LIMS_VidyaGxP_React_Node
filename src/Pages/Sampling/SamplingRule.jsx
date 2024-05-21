@@ -6,6 +6,7 @@ import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const SamplingRule = () => {
@@ -46,11 +47,15 @@ const SamplingRule = () => {
                 <td>{employee.updatedAt}</td>
                 <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <FontAwesomeIcon icon={faEye} />
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
-                                                  
-
+                    <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />                
+                </span>
+                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
                 </td>
             </tr>
         ));
@@ -109,7 +114,7 @@ const SamplingRule = () => {
                 >
                     <div className="offcanvas-header ">
                         <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add User
+                            Add Rule
                         </h5>
                             <button
                                 id="closebtn"
@@ -120,20 +125,19 @@ const SamplingRule = () => {
                             ></button>
                         </div>
                     </div>
-                    <p className='p-3'>Please Add User To fill This Details</p>
+                    
+                    <label id="line3" htmlFor="">Sampling Rule Name</label>
+                    <input id="line4" required type="text" placeholder="Sampling Rule Name" />
 
-                    <label id="line3" htmlFor="">User Name</label>
-                    <input id="line4" required type="text" placeholder="Name here" />
+                    <label id="line3" htmlFor="">Unique Code</label>
+                    <input id="line4" required type="text" placeholder="Unique Code" />
 
-                    <label id="line3" htmlFor="">Contact Number</label>
-                    <input id="line4" required type="text" placeholder="+91 0000000000" />
-
-                    <label id="line3" htmlFor="">Gmail Address</label>
-                    <input id="line4" required type="text" placeholder="sample@gamail.com" />
-
-                    <label id="line3" htmlFor="">Address</label>
-                    <input id="line4" required type="text" placeholder="Name" />
-
+                    <label id="line3" htmlFor="">Number of Ranges</label>
+                    <div className='d-flex '>
+                    <input id="line4" required type="text" placeholder="Number of Ranges" />
+                    <button className='btn btn-info text-white' >Add</button>
+                    </div>
+                    
                     <div id="line5">
                         <button type="button"
                             data-bs-dismiss="offcanvas"

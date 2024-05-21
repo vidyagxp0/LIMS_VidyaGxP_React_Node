@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFooter, CFormInput, CFormSelect, CHeader, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -73,7 +73,7 @@ function SummaryReportHeader() {
                                    </CCol>
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add Summary</CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Summary</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -165,24 +165,68 @@ const StatusModal = (_props) => {
 
                <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                     <CModalHeader>
-                         <CModalTitle>New Condition</CModalTitle>
+                         <CModalTitle>Add Summary Report Header</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
 
+                         
                          <CFormInput
                               type="text"
-                              label="Stability Storage Condition"
-                              placeholder="°C °F "
+                              label="Report Title"
+                              placeholder=" Report Title"
                          />
                          <CFormInput
                               type="text"
-                              label="Description"
-                              placeholder=" "
+                              label="Product/Material Caption"
+                              placeholder=" Product"
                          />
+                         <CFormInput
+                              type="text"
+                              label="Format No."
+                              placeholder=" Format No."
+                         />
+                         <CHeader className="bg-secondary">Header</CHeader>
+                         <CFormInput
+                              type="text"
+                              label="Rows"
+                              placeholder=" Rows"
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Columns"
+                              placeholder=" Columns"
+                              options={[
+                                   " Columns",
+                                   { label: "2" },
+                                   { label: "4" },
+                                   { label: "6" }
+                                   
+                                 ]}
+                         />
+                         <CFooter className="bg-secondary">Footer</CFooter>
+                         
+                         <CFormInput
+                              type="text"
+                              label="Rows"
+                              placeholder=" Rows"
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Columns"
+                              placeholder=" Columns"
+                              options={[
+                                   " Columns",
+                                   { label: "2" },
+                                   { label: "4" },
+                                   { label: "6" }
+                                   
+                                 ]}
+                         />
+
                     </CModalBody>
                     <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Add</CButton>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
                     </CModalFooter>
                </CModal>
 

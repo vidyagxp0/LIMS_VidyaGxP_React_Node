@@ -37,7 +37,7 @@ function StandardProtocol() {
                                    <CCol sm={2}></CCol>
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <CButton color="dark" onClick={() => setAddModal(true)}>Add Condition</CButton>
+                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Condition</CButton>
                                         </div>
                                    </CCol>
                               </CRow>
@@ -173,8 +173,8 @@ const StatusModal = (_props) => {
                          />
                     </CModalBody>
                     <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Add</CButton>
+                         {/* <CButton color="light" onClick={_props.closeModal}>Cancel</CButton> */}
+                         <CButton className="bg-info text-white">Add</CButton>
                     </CModalFooter>
                </CModal>
 
