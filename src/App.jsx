@@ -56,7 +56,7 @@ import MasterProductDetail from "./Pages/Masters/MasterProductDetail.jsx"
 
 // import Inventory from './Pages/Inventory/Inventory.jsx'
 import Inventory from "./Pages/Inventory/Inventory";
-import Chemicals from "./Pages/Inventory/Chemicals";
+// import Chemicals from "./Pages/Inventory/Chemicals";
 import Columns from "./Pages/Inventory/Columns";
 // import CultureManagement from "./Pages/Inventory/CultureManagement";
 import Environment from "./Pages/Inventory/Environment";
@@ -91,6 +91,27 @@ import CultureRegistration from "./Pages/Inventory/CultureRegistration.jsx"
 import RefrenceCulture from "./Pages/Inventory/RefrenceCulture.jsx"
 import CultureTemplateConfiguration from "./Pages/Inventory/CultureTemplateConfiguration.jsx"
 import RefrenceCultureLot from "./Pages/Inventory/RefrenceCultureLot.jsx"
+import CultureLotAcceptance from "./Pages/Inventory/CultureLotAcceptance.jsx"
+import MediaOnboarding from "./Pages/Inventory/MediaOnboarding.jsx"
+import MediaContainerType from "./Pages/Inventory/MediaContainerType.jsx"
+import MediaTemplateConfiguration from "./Pages/Inventory/MediaTemplateConfiguration.jsx"
+import MediaLot from "./Pages/Inventory/MediaLot.jsx"
+import MediaLotContainerIssue from "./Pages/Inventory/MediaLotContainerIssue.jsx"
+import MediaLotAcceptance from "./Pages/Inventory/MediaLotAcceptance.jsx"
+import MediaLotUsage from "./Pages/Inventory/MediaLotUsage.jsx"
+import SampleArea from "./Pages/Inventory/SampleArea.jsx"
+import ProcessingSystem from "./Pages/Inventory/ProcessingSystem.jsx"
+import Schedule from "./Pages/Inventory/Schedule.jsx"
+import Unschedule from "./Pages/Inventory/Unschedule.jsx"
+import Acknowledgement from "./Pages/Inventory/Acknowledgement.jsx"
+import ScheduleTermination from "./Pages/Inventory/ScheduleTermination.jsx"
+import Facility from "./Pages/Inventory/Facility.jsx"
+import Location from "./Pages/Inventory/Location.jsx"
+import EMMoniteringDetails from "./Pages/Inventory/EMMoniteringDetails.jsx"
+import EMCOATemplate from "./Pages/Inventory/EMCOATemplate.jsx"
+import OOATemplate from "./Pages/Inventory/OOATemplate.jsx"
+import LocationSamples from "./Pages/Inventory/LocationSamples.jsx"
+
 
 
 import StocksVerification from "./Pages/Stock Management/StocksVerification"
@@ -203,6 +224,7 @@ function App() {
             <Route path="Inventory/Assignment" element={<Assignment/>}/>
             <Route path="Inventory/Qualification" element={<Qualification/>}/>
             <Route path="Inventory/ColumnUsage" element={<ColumnUsage/>}/>
+            {/* <Route path="Inventory/Chemicals" element={<Chemicals/>}/> */}
             <Route path="Inventory/BatchAssignment" element={<BatchAssignment/>}/>
             <Route path="Inventory/StandardRegistration" element={<StandardRegistration/>}/>
             <Route path="Inventory/InvLotRegistration" element={<InvLotRegistration/>}/>
@@ -211,6 +233,30 @@ function App() {
             <Route path="Inventory/RefrenceCulture" element={<RefrenceCulture/>}/>
             <Route path="Inventory/CultureTemplateConfiguration" element={<CultureTemplateConfiguration/>}/>
             <Route path="Inventory/RefrenceCultureLot" element={<RefrenceCultureLot/>}/>
+            <Route path="Inventory/CultureLotAcceptance" element={<CultureLotAcceptance/>}/>
+            <Route path="Inventory/MediaOnboarding" element={<MediaOnboarding/>}/>
+            <Route path="Inventory/MediaContainerType" element={<MediaContainerType/>}/>
+            <Route path="Inventory/MediaTemplateConfiguration" element={<MediaTemplateConfiguration/>}/>
+            <Route path="Inventory/MediaLot" element={<MediaLot/>}/>
+            <Route path="Inventory/MediaLotContainerIssue" element={<MediaLotContainerIssue/>}/>
+            <Route path="Inventory/MediaLotAcceptance" element={<MediaLotAcceptance/>}/>
+            <Route path="Inventory/MediaLotUsage" element={<MediaLotUsage/>}/>
+            <Route path="Inventory/SampleArea" element={<SampleArea/>}/>
+            <Route path="Inventory/ProcessingSystem" element={<ProcessingSystem/>}/>
+            <Route path="Inventory/Schedule" element={<Schedule/>}/>
+            <Route path="Inventory/Unschedule" element={<Unschedule/>}/>
+            <Route path="Inventory/Acknowledgement" element={<Acknowledgement/>}/>
+            <Route path="Inventory/ScheduleTermination" element={<ScheduleTermination/>}/>
+            <Route path="Inventory/Facility" element={<Facility/>}/>
+            <Route path="Inventory/Location" element={<Location/>}/>
+            <Route path="Inventory/EMMoniteringDetails" element={<EMMoniteringDetails/>}/>
+            <Route path="Inventory/EMCOATemplate" element={<EMCOATemplate/>}/>
+            <Route path="Inventory/OOATemplate" element={<OOATemplate/>}/>
+            <Route path="Inventory/LocationSamples" element={<LocationSamples/>}/>
+
+
+
+
             
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />

@@ -1,13 +1,17 @@
 import {
   CButton,
   CCol,
-  // CFormCheck,
-  CFormInput,
-  CFormSelect,
+  // CFormInput,
+  // CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
+  // CDropdownDivider,
   CModalTitle,
   CRow,
   CTable,
@@ -26,7 +30,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function CultureTemplateConfiguration() {
+function MediaLotContainersIssue() {
+  const [selectedStatus, setSelectedStatus] = useState("Select Status");
+
+  const handleSelect = (status) => {
+    setSelectedStatus(status);
+  };
   const [addModal, setAddModal] = useState(false);
   const badgeStyle = { background: "#cdffca" };
   return (
@@ -34,68 +43,46 @@ function CultureTemplateConfiguration() {
       <div id="approval-page" className="h-100 mx-5">
         <div className="container-fluid my-5">
           <div className="main-head">
-            <div className="title fw-bold fs-5">Reference Culture Lot</div>
-          </div>
-          <div className="d-flex gap-4">
-            <div className="chart-widgets w-100">
-              <div className="">
-                <div className="row">
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#0d6efd, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">2</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#d63384, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#ffc107, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">APPROVED</div>
-                    <div className="count fs-1 text-light fw-bolder">1</div>
-                  </div>
-
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#dc3545, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                </div>
-              </div>
+            <div className="title fw-bold fs-5 mb-5">
+              Media Lot Containers Issue
             </div>
           </div>
+          <div className="d-flex gap-4">
+            <div className="chart-widgets w-100"></div>
+          </div>
           <div>
-            <CRow className="mb-3">
-              <CCol sm={4}>
-                <CFormInput type="email" placeholder="Search..." />
-              </CCol>
-              <CCol sm={3}>
-                <CFormSelect
-                  options={[
-                    "All",
-                    { label: "All" },
-                    { label: "Initiated" },
-                    { label: "Approved" },
-                    { label: "Rejected" },
-                    { label: "Reinitiated" },
-                    { label: "Dropped" },
-                  ]}
-                />
-              </CCol>
+            <CRow className="mb-3 ">
+              <CDropdown
+                style={{
+                  width: "200px",
+                  border: "1px solid lightgray",
+                  boxShadow: "0 0 5px  black",
+                  borderRadius: "5px",
+                }}
+              >
+                <CDropdownToggle color="" style={{ color: "gray" }}>
+                  Show {selectedStatus}
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem header>Select Status</CDropdownItem>
+                  <CDropdownItem onClick={() => handleSelect("Active")}>
+                    Active
+                  </CDropdownItem>
+                  <CDropdownItem onClick={() => handleSelect("Inactive")}>
+                    Inactive
+                  </CDropdownItem>
+                </CDropdownMenu>
+              </CDropdown>
               <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="info" onClick={() => setAddModal(true)}>
-                    Add Culture Lot
+                  <CButton
+                    color="info"
+                    text="white"
+                    style={{ marginLeft: "50px" }}
+                    onClick={() => setAddModal(true)}
+                  >
+                    Media Lot Containers Issue
                   </CButton>
                 </div>
               </CCol>
@@ -110,21 +97,26 @@ function CultureTemplateConfiguration() {
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">SNo.</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Reference Lot Code
+                    Media Container No.{" "}
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Reference Culture
+                    Container Qty{" "}
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Received Quantity
+                    Container Validity Period Day(s)
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Batch No. </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Catalogue No.{" "}
+                    Container Valid Upto
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Valid Upto</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">
+                    Lot Valid Upto{" "}
+                  </CTableHeaderCell>
+                  {/* <CTableHeaderCell scope="col">Media Usage </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Comments </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell> */}
 
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Status </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -136,7 +128,10 @@ function CultureTemplateConfiguration() {
 
                   <CTableDataCell>stmp1</CTableDataCell>
                   <CTableDataCell>describe</CTableDataCell>
-                  <CTableDataCell>isubus111</CTableDataCell>
+                  {/* <CTableDataCell>isubus111</CTableDataCell>
+                  <CTableDataCell>54255455</CTableDataCell>
+                  <CTableDataCell>54255455</CTableDataCell> */}
+                  <CTableDataCell>54255455</CTableDataCell>
                   <CTableDataCell>54255455</CTableDataCell>
                   <CTableDataCell>loc1</CTableDataCell>
 
@@ -172,8 +167,10 @@ function CultureTemplateConfiguration() {
                   </CTableHeaderCell>
                   <CTableDataCell>2</CTableDataCell>
                   <CTableDataCell>test21</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>
-                  {/* <CTableDataCell>testing</CTableDataCell>*/}
+                  {/* <CTableDataCell>NA</CTableDataCell>
+                  <CTableDataCell>testing</CTableDataCell>
+                  <CTableDataCell>testing</CTableDataCell> */}
+                  <CTableDataCell>testing</CTableDataCell>
                   <CTableDataCell>testing</CTableDataCell>
                   <CTableDataCell>25365488</CTableDataCell>
                   <CTableDataCell>Plant1</CTableDataCell>
@@ -210,9 +207,11 @@ function CultureTemplateConfiguration() {
                   </CTableHeaderCell>
                   <CTableDataCell>3</CTableDataCell>
                   <CTableDataCell>test</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>
-                  {/* <CTableDataCell>testing525</CTableDataCell>*/}
-                  <CTableDataCell>25255488</CTableDataCell>
+                  {/* <CTableDataCell>NA</CTableDataCell>
+                  <CTableDataCell>testing525</CTableDataCell>
+                  <CTableDataCell>25255488</CTableDataCell> */}
+                  <CTableDataCell>Lab1</CTableDataCell>
+                  <CTableDataCell>Lab1</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
 
@@ -246,9 +245,11 @@ function CultureTemplateConfiguration() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableDataCell>3</CTableDataCell>
-                  <CTableDataCell>test</CTableDataCell>
+                  {/* <CTableDataCell>test</CTableDataCell>
                   <CTableDataCell>NA</CTableDataCell>
-                  {/* <CTableDataCell>NA</CTableDataCell>*/}
+                  <CTableDataCell>testing525</CTableDataCell> */}
+                  <CTableDataCell>testing525</CTableDataCell>
+                  <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>25255488</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
@@ -298,81 +299,159 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="xl"
       >
         <CModalHeader>
-          <CModalTitle>Add Culture Lot</CModalTitle>
+          <CModalTitle size="xl">Add Media Lot</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Add information and Add Template</p>
-          <h3>Registration Initiation</h3>
-          <CFormSelect
-            type="text"
-            label="Reference Culture Lot Code
-
-
-
-            "
-            placeholder=" "
-          />
-          <CFormInput type="text" label="Reference Culture" placeholder="" />
-          <CFormInput type="text" label="Received Quantity" placeholder="" />
-          <CFormInput type="text" label="Received By" placeholder="" />
-          <CFormInput type="date" label="Received On" placeholder="" />{" "}
-          <CFormInput
-            type="date"
-            label="Valid Upto
-          "
-            placeholder=""
-          />
-          <CFormInput type="text" label="Delivery Receipt No" placeholder="" />
-          <CFormInput type="text" label="Supplied By" placeholder="" />
-          <CFormInput
-            type="text"
-            label="Certificate No
-            "
-            placeholder=""
-          />
-          <CFormInput type="text" label="Certificate" placeholder="" />
-          <CFormInput
-            type="text"
-            label="Batch No. On Catalogue
-            "
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            label="Catalogue No.
-            "
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            label="Packing Description
-
-
-            "
-            placeholder=""
-          />
-          <CFormSelect
-            type="text"
-            label="Stored At
-
-            "
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            label="Comments
-            "
-            placeholder=""
-          />
+          <table
+            className="table table-bordered"
+            style={{ width: "100%", height: "700px" }}
+          >
+            <thead className="thead-light">
+              <tr>
+                <th style={{ background: "#0F93C3", color: "white" }}>SNo.</th>
+                <th style={{ background: "#0F93C3", color: "white" }}>
+                Media Container No.	
+                </th>
+                <th style={{ background: "#0F93C3", color: "white" }}>
+                  Container Qty
+                </th>
+                <th style={{ background: "#0F93C3", color: "white" }}>
+                  Container Validity Period Day(s)
+                </th>
+                <th style={{ background: "#0F93C3", color: "white" }}>
+                  Container Valid Upto
+                </th>
+                <th style={{ background: "#0F93C3", color: "white" }}>
+                  Lot Valid Upto
+                </th>
+                <th style={{ background: "#0F93C3", color: "white" }}>
+                  Select
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>WSI-1020223-000000061</td>
+                <td>10</td>
+                <td>60</td>
+                <td>19/05/2024 15:08</td>
+                <td>19/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>WSI-1020223-000000062</td>
+                <td>10</td>
+                <td>60</td>
+                <td>19/05/2024 15:08</td>
+                <td>19/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>WSI-1020223-000000063</td>
+                <td>10</td>
+                <td>60</td>
+                <td>18/05/2024 15:08</td>
+                <td>18/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>WSI-1020223-000000064</td>
+                <td>10</td>
+                <td>60</td>
+                <td>18/05/2024 15:08</td>
+                <td>18/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>WSI-1020223-000000065</td>
+                <td>10</td>
+                <td>60</td>
+                <td>18/05/2024 15:08</td>
+                <td>18/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>WSI-1020223-000000066</td>
+                <td>10</td>
+                <td>60</td>
+                <td>18/05/2024 15:08</td>
+                <td>18/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>WSI-1020223-000000067</td>
+                <td>10</td>
+                <td>60</td>
+                <td>19/05/2024 15:08</td>
+                <td>19/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>WSI-1020223-000000068</td>
+                <td>10</td>
+                <td>60</td>
+                <td>19/05/2024 15:08</td>
+                <td>19/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>WSI-1020223-000000069</td>
+                <td>10</td>
+                <td>60</td>
+                <td>19/05/2024 15:08</td>
+                <td>19/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>WSI-1020223-000000610</td>
+                <td>10</td>
+                <td>60</td>
+                <td>19/05/2024 15:08</td>
+                <td>19/05/2024 15:08</td>
+                <td>
+                  <input type="checkbox" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
             Cancel
           </CButton>
           <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add Culture Lot
+            Submit
           </CButton>
         </CModalFooter>
       </CModal>
@@ -380,4 +459,4 @@ const StatusModal = (_props) => {
   );
 };
 
-export default CultureTemplateConfiguration;
+export default MediaLotContainersIssue;
