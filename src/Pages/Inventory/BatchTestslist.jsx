@@ -35,7 +35,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function LocationSamples() {
+function BatchTestslist() {
   const [selectedStatus, setSelectedStatus] = useState("Select Status");
 
   const handleSelect = (status) => {
@@ -48,7 +48,7 @@ function LocationSamples() {
       <div id="approval-page" className="h-100 mx-5">
         <div className="container-fluid my-5">
           <div className="main-head">
-            <div className="title fw-bold fs-5 mb-5">Location Samples</div>
+            <div className="title fw-bold fs-5 mb-5">Batch Tests list</div>
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100"></div>
@@ -91,7 +91,18 @@ function LocationSamples() {
               </CCol> */}
 
               <CCol sm={2}></CCol>
-              <CCol sm={3}></CCol>
+              <CCol sm={3}>
+                <div className="d-flex justify-content-end">
+                  <CButton
+                    color="info"
+                    text="white"
+                    style={{ marginLeft: "50px" }}
+                    onClick={() => setAddModal(true)}
+                  >
+                    Batch Tests List
+                  </CButton>
+                </div>
+              </CCol>
             </CRow>
           </div>
           <div className="bg-white mt-5">
@@ -102,19 +113,24 @@ function LocationSamples() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">SNo.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col"> Plant Name </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Facility </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Location</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">prefix</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Location Type Id
+                    Batch Sample Id
                   </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">
+                    Registered On{" "}
+                  </CTableHeaderCell>
+                  {/*<CTableHeaderCell scope="col">
+                  Generic Name	
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Specification Code	
+</CTableHeaderCell> */}
+                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                   {/* <CTableHeaderCell scope="col">Media Usage </CTableHeaderCell>
                   <CTableHeaderCell scope="col">Comments </CTableHeaderCell> */}
                   {/* <CTableHeaderCell scope="col">Added On</CTableHeaderCell> */}
 
                   {/* <CTableHeaderCell scope="col">Added On</CTableHeaderCell> */}
-                  <CTableHeaderCell scope="col">Added On </CTableHeaderCell>
+                  {/* <CTableHeaderCell scope="col">Status </CTableHeaderCell> */}
                   <CTableHeaderCell scope="col">Actions </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -126,13 +142,8 @@ function LocationSamples() {
                   <CTableDataCell>1</CTableDataCell>
 
                   <CTableDataCell>stmp1</CTableDataCell>
-                  <CTableDataCell>describe</CTableDataCell>
-                  {/* <CTableDataCell>isubus111</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell> */}
-                  <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>loc1</CTableDataCell>
+                  <CTableDataCell>stmp1</CTableDataCell>
+                  {/* <CTableDataCell>describe</CTableDataCell> */}
 
                   <CTableDataCell className="d-flex">
                     <div
@@ -144,12 +155,18 @@ function LocationSamples() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
+                      <Link to="/approval/1321">
+                        <FontAwesomeIcon icon={faEye} />
+                      </Link>
                       <div
                         className="cursor-pointer"
                         onClick={() => setAddModal(true)}
                       >
-                        <CButton color="info">Add</CButton>
+                        <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
+                      <Link to="#">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </Link>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -159,14 +176,8 @@ function LocationSamples() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableDataCell>2</CTableDataCell>
-                  <CTableDataCell>test21</CTableDataCell>
-                  {/* <CTableDataCell>NA</CTableDataCell>
+                  <CTableDataCell>2</CTableDataCell>
                   <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell> */}
-                  <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>25365488</CTableDataCell>
-                  <CTableDataCell>Plant1</CTableDataCell>
 
                   <CTableDataCell className="d-flex">
                     <div
@@ -178,12 +189,18 @@ function LocationSamples() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
+                      <Link to="/approval/1321">
+                        <FontAwesomeIcon icon={faEye} />
+                      </Link>
                       <div
                         className="cursor-pointer"
                         onClick={() => setAddModal(true)}
                       >
-                        <CButton color="info">Add</CButton>
+                        <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
+                      <Link to="#">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </Link>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -193,14 +210,12 @@ function LocationSamples() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableDataCell>3</CTableDataCell>
-                  <CTableDataCell>test</CTableDataCell>
-                  {/* <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>25255488</CTableDataCell> */}
+                  <CTableDataCell>3</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
+
+                  {/* <CTableDataCell>Lab1</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
+                  <CTableDataCell>Lab1</CTableDataCell> */}
 
                   <CTableDataCell className="d-flex">
                     <div
@@ -210,15 +225,20 @@ function LocationSamples() {
                       INITIATED
                     </div>
                   </CTableDataCell>
-
                   <CTableDataCell>
                     <div className="d-flex gap-3">
+                      <Link to="/approval/1321">
+                        <FontAwesomeIcon icon={faEye} />
+                      </Link>
                       <div
                         className="cursor-pointer"
                         onClick={() => setAddModal(true)}
                       >
-                        <CButton color="info">Add</CButton>
+                        <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
+                      <Link to="#">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </Link>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -232,9 +252,10 @@ function LocationSamples() {
                   <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
+                  {/* <CTableDataCell>testing525</CTableDataCell> */}
+                  {/* <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>25255488</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
+                  <CTableDataCell>Lab1</CTableDataCell> */}
 
                   <CTableDataCell className="d-flex">
                     <div
@@ -246,12 +267,18 @@ function LocationSamples() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
+                      <Link to="/approval/1321">
+                        <FontAwesomeIcon icon={faEye} />
+                      </Link>
                       <div
                         className="cursor-pointer"
                         onClick={() => setAddModal(true)}
                       >
-                        <CButton color="info">Add</CButton>
+                        <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
+                      <Link to="#">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </Link>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -275,25 +302,18 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="2xl"
-        
       >
         <CModalHeader className="p-3">
-          <CModalTitle>Add Sampling Schedule Registration</CModalTitle>
+          <CModalTitle>Add Batch Tests List Registration</CModalTitle>
         </CModalHeader>
-        <p>Add information and register new Sampling Schedule</p>
 
-        {/* <p>Add information and Add Coa Template</p> */}
+        <p>Add information and register new Batch Tests List</p>
         <div className="modal-body p-4">
           <CForm>
             <div className="mb-3">
               <CFormInput
-                type="text"
-                label="Schedule Code
-
-
-
-
+                type="date"
+                label="Batch Sample ID
                 "
                 placeholder=""
                 className="custom-placeholder"
@@ -301,11 +321,8 @@ const StatusModal = (_props) => {
             </div>
             <div className="mb-3">
               <CFormInput
-                type="text"
-                label="Description
-
-
-
+                type="date"
+                label="Test Name
                 "
                 placeholder=""
                 className="custom-placeholder"
@@ -315,99 +332,53 @@ const StatusModal = (_props) => {
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Frequency
+                label="Test Type
+
+
+
+
                "
                 placeholder=""
                 className="custom-placeholder"
               />
             </div>
+
             <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Tolerance
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-              <CButton color="info">Add</CButton>
-            </div>
-
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Start Date"
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="End Date
+                label="Submission Type
                 "
                 placeholder=""
                 className="custom-placeholder"
               />
             </div>
-
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Select User Group To Alert
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
             <div>
-              <table className="table table-bordered" style={{background:"white"}}>
-                <thead style={{background:"lightblue"}}>
-                  <th>Sno.</th>
-                  <th>Plant</th>
-                  <th>Facility</th>
-                  <th>Location</th>
-                  <th>Location ID</th>
-                  <th>Location Description</th>
-                  <th>Grade/Class</th>
-                  <th>Monitoring Method</th>
+              <table>
+                <thead style={{background:"lightblue", border:"2px solid black"}}>
+                  <tr style={{background:"lightblue", border:"2px solid black"}}>
+                    <th style={{background:"lightblue", border:"2px solid black"}}>Sno.</th>
+                    <th style={{background:"lightblue", border:"2px solid black"}}>EM A RN.</th>
+                    <th style={{background:"lightblue", border:"2px solid black"}}>Location</th>
+                    <th style={{background:"lightblue", border:"2px solid black"}}>Location Description</th>
+                    <th style={{background:"lightblue", border:"2px solid black"}}>Alert Limits</th>
+                    <th style={{background:"lightblue", border:"2px solid black"}}>Action Limits</th>
+                    
+                    <th style={{background:"lightblue", border:"2px solid black"}}>Evaluation</th>
+                  </tr>
                 </thead>
-                <tr>
-                  <td>88541</td>
-                  <td>88541</td>
-                  <td>88541</td>
-                  <td>88541</td>
-                  <td>88541</td>
-                  <td>88541</td>
-                  <td>88541</td>
-                  <td>88541</td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td>1.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    
+                  </tr>
+                </tbody>
               </table>
-            </div>
-
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Date of Monitoring
-
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Monitored / Sampled By
-
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
             </div>
           </CForm>
         </div>
@@ -417,7 +388,7 @@ const StatusModal = (_props) => {
             Cancel
           </CButton>
           <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add
+            Submit
           </CButton>
         </CModalFooter>
       </CModal>
@@ -425,4 +396,4 @@ const StatusModal = (_props) => {
   );
 };
 
-export default LocationSamples;
+export default BatchTestslist;

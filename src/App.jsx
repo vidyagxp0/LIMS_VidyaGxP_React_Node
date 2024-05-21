@@ -111,6 +111,16 @@ import EMMoniteringDetails from "./Pages/Inventory/EMMoniteringDetails.jsx"
 import EMCOATemplate from "./Pages/Inventory/EMCOATemplate.jsx"
 import OOATemplate from "./Pages/Inventory/OOATemplate.jsx"
 import LocationSamples from "./Pages/Inventory/LocationSamples.jsx"
+import SamplingSchedule from "./Pages/Inventory/SamplingSchedule.jsx"
+import BatchSample from "./Pages/Inventory/BatchSample.jsx"
+import SampleLogin from "./Pages/Inventory/SampleLogin.jsx"
+import AcknowledgeSample from "./Pages/Inventory/AcknowledgeSample.jsx"
+import BatchSampleAllotment from "./Pages/Inventory/BatchSampleAllotment.jsx"
+import BatchTestslist from "./Pages/Inventory/BatchTestslist.jsx"
+
+
+
+
 
 
 
@@ -253,6 +263,12 @@ function App() {
             <Route path="Inventory/EMCOATemplate" element={<EMCOATemplate/>}/>
             <Route path="Inventory/OOATemplate" element={<OOATemplate/>}/>
             <Route path="Inventory/LocationSamples" element={<LocationSamples/>}/>
+            <Route path="Inventory/SamplingSchedule" element={<SamplingSchedule/>}/>
+            <Route path="Inventory/BatchSample" element={<BatchSample/>}/>
+            <Route path="Inventory/SampleLogin" element={<SampleLogin/>}/>
+            <Route path="Inventory/AcknowledgeSample" element={<AcknowledgeSample/>}/>
+            <Route path="Inventory/BatchSampleAllotment" element={<BatchSampleAllotment/>}/>
+            <Route path="Inventory/BatchTestslist" element={<BatchTestslist/>}/>
 
 
 
