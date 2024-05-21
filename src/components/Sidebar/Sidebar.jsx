@@ -1097,7 +1097,7 @@ function Sidebar() {
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
-                   Sample Login
+                  Sample Login
                 </CNavItem>
               </Link> <Link to="/Inventory/ScheduleTermination">
                 <CNavItem href="#">
@@ -1607,60 +1607,20 @@ function Sidebar() {
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} />{" "}
-                Calibration
+                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Calibration
               </>
             }
           >
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Type
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Frequency
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Data Sheet
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Sample Login Template
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Schedule
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Record
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Sample Login
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Calendar
-            </CNavItem>
+            <Link to="/calibration/calibration-type"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Type</CNavItem></Link>
+            <Link to="/calibration/calibration-frequency"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Frequency</CNavItem></Link>
+            <Link to="/calibration/calibration-data-sheet"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Data Sheet</CNavItem></Link>
+            <Link to="/calibration/sample-login-template"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login Template</CNavItem></Link>
+            <Link to="/calibration/calibration-schedule"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Schedule</CNavItem></Link>
+            <Link to="/calibration/calibration-record"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Record</CNavItem></Link>
+            <Link to="/calibration/sample-login"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login</CNavItem></Link>
+            <Link to="/calibration/calibration-calender"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Calendar</CNavItem></Link>
           </CNavGroup>
+
           <CNavGroup
             toggler={
               <>
@@ -1722,19 +1682,20 @@ function Sidebar() {
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Clients
             </CNavItem>
-          </Link>
-          <CNavItem href="#">
+          </Link><Link to="/plants"><CNavItem href="#">
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
             Plants
-          </CNavItem>
-          <CNavItem href="#">
+          </CNavItem></Link>
+
+          <Link to="/workFlow"><CNavItem href="#">
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
             Workflow
-          </CNavItem>
-          <CNavItem href="#">
+          </CNavItem></Link>
+
+          <Link to="/auditTrail"><CNavItem href="#">
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
             Audit Trail
-          </CNavItem>
+          </CNavItem></Link>
           <CNavGroup
             toggler={
               <>
@@ -1742,114 +1703,116 @@ function Sidebar() {
               </>
             }
           >
-            <CNavItem href="#">
+            <Link to="/settings/businessAssociate"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Business Associate
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/labelManagement"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Label Management
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/functionalGrouping"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Functional Grouping
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/worksheets"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Worksheets
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/groupName"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Group Name
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/investigationTemplate"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Investigation Template
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/chemicalCategory"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Chemical Category
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/grade"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Grade
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/handlingSymbol"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Handling Symbol
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/accessRight"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Access Right
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/projects"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Projects
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/template"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Template
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/trainingConfirmations"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Training Confirmations
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/proposal"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Proposal
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/nominations"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Nominations
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/reQualificationRequest"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Re-Qualification Request
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/resources"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Resources
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/typeOfSection"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Type of Section
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/wosTest"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               WOS Test
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/serviceprovider"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Service Provider
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/externalRegistration"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               External Registration
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/testTechniques"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Test Techniques
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/instrumentRegistration"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Instrument Regitration
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/stability"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Stability
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/testHistory"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Test History
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/settingVendors"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Vendor
-            </CNavItem>
-            <CNavItem href="#">
+            </CNavItem></Link>
+            <Link to="/settings/appConfiguration"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               App Configuration
-            </CNavItem>
+            </CNavItem></Link>
+
+
           </CNavGroup>
         </CSidebarNav>
       </CSidebar>
