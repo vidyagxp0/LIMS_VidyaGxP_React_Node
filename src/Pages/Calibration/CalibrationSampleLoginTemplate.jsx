@@ -6,61 +6,60 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
 
-
-
-export default function StockInventory() {
+export default function CalibrationSampleLoginTemplate() {
     const top100Films = [
-  { label: 'The Shawshank Redemption', year: 1994 },
-  { label: 'The Godfather', year: 1972 },
-  { label: 'The Godfather: Part II', year: 1974 },
-  { label: 'The Dark Knight', year: 2008 },
-  { label: '12 Angry Men', year: 1957 },];
+        { label: 'The Shawshank Redemption', year: 1994 },
+        { label: 'The Godfather', year: 1972 },
+        { label: 'The Godfather: Part II', year: 1974 },
+        { label: 'The Dark Knight', year: 2008 },
+        { label: '12 Angry Men', year: 1957 },];
 
-    const [storageName, setStorageName] = useState("");
+  const [storageName, setStorageName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  
+  const handleAddStorage = () => {
+    if (storageName.trim() === "") {
+      setErrorMessage("Storage condition is Required");
+    } else {
+      toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.")
+    }
+  };
   const notify = () => toast("Wow so easy!");
 
 
   const pageSize = 4; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      {  user: 'CHPOIL',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
+    { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
+    { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'INITIATED'  },
+    {  user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
+    {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'},
     
-  ];
+];
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
   const renderRows = () => {
-      return employees.slice(startIndex, endIndex).map((employee, index) => (
-          <tr key={startIndex + index}>
-                <td><input type="checkbox" /></td>
-              <td>{startIndex + index + 1}</td>
-              <td>{employee.user}</td>
-              <td>{employee.ProdName}</td>
-              <td>{employee.SpecificID}</td>
-              <td>{employee.SpecificID}</td>
-              <td>{employee.SpecificID}</td>
-              <td>{employee.ProdName}</td>
-              <td id='edatabtn' className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
-              <td>
-                  &nbsp; <Link to="/stock-management/stock-inventory-details"><IoEyeSharp/></Link>  &nbsp;&nbsp;
-                  <HiDotsHorizontal />
-              </td>
-          </tr>
-      ));
-  };
+    return employees.slice(startIndex, endIndex).map((employee, index) => (
+        <tr key={startIndex + index}>
+            <td><input type="checkbox" /></td>
+            <td>{employee.user}</td>
+            <td>{employee.role}</td>
+            <td>{employee.addedBy}</td>
+            <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+            <td>
+                &nbsp; <IoEyeSharp/> &nbsp;&nbsp;
+                <HiDotsHorizontal />
+            </td>
+        </tr>
+    ));
+};
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
 };
@@ -78,7 +77,7 @@ const nextToLastPage = () => {
   return (
     <>
       <div id="div1">
-        <h5>Inventory/Inventory Registration</h5>
+        <h5>Sample Login Template</h5>
       </div>
 
       {/* <div id="div2"> */}
@@ -101,13 +100,14 @@ const nextToLastPage = () => {
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             
-                            <select id='selectOption'>
-                            <option>All</option>
+                            <select id='selectOption'>  
+                            <option>Select Status </option>
+                                <option>All</option>
                                 <option>Initiated</option>
                                 <option>Approved</option>
                                 <option>Rejected</option>
                                 <option>Reinitiated</option>
-                                <option>Inactive</option>
+                                <option>Droped</option>
                             </select>
 
                         </button>
@@ -124,11 +124,11 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span>Add Inventory Registration</span>
+          <CgAddR /> <span>Add Login Template</span>
         </button>
 
         <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
+          className="offcanvas offcanvas-end"
           tabIndex="-1"
           id="offcanvasRight"
           aria-labelledby="offcanvasRightLabel"
@@ -136,7 +136,7 @@ const nextToLastPage = () => {
           <div className="offcanvas-header">
             <div id="line1">
               <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Material
+                Add Sample Login Template
               </h5>
               <button
                 id="closebtn"
@@ -148,13 +148,10 @@ const nextToLastPage = () => {
             </div>
           </div>
         
-        <label id="line3" htmlFor="">Material Name</label>
-        <input id="line4" required type="text" placeholder="Select"/>
-
-        <label id="line3" htmlFor="">Received Date</label>
-        <input id="line4" style={{padding:'14px'}} required type="date" placeholder=""/> 
-        
-        <label id="line3" htmlFor="">Supplier Name</label>
+        <label id="line3" htmlFor="">Sample Login Template</label>
+        <input id="line4" required type="text" placeholder=""/>
+         
+        <label id="line3" htmlFor="">Test Plan / Revision No.</label>
         <Autocomplete
       disablePortal
       id="combo-box-demo"
@@ -162,22 +159,19 @@ const nextToLastPage = () => {
       sx={{ width: 370,margin:2 }}
       renderInput={(params) => <TextField {...params} label="" />}
     />
-        <label id="line3" htmlFor="">Truck No.</label>
-        <input id="line4" type="text" placeholder="Truck No." /> 
-        <label id="line3" htmlFor="">Ch No.</label>
-        <input id="line4" type="text" placeholder="Ch No." /> 
-        <label id="line3" htmlFor="">Invoice Number</label>
-        <input id="line4" type="text" placeholder="Invoice Number" /> 
-        <label id="line3" htmlFor="">Quantity In MT</label>
-        <input id="line4" type="text" placeholder="Quantity In MT" /> 
-        <label id="line3" htmlFor="">Remarks</label>
-        <input id="line4" type="text" placeholder="Remarks" />
 
-          {errorMessage && (
-            <div id="error" style={{ color: "red" ,fontSize:"10px",marginLeft:"30px"}}>
-              {errorMessage}
-            </div>
-          )}
+        <label id="line3" htmlFor="">Product / Material</label>
+        <input id="line4" required type="text" placeholder="prefix"/> 
+        
+        <label id="line3" htmlFor="">Product / Material Code</label>
+        <input id="line4" required type="text" placeholder=""/> 
+        
+        <label id="line3" htmlFor="">Generic Name</label>
+        <input id="line4" required type="text" placeholder=""/> 
+        
+        <label id="line3" htmlFor="">Specification ID</label>
+        <input id="line4" required type="text" placeholder=""/>
+
 
           <div id="line5">
             <button
@@ -187,7 +181,7 @@ const nextToLastPage = () => {
             >
               &lt; Back
             </button>
-            <button>Submit</button>
+            <button>Add</button>
           </div>
           <div>
             <ToastContainer/>
@@ -197,19 +191,15 @@ const nextToLastPage = () => {
 
       <br />
       <div className='table-responsive p-4 container1'>
-                <table className='table shadow '>
+                <table className='table shadow'>
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>
-                            <th>Sr.no.</th>
-                            <th>Material Name</th>
-                            <th>Supplier Name</th>
-                            <th>Truck No.</th>
-                            <th>CH No.</th>
-                            <th>Invoice No.</th>
-                            <th>Quantity In Mt</th>
+                            <th>Sample Login template</th>
+                            <th>Test Plan</th>
+                            <th>Auto Sample Allotment Required</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Actions </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -220,7 +210,7 @@ const nextToLastPage = () => {
 
             <div className="pagination">
 
-<div className="pagination ">
+<div className="pagination" style={{margin:'0 30px'}}>
     <div className='mr-5'>
         <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
     </div>
@@ -234,7 +224,7 @@ const nextToLastPage = () => {
 
 </div>
 
-<button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+<button className="btn btn-next"  style={{margin:'0 30px'}} onClick={nextToLastPage}> Next <FaArrowRight /></button>
 </div>
 
 
