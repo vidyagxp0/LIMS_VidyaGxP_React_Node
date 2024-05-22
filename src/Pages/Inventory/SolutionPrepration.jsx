@@ -26,7 +26,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function SolutionTemplate() {
+function SolutionPreparation() {
   const [addModal, setAddModal] = useState(false);
   const badgeStyle = { background: "#cdffca" };
   return (
@@ -357,4 +357,4 @@ const StatusModal = (_props) => {
   );
 };
 
-export default SolutionTemplate;
+export default SolutionPreparation;

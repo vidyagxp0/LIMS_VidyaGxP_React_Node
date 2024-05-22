@@ -67,7 +67,7 @@ import WaterManagement from "./Pages/Inventory/WaterManagement";
 import WorkingStandardIssue from "./Pages/Inventory/WorkingStandardIssue";
 import WorkingStandardUsage from "./Pages/Inventory/WorkingStandardUsage";
 import InternalRegistration from "./Pages/Inventory/InternalRegistration";
-import SolutionPrepration from "./Pages/Inventory/SolutionPrepration";
+import SolutionPreparation from "./Pages/Inventory/SolutionPrepration";
 import SolutionTemplate from "./Pages/Inventory/SolutionTemplate";
 import SolutionStandardization from "./Pages/Inventory/SolutionStandardization.jsx";
 import SolutionUsage from "./Pages/Inventory/SolutionUsage.jsx";
@@ -123,14 +123,16 @@ import StockInventoryDetail from "./Pages/Stock Management/StockInventoryDetail.
 import StockMaterialDetail from "./Pages/Stock Management/StockMaterialDetail.jsx"
 import StockOnboardingDetails from "./Pages/Stock Management/StockOnboardingDetails.jsx"
 
-// import CalibrationDataSheet from "./Pages/Calibration/CalibrationDataSheet.jsx"
-// import CalibrationSampleLoginTemplate from "./Pages/Calibration/CalibrationSampleLoginTemplate.jsx"
-// import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx"
-// import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx"
-// import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx"
-// import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx"
+import CalibrationType from "./Pages/Calibration/CalibrationType.jsx"
+import CalibrationFrequency from "./Pages/Calibration/CalibrationFrequency.jsx"
+import CalibrationDataSheet from "./Pages/Calibration/CalibrationDataSheet.jsx"
+import CalibrationSampleLoginTemplate from "./Pages/Calibration/CalibrationSampleLoginTemplate.jsx"
+import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx"
+import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx"
+import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx"
+import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx"
 
-
+import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting.jsx"
 import InvestigationCoa from "./Pages/ReportsCertificate/InvestigationCoa"
 import ReleasedCoa from "./Pages/ReportsCertificate/ReleasedCoa"
 import Coa_Template from "./Pages/ReportsCertificate/Coa_Template"
@@ -241,7 +243,7 @@ function App() {
             <Route path="/Inventory/WorkingStandardIssue" element={<WorkingStandardIssue />} />
             <Route path="/Inventory/VolumeSolutions" element={<VolumeSolutions />} />
             <Route path="Inventory/SolutionTemplate" element={<SolutionTemplate />} />
-            <Route path="Inventory/SolutionPrepration" element={<SolutionPrepration />} />
+            <Route path="/Inventory/SolutionPreparation" element={<SolutionPreparation />} />
             <Route path="Inventory/SolutionStandardization" element={<SolutionStandardization />} />
             <Route path="Inventory/SolutionUsage" element={<SolutionUsage />} />
             <Route path="/Inventory/Columns" element={<Columns />} />
@@ -306,14 +308,14 @@ function App() {
             <Route path="/stock-management/stock-material-details" element={<StockMaterialDetail />} />
             <Route path="/stock-management/stock-onboarding-details" element={<StockOnboardingDetails />} />
 
-            {/* <Route path="/calibration/calibration-type" element={<CalibrationType />} />
+            <Route path="/calibration/calibration-type" element={<CalibrationType />} />
             <Route path="/calibration/calibration-frequency" element={<CalibrationFrequency />} />
             <Route path="/calibration/calibration-data-sheet" element={<CalibrationDataSheet />} />
             <Route path="/calibration/sample-login-template" element={<CalibrationSampleLoginTemplate />} />
             <Route path="/calibration/calibration-schedule" element={<CalibrationSchedule />} />
             <Route path="/calibration/calibration-record" element={<CalibrationRecord />} />
             <Route path="/calibration/sample-login" element={<CalibrationSampleLogin />} />
-            <Route path="/calibration/calibration-calender" element={<CalibrationCalender />} /> */}
+            <Route path="/calibration/calibration-calender" element={<CalibrationCalender />} />
 
             <Route path="/reportsCertification/problemReporting" element={< ProblemReporting />} />
             <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
@@ -328,7 +330,7 @@ function App() {
             <Route path="/auditTrail" element={< AuditTrail />} />
 
             <Route path="/settings/businessAssociate" element={<  BussinessAssociate />} />
-            <Route path="/settings/labelManegement" element={< LabelManagement />} />
+            <Route path="/settings/labelManagement" element={< LabelManagement />} />
             <Route path="/settings/functionalGrouping" element={< FuctionalGrouping />} />
             <Route path="/settings/worksheetFields" element={< WorkSheelField />} />
             <Route path="/settings/worksheets" element={<WorkSheet />} />
