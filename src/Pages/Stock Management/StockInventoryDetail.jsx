@@ -7,10 +7,6 @@ export default function StockInventoryDetail() {
        
         <div style={{margin: '0 auto',border:'2px solid',width:'70%',display:'flex'
         }}>
-            
-
-
-
             <div style={{ borderRight:'2px solid',width:'45%',backgroundColor:'blue',color:'white', }}>
             <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Material Name </p> 
             <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Received Date</p> 
