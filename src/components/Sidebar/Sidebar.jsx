@@ -501,6 +501,15 @@ function Sidebar() {
                   </span>
                   Solutions Template
                 </CNavItem>
+              </Link> 
+              
+              <Link to="/Inventory/SolutionPreparation">
+                <CNavItem href="#">
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Solutions Preparation
+                </CNavItem>
               </Link>
 
               <Link to="/Inventory/SolutionStandardization">
@@ -1128,7 +1137,7 @@ function Sidebar() {
           </CNavGroup>
 
 
-
+{/* 
           <CNavGroup
             toggler={
               <>
@@ -1317,7 +1326,7 @@ function Sidebar() {
                 Investigation Coa
               </CNavItem>
             </Link>
-          </CNavGroup>
+          </CNavGroup> */}
           {/* <CNavItem href="#">
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
             Vendor
