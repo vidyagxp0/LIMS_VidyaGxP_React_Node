@@ -144,7 +144,7 @@ const nextToLastPage = () => {
 
            {/* Employee table */}
            <div className='table-responsive p-4 container1'>
-                <table className='table'>
+                <table className='table shadow'>
                     <thead>
                         <tr>
                             <th>Sr.no.</th>
@@ -165,7 +165,7 @@ const nextToLastPage = () => {
 
             <div className="pagination">
 
-<div className="pagination ">
+<div className="pagination " style={{margin:'0 30px'}} >
     <div className='mr-5'>
         <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
     </div>
@@ -179,7 +179,7 @@ const nextToLastPage = () => {
 
 </div>
 
-<button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+<button className="btn btn-next" style={{margin:'0 30px'}}  onClick={nextToLastPage}> Next <FaArrowRight /></button>
 </div>
 
 

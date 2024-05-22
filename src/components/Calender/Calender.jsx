@@ -1,7 +1,9 @@
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
+import React from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css'; 
 
-const localizer = momentLocalizer(moment)
+const localizer = momentLocalizer(moment);
 
 const MyCalendar = () => {
   // Sample events
@@ -21,12 +23,16 @@ const MyCalendar = () => {
   ];
 
   return (
-    <div style={{ height: '500px', width: '800px', border: '2px solid red' }}>
+    <div className="calendar-container">
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
+        defaultDate={new Date(2024, 4, 1)}
+        views={['month']}
+        style={{ height: 600 }}
+        toolbar={true}
       />
     </div>
   );

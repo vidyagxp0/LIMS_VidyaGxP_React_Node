@@ -1,19 +1,16 @@
-
 import React, { useState } from 'react';
-
 import { FaArrowRight } from 'react-icons/fa';
 import { CgAddR } from 'react-icons/cg';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
 
-
 const CalibrationDataSheet = () => {
-  const pageSize = 9; 
+  const pageSize = 9;
   const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
+  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
 
+  const employees = [
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
     { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
@@ -24,9 +21,8 @@ const CalibrationDataSheet = () => {
     { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
     { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    2
-
   ];
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
@@ -41,11 +37,9 @@ const CalibrationDataSheet = () => {
         <td>{employee.registeredOn}</td>
         <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
         <td>
-          <FontAwesomeIcon icon={faEye} />
-          <FontAwesomeIcon icon={faPenToSquare} />
-          <FontAwesomeIcon icon={faTrashCan} />
-
-
+          <FontAwesomeIcon icon={faEye} className="mx-1" />
+          <FontAwesomeIcon icon={faPenToSquare} className="mx-1" />
+          <FontAwesomeIcon icon={faTrashCan} className="mx-1" />
         </td>
       </tr>
     ));
@@ -63,56 +57,52 @@ const CalibrationDataSheet = () => {
     setCurrentPage(Math.ceil(employees.length / pageSize));
   };
 
+  const handleCheckboxChange = (e) => {
+    setShowAdditionalFields(e.target.checked);
+  };
+
   return (
-    <div className=" mx-5 ">
-      <div className="row my-5 ">
+    <div className="mx-5">
+      <div className="row my-5">
         <div className="main-head">
           <div className="title fw-bold fs-5">Calibration Data Sheets</div>
         </div>
 
         <div className="chart-widgets w-100">
-          <div className="">
-            <div className="row">
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
-                <div className="text-light fs-5">INITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">4</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
-                <div className="text-light fs-5">REINITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">0</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
-                <div className="text-light fs-5">APPROVED</div>
-                <div className="count fs-1 text-light fw-bolder">6</div>
-              </div>
-            
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
-                <div className="text-light fs-5">REJECTED</div>
-                <div className="count fs-1 text-light fw-bolder">0</div>
-              </div>
+          <div className="row">
+            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
+              <div className="text-light fs-5">INITIATED</div>
+              <div className="count fs-1 text-light fw-bolder">4</div>
+            </div>
+            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
+              <div className="text-light fs-5">REINITIATED</div>
+              <div className="count fs-1 text-light fw-bolder">0</div>
+            </div>
+            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
+              <div className="text-light fs-5">APPROVED</div>
+              <div className="count fs-1 text-light fw-bolder">6</div>
+            </div>
+            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
+              <div className="text-light fs-5">REJECTED</div>
+              <div className="count fs-1 text-light fw-bolder">0</div>
             </div>
           </div>
-          
-        
         </div>
-        
+
         <div>
           <CRow className="mb-3">
             <CCol sm={4}>
-              <CFormInput
-                type="email"
-                placeholder="Search..."
-              />
+              <CFormInput type="email" placeholder="Search..." />
             </CCol>
-            <CCol sm={3}> 
+            <CCol sm={3}>
               <CFormSelect
                 options={[
                   'Select Status',
                   { label: 'All', value: '1' },
-                  { label: 'Initiated', value: '0' } ,
+                  { label: 'Initiated', value: '0' },
                   { label: 'Approved', value: '1' },
                   { label: 'Rejected', value: '0' },
-                  { label: 'Reinitiated', value: '0'},
+                  { label: 'Reinitiated', value: '0' },
                   { label: 'Droped', value: '0' }
                 ]}
               />
@@ -125,7 +115,7 @@ const CalibrationDataSheet = () => {
                   type="button"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight"><CgAddR />  <span>Add Datasheet</span></CButton>
+                  aria-controls="offcanvasRight"><CgAddR /> <span>Add Datasheet</span></CButton>
               </div>
             </CCol>
           </CRow>
@@ -138,7 +128,7 @@ const CalibrationDataSheet = () => {
         >
           <div className="offcanvas-header ">
             <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-            Add Calibration Data Sheet
+              Add Calibration Data Sheet
             </h5>
               <button
                 id="closebtn"
@@ -149,7 +139,6 @@ const CalibrationDataSheet = () => {
               ></button>
             </div>
           </div>
-          
 
           <label id="line3" htmlFor="">Name</label>
           <input id="line4" required type="text" placeholder="Name " />
@@ -157,34 +146,37 @@ const CalibrationDataSheet = () => {
           <label id="line3" htmlFor="">Unique code</label>
           <input id="line4" required type="text" placeholder="" />
 
-          <div style={{margin:'15px 20px',}}>
-          <label> Quantitative Parameters &nbsp;
-        <input
-          type="checkbox"
-        />
-      </label>
-      <br />
-      <label style={{padding:'7px 0'}}>Qualitative Parameter &nbsp;
-        <input
-          type="checkbox"
-        />
-      </label>
-      <br />
-      </div>
+          <div style={{ margin: '15px 20px', }}>
+            <label> Quantitative Parameters &nbsp;
+              <input
+                type="checkbox"
+                onChange={handleCheckboxChange}
+              />
+            </label>
+            {showAdditionalFields && (
+              <>
+                <br />
+                <label>No. of Quantitative Parameters</label>
+                <input style={{width:'240px'}} id="line4" type="text" placeholder="No. of Quantitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
+           
+                <label>Parameters and No. of Set Points</label>
+                <input style={{width:'240px'}} id="line4" type="text" placeholder="Parameters and No. of Set Points" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Set</button>
+              </>
+            )}
+            <br />
+            <label style={{ padding: '7px 0' }}>Qualitative Parameter &nbsp;
+              <input type="checkbox" />
+            </label>
+            <br />
+          </div>
 
           <div id="line5">
             <button type="button"
               data-bs-dismiss="offcanvas"
               aria-label="Close">&lt; Back</button>
             <button>Add</button>
-
-
           </div>
         </div>
-
-
-
-
       </div>
 
       {/* Employee table */}
@@ -208,15 +200,8 @@ const CalibrationDataSheet = () => {
         </table>
       </div>
 
-
-
-
       {/* Pagination */}
-
-
-
       <div className="pagination">
-
         <div className="pagination">
           <div className='mr-5'>
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
@@ -226,15 +211,12 @@ const CalibrationDataSheet = () => {
           </div>
           <div>
             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
           </div>
-
         </div>
         <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
       </div>
-
     </div>
   );
 };
 
-export default CalibrationDataSheet
+export default CalibrationDataSheet;

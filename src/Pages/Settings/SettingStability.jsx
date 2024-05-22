@@ -1,11 +1,13 @@
 import React from 'react'
+import MyCalendar from '../../components/Calender/Calender'
 
 const SettingStability = () => {
   return (
-    <div>
-      sdfdsf
+    <div >
+      <MyCalendar/>
     </div>
   )
 }
 
 export default SettingStability
+

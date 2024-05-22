@@ -112,14 +112,21 @@ const nextToLastPage = () => {
         </div>
             <p style={{marginLeft:'20px'}}>Add information and add new approved vendor</p>
             
-        <label id="line3" htmlFor="">Product/Material Name</label>
-        <input id="line4" required type="text" placeholder="Product Name"/>
+            <label id="line3" htmlFor="">Product/Material Name</label>
+        <select name="Product/Material Name" id="line4">
+            <option value="">Select Product</option>
+            <option value="Tadalafil">Tadalafil</option>
+            <option value="Diclofenac Resinate">Diclofenac Resinate</option>
+        </select>
 
         <label id="line3" htmlFor="">Unique Code</label>
         <input id="line4" required type="text" placeholder="Product Code"/>
 
         <label id="line3" htmlFor="">Vendor Name</label>
-        <input id="line4" required type="text" placeholder="Select venders"/> 
+        <select name="Vendor Name" id="line4">
+            <option value="">Select Vendors</option>
+            <option value="Aavis Pharmaceuticals">Aavis Pharmaceuticals</option>
+        </select> 
         
         <label id="line3" htmlFor="">Qualification Criteria</label>
         <input id="line4" required type="text" placeholder="Qualification Criteria"/>    
@@ -137,7 +144,7 @@ const nextToLastPage = () => {
 
            {/* Employee table */}
            <div className='table-responsive p-4 container1'>
-                <table className='table'>
+                <table className='table shadow'>
                     <thead>
                         <tr>
                             <th>Sr.no.</th>
@@ -156,7 +163,7 @@ const nextToLastPage = () => {
                 </table>
             </div>
 
-            <div className="pagination">
+            <div className="pagination " style={{margin:'0 30px'}} >
 
 <div className="pagination ">
     <div className='mr-5'>
@@ -172,7 +179,7 @@ const nextToLastPage = () => {
 
 </div>
 
-<button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+<button className="btn btn-next" style={{margin:'0 30px'}}  onClick={nextToLastPage}> Next <FaArrowRight /></button>
 </div>
 
 

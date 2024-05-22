@@ -3,7 +3,7 @@ import MyCalendar from '../../components/Calender/Calender'
 
 const CalibrationCalender = () => {
   return (
-    <div style={{height:'80%',width:'80%',border:'2px solid'}}>
+    <div >
       <MyCalendar/>
     </div>
   )
