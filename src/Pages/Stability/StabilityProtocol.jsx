@@ -155,7 +155,7 @@ function StabilityProtocol() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
+                    <Link to="/stability/stabilityProtocolDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                       <div
@@ -195,7 +195,7 @@ function StabilityProtocol() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
+                    <Link to="/stability/stabilityProtocolDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                       <div
@@ -234,7 +234,7 @@ function StabilityProtocol() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
+                      <Link to="/stability/stabilityProtocolDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                       <div

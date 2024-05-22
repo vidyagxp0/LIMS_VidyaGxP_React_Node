@@ -71,8 +71,8 @@ function LabelManagement() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+          <div className="bg-white mt-5 ">
+            {/* <CTable align="middle" responsive className=" shadow">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
@@ -159,9 +159,9 @@ function LabelManagement() {
 
 
               </CTableBody>
-            </CTable>
+            </CTable> */}
+          <div className=""> No Label found</div>
           </div>
-          <div> No Label found</div>
 
           {/* <div className="pagination">
 
@@ -203,80 +203,33 @@ const StatusModal = (_props) => {
 
           <CFormInput
             type="text"
-            label="Business Associate Name"
-            placeholder="Business Associate Name "
+            label="Label"
+            placeholder="Enter Label"
           />
-          <CFormInput
+          <CFormTextarea
             type="text"
-            label="Unique Code"
-            placeholder="Unique Code  "
+            label="address"
+            placeholder="  "
           />
 
-          {/* <CFormCheck
-                              type="check"
-                              label="Make / Model"
-                              placeholder="Make / Model "
-                         /> */}
           <CFormInput
             type="text"
-            label="Contact Person "
-            placeholder=" CAtegory Of Business Associate"
+            label="logo"
+            placeholder="logo"
           />
-          <CFormInput
-            type="text"
-            label="Location"
-            placeholder="Location "
-          />
-          <CFormInput
-            type="text"
-            label="Address : Line 1"
-            placeholder="Address : Line 1"
-          />
-          <CFormInput
-            type="text"
-            label="Address : Line 2"
-            placeholder="Address : Line 2"
-          />
-          <CFormInput
-            type="text"
-            label="Address : Line 3"
-            placeholder=" Address : Line 3"
-          />
-          <CFormInput
-            type="text"
-            label="City"
-            placeholder="City"
-          />
-          <CFormInput
-            type="text"
-            label="State"
-            placeholder="State"
-          />
-          <CFormInput
-            type="text"
-            label="Country"
-            placeholder="Country"
-          />
-          <CFormInput
-            type="text"
-            label="ZIP / PIN"
-            placeholder="ZIP / PIN"
-          />
-          <CFormInput
-            type="text"
-            label="Phone"
-            placeholder="Phone"
-          />
-          <CFormInput
-            type="text"
-            label="Fax"
-            placeholder="Fax"
-          />
-          <CFormInput
-            type="text"
-            label="Email"
-            placeholder="Email"
-          />
+          <label>UM</label>
+                         <CFormCheck
+                         type="radio"
+                         id="UMCM"
+                         name="UM"
+                         label="CM"
+                         />
+                         <CFormCheck
+                         type="radio"
+                         id="UMMM"
+                         name="UM"
+                         label="MM"
+                         />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>Back</CButton>

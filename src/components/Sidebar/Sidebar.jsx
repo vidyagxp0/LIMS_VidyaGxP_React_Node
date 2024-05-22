@@ -1751,7 +1751,7 @@ function Sidebar() {
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Template
             </CNavItem></Link>
-            <Link to="/settings/trainingConfirmations"><CNavItem href="#">
+            <Link to="/settings/trainingConfirmation"><CNavItem href="#">
               <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
               Training Confirmations
             </CNavItem></Link>

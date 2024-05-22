@@ -211,11 +211,11 @@ const StatusModal = (_props) => {
             placeholder="Unique Code  "
           />
 
-          {/* <CFormCheck
-                              type="check"
-                              label="Make / Model"
-                              placeholder="Make / Model "
-                         /> */}
+          <label>Category Of Business Associate</label>
+          <CFormCheck type="checkbox" id="checkbox1" label="Customer" />
+          <CFormCheck type="checkbox" id="checkbox2" label="Supplier" />
+          <CFormCheck type="checkbox" id="checkbox3" label="Manufacturer" />
+
           <CFormInput
             type="text"
             label="Contact Person "

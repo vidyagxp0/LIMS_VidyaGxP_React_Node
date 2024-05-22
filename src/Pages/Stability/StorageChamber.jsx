@@ -108,7 +108,7 @@ function StorageChamber() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                                       <Link to="/stability/storageChamberDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                                        <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
                                                   </div>
@@ -131,7 +131,7 @@ function StorageChamber() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                                       <Link to="/stability/storageChamberDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                                        <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
                                                   </div>
@@ -155,7 +155,7 @@ function StorageChamber() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                                       <Link to="/stability/storageChamberDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                                                        <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
                                                   </div>
