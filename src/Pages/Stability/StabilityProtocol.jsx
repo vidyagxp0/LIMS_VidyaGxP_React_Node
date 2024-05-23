@@ -30,6 +30,7 @@ import { Link } from "react-router-dom";
 
 function StabilityProtocol() {
   const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false)
   const badgeStyle = { background: "#cdffca" };
   return (
     <>
@@ -155,7 +156,7 @@ function StabilityProtocol() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                    <Link to="/stability/stabilityProtocolDetails">
+                      <Link to="/stability/stabilityProtocolDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                       <div
@@ -164,9 +165,7 @@ function StabilityProtocol() {
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
+                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -195,7 +194,7 @@ function StabilityProtocol() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                    <Link to="/stability/stabilityProtocolDetails">
+                      <Link to="/stability/stabilityProtocolDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                       <div
@@ -204,9 +203,7 @@ function StabilityProtocol() {
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
+                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -243,9 +240,7 @@ function StabilityProtocol() {
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
+                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -276,6 +271,7 @@ function StabilityProtocol() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
+      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
     </>
   );
 }
@@ -371,7 +367,7 @@ const StatusModal = (_props) => {
             name="DateFormat"
             label="Long Date"
           />
-          
+
           <CFormInput type="text" label="Sample By" placeholder="Sample By " />
           <CFormInput
             type="text"
@@ -391,9 +387,9 @@ const StatusModal = (_props) => {
             name="ChangingDate"
             label="Later"
           />
-          
+
           <CFormInput type="date" label="Starting Date" placeholder="" />
-          
+
           <label>Initial Testing Required</label>
           <CFormCheck
             type="radio"
@@ -429,11 +425,7 @@ const StatusModal = (_props) => {
               { label: "Bio Burden Test For PM" },
             ]}
           />
-          <CFormInput
-            type="text"
-            label="Storage Condition UOM"
-            placeholder="Storage Condition UOM "
-          />
+          
           <CFormInput
             type="text"
             label="Instructions"
@@ -455,5 +447,36 @@ const StatusModal = (_props) => {
     </>
   );
 };
+const DeleteModal = (_props) => {
+  return (
+    <>
+
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Delete Protocol</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Do you want to delete this Protocol?</p>
+          <CFormInput
+            type="text"
+            label="User ID"
+            placeholder="User Id "
+          />
+          <CFormInput
+            type="password"
+            label="Password"
+            placeholder="Your password"
+          />
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton className="bg-info text-white">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+
+    </>
+  )
+}
 
 export default StabilityProtocol;

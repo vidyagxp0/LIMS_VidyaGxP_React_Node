@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function InstrumentUsage() {
     const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
     return (
         <>
@@ -78,8 +79,7 @@ function InstrumentUsage() {
                                         <div className="d-flex gap-3">
                                             <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -100,8 +100,7 @@ function InstrumentUsage() {
                                         <div className="d-flex gap-3">
                                             <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -131,7 +130,7 @@ function InstrumentUsage() {
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
         </>
     )
 }
@@ -163,7 +162,7 @@ const StatusModal = (_props) => {
 
                     <CFormInput
                         type="text"
-                        label="Instruction Category"
+                        label="Instrument Category"
                         placeholder="chromatography "
                         disabled
                     />
@@ -240,4 +239,27 @@ const StatusModal = (_props) => {
         </>
     )
 }
+
+const DeleteModal = (_props) => {
+    return (
+         <>
+
+              <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                   <CModalHeader>
+                        <CModalTitle>Delete Instrument Usage</CModalTitle>
+                   </CModalHeader>
+                   <CModalBody>
+                        <p>Do you want to delete this instrument usage <code>gd534</code>?</p>
+
+                   </CModalBody>
+                   <CModalFooter>
+                        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                        <CButton className="bg-info text-white">Submit</CButton>
+                   </CModalFooter>
+              </CModal>
+
+         </>
+    )
+}
+
 export default InstrumentUsage

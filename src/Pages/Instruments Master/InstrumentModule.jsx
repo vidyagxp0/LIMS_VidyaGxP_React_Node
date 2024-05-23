@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormInput, CFormSelect,  CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function InstrumentModule() {
     const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
     return (
         <>
@@ -80,10 +81,9 @@ function InstrumentModule() {
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                        <Link to="/instrumentMaster/instrumentModuleDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -104,10 +104,9 @@ function InstrumentModule() {
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                        <Link to="/instrumentMaster/instrumentModuleDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -137,6 +136,7 @@ function InstrumentModule() {
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
 
         </>
     )
@@ -178,14 +178,14 @@ const StatusModal = (_props) => {
                             type="text"
                             label=" Module"
                             placeholder="Module "
-                            disabled
+                            
                     />
 
                     <CFormInput
                         type="text"
                         label="Module ID "
                         placeholder="Module ID"
-                        disabled
+                       
                     />
 
                     <CFormInput
@@ -225,13 +225,14 @@ const StatusModal = (_props) => {
                     <CFormInput
                         type="text"
                         label="Supplied By"
-                        placeholder="Arizona "
+                        placeholder="VidyaGxP "
                         disabled
                     />
                     <CFormInput
                         type="text"
                         label="SOP No."
                         placeholder="ASTM6453 "
+                        disabled
                     />
                     
                 </CModalBody>
@@ -244,4 +245,27 @@ const StatusModal = (_props) => {
         </>
     )
 }
+
+const DeleteModal = (_props) => {
+    return (
+         <>
+
+              <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                   <CModalHeader>
+                        <CModalTitle>Delete Instrument Module</CModalTitle>
+                   </CModalHeader>
+                   <CModalBody>
+                        <p>Do you want to delete this instrument module <code>Weighing</code>?</p>
+
+                   </CModalBody>
+                   <CModalFooter>
+                        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                        <CButton className="bg-info text-white">Submit</CButton>
+                   </CModalFooter>
+              </CModal>
+
+         </>
+    )
+}
+
 export default InstrumentModule

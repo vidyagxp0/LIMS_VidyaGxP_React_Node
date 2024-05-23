@@ -2,35 +2,27 @@ import {  CFooter,  CHeader,  CTable, CTableBody, CTableDataCell, CTableRow } fr
 
 
 
-function CoaTemplateDetails() {
+function SummaryReportHeaderDetails() {
      return (
           <>
 
-               <div id="coaTemplate-page" className="py-3 bg-light h-100">
+               <div id="worksheetHeaderPage" className="py-3 bg-light h-100">
                     <div className="container-fluid">
                          <div className="block mb-3">
                               <div className="main-head d-flex justify-content-between align-items-center">
-                                   <h4 className="fw-bold mb-4 mt-3">COA Tempalte Details</h4>
+                                   <h4 className="fw-bold mb-4 mt-3">Summary Report Header Details</h4>
                               </div>
                               <div className="bg-white px-5 py-3">
                                    <CTable align="middle" className="mb-0" small bordered>
                                         <CTableBody>
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Template Id</CTableDataCell>
-                                                  <CTableDataCell>SCOA-022024-0000001</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Sample Type</CTableDataCell>
                                                   <CTableDataCell></CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Coa Type</CTableDataCell>
-                                                  <CTableDataCell>WITH-SPECIFICATION</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Report Title</CTableDataCell>
                                                   <CTableDataCell>testing</CTableDataCell>
-                                             </CTableRow>
+                                             </CTableRow>                                             
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Product Material</CTableDataCell>
                                                   <CTableDataCell>testing</CTableDataCell>
@@ -116,9 +108,4 @@ function CoaTemplateDetails() {
      )
 }
 
-
-
-
-
-
-export default CoaTemplateDetails
+export default SummaryReportHeaderDetails

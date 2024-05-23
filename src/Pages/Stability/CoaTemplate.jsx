@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function CoaTemplate() {
      const [addModal, setAddModal] = useState(false)
+     const [deleteModal, setDeleteModal] = useState(false)
      const badgeStyle = { background: "#cdffca" }
      return (
           <>
@@ -108,7 +109,7 @@ function CoaTemplate() {
                                                   <div className="d-flex gap-3">
                                                        <Link to="/stability/CoaTemplateDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -129,7 +130,7 @@ function CoaTemplate() {
                                                   <div className="d-flex gap-3">
                                                        <Link to="/stability/CoaTemplateDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -160,6 +161,7 @@ function CoaTemplate() {
                </div>
 
                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+               {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
 
           </>
      )
@@ -185,7 +187,7 @@ const StatusModal = (_props) => {
                                    { label: "Hydrochrolic Acid" },
                                    { label: "Petrochemical" },
                                    { label: "Initial Product" }
-                                 ]}
+                              ]}
                          />
                          <CFormSelect
                               type="text"
@@ -196,8 +198,8 @@ const StatusModal = (_props) => {
                                    { label: "With Specification" },
                                    { label: "Without Specification" },
                                    { label: "ERP" }
-                                   
-                                 ]}
+
+                              ]}
                          />
                          <CFormInput
                               type="text"
@@ -214,7 +216,7 @@ const StatusModal = (_props) => {
                               label="Format No."
                               placeholder=" Format No."
                          />
-                         <CHeader className="bg-secondary">Header</CHeader>
+                         <CHeader className="bg-light">Header</CHeader>
                          <CFormInput
                               type="text"
                               label="Rows"
@@ -229,11 +231,11 @@ const StatusModal = (_props) => {
                                    { label: "2" },
                                    { label: "4" },
                                    { label: "6" }
-                                   
-                                 ]}
+
+                              ]}
                          />
-                         <CFooter className="bg-secondary">Footer</CFooter>
-                         
+                         <CFooter className="bg-light">Footer</CFooter>
+
                          <CFormInput
                               type="text"
                               label="Rows"
@@ -248,9 +250,30 @@ const StatusModal = (_props) => {
                                    { label: "2" },
                                    { label: "4" },
                                    { label: "6" }
-                                   
-                                 ]}
+
+                              ]}
                          />
+
+                    </CModalBody>
+                    <CModalFooter>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
+                    </CModalFooter>
+               </CModal>
+
+          </>
+     )
+}
+const DeleteModal = (_props) => {
+     return (
+          <>
+
+               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                    <CModalHeader>
+                         <CModalTitle>Delete Coa Template</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                         <p>Do you want to delete this COA Template <code>testing</code>?</p>
 
                     </CModalBody>
                     <CModalFooter>

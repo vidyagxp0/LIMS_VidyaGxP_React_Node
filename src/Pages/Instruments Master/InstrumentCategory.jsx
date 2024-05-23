@@ -1,12 +1,13 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import {  faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import { FaArrowRight } from "react-icons/fa"
-import { Link } from "react-router-dom"
+
 
 function InstrumentCategory() {
     const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
     return (
         <>
@@ -71,8 +72,7 @@ function InstrumentCategory() {
                                         <div className="d-flex gap-3">
                                             {/* <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link> */}
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -91,8 +91,7 @@ function InstrumentCategory() {
                                         <div className="d-flex gap-3">
                                             {/* <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link> */}
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -111,8 +110,7 @@ function InstrumentCategory() {
                                         <div className="d-flex gap-3">
                                             {/* <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link> */}
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -146,7 +144,7 @@ function InstrumentCategory() {
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
         </>
     )
 }
@@ -180,6 +178,28 @@ const StatusModal = (_props) => {
             </CModal>
 
         </>
+    )
+}
+
+const DeleteModal = (_props) => {
+    return (
+         <>
+
+              <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                   <CModalHeader>
+                        <CModalTitle>Delete Instrument Category</CModalTitle>
+                   </CModalHeader>
+                   <CModalBody>
+                        <p>Do you want to delete this Instrument Category <code>thermal analysis</code>?</p>
+
+                   </CModalBody>
+                   <CModalFooter>
+                        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                        <CButton className="bg-info text-white">Submit</CButton>
+                   </CModalFooter>
+              </CModal>
+
+         </>
     )
 }
 

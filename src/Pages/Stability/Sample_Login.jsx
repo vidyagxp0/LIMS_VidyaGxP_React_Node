@@ -28,6 +28,8 @@ import { Link } from "react-router-dom";
 
 function Sample_Login() {
   const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [permanentlyDeleteModal, setPermanentlyDeleteModal] = useState(false)
   const badgeStyle = { background: "#cdffca" };
   return (
     <>
@@ -95,9 +97,9 @@ function Sample_Login() {
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <div className="p-2">
-                  <CButton className="bg-danger bg-opacity-75 rounded" >
-                    <FaDownload/>
-                  </CButton>
+                    <CButton className="bg-danger bg-opacity-75 rounded" >
+                      <FaDownload />
+                    </CButton>
                   </div>
                   <CButton
                     className="bg-info text-white"
@@ -151,7 +153,7 @@ function Sample_Login() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
+                      <Link to="/stability/sample_LoginDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                       <div
@@ -160,9 +162,9 @@ function Sample_Login() {
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
+                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
+                      <div className='cursor-pointer' onClick={() => setPermanentlyDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
+                    
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -186,7 +188,7 @@ function Sample_Login() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
+                    <Link to="/stability/sample_LoginDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
                       <div
@@ -195,9 +197,8 @@ function Sample_Login() {
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
+                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
+                      <div className='cursor-pointer' onClick={() => setPermanentlyDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -228,6 +229,8 @@ function Sample_Login() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
+      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
+      {permanentlyDeleteModal && <PermanentlyDeleteModal visible={permanentlyDeleteModal} closeModal={() => setPermanentlyDeleteModal(false)} />}
     </>
   );
 }
@@ -338,5 +341,71 @@ const StatusModal = (_props) => {
     </>
   );
 };
+
+const DeleteModal = (_props) => {
+  return (
+    <>
+
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Delete Stability Sample Login</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Do you want to delete this stability Sample login <code>ARFFT0000081</code>?</p>
+
+          <CFormInput
+            type="text"
+            label="User ID"
+            placeholder="User Id "
+          />
+          <CFormInput
+            type="password"
+            label="Password"
+            placeholder="Your password"
+          />
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton className="bg-info text-white">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+
+    </>
+  )
+}
+
+const PermanentlyDeleteModal = (_props) => {
+  return (
+    <>
+
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Delete Stability Sample Login</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Do you want to permanently delete this stability Sample login <code>ARFFT0000081</code>?</p>
+
+          <CFormInput
+            type="text"
+            label="User ID"
+            placeholder="User Id "
+          />
+          <CFormInput
+            type="password"
+            label="Password"
+            placeholder="Your password"
+          />
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton className="bg-info text-white">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+
+    </>
+  )
+}
 
 export default Sample_Login;

@@ -1,34 +1,14 @@
-import {
-  CButton,
-  CCol,
-  CFormCheck,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { FaArrowRight, FaDownload } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+
 function SampleLoginTemplate() {
   const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false)
   const badgeStyle = { background: "#cdffca" };
   return (
     <>
@@ -96,8 +76,8 @@ function SampleLoginTemplate() {
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <div className="p-2">
-                  <CButton className="bg-danger bg-opacity-75 rounded" >
-                    <FaDownload/>
+                    <CButton className="bg-danger bg-opacity-75 rounded" >
+                      <FaDownload />
                     </CButton>
                   </div>
                   <CButton
@@ -144,18 +124,12 @@ function SampleLoginTemplate() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
+                      <Link to="/stability/sampleLoginTemplateDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
+                      
+                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
+
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -176,18 +150,12 @@ function SampleLoginTemplate() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
+                      <Link to="/stability/sampleLoginTemplateDetails">
                         <FontAwesomeIcon icon={faEye} />
                       </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
+                      
+                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
+
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -215,9 +183,9 @@ function SampleLoginTemplate() {
         </div>
       </div>
 
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
+
     </>
   );
 }
@@ -250,7 +218,7 @@ const StatusModal = (_props) => {
           <CFormCheck type="checkbox" id="checkbox3" label="Expiry / Retest Date" />
           <CFormCheck type="checkbox" id="checkbox3" label="Packed At" />
           <CFormCheck type="checkbox" id="checkbox3" label="No. Of API's" />
-          <CFormCheck type="checkbox" id="checkbox3" label="Source of API" /> 
+          <CFormCheck type="checkbox" id="checkbox3" label="Source of API" />
 
           <label>Auto Dedection Required</label>
           <CFormCheck
@@ -264,7 +232,7 @@ const StatusModal = (_props) => {
             id="AutoDedectionNo"
             name="AutoDedection"
             label="No"
-          /> 
+          />
 
         </CModalBody>
         <CModalFooter>
@@ -277,5 +245,38 @@ const StatusModal = (_props) => {
     </>
   );
 };
+
+const DeleteModal = (_props) => {
+  return (
+    <>
+
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Delete Sample Type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Do you want to delete this sample type <code>testing</code>?</p>
+
+          <CFormInput
+            type="text"
+            label="User ID"
+            placeholder="User Id "
+          />
+          <CFormInput
+            type="password"
+            label="Password"
+            placeholder="Your password"
+          />
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton className="bg-info text-white">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+
+    </>
+  )
+}
 
 export default SampleLoginTemplate;

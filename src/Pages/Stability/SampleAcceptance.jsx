@@ -74,12 +74,15 @@ function SampleAcceptance() {
                                    </CCol>
                                    <CCol sm={3}>
                                         <div className="d-flex justify-content-end">
-                                             <div className="p-2"><FaDownload /></div>
+                                             <div className="p-2">
+                                                  <CButton className="bg-danger bg-opacity-75 rounded" >
+                                                       <FaDownload />
+                                                  </CButton></div>
                                         </div>
                                    </CCol>
                               </CRow>
                          </div>
-                         <div className="bg-white mt-5">
+                         {/* <div className="bg-white mt-5">
                               <CTable align="middle" responsive className=" shadow">
                                    <CTableHead>
                                         <CTableRow>
@@ -158,7 +161,7 @@ function SampleAcceptance() {
 
                               </div>
                               <button className="btn btn-next" > Next <FaArrowRight /></button>
-                         </div>
+                         </div> */}
 
                     </div>
                </div>

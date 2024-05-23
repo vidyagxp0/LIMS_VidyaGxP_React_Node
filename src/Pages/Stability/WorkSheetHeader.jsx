@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function WorkSheetHeader() {
      const [addModal, setAddModal] = useState(false)
+     const [deleteModal, setDeleteModal] = useState(false)
      const badgeStyle = { background: "#cdffca" }
      return (
           <>
@@ -108,9 +109,8 @@ function WorkSheetHeader() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                                       <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <Link to="/stability/worksheetHeaderDetails"><FontAwesomeIcon icon={faEye} /></Link>
+                                                  <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -129,9 +129,8 @@ function WorkSheetHeader() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                                       <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <Link to="/stability/worksheetHeaderDetails"><FontAwesomeIcon icon={faEye} /></Link>
+                                                  <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -163,6 +162,8 @@ function WorkSheetHeader() {
                </div>
 
                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+               {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
+
 
           </>
      )
@@ -204,6 +205,12 @@ const StatusModal = (_props) => {
                          />
                          <CFormInput
                               type="text"
+                              label="Unique Code"
+                              placeholder="Unique Code"
+                              disabled
+                         />
+                         <CFormInput
+                              type="text"
                               label="Report Title"
                               placeholder=" Report Title"
                          />
@@ -217,7 +224,7 @@ const StatusModal = (_props) => {
                               label="Format No."
                               placeholder=" Format No."
                          />
-                         <CHeader className="bg-secondary">Header</CHeader>
+                         <CHeader className="bg-light">Header</CHeader>
                          <CFormInput
                               type="text"
                               label="Rows"
@@ -235,7 +242,7 @@ const StatusModal = (_props) => {
                                    
                                  ]}
                          />
-                         <CFooter className="bg-secondary">Footer</CFooter>
+                         <CFooter className="bg-light">Footer</CFooter>
                          
                          <CFormInput
                               type="text"
@@ -254,6 +261,28 @@ const StatusModal = (_props) => {
                                    
                                  ]}
                          />
+
+                    </CModalBody>
+                    <CModalFooter>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
+                    </CModalFooter>
+               </CModal>
+
+          </>
+     )
+}
+
+const DeleteModal = (_props) => {
+     return (
+          <>
+
+               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                    <CModalHeader>
+                         <CModalTitle>Delete Worksheet </CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                         <p>Do you want to delete this Worksheet <code>Micro media</code>?</p>
 
                     </CModalBody>
                     <CModalFooter>

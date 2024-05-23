@@ -1,4 +1,4 @@
-import { CButton, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableBody, CTableDataCell, CTableRow } from "@coreui/react"
+import {  CTable, CTableBody, CTableDataCell, CTableRow } from "@coreui/react"
 
 
 function StabilityProtocolDetails() {
@@ -7,7 +7,7 @@ function StabilityProtocolDetails() {
 
             <div id="approval-page" className="py-3 bg-light h-100">
                 <div className="container-fluid">
-                    <div className="bock mb-3">
+                    <div className="block mb-3">
                         <div className="main-head d-flex justify-content-between align-items-center">
                             <h4 className="fw-bold mb-4 mt-3">Stability Protocol Details</h4>
                         </div>
@@ -15,56 +15,56 @@ function StabilityProtocolDetails() {
                             <CTable align="middle" className="mb-0" small bordered>
                                 <CTableBody>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Product / Material</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Product / Material</CTableDataCell>
                                         <CTableDataCell>Sodium Propyl Paraben IP</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Specification ID</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Specification ID</CTableDataCell>
                                         <CTableDataCell>EUR/SOP-AD-01</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Protocol ID</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Protocol ID</CTableDataCell>
                                         <CTableDataCell>asdf3453</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Protocol Type</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Protocol Type</CTableDataCell>
                                         <CTableDataCell>NEW</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Sampled By</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Sampled By</CTableDataCell>
                                         <CTableDataCell>na</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Date format</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Date format</CTableDataCell>
                                         <CTableDataCell>SHORTDATE</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Starting Date</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Starting Date</CTableDataCell>
                                         <CTableDataCell>12-May-2024 17:02</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Manufacturing Date</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Manufacturing Date</CTableDataCell>
                                         <CTableDataCell>06-May-2024 05:30</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Initial Testing required</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Initial Testing required</CTableDataCell>
                                         <CTableDataCell>YES</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Charging Start Date</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Charging Start Date</CTableDataCell>
                                         <CTableDataCell>NOW</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Storage Condition Uom</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Storage Condition Uom</CTableDataCell>
                                         <CTableDataCell>gm</CTableDataCell>
                                     </CTableRow>
 
                                     <CTableRow>
-                                        <CTableDataCell color="info">Created At</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Created At</CTableDataCell>
                                         <CTableDataCell>05/05/2024</CTableDataCell>
                                     </CTableRow>
                                     <CTableRow>
-                                        <CTableDataCell color="info">Status</CTableDataCell>
+                                        <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
                                         <CTableDataCell>APPROVED</CTableDataCell>
                                     </CTableRow>
 
@@ -72,7 +72,7 @@ function StabilityProtocolDetails() {
                             </CTable>
                         </div>
                     </div>
-                    <div className="block">
+                    <div className="block mb-3">
                         <div className="main-head">
                             <h4 className="fw-bold mb-4 mt-3">Stability Storage Condition-1</h4>
                         </div>
@@ -86,7 +86,7 @@ function StabilityProtocolDetails() {
                         <div className="bg-white px-5 py-3">
                             <CTable align="middle" className="mb-0" >
                                 <CTableBody>
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>Station</CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
@@ -97,7 +97,7 @@ function StabilityProtocolDetails() {
                                         <CTableDataCell>11 months</CTableDataCell>
                                     </CTableRow>
 
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>Withdrawal Dates</CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
@@ -108,7 +108,7 @@ function StabilityProtocolDetails() {
                                         <CTableDataCell>05-Apr-2025</CTableDataCell>
                                     </CTableRow>
 
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>Sno.</CTableDataCell>
                                         <CTableDataCell>Test Name</CTableDataCell>
                                         <CTableDataCell>Group Name</CTableDataCell>
@@ -153,7 +153,7 @@ function StabilityProtocolDetails() {
 
                             <CTable align="middle" className="mb-0">
                                 <CTableBody>
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>Withdrawal Tolerance(days)</CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
@@ -163,7 +163,7 @@ function StabilityProtocolDetails() {
                                         <CTableDataCell>5</CTableDataCell>
                                         <CTableDataCell>1</CTableDataCell>
                                     </CTableRow>
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>Generation Type</CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
@@ -174,7 +174,7 @@ function StabilityProtocolDetails() {
                                         <CTableDataCell>A</CTableDataCell>
 
                                     </CTableRow>
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>Withdrawal Quantity</CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
                                         <CTableDataCell></CTableDataCell>
@@ -184,10 +184,10 @@ function StabilityProtocolDetails() {
                                         <CTableDataCell>10</CTableDataCell>
                                         <CTableDataCell>10</CTableDataCell>
                                     </CTableRow>
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>Additional Quantity</CTableDataCell>
                                     </CTableRow>
-                                    <CTableRow color="">
+                                    <CTableRow className="">
                                         <CTableDataCell>50</CTableDataCell>
                                     </CTableRow>
 
