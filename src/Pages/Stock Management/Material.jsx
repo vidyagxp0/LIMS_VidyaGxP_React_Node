@@ -75,7 +75,7 @@ const nextToLastPage = () => {
 
       {/* <div id="div2"> */}
 
-      <div id="div2">
+      <div id="div2" style={{display:'flex',justifyContent:'space-between'}}>
         
         <div id="searchmain"> 
           <div id="searchicon">
@@ -94,12 +94,13 @@ const nextToLastPage = () => {
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             
                             <select id='selectOption'>
-                            <option>All</option>
-                                <option>Initiated</option>
-                                <option>Approved</option>
-                                <option>Rejected</option>
-                                <option>Reinitiated</option>
-                                <option>Inactive</option>
+                            <option value="">All</option>
+                                <option value="initiated">Initiated</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="reinitiated">Reinitiated</option>
+                                <option value="Inactive">Inactive</option>
+                            
                             </select>
 
                         </button>
@@ -116,7 +117,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span>Add Material</span>
+          <CgAddR /> <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Material</span>
         </button>
 
         <div
@@ -170,7 +171,7 @@ const nextToLastPage = () => {
 
       <br />
       <div className='table-responsive p-4 container1'>
-                <table className='table shadow '>
+                <table className='table shadow '  style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>
@@ -188,7 +189,7 @@ const nextToLastPage = () => {
                 </table>
             </div>
 
-            <div className="pagination">
+            <div className="pagination" style={{margin:'0 35px'}}>
 
 <div className="pagination ">
     <div className='mr-5'>

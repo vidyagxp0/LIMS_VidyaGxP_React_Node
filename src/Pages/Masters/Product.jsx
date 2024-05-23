@@ -58,7 +58,7 @@ const nextToLastPage = () => {
         <h5>Products/Materials</h5>
       </div>
 
-      <div id="div2" className='p-5 '>
+      <div id="div2" className='p-5 ' style={{display:'flex',justifyContent:'space-between'}}>
 
          <div className="dropdown">
                     <div>
@@ -78,7 +78,7 @@ const nextToLastPage = () => {
                     </div>
                 </div>
 
-         <button
+         <button 
           id="sampleloginbtn"
           className="btn btn-primary"
           type="button"
@@ -86,7 +86,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
           >
-          <CgAddR />  <span>Add Product/Material</span>
+          <CgAddR />  <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Product/Material</span>
         </button>
 
     </div>
@@ -123,6 +123,8 @@ const nextToLastPage = () => {
         <label id="line3" htmlFor="">Re-testing Period</label>
         <input id="line4" required type="text" placeholder="Retesting Period"/>
 
+        <p style={{margin:'4px 23px'}}>Days</p>
+    
          <div id="line5">
           <button type="button"
             data-bs-dismiss="offcanvas"
@@ -132,8 +134,8 @@ const nextToLastPage = () => {
            </div>
 
            {/* Employee table */}
-           <div className='table-responsive p-4 container1'>
-                <table className='table'>
+           <div className='table-responsive p-4 container1' >
+                <table className='table shadow' style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
                     <thead>
                         <tr>
                             <th>Sr.no.</th>
@@ -154,7 +156,7 @@ const nextToLastPage = () => {
 
             <div className="pagination">
 
-<div className="pagination ">
+<div className="pagination " style={{margin:'0 35px'}}>
     <div className='mr-5'>
         <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
     </div>
@@ -168,7 +170,7 @@ const nextToLastPage = () => {
 
 </div>
 
-<button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+<button className="btn btn-next" style={{margin:'0 35px'}} onClick={nextToLastPage}> Next <FaArrowRight /></button>
 </div>
 
 

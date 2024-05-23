@@ -157,7 +157,7 @@ const nextToLastPage = () => {
 
 </div>
 
-<button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+<button className="btn btn-next"  onClick={nextToLastPage}> Next <FaArrowRight /></button>
 </div>
 
 
