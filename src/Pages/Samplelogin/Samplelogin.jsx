@@ -35,8 +35,7 @@ export default function Samplelogin() {
               <td>{employee.addedBy}</td>
               <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
               <td>
-                  &nbsp; &nbsp; <Link to="/view">< IoEyeSharp /></Link> &nbsp;
-                  {/* &nbsp; &nbsp; <a href="/approval/1321">< IoEyeSharp /></a> &nbsp; */}
+                  &nbsp; &nbsp; <Link to="/viewDetails">< IoEyeSharp /></Link> &nbsp;
                   <HiDotsHorizontal />
               </td>
           </tr>

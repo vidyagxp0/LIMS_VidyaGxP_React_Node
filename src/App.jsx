@@ -17,7 +17,8 @@ import QualityCheck from "./Pages/UserManagement/Department/QualityCheck"
 import Store from "./Pages/UserManagement/Department/Store"
 import Roles from "./Pages/UserManagement/Roles"
 import Samplelogin from "./Pages/Samplelogin/Samplelogin"
-import View from "./Pages/Samplelogin/SampleloginView/View.jsx"
+import SampleLoginDetails from "./Pages/Samplelogin/SampleloginView/SampleLoginDetails.jsx"
+import TestResultsDetails from "./Pages/Samplelogin/SampleloginView/TestResultsDetails.jsx"
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1"
 import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2"
 import Storage_Condition from "./Pages/Stability/Storage_Condition"
@@ -54,6 +55,10 @@ import InstrumentModule from "./Pages/Instruments Master/InstrumentModule"
 import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage"
 import MasterProductDetail from "./Pages/Masters/MasterProductDetail.jsx"
 
+import StorageChamberDetails from "./Pages/Stability/StabilityDetails/StorageChamberDetails.jsx"
+import StabilityProtocolDetails from "./Pages/Stability/StabilityDetails/StabilityProtocolDetails.jsx"
+import SampleStorageDetails from "./Pages/Stability/StabilityDetails/SampleStorageDetails.jsx"
+import CoaTemplateDetails from "./Pages/Stability/StabilityDetails/CoaTemplateDetails.jsx"
 
 // import Inventory from './Pages/Inventory/Inventory.jsx'
 import Inventory from "./Pages/Inventory/Inventory";
@@ -162,7 +167,8 @@ function App() {
             <Route path="/roles" element={<Roles/>} />
 
             <Route path="/samplelogin" element={<Samplelogin/>} />
-            <Route path="/view" element={<View/>} />
+            <Route path="/viewDetails" element={<SampleLoginDetails/>} />
+            <Route path="/testResultsDetails" element={<TestResultsDetails/>} />
 
             <Route path="/investigationl1" element={<InvestigationL1/>} />
             <Route path="/investigationl2" element={<InvestigationL2/>}/>
@@ -283,6 +289,13 @@ function App() {
             <Route path="/reportsCertification/releasedCoa" element={<ReleasedCoa />} />
             <Route path="/reportsCertification/investigationCoa" element={<InvestigationCoa />} />
           
+
+            <Route path="/stability/storageChamberDetails" element={< StorageChamberDetails/>}/>
+            <Route path="/stability/stabilityProtocolDetails"element={< StabilityProtocolDetails/>}/>
+            <Route path="/stability/sampleStorageDetails"element={< SampleStorageDetails/>}/>
+            <Route path="/stability/CoaTemplateDetails"element={< CoaTemplateDetails/>}/>
+
+
             <Route path="/vender" element={<Vender/>} />
             <Route path="/clients" element={<Clients/>} />
           </Route>
