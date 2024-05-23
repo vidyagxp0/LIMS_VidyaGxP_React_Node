@@ -74,7 +74,7 @@ const nextToLastPage = () => {
      
            {/* Employee table */}
            <div className='table-responsive p-4 container1'>
-                <table className='table shadow'>
+                <table className='table shadow'  style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
                     <thead>
                         <tr>
                             <th>Sr.no.</th>

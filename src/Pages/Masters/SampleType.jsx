@@ -63,11 +63,11 @@ const nextToLastPage = () => {
         <h5>Specifications/Sample Type</h5>
       </div>
 
-      <div id="div2" className='p-5 '>
+      <div id="div2" className='p-5 ' style={{display:'flex',justifyContent:'space-between'}}>
 
          <div className="dropdown">
                     <div>
-                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                             Show
                             <select id='selectOption'>
                                 <option>All</option>
@@ -91,7 +91,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
           >
-          <CgAddR />  <span>Add Sample Type</span>
+          <CgAddR />  <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Sample Type</span>
         </button>
 
     </div>
@@ -259,7 +259,7 @@ Sample Reference No" />
 
            {/* Employee table */}
            <div className='table-responsive p-4 container1'>
-                <table className='table'>
+                <table className='table shadow' style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
                     <thead>
                         <tr>
                             <th>Sr.no.</th>
@@ -278,7 +278,7 @@ Sample Reference No" />
 
             <div className="pagination">
 
-<div className="pagination ">
+<div className="pagination" style={{margin:'0 35px'}}>
     <div className='mr-5'>
         <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
     </div>
@@ -292,7 +292,7 @@ Sample Reference No" />
 
 </div>
 
-<button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+<button className="btn btn-next" style={{margin:'0 35px'}} onClick={nextToLastPage}> Next <FaArrowRight /></button>
 </div>
 
 
