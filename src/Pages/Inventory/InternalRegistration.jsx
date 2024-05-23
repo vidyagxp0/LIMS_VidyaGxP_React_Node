@@ -94,7 +94,7 @@ function InternalRegistration() {
               <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="dark" onClick={() => setAddModal(true)}>
+                  <CButton color="primary" onClick={() => setAddModal(true)}>
                     Add Internal
                   </CButton>
                 </div>
@@ -255,6 +255,7 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>New Internal</CModalTitle>

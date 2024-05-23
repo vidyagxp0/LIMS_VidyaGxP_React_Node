@@ -11,8 +11,8 @@ import { Link } from 'react-router-dom';
 const SamplingConfiguration = () => {
     const pageSize = 9; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
-    
-    
+
+
 
     // data for the table
     const employees = [
@@ -28,14 +28,12 @@ const SamplingConfiguration = () => {
         { samplingId: "USER-022024-000009", specificationId: 'spsc/01/001', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C4' },
         { samplingId: "USER-022024-0000010", specificationId: 'wbl/fps/004', sample: 'Finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample' },
 
-        
+
     ];
 
-    // Function to calculate start and end indices for current page
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize, employees.length);
 
-    // Function to render table rows for current page
     const renderRows = () => {
         return employees.slice(startIndex, endIndex).map((employee, index) => (
             <tr key={startIndex + index}>
@@ -47,21 +45,22 @@ const SamplingConfiguration = () => {
                 <td>{employee.testPlan}</td>
                 <td>{employee.sampleTemplate}</td>
                 <td>{employee.sampleRule}</td>
-                
+
                 <td>
-                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                <span
+                    <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                    <span
                         className="btn "
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasRight"
                         aria-controls="offcanvasRight"
-                        >
-                <FontAwesomeIcon icon={faPenToSquare} />                
-                </span>
-                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                    >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                    </span>
+                    <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeConfigurationModal" ><FontAwesomeIcon icon={faTrashCan} /></span>
 
                 </td>
             </tr>
+
         ));
     };
 
@@ -129,7 +128,7 @@ const SamplingConfiguration = () => {
                             ></button>
                         </div>
                     </div>
-                    
+
                     <label id="line3" htmlFor="">Test Plan / Revision No.</label>
                     <select id="line4" required>
                         <option value="">Select...</option>
@@ -138,18 +137,18 @@ const SamplingConfiguration = () => {
                         <option value="option3">TP-010110</option>
                     </select>
 
-                    
+
                     <label id="line3" htmlFor="">Specification ID</label>
-                    <input id="line4" required type="text" placeholder="" disabled/>
+                    <input id="line4" required type="text" placeholder="" disabled />
 
                     <label id="line3" htmlFor="">Product/Material Name</label>
-                    <input id="line4" required type="text" placeholder="Product/Material Name" disabled/>
+                    <input id="line4" required type="text" placeholder="Product/Material Name" disabled />
 
                     <label id="line3" htmlFor="">Product/Material Code</label>
-                    <input id="line4" required type="text" placeholder="Product/Material Code" disabled/>
+                    <input id="line4" required type="text" placeholder="Product/Material Code" disabled />
 
                     <label id="line3" htmlFor="">Sample Type</label>
-                    <input id="line4" required type="text" placeholder="" disabled/>
+                    <input id="line4" required type="text" placeholder="" disabled />
 
                     <label id="line3" htmlFor="">Sampling Template</label>
                     <select id="line4" required>
@@ -171,13 +170,13 @@ const SamplingConfiguration = () => {
                     <select id="line4" required>
                         <option value="">Select...</option>
                         <option value="option1">No Options</option>
-                        
+
                     </select>
 
                     <label id="line3" htmlFor="">Comment</label>
                     <input id="line4" required type="text" placeholder="Test Code" />
 
-                    
+
                     <div id="line5">
                         <button type="button"
                             data-bs-dismiss="offcanvas"
@@ -216,10 +215,27 @@ const SamplingConfiguration = () => {
                         {renderRows()}
                     </tbody>
                 </table>
+                <div className="modal fade" id="removeConfigurationModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Sampling Configuration</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="">Do you want to delete this Sampling Configuration <code>Tamc</code> ?</p>
+                            </div>
+                            <div className="d-flex justify-content-end m-3">
+                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
-            
+
 
             {/* Pagination */}
 

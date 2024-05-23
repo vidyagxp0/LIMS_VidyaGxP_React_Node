@@ -60,11 +60,8 @@ import StabilityProtocolDetails from "./Pages/Stability/StabilityDetails/Stabili
 import SampleStorageDetails from "./Pages/Stability/StabilityDetails/SampleStorageDetails.jsx"
 import CoaTemplateDetails from "./Pages/Stability/StabilityDetails/CoaTemplateDetails.jsx"
 
-// import Inventory from './Pages/Inventory/Inventory.jsx'
 import Inventory from "./Pages/Inventory/Inventory";
-// import Chemicals from "./Pages/Inventory/Chemicals";
 import Columns from "./Pages/Inventory/Columns";
-// import CultureManagement from "./Pages/Inventory/CultureManagement";
 import Environment from "./Pages/Inventory/Environment";
 import Media from "./Pages/Inventory/Media";
 import ReferenceStandards from "./Pages/Inventory/RefrenceStandards";
@@ -123,7 +120,7 @@ import LocationSamples from "./Pages/Inventory/LocationSamples.jsx"
 import StocksVerification from "./Pages/Stock Management/StocksVerification"
 import StocksOnboarding from "./Pages/Stock Management/StocksOnboarding"
 import Material from "./Pages/Stock Management/Material"
-// import Inventory from "./Pages/Stock Management/Inventory"
+
 import StockInventory from "./Pages/Stock Management/StockInventory.jsx"
 import StockInventoryDetail from "./Pages/Stock Management/StockInventoryDetail.jsx"
 import StockMaterialDetail from "./Pages/Stock Management/StockMaterialDetail.jsx"
@@ -180,6 +177,13 @@ import TestHistory from "./Pages/Settings/TestHistory.jsx"
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx"
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx"
 
+import SampleLoginTemplateDetails from "./Pages/Stability/StabilityDetails/SampleLoginTemplateDetails.jsx"
+import WorksheetHeaderDetails from "./Pages/Stability/StabilityDetails/WorksheetHeaderDetails.jsx"
+import SummaryReportHeaderDetails from "./Pages/Stability/StabilityDetails/SummaryReportHeaderDetails.jsx"
+import RegistrationDetails from "./Pages/Instruments Master/InstrumentMasterDetails/RegistrationDetails.jsx"
+import Sample_LoginDetails from "./Pages/Stability/StabilityDetails/Sample_LoginDetails.jsx"
+import InstrumentModuleDetails from "./Pages/Instruments Master/InstrumentMasterDetails/InstrumentModuleDetails.jsx"
+
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false)
   const checkLoggedIn = (data) => {
@@ -200,10 +204,10 @@ function App() {
             <Route path="/stCondition" element={<StorageCondition />} />
 
             <Route path="/department" element={<Department />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/qualityAssurance" element={<QualityAssurance />} />
-            <Route path="/qualityCheck" element={< QualityCheck />} />
-            <Route path="/store" element={< Store />} />
+            <Route path="/department/admin" element={<Admin />} />
+            <Route path="/department/qualityAssurance" element={<QualityAssurance />} />
+            <Route path="/department/qualityCheck" element={< QualityCheck />} />
+            <Route path="/department/store" element={< Store />} />
             <Route path="/users" element={<Users />} />
             <Route path="/roles" element={<Roles />} />
 
@@ -215,9 +219,14 @@ function App() {
             <Route path="/viewDetails" element={<SampleLoginDetails/>} />
             <Route path="/testResultsDetails" element={<TestResultsDetails/>} />
 
-            <Route path="/investigationl1" element={<InvestigationL1/>} />
-            <Route path="/investigationl2" element={<InvestigationL2/>}/>
+            <Route path="/stability/sampleLoginTemplateDetails" element={< SampleLoginTemplateDetails/>}/>
+            <Route path="/stability/worksheetHeaderDetails" element={< WorksheetHeaderDetails/>}/>
+            <Route path="/stability/SummaryReportHeaderDetails" element={< SummaryReportHeaderDetails/>}/>
+            <Route path="/stability/sample_LoginDetails" element={< Sample_LoginDetails/>}/>
             
+            <Route path="/instrumentMaster/registrationDetails" element={< RegistrationDetails/>}/>
+            <Route path="/instrumentMaster/instrumentModuleDetails" element={< InstrumentModuleDetails/>}/>
+
             <Route path="/storageCondition1321" element={<Storage_Condition />} />
             <Route path="/standardProtocol" element={< StandardProtocol />} />
             <Route path="/storageChamber" element={< StorageChamber />} />
@@ -261,7 +270,7 @@ function App() {
             <Route path="Inventory/SolutionUsage" element={<SolutionUsage />} />
             <Route path="/Inventory/Columns" element={<Columns />} />
             <Route path="/Inventory/ReferenceStandards" element={<ReferenceStandards />} />
-            {/* <Route path="/Inventory/CultureManagement" element={<CultureManagement />}/> */}
+
             <Route path="/Inventory/Media" element={<Media />} />
             <Route path="/Inventory/WaterManagement" element={<WaterManagement />} />
             <Route path="/Inventory/Environment" element={<Environment />} />
@@ -277,7 +286,7 @@ function App() {
             <Route path="Inventory/Assignment" element={<Assignment />} />
             <Route path="Inventory/Qualification" element={<Qualification />} />
             <Route path="Inventory/ColumnUsage" element={<ColumnUsage />} />
-            {/* <Route path="Inventory/Chemicals" element={<Chemicals/>}/> */}
+
             <Route path="Inventory/BatchAssignment" element={<BatchAssignment />} />
             <Route path="Inventory/StandardRegistration" element={<StandardRegistration />} />
             <Route path="Inventory/InvLotRegistration" element={<InvLotRegistration />} />
@@ -315,7 +324,6 @@ function App() {
             <Route path="/stock-management/stocks-verification" element={< StocksVerification />} />
             <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding />} />
             <Route path="/stock-management/material" element={<Material />} />
-            {/* <Route path="/stock-management/inventory" element={<Inventory/>}/>            */}
             <Route path="/stock-management/inventory" element={<StockInventory />} />
             <Route path="/stock-management/stock-inventory-details" element={<StockInventoryDetail />} />
             <Route path="/stock-management/stock-material-details" element={<StockMaterialDetail />} />
@@ -340,7 +348,7 @@ function App() {
             <Route path="/clients" element={<Clients />} />
             <Route path="/plants" element={< Plants />} />
             <Route path="/workFlow" element={< WorkFlow />} />
-            <Route path="/auditTrail" element={< AuditTrail />} />
+            <Route path="/auditTrail" element={<AuditTrail />} />
 
             <Route path="/settings/businessAssociate" element={<  BussinessAssociate />} />
             <Route path="/settings/labelManagement" element={< LabelManagement />} />
@@ -377,9 +385,6 @@ function App() {
             <Route path="/stability/sampleStorageDetails"element={< SampleStorageDetails/>}/>
             <Route path="/stability/CoaTemplateDetails"element={< CoaTemplateDetails/>}/>
 
-
-            <Route path="/vender" element={<Vender/>} />
-            <Route path="/clients" element={<Clients/>} />
           </Route>
         </Routes>
       </BrowserRouter>
