@@ -55,7 +55,7 @@ const SamplingRule = () => {
                         >
                 <FontAwesomeIcon icon={faPenToSquare} />                
                 </span>
-                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeSamplingRuleModal"><FontAwesomeIcon icon={faTrashCan} /></span>
                 </td>
             </tr>
         ));
@@ -134,7 +134,7 @@ const SamplingRule = () => {
 
                     <label id="line3" htmlFor="">Number of Ranges</label>
                     <div className='d-flex '>
-                    <input id="line4" required type="text" placeholder="Number of Ranges" />
+                    <input id="line4" required type="number" placeholder="Number of Ranges" />
                     <button className='btn btn-info text-white' >Add</button>
                     </div>
                     
@@ -142,21 +142,11 @@ const SamplingRule = () => {
                         <button type="button"
                             data-bs-dismiss="offcanvas"
                             aria-label="Close">&lt; Back</button>
-
-
-
                         <button>Submit</button>
-
-
                     </div>
                 </div>
-
-
-
-
             </div>
 
-            {/* Employee table */}
             <div className='table-responsive shadow p-4 container1'>
                 <table className='table'>
                     <thead>
@@ -174,17 +164,26 @@ const SamplingRule = () => {
                         {renderRows()}
                     </tbody>
                 </table>
+                <div className="modal fade" id="removeSamplingRuleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Analyst Template</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="">Do you want to delete this Analyst Template Raw <code>Sampl</code> ?</p>
+                            </div>
+                            <div className="d-flex justify-content-end m-3">
+                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-
-            
-
-            {/* Pagination */}
-
-
-
             <div className="pagination">
-
                 <div className="pagination">
                     <div className='mr-5'>
                         <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
@@ -194,9 +193,7 @@ const SamplingRule = () => {
                     </div>
                     <div>
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
                     </div>
-
                 </div>
                 <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
             </div>

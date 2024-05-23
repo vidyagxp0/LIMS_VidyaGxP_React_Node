@@ -12,24 +12,24 @@ import { Link } from 'react-router-dom';
 const ESampling = () => {
     const pageSize = 9; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
-    
-    
+
+
 
     // data for the table
     const employees = [
 
-        { product: "LUPIN MIRA S 21", containersSampled:'37', numberOfContainers: '3',  addedOn: '2024-05-15', samplingConclusion:'PASS', status: 'APPROVED' },
-        { product: "LUPIN MIRA S 22", containersSampled:'130', numberOfContainers: '5',  addedOn: '2024-05-16',samplingConclusion:'PASS', status: 'INITIATED' },
-        { product: "LUPIN MIRA S 23", containersSampled:'37', numberOfContainers: '3',  addedOn: '2024-05-15',samplingConclusion:'PASS', status: 'APPROVED' },
-        { product: "LUPIN MIRA S 24", containersSampled:'56', numberOfContainers: '5',  addedOn: '2024-05-16', samplingConclusion:'PASS',status: 'INITIATED' },
-        { product: "LUPIN MIRA S 25", containersSampled:'38', numberOfContainers: '3',  addedOn: '2024-05-15',samplingConclusion:'PASS', status: 'APPROVED' },
-        { product: "LUPIN MIRA S 26", containersSampled:'31', numberOfContainers: '5',  addedOn: '2024-05-16',samplingConclusion:'PASS', status: 'INITIATED' },
-        { product: "LUPIN MIRA S 27", containersSampled:'49', numberOfContainers: '3',  addedOn: '2024-05-15', samplingConclusion:'PASS',status: 'APPROVED' },
-        { product: "LUPIN MIRA S 28", containersSampled:'37', numberOfContainers: '5',  addedOn: '2024-05-16', samplingConclusion:'PASS',status: 'INITIATED' },
-        { product: "LUPIN MIRA S 29", containersSampled:'21', numberOfContainers: '3',  addedOn: '2024-05-15', samplingConclusion:'PASS',status: 'APPROVED' },
-        { product: "LUPIN MIRA S 30", containersSampled:'37', numberOfContainers: '5',  addedOn: '2024-05-16', samplingConclusion:'PASS',status: 'INITIATED' },
-2
-        
+        { product: "LUPIN MIRA S 21", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { product: "LUPIN MIRA S 22", containersSampled: '130', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { product: "LUPIN MIRA S 23", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { product: "LUPIN MIRA S 24", containersSampled: '56', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { product: "LUPIN MIRA S 25", containersSampled: '38', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { product: "LUPIN MIRA S 26", containersSampled: '31', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { product: "LUPIN MIRA S 27", containersSampled: '49', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { product: "LUPIN MIRA S 28", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { product: "LUPIN MIRA S 29", containersSampled: '21', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { product: "LUPIN MIRA S 30", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        2
+
     ];
 
     // Function to calculate start and end indices for current page
@@ -42,22 +42,22 @@ const ESampling = () => {
             <tr key={startIndex + index}>
                 <td>{startIndex + index + 1}</td>
                 <td>{employee.product}</td>
-                <td>{employee.containersSampled}</td>                              
+                <td>{employee.containersSampled}</td>
                 <td>{employee.addedOn}</td>
                 <td>{employee.numberOfContainers}</td>
                 <td>{employee.samplingConclusion}</td>
                 <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                <span
+                    <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                    <span
                         className="btn "
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasRight"
                         aria-controls="offcanvasRight"
-                        >
-                <FontAwesomeIcon icon={faPenToSquare} />                
-                </span>
-                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>                               
+                    >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                    </span>
+                    <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeESamplingModal"><FontAwesomeIcon icon={faTrashCan} /></span>
 
                 </td>
             </tr>
@@ -128,93 +128,115 @@ const ESampling = () => {
                             ></button>
                         </div>
                     </div>
-                    
-                    <label id="line3" htmlFor="">Sampling Configuration</label>
-                    <select id="line4" required>
-                        <option value="">Select...</option>
-                        <option value="option1">TP-010110</option>
-                        <option value="option2">TP-012122</option>
-                        <option value="option3">TP-010110</option>
-                    </select>
+                    <div className="offcanvas-body">
+                        <div className="mb-3">
+                            <label htmlFor="SamplingConfiguration" className="form-label">Sampling Configuration</label>
+                            <select className="form-select" id='SamplingConfiguration' aria-label="Default select example">
+                                <option selected>Select </option>
+                                <option value="1">SC-072023-0000001</option>
+                                <option value="2">SC-072023-0000002</option>
+                                <option value="3">SC-072023-0000003</option>
+                                <option value="3">SC-072023-0000004</option>
+                                <option value="3">SC-072023-0000005</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="productName" className="form-label">Product/Material Name</label>
+                            <input type="text" className="form-control" id="productName" placeholder="Product" readOnly />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="testPlan" className="form-label">Test Plan</label>
+                            <input type="text" className="form-control" id="testPlan" placeholder="Test Plan" readOnly />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="ARNo" className="form-label">A.R. No</label>
+                            <select className="form-select" id='ARNo' aria-label="Default select example">
+                                <option selected>Select </option>
+                                <option value="ARPC010110">ARPC010110</option>
+                                <option value="ARPC012122">ARPC012122</option>
+                                <option value="ARPC010110">ARPC010111</option>
+                                <option value="ARPC010110">ARPC010111</option>
+                                <option value="ARPC010111">ARPC010111</option>
+                                <option value="ARPC010110">ARPC010111</option>
+                                <option value="ARPC010110">ARPC010111</option>
+                                <option value="ARPC010110">ARPC010111</option>
+                                <option value="ARPC010110">ARPC010111</option>
+                                <option value="ARPC010110">ARPC010111</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="noOfContainers" className="form-label">Total No. of containers</label>
+                            <input type="number" className="form-control" id="noOfContainers" placeholder="Total No. of containers" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="sampledContainerNo" className="form-label">No. of containers to be sampled</label>
+                            <input type="number" className="form-control" id="sampledContainerNo" placeholder="No. of containers to be sampled" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="sampledContainer" className="form-label">Containers sampled</label>
+                            <select className="form-select" id='sampledContainer' aria-label="Default select example">
+                                <option selected>Select </option>
+                                <option disabled>No. Of Sampled Containers </option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Sampling Conclusion</label>
+                            <div className="d-flex flex-row gap-4" >
+                                <div>
+                                    <input type="radio" className='form-check-input mx-3' name="conclusion" id="pass" />
+                                    <label htmlFor="pass">Pass</label>
+                                </div>
+                                <div>
+                                    <input type="radio" className='form-check-input mx-3' name="conclusion" id="fail" />
+                                    <label htmlFor="fail">Fail</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Check point passed</label>
+                            <div className="d-flex flex-row gap-4" >
+                                <div>
+                                    <input type="radio" className='form-check-input mx-3' name="CheckPointPassed" id="pass" />
+                                    <label htmlFor="yes">Yes</label>
+                                </div>
+                                <div>
+                                    <input type="radio" className='form-check-input mx-3' name="CheckPointPassed" id="fail" />
+                                    <label htmlFor="no">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="formFile" className="form-label">Document if any</label>
+                            <input className="form-control" type="file" id="formFile" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="comments" className="form-label">Comments</label>
+                            <input type="text" className="form-control" id="comments" placeholder="Comment here ..." />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="InitiatedBy" className="form-label">Initiated By</label>
+                            <input type="number" className="form-control" id="InitiatedBy" placeholder="Admin" readOnly />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="InitiatedOn" className="form-label">Initiated On</label>
+                            <input type="date" className="form-control" id="InitiatedOn" placeholder="2024-05-23" />
+                        </div>
 
-                    
-                    <label id="line3" htmlFor="">Product/Material Name</label>
-                    <input id="line4" required type="text" placeholder="Product" disabled/>
-
-                    <label id="line3" htmlFor="">Test Plan</label>
-                    <input id="line4" required type="text" placeholder="Test Plan" disabled/>
-
-                    <label id="line3" htmlFor="">A.R. No</label>
-                    <select id="line4" required>
-                        <option value="">A.R. No</option>
-                        <option value="option1">ARPC010110</option>
-                        <option value="option2">ARPC012122</option>
-                        <option value="option3">ARPC010111</option>
-                    </select>                  
-
-
-                    <label id="line3" htmlFor="">Total No. of containers</label>
-                    <input id="line4" required type="text" placeholder="No. of containers" />
-
-                    <label id="line3" htmlFor="">No. of containers to be sampled</label>
-                    <input id="line4" required type="text" placeholder="No. of containers to be sampled" />
-
-                    <label id="line3" htmlFor="">Containers sampled</label>
-                    <select id="line4" required>
-                        <option value="">No. Of Sampled Containers</option>
-                        <option value="option1">No Options</option>
-                        
-                    </select>
-
-                    {/* <label id="line3" htmlFor="">Sampling Conclusion</label>
-                    <input id="pass" name="samplingConclusion" type="radio" required  />
-                    <input id="Fail" name="samplingConclusion" type="radio" required  />
-
-                    <label id="line3" htmlFor="">Check point passed</label>
-                    <input id="yes" name="Checkpointpassed" type="radio" required  />
-                    <input id="no" name="Checkpointpassed" type="radio" required  />
-
-                    <label id='line3' for="fileInput">Upload File</label>
-                    <input id="fileInput" type="file" required placeholder='Upload File'/>
-
-
-                     */}
-
-
-                    <label id="line3" htmlFor="">Comments</label>
-                    <input id="line4" required type="text" placeholder="" />
-
-                    <label id="line3" htmlFor="">Initiated By</label>
-                    <input id="line4" required type="text" placeholder="Admin" disabled />
-
-                    <label id="line3" htmlFor="">Initiated On</label>
-                    <input id="line4" required type="text" placeholder="05/20/2024" disabled />
-
-
-
-                    <div id="line5">
-                        <button type="button"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close">&lt; Back</button>
-                        <button>Add</button>
-
-
+                        <div className="d-flex justify-content-center gap-4 mt-4">
+                            <button type="button" className='btn btn-secondary w-100' data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
+                            <button type="button" className='btn btn-primary w-100'>Add</button>
+                        </div>
                     </div>
                 </div>
-
-
-
-
             </div>
 
-            {/* Employee table */}
             <div className='table-responsive shadow p-4 container1'>
                 <table className='table'>
                     <thead>
                         <tr>
                             <th>S.No.</th>
                             <th>Product/Material Name</th>
-                            <th>Containers Sampled</th>                            
+                            <th>Containers Sampled</th>
                             <th>Added On</th>
                             <th>Number Of Containers</th>
                             <th>Sampling Conclusion</th>
@@ -226,10 +248,27 @@ const ESampling = () => {
                         {renderRows()}
                     </tbody>
                 </table>
+                <div className="modal fade" id="removeESamplingModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete E-Sample</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="">Do you want to delete this E-Sample <code>LUPIN MIRA S 25 TABLET</code> ?</p>
+                            </div>
+                            <div className="d-flex justify-content-end m-3">
+                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
-            
+
 
             {/* Pagination */}
 

@@ -1,6 +1,8 @@
 
+import './SamplingTemplate.css'
 import React, { useState } from 'react';
-
+import { TiArrowRightThick } from "react-icons/ti";
+import { TiArrowLeftThick } from "react-icons/ti";
 import { FaArrowRight } from 'react-icons/fa';
 import { CgAddR } from 'react-icons/cg';
 
@@ -11,14 +13,76 @@ import { Link } from 'react-router-dom';
 
 
 const SamplingTemplate = () => {
-  const pageSize = 9; // Number of items per page
+  const [leftArray, setLeftArray] = useState([
+    "Change Control",
+    "CAPA",
+    "Internal Audit",
+    "External Audit",
+    "Initiator",
+    "SQM",
+    "CTMS", ,
+    "Calendar",
+    "EHS",
+    "Environment",
+    "Documents",
+    "Deviation",
+
+  ]);
+
+  const [rightArray, setRightArray] = useState([
+    "Inspections",
+    "Audit",
+    "Refference",
+    "CCTT",
+  ]);
+
+  const moveRight = () => {
+    let leftElement = document.getElementsByClassName('check-left');
+    for (let index = 0; index < leftElement.length; index++) {
+      if (leftElement[index].checked) {
+        let data = leftElement[index].value;
+        let left = leftArray.filter((value) => value !== data);
+        setLeftArray(left);
+        rightArray.push(data);
+        setRightArray(rightArray);
+        break  // Important
+      }
+    }
+  }
+
+  const moveLeft = () => {
+    let rightElement = document.getElementsByClassName('check-right');
+    for (let index = 0; index < rightElement.length; index++) {
+      if (rightElement[index].checked) {
+        let data = rightElement[index].value;
+        let right = rightArray.filter((value) => value !== data);
+        setRightArray(right);
+        leftArray.push(data);
+        setLeftArray(leftArray);
+        break         // Important
+      }
+    }
+  }
+
+  const clicked = () => {
+    let checkboxes = document.querySelectorAll('.check-left, .check-right');
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    let allLabels = document.querySelectorAll('.labels');
+    allLabels.forEach((label) => {
+      label.classList.remove('clicked');
+    });
+
+    let label = event.target;
+    label.classList.add('clicked');
+    label.checked = true;
+  };
+
+  const pageSize = 9;
   const [currentPage, setCurrentPage] = useState(1);
 
-
-
-  // data for the table
   const employees = [
-
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
     { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
@@ -29,15 +93,11 @@ const SamplingTemplate = () => {
     { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
     { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    2
-
   ];
 
-  // Function to calculate start and end indices for current page
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
-  // Function to render table rows for current page
   const renderRows = () => {
     return employees.slice(startIndex, endIndex).map((employee, index) => (
       <tr key={startIndex + index}>
@@ -48,8 +108,8 @@ const SamplingTemplate = () => {
         <td>{employee.registeredOn}</td>
         <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
         <td>
-          <Link to="/approval/1321" ><FontAwesomeIcon icon={faEye} /></Link>          
-          <Link to="#" ><FontAwesomeIcon icon={faTrashCan} /></Link>
+          <Link className='mx-2' to="/approval/1321" ><FontAwesomeIcon icon={faEye} /></Link>
+          <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeSamplingTemplateModal"><FontAwesomeIcon icon={faTrashCan} /></span>
 
 
         </td>
@@ -57,7 +117,6 @@ const SamplingTemplate = () => {
     ));
   };
 
-  // Function to handle pagination
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -92,17 +151,14 @@ const SamplingTemplate = () => {
                 <div className="text-light fs-5">APPROVED</div>
                 <div className="count fs-1 text-light fw-bolder">6</div>
               </div>
-            
               <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
                 <div className="text-light fs-5">REJECTED</div>
                 <div className="count fs-1 text-light fw-bolder">0</div>
               </div>
             </div>
           </div>
-          
-        
         </div>
-        
+
         <div>
           <CRow className="mb-3">
             <CCol sm={4}>
@@ -133,60 +189,97 @@ const SamplingTemplate = () => {
             </CCol>
           </CRow>
         </div>
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header ">
-            <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add Sampling Template
-            </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
+        <div className="offcanvas offcanvas-end w-50" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+          <div className="offcanvas-header border-bottom pb-1 border-2 border-dark px-0 mx-3">
+            <h5 className="offcanvas-title" id="offcanvasRightLabel">Add Sampling template</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div className="offcanvas-body">
+            <p className="text-muted">Add information of Sampling template</p>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Template Name</label>
+              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Template Name" />
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Unique Code</label>
+              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Sample Type</label>
+              <select class="form-select" aria-label="Default select example">
+                <option selected>Select...</option>
+                <option value="1">Raw Material</option>
+                <option value="3">Hydrochloric Acid</option>
+                <option value="2">Hcl</option>
+                <option value="2">Petrochemical</option>
+              </select>
+            </div>
+            <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Header</div>
+            <div className="d-flex flex-row mb-3 gap-4">
+              <div class="w-50">
+                <label for="exampleFormControlInput1" class="form-label">Row</label>
+                <input type="number" defaultValue={0} class="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+              </div>
+              <div class="w-50">
+                <label for="exampleFormControlInput1" class="form-label">Columns</label>
+                <select class="form-select" aria-label="Default select example">
+                  <option value="2" selected>2</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+            </div>
+            <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Body</div>
+            <div className="d-flex">
+              <div className="w-100 m-3">
+                <h5>Available</h5>
+                <div className="shadow p-2 rounded border overflow-y-auto" style={{height: '350px'}}>
+                  <ul className='list-group'>
+                    {leftArray.map((data) =>
+                      <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark'><input type="checkbox" value={data} id={data} className="check-left d-none" /><label className="labels cursor-pointer" htmlFor={data} onClick={clicked}>{data}</label></li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+              <div className="m-auto justify-content-center">
+                <button className="btn shadow py-1 px-3 mt-5 text-warning fs-4" onClick={moveRight}><TiArrowRightThick /></button>
+                <button className="btn shadow py-1 px-3 mt-2 text-warning fs-4" onClick={moveLeft}><TiArrowLeftThick /></button>
+              </div>
+              <div className="w-100 m-3">
+                <h5>Selected</h5>
+                <div className="shadow p-2 rounded border overflow-y-auto" style={{height: '350px'}}>
+                  <ul className='list-group'>
+                    {rightArray.map((data) =>
+                      <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark'><input type="checkbox" value={data} id={data} className="check-right d-none" /><label className="labels cursor-pointer" htmlFor={data} onClick={clicked}>{data}</label></li>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Footer</div>
+            <div className="d-flex flex-row mb-3 gap-4">
+              <div class="w-50">
+                <label for="exampleFormControlInput1" class="form-label">Row</label>
+                <input type="number" defaultValue={0} class="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+              </div>
+              <div class="w-50">
+                <label for="exampleFormControlInput1" class="form-label">Columns</label>
+                <select class="form-select" aria-label="Default select example">
+                  <option value="2" selected>2</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+            </div>
+            <div className="d-flex gap-5 mt-5">
+              <button className="btn btn-secondary px-3" data-bs-dismiss="offcanvas" aria-label="Close"> Back</button>
+              <button className="btn btn-primary px-3"> Submit</button>
             </div>
           </div>
-          <p className='p-3'>Add Information Of Sampling Template</p>
-
-          <label id="line3" htmlFor="">Template Name</label>
-          <input id="line4" required type="text" placeholder="Template Name" />
-
-          <label id="line3" htmlFor="">Unique Code</label>
-          <input id="line4" required type="text" placeholder="Unique Code" />
-
-          <label id="line3" htmlFor="">Sample Type</label>
-                    <select id="line4"  required>
-                        <option value="">Select...</option>
-                        <option value="option1">Raw Material</option>
-                        <option value="option2">Hcl</option>
-                        <option value="option3">Hydrochloric Acid</option>
-                        <option value="option4">Petrochemical</option>
-
-                    </select>
-
-          
-          <div id="line5">
-            <button type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close">&lt; Back</button>
-            <button>Submit</button>
-
-
-          </div>
         </div>
-
-
-
-
       </div>
 
-      {/* Employee table */}
       <div className='table-responsive shadow p-4 container1'>
         <table className='table'>
           <thead>
@@ -204,16 +297,26 @@ const SamplingTemplate = () => {
             {renderRows()}
           </tbody>
         </table>
+        <div className="modal fade" id="removeSamplingTemplateModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Sampling template</h1>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div className="modal-body">
+                <p className="">Do you want to delete this Template <code>Raw Smapling Template</code> ?</p>
+              </div>
+              <div className="d-flex justify-content-end m-3">
+                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
+                <button type="button" className="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-
-
-
-      {/* Pagination */}
-
-
-
-      <div className="pagination">
+      <div className="pagination my-4">
 
         <div className="pagination">
           <div className='mr-5'>
@@ -224,9 +327,7 @@ const SamplingTemplate = () => {
           </div>
           <div>
             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
           </div>
-
         </div>
         <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
       </div>

@@ -68,15 +68,9 @@ const TestResultsDetails = () => {
                                         <tbody>
                                             <tr>
                                                 <td>1</td>
-                                                <td>weight of the sample</td>
-                                                <td>w</td>
-                                                <td>gm</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>sample qt</td>
-                                                <td>m</td>
-                                                <td>gm</td>
+                                                <td>Count</td>
+                                                <td>c</td>
+                                                <td>cfu/g</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -92,41 +86,15 @@ const TestResultsDetails = () => {
                                         <tbody>
                                             <tr>
                                                 <td>1</td>
-                                                <td>w</td>
-                                                <td>100</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>m</td>
-                                                <td>10</td>
+                                                <td>c</td>
+                                                <td>80</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <p className='fs-5 fw-bold mt-2 mb-0'>Worksheet</p>
-                                    WSQTY0001: <span className='text-muted bg-warning-subtle rounded p-1'>
-                                        WSQTY0001
-                                    </span> <hr className='text-light m-2' />
-                                    WSQTY0002: <span className='text-muted bg-warning-subtle rounded p-1'>
-                                        WSQTY0002
-                                    </span>
-                                    <hr className='text-light m-2' />
-                                    <p className='l-2'><span className='fw-bold'>Procedure:</span>Weigh about (0.15)<span className='text-muted bg-warning-subtle rounded p-1'>
-                                        WSQTY0001
-                                    </span>
-                                        gm of Calcium Hydroxide powder, and transfer in  a Idometric flask add (50)
-                                        <span className='text-muted bg-warning-subtle rounded p-1'>
-                                            WSQTY0002
-                                        </span>
-                                        ml of  0.1 N Iodine Solution, Keep the solution in dark for 30 minutes and Shake it in regular time interval  Titrate the excess iodine with 0.1 N Sodium Thiosulphate using starch as an indicator. End point is bluish to colorless. Carry out a blank titration without sample. <br />
-                                        Weight of butter paper. <br />
-                                        Weight of butter paper + sample <br />
-                                        Weight of sample taken. <br />
-                                        Blank value (B) <br />
-                                        Titer value (A)</p>
-
-                                    <span className='text-success d-flex justify-content-center'>Test Cases Passed Successfully with value 11.00</span> <br />
-                                    <div className="d-flex">
-                                        <button type="button" className="btn btn-danger px-4 mt-3 ms-auto" data-bs-dismiss="modal">Cancel</button>
+                                    <span className='text-success d-flex justify-content-center'>Test Cases Passed Successfully with value 80.00</span> <br />
+                                    <div className="d-flex justify-content-end">
+                                        <button type="button" className="btn btn-danger text-light mx-4">Submit</button>
+                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                     </div>
                                 </div>
                             </div>

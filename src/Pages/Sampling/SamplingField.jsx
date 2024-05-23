@@ -10,12 +10,9 @@ import { Link } from 'react-router-dom';
 
 
 const SamplingField = () => {
-    const pageSize = 9; // Number of items per page
+    const pageSize = 9;
     const [currentPage, setCurrentPage] = useState(1);
     
-    
-
-    // data for the table
     const employees = [
 
         { fieldName: "Room is clean", fieldType:'RadioButton', registeredBy: 'Manager',  registeredOn: '2024-05-15',  status: 'ACTIVE' },
@@ -28,15 +25,12 @@ const SamplingField = () => {
         { fieldName: "Sampling Check List", fieldType:'Label', registeredBy: 'Admin',  registeredOn: '2024-05-16', status: 'INACTIVE' },
         { fieldName: "Manufacturing Date", fieldType:'RadioButton', registeredBy: 'Manager',  registeredOn: '2024-05-15', status: 'ACTIVE' },
         { fieldName: "Manufacturing Date", fieldType:'Label', registeredBy: 'Admin',  registeredOn: '2024-05-16', status: 'INACTIVE' },
-2
         
     ];
 
-    // Function to calculate start and end indices for current page
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize, employees.length);
 
-    // Function to render table rows for current page
     const renderRows = () => {
         return employees.slice(startIndex, endIndex).map((employee, index) => (
             <tr key={startIndex + index}>
@@ -55,14 +49,13 @@ const SamplingField = () => {
                         >
                 <FontAwesomeIcon icon={faPenToSquare} />                
                 </span>
-                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>                              
+                <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeSamplingFieldModal"><FontAwesomeIcon icon={faTrashCan} /></span>                              
 
                 </td>
             </tr>
         ));
     };
 
-    // Function to handle pagination
     const nextPage = () => {
         setCurrentPage(currentPage + 1);
     };
@@ -174,14 +167,24 @@ const SamplingField = () => {
                         {renderRows()}
                     </tbody>
                 </table>
+                <div className="modal fade" id="removeSamplingFieldModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Sampling Field</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="">Do you want to delete this Sampling Field <code>Sampling Check List</code> ?</p>
+                            </div>
+                            <div className="d-flex justify-content-end m-3">
+                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-            
-
-            {/* Pagination */}
-
-
 
             <div className="pagination">
 
@@ -194,9 +197,7 @@ const SamplingField = () => {
                     </div>
                     <div>
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
                     </div>
-
                 </div>
                 <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
             </div>

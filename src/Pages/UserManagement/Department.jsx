@@ -1,5 +1,6 @@
 import React from 'react'
 import './Department.css'
+import { Link } from 'react-router-dom'
 
 const Department = () => {
     return (
@@ -8,7 +9,7 @@ const Department = () => {
         <div className='mx-5'>
             <div className="">
                 <div className="main-head py-5">
-                    
+
                     <div className="title fw-bold fs-5">Department</div>
                 </div>
 
@@ -35,9 +36,9 @@ const Department = () => {
                                 <h5 className="card-title">Admin</h5>
                                 <div className="justify-container">
                                     <p className="card-text">  12 Employee</p>
-                                    <a href="/admin" className="btn btn-secondary">
+                                    <Link to="/department/admin" className="btn btn-secondary">
                                         <img src='/images/plus-icon.svg' />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -46,9 +47,9 @@ const Department = () => {
                                 <h5 className="card-title">Quality Assurance</h5>
                                 <div className="justify-container">
                                     <p className="card-text">3 Employee</p>
-                                    <a href="/qualityAssurance" className="btn btn-danger">
+                                    <Link to="/department/qualityAssurance" className="btn btn-danger">
                                         <img src='/images/plus-icon.svg' />
-                                    </a>
+                                    </Link>
 
                                 </div>
                             </div>
@@ -58,9 +59,9 @@ const Department = () => {
                                 <h5 className="card-title">Quality Check</h5>
                                 <div className="justify-container">
                                     <p className="card-text">2 Employee</p>
-                                    <a href="/qualityCheck" className="btn btn-warning">
+                                    <Link to="/department/qualityCheck" className="btn btn-warning">
                                         <img src='/images/plus-icon.svg' />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -69,9 +70,9 @@ const Department = () => {
                                 <h5 className="card-title">Store</h5>
                                 <div className="justify-container">
                                     <p className="card-text">2 Employee</p>
-                                    <a href="/store" className="btn btn-secondary">
+                                    <Link to="/department/store" className="btn btn-secondary">
                                         <img src='/images/plus-icon.svg' />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

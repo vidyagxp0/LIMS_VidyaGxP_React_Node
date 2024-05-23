@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function StorageChamber() {
      const [addModal, setAddModal] = useState(false)
+     const [deleteModal, setDeleteModal] = useState(false)
      const badgeStyle = { background: "#cdffca" }
      return (
           <>
@@ -110,7 +111,7 @@ function StorageChamber() {
                                                   <div className="d-flex gap-3">
                                                        <Link to="/stability/storageChamberDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -133,7 +134,7 @@ function StorageChamber() {
                                                   <div className="d-flex gap-3">
                                                        <Link to="/stability/storageChamberDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -157,7 +158,7 @@ function StorageChamber() {
                                                   <div className="d-flex gap-3">
                                                        <Link to="/stability/storageChamberDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -190,6 +191,7 @@ function StorageChamber() {
                </div>
 
                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+               {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
 
           </>
      )
@@ -199,7 +201,7 @@ const StatusModal = (_props) => {
      return (
           <>
 
-               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
                     <CModalHeader>
                          <CModalTitle>Add Storage Chamber</CModalTitle>
                     </CModalHeader>
@@ -256,6 +258,39 @@ const StatusModal = (_props) => {
                               label="Maximum No. Of Positions For Shelf"
                               placeholder="0"
                          />
+                    </CModalBody>
+                    <CModalFooter>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
+                    </CModalFooter>
+               </CModal>
+
+          </>
+     )
+}
+
+const DeleteModal = (_props) => {
+     return (
+          <>
+
+               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                    <CModalHeader>
+                         <CModalTitle>Delete Storage Chamber</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                         <p>Do you want to delete this storage chamber <code>stmp23</code>?</p>
+
+                         <CFormInput
+                              type="text"
+                              label="User ID"
+                              placeholder="Chamber Id "
+                         />
+                         <CFormInput
+                              type="password"
+                              label="Password"
+                              placeholder="Your password"
+                         />
+
                     </CModalBody>
                     <CModalFooter>
                          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
