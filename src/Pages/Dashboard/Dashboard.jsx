@@ -14,6 +14,10 @@ function Dashboard(props) {
     }
   }, [props.show]);
 
+  const latestProducts = ['Apixaban', 'Glass', 'Hydraulic Oil', 'chpoil', 'Feliconar', 'Feliconar', 'Feliconar', 'Sacubitril', 'Testamine'];
+
+  const ARNumber = ['ARPC0000099', 'ARPC0000098', 'ARPC0000097', 'ARPC0000096', 'ARIP0000095', 'ARFFT0000094', 'ARRW0000093', 'ARRW0000092', 'ARFFT0000091', 'ARRW0000090'];
+
   const analysisOptions = {
     tooltip: {
       trigger: 'axis'
@@ -170,7 +174,10 @@ function Dashboard(props) {
         type: 'bar',
         stack: 'Total',
         color: '#0089c8',
-        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
       }
     ],
     toolbox: {
@@ -226,7 +233,10 @@ function Dashboard(props) {
         type: 'bar',
         stack: 'Total',
         color: '#0089c8',
-        data: [2, 7]
+        data: [2, 7],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
       }
     ],
     toolbox: {
@@ -237,9 +247,6 @@ function Dashboard(props) {
   };
 
   const testStatsOption = {
-    title: {
-      text: 'Test Stats'
-    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -248,119 +255,344 @@ function Dashboard(props) {
     },
     legend: {},
     grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
+      left: '1%',
+      right: '8%',
+      top: '10%',
+      bottom: '20%',
       containLabel: true
     },
     xAxis: {
+      name: 'Sample Login',
       type: 'category',
-      boundaryGap: [0, 0.01]
+      boundaryGap: [0, 0.01],
+      axisLabel: {
+        rotate: 45,
+        interval: 0
+      },
+      data: [
+        'ARPC0000099', 'ARRW0000017', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017',
+        'ARPC0000099', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099',
+        'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017',
+        'ARPC0000099', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099',
+        'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017',
+        'ARPC0000099', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099',
+        'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017',
+        'ARPC0000099', 'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099',
+        'ARRW0000017', 'ARPC0000099', 'ARRW0000017', 'ARPC0000099'
+      ]
     },
     yAxis: {
       type: 'value',
-      data: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World']
+      name: 'Tests'
     },
     series: [
       {
-        name: '2011',
+        name: 'Approved',
         type: 'bar',
-        data: [18203, 23489, 29034, 104970, 131744, 630230]
+        data: [
+          6, 8, 3, 2, 5, 1, 7, 9, 4,
+          3, 7, 2, 4, 1, 9, 5, 8, 6,
+          2, 5, 4, 3, 1, 7, 9, 6, 8,
+          3, 7, 2, 4, 1, 9, 5, 8, 6,
+          2, 5, 4, 3, 1, 7, 9, 8
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
       },
       {
-        name: '2012',
+        name: 'Mgr',
         type: 'bar',
-        data: [19325, 23438, 31000, 121594, 134141, 681807]
+        data: [
+          4, 9, 8, 1, 2, 7, 5, 3, 6,
+          2, 7, 1, 6, 3, 9, 8, 5, 4,
+          3, 5, 2, 9, 6, 8, 1, 7, 4,
+          5, 8, 2, 3, 9, 1, 4, 7, 6,
+          7, 3, 9, 4, 2, 6, 5, 1
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
+      },
+      {
+        name: 'Pending',
+        type: 'bar',
+        data: [
+          8, 3, 2, 6, 5, 4, 1, 9, 7,
+          3, 9, 5, 4, 2, 1, 6, 7, 8,
+          2, 7, 1, 6, 9, 3, 5, 8, 4,
+          5, 4, 2, 7, 3, 8, 1, 9, 6,
+          1, 9, 6, 8, 3, 5, 4, 7
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
+      },
+      {
+        name: 'QA Approval',
+        type: 'bar',
+        data: [
+          7, 1, 5, 2, 6, 9, 4, 8, 3,
+          2, 5, 8, 3, 7, 6, 9, 1, 4,
+          6, 9, 4, 7, 8, 2, 3, 1, 5,
+          4, 6, 9, 2, 1, 8, 7, 3, 5,
+          3, 7, 2, 9, 1, 6, 8, 5
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
+      },
+      {
+        name: 'Rejected',
+        type: 'bar',
+        data: [
+          5, 8, 2, 7, 1, 9, 6, 4, 3,
+          7, 2, 9, 1, 5, 3, 4, 6, 8,
+          3, 6, 4, 2, 5, 8, 1, 9, 7,
+          9, 5, 7, 1, 3, 4, 8, 6, 2,
+          1, 3, 7, 9, 6, 4, 8, 2
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
+      },
+      {
+        name: 'SC Approval',
+        type: 'bar',
+        data: [
+          9, 7, 1, 4, 6, 3, 8, 5, 2,
+          4, 5, 9, 2, 7, 8, 3, 6, 1,
+          6, 8, 2, 5, 1, 4, 7, 9, 3,
+          1, 3, 6, 7, 9, 2, 5, 8, 4,
+          8, 2, 3, 1, 5, 7, 6, 4
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
+      },
+      {
+        name: 'SI',
+        type: 'bar',
+        data: [
+          3, 5, 6, 9, 2, 8, 1, 4, 7,
+          2, 1, 5, 7, 9, 4, 6, 3, 8,
+          4, 3, 6, 1, 5, 8, 9, 7, 2,
+          9, 8, 7, 2, 3, 6, 4, 1, 5,
+          7, 4, 1, 8, 3, 2, 9, 6
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
+      },
+      {
+        name: 'TCI',
+        type: 'bar',
+        data: [
+          0, 0, 1, 2, 2, 0, 0, 1, 7,
+          0, 5, 0, 3, 2, 4, 2, 0, 2,
+          2, 0, 4, 6, 8, 1, 0, 3, 0,
+          4, 0, 5, 2, 0, 5, 2, 3
+        ],
+        itemStyle: {
+          borderRadius: [5, 5, 0, 0]
+        }
       }
     ],
     toolbox: {
       feature: {
         saveAsImage: {}
       }
-    }
+    },
+    dataZoom: [
+      {
+        type: 'slider',
+        show: true,
+        xAxisIndex: 0,
+        start: 0,
+        end: 15,
+        bottom: '5%',
+      }
+    ]
   };
 
-  const option = {
+  const productWiseTestStatsOption = {
     tooltip: {
-      trigger: 'axis'
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
     },
-    legend: {
-      data: ['Material', '2', '3', '4']
-    },
+    legend: {},
     grid: {
-      show: false,
+      left: '1%',
+      right: '5%',
+      top: '10%',
+      bottom: '20%',
       containLabel: true
     },
     xAxis: {
+      name: 'Product',
       type: 'category',
-      boundaryGap: true,
-      axisLine: {
-        show: true
-      },
-      axisTick: {
-        show: true
-      },
+      boundaryGap: [0, 0.01],
       axisLabel: {
-        show: true
+        rotate: 45,
+        interval: 0
       },
-      data: ['16 Jun 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '24 Jun 2023', '20 Sep 2023', '12 Feb 2023', '22 Mar 2023', '12 Feb 2023', '22 Mar 2023']
+      data: [
+        'Formulation Analysis', 'Impurity Profiling', 'Potency Testing', 'Dissolution Testing',
+        'Stability Testing', 'Bioavailability Assessment', 'Microbiological Testing',
+        'Extractable and Leachable Studies', 'Process Validation', 'Method Development and Validation',
+        'Particle Size Analysis', 'Container Closure Integrity Testing', 'Water Content Determination',
+        'Residual Solvents Analysis', 'Toxicological Studies', 'Excipient Compatibility Testing',
+        'Pharmacokinetic Analysis', 'Pharmacodynamic Evaluation', 'Biowaivers Assessment',
+        'Container Material Compatibility', 'Photostability Testing', 'Forced Degradation Studies',
+        'Reference Standard Qualification', 'Sterility Testing', 'Endotoxin Testing'
+      ]
     },
     yAxis: {
       type: 'value',
-      axisLine: {
-        show: true
-      },
-      axisTick: {
-        show: true
-      },
-      axisLabel: {
-        show: true
-      },
-      splitLine: {
-        show: true
-      }
+      name: 'Tests'
     },
     series: [
       {
-        name: 'Material',
+        name: 'Test Registered',
         type: 'bar',
-        stack: 'Total',
-        color: '#0089c8',
-        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+        data: [
+          6, 8, 3, 2, 5, 1, 7, 9, 4,
+          3, 7, 2, 4, 1, 9, 5, 8, 6,
+          2, 5, 4, 3, 1, 7, 9
+        ],
+        itemStyle: {
+          color: '#0089c8',
+          borderRadius: [5, 5, 0, 0]
+        }
       },
       {
-        name: '2',
+        name: 'Test Executed',
         type: 'bar',
-        stack: 'Total',
-        color: '#0089c8',
-        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
-      },
-      {
-        name: '3',
-        type: 'bar',
-        stack: 'Total',
-        color: '#0089c8',
-        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 4, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
-      },
-      {
-        name: '4',
-        type: 'bar',
-        stack: 'Total',
-        color: '#0089c8',
-        data: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2]
+        data: [0, 0, 1, 2, 2, 0, 0, 1, 7, 0, 5, 0, 3, 2, 4, 2, 0, 2, 2, 0, 4, 6, 8, 1, 0],
+        itemStyle: {
+          color: '#ffada4',
+          borderRadius: [5, 5, 0, 0]
+        }
       }
     ],
     toolbox: {
       feature: {
         saveAsImage: {}
       }
-    }
+    },
+    dataZoom: [
+      {
+        type: 'slider',
+        show: true,
+        xAxisIndex: 0,
+        start: 0,
+        end: 10,
+        bottom: '5%',
+      }
+    ]
+  };
+
+  const testWiseStatsOption = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    legend: {},
+    grid: {
+      left: '1%',
+      right: '5%',
+      top: '10%',
+      bottom: '20%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      name: 'Products',
+      boundaryGap: [0, 0.01],
+      axisLabel: {
+        rotate: 45,
+        interval: 0
+      },
+      data: [
+        'Formulation Analysis', 'Pharmacodynamic Evaluation', 'In Silico Modeling and Simulation', 'Process Optimization', 'Potency Testing',
+        'Toxicological Studies', 'Microbiological Testing', 'In Vitro Diagnostics', 'Genomic Biomarker Analysis', 'Pharmacogenomics Analysis',
+        'Drug Delivery Systems', 'Clinical Endpoint Assessment', 'Environmental Monitoring', 'Sterility Testing', 'Bacterial Endotoxin Testing (BET)',
+        'Biological Product Characterization', 'Excipient Selection', 'Tablet Hardness Testing', 'Pharmaceutical Packaging', 'Solubility Testing',
+        'Pharmacogenetics Testing', 'Genotoxicity Studies', 'Pharmacovigilance Monitoring', 'Pharmacogenetics Profiling', 'Bioavailability Assessment',
+        'Inhalation Toxicology', 'Description', 'Lyophilization Cycle Optimization', 'Method Development and Validation', 'Quality Control Measures',
+        'Endotoxin Testing', 'Single Maximum unknown impurity Mirabegron', 'Special Gravity', 'Post-Marketing Surveillance', 'Cell Culture Studies',
+        'Sterilization Validation', 'Process Validation', 'Bioequivalence Studies', 'Pharmacoeconomic Evaluation', 'Pharmaceutical Marketing',
+        'Quality by Design (QbD) Implementation', 'Mirabegron (As Extended Release)...25mg', 'Regulatory Compliance', 'Pharmacokinetic Analysis',
+        'Extractable and Leachable Studies', 'Total Acid Number (TAN)', 'Nanoparticle Characterization', 'Analytical Method Development',
+        'Impurity Profiling', 'In Vitro-In Vivo Correlation', 'Pharmaceutical Development', 'Total Impurities', 'Formulation Development',
+        'Freeze-Thaw Testing', 'Drug Product Development', 'Pharmacokinetic Modeling', 'Immunogenicity Testing', 'Biowaivers Assessment',
+        'Assay', 'Reference Standard Qualification', 'Dissolution Testing', 'Pharmaceutical Testing', 'Clinical Development', 'Color Test',
+        'FG Assya Text', 'Pharmacogenomics Analysis'
+      ]
+
+    },
+    yAxis: {
+      type: 'value',
+      name: 'Tests'
+    },
+    series: [
+      {
+        name: 'Test Planned',
+        type: 'bar',
+        data: [
+          6, 3, 1, 3, 4, 4, 3, 1, 9, 1, 8, 4, 6, 3, 7, 6, 4, 2, 2, 3, 6, 1, 9, 3, 2, 7, 3, 5, 9, 1,
+          4, 6, 2, 1, 4, 5, 8, 2, 3, 7, 4, 9, 6, 3, 2, 8, 6, 1, 14, 9, 3, 2, 7, 3, 5, 9, 1, 4, 6, 2, 1,
+          4, 5, 8, 2, 3, 7, 4, 9, 6, 3
+        ],
+        itemStyle: {
+          color: '#0089c8',
+          borderRadius: [5, 5, 0, 0]
+        }
+      },
+      {
+        name: 'Test Executed',
+        type: 'bar',
+        data: [
+          2, 7, 4, 1, 8, 3, 6, 5, 9, 0,
+          4, 8, 1, 6, 2, 3, 7, 9, 5, 0,
+          3, 9, 4, 5, 6, 1, 0, 2, 7, 8,
+          6, 0, 2, 7, 1, 9, 5, 4, 8, 3,
+          8, 2, 5, 7, 0, 9, 3, 6, 1, 4,
+          4, 3, 1, 0, 8, 2, 6, 9, 7, 5,
+          7, 1, 6, 5, 4, 8, 0, 3, 9, 2,
+          2, 9, 6, 1, 7, 5, 4, 8, 0, 3
+        ],
+        itemStyle: {
+          color: '#ffada4',
+          borderRadius: [5, 5, 0, 0]
+        }
+      }
+    ],
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    },
+    dataZoom: [
+      {
+        type: 'slider',
+        show: true,
+        xAxisIndex: 0,
+        start: 0,
+        end: 10,
+        bottom: '5%',
+      }
+    ]
   };
 
   return (
     <>
       <div id="dashboard" className="mx-5">
-        <div className="sub-head my-5">
+        <div className="sub-head mt-5 mb-4">
           <div className="title fw-bold fs-5">Dashboard</div>
         </div>
         <div className="d-flex gap-4">
@@ -394,7 +626,7 @@ function Dashboard(props) {
             <div className="d-flex gap-4 my-2">
               <div className="w-75 shadow rounded px-3">
                 <div className="d-flex justify-content-between py-4">
-                  <div className="py-2 fw-medium">Material</div>
+                  <div className="py-2 fw-bolder">Material</div>
                   <div className="mt-0 pt-0 fw-bolder fs-4">...</div>
                 </div>
                 <div className="d-flex gap-3">
@@ -448,7 +680,7 @@ function Dashboard(props) {
               </div>
               <div className="w-25 shadow rounded p-4">
                 <div className="d-flex justify-content-between">
-                  <div className="py-2 fw-medium">Analysis</div>
+                  <div className="py-2 fw-bolder">Analysis</div>
                   <div className="mt-0 pt-0 fw-bolder fs-4">...</div>
                 </div>
                 <div className="mt-4">
@@ -457,67 +689,53 @@ function Dashboard(props) {
               </div>
             </div>
             <div className="my-4 shadow rounded">
-              <div className="py-4 mx-3">Material Status</div>
+              <div className="py-4 mx-3 fw-bolder">Material Status</div>
               <div className="pt-4 mx-4">
                 <LineChart option={materialOption} />
               </div>
             </div>
             <div className="my-4 shadow rounded">
-              <div className="py-4 mx-3">Category wise Instruments</div>
+              <div className="py-4 mx-3 fw-bolder">Category wise Instruments</div>
               <div className="pt-4 mx-5">
                 <LineChart option={instrumentOption} />
               </div>
             </div>
           </div>
-          <div className="d-flex flex-column gap-4 w-25">
+          <div className="d-flex flex-column gap-4 w-25 mt-3">
             <div className="rounded shadow">
               <div className="h5 m-4">Latest Products</div>
               <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
-                <li>Para</li>
-                <li>Sacubitril</li>
-                <li>Testamine</li>
-                <li>Sulphuric Acid</li>
-                <li>NACL</li>
-                <li>CNCD</li>
-                <li>CACO N</li>
-                <li>Potting compound</li>
-                <li>Vitamin A & D</li>
-                <li>samp2</li>
+                {latestProducts.map((product, idx) => {
+                  return <li key={idx}>{product}</li>
+                })}
               </ul>
             </div>
             <div className="rounded shadow">
               <div className="h5 m-4">AR Number</div>
               <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
-                <li>ARIP0000095</li>
-                <li>ARFFT0000094</li>
-                <li>ARRW0000093</li>
-                <li>ARRW0000092</li>
-                <li>ARFFT0000091</li>
-                <li>ARRW0000090</li>
-                <li>ARFP0000089</li>
-                <li>ARFFT0000088</li>
-                <li>ARFFT0000087</li>
-                <li>ARFFT0000086</li>
+              {ARNumber.map((number, idx) => {
+                  return <li key={idx}>{number}</li>
+                })}
               </ul>
             </div>
           </div>
         </div>
         <div className="mb-4 shadow rounded">
-          <div className="py-4 mx-3">Test Stats</div>
+          <div className="py-4 mx-3 fw-bolder">Test Stats</div>
           <div className="pt-4 mx-5">
             <LineChart option={testStatsOption} />
           </div>
         </div>
         <div className="mb-4 shadow rounded">
-          <div className="py-4 mx-3">Material Status</div>
+          <div className="py-4 mx-3 fw-bolder">Product Wise Test stats</div>
           <div className="pt-4 mx-4">
-            <LineChart option={materialOption} />
+            <LineChart option={productWiseTestStatsOption} />
           </div>
         </div>
         <div className="mb-4 shadow rounded">
-          <div className="py-4 mx-3">Test Stats</div>
+          <div className="py-4 mx-3 fw-bolder">Test Wise stats</div>
           <div className="pt-4 mx-5">
-            <LineChart option={testStatsOption} />
+            <LineChart option={testWiseStatsOption} />
           </div>
         </div>
       </div>

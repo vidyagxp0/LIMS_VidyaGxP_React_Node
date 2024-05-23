@@ -17,6 +17,8 @@ import QualityCheck from "./Pages/UserManagement/Department/QualityCheck"
 import Store from "./Pages/UserManagement/Department/Store"
 import Roles from "./Pages/UserManagement/Roles"
 import Samplelogin from "./Pages/Samplelogin/Samplelogin"
+import SampleLoginDetails from "./Pages/Samplelogin/SampleloginView/SampleLoginDetails.jsx"
+import TestResultsDetails from "./Pages/Samplelogin/SampleloginView/TestResultsDetails.jsx"
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1"
 import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2"
 import Storage_Condition from "./Pages/Stability/Storage_Condition"
@@ -53,6 +55,10 @@ import InstrumentModule from "./Pages/Instruments Master/InstrumentModule"
 import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage"
 import MasterProductDetail from "./Pages/Masters/MasterProductDetail.jsx"
 
+import StorageChamberDetails from "./Pages/Stability/StabilityDetails/StorageChamberDetails.jsx"
+import StabilityProtocolDetails from "./Pages/Stability/StabilityDetails/StabilityProtocolDetails.jsx"
+import SampleStorageDetails from "./Pages/Stability/StabilityDetails/SampleStorageDetails.jsx"
+import CoaTemplateDetails from "./Pages/Stability/StabilityDetails/CoaTemplateDetails.jsx"
 
 // import Inventory from './Pages/Inventory/Inventory.jsx'
 import Inventory from "./Pages/Inventory/Inventory";
@@ -205,6 +211,13 @@ function App() {
             <Route path="/investigationl1" element={<InvestigationL1 />} />
             <Route path="/investigationl2" element={<InvestigationL2 />} />
 
+            <Route path="/samplelogin" element={<Samplelogin/>} />
+            <Route path="/viewDetails" element={<SampleLoginDetails/>} />
+            <Route path="/testResultsDetails" element={<TestResultsDetails/>} />
+
+            <Route path="/investigationl1" element={<InvestigationL1/>} />
+            <Route path="/investigationl2" element={<InvestigationL2/>}/>
+            
             <Route path="/storageCondition1321" element={<Storage_Condition />} />
             <Route path="/standardProtocol" element={< StandardProtocol />} />
             <Route path="/storageChamber" element={< StorageChamber />} />
@@ -357,6 +370,16 @@ function App() {
             <Route path="/settings/testHistory" element={< TestHistory />} />
             <Route path="/settings/settingVendors" element={<SettingVendors />} />
             <Route path="/settings/appConfiguration" element={<AppConfiguration />} />
+          
+
+            <Route path="/stability/storageChamberDetails" element={< StorageChamberDetails/>}/>
+            <Route path="/stability/stabilityProtocolDetails"element={< StabilityProtocolDetails/>}/>
+            <Route path="/stability/sampleStorageDetails"element={< SampleStorageDetails/>}/>
+            <Route path="/stability/CoaTemplateDetails"element={< CoaTemplateDetails/>}/>
+
+
+            <Route path="/vender" element={<Vender/>} />
+            <Route path="/clients" element={<Clients/>} />
           </Route>
         </Routes>
       </BrowserRouter>
