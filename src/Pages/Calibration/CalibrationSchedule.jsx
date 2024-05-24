@@ -15,6 +15,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { PiDownloadBold } from "react-icons/pi";
 
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -67,8 +71,15 @@ export default function CalibrationSchedule() {
             <td>{employee.addedBy}</td>
             <td className={`rounded-5 ${employee.status === 'ACTIVE' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'ACTIVE' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
             <td>
-                &nbsp; <IoEyeSharp/> &nbsp;&nbsp;
-                <HiDotsHorizontal />
+            <div className="d-flex gap-3">
+			 <Link to="/calibration/calibration-schedule-details"><FontAwesomeIcon icon={faEye} /></Link>
+                        <div className="cursor-pointer" >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
+                    </div>
             </td>
         </tr>
     ));
@@ -93,7 +104,7 @@ const nextToLastPage = () => {
         <h5>Calibration Schedule</h5>
       </div>
 
-      <div id="div2">
+      <div id="div2" style={{display:'flex',justifyContent:'space-between'}}>
         
         <div id="searchmain"> 
           <div id="searchicon">
@@ -253,7 +264,7 @@ Calibration Data Sheet" />
 
       <br />
       <div className='table-responsive p-4 container1'>
-                <table className='table shadow'>
+                <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>

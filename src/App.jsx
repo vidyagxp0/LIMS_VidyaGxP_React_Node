@@ -130,12 +130,28 @@ import StockInventoryDetail from "./Pages/Stock Management/StockInventoryDetail.
 import StockMaterialDetail from "./Pages/Stock Management/StockMaterialDetail.jsx"
 import StockOnboardingDetails from "./Pages/Stock Management/StockOnboardingDetails.jsx"
 
+import CalibrationType from "./Pages/Calibration/CalibrationType.jsx"
+import CalibrationFrequency from "./Pages/Calibration/CalibrationFrequency.jsx"
+import CalibrationDataSheet from "./Pages/Calibration/CalibrationDataSheet.jsx"
+import CalibrationSampleLoginTemplate from "./Pages/Calibration/CalibrationSampleLoginTemplate.jsx"
+import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx"
+import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx"
+import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx"
+import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx"
+import CalibrationDataSheetDetails from "./Pages/Calibration/Calibration Details/CalibrationDataSheetDetails.jsx"
+import CalibrationSampleLoginTemplateDetails from "./Pages/Calibration/Calibration Details/CalibrationSampleLoginTemplateDetails.jsx"
+import CalibrationScheduleDetails from "./Pages/Calibration/Calibration Details/CalibrationScheduleDetails.jsx"
+import CalibrationSampleLoginDetails from "./Pages/Calibration/Calibration Details/CalibrationSampleLoginDetails.jsx"
 
-import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting"
+import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting.jsx"
 import InvestigationCoa from "./Pages/ReportsCertificate/InvestigationCoa"
 import ReleasedCoa from "./Pages/ReportsCertificate/ReleasedCoa"
 import Coa_Template from "./Pages/ReportsCertificate/Coa_Template"
 import ServiceReporting from "./Pages/ReportsCertificate/ServiceReporting"
+
+import ProblemReportingDetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/ProblemReportingDetails.jsx"
+import ServiceReportingdetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/ServiceReportingdetails.jsx"
+import Coa_TemplateDetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/Coa_TemplateDetails.jsx"
 
 import Vender from "./Pages/Vender/Vender.jsx"
 import Clients from "./Pages/Clientss/Clients.jsx"
@@ -266,6 +282,8 @@ function App() {
             <Route path="Inventory/AcknowledgeSample" element={<AcknowledgeSample/>}/>
             <Route path="Inventory/BatchSampleAllotment" element={<BatchSampleAllotment/>}/>
             <Route path="Inventory/BatchTestslist" element={<BatchTestslist/>}/>
+
+            
             
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />
@@ -273,24 +291,81 @@ function App() {
             <Route path="/instrumentMaster/instrumentModule" element={<InstrumentModule />} />
             <Route path="/instrumentMaster/instrumentUsage" element={<InstrumentUsage />} /> 
 
-            <Route path="/stock-management/stocks-verification" element={< StocksVerification/>} />
-            <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding/>} />
-            <Route path="/stock-management/material" element={<Material/>} />
-            {/* <Route path="/stock-management/inventory" element={<Inventory/>}/>            */}
-            <Route path="/stock-management/inventory" element={<StockInventory/>}/>
-             <Route path="/stock-management/stock-inventory-details" element={<StockInventoryDetail/>}/> 
-             <Route path="/stock-management/stock-material-details" element={<StockMaterialDetail/>}/> 
-             <Route path="/stock-management/stock-onboarding-details" element={<StockOnboardingDetails/>}/> 
-                       
+            <Route path="/stock-management/stocks-verification" element={< StocksVerification />} />
+            <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding />} />
+            <Route path="/stock-management/material" element={<Material />} />
+            <Route path="/stock-management/inventory" element={<StockInventory />} />
+            <Route path="/stock-management/stock-inventory-details" element={<StockInventoryDetail />} />
+            <Route path="/stock-management/stock-material-details" element={<StockMaterialDetail />} />
+            <Route path="/stock-management/stock-onboarding-details" element={<StockOnboardingDetails />} />
 
-            <Route path="/reportsCertification/problemReporting" element={< ProblemReporting/>} />
+            <Route path="/calibration/calibration-type" element={<CalibrationType />} />
+            <Route path="/calibration/calibration-frequency" element={<CalibrationFrequency />} />
+            <Route path="/calibration/calibration-data-sheet" element={<CalibrationDataSheet />} />
+            <Route path="/calibration/sample-login-template" element={<CalibrationSampleLoginTemplate />} />
+            <Route path="/calibration/calibration-schedule" element={<CalibrationSchedule />} />
+            <Route path="/calibration/calibration-record" element={<CalibrationRecord />} />
+            <Route path="/calibration/sample-login" element={<CalibrationSampleLogin />} />
+            <Route path="/calibration/calibration-calender" element={<CalibrationCalender />} />
+
+            <Route path="/calibration/calibration-datasheet-details" element={<CalibrationDataSheetDetails />} />
+            <Route path="/calibration/sample-login-template-details" element={<CalibrationSampleLoginTemplateDetails />} />
+            <Route path="/calibration/calibration-schedule-details" element={<CalibrationScheduleDetails />} />
+            <Route path="/calibration/calibration-sample-login-details" element={<CalibrationSampleLoginDetails />} />
+
+
+
+            <Route path="/reportsCertification/problemReporting" element={< ProblemReporting />} />
             <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
             <Route path="/reportsCertification/coaTemplate1321" element={< Coa_Template/>} />
             <Route path="/reportsCertification/releasedCoa" element={<ReleasedCoa />} />
             <Route path="/reportsCertification/investigationCoa" element={<InvestigationCoa />} />
+
+            <Route path="/reportsCertificate/problemReportingDetails" element={< ProblemReportingDetails/>}/>
+            <Route path="/reportsCertificate/ServiceReportingDetails" element={< ServiceReportingdetails/>}/>
+            <Route path="/reportsCertificate/coa_TemplateDetails" element={< Coa_TemplateDetails/>}/>
+
+            <Route path="/vender" element={<Vender />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/plants" element={< Plants />} />
+            <Route path="/workFlow" element={< WorkFlow />} />
+            <Route path="/auditTrail" element={<AuditTrail />} />
+
+            <Route path="/settings/businessAssociate" element={<  BussinessAssociate />} />
+            <Route path="/settings/labelManagement" element={< LabelManagement />} />
+            <Route path="/settings/functionalGrouping" element={< FuctionalGrouping />} />
+            <Route path="/settings/worksheetFields" element={< WorkSheelField />} />
+            <Route path="/settings/worksheets" element={<WorkSheet />} />
+            <Route path="/settings/groupName" element={<GroupName />} />
+            <Route path="/settings/investigationTemplate" element={<InvestigationTamplate />} />
+            <Route path="/settings/chemicalCategory" element={< ChemicalCategory />} />
+            <Route path="/settings/grade" element={<Grade />} />
+            <Route path="/settings/handlingSymbol" element={<HandlingSymbol />} />
+            <Route path="/settings/accessRight" element={< AccessRight />} />
+            <Route path="/settings/projects" element={< Projects />} />
+            <Route path="/settings/template" element={< Template />} />
+            <Route path="/settings/trainingConfirmation" element={< TrainingConfirmation />} />
+            <Route path="/settings/proposal" element={< Proposal />} />
+            <Route path="/settings/nominations" element={<Nominations />} />
+            <Route path="/settings/reQualificationRequest" element={< ReQualificationRequest />} />
+            <Route path="/settings/resources" element={< Resources />} />
+            <Route path="/settings/typeOfSection" element={< TypeOfSection />} />
+            <Route path="/settings/wosTest" element={<WOSTest />} />
+            <Route path="/settings/serviceProvider" element={< ServiceProvider />} />
+            <Route path="/settings/externalregistration" element={< ExternalRegistration />} />
+            <Route path="/settings/testTechniques" element={< TestTechniques />} />
+            <Route path="/settings/instrumentRegistration" element={< InstrumentRegistration />} />
+            <Route path="/settings/stability" element={<SettingStability />} />
+            <Route path="/settings/testHistory" element={< TestHistory />} />
+            <Route path="/settings/settingVendors" element={<SettingVendors />} />
+            <Route path="/settings/appConfiguration" element={<AppConfiguration />} />
           
-            <Route path="/vender" element={<Vender/>} />
-            <Route path="/clients" element={<Clients/>} />
+
+            <Route path="/stability/storageChamberDetails" element={< StorageChamberDetails/>}/>
+            <Route path="/stability/stabilityProtocolDetails"element={< StabilityProtocolDetails/>}/>
+            <Route path="/stability/sampleStorageDetails"element={< SampleStorageDetails/>}/>
+            <Route path="/stability/CoaTemplateDetails"element={< CoaTemplateDetails/>}/>
+
           </Route>
         </Routes>
       </BrowserRouter>

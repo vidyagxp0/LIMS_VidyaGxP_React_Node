@@ -106,6 +106,7 @@ function Inventory() {
   console.log(search);
 
   
+  // const [count, setCount] = useState(0);
 
   return (
     <>
@@ -232,17 +233,13 @@ function Inventory() {
               </CCol>
               <CCol sm={2}></CCol>
               <CCol sm={3}>
-                <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
-                    Add Internal
-                  </CButton>
-                </div>
+                <div className="d-flex justify-content-end"></div>
               </CCol>
             </CRow>
           </div>
           <div
             className="bg-white mt-5"
-            style={{ boxShadow: "0px 0px 3px black" }}
+            style={{ boxShadow: "0px 0px 8px black" }}
           >
             <CTable>
               <CTableHead>
@@ -532,4 +529,4 @@ const StatusModal = (_props) => {
   );
 };
 
-export default Inventory;
+export default Inventory;

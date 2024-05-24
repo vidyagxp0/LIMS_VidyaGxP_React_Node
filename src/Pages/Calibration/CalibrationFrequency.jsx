@@ -8,6 +8,8 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function CalibrationFrequency() {
@@ -27,7 +29,7 @@ export default function CalibrationFrequency() {
   const pageSize = 4; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
-    { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
+    { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'INACTIVE'  },
     { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
     {  user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
     {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'},
@@ -44,10 +46,16 @@ export default function CalibrationFrequency() {
             <td>{employee.user}</td>
             <td>{employee.role}</td>
             <td>{employee.addedBy}</td>
-            <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+            <td className={`rounded-5 ${employee.status === 'ACTIVE' ? 'bg-success' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'ACTIVE' ? 'success' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
             <td>
-                &nbsp; &nbsp; &nbsp;
-                <HiDotsHorizontal />
+            <div className="d-flex gap-3">
+                        <div className="cursor-pointer" >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
+                    </div>
             </td>
         </tr>
     ));
@@ -74,7 +82,7 @@ const nextToLastPage = () => {
 
       {/* <div id="div2"> */}
 
-      <div id="div2">
+      <div id="div2" style={{display:'flex',justifyContent:'space-between'}}>
         
         <div id="searchmain"> 
           <div id="searchicon">
@@ -112,7 +120,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span>Calibration Type</span>
+          <CgAddR /> <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Calibration Type</span>
         </button>
 
         <div
@@ -161,7 +169,7 @@ const nextToLastPage = () => {
 
       <br />
       <div className='table-responsive p-4 container1'>
-                <table className='table'>
+                <table className='table shadow'  style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>
@@ -179,7 +187,7 @@ const nextToLastPage = () => {
                 </table>
             </div>
 
-            <div className="pagination">
+            <div className="pagination" style={{margin:'0 35px'}}>
 
 <div className="pagination ">
     <div className='mr-5'>
