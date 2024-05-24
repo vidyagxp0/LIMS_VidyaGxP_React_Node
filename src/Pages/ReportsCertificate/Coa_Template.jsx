@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -7,37 +7,131 @@ import { Link } from "react-router-dom"
 
 function Coa_Template() {
     const [addModal, setAddModal] = useState(false)
-    const badgeStyle = { background: "#cdffca" }
+    const [deleteModal, setDeleteModal] = useState(false)
+    const [deleteId, setDeleteId] = useState(null)
+
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
+    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+    const [selectedStatus, setSelectedStatus] = useState("All");
+
+    const pageSize = 3; // Number of items per page
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [data, setData] = useState([
+        {
+            id: 1,
+            sampleType: "Micro Media",
+            coaId: "COA-022024-0000003",
+            coaType: "WITH-SPECIFICATION",
+            updatedAt: "Feb 12th 24 15:36",
+            status: "INITIATED",
+        },
+        {
+            id: 2,
+            sampleType: "Finished Product",
+            coaId: "COA-062023-0000002",
+            coaType: "WITHOUT-SPECIFICATION",
+            updatedAt: "Jul 23rd 23 23:37",
+            status: "REJECTED",
+        },
+        {
+            id: 3,
+            sampleType: "Finished Product",
+            coaId: "COA-062023-0000001",
+            coaType: "WITH-SPECIFICATION",
+            updatedAt: "Jun 17th 23 15:36",
+            status: "INITIATED",
+        },
+        {
+            id: 4,
+            sampleType: "Micro Media",
+            coaId: "COA-022024-0000004",
+            coaType: "WITH-SPECIFICATION",
+            updatedAt: "Feb 12th 24 15:36",
+            status: "REJECTED",
+        },
+        {
+            id: 5,
+            sampleType: "Finished Product",
+            coaId: "COA-062023-0000009",
+            coaType: "WITH-SPECIFICATION",
+            updatedAt: "Feb 12th 24 15:36",
+            status: "APPROVED",
+        },
+        {
+            id: 6,
+            sampleType: "Micro Media",
+            coaId: "COA-062023-0000006",
+            coaType: "WITH-SPECIFICATION",
+            updatedAt: "Jul 23rd 23 23:37",
+            status: "INITIATED",
+        },
+    ]);
+
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, data.length);
+    const paginatedData = data.slice(startIndex, endIndex);
+
+    const nextPage = () => {
+        if (endIndex < data.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const nextToLastPage = () => {
+        setCurrentPage(Math.ceil(data.length / pageSize));
+    };
+
+    const filterData = () => {
+        if (selectedStatus === "All") {
+            return paginatedData;
+        }
+
+        return paginatedData.filter((item) => item.status === selectedStatus.toUpperCase());
+    };
+
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+    }
+
+    const handleDeleteConfirm = () => {
+        setData(data.filter(item => item.id !== deleteId));
+        setDeleteModal(false);
+    }
 
     return (
         <>
-
-            <div id="approval-page" className="h-100 mx-5">
+            <div className="h-100 mx-5">
                 <div className="container-fluid my-5">
-
                     <div className="main-head">
-                        <div className="title fw-bold fs-5">Certificate Of Analysis Report </div>
-
-
-                    </div>
-                    <div className="d-flex gap-4">
-
-
+                        <div className="title fw-bold fs-5 py-4">Certificate Of Analysis Report </div>
                     </div>
                     <div>
                         <CRow className="mb-3">
                             <CCol sm={3}>
                                 <CFormSelect
-                                    options={[
-                                        'Select Status',
-                                        { label: 'All' },
-                                        { label: 'Initiated' },
-                                        { label: 'Approved' },
-                                        { label: 'Rejected' },
-                                        { label: 'Reinitiated' },
-                                        { label: 'Droped' }
-                                    ]}
-                                />
+                                    onChange={(e) => setSelectedStatus(e.target.value)}
+                                    value={selectedStatus} style={{ border: "2px solid gray" }}
+                                >
+                                    <option value="All">All</option>
+                                    <option value="Initiated">Initiated</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="Reinitiated">Reinitiated</option>
+                                    <option value="Dropped">Dropped</option>
+                                </CFormSelect>
                             </CCol>
 
                             <CCol sm={6}></CCol>
@@ -49,8 +143,8 @@ function Coa_Template() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white mt-5">
-                        <CTable align="middle" responsive className=" shadow">
+                    <div className="bg-white rounded py-3 px-4  mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
+                        <CTable align="middle" responsive className="">
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
@@ -63,74 +157,77 @@ function Coa_Template() {
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                                <CTableRow>
-                                    <CTableDataCell>1</CTableDataCell>
-                                    <CTableDataCell>Micro Media</CTableDataCell>
-                                    <CTableDataCell>SHMDZ/102145</CTableDataCell>
-                                    <CTableDataCell>WITH-SPECIFICATION</CTableDataCell>
-                                    <CTableDataCell>feb 11th 24</CTableDataCell>
-
-                                    <CTableDataCell className="">
-                                        <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>INITIATED</div>
-                                    </CTableDataCell>
-
-                                    <CTableDataCell>
-                                        <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                            <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
-                                    </CTableDataCell>
-                                </CTableRow>
-
-                                <CTableRow>
-                                    <CTableDataCell>2</CTableDataCell>
-                                    <CTableDataCell>Finished Product</CTableDataCell>
-                                    <CTableDataCell>hplc/0112</CTableDataCell>
-                                    <CTableDataCell>WITH-SPECIFICATION</CTableDataCell>
-                                    <CTableDataCell>oct 15th 23</CTableDataCell>
-                                    <CTableDataCell className="">
-                                        <div className="py-2 px-3 small rounded fw-bold bg-info" >Approved</div>
-                                    </CTableDataCell>
-
-
-                                    <CTableDataCell>
-                                        <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                            <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
-                                    </CTableDataCell>
-                                </CTableRow>
-
+                                {filterData().map((item, index) => (
+                                    <CTableRow key={index}>
+                                        <CTableDataCell>{item.id}</CTableDataCell>
+                                        <CTableDataCell>{item.sampleType}</CTableDataCell>
+                                        <CTableDataCell>{item.coaId}</CTableDataCell>
+                                        <CTableDataCell>{item.coaType}</CTableDataCell>
+                                        <CTableDataCell>{item.updatedAt}</CTableDataCell>
+                                        <CTableDataCell className="d-flex">
+                                            <div
+                                                className="py-2 px-3 small rounded fw-bold"
+                                                style={
+                                                    item.status === "INITIATED"
+                                                        ? badgeStyle2
+                                                        : item.status === "APPROVED"
+                                                            ? badgeStyle3
+                                                            : item.status === "REJECTED"
+                                                                ? badgeStyle4
+                                                                : item.status === "REINITIATED"
+                                                                    ? badgeStyle5
+                                                                    : item.status === "DROPPED"
+                                                                        ? badgeStyle6
+                                                                        : badgeStyle
+                                                }
+                                            >
+                                                {item.status}
+                                            </div>
+                                        </CTableDataCell>
+                                        <CTableDataCell>
+                                            <div className="d-flex gap-3">
+                                                <Link to="/reportsCertificate/coa_TemplateDetails">
+                                                    <FontAwesomeIcon icon={faEye} />
+                                                </Link>
+                                                <div
+                                                    className="cursor-pointer"
+                                                    onClick={() => setAddModal(true)}
+                                                >
+                                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                                </div>
+                                                <div
+                                                    className="cursor-pointer"
+                                                    onClick={() => handleDeleteClick(item.id)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrashCan} />
+                                                </div>
+                                            </div>
+                                        </CTableDataCell>
+                                    </CTableRow>
+                                ))}
                             </CTableBody>
                         </CTable>
                     </div>
-
-                    <div className="pagination">
-
+                    <div className="d-flex justify-content-between align-items-center mt-4">
                         <div className="pagination">
-                            <div className='mr-5'>
-                                <button className="btn  mr-2" >&lt;&lt;</button>
-                            </div>
-                            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                                <button className='btn rounded-circle'> 1 </button>
-                            </div>
-                            <div>
-                                <button className="btn mr-2" >&gt;&gt;</button>
-
-                            </div>
-
+                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
                         </div>
-                        <button className="btn btn-next" > Next <FaArrowRight /></button>
+                        <button className="btn btn-next" onClick={nextToLastPage}>
+                            Next <FaArrowRight />
+                        </button>
                     </div>
-
 
                 </div>
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
         </>
     )
 }
@@ -138,12 +235,12 @@ function Coa_Template() {
 const StatusModal = (_props) => {
     return (
         <>
-
             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                 <CModalHeader>
                     <CModalTitle>Add Coa Template</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
+                    <p>Add information and Add Coa Template</p>
 
                     <CFormInput
                         type="text"
@@ -167,7 +264,6 @@ const StatusModal = (_props) => {
                             { label: "With Specification" },
                             { label: "WithOut Specification" },
                             { label: "ERP" }
-
                         ]}
                     />
                     <CFormInput
@@ -175,7 +271,6 @@ const StatusModal = (_props) => {
                         label="Report Title"
                         placeholder=" Report Title"
                     />
-
                     <CFormInput
                         type="text"
                         label="Product/Material Caption"
@@ -191,10 +286,10 @@ const StatusModal = (_props) => {
                         label="Format No."
                         placeholder="Format No. "
                     />
-                    
-                    <CModalTitle className="bg-secondary ">Header</CModalTitle>
 
-                    <div className="d-flex pb-2 ">
+                    <CModalTitle className="bg-light">Header</CModalTitle>
+
+                    <div className="d-flex pb-2">
                         <div className="pe-3">
                             <CFormInput
                                 type="text"
@@ -202,25 +297,23 @@ const StatusModal = (_props) => {
                                 placeholder="Rows "
                             />
                         </div>
-
                         <div className="ps-3 w-50">
                             <CFormSelect
                                 type="text"
                                 label="Columns"
                                 placeholder="Columns "
                                 options={[
-                                    {label: "2"},
-                                    {label: "4"},
-                                    {label: "6"}
+                                    { label: "2" },
+                                    { label: "4" },
+                                    { label: "6" }
                                 ]}
                             />
                         </div>
-
                     </div>
 
-                    <CModalTitle className="bg-secondary">Footer</CModalTitle>
+                    <CModalTitle className="bg-light">Footer</CModalTitle>
 
-                    <div className="d-flex pb-2 ">
+                    <div className="d-flex pb-2">
                         <div className="pe-3">
                             <CFormInput
                                 type="text"
@@ -228,20 +321,18 @@ const StatusModal = (_props) => {
                                 placeholder="Rows "
                             />
                         </div>
-
                         <div className="ps-3 w-50">
                             <CFormSelect
                                 type="text"
                                 label="Columns"
                                 placeholder="Columns "
                                 options={[
-                                    {label: "2"},
-                                    {label: "4"},
-                                    {label: "6"}
+                                    { label: "2" },
+                                    { label: "4" },
+                                    { label: "6" }
                                 ]}
                             />
                         </div>
-
                     </div>
 
                     <div className="d-flex">
@@ -252,7 +343,6 @@ const StatusModal = (_props) => {
                                 placeholder="Approved By "
                             />
                         </div>
-
                         <div className="ps-3 w-50">
                             <CFormSelect
                                 type="text"
@@ -260,11 +350,9 @@ const StatusModal = (_props) => {
                                 placeholder="approved_by "
                                 options={[
                                     "approved_by",
-                                    
                                 ]}
                             />
                         </div>
-
                     </div>
 
                     <div className="d-flex">
@@ -275,7 +363,6 @@ const StatusModal = (_props) => {
                                 placeholder="Reviewed By"
                             />
                         </div>
-
                         <div className="ps-3 w-50">
                             <CFormSelect
                                 type="text"
@@ -284,13 +371,11 @@ const StatusModal = (_props) => {
                                 options={[
                                     "reviewed_by",
                                     {}
-                                    
                                 ]}
                             />
                         </div>
-
                     </div>
-                    
+
                     <div className="d-flex">
                         <div className="pe-3">
                             <CFormInput
@@ -299,7 +384,6 @@ const StatusModal = (_props) => {
                                 placeholder="Checked By "
                             />
                         </div>
-
                         <div className="ps-3 w-50">
                             <CFormSelect
                                 type="text"
@@ -308,23 +392,37 @@ const StatusModal = (_props) => {
                                 options={[
                                     "checked_by",
                                     {}
-                                    
                                 ]}
                             />
                         </div>
-
                     </div>
-
-                    
-                    
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
+                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
                     <CButton className="bg-info text-white">Submit</CButton>
                 </CModalFooter>
             </CModal>
-
         </>
     )
 }
+
+const DeleteModal = (_props) => {
+    return (
+        <>
+            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                <CModalHeader>
+                    <CModalTitle>Delete Coa Template</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <p>Do you want to delete this Coa  Template <code>{_props.templateId}</code>?</p>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                    <CButton className="bg-info text-white" onClick={_props.confirmDelete}>Submit</CButton>
+                </CModalFooter>
+            </CModal>
+        </>
+    )
+}
+
 export default Coa_Template

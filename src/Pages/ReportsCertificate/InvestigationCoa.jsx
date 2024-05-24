@@ -1,142 +1,244 @@
-import { CButton, CCol, CFormInput, CFormSelect, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { FaArrowRight } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import {
+    CButton,
+    CCol,
+    CFormInput,
+    CFormSelect,
+    CRow,
+    CTable,
+    CTableBody,
+    CTableDataCell,
+    CTableHead,
+    CTableHeaderCell,
+    CTableRow,
+  } from "@coreui/react";
+  import { faEye } from "@fortawesome/free-regular-svg-icons";
+  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  import { useState } from "react";
+  import { FaArrowRight } from "react-icons/fa";
+  import { Link } from "react-router-dom";
+  
+  function InvestigationCoa() {
+    const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
+    const [deleteId, setDeleteId] = useState(null)
 
-function InvestigationCoa() {
-    
-    const badgeStyle = { background: "#cdffca" }
-    
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
+    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+    const [selectedStatus, setSelectedStatus] = useState("All");
+
+    const pageSize = 3; // Number of items per page
+    const [currentPage, setCurrentPage] = useState(1);
+    const [data, setData] = useState([
+      {
+        id: 1,
+        sampleType: "Petrochemical",
+        productMaterial: "Hydraulic Oil",
+        arNo: "ARPC0000001",
+        genericName: "hyo",
+        specificationCode: "HOS 234",
+        status: "APPROVED",
+      },
+      {
+        id: 2,
+        sampleType: "Petrochemical",
+        productMaterial: "Sacubitril",
+        arNo: "ARPC0000002",
+        genericName: "Polycaprolactone",
+        specificationCode: "RPS-TSLV-00",
+        status: "APPROVED",
+      },
+      {
+        id: 3,
+        sampleType: "Chemical",
+        productMaterial: "Ethanol",
+        arNo: "ARPC0000003",
+        genericName: "ethyl",
+        specificationCode: "ETH-123",
+        status: "INITIATED",
+      },
+      {
+        id: 4,
+        sampleType: "Pharmaceutical",
+        productMaterial: "Aspirin",
+        arNo: "ARPC0000004",
+        genericName: "acetylsalicylic",
+        specificationCode: "ASP-567",
+        status: "REJECTED",
+      },
+      {
+        id: 5,
+        sampleType: "Polymer",
+        productMaterial: "Nylon",
+        arNo: "ARPC0000005",
+        genericName: "polyamide",
+        specificationCode: "NYL-890",
+        status: "APPROVED",
+      },
+      {
+        id: 6,
+        sampleType: "Metal",
+        productMaterial: "Steel",
+        arNo: "ARPC0000006",
+        genericName: "ferrum",
+        specificationCode: "STL-101",
+        status: "REINITIATED",
+      },
+    ]);
+
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, data.length);
+    const paginatedData = data.slice(startIndex, endIndex);
+
+    const nextPage = () => {
+        if (endIndex < data.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const nextToLastPage = () => {
+        setCurrentPage(Math.ceil(data.length / pageSize));
+    };
+
+    const filterData = () => {
+        if (selectedStatus === "All") {
+            return paginatedData;
+        }
+
+        return paginatedData.filter((item) => item.status === selectedStatus.toUpperCase());
+    };
+
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+    }
+
+    const handleDeleteConfirm = () => {
+        setData(data.filter(item => item.id !== deleteId));
+        setDeleteModal(false);
+    }
+  
     return (
-        <>
-
-            <div id="approval-page" className="h-100 mx-5">
-                <div className="container-fluid my-5">
-
-                    <div className="main-head">
-                        <div className="title fw-bold fs-5">Investigation Coa </div>
-
-
-                    </div>
-                    <div className="d-flex gap-4">
-
-
-                    </div>
-                    <div>
-                        <CRow className="mb-3">
-                        <CCol sm={2}>
-                                <CFormSelect
-                                    options={[
-                                        'Ar No.',
-                                        { label: 'ARPC0000001' },
-                                        { label: 'ARPC0000002' },
-                                        { label: 'ARPC0000003' }
-                                       
-                                    ]}
-                                />
-                            </CCol>
-                            <CCol sm={3}>
-                                <CFormSelect
-                                    options={[
-                                        'Select Status',
-                                        { label: 'All' },
-                                        { label: 'Initiated' },
-                                        { label: 'Approved' },
-                                        { label: 'Rejected' },
-                                        { label: 'Reinitiated' },
-                                        { label: 'Droped' }
-                                    ]}
-                                />
-                            </CCol>
-
-                            
-                        </CRow>
-                    </div>
-                    <div className="bg-white mt-5">
-                        <CTable align="middle" responsive className=" shadow">
-                            <CTableHead>
-                                <CTableRow>
-                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Sample Type</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Product / Material</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">A.R No.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Generic Name</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Specification Code</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                                </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                                <CTableRow>
-                                    <CTableDataCell>1</CTableDataCell>
-                                    <CTableDataCell>Petrochemical</CTableDataCell>
-                                    <CTableDataCell>Hydraulic Oil</CTableDataCell>
-                                    <CTableDataCell>ARPC0000001</CTableDataCell>
-                                    <CTableDataCell>hyo</CTableDataCell>
-                                    <CTableDataCell>HOS 234</CTableDataCell>                                   
-                                    
-                                    <CTableDataCell className="">
-                                        <div className="py-2 px-3 small rounded fw-bold bg-info" >APPROVED</div>
-                                    </CTableDataCell>                                   
-
-                                    <CTableDataCell>
-                                        <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                        </div>
-                                    </CTableDataCell>
-                                </CTableRow>
-
-                                <CTableRow>
-                                    <CTableDataCell>2</CTableDataCell>
-                                    <CTableDataCell>Petrochemical</CTableDataCell>
-                                    <CTableDataCell>Sacubitril</CTableDataCell>
-                                    <CTableDataCell>ARPC0000002</CTableDataCell>
-                                    <CTableDataCell>Polycaprolactone</CTableDataCell>
-                                    <CTableDataCell>RPS-TSLV-00</CTableDataCell>
-                                    <CTableDataCell className="">
-                                        <div className="py-2 px-3 small rounded fw-bold bg-info" >APPROVED</div>
-                                    </CTableDataCell>
-                                    
-
-                                    <CTableDataCell>
-                                        <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                            
-                                        </div>
-                                    </CTableDataCell>
-                                </CTableRow>
-
-                            </CTableBody>
-                        </CTable>
-                    </div>
-
-                    <div className="pagination">
-
-                        <div className="pagination">
-                            <div className='mr-5'>
-                                <button className="btn  mr-2" >&lt;&lt;</button>
-                            </div>
-                            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                                <button className='btn rounded-circle'> 1 </button>
-                            </div>
-                            <div>
-                                <button className="btn mr-2" >&gt;&gt;</button>
-
-                            </div>
-
-                        </div>
-                        <button className="btn btn-next" > Next <FaArrowRight /></button>
-                    </div>
-
-
-                </div>
+      <>
+        <div className="h-100 mx-5">
+          <div className="container-fluid my-5">
+            <div className="main-head">
+              <div className="title fw-bold fs-5 py-4">Investigation Coa</div>
             </div>
-
-            
-        </>
-    )
-}
-
-export default InvestigationCoa
+            <div>
+              <CRow className="mb-3">
+                <CCol sm={2}>
+                  <CFormSelect
+                    options={[
+                      "Ar No.",
+                      { label: "ARPC0000001" },
+                      { label: "ARPC0000002" },
+                      { label: "ARPC0000003" },
+                    ]}
+                  />
+                </CCol>
+                <CCol sm={3}>
+                  <CFormSelect
+                    options={[
+                      "Select Status",
+                      { label: "All" },
+                      { label: "Initiated" },
+                      { label: "Approved" },
+                      { label: "Rejected" },
+                      { label: "Reinitiated" },
+                      { label: "Droped" },
+                    ]}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                    value={selectedStatus} style={{ border: "2px solid gray" }}
+                  />
+                </CCol>
+              </CRow>
+            </div>
+            <div className="bg-white rounded py-3 px-4 mt-5">
+              <CTable align="middle" responsive className="">
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Sample Type</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Product / Material</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">A.R No.</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Generic Name</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Specification Code</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {filterData().map((item, index) => (
+                    <CTableRow key={item.id}>
+                      <CTableDataCell>{index + 1}</CTableDataCell>
+                      <CTableDataCell>{item.sampleType}</CTableDataCell>
+                      <CTableDataCell>{item.productMaterial}</CTableDataCell>
+                      <CTableDataCell>{item.arNo}</CTableDataCell>
+                      <CTableDataCell>{item.genericName}</CTableDataCell>
+                      <CTableDataCell>{item.specificationCode}</CTableDataCell>
+                      <CTableDataCell className="d-flex">
+                      <div
+                                                className="py-2 px-3 small rounded fw-bold"
+                                                style={
+                                                    item.status === "INITIATED"
+                                                        ? badgeStyle2
+                                                        : item.status === "APPROVED"
+                                                            ? badgeStyle3
+                                                            : item.status === "REJECTED"
+                                                                ? badgeStyle4
+                                                                : item.status === "REINITIATED"
+                                                                    ? badgeStyle5
+                                                                    : item.status === "DROPPED"
+                                                                        ? badgeStyle6
+                                                                        : badgeStyle
+                                                }
+                                            >
+                                                {item.status}
+                                            </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div className="d-flex gap-3">
+                          <Link to="/stability/sample_LoginDetails">
+                            <FontAwesomeIcon icon={faEye} />
+                          </Link>
+                        </div>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
+            </div>
+  
+            <div className="pagination d-flex justify-content-between align-items-center mt-4">
+              <div className="pagination">
+                <button className="btn mr-2" disabled>
+                  &lt;&lt;
+                </button>
+                <button className="btn mr-2 bg-dark-subtle rounded-circle">1</button>
+                <button className="btn mr-2" disabled>
+                  &gt;&gt;
+                </button>
+              </div>
+              <button className="btn btn-next">
+                Next <FaArrowRight />
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+  
+  export default InvestigationCoa;
+  

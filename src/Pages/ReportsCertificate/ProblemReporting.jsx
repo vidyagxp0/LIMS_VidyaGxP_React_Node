@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -7,15 +7,16 @@ import { Link } from "react-router-dom"
 
 function ProblemReporting() {
     const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
     return (
         <>
 
-            <div id="approval-page" className="h-100 mx-5">
+            <div className=" mx-5">
                 <div className="container-fluid my-5">
 
                     <div className="main-head">
-                        <div className="title fw-bold fs-5">Problem Reporting</div>
+                        <div className="title fw-bold fs-5 py-4">Problem Reporting</div>
 
 
                     </div>
@@ -44,8 +45,8 @@ function ProblemReporting() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white mt-5">
-                        <CTable align="middle" responsive className=" shadow">
+                    <div className="bg-white rounded shadow py-3 px-4 mt-5">
+                        <CTable align="middle" responsive className=" ">
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
@@ -73,10 +74,9 @@ function ProblemReporting() {
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                            <Link to="/reportsCertificate/problemReportingDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -93,44 +93,40 @@ function ProblemReporting() {
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                            <Link to="/reportsCertificate/problemReportingDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
-
-
-
                             </CTableBody>
                         </CTable>
-                    </div>
 
-                    <div className="pagination">
 
                         <div className="pagination">
-                            <div className='mr-5'>
-                                <button className="btn  mr-2" >&lt;&lt;</button>
-                            </div>
-                            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                                <button className='btn rounded-circle'> 1 </button>
-                            </div>
-                            <div>
-                                <button className="btn mr-2" >&gt;&gt;</button>
+
+                            <div className="pagination">
+                                <div className='mr-5'>
+                                    <button className="btn mr-2" >&lt;&lt;</button>
+                                </div>
+                                <div className="current-page-number mr-2 bg-dark-subtle page-item">
+                                    <button className='btn'> 1 </button>
+                                </div>
+                                <div>
+                                    <button className="btn mr-2" >&gt;&gt;</button>
+
+                                </div>
 
                             </div>
-
+                            <button className="btn btn-next" > Next <FaArrowRight /></button>
                         </div>
-                        <button className="btn btn-next" > Next <FaArrowRight /></button>
                     </div>
-
 
                 </div>
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
         </>
     )
 }
@@ -148,6 +144,7 @@ const StatusModal = (_props) => {
                 </CModalHeader>
 
                 <CModalBody>
+                <p>Add information and Add Problem Reporting</p>
 
                     <CFormSelect
                         type="text"
@@ -235,5 +232,27 @@ const StatusModal = (_props) => {
         </>
     );
 };
+
+const DeleteModal = (_props) => {
+    return (
+         <>
+
+              <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                   <CModalHeader>
+                        <CModalTitle>Delete Problem Reporting</CModalTitle>
+                   </CModalHeader>
+                   <CModalBody>
+                        <p>Do you want to delete this problem reporting <code>AL001</code>?</p>
+
+                   </CModalBody>
+                   <CModalFooter>
+                        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                        <CButton className="bg-info text-white">Submit</CButton>
+                   </CModalFooter>
+              </CModal>
+
+         </>
+    )
+}
 
 export default ProblemReporting
