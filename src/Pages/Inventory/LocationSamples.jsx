@@ -91,18 +91,7 @@ function LocationSamples() {
               </CCol> */}
 
               <CCol sm={2}></CCol>
-              <CCol sm={3}>
-                {/* <div className="d-flex justify-content-end">
-                  <CButton
-                    color="info"
-                    text="white"
-                    style={{ marginLeft: "50px" }}
-                    onClick={() => setAddModal(true)}
-                  >
-                    Add OOA Template
-                  </CButton>
-                </div> */}
-              </CCol>
+              <CCol sm={3}></CCol>
             </CRow>
           </div>
           <div className="bg-white mt-5">
@@ -113,11 +102,9 @@ function LocationSamples() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">SNo.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col"> Plant Name	 </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Facility	 </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                  Location
-                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col"> Plant Name </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Facility </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Location</CTableHeaderCell>
                   <CTableHeaderCell scope="col">prefix</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
                     Location Type Id
@@ -157,18 +144,12 @@ function LocationSamples() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
                       <div
                         className="cursor-pointer"
                         onClick={() => setAddModal(true)}
                       >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        <CButton color="info">Add</CButton>
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -197,18 +178,12 @@ function LocationSamples() {
                   </CTableDataCell>
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
                       <div
                         className="cursor-pointer"
                         onClick={() => setAddModal(true)}
                       >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        <CButton color="info">Add</CButton>
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -235,20 +210,15 @@ function LocationSamples() {
                       INITIATED
                     </div>
                   </CTableDataCell>
+
                   <CTableDataCell>
                     <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
                       <div
                         className="cursor-pointer"
                         onClick={() => setAddModal(true)}
                       >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        <CButton color="info">Add</CButton>
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
                     </div>
                   </CTableDataCell>
                 </CTableRow>
@@ -259,7 +229,7 @@ function LocationSamples() {
                   {/* <CTableDataCell>3</CTableDataCell>
                   <CTableDataCell>test</CTableDataCell>
                   <CTableDataCell>NA</CTableDataCell> */}
-                  <CTableDataCell>testing525</CTableDataCell> 
+                  <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>testing525</CTableDataCell>
                   <CTableDataCell>testing525</CTableDataCell>
@@ -275,7 +245,14 @@ function LocationSamples() {
                     </div>
                   </CTableDataCell>
                   <CTableDataCell>
-                   <CButton color="info">Add</CButton>
+                    <div className="d-flex gap-3">
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => setAddModal(true)}
+                      >
+                        <CButton color="info">Add</CButton>
+                      </div>
+                    </div>
                   </CTableDataCell>
                 </CTableRow>
               </CTableBody>
@@ -298,10 +275,13 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="2xl"
+        
       >
         <CModalHeader className="p-3">
-          <CModalTitle>Add OOA Template</CModalTitle>
+          <CModalTitle>Add Sampling Schedule Registration</CModalTitle>
         </CModalHeader>
+        <p>Add information and register new Sampling Schedule</p>
 
         {/* <p>Add information and Add Coa Template</p> */}
         <div className="modal-body p-4">
@@ -309,7 +289,8 @@ const StatusModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Copying From Template
+                label="Schedule Code
+
 
 
 
@@ -321,7 +302,7 @@ const StatusModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Name
+                label="Description
 
 
 
@@ -334,7 +315,7 @@ const StatusModal = (_props) => {
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Unique Code
+                label="Frequency
                "
                 placeholder=""
                 className="custom-placeholder"
@@ -343,32 +324,91 @@ const StatusModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Analyst Check List
+                label="Tolerance
                 "
                 placeholder=""
                 className="custom-placeholder"
-                
               />
               <CButton color="info">Add</CButton>
             </div>
-            
 
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Supervisor Check List
+                label="Start Date"
+                placeholder=""
+                className="custom-placeholder"
+              />
+            </div>
+
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="End Date
+                "
+                placeholder=""
+                className="custom-placeholder"
+              />
+            </div>
+
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Select User Group To Alert
+
+                "
+                placeholder=""
+                className="custom-placeholder"
+              />
+            </div>
+
+            <div>
+              <table className="table table-bordered" style={{background:"white"}}>
+                <thead style={{background:"lightblue"}}>
+                  <th>Sno.</th>
+                  <th>Plant</th>
+                  <th>Facility</th>
+                  <th>Location</th>
+                  <th>Location ID</th>
+                  <th>Location Description</th>
+                  <th>Grade/Class</th>
+                  <th>Monitoring Method</th>
+                </thead>
+                <tr>
+                  <td>88541</td>
+                  <td>88541</td>
+                  <td>88541</td>
+                  <td>88541</td>
+                  <td>88541</td>
+                  <td>88541</td>
+                  <td>88541</td>
+                  <td>88541</td>
+                </tr>
+              </table>
+            </div>
+
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Date of Monitoring
 
 
                 "
                 placeholder=""
                 className="custom-placeholder"
               />
-              <CButton color="info">Add</CButton>
             </div>
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Monitored / Sampled By
 
-         
 
-           
+                "
+                placeholder=""
+                className="custom-placeholder"
+              />
+            </div>
           </CForm>
         </div>
 

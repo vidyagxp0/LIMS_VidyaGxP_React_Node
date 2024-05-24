@@ -59,15 +59,15 @@ function Acknowledgement() {
             <CRow className="mb-3 ">
               <CDropdown
                 style={{
-                  width: "200px",
-                  border: "1px solid lightgray",
-                  boxShadow: "0 0 5px  black",
+                  width: "220px",
+                  border: "2px solid gray",
+                  
                   borderRadius: "5px",
                 }}
               >
-                <CDropdownToggle color="" style={{ color: "gray" }}>
+                <CDropdownToggle color="">
                   {selectedStatus}
-                  Category/
+                  Category
                 </CDropdownToggle>
                 <CDropdownMenu>
                   <CDropdownItem header>Select Status</CDropdownItem>
@@ -89,19 +89,22 @@ function Acknowledgement() {
                     { label: "Rejected" },
                     { label: "Reinitiated" },
                     { label: "Dropped" },
+                    
                   ]}
+                  style={{border :"2px solid gray"}}
                 />
               </CCol>
                 
               
               <CCol sm={2}></CCol>
               <CCol sm={3}>
-                <div className="d-flex justify-content-end">
+                <div className="d-flex justify-content-end ">
                   <CButton
                     color="info"
                     text="white"
                     style={{ marginLeft: "50px" }}
                     onClick={() => setAddModal(true)}
+                    className="text-white"
                   >
                     Acknowledgement
                   </CButton>
@@ -109,8 +112,8 @@ function Acknowledgement() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+          <div className="bg-white mt-5" style={{boxShadow:"0 0 4px black"}}>
+            <CTable align="middle" responsive className=" ">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
@@ -123,18 +126,6 @@ function Acknowledgement() {
                   <CTableHeaderCell scope="col">
                     Schedule Date
                   </CTableHeaderCell>
-                  {/* <CTableHeaderCell scope="col">
-                    Frequency Type{" "}
-                  </CTableHeaderCell> */}
-                  {/* <CTableHeaderCell scope="col">Container No.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Collection Type
-                  </CTableHeaderCell> */}
-                  {/* <CTableHeaderCell scope="col">Media Usage </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Comments </CTableHeaderCell> */}
-                  {/* <CTableHeaderCell scope="col">Added On</CTableHeaderCell> */}
-
-                  {/* <CTableHeaderCell scope="col">Added On</CTableHeaderCell> */}
                   <CTableHeaderCell scope="col">Status </CTableHeaderCell>
                   <CTableHeaderCell scope="col">Actions </CTableHeaderCell>
                 </CTableRow>
@@ -147,15 +138,10 @@ function Acknowledgement() {
                   <CTableDataCell>1</CTableDataCell>
 
                   <CTableDataCell>stmp1</CTableDataCell>
-                  {/* <CTableDataCell>describe</CTableDataCell> */}
-                  {/* <CTableDataCell>isubus111</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell>*/}
-                  {/* <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell> */}
-                  {/* <CTableDataCell>54255455</CTableDataCell> */}
                   <CTableDataCell>loc1</CTableDataCell>
-
                   <CTableDataCell className="d-flex">
+                  
+
                     <div
                       className="py-2 px-3 small rounded fw-bold"
                       style={badgeStyle}
@@ -186,13 +172,9 @@ function Acknowledgement() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableDataCell>2</CTableDataCell>
-                  {/* <CTableDataCell>test21</CTableDataCell> */}
-                  {/* <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell>*/}
-                  {/* <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell> */}
+                  
                   <CTableDataCell>testing</CTableDataCell>
-                  {/* <CTableDataCell>25365488</CTableDataCell> */}
+                
                   <CTableDataCell>Plant1</CTableDataCell>
 
                   <CTableDataCell className="d-flex">
@@ -226,16 +208,11 @@ function Acknowledgement() {
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableDataCell>3</CTableDataCell>
-                  {/* <CTableDataCell>test</CTableDataCell> */}
-                  {/* <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>*/}
-                  {/* <CTableDataCell>25255488</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell> */}
-                  {/* <CTableDataCell>Lab1</CTableDataCell> */}
                   <CTableDataCell>Lab1</CTableDataCell>
                   <CTableDataCell>Lab1</CTableDataCell>
-
                   <CTableDataCell className="d-flex">
+
+               
                     <div
                       className="py-2 px-3 small rounded fw-bold"
                       style={badgeStyle}
