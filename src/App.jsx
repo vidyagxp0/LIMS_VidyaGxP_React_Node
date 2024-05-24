@@ -155,6 +155,45 @@ import Coa_TemplateDetails from "./Pages/ReportsCertificate/ReportsCertificateDe
 
 import Vender from "./Pages/Vender/Vender.jsx"
 import Clients from "./Pages/Clientss/Clients.jsx"
+import Plants from './Pages/Plants/Plants.jsx'
+import WorkFlow from "./Pages/WorkFlow/WorkFlow.jsx"
+import AuditTrail from './Pages/AuditTrail/AuditTrail.jsx';
+
+import BussinessAssociate from "./Pages/Settings/BussinessAssociate.jsx"
+import LabelManagement from   "./Pages/Settings/LabelManagement.jsx"
+import FuctionalGrouping from "./Pages/Settings/FuctionalGrouping.jsx"
+import WorkSheelField from "./Pages/Settings/WorkSheelField.jsx"
+import WorkSheet from "./Pages/Settings/WorkSheet.jsx"
+import GroupName from "./Pages/Settings/GroupName.jsx"
+import InvestigationTamplate from "./Pages/Settings/InvestigationTamplate.jsx"
+import ChemicalCategory from "./Pages/Settings/ChemicalCategory.jsx"
+import Grade from "./Pages/Settings/Grade.jsx"
+import HandlingSymbol from "./Pages/Settings/HandlingSymbol.jsx"
+import AccessRight from "./Pages/Settings/AccessRight.jsx"
+import Projects from "./Pages/Settings/Projects.jsx"
+import Template from "./Pages/Settings/Template.jsx"
+import TrainingConfirmation from "./Pages/Settings/TrainingConfirmation.jsx"
+import Proposal from "./Pages/Settings/Proposal.jsx"
+import Nominations from "./Pages/Settings/Nominations.jsx"
+import ReQualificationRequest from "./Pages/Settings/ReQualificationRequest.jsx"
+import Resources from "./Pages/Settings/Resources.jsx"
+import TypeOfSection from "./Pages/Settings/TypeOfSection.jsx"
+import WOSTest from "./Pages/Settings/WOSTest.jsx"
+import ServiceProvider from "./Pages/Settings/ServiceProvider.jsx"
+import ExternalRegistration from "./Pages/Settings/ExternalRegistration.jsx"
+import TestTechniques from "./Pages/Settings/TestTechniques.jsx"
+import InstrumentRegistration from "./Pages/Settings/InstrumentRegistration.jsx"
+import SettingStability from "./Pages/Settings/SettingStability.jsx"
+import TestHistory from "./Pages/Settings/TestHistory.jsx"
+import SettingVendors from "./Pages/Settings/SettingVendors.jsx"
+import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx"
+import StorageChamberDetails from './Pages/Stability/StorageChamber.jsx';
+import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
+import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
+import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
+
+
+
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false)
@@ -374,5 +413,5 @@ function App() {
   )
 }
 
-export default App
+export   default App
 
