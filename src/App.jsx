@@ -121,9 +121,6 @@ import BatchTestslist from "./Pages/Inventory/BatchTestslist.jsx"
 
 
 
-
-
-
 import StocksVerification from "./Pages/Stock Management/StocksVerification"
 import StocksOnboarding from "./Pages/Stock Management/StocksOnboarding"
 import Material from "./Pages/Stock Management/Material"
@@ -219,60 +216,56 @@ function App() {
             <Route path="/Inventory/Columns" element={<Columns />} />
             <Route path="/Inventory/ReferenceStandards"  element={<ReferenceStandards />}/>
             {/* <Route path="/Inventory/CultureManagement" element={<CultureManagement />}/> */}
+            <Route path="/Inventory/ReferenceStandards" element={<ReferenceStandards />} />
             <Route path="/Inventory/Media" element={<Media />} />
             <Route path="/Inventory/WaterManagement" element={<WaterManagement />}/>
             <Route path="/Inventory/Environment" element={<Environment />} />
-            <Route path="Inventory/ChemicalRegistration" element={<ChemicalRegistration/>}/>
-            <Route path="Inventory/ChemicalReagent" element={<ChemicalReagent/>}/>
-            <Route path="Inventory/LotRegistration" element={<LotRegistration/>}/>
-            <Route path="Inventory/ChemicalReagentReports" element={<ChemicalReagentReports/>}/>
-            <Route path="Inventory/ChemicalUsage" element={<ChemicalUsage/>}/>
-            <Route path="Inventory/ChemicalIssues" element={<ChemicalIssues/>}/>
-            <Route path="Inventory/ColumnApplication" element={<ColumnApplication/>}/>
-            <Route path="Inventory/ColumnRegistration" element={<ColumnRegistration/>}/>
-            <Route path="Inventory/PerformanceTest" element={<PerformanceTest/>}/>
-            <Route path="Inventory/Assignment" element={<Assignment/>}/>
-            <Route path="Inventory/Qualification" element={<Qualification/>}/>
-            <Route path="Inventory/ColumnUsage" element={<ColumnUsage/>}/>
-            {/* <Route path="Inventory/Chemicals" element={<Chemicals/>}/> */}
-            <Route path="Inventory/BatchAssignment" element={<BatchAssignment/>}/>
-            <Route path="Inventory/StandardRegistration" element={<StandardRegistration/>}/>
-            <Route path="Inventory/InvLotRegistration" element={<InvLotRegistration/>}/>
-            <Route path="Inventory/UsageRegistration" element={<UsageRegistration/>}/>
-            <Route path="Inventory/CultureRegistration" element={<CultureRegistration/>}/>
-            <Route path="Inventory/RefrenceCulture" element={<RefrenceCulture/>}/>
-            <Route path="Inventory/CultureTemplateConfiguration" element={<CultureTemplateConfiguration/>}/>
-            <Route path="Inventory/RefrenceCultureLot" element={<RefrenceCultureLot/>}/>
-            <Route path="Inventory/CultureLotAcceptance" element={<CultureLotAcceptance/>}/>
-            <Route path="Inventory/MediaOnboarding" element={<MediaOnboarding/>}/>
-            <Route path="Inventory/MediaContainerType" element={<MediaContainerType/>}/>
-            <Route path="Inventory/MediaTemplateConfiguration" element={<MediaTemplateConfiguration/>}/>
-            <Route path="Inventory/MediaLot" element={<MediaLot/>}/>
-            <Route path="Inventory/MediaLotContainerIssue" element={<MediaLotContainerIssue/>}/>
-            <Route path="Inventory/MediaLotAcceptance" element={<MediaLotAcceptance/>}/>
-            <Route path="Inventory/MediaLotUsage" element={<MediaLotUsage/>}/>
-            <Route path="Inventory/SampleArea" element={<SampleArea/>}/>
-            <Route path="Inventory/ProcessingSystem" element={<ProcessingSystem/>}/>
-            <Route path="Inventory/Schedule" element={<Schedule/>}/>
-            <Route path="Inventory/Unschedule" element={<Unschedule/>}/>
-            <Route path="Inventory/Acknowledgement" element={<Acknowledgement/>}/>
-            <Route path="Inventory/ScheduleTermination" element={<ScheduleTermination/>}/>
-            <Route path="Inventory/Facility" element={<Facility/>}/>
-            <Route path="Inventory/Location" element={<Location/>}/>
-            <Route path="Inventory/EMMoniteringDetails" element={<EMMoniteringDetails/>}/>
-            <Route path="Inventory/EMCOATemplate" element={<EMCOATemplate/>}/>
-            <Route path="Inventory/OOATemplate" element={<OOATemplate/>}/>
-            <Route path="Inventory/LocationSamples" element={<LocationSamples/>}/>
+            <Route path="Inventory/ChemicalRegistration" element={<ChemicalRegistration />} />
+            <Route path="Inventory/ChemicalReagent" element={<ChemicalReagent />} />
+            <Route path="Inventory/LotRegistration" element={<LotRegistration />} />
+            <Route path="Inventory/ChemicalReagentReports" element={<ChemicalReagentReports />} />
+            <Route path="Inventory/ChemicalUsage" element={<ChemicalUsage />} />
+            <Route path="Inventory/ChemicalIssues" element={<ChemicalIssues />} />
+            <Route path="Inventory/ColumnApplication" element={<ColumnApplication />} />
+            <Route path="Inventory/ColumnRegistration" element={<ColumnRegistration />} />
+            <Route path="Inventory/PerformanceTest" element={<PerformanceTest />} />
+            <Route path="Inventory/Assignment" element={<Assignment />} />
+            <Route path="Inventory/Qualification" element={<Qualification />} />
+            <Route path="Inventory/ColumnUsage" element={<ColumnUsage />} />
+            <Route path="Inventory/BatchAssignment" element={<BatchAssignment />} />
+            <Route path="Inventory/StandardRegistration" element={<StandardRegistration />} />
+            <Route path="Inventory/InvLotRegistration" element={<InvLotRegistration />} />
+            <Route path="Inventory/UsageRegistration" element={<UsageRegistration />} />
+            <Route path="Inventory/CultureRegistration" element={<CultureRegistration />} />
+            <Route path="Inventory/RefrenceCulture" element={<RefrenceCulture />} />
+            <Route path="Inventory/CultureTemplateConfiguration" element={<CultureTemplateConfiguration />} />
+            <Route path="Inventory/RefrenceCultureLot" element={<RefrenceCultureLot />} />
+            <Route path="Inventory/CultureLotAcceptance" element={<CultureLotAcceptance />} />
+            <Route path="Inventory/MediaOnboarding" element={<MediaOnboarding />} />
+            <Route path="Inventory/MediaContainerType" element={<MediaContainerType />} />
+            <Route path="Inventory/MediaTemplateConfiguration" element={<MediaTemplateConfiguration />} />
+            <Route path="Inventory/MediaLot" element={<MediaLot />} />
+            <Route path="Inventory/MediaLotContainerIssue" element={<MediaLotContainerIssue />} />
+            <Route path="Inventory/MediaLotAcceptance" element={<MediaLotAcceptance />} />
+            <Route path="Inventory/MediaLotUsage" element={<MediaLotUsage />} />
+            <Route path="Inventory/SampleArea" element={<SampleArea />} />
+            <Route path="Inventory/ProcessingSystem" element={<ProcessingSystem />} />
+            <Route path="Inventory/Schedule" element={<Schedule />} />
+            <Route path="Inventory/Unschedule" element={<Unschedule />} />
+            <Route path="Inventory/Acknowledgement" element={<Acknowledgement />} />
+            <Route path="Inventory/ScheduleTermination" element={<ScheduleTermination />} />
+            <Route path="Inventory/Facility" element={<Facility />} />
+            <Route path="Inventory/Location" element={<Location />} />
+            <Route path="Inventory/EMMoniteringDetails" element={<EMMoniteringDetails />} />
+            <Route path="Inventory/EMCOATemplate" element={<EMCOATemplate />} />
+            <Route path="Inventory/OOATemplate" element={<OOATemplate />} />
+            <Route path="Inventory/LocationSamples" element={<LocationSamples />} />
             <Route path="Inventory/SamplingSchedule" element={<SamplingSchedule/>}/>
             <Route path="Inventory/BatchSample" element={<BatchSample/>}/>
             <Route path="Inventory/SampleLogin" element={<SampleLogin/>}/>
             <Route path="Inventory/AcknowledgeSample" element={<AcknowledgeSample/>}/>
             <Route path="Inventory/BatchSampleAllotment" element={<BatchSampleAllotment/>}/>
             <Route path="Inventory/BatchTestslist" element={<BatchTestslist/>}/>
-
-
-
-
             
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />
