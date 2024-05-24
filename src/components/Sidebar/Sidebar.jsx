@@ -1087,42 +1087,42 @@ function Sidebar() {
                   Location Samples
                 </CNavItem>
               </Link>
-              <Link to="/Inventory/ScheduleTermination">
+              <Link to="/Inventory/SamplingSchedule">
                 <CNavItem href="#">
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Sampling Schedule
                 </CNavItem>
-              </Link> <Link to="/Inventory/ScheduleTermination">
+              </Link> <Link to="/Inventory/BatchSample">
                 <CNavItem href="#">
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Batch Sample
                 </CNavItem>
-              </Link> <Link to="/Inventory/ScheduleTermination">
+              </Link> <Link to="/Inventory/SampleLogin">
                 <CNavItem href="#">
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Sample Login
                 </CNavItem>
-              </Link> <Link to="/Inventory/ScheduleTermination">
+              </Link> <Link to="/Inventory/AcknowledgeSample">
                 <CNavItem href="#">
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Acknowledge Sample
                 </CNavItem>
-              </Link> <Link to="/Inventory/ScheduleTermination">
+              </Link> <Link to="/Inventory/BatchSampleAllotment">
                 <CNavItem href="#">
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Batch Sample Allotment
                 </CNavItem>
-              </Link> <Link to="/Inventory/ScheduleTermination">
+              </Link> <Link to="/Inventory/BatchTestslist">
                 <CNavItem href="#">
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
@@ -1130,6 +1130,7 @@ function Sidebar() {
                   Batch Tests list
                 </CNavItem>
               </Link>
+
 
 
 

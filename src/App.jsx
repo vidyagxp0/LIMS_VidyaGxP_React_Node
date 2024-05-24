@@ -114,6 +114,13 @@ import EMMoniteringDetails from "./Pages/Inventory/EMMoniteringDetails.jsx"
 import EMCOATemplate from "./Pages/Inventory/EMCOATemplate.jsx"
 import OOATemplate from "./Pages/Inventory/OOATemplate.jsx"
 import LocationSamples from "./Pages/Inventory/LocationSamples.jsx"
+import SamplingSchedule from "./Pages/Inventory/SamplingSchedule.jsx"
+import BatchSample from "./Pages/Inventory/BatchSample.jsx"
+import SampleLogin from "./Pages/Inventory/SampleLogin.jsx"
+import AcknowledgeSample from "./Pages/Inventory/AcknowledgeSample.jsx"
+import BatchSampleAllotment from "./Pages/Inventory/BatchSampleAllotment.jsx"
+import BatchTestslist from "./Pages/Inventory/BatchTestslist.jsx"
+
 
 
 
@@ -270,7 +277,6 @@ function App() {
             <Route path="Inventory/SolutionUsage" element={<SolutionUsage />} />
             <Route path="/Inventory/Columns" element={<Columns />} />
             <Route path="/Inventory/ReferenceStandards" element={<ReferenceStandards />} />
-
             <Route path="/Inventory/Media" element={<Media />} />
             <Route path="/Inventory/WaterManagement" element={<WaterManagement />} />
             <Route path="/Inventory/Environment" element={<Environment />} />
@@ -286,7 +292,6 @@ function App() {
             <Route path="Inventory/Assignment" element={<Assignment />} />
             <Route path="Inventory/Qualification" element={<Qualification />} />
             <Route path="Inventory/ColumnUsage" element={<ColumnUsage />} />
-
             <Route path="Inventory/BatchAssignment" element={<BatchAssignment />} />
             <Route path="Inventory/StandardRegistration" element={<StandardRegistration />} />
             <Route path="Inventory/InvLotRegistration" element={<InvLotRegistration />} />
@@ -315,6 +320,13 @@ function App() {
             <Route path="Inventory/EMCOATemplate" element={<EMCOATemplate />} />
             <Route path="Inventory/OOATemplate" element={<OOATemplate />} />
             <Route path="Inventory/LocationSamples" element={<LocationSamples />} />
+            <Route path="Inventory/SamplingSchedule" element={<SamplingSchedule/>}/>
+            <Route path="Inventory/BatchSample" element={<BatchSample/>}/>
+            <Route path="Inventory/SampleLogin" element={<SampleLogin/>}/>
+            <Route path="Inventory/AcknowledgeSample" element={<AcknowledgeSample/>}/>
+            <Route path="Inventory/BatchSampleAllotment" element={<BatchSampleAllotment/>}/>
+            <Route path="Inventory/BatchTestslist" element={<BatchTestslist/>}/>
+            
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />
             <Route path="/instrumentMaster/instrumentCategory" element={<InstrumentCategory />} />
