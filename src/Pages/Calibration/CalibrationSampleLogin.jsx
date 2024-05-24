@@ -12,6 +12,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import {Link} from 'react-router-dom'
 
 
 const CalibrationSampleLogin = () => {
@@ -46,8 +47,7 @@ const CalibrationSampleLogin = () => {
         <td>{employee.registeredOn}</td>
         <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
         <td>
-          <FontAwesomeIcon icon={faEye} />
-          <FontAwesomeIcon icon={faPenToSquare} />
+          <Link to="/calibration/calibration-sample-login-details"><FontAwesomeIcon icon={faEye} /></Link>
           <FontAwesomeIcon icon={faTrashCan} />
 
 
@@ -198,7 +198,7 @@ const CalibrationSampleLogin = () => {
 
       {/* Employee table */}
       <div className='table-responsive shadow p-4 container1'>
-        <table className='table'>
+        <table className='table' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
           <thead>
             <tr>
               <th><input type="checkbox" /></th>
@@ -224,7 +224,7 @@ const CalibrationSampleLogin = () => {
 
 
 
-      <div className="pagination">
+      <div className="pagination"  style={{ margin: '20px 0' }}>
 
         <div className="pagination">
           <div className='mr-5'>

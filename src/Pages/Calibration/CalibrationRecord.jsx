@@ -14,7 +14,8 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { PiDownloadBold } from "react-icons/pi";
-
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -80,8 +81,14 @@ export default function CalibrationRecord() {
             <td>{employee.addedBy}</td>
             <td className={`rounded-5 ${employee.status === 'Pending' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Pending' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
             <td>
-                &nbsp; &nbsp;&nbsp;
-                <HiDotsHorizontal />
+            <div className="d-flex gap-3">
+			
+                        <div className="cursor-pointer" >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        
+                    </div>
+
             </td>
         </tr>
     ));
@@ -107,7 +114,7 @@ const nextToLastPage = () => {
       </div>
 
       <div className='table-responsive p-4 container1'>
-                <table className='table shadow'>
+                <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>

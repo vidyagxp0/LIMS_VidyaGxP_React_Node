@@ -10,6 +10,8 @@ import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function CalibrationSampleLoginTemplate() {
@@ -54,8 +56,16 @@ export default function CalibrationSampleLoginTemplate() {
             <td>{employee.addedBy}</td>
             <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
             <td>
-                &nbsp; <IoEyeSharp/> &nbsp;&nbsp;
-                <HiDotsHorizontal />
+            <div className="d-flex gap-3">
+			 <Link to="/calibration/sample-login-template-details"><FontAwesomeIcon icon={faEye} /></Link>
+                        <div className="cursor-pointer" >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
+                    </div>
+
             </td>
         </tr>
     ));
@@ -82,7 +92,7 @@ const nextToLastPage = () => {
 
       {/* <div id="div2"> */}
 
-      <div id="div2">
+      <div id="div2" style={{display:'flex',justifyContent:'space-between'}}>
         
         <div id="searchmain"> 
           <div id="searchicon">
@@ -124,7 +134,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span>Add Login Template</span>
+          <CgAddR /> <span  style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Login Template</span>
         </button>
 
         <div
@@ -191,7 +201,7 @@ const nextToLastPage = () => {
 
       <br />
       <div className='table-responsive p-4 container1'>
-                <table className='table shadow'>
+                <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>

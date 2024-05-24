@@ -141,12 +141,20 @@ import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx"
 import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx"
 import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx"
 import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx"
+import CalibrationDataSheetDetails from "./Pages/Calibration/Calibration Details/CalibrationDataSheetDetails.jsx"
+import CalibrationSampleLoginTemplateDetails from "./Pages/Calibration/Calibration Details/CalibrationSampleLoginTemplateDetails.jsx"
+import CalibrationScheduleDetails from "./Pages/Calibration/Calibration Details/CalibrationScheduleDetails.jsx"
+import CalibrationSampleLoginDetails from "./Pages/Calibration/Calibration Details/CalibrationSampleLoginDetails.jsx"
 
 import ProblemReporting from "./Pages/ReportsCertificate/ProblemReporting.jsx"
 import InvestigationCoa from "./Pages/ReportsCertificate/InvestigationCoa"
 import ReleasedCoa from "./Pages/ReportsCertificate/ReleasedCoa"
 import Coa_Template from "./Pages/ReportsCertificate/Coa_Template"
 import ServiceReporting from "./Pages/ReportsCertificate/ServiceReporting"
+
+import ProblemReportingDetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/ProblemReportingDetails.jsx"
+import ServiceReportingdetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/ServiceReportingdetails.jsx"
+import Coa_TemplateDetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/Coa_TemplateDetails.jsx"
 
 import Vender from "./Pages/Vender/Vender.jsx"
 import Clients from "./Pages/Clientss/Clients.jsx"
@@ -326,6 +334,8 @@ function App() {
             <Route path="Inventory/AcknowledgeSample" element={<AcknowledgeSample/>}/>
             <Route path="Inventory/BatchSampleAllotment" element={<BatchSampleAllotment/>}/>
             <Route path="Inventory/BatchTestslist" element={<BatchTestslist/>}/>
+
+            
             
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />
@@ -350,11 +360,22 @@ function App() {
             <Route path="/calibration/sample-login" element={<CalibrationSampleLogin />} />
             <Route path="/calibration/calibration-calender" element={<CalibrationCalender />} />
 
+            <Route path="/calibration/calibration-datasheet-details" element={<CalibrationDataSheetDetails />} />
+            <Route path="/calibration/sample-login-template-details" element={<CalibrationSampleLoginTemplateDetails />} />
+            <Route path="/calibration/calibration-schedule-details" element={<CalibrationScheduleDetails />} />
+            <Route path="/calibration/calibration-sample-login-details" element={<CalibrationSampleLoginDetails />} />
+
+
+
             <Route path="/reportsCertification/problemReporting" element={< ProblemReporting />} />
             <Route path="/reportsCertification/serviceReporting" element={<ServiceReporting />} />
             <Route path="/reportsCertification/coaTemplate1321" element={< Coa_Template />} />
             <Route path="/reportsCertification/releasedCoa" element={<ReleasedCoa />} />
             <Route path="/reportsCertification/investigationCoa" element={<InvestigationCoa />} />
+
+            <Route path="/reportsCertificate/problemReportingDetails" element={< ProblemReportingDetails/>}/>
+            <Route path="/reportsCertificate/ServiceReportingDetails" element={< ServiceReportingdetails/>}/>
+            <Route path="/reportsCertificate/coa_TemplateDetails" element={< Coa_TemplateDetails/>}/>
 
             <Route path="/vender" element={<Vender />} />
             <Route path="/clients" element={<Clients />} />
