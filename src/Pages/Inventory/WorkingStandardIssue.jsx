@@ -3,7 +3,6 @@ import {
   CCol,
   CFormInput,
   CFormSelect,
-  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
@@ -26,7 +25,95 @@ import { Link } from "react-router-dom";
 
 function WorkingStandardIssue() {
   const [addModal, setAddModal] = useState(false);
-  const badgeStyle = { background: "#cdffca" };
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [search, setSearch] = useState("");
+  const [data, setData] = useState([
+    {
+      id: 1,
+      WorkingContainerno: "stmp1",
+      ContainerQty: "describe",
+      ContainerValidityPeriodDays: "isubus111",
+      ContainerValidUpto: "54255455",
+      LotValidUpto: "loc1",
+      AddedOn: "loc1",
+      status: "ACTIVE",
+    },
+    {
+      id: 2,
+      WorkingContainerno: "stmp1",
+      ContainerQty: "describe",
+      ContainerValidityPeriodDays: "isubus111",
+      ContainerValidUpto: "54255455",
+      LotValidUpto: "loc1",
+      AddedOn: "loc1",
+      status: "ACTIVE",
+    },
+    {
+      id: 3,
+      WorkingContainerno: "stmp1",
+      ContainerQty: "describe",
+      ContainerValidityPeriodDays: "isubus111",
+      ContainerValidUpto: "54255455",
+      LotValidUpto: "loc1",
+      AddedOn: "loc1",
+      status: "UNACTIVE",
+    },
+    {
+      id: 4,
+      WorkingContainerno: "stmp1",
+      ContainerQty: "describe",
+      ContainerValidityPeriodDays: "isubus111",
+      ContainerValidUpto: "54255455",
+      LotValidUpto: "loc1",
+      AddedOn: "loc1",
+      status: "UNACTIVE",
+    },
+    {
+      id: 5,
+      WorkingContainerno: "stmp1",
+      ContainerQty: "describe",
+      ContainerValidityPeriodDays: "isubus111",
+      ContainerValidUpto: "54255455",
+      LotValidUpto: "loc1",
+      AddedOn: "loc1",
+      status: "ACTIVE",
+    },
+    {
+      id: 6,
+      WorkingContainerno: "stmp1",
+      ContainerQty: "describe",
+      ContainerValidityPeriodDays: "isubus111",
+      ContainerValidUpto: "54255455",
+      LotValidUpto: "loc1",
+      AddedOn: "loc1",
+      status: "UNACTIVE",
+    },
+  ]);
+
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return data;
+    }
+    return data.filter((item) => item.status === selectedStatus.toUpperCase());
+  };
+
+  const filteredData = filterData().filter((item) => {
+    return search.toLowerCase() === ""
+      ? item
+      : item.WorkingContainerno.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <>
       <div id="approval-page" className="h-100 mx-5">
@@ -39,29 +126,40 @@ function WorkingStandardIssue() {
             <CRow className="mb-3">
               <CCol sm={3}>
                 <CFormSelect
-                  options={[
-                    { label: "Show" },
-                    { label: "Active" },
-                    { label: "Inactive" },
-                  ]}
-                />
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  value={selectedStatus}
+                  style={{ border: "2px solid gray" }}
+                >
+                  <option value="All">All</option>
+                  <option value="Active">Active</option>
+                  <option value="Unactive">Unactive</option>
+                </CFormSelect>
               </CCol>
               <CCol sm={2}></CCol>
-              <CCol sm={3}>
+              {/* <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton
-                    color="dark"
-                    style={{ background: "blue" }}
-                    onClick={() => setAddModal(true)}
-                  >
+                  <CFormInput
+                    type="text"
+                    placeholder="Search by Container No."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
+              </CCol> */}
+              <CCol sm={7}>
+                <div className="d-flex justify-content-end">
+                  <CButton color="primary" onClick={() => setAddModal(true)}>
                     Media Lot Container Issue
                   </CButton>
                 </div>
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+          <div
+            className="bg-white mt-5"
+            style={{ boxShadow: "0px 0px 4px black" }}
+          >
+            <CTable align="middle" responsive className=" ">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
@@ -69,136 +167,65 @@ function WorkingStandardIssue() {
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Working Container no.{" "}
+                    Working Container no.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    {" "}
-                    Container Qty
-                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Container Qty</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
                     Container Validity Period Day(s)
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
                     Container Valid Upto
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Lot Valid Upto
-                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Lot Valid Upto</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>1</CTableDataCell>
-                  <CTableDataCell>stmp1</CTableDataCell>
-                  <CTableDataCell>describe</CTableDataCell>
-                  <CTableDataCell>isubus111</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>loc1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      APPROVED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
+                {filteredData.map((item, index) => (
+                  <CTableRow key={index}>
+                    <CTableHeaderCell scope="row" className="text-center">
+                      <input type="checkbox" />
+                    </CTableHeaderCell>
+                    <CTableDataCell>{item.id}</CTableDataCell>
+                    <CTableDataCell>{item.WorkingContainerno}</CTableDataCell>
+                    <CTableDataCell>{item.ContainerQty}</CTableDataCell>
+                    <CTableDataCell>{item.ContainerValidityPeriodDays}</CTableDataCell>
+                    <CTableDataCell>{item.ContainerValidUpto}</CTableDataCell>
+                    <CTableDataCell>{item.LotValidUpto}</CTableDataCell>
+                    <CTableDataCell>{item.AddedOn}</CTableDataCell>
+                    <CTableDataCell className="d-flex">
                       <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
+                        className="py-2 px-3 small rounded fw-bold"
+                        style={
+                          item.status === "ACTIVE"
+                            ? badgeStyle3
+                            : item.status === "UNACTIVE"
+                            ? badgeStyle4
+                            : badgeStyle
+                        }
                       >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        {item.status}
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>2</CTableDataCell>
-                  <CTableDataCell>test21</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>25365488</CTableDataCell>
-                  <CTableDataCell>Plant1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <div className="d-flex gap-3">
+                        <Link to="/approval/1321">
+                          <FontAwesomeIcon icon={faEye} />
+                        </Link>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => setAddModal(true)}
+                        >
+                          <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        <Link to="#">
+                          <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  <CTableDataCell>test</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>25255488</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
               </CTableBody>
             </CTable>
           </div>
@@ -220,10 +247,12 @@ const StatusModal = (_props) => {
         visible={_props.visible}
         onClose={_props.closeModal}
         size="xl"
-        
       >
         <CModalBody>
-          <table className="table table-bordered" style={{ width: '100%', height:"700px" }}>
+          <table
+            className="table table-bordered"
+            style={{ width: "100%", height: "700px" }}
+          >
             <thead className="thead-light">
               <tr>
                 <th style={{ background: "#0F93C3", color: "white" }}>SNo.</th>
@@ -242,9 +271,7 @@ const StatusModal = (_props) => {
                 <th style={{ background: "#0F93C3", color: "white" }}>
                   Lot Valid Upto
                 </th>
-                <th style={{ background: "#0F93C3", color: "white" }}>
-                  Select
-                </th>
+                <th style={{ background: "#0F93C3", color: "white" }}>Select</th>
               </tr>
             </thead>
             <tbody>
@@ -255,7 +282,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>19/05/2024 15:08</td>
                 <td>19/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>2</td>
@@ -264,7 +293,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>19/05/2024 15:08</td>
                 <td>19/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>3</td>
@@ -273,7 +304,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>18/05/2024 15:08</td>
                 <td>18/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>4</td>
@@ -282,7 +315,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>18/05/2024 15:08</td>
                 <td>18/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>5</td>
@@ -291,7 +326,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>18/05/2024 15:08</td>
                 <td>18/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>6</td>
@@ -300,7 +337,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>18/05/2024 15:08</td>
                 <td>18/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>7</td>
@@ -309,7 +348,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>19/05/2024 15:08</td>
                 <td>19/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>8</td>
@@ -318,7 +359,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>19/05/2024 15:08</td>
                 <td>19/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>9</td>
@@ -327,7 +370,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>19/05/2024 15:08</td>
                 <td>19/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
               <tr>
                 <td>10</td>
@@ -336,7 +381,9 @@ const StatusModal = (_props) => {
                 <td>60</td>
                 <td>19/05/2024 15:08</td>
                 <td>19/05/2024 15:08</td>
-                <td><input type="checkbox" /></td>
+                <td>
+                  <input type="checkbox" />
+                </td>
               </tr>
             </tbody>
           </table>

@@ -452,7 +452,7 @@ function Sidebar() {
             <CNavGroup
               toggler={
                 <>
-                  <Link to="/Inventory/Inventory" style={{ color: "white" }}>
+                  <Link to="/Inventory/VolumeSolutions" style={{ color: "white" }}>
                     <span
                       className="nav-icon"
                       style={{
@@ -480,7 +480,7 @@ function Sidebar() {
               <CNavGroup
                 toggler={
                   <>
-                    <Link to="/Inventory/InternalRegistration">
+                    <Link to="/Inventory/VolumeSolutions">
                       <CNavItem
                         href="#"
                         style={{ position: "relative", left: "-47px" }}
@@ -503,7 +503,7 @@ function Sidebar() {
                 </CNavItem>
               </Link> 
               
-              <Link to="/Inventory/SolutionPreparation">
+              <Link to="/Inventory/SolutionPrepration">
                 <CNavItem href="#">
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
