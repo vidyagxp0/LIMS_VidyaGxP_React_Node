@@ -6,10 +6,19 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
 
 
 export default function Specifications() {
+  const top100Films = [
+    { label: 'The Shawshank Redemption', year: 1994 },
+    { label: 'The Godfather', year: 1972 },
+    { label: 'The Godfather: Part II', year: 1974 },
+    { label: 'The Dark Knight', year: 2008 },
+    { label: '12 Angry Men', year: 1957 },];
+
   const [storageName, setStorageName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -78,28 +87,15 @@ const nextToLastPage = () => {
         <h5>Specifications / Specification List</h5>
       </div>
 
-      <div id="div2">
+      <div id="div2" style={{display:'flex',justifyContent:'space-between'}}>
         <div className="dropdown m-5">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             
                             <select id='selectOption'>
-                                <option>Select Sample Type</option>
-                                <option>Petrochemical</option>
-                                <option>HYO</option>
-                                <option>Semi Finished</option>
-                                <option>ABCD</option>
-                                <option>H2So4</option>
-                                <option>ATT108</option>
-                                <option>Micro Media </option>
-                                <option>Raw Smapling</option>
-                                <option>FG Templage</option>
-                                <option>water typ</option>
-                                <option>Sodium</option>
-                                <option>New Product Sample Type</option>
-                                <option>Packing Material</option>
-                                <option>Raw Material-1</option>
-                                <option>Finished Product</option>
+                            <option value="">Select Sample Type</option>
+                <option value="raw-material">Raw Material</option><option value="hcl">hcl</option>
+                <option value="hydrochloric-acid">Hydrochloric Acid</option><option value="petrochemical">Petrochemical</option><option value="initiated-product">Initiated Product</option><option value="semi-finished">Semi Finished</option><option value="abcd">ABCD</option><option value="h2so4">H2So4</option><option value="att108">ATT108</option><option value="micro-media">Micro Media </option><option value="fg-templage">FG Templage</option><option value="water-type">water type</option><option value="sodium">Sodium</option><option value="test-sample-type">test sample type</option><option value="new-product-sample-type">New Product Sample Type</option><option value="packing-material">Packing Material</option><option value="raw-material-1">Raw Material-1</option><option value="finished-product">Finished Product</option>
                             </select>
                            
                         </button>
@@ -112,12 +108,12 @@ const nextToLastPage = () => {
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
                             <select id='selectOption'>
-                            <option>All</option>
-                                <option>Initiated</option>
-                                <option>Approved</option>
-                                <option>Rejected</option>
-                                <option>Reinitiated</option>
-                                <option>Droped</option>
+                            <option value="">All</option>
+                                <option value="initiated">Initiated</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="reinitiated">Reinitiated</option>
+                                <option value="droped">Droped</option>
                             </select>
 
                         </button>
@@ -134,11 +130,11 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span>Add Specification</span>
+          <CgAddR /> <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Specification</span>
         </button>
 
         <div
-          className="offcanvas offcanvas-end"
+          className="offcanvas offcanvas-end overflow-y-scroll"
           tabIndex="-1"
           id="offcanvasRight"
           aria-labelledby="offcanvasRightLabel"
@@ -146,7 +142,7 @@ const nextToLastPage = () => {
           <div className="offcanvas-header">
             <div id="line1">
               <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                New Storage Condition
+                Add Specification
               </h5>
               <button
                 id="closebtn"
@@ -157,23 +153,64 @@ const nextToLastPage = () => {
               ></button>
             </div>
           </div>
-          <p id="line2">Add a new storage.</p>
           <label id="line3" htmlFor="">
-            Name
+          Product/Material Code
           </label>
-          <input
-            id="line4"
-            required
-            type="text"
-            placeholder="Storage Name"
-            value={storageName}
-            onChange={(e) => setStorageName(e.target.value)}
-          />
-          {errorMessage && (
-            <div id="error" style={{ color: "red" ,fontSize:"10px",marginLeft:"30px"}}>
-              {errorMessage}
-            </div>
-          )}
+                <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={top100Films}
+              sx={{ width: 370,margin:2 }}
+              renderInput={(params) => <TextField {...params} label="" />}
+            />
+
+            <label id="line3" htmlFor="">
+            Product Name
+               </label>
+              <input id="line4" type="text" placeholder="Product Name" /> 
+              
+              <label id="line3" htmlFor="">
+              Specification Name
+               </label>
+              <input id="line4" type="text" placeholder="Specification Name" /> 
+             
+              <label id="line3" htmlFor="">
+              Specification ID
+               </label>
+              <input id="line4" type="text" placeholder="Specification ID" />
+         
+
+          
+            <label id="line3" htmlFor="">Sample Type</label>
+             <select name="Sample Type" id="line4">
+                <option value="">Select Sample Type</option>
+                <option value="raw-material">Raw Material</option><option value="hcl">hcl</option>
+                <option value="hydrochloric-acid">Hydrochloric Acid</option><option value="petrochemical">Petrochemical</option><option value="initiated-product">Initiated Product</option><option value="semi-finished">Semi Finished</option><option value="abcd">ABCD</option><option value="h2so4">H2So4</option><option value="att108">ATT108</option><option value="micro-media">Micro Media </option><option value="fg-templage">FG Templage</option><option value="water-type">water type</option><option value="sodium">Sodium</option><option value="test-sample-type">test sample type</option><option value="new-product-sample-type">New Product Sample Type</option><option value="packing-material">Packing Material</option><option value="raw-material-1">Raw Material-1</option><option value="finished-product">Finished Product</option>
+              </select>
+              
+               <label id="line3" htmlFor="">Specification Type</label>
+             <select name="Specification Type" id="line4">
+                <option value="">Select Specification Type</option>
+              <option value="environment">environment</option><option value="culture">culture</option><option value="culture1">culture1</option><option value="working-standard">working standard</option><option value="tentative">tentative</option><option value="release">release</option><option value="regulatory">regulatory</option><option value="raw-material">Raw Material</option><option value="instrument">instrument</option><option value="shell-life">shell life</option><option value="lupin-mitra-s-25-tablet">LUPIN MIRA S 25 TABLET</option>
+              </select>
+
+           
+        <label id="line3" htmlFor="">Effective From</label>
+        <input id="line4" style={{padding:'14px'}}  type="date" placeholder="" />  
+        
+        <label id="line3" htmlFor="">Review Date</label>
+        <input id="line4" style={{padding:'14px'}} type="date" placeholder="" />  
+        
+        <label id="line3" htmlFor="">Supersedes</label>
+        <input id="line4" type="text" placeholder="Supersedes" /> 
+
+         <label id="line3" htmlFor="">Standard Test Procedure No.</label>
+        <input id="line4" type="text" placeholder="Standard Test Procedure No." />
+        
+        <label id="line3" for="formFile" className="form-label">Document</label>
+      <input id="line4" style={{padding:'25px',fontSize:'12px'}} type="file"/>
+
+         
 
           <div id="line5">
             <button
@@ -183,7 +220,7 @@ const nextToLastPage = () => {
             >
               &lt; Back
             </button>
-            <button onClick={handleAddStorage}>Add</button>
+            <button>Add Specification</button>
           </div>
           <div>
             <ToastContainer/>
@@ -193,7 +230,7 @@ const nextToLastPage = () => {
 
       <br />
       <div className='table-responsive p-4 container1'>
-                <table className='table shadow '>
+                <table className='table shadow ' style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
                     <thead>
                         <tr>
                             <th>Sr.no.</th>
@@ -215,7 +252,7 @@ const nextToLastPage = () => {
 
             <div className="pagination">
 
-<div className="pagination ">
+<div className="pagination " style={{margin:'0 35px'}}>
     <div className='mr-5'>
         <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
     </div>
@@ -229,7 +266,7 @@ const nextToLastPage = () => {
 
 </div>
 
-<button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+<button className="btn btn-next" style={{margin:'0 35px'}} onClick={nextToLastPage}> Next <FaArrowRight /></button>
 </div>
 
 

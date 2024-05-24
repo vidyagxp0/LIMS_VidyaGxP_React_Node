@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function SampleStorage() {
      const [addModal, setAddModal] = useState(false)
+     const [deleteModal, setDeleteModal] = useState(false)
      const badgeStyle = { background: "#cdffca" }
      return (
           <>
@@ -108,9 +109,9 @@ function SampleStorage() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                                       <Link to="/stability/sampleStorageDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -131,9 +132,9 @@ function SampleStorage() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                                       <Link to="/stability/sampleStorageDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -154,9 +155,9 @@ function SampleStorage() {
                                              </CTableDataCell>
                                              <CTableDataCell>
                                                   <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                                       <Link to="/stability/sampleStorageDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+                                                       <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
                                                   </div>
                                              </CTableDataCell>
                                         </CTableRow>
@@ -190,6 +191,7 @@ function SampleStorage() {
                </div>
 
                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+               {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
 
           </>
      )
@@ -217,63 +219,59 @@ const StatusModal = (_props) => {
                                    { label: "MB-PM-001/01" },
                                    { label: "RPS-TSLV-00" },
                                    { label: "rest0001" },
-                                 ]}
+                              ]}
                          />
-                              <CFormInput
-                                   type="text"
-                                   label="Product/Material Name"
-                                   placeholder="Testamine "
-                                   disabled
-                              />
-                              <CFormSelect
-                                   type="text"
-                                   label="Protocol ID"
-                                   placeholder="select... "
-                                   options={[
-                                        "select...",
-                                        { label: "asdf3453" },
-                                        { label: "001" },
-                                        { label: "STP132432" },
-                                        { label: "MB-PM-001/01" },
-                                        { label: "RPS-TSLV-00" },
-                                        { label: "rest0001" },
-                                      ]}
-                              />
-                              <CFormSelect
-                                   type="text"
-                                   label="Storage Conditions"
-                                   placeholder="select... "
-                                   options={[
-                                        "select...",
-                                        { label: "asdf3453" },
-                                        { label: "001" },
-                                        { label: "STP132432" },
-                                        { label: "MB-PM-001/01" },
-                                        { label: "RPS-TSLV-00" },
-                                        { label: "rest0001" },
-                                      ]}
-                              />
-                                   <CFormSelect
-                                        type="text"
-                                        label="Chamber ID"
-                                        placeholder="select... "
-                                   />
-                              <CFormInput
-                                   type="text"
-                                   label=" Actual Storage Quantity"
-                                   placeholder="Actual Storage Quantity "
-                              />
+                         <CFormInput
+                              type="text"
+                              label="Product/Material Name"
+                              placeholder="Testamine "
+                              disabled
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Protocol ID"
+                              placeholder="select... "
+                              options={[
+                                   "select...",
+                                   { label: "asdf3453" },
+                                   { label: "001" },
+                                   { label: "STP132432" },
+                                   { label: "MB-PM-001/01" },
+                                   { label: "RPS-TSLV-00" },
+                                   { label: "rest0001" },
+                              ]}
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Storage Conditions"
+                              placeholder="select... "
+                              options={[
+                                   "select...",
+                                   { label: "asdf3453" },
+                                   { label: "001" },
+                                   { label: "STP132432" },
+                                   { label: "MB-PM-001/01" },
+                                   { label: "RPS-TSLV-00" },
+                                   { label: "rest0001" },
+                              ]}
+                         />
+                         <CFormSelect
+                              type="text"
+                              label="Chamber ID"
+                              placeholder="select... "
+                         />
+                         <CFormInput
+                              type="text"
+                              label=" Actual Storage Quantity"
+                              placeholder="Actual Storage Quantity "
+                         />
 
                          <CFormInput
                               type="text"
                               label="Available Storage Quantity"
                               placeholder="Available Storage Quantity "
                          />
-                         <CFormInput
-                              type="text"
-                              label="Number Of Storage Positions"
-                              placeholder="Number Of Storage Positions"
-                         />
+                         
                          <CFormInput
                               type="text"
                               label="Number Of Storage Positions"
@@ -289,7 +287,40 @@ const StatusModal = (_props) => {
                               label="Chamber Location"
                               placeholder=" Chamber Location"
                          />
-                         
+
+                    </CModalBody>
+                    <CModalFooter>
+                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                         <CButton className="bg-info text-white">Submit</CButton>
+                    </CModalFooter>
+               </CModal>
+
+          </>
+     )
+}
+
+const DeleteModal = (_props) => {
+     return (
+          <>
+
+               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                    <CModalHeader>
+                         <CModalTitle>Delete Sample Storage</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                         <p>Do you want to delete this sample storage ?</p>
+
+                         <CFormInput
+                              type="text"
+                              label="User ID"
+                              placeholder="User Id "
+                         />
+                         <CFormInput
+                              type="password"
+                              label="Password"
+                              placeholder="Your password"
+                         />
+
                     </CModalBody>
                     <CModalFooter>
                          <CButton color="light" onClick={_props.closeModal}>Back</CButton>

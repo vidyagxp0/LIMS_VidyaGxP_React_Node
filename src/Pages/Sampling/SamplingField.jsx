@@ -6,15 +6,13 @@ import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const SamplingField = () => {
-    const pageSize = 9; // Number of items per page
+    const pageSize = 9;
     const [currentPage, setCurrentPage] = useState(1);
     
-    
-
-    // data for the table
     const employees = [
 
         { fieldName: "Room is clean", fieldType:'RadioButton', registeredBy: 'Manager',  registeredOn: '2024-05-15',  status: 'ACTIVE' },
@@ -27,15 +25,12 @@ const SamplingField = () => {
         { fieldName: "Sampling Check List", fieldType:'Label', registeredBy: 'Admin',  registeredOn: '2024-05-16', status: 'INACTIVE' },
         { fieldName: "Manufacturing Date", fieldType:'RadioButton', registeredBy: 'Manager',  registeredOn: '2024-05-15', status: 'ACTIVE' },
         { fieldName: "Manufacturing Date", fieldType:'Label', registeredBy: 'Admin',  registeredOn: '2024-05-16', status: 'INACTIVE' },
-2
         
     ];
 
-    // Function to calculate start and end indices for current page
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize, employees.length);
 
-    // Function to render table rows for current page
     const renderRows = () => {
         return employees.slice(startIndex, endIndex).map((employee, index) => (
             <tr key={startIndex + index}>
@@ -46,17 +41,21 @@ const SamplingField = () => {
                 <td>{employee.registeredOn}</td>
                 <td className={`rounded-5 ${employee.status === 'ACTIVE' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'ACTIVE' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <FontAwesomeIcon icon={faEye} />
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
-                                                  
+                <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />                
+                </span>
+                <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeSamplingFieldModal"><FontAwesomeIcon icon={faTrashCan} /></span>                              
 
                 </td>
             </tr>
         ));
     };
 
-    // Function to handle pagination
     const nextPage = () => {
         setCurrentPage(currentPage + 1);
     };
@@ -109,7 +108,7 @@ const SamplingField = () => {
                 >
                     <div className="offcanvas-header ">
                         <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add User
+                            Add Fields
                         </h5>
                             <button
                                 id="closebtn"
@@ -120,25 +119,26 @@ const SamplingField = () => {
                             ></button>
                         </div>
                     </div>
-                    <p className='p-3'>Please Add User To fill This Details</p>
+                    
+                    <label id="line3" htmlFor="">Field Name</label>
+                    <input id="line4" required type="text" placeholder="Sample Type Name" />
 
-                    <label id="line3" htmlFor="">User Name</label>
-                    <input id="line4" required type="text" placeholder="Name here" />
+                    <label id="line3" htmlFor="">Field Type</label>
+                    <select id="line4"  required>
+                        <option value="">Select Field Type</option>
+                        <option value="option1">Radio Button</option>
+                        <option value="option2">Label</option>
+                        <option value="option3">Entry Field</option>
+                        <option value="option4">Date Field</option>
 
-                    <label id="line3" htmlFor="">Contact Number</label>
-                    <input id="line4" required type="text" placeholder="+91 0000000000" />
+                    </select>
 
-                    <label id="line3" htmlFor="">Gmail Address</label>
-                    <input id="line4" required type="text" placeholder="sample@gamail.com" />
-
-                    <label id="line3" htmlFor="">Address</label>
-                    <input id="line4" required type="text" placeholder="Name" />
-
+              
                     <div id="line5">
                         <button type="button"
                             data-bs-dismiss="offcanvas"
                             aria-label="Close">&lt; Back</button>
-                        <button>Add</button>
+                        <button>Submit</button>
 
 
                     </div>
@@ -167,14 +167,24 @@ const SamplingField = () => {
                         {renderRows()}
                     </tbody>
                 </table>
+                <div className="modal fade" id="removeSamplingFieldModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Sampling Field</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="">Do you want to delete this Sampling Field <code>Sampling Check List</code> ?</p>
+                            </div>
+                            <div className="d-flex justify-content-end m-3">
+                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-            
-
-            {/* Pagination */}
-
-
 
             <div className="pagination">
 
@@ -187,9 +197,7 @@ const SamplingField = () => {
                     </div>
                     <div>
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
                     </div>
-
                 </div>
                 <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
             </div>

@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function InstrumentUsage() {
     const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
     return (
         <>
@@ -39,7 +40,7 @@ function InstrumentUsage() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Add Usage</CButton>
+                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Usage</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -78,8 +79,7 @@ function InstrumentUsage() {
                                         <div className="d-flex gap-3">
                                             <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -100,8 +100,7 @@ function InstrumentUsage() {
                                         <div className="d-flex gap-3">
                                             <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -131,7 +130,7 @@ function InstrumentUsage() {
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
         </>
     )
 }
@@ -142,69 +141,125 @@ const StatusModal = (_props) => {
 
             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                 <CModalHeader>
-                    <CModalTitle>Add Storage Chamber</CModalTitle>
+                    <CModalTitle>Add Instrument usage</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
 
-                    <CFormInput
+                <CFormSelect
                         type="text"
-                        label="Chamber ID"
-                        placeholder="Chamber Id "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Description"
-                        placeholder="Enter Description "
+                        label="Instrument (Instrument ID)"
+                        placeholder="Select... "
+                        options={[
+                            "Select...",
+                            { label: "en33/23" },
+                            { label: "eqi/eng/163" },
+                            { label: "ARZ001" },
+                            { label: "Arz003" },
+                            { label: "qc/bal/011" },
+                            { label: "hplc" },
+                          ]}
                     />
 
                     <CFormInput
                         type="text"
-                        label="Make / Model"
-                        placeholder="Make / Model "
+                        label="Instrument Category"
+                        placeholder="chromatography "
+                        disabled
                     />
+
+                    <CFormInput
+                            type="text"
+                            label=" Usage Code"
+                            placeholder=" Usage Code"
+                            
+                    />
+
+                    <CFormSelect
+                        type="text"
+                        label="Instrument (Instrument ID)"
+                        placeholder="Select Product "
+                        options={[
+                            "Select Product",
+                            { label: "apb" },
+                            { label: "chpoil" },
+                            { label: "fet0012" },
+                            { label: "fet0011" },
+                            { label: "samps" },
+                            { label: "epto" },
+                          ]}
+                    />
+
                     <CFormInput
                         type="text"
-                        label="Serial No."
-                        placeholder="Serial Number "
+                        label="A.R.No. "
+                        placeholder="A.R.No."
+                        
                     />
+
                     <CFormInput
                         type="text"
-                        label="Location"
-                        placeholder="Location "
+                        label="Used For "
+                        placeholder=" Used For"
+                        
                     />
-                    <CFormTextarea
+
+                    <CFormInput
                         type="text"
-                        label="Comments"
+                        label="Used By "
+                        placeholder=" Used By"
+                        
+                    />
+
+                    <CFormInput
+                        type="date"
+                        label="Used From"
                         placeholder=""
+                        
+                    />
+                    <CFormInput
+                        type="date"
+                        label="Used To"
+                        placeholder=""
+                        
                     />
                     <CFormInput
                         type="text"
-                        label="Stability Storage Condition"
-                        placeholder="Select... "
+                        label="Comment If Any"
+                        placeholder="Comment"
+                        
                     />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Racks"
-                        placeholder="Number Of Racks "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Shelfs"
-                        placeholder="Number Of Shelfs "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Maximum No. Of Positions For Shelf"
-                        placeholder="0"
-                    />
+
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                    <CButton color="dark">Add</CButton>
+                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                    <CButton className="bg-info text-white">Submit</CButton>
                 </CModalFooter>
             </CModal>
 
         </>
     )
 }
+
+const DeleteModal = (_props) => {
+    return (
+         <>
+
+              <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                   <CModalHeader>
+                        <CModalTitle>Delete Instrument Usage</CModalTitle>
+                   </CModalHeader>
+                   <CModalBody>
+                        <p>Do you want to delete this instrument usage <code>gd534</code>?</p>
+
+                   </CModalBody>
+                   <CModalFooter>
+                        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                        <CButton className="bg-info text-white">Submit</CButton>
+                   </CModalFooter>
+              </CModal>
+
+         </>
+    )
+}
+
 export default InstrumentUsage

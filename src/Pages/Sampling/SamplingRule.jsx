@@ -6,6 +6,7 @@ import { CgAddR } from 'react-icons/cg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { Link } from 'react-router-dom';
 
 
 const SamplingRule = () => {
@@ -46,11 +47,15 @@ const SamplingRule = () => {
                 <td>{employee.updatedAt}</td>
                 <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <FontAwesomeIcon icon={faEye} />
-                <FontAwesomeIcon icon={faPenToSquare} />
-                <FontAwesomeIcon icon={faTrashCan} />
-                                                  
-
+                    <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
+                <FontAwesomeIcon icon={faPenToSquare} />                
+                </span>
+                <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeSamplingRuleModal"><FontAwesomeIcon icon={faTrashCan} /></span>
                 </td>
             </tr>
         ));
@@ -109,7 +114,7 @@ const SamplingRule = () => {
                 >
                     <div className="offcanvas-header ">
                         <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add User
+                            Add Rule
                         </h5>
                             <button
                                 id="closebtn"
@@ -120,39 +125,28 @@ const SamplingRule = () => {
                             ></button>
                         </div>
                     </div>
-                    <p className='p-3'>Please Add User To fill This Details</p>
+                    
+                    <label id="line3" htmlFor="">Sampling Rule Name</label>
+                    <input id="line4" required type="text" placeholder="Sampling Rule Name" />
 
-                    <label id="line3" htmlFor="">User Name</label>
-                    <input id="line4" required type="text" placeholder="Name here" />
+                    <label id="line3" htmlFor="">Unique Code</label>
+                    <input id="line4" required type="text" placeholder="Unique Code" />
 
-                    <label id="line3" htmlFor="">Contact Number</label>
-                    <input id="line4" required type="text" placeholder="+91 0000000000" />
-
-                    <label id="line3" htmlFor="">Gmail Address</label>
-                    <input id="line4" required type="text" placeholder="sample@gamail.com" />
-
-                    <label id="line3" htmlFor="">Address</label>
-                    <input id="line4" required type="text" placeholder="Name" />
-
+                    <label id="line3" htmlFor="">Number of Ranges</label>
+                    <div className='d-flex '>
+                    <input id="line4" required type="number" placeholder="Number of Ranges" />
+                    <button className='btn btn-info text-white' >Add</button>
+                    </div>
+                    
                     <div id="line5">
                         <button type="button"
                             data-bs-dismiss="offcanvas"
                             aria-label="Close">&lt; Back</button>
-
-
-
                         <button>Submit</button>
-
-
                     </div>
                 </div>
-
-
-
-
             </div>
 
-            {/* Employee table */}
             <div className='table-responsive shadow p-4 container1'>
                 <table className='table'>
                     <thead>
@@ -170,17 +164,26 @@ const SamplingRule = () => {
                         {renderRows()}
                     </tbody>
                 </table>
+                <div className="modal fade" id="removeSamplingRuleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Analyst Template</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="">Do you want to delete this Analyst Template Raw <code>Sampl</code> ?</p>
+                            </div>
+                            <div className="d-flex justify-content-end m-3">
+                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
+                                <button type="button" className="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-
-            
-
-            {/* Pagination */}
-
-
-
             <div className="pagination">
-
                 <div className="pagination">
                     <div className='mr-5'>
                         <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
@@ -190,9 +193,7 @@ const SamplingRule = () => {
                     </div>
                     <div>
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
                     </div>
-
                 </div>
                 <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
             </div>

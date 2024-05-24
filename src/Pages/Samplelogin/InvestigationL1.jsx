@@ -3,8 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { CgAddR } from "react-icons/cg";
 import { IoEyeSharp } from "react-icons/io5";
 import { HiDotsHorizontal } from "react-icons/hi";
-
-
+import { Link } from 'react-router-dom';
 
 export default function InvestigationL1() {
   
@@ -61,7 +60,7 @@ export default function InvestigationL1() {
       <td>WBL/FPS/FG/2893-T-25</td>
       <td>QUANTITATIVE</td>
       <td>13-07-2023</td>
-      <td><HiDotsHorizontal /></td>
+      <td> <Link to='/testResultsDetails'><IoEyeSharp /></Link> <HiDotsHorizontal /></td>
     </tr> 
   </tbody>
 </table>

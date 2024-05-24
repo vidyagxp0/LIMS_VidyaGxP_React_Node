@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 function Coa_Template() {
     const [addModal, setAddModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
-    
+
     return (
         <>
 
@@ -44,7 +44,7 @@ function Coa_Template() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Add Coa Template</CButton>
+                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Coa Template</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -69,10 +69,10 @@ function Coa_Template() {
                                     <CTableDataCell>SHMDZ/102145</CTableDataCell>
                                     <CTableDataCell>WITH-SPECIFICATION</CTableDataCell>
                                     <CTableDataCell>feb 11th 24</CTableDataCell>
-                                    
+
                                     <CTableDataCell className="">
                                         <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>INITIATED</div>
-                                    </CTableDataCell>                                   
+                                    </CTableDataCell>
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
@@ -92,7 +92,7 @@ function Coa_Template() {
                                     <CTableDataCell className="">
                                         <div className="py-2 px-3 small rounded fw-bold bg-info" >Approved</div>
                                     </CTableDataCell>
-                                    
+
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
@@ -141,25 +141,45 @@ const StatusModal = (_props) => {
 
             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                 <CModalHeader>
-                    <CModalTitle>Add Storage Chamber</CModalTitle>
+                    <CModalTitle>Add Coa Template</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
 
                     <CFormInput
                         type="text"
-                        label="Chamber ID"
-                        placeholder="Chamber Id "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Description"
-                        placeholder="Enter Description "
+                        label="Sample Type"
+                        placeholder="Select... "
+                        options={[
+                            "Select...",
+                            { label: "Hydroulic Oil" },
+                            { label: "hcl" },
+                            { label: "petrochemical" },
+                            { label: "Initiated product" }
+                        ]}
                     />
 
                     <CFormInput
                         type="text"
-                        label="Make / Model"
-                        placeholder="Make / Model "
+                        label="Coa Type"
+                        placeholder="Select Coa Type "
+                        options={[
+                            "Select Coa Type",
+                            { label: "With Specification" },
+                            { label: "WithOut Specification" },
+                            { label: "ERP" }
+
+                        ]}
+                    />
+                    <CFormInput
+                        type="text"
+                        label="Report Title"
+                        placeholder=" Report Title"
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Product/Material Caption"
+                        placeholder="Report Title "
                     />
                     <CFormInput
                         type="text"
@@ -168,38 +188,139 @@ const StatusModal = (_props) => {
                     />
                     <CFormInput
                         type="text"
-                        label="Location"
-                        placeholder="Location "
+                        label="Format No."
+                        placeholder="Format No. "
                     />
-                    <CFormTextarea
-                        type="text"
-                        label="Comments"
-                        placeholder=""
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Stability Storage Condition"
-                        placeholder="Select... "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Racks"
-                        placeholder="Number Of Racks "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Shelfs"
-                        placeholder="Number Of Shelfs "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Maximum No. Of Positions For Shelf"
-                        placeholder="0"
-                    />
+                    
+                    <CModalTitle className="bg-secondary ">Header</CModalTitle>
+
+                    <div className="d-flex pb-2 ">
+                        <div className="pe-3">
+                            <CFormInput
+                                type="text"
+                                label="Rows"
+                                placeholder="Rows "
+                            />
+                        </div>
+
+                        <div className="ps-3 w-50">
+                            <CFormSelect
+                                type="text"
+                                label="Columns"
+                                placeholder="Columns "
+                                options={[
+                                    {label: "2"},
+                                    {label: "4"},
+                                    {label: "6"}
+                                ]}
+                            />
+                        </div>
+
+                    </div>
+
+                    <CModalTitle className="bg-secondary">Footer</CModalTitle>
+
+                    <div className="d-flex pb-2 ">
+                        <div className="pe-3">
+                            <CFormInput
+                                type="text"
+                                label="Rows"
+                                placeholder="Rows "
+                            />
+                        </div>
+
+                        <div className="ps-3 w-50">
+                            <CFormSelect
+                                type="text"
+                                label="Columns"
+                                placeholder="Columns "
+                                options={[
+                                    {label: "2"},
+                                    {label: "4"},
+                                    {label: "6"}
+                                ]}
+                            />
+                        </div>
+
+                    </div>
+
+                    <div className="d-flex">
+                        <div className="pe-3">
+                            <CFormInput
+                                type="text"
+                                label=""
+                                placeholder="Approved By "
+                            />
+                        </div>
+
+                        <div className="ps-3 w-50">
+                            <CFormSelect
+                                type="text"
+                                label=""
+                                placeholder="approved_by "
+                                options={[
+                                    "approved_by",
+                                    
+                                ]}
+                            />
+                        </div>
+
+                    </div>
+
+                    <div className="d-flex">
+                        <div className="pe-3">
+                            <CFormInput
+                                type="text"
+                                label=""
+                                placeholder="Reviewed By"
+                            />
+                        </div>
+
+                        <div className="ps-3 w-50">
+                            <CFormSelect
+                                type="text"
+                                label=""
+                                placeholder="reviewed_by "
+                                options={[
+                                    "reviewed_by",
+                                    {}
+                                    
+                                ]}
+                            />
+                        </div>
+
+                    </div>
+                    
+                    <div className="d-flex">
+                        <div className="pe-3">
+                            <CFormInput
+                                type="text"
+                                label=""
+                                placeholder="Checked By "
+                            />
+                        </div>
+
+                        <div className="ps-3 w-50">
+                            <CFormSelect
+                                type="text"
+                                label=""
+                                placeholder="checked_by "
+                                options={[
+                                    "checked_by",
+                                    {}
+                                    
+                                ]}
+                            />
+                        </div>
+
+                    </div>
+
+                    
+                    
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                    <CButton color="dark">Add</CButton>
+                    <CButton className="bg-info text-white">Submit</CButton>
                 </CModalFooter>
             </CModal>
 

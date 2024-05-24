@@ -1,0 +1,55 @@
+.drag-drop {
+    display: flex;
+    height: auto;
+  }
+  
+  .sub-container {
+    margin: 15px;
+    width: 100%;
+  }
+  
+  .mid-container {
+    display: block;
+    margin: auto;
+    justify-content: center;
+  }
+  
+  .arrow-button {
+    border-radius: 5px;
+    padding: 0 10px;
+    margin-top: 10px;
+    font-size: 20px;
+    color: orange;
+    border: none;
+  }
+  
+  .check-left, .check-right {
+    display: none;
+  }
+  
+  .clicked {
+    color: orange
+  }
+  
+  .labels{
+    background-color: rgb(233, 229, 229);
+    margin: 3px;
+    width: 100%;
+    list-style:;
+
+  }
+  .labels:hover {
+    color: rgb(255, 206, 141);
+    cursor: pointer;
+  }
+  
+  .list-container {
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    box-shadow: 0 0 10px 1px rgb(211, 211, 211);
+    border-radius: 5px;
+    font-size: large;
+    height: 350px;
+    overflow-y: auto;
+  }

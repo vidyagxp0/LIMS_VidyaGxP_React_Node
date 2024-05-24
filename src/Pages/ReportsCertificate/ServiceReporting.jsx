@@ -40,7 +40,7 @@ function ServiceReporting() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Add Service</CButton>
+                                    <CButton className="bg-info text-light" onClick={() => setAddModal(true)}>Add Service</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -148,72 +148,105 @@ function ServiceReporting() {
 const StatusModal = (_props) => {
     return (
         <>
-
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+            <CModal
+                alignment="center"
+                visible={_props.visible}
+                onClose={_props.closeModal}
+            >
                 <CModalHeader>
-                    <CModalTitle>Add Storage Chamber</CModalTitle>
+                    <CModalTitle>Add Service Reporting</CModalTitle>
                 </CModalHeader>
+
                 <CModalBody>
 
-                    <CFormInput
+                    <CFormSelect
                         type="text"
-                        label="Chamber ID"
-                        placeholder="Chamber Id "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Description"
-                        placeholder="Enter Description "
-                    />
-
-                    <CFormInput
-                        type="text"
-                        label="Make / Model"
-                        placeholder="Make / Model "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Serial No."
-                        placeholder="Serial Number "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Location"
-                        placeholder="Location "
-                    />
-                    <CFormTextarea
-                        type="text"
-                        label="Comments"
-                        placeholder=""
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Stability Storage Condition"
+                        label="Problem ID"
+                        options={[
+                            "Select...",
+                            { label: "SHMDZ" }
+                           
+                        ]}
                         placeholder="Select... "
                     />
                     <CFormInput
                         type="text"
-                        label="Number Of Racks"
-                        placeholder="Number Of Racks "
+                        label="Instrument (Instrument ID)"
+                        placeholder="hplc "
+                        disabled
+                    />
+                    <CFormSelect
+                        type="text"
+                        label="Module ID"
+                        options={[
+                            "Select...",
+                            { label: "wl/wb/m/001" }
+                           
+                        ]}
+                        placeholder="Select... "
                     />
                     <CFormInput
                         type="text"
-                        label="Number Of Shelfs"
-                        placeholder="Number Of Shelfs "
+                        label="Problem In Brief"
+                        placeholder="Problem In Brief "
                     />
                     <CFormInput
                         type="text"
-                        label="Maximum No. Of Positions For Shelf"
-                        placeholder="0"
+                        label="Problem In Details"
+                        placeholder="Problem In Details"
                     />
+
+                    <CFormInput
+                        type="text"
+                        label="Problem In Brief"
+                        placeholder=" Problem In Brief"
+                    />
+
+                    <CFormInput
+                        type="file"
+                        label="Reference Document"
+                        placeholder=" choose file"
+                    />
+
+                    <CFormInput
+                        type="date"
+                        label="Occured On"
+                        placeholder=" "
+                    />
+
+                    <CFormInput
+                        type="date"
+                        label="Reported On"
+                        placeholder=" "
+                    />
+
+<CFormInput
+                        type="date"
+                        label="Attended On"
+                        placeholder=" "
+                    />
+
+                    <CFormInput
+                        type="date"
+                        label="Expected Closure Date"
+                        placeholder=" "
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Job Details"
+                        placeholder=" Job Details"
+                    />
+
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                    <CButton color="dark">Add</CButton>
+                    <CButton color="light" onClick={_props.closeModal}>
+                        Back
+                    </CButton>
+                    <CButton className="bg-info text-light">Submit</CButton>
                 </CModalFooter>
             </CModal>
-
         </>
-    )
-}
+    );
+};
 export default ServiceReporting

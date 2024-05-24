@@ -11,10 +11,11 @@ import { Link } from 'react-router-dom';
 
 
 const Admin = () => {
+
     const pageSize = 9; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
-    
-    
+
+
 
     // data for the table
     const employees = [
@@ -30,7 +31,7 @@ const Admin = () => {
         { id: "USER-022024-000009", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
         { id: "USER-022024-0000010", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
 
-        
+
     ];
 
     // Function to calculate start and end indices for current page
@@ -51,10 +52,17 @@ const Admin = () => {
                 <td>{employee.addedOn}</td>
                 <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
                 <td>
-                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                <span
+                        className="btn "
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasRight"
+                        aria-controls="offcanvasRight"
+                        >
                 <FontAwesomeIcon icon={faPenToSquare} />
-                <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                                  
+                </span>
+
+                    <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
+
 
                 </td>
             </tr>
@@ -143,9 +151,6 @@ const Admin = () => {
                         <button type="button"
                             data-bs-dismiss="offcanvas"
                             aria-label="Close">&lt; Back</button>
-
-
-
                         <button>Create user Id &gt;</button>
 
 
@@ -179,7 +184,7 @@ const Admin = () => {
             </div>
 
 
-            
+
 
             {/* Pagination */}
 

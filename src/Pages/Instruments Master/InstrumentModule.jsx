@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormInput, CFormSelect,  CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 
 function InstrumentModule() {
     const [addModal, setAddModal] = useState(false)
+    const [deleteModal, setDeleteModal] = useState(false)
     const badgeStyle = { background: "#cdffca" }
     return (
         <>
@@ -39,7 +40,7 @@ function InstrumentModule() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="dark" onClick={() => setAddModal(true)}>Add Module</CButton>
+                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Module</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -80,10 +81,9 @@ function InstrumentModule() {
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                        <Link to="/instrumentMaster/instrumentModuleDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -104,10 +104,9 @@ function InstrumentModule() {
 
                                     <CTableDataCell>
                                         <div className="d-flex gap-3">
-                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                        <Link to="/instrumentMaster/instrumentModuleDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                        </div>
+                                            <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div></div>
                                     </CTableDataCell>
                                 </CTableRow>
 
@@ -137,6 +136,7 @@ function InstrumentModule() {
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
 
         </>
     )
@@ -148,69 +148,124 @@ const StatusModal = (_props) => {
 
             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                 <CModalHeader>
-                    <CModalTitle>Add Storage Chamber</CModalTitle>
+                    <CModalTitle>Add Instrument Module</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
 
-                    <CFormInput
+                    <CFormSelect
                         type="text"
-                        label="Chamber ID"
-                        placeholder="Chamber Id "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Description"
-                        placeholder="Enter Description "
+                        label="Instrument (Instrument ID)"
+                        placeholder="Select... "
+                        options={[
+                            "Select...",
+                            { label: "Weighing Balance 2" },
+                            { label: "Pressure Gauge" },
+                            { label: "ARZ ph Meter" },
+                            { label: "Ariz Balance" },
+                            { label: "Weighing Balance-1" },
+                            { label: "Weighing Balance" },
+                          ]}
                     />
 
                     <CFormInput
                         type="text"
-                        label="Make / Model"
-                        placeholder="Make / Model "
+                        label="Instruction Category"
+                        placeholder="Weighing Balance "
+                        disabled
+                    />
+
+                    <CFormInput
+                            type="text"
+                            label=" Module"
+                            placeholder="Module "
+                            
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Module ID "
+                        placeholder="Module ID"
+                       
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Make "
+                        placeholder="Shimadu "
+                        disabled
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Model"
+                        placeholder="Ser33"
+                        disabled
                     />
                     <CFormInput
                         type="text"
-                        label="Serial No."
-                        placeholder="Serial Number "
+                        label="Manufacturer's Serial No."
+                        placeholder="adf3434"
+                        disabled
                     />
                     <CFormInput
                         type="text"
-                        label="Location"
-                        placeholder="Location "
+                        label="Installed On"
+                        placeholder="05/10/2024"
+                        disabled
                     />
-                    <CFormTextarea
+
+                    <CFormInput
                         type="text"
-                        label="Comments"
-                        placeholder=""
+                        label="Warranty Expires On"
+                        placeholder="05/05/2023"
+                        disabled
+                    />
+
+                    
+                    <CFormInput
+                        type="text"
+                        label="Supplied By"
+                        placeholder="VidyaGxP "
+                        disabled
                     />
                     <CFormInput
                         type="text"
-                        label="Stability Storage Condition"
-                        placeholder="Select... "
+                        label="SOP No."
+                        placeholder="ASTM6453 "
+                        disabled
                     />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Racks"
-                        placeholder="Number Of Racks "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Number Of Shelfs"
-                        placeholder="Number Of Shelfs "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Maximum No. Of Positions For Shelf"
-                        placeholder="0"
-                    />
+                    
                 </CModalBody>
                 <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                    <CButton color="dark">Add</CButton>
+                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                    <CButton className="bg-info text-white">Submit</CButton>
                 </CModalFooter>
             </CModal>
 
         </>
     )
 }
+
+const DeleteModal = (_props) => {
+    return (
+         <>
+
+              <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                   <CModalHeader>
+                        <CModalTitle>Delete Instrument Module</CModalTitle>
+                   </CModalHeader>
+                   <CModalBody>
+                        <p>Do you want to delete this instrument module <code>Weighing</code>?</p>
+
+                   </CModalBody>
+                   <CModalFooter>
+                        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                        <CButton className="bg-info text-white">Submit</CButton>
+                   </CModalFooter>
+              </CModal>
+
+         </>
+    )
+}
+
 export default InstrumentModule

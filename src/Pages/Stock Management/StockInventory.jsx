@@ -25,13 +25,7 @@ export default function StockInventory() {
     const [storageName, setStorageName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-        toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.")
-    }
-  };
+  
   const notify = () => toast("Wow so easy!");
 
 
@@ -89,7 +83,7 @@ const nextToLastPage = () => {
 
       {/* <div id="div2"> */}
 
-      <div id="div2">
+      <div id="div2" style={{display:'flex',justifyContent:'space-between'}}>
         
         <div id="searchmain"> 
           <div id="searchicon">
@@ -130,7 +124,7 @@ const nextToLastPage = () => {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span>Add Inventory Registration</span>
+          <CgAddR /> <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Inventory Registration</span>
         </button>
 
         <div
@@ -203,7 +197,7 @@ const nextToLastPage = () => {
 
       <br />
       <div className='table-responsive p-4 container1'>
-                <table className='table shadow '>
+                <table className='table shadow '  style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>
@@ -224,7 +218,7 @@ const nextToLastPage = () => {
                 </table>
             </div>
 
-            <div className="pagination">
+            <div className="pagination" style={{margin:'0 35px'}}>
 
 <div className="pagination ">
     <div className='mr-5'>
