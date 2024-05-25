@@ -9,16 +9,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function CalibrationType() {
     const [addModal, setAddModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState('All');
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' }, 
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
     ]);
 
-    const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
+    const [employeeToEdit, setEmployeeToEdit] = useState(null);
+    const pageSize = 5;
 
     const filteredEmployees = employees.filter(employee => 
         selectedStatus === 'All' ? true : employee.status === selectedStatus.toUpperCase()
@@ -30,6 +34,27 @@ export default function CalibrationType() {
     const deleteEmployee = (indexToDelete) => {
         const newEmployees = employees.filter((_, index) => index !== indexToDelete);
         setEmployees(newEmployees);
+    };
+
+    const openEditModal = (index) => {
+        setEmployeeToEdit({ ...filteredEmployees[startIndex + index], index: startIndex + index });
+        setEditModal(true);
+    };
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setEmployeeToEdit(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const saveEmployee = () => {
+        const updatedEmployees = employees.map((employee, index) =>
+            index === employeeToEdit.index ? { ...employeeToEdit } : employee
+        );
+        setEmployees(updatedEmployees);
+        setEditModal(false);
     };
 
     const renderRows = () => {
@@ -44,10 +69,10 @@ export default function CalibrationType() {
                 </td>
                 <td>
                     <div className="d-flex gap-3">
-                        <div className="cursor-pointer" >
+                        <div className="cursor-pointer" onClick={() => openEditModal(index)}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
-                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                        <Link to="#" onClick={() => deleteEmployee(startIndex + index)}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </Link>
                     </div>
@@ -133,6 +158,53 @@ export default function CalibrationType() {
                     <button>Submit</button>
                 </div>
             </div>
+
+            {/* Edit Modal */}
+            {editModal && (
+                <div className="modal" style={{ display: 'block' }} tabindex="-1">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Edit Employee</h5>
+                                <button type="button" className="btn-close" onClick={() => setEditModal(false)} aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="mb-3">
+                                    <label htmlFor="user" className="form-label">User</label>
+                                    <input type="text" className="form-control" id="user" name="user" value={employeeToEdit.user} onChange={handleEditChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="role" className="form-label">Role</label>
+                                    <input type="text" className="form-control" id="role" name="role" value={employeeToEdit.role} onChange={handleEditChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="departments" className="form-label">Departments</label>
+                                    <input type="text" className="form-control" id="departments" name="departments" value={employeeToEdit.departments} onChange={handleEditChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="joiningDate" className="form-label">Joining Date</label>
+                                    <input type="text" className="form-control" id="joiningDate" name="joiningDate" value={employeeToEdit.joiningDate} onChange={handleEditChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="addedBy" className="form-label">Added By</label>
+                                    <input type="text" className="form-control" id="addedBy" name="addedBy" value={employeeToEdit.addedBy} onChange={handleEditChange} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="status" className="form-label">Status</label>
+                                    <select className="form-control" id="status" name="status" value={employeeToEdit.status} onChange={handleEditChange}>
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
+                                <button type="button" className="btn btn-primary" onClick={saveEmployee}>Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Employee table */}
             <div className='table-responsive p-4 container1'>

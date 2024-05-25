@@ -11,44 +11,69 @@ function CalibrationScheduleDetails() {
                     <div className="container-fluid">
                          <div className="bock mb-3">
                               <div className="main-head d-flex justify-content-between align-items-center">
-                                   <h4 className="fw-bold mb-4 mt-3">Details</h4>
-                                   <CButton color="dark" onClick={() => setStatusModal(true)}>Update Status</CButton>
+                                   <h4 className="fw-bold mb-4 mt-3">Calibration Schedule Details</h4>
                               </div>
                               <div className="bg-white px-5 py-3">
                                    <CTable align="middle" className="mb-0" small bordered>
                                         <CTableBody>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Unique Code</CTableDataCell>
-                                                  <CTableDataCell>NA-002</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Instrument Category</CTableDataCell>
+                                                  <CTableDataCell>-</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Product Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Instrument Name</CTableDataCell>
+                                                  <CTableDataCell>Weighing Balance 2</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Generic Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Module</CTableDataCell>
+                                                  <CTableDataCell></CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Action By</CTableDataCell>
-                                                  <CTableDataCell>Manager</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Calibration Type</CTableDataCell>
+                                                  <CTableDataCell>
+monthly</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Action On</CTableDataCell>
-                                                  <CTableDataCell>Mar 22nd 2024 11:48</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Work Flow</CTableDataCell>
+                                                  <CTableDataCell>CALIBRATION_DATA_SHEET</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Re-Testing Period</CTableDataCell>
-                                                  <CTableDataCell>450 Days</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Data Sheet</CTableDataCell>
+                                                  <CTableDataCell>65276af33357c4362595e464</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Status</CTableDataCell>
-                                                  <CTableDataCell>INITIATED</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Schedule Description</CTableDataCell>
+                                                  <CTableDataCell>Monthly Calibration</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Version</CTableDataCell>
-                                                  <CTableDataCell>0</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Unique Code</CTableDataCell>
+                                                  <CTableDataCell>Mnth/en33/23/monthly</CTableDataCell>
                                              </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Sequence Number</CTableDataCell>
+                                                  <CTableDataCell>calibrationSchedule-052024-0000014</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Start Date</CTableDataCell>
+                                                  <CTableDataCell>Jun 1st 2024 05:30</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Frequency</CTableDataCell>
+                                                  <CTableDataCell>monthly</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Next Calibration Due Date</CTableDataCell>
+                                                  <CTableDataCell>Jul 1st 2024 05:30</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Tolerance Period</CTableDataCell>
+                                                  <CTableDataCell>7</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
+                                                  <CTableDataCell>ACTIVE</CTableDataCell>
+                                             </CTableRow>
+                                           
                                         </CTableBody>
                                    </CTable>
                               </div>
@@ -57,40 +82,133 @@ function CalibrationScheduleDetails() {
                               <div className="main-head">
                                    <h4 className="fw-bold mb-4 mt-3">History</h4>
                               </div>
+                             <div className="bg-white px-5 py-3">
+                                   <CTable align="middle" className="mb-0" small bordered>
+                                        <CTableBody>
+                                             <CTableRow color="warning">
+                                                   <CTableDataCell>Revision</CTableDataCell>
+                                                  <CTableDataCell>-</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Instrument Category</CTableDataCell>
+                                                  <CTableDataCell>-</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Instrument Name</CTableDataCell>
+                                                  <CTableDataCell>weighing Balance 2</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Module</CTableDataCell>
+                                                  <CTableDataCell></CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Calibration Type</CTableDataCell>
+                                                  <CTableDataCell>monthly</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Work Flow</CTableDataCell>
+                                                  <CTableDataCell>CALIBRATION_DATA_SHEET</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Data Sheet</CTableDataCell>
+                                                  <CTableDataCell>65276af3333f2f2f2f5</CTableDataCell>
+                                             </CTableRow>
+                                            
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Schedule Description </CTableDataCell>
+                                                  <CTableDataCell>Monthly Calibration</CTableDataCell>
+                                             </CTableRow><CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Unique Code </CTableDataCell>
+                                                  <CTableDataCell>Mnth/en33/23/monthly</CTableDataCell>
+                                             </CTableRow><CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Sequence Number </CTableDataCell>
+                                                  <CTableDataCell>calibrationSchedule-052024-0000014</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Start Date </CTableDataCell>
+                                                  <CTableDataCell>Jun 1st 2024 05:30</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Frequency </CTableDataCell>
+                                                  <CTableDataCell>monthly</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Next Calibration Due Date </CTableDataCell>
+                                                  <CTableDataCell>Jul 1st 2024 05:30</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Tolerance Period </CTableDataCell>
+                                                  <CTableDataCell>7</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Status </CTableDataCell>
+                                                  <CTableDataCell>ACTIVE</CTableDataCell>
+                                             </CTableRow>
+                                        </CTableBody>
+                                   </CTable>
+                              </div>
+
                               <div className="bg-white px-5 py-3">
                                    <CTable align="middle" className="mb-0" small bordered>
                                         <CTableBody>
                                              <CTableRow color="warning">
-                                                  <CTableDataCell>Revision</CTableDataCell>
-                                                  <CTableDataCell>3</CTableDataCell>
+                                                   <CTableDataCell>Revision</CTableDataCell>
+                                                  <CTableDataCell>-</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Unique Code</CTableDataCell>
-                                                  <CTableDataCell>NA-002</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Instrument Category</CTableDataCell>
+                                                  <CTableDataCell>-</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Product Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Instrument Name</CTableDataCell>
+                                                  <CTableDataCell>weighing Balance 2</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Generic Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Module</CTableDataCell>
+                                                  <CTableDataCell></CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Action By</CTableDataCell>
-                                                  <CTableDataCell>Manager</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Calibration Type</CTableDataCell>
+                                                  <CTableDataCell>monthly</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Action On</CTableDataCell>
-                                                  <CTableDataCell>Mar 22nd 2024 11:48</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Work Flow</CTableDataCell>
+                                                  <CTableDataCell>CALIBRATION_DATA_SHEET</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Re-Testing Period</CTableDataCell>
-                                                  <CTableDataCell>45 Days</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Data Sheet</CTableDataCell>
+                                                  <CTableDataCell>65276af3333f2f2f2f5</CTableDataCell>
+                                             </CTableRow>
+                                            
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Schedule Description </CTableDataCell>
+                                                  <CTableDataCell>Monthly Calibration</CTableDataCell>
+                                             </CTableRow><CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Unique Code </CTableDataCell>
+                                                  <CTableDataCell>Mnth/en33/23/monthly</CTableDataCell>
+                                             </CTableRow><CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Sequence Number </CTableDataCell>
+                                                  <CTableDataCell>calibrationSchedule-052024-0000014</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Status</CTableDataCell>
-                                                  <CTableDataCell>INITIATED</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Start Date </CTableDataCell>
+                                                  <CTableDataCell>Jun 1st 2024 05:30</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Frequency </CTableDataCell>
+                                                  <CTableDataCell>monthly</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Next Calibration Due Date </CTableDataCell>
+                                                  <CTableDataCell>Jul 1st 2024 05:30</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Tolerance Period </CTableDataCell>
+                                                  <CTableDataCell>7</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Status </CTableDataCell>
+                                                  <CTableDataCell>ACTIVE</CTableDataCell>
                                              </CTableRow>
                                         </CTableBody>
                                    </CTable>
