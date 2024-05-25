@@ -5,6 +5,8 @@ import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Clients() {
   const pageSize = 8; 
@@ -30,8 +32,13 @@ export default function Clients() {
               <td>{employee.addedBy}</td>
               <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
               <td>
-                  &nbsp; &nbsp; <Link to="/masters/product-details">< IoEyeSharp /></Link> &nbsp;
-                  <HiDotsHorizontal />
+              <div className="d-flex gap-3">
+              <Link to="/clientss/clients-details"><FontAwesomeIcon icon={faEye} /></Link>
+                        
+                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
+                    </div>
               </td>
           </tr>
       ));

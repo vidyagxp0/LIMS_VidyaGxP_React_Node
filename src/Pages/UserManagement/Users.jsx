@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import '../UserManagement/Department/Admin.css';
-import { HiDotsHorizontal } from "react-icons/hi";
+
 import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
+import { CgAddR } from 'react-icons/cg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
 
 
 const Users = () => {
-    const pageSize = 9; 
+    const pageSize = 3; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState('All');
 
     
     const employees = [
@@ -28,35 +30,39 @@ const Users = () => {
 
     ];
 
-    
+    const filteredEmployees = employees.filter(employee =>
+        selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+    );
+
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employees.length);
+    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
     // Function to render table rows for current page
     const renderRows = () => {
-        return employees.slice(startIndex, endIndex).map((employee, index) => (
+        return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
             <tr key={startIndex + index}>
                 <td>{startIndex + index + 1}</td>
                 <td>{employee.id}</td>
                 <td>{employee.user}</td>
                 <td>{employee.role}</td>
                 <td>{employee.departments}</td>
-                <td><CgCalendarDates/>{employee.joiningDate}</td>
-                <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+                <td>{employee.joiningDate}</td>
+                <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-success' : 'bg-danger'} bg-opacity-25 text-${employee.status === 'Active' ? 'success' : 'danger'} d-flex justify-content-center p-1 m-2`} style={{width:"110px"}}>
+                    {employee.status}
+                </td>
                 <td>{employee.addedBy}</td>
                 <td>
-                    
-                <span
-                        className="btn "
+                    <span
+                        className="btn"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasRight"
                         aria-controls="offcanvasRight"
-                        >
-                <FontAwesomeIcon icon={faPenToSquare} />
-                </span>
-
-                    <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-
+                    >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                    </span>
+                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                    </Link>
                 </td>
                 
             </tr>
@@ -73,7 +79,13 @@ const Users = () => {
     };
 
     const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(employees.length / pageSize));
+        setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+    };
+
+    const handleDelete = () => {
+        console.log(`Deleting employee: ${selectedEmployee.name}`);
+        // Perform delete operation here
+        setSelectedEmployee(null);
     };
 
     return (
@@ -84,13 +96,16 @@ const Users = () => {
                     <div className="title fw-bold fs-5">User Management/Users</div>
                 </div>
                 <div className="col-md-6 pt-4">
-                    <div className="dropdown">
+                <div className="dropdown">
                         <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select id='selectOption'>
-                                <option>Select Status</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
+                            <select id='selectOption' onChange={(e) => {
+                                setSelectedStatus(e.target.value);
+                                setCurrentPage(1); // Reset to the first page on filter change
+                            }}>
+                                <option value="All">All</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
                             </select>
                         </button>
                     </div>
@@ -99,18 +114,20 @@ const Users = () => {
                 <div className="col-md-6">
                     <button
                         id="Addbtn"
-                        className="btn btn-primary btn-right"
+                        className="btn btn-right"
                         type="button"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasRight"
                         aria-controls="offcanvasRight"
+                        style={{background:"#4B49B6"}}
                     >
                         <CgAddR />  <span>Add user</span>
                     </button>
                 </div>
                  {/* right toggle of add user  */}
 
-                <div
+
+                 <div
                     className="offcanvas offcanvas-end overflow-y-scroll"
                     tabIndex="-1"
                     id="offcanvasRight"
@@ -129,60 +146,86 @@ const Users = () => {
                             ></button>
                         </div>
                     </div>
-                    
-                    <label id="line3" htmlFor="">User Name</label>
-                    <input id="line4" required type="text" placeholder="Name here" />
+                    <div className="offcanvas-body">
+                        
+                        <div className="mb-3">
+                            <label htmlFor="userName" className="form-label">User Name</label>
+                            <input type="text" className="form-control" id="userName" placeholder="UserName" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="contactNumber" className="form-label">Contact Number</label>
+                            <input type="text" className="form-control" id="contactNumber" placeholder="+91 0000000000" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="email" className="form-label">Gmail Address</label>
+                            <input type="text" className="form-control" id="email" placeholder="sample@gmail.com" />
 
-                    <label id="line3" htmlFor="">Contact Number</label>
-                    <input id="line4" required type="text" placeholder="+91 0000000000" />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="address" className="form-label">Address</label>
+                            <input type="number" className="form-control" id="address" placeholder="Address" />
+                        </div>
 
-                    <label id="line3" htmlFor="">Gmail Address</label>
-                    <input id="line4" required type="text" placeholder="sample@gamail.com" />
+                        <div className="mb-3">
+                            <label htmlFor="plant" className="form-label">Plant</label>
+                            <select className="form-select" id='plant' aria-label="Default select example">
+                                <option selected>Select... </option>
+                                <option value="1">Master</option>
+                                <option value="2">win_Master</option>
+                                <option value="3">plant3</option>
+                                <option value="4">PlantDemo4</option>                                
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="department" className="form-label">Department</label>
+                            <select className="form-select" id='department' aria-label="Default select example">
+                                <option selected>Select Department </option>
+                                <option value="1">Admin</option>
+                                <option value="2">Quality Assurance</option>
+                                <option value="3">Quality Check</option>
+                                <option value="4">Store</option>                                
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="role" className="form-label">Role</label>
+                            <select className="form-select" id='role' aria-label="Default select example">
+                                <option selected>Select Role </option>
+                                <option value="1">No Options</option>                                                              
+                            </select>
+                        </div>
 
-                    <label id="line3" htmlFor="">Address</label>
-                    <input id="line4" required type="text" placeholder="Name" />
-
-                    
-                    
-                    <label id="line3" htmlFor="">Plant</label>
-                    
-                    <select  id='line4' defaultValue="">
-                    <option value="" disabled hidden>Select...</option>
-                    <option value="1">Master</option>
-                    <option value="2">win_Master</option>
-                    <option value="3">plant3</option>
-                    <option value="3">PlantDemo4</option>
-                  </select>
-                                            
-                    <label id="line3" htmlFor="">Department</label>
-                    
-                    <select  id='line4' defaultValue="">
-                    <option value="" disabled hidden >Select Department</option>
-                    <option value="1">Admin</option>
-                    <option value="2">Quality Assurance</option>
-                    <option value="3">Quality Check</option>
-                    <option value="3">Store</option>
-                  </select>
-                  
-                    <label id="line3" htmlFor="">Role</label>
-                    <input id="line4" required type="text" placeholder="Select Role"/>
-
-
-                    <div id="line5">
-                        <button type="button"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close">&lt; Back</button>
-                        <button>Create user Id &gt;</button>
+                        <div className="d-flex justify-content-center gap-4 mt-4">
+                            <button type="button" className='btn btn-secondary w-100' data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
+                            <button type="button" className='btn btn-primary w-100'>Create User ID</button>
+                        </div>
                     </div>
                 </div>
 
-
+                <div
+                    className="offcanvas offcanvas-end"
+                    tabIndex="-1"
+                    id="deleteOffcanvas"
+                    aria-labelledby="deleteOffcanvasLabel"
+                >
+                    <div className="offcanvas-header">
+                        <h5 className="offcanvas-title" id="deleteOffcanvasLabel">Confirm Deletion</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div className="offcanvas-body">
+                        <p>Are you sure you want to delete {selectedEmployee && selectedEmployee.name}?</p>
+                        <div className="d-flex justify-content-end">
+                            <button className="btn btn-light"
+                            data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
+                            <button className="btn btn-info" onClick={handleDelete}>Submit</button>
+                        </div>
+                    </div>
+                </div>
 
 
             </div>
 
             {/* Employee table */}
-            <div className='shadow table-responsive p-4 '>
+            <div className=' table-responsive p-4 container1' style={{ boxShadow: "0px 0px 3px black" }}>
                 <table className='table'>
                     <thead>
                         <tr>
@@ -207,20 +250,17 @@ const Users = () => {
 
 
 
-            <div className="pagination my-5">
-
-                <div className="pagination">
-                    <div className='mr-5'>
-                        <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-                    </div>
-                    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                        <button className='btn rounded-circle'> {currentPage} </button>
-                    </div>
-                    <div>
-                        <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
-                    </div>
-
+            <div className="pagination">
+            <div className="pagination">
+                <div className='mr-5'>
+                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
+                </div>
+                <div className="current-page-number mr-2 bg-dark-subtle page-item">
+                    <button className='btn rounded-circle'> {currentPage} </button>
+                </div>
+                <div>
+                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
+                </div>
                 </div>
                 <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
             </div>
@@ -231,259 +271,3 @@ const Users = () => {
 
 export default Users;
 
-
-
-
-
-
-// import React,{useState} from 'react'
-// import { CgAddR } from "react-icons/cg";
-
-
-// export default function Users() {
-
-
-//   function showActiveStatus(){
-    
-//   }
-//   return (
-      
-//     <>
-//      <div id="div1">
-//         <h5>User Management / Users</h5>
-//       </div>
-    
-//       <div id="div2">
-//           <div id="div2ka2">
-//              <select className="form-control form-select" id="fv-topics" name="status" data-placeholder="Select a option" required="">
-//                  <option label=" Select Status" value=""></option>
-//                  <option onClick={showActiveStatus} value="ACTIVE">Active</option>
-//                  <option value="INACTIVE">Inactive</option>
-//              </select>
-//            </div>
-
-//          <button
-//           id="Addbtn"
-//          className="btn btn-primary"
-//          type="button"
-//           data-bs-toggle="offcanvas"
-//           data-bs-target="#offcanvasRight"
-//           aria-controls="offcanvasRight"
-//          >
-//           <CgAddR />  <span>Add user</span>
-//         </button>
-
-//         <div
-//         className="offcanvas offcanvas-end overflow-y-scroll"
-//         tabIndex="-1"
-//         id="offcanvasRight"
-//         aria-labelledby="offcanvasRightLabel"
-//       >
-//         <div className="offcanvas-header ">
-//           <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-//             Add User
-//           </h5>
-//           <button
-//             id="closebtn"
-//             type="button"
-//             className="btn-close"
-//             data-bs-dismiss="offcanvas"
-//             aria-label="Close"
-//             ></button>
-//           </div>
-//         </div>
-            
-//         <label id="line3" htmlFor="">User Name</label>
-//         <input id="line4" required type="text" placeholder="Name here"/>
-
-//         <label id="line3" htmlFor="">Contact Number</label>
-//         <input id="line4" required type="text" placeholder="+91 0000000000"/>
-
-//         <label id="line3" htmlFor="">Gmail Address</label>
-//         <input id="line4" required type="text" placeholder="sample@gamail.com"/>
-
-//         <label id="line3" htmlFor="">Address</label>
-//         <input id="line4" required type="text" placeholder="Floor,Bulding,Street,Land Mark,City,State"/>
-
-//         <label id="line3" htmlFor="">Plant</label>
-//         <input id="line4" required type="text" placeholder="Select"/> 
-        
-//         <label id="line3" htmlFor="">Department</label>
-//         <input id="line4" required type="text" placeholder="Select Department"/>
-       
-//         <label id="line3" htmlFor="">Role</label>
-//         <input id="line4" required type="text" placeholder="admin@lims.com"/>
-
-
-
-//          <div id="line5">
-//           <button type="button"
-            
-//             data-bs-dismiss="offcanvas"
-//             aria-label="Close">&lt; Back</button>
-//            <button>Create user Id</button>
-//           </div>
-//            </div>
-
-
-//       </div>
-
-//       <table className="table">
-//   <thead>
-//     <tr>	
-//       <th scope="col">Sr.No</th>
-//       <th scope="col">User Id</th>
-//       <th scope="col">User</th>
-//       <th scope="col">Role</th>
-//       <th scope="col">Departments	</th>
-//       <th scope="col">Joining Date</th>
-//       <th scope="col">Status</th>
-//       <th scope="col">Added By</th>
-//       <th scope="col">...</th>
-//     </tr>
-//   </thead>
-//   <tbody>
-//     <tr> 					
-//       <td>1</td>
-//       <td>USER-022024-0000018</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//     <tr> 					
-//       <td>2</td>
-//       <td>USER-022024-0000017</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//     <tr> 					
-//       <td>3</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//     <tr> 					
-//       <td>4</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//      <tr> 					
-//       <td>5</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr> 
-//     <tr> 					
-//       <td>6</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//      <tr> 					
-//       <td>7</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr> 
-//     <tr> 					
-//       <td>8</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr> 
-//     <tr> 					
-//       <td>9</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>ACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//     <tr> 					
-//       <td>10</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>INACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//     <tr> 					
-//       <td>11</td>
-//       <td>USER-022024-0000016</td>
-//       <td>afiya</td>
-//       <td>admin</td>
-//       <td>QC</td>
-//       <td>Feb 9th 24 15:52</td>
-//       <td>INACTIVE</td>
-//       <td>Admin</td>
-//       <td>...</td>
-//     </tr>
-//   </tbody>
-// </table>
-
-// <nav aria-label="Page navigation example">
-//   <ul className="pagination justify-content-center">
-//     <li className="page-item disabled">
-//       <a className="page-link">Previous</a>
-//     </li>
-//     <li className="page-item"><a className="page-link" href="#">1</a></li>
-//     <li className="page-item"><a className="page-link" href="#">2</a></li>
-//     <li className="page-item"><a className="page-link" href="#">3</a></li>
-//     <li className="page-item">
-//       <a className="page-link" href="#">Next</a>
-//     </li>
-//   </ul>
-// </nav>
-
-    
-    
-    
-//     </>
-//   )
-// }

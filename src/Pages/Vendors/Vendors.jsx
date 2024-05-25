@@ -5,8 +5,11 @@ import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function Vender() {
+
+export default function Vendors() {
   const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
@@ -35,8 +38,13 @@ export default function Vender() {
               <td>{employee.addedBy}</td>
               <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
               <td>
-                  &nbsp; &nbsp; <Link to="/masters/product-details">< IoEyeSharp /></Link> &nbsp;
-                  <HiDotsHorizontal />
+              <div className="d-flex gap-3">
+			 <Link to="/vendors/vendor-details"><FontAwesomeIcon icon={faEye} /></Link>
+                        
+                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
+                    </div>
               </td>
           </tr>
       ));

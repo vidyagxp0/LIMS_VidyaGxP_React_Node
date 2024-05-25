@@ -138,7 +138,7 @@ function Coa_Template() {
 
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Coa Template</CButton>
+                                    <CButton color="primary" onClick={() => setAddModal(true)}>Add Coa Template</CButton>
                                 </div>
                             </CCol>
                         </CRow>

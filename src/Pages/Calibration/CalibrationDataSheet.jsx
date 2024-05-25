@@ -7,12 +7,62 @@ import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
 import { Link } from 'react-router-dom';
 
 const CalibrationDataSheet = () => {
-  const pageSize = 9;
+  const pageSize = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [showAdditionalFields2, setShowAdditionalFields2] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
 
-  const employees = [
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEmployee, setCurrentEmployee] = useState(null);
+
+
+  
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleStatusChange = (e) => {
+    setFilterStatus(e.target.value);
+  };
+
+
+
+  const handleEdit = (employee) => {
+    setCurrentEmployee(employee);
+    setIsEditing(true);
+  };
+
+  const handleEditClose = () => {
+    setIsEditing(false);
+    setCurrentEmployee(null);
+  };
+
+  const handleEditSubmit = () => {
+    const updatedEmployees = employees.map(emp =>
+      emp === currentEmployee ? currentEmployee : emp
+    );
+    setEmployees(updatedEmployees);
+    toast.success("Employee updated successfully");
+    handleEditClose();
+  };
+
+
+
+
+
+
+
+  const handleDelete = (index) => {
+    // Delete row from table
+    console.log("Deleting row at index:", index);
+  };
+
+  
+  
+  
+  const [employees, setEmployees] = useState([
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
     { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
@@ -23,13 +73,32 @@ const CalibrationDataSheet = () => {
     { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
     { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-  ];
+  ]);
+  
+  const deleteEmployee = (index) => {
+    const updatedEmployees = [...employees];
+    updatedEmployees.splice(startIndex + index, 1);
+    setEmployees(updatedEmployees);
+  };
 
+
+
+
+
+
+
+  const filteredEmployees = employees.filter((employee) => {
+    return (
+      employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filterStatus === "" || employee.status === filterStatus)
+    );
+  });
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
+  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
+
 
   const renderRows = () => {
-    return employees.slice(startIndex, endIndex).map((employee, index) => (
+    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
       <tr key={startIndex + index}>
         <td><input type="checkbox" /></td>
         <td>{startIndex + index + 1}</td>
@@ -40,13 +109,14 @@ const CalibrationDataSheet = () => {
         <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
         <td>
           <Link to="/calibration/calibration-datasheet-details"><FontAwesomeIcon icon={faEye} className="mx-1" /></Link>
-          <FontAwesomeIcon icon={faPenToSquare} className="mx-1" />
-          <FontAwesomeIcon icon={faTrashCan} className="mx-1" />
+          <FontAwesomeIcon icon={faPenToSquare} className="mx-1" onClick={() => handleEdit(employee)} />
+          <Link to="#" onClick={() => deleteEmployee(index)}>
+              <FontAwesomeIcon icon={faTrashCan} />
+            </Link>
         </td>
       </tr>
     ));
   };
-
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -97,20 +167,15 @@ const CalibrationDataSheet = () => {
         <div>
           <CRow className="mb-3">
             <CCol sm={4}>
-              <CFormInput type="email" placeholder="Search..." />
+              <CFormInput type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
             </CCol>
             <CCol sm={3}>
-              <CFormSelect
-                options={[
-                  'Select Status',
-                  { label: 'All', value: '1' },
-                  { label: 'Initiated', value: '0' },
-                  { label: 'Approved', value: '1' },
-                  { label: 'Rejected', value: '0' },
-                  { label: 'Reinitiated', value: '0' },
-                  { label: 'Droped', value: '0' }
-                ]}
-              />
+              <CFormSelect value={filterStatus} onChange={handleStatusChange}>
+                <option value="">Select Status</option>
+                <option value="INITIATED">Initiated</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+              </CFormSelect>
             </CCol>
             <CCol sm={2}></CCol>
             <CCol sm={3}>
@@ -125,6 +190,7 @@ const CalibrationDataSheet = () => {
             </CCol>
           </CRow>
         </div>
+
         <div
           className="offcanvas offcanvas-end overflow-y-scroll"
           tabIndex="-1"
@@ -228,7 +294,46 @@ const CalibrationDataSheet = () => {
         </div>
         <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
       </div>
+
+
+{isEditing && (
+  <div className="modal" style={{ display: 'block' }}>
+    <div className="modal-dialog">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">Edit Employee</h5>
+          <button type="button" className="close" onClick={handleEditClose}>
+            <span>&times;</span>
+          </button>
+        </div>
+        <div className="modal-body">
+          <form>
+            <div className="form-group">
+              <label>Unique code</label>
+              <input type="text" className="form-control" value={currentEmployee.role} onChange={(e) => setCurrentEmployee({ ...currentEmployee, role: e.target.value })} />
+            </div>
+            <div className="form-group">
+              <label>Data Sheet Name</label>
+              <input type="text" className="form-control" value={currentEmployee.departments} onChange={(e) => setCurrentEmployee({ ...currentEmployee, departments: e.target.value })} />
+            </div>
+            <div className="form-group">
+              <label>Status</label>
+              <select className="form-control" value={currentEmployee.status} onChange={(e) => setCurrentEmployee({ ...currentEmployee, status: e.target.value })}>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" onClick={handleEditClose}>Close</button>
+          <button type="button" className="btn btn-primary" onClick={handleEditSubmit}>Save changes</button>
+        </div>
+      </div>
     </div>
+  </div>
+)}
+</div>
   );
 };
 
