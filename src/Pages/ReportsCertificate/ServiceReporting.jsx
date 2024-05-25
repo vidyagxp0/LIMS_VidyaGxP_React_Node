@@ -158,7 +158,7 @@ import {
                 <CCol sm={6}></CCol>
                 <CCol sm={3}>
                   <div className="d-flex justify-content-end">
-                    <CButton className="bg-info text-light" onClick={() => setAddModal(true)}>
+                    <CButton color="primary" onClick={() => setAddModal(true)}>
                       Add Service
                     </CButton>
                   </div>
