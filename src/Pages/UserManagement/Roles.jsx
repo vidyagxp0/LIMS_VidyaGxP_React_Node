@@ -8,15 +8,15 @@ const Roles = () => {
 
         {    role: 'sd_manager',   status: 'Active' },
         {    role: 'sd_user',   status: 'Active'},
-        {    role: 'sd_manger',   status: 'Active' },
+        {    role: 'sd_manger',   status: 'Inactive' },
         {    role: 'sd_user',   status: 'Active'},
         {    role: 'sd',   status: 'Active' },
         {    role: 'sc',   status: 'Active'},
         {    role: 'sd',   status: 'Active' },
-        {    role: 'qc',   status: 'Active'},
+        {    role: 'qc',   status: 'Inactive'},
         {    role: 'qa',   status: 'Active' },
         {    role: 'mgr',   status: 'Active'},
-        {    role: 'si',   status: 'Active' },
+        {    role: 'si',   status: 'Inactive' },
         {    role: 'tci',   status: 'Active'},
         {    role: 'tester',   status: 'Active' },
         {    role: 'super_admin',   status: 'Active'},
@@ -36,7 +36,7 @@ const Roles = () => {
             <tr key={ index}>
                 <td>{ index + 1}</td>
                 <td>{employee.role}</td>
-                <td ><button className={`btn rounded-5 ${employee.status === 'Active' ? 'bg-success' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'success' : 'warning'} justify-content-center p-1`} >{employee.status}</button></td>
+                <td ><button className={`btn rounded-5 ${employee.status === 'Active' ? 'bg-success' : 'bg-danger'} bg-opacity-25 text-${employee.status === 'Active' ? 'success' : 'danger'} justify-content-center p-1 m-2`} style={{width:"110px"}}>{employee.status}</button></td>
             </tr>
         ));
     };
@@ -51,7 +51,7 @@ const Roles = () => {
             </div>
 
             {/* Employee table */}
-            <div className=' shadow table-responsive p-4'>
+            <div className=' table-responsive p-4 container1'style={{ boxShadow: "0px 0px 3px black" }}>
                 <table className='table'>
                     <thead>
                         <tr>
