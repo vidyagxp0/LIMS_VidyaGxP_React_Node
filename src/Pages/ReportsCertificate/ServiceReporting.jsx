@@ -306,7 +306,7 @@ import {
               Back
             </CButton>
             <CButton className="bg-info text-white" onClick={_props.confirmDelete}>
-              Delete
+              Submit
             </CButton>
           </CModalFooter>
         </CModal>
