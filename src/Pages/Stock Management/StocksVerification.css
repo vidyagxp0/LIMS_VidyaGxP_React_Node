@@ -4,3 +4,7 @@
     margin-top: 90px;
     padding: 10px;
 }
+
+.vertical-timeline::before {
+    background: rgb(233, 30, 99); /* Change this to your desired color */
+}

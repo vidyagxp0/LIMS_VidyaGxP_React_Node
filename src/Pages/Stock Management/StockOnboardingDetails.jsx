@@ -1,88 +1,67 @@
 import React from 'react'
 
 export default function StockOnboardingDetails() {
+
+  const stockDetails = [
+    { key: 'Material Name', value: 'Polycaprolactone New' },
+    { key: 'Invoice Date', value: '05/05/2024' },
+    { key: 'Invoice Number', value: 'INC3434' },
+    { key: 'Supplier Name', value: 'Ariz tech' },
+    { key: 'Quantity of Material as per Invoice', value: 2 },
+    { key: 'Vendor Code of Supplier', value: 'uc' },
+    { key: 'Truck Number', value: 'DF4353D' },
+    { key: 'Ch Number', value: 'hgfgjh5354' },
+    { key: 'Stock Registration Remark', value: 'na' },
+    { key: 'Supplier Approved by QA Department', value: 'Yes' },
+    { key: 'COA of Material Received', value: 'Yes' },
+    { key: 'Status', value: 'APPROVED' }
+  ];
+
+  const history = [
+    { key: 'Material Name', value: 'Polycaprolactone New' },
+    { key: 'Invoice Date', value: '05/05/2024' },
+    { key: 'Invoice Number', value: 'INC3434' },
+    { key: 'Supplier Name', value: 'Ariz tech' },
+    { key: 'Quantity of Material as per Invoice', value: 2 },
+    { key: 'Vendor Code of Supplier', value: 'uc' },
+    { key: 'Truck Number', value: 'DF4353D' },
+    { key: 'Ch Number', value: 'hgfgjh5354' },
+    { key: 'Stock Registration Remark', value: 'na' },
+    { key: 'Supplier Approved by QA Department', value: 'Yes' },
+    { key: 'COA of Material Received', value: 'Yes' },
+    { key: 'Status', value: 'INITIATED' }
+  ];
+
   return (
-    <div style={{ margin: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-    <h3 style={{marginLeft:'160px',paddingTop:'30px'}}>Stock Details</h3>
-      
-       <div style={{margin: '0 auto',border:'2px solid',width:'70%',display:'flex'
-       }}>
-           
-
-
-
-           <div style={{ borderRight:'2px solid',width:'45%',backgroundColor:'blue',color:'white', }}>
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Material Name </p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Invoice Date</p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Invoice Number</p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Supplier Name</p>
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Quantity of material as per invoice </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Vendor code of supplier </p>    
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Truck Number </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Ch Number </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>   Stock Registration Remark </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>  Supplier approved by qa department </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>  COA of material received </p>  
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Status</p>
-           </div>
-          
-           <div style={{width:'55%'}}>
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>Polycaprolactone New</p> 
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> 
-05/05/2024</p> 
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>Ariz Enterprize</p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>GT001TDM </p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> 2</p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> uc </p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> DF4345D </p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>  vh</p>
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>  na</p>
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> yes</p>
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>  yes</p>
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> APPROVED</p>
-           </div>
-      
-       </div>
-
-       <h3 style={{marginLeft:'160px',paddingTop:'30px'}}>History</h3>
-      
-      <div style={{margin: '0 auto',border:'2px solid',width:'70%',display:'flex'
-      }}>
-
-          <div style={{ borderRight:'2px solid',width:'45%',backgroundColor:'blue',color:'white', }}>
-          <p style={{borderRight:'2px solid black',paddingLeft:'20px',backgroundColor:'whitesmoke',color:'black'}}>Revision </p> 
-          <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Material Name </p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Invoice Date</p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Invoice Number</p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Supplier Name</p>
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Quantity of material as per invoice </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Vendor code of supplier </p>    
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Truck Number </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Ch Number </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>   Stock Registration Remark </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>  Supplier approved by qa department </p> 
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>  COA of material received </p>  
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Status</p>
-          </div>
-         
-          <div style={{width:'55%'}}>
-          <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>0</p> 
-          <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>Polycaprolactone New</p> 
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> 
-05/05/2024</p> 
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>Ariz Enterprize</p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>GT001TDM </p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> 2</p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> uc </p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> DF4345D </p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>  vh</p>
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>  na</p>
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> yes</p>
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>  yes</p>
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> INITIATED</p>
-          </div>
-     
+    <>
+      <div className='m-5 p-5 rounded shadow'>
+        <h4 className='fw-bold'>Stock Details</h4>
+        <table className='table-responsive table-bordered border-dark mb-4 w-100'>
+          <tbody>
+            {stockDetails.map((data) => {
+              return <tr key={data.key}>
+                <td className="text-light bg-info w-25 px-2 py-1">{data.key}</td>
+                <td className='px-2 py-1'>{data.value}	</td>
+              </tr>
+            })}
+          </tbody>
+        </table>
+        <h4 className='fw-bold'>History</h4>
+        <table className='table-responsive table-bordered border-dark mb-4 w-100'>
+          <tbody>
+            <tr>
+              <td className="text-dark bg-secondary-subtle w-25 px-2 py-1">Revision</td>
+              <td className='text-dark bg-secondary-subtle px-2 py-1'>0</td>
+            </tr>
+            {history.map((data) => {
+              return <tr key={data.key}>
+                <td className="text-light bg-info w-25 px-2 py-1">{data.key}</td>
+                <td className='px-2 py-1'>{data.value}	</td>
+              </tr>
+            })}
+          </tbody>
+        </table>
       </div>
-   </div>
-  )
+    </>
+  );
 }
