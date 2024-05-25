@@ -11,91 +11,36 @@ function CalibrationSampleLoginTemplateDetails() {
                     <div className="container-fluid">
                          <div className="bock mb-3">
                               <div className="main-head d-flex justify-content-between align-items-center">
-                                   <h4 className="fw-bold mb-4 mt-3">Details</h4>
-                                   <CButton color="dark" onClick={() => setStatusModal(true)}>Update Status</CButton>
+                                   <h4 className="fw-bold mb-4 mt-3">Login Template Details</h4>
                               </div>
                               <div className="bg-white px-5 py-3">
                                    <CTable align="middle" className="mb-0" small bordered>
                                         <CTableBody>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Unique Code</CTableDataCell>
-                                                  <CTableDataCell>NA-002</CTableDataCell>
+                                        <CTableRow>
+                                                  <CTableDataCell color="info">Sequence No</CTableDataCell>
+                                                  <CTableDataCell>CDSR0000007</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Product Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
+                                                  <CTableDataCell color="info">Sample Login template</CTableDataCell>
+                                                  <CTableDataCell>weight balancer 1</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Generic Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
+                                                  <CTableDataCell color="info">Test Plan</CTableDataCell>
+                                                  <CTableDataCell>Calcium Hydroxide</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Action By</CTableDataCell>
-                                                  <CTableDataCell>Manager</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Action On</CTableDataCell>
-                                                  <CTableDataCell>Mar 22nd 2024 11:48</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Re-Testing Period</CTableDataCell>
-                                                  <CTableDataCell>450 Days</CTableDataCell>
+                                                  <CTableDataCell color="info">Auto Sample Allotment Required</CTableDataCell>
+                                                  <CTableDataCell>yes</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
                                                   <CTableDataCell color="info">Status</CTableDataCell>
-                                                  <CTableDataCell>INITIATED</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Version</CTableDataCell>
-                                                  <CTableDataCell>0</CTableDataCell>
+                                                  <CTableDataCell>APPROVED</CTableDataCell>
                                              </CTableRow>
                                         </CTableBody>
                                    </CTable>
                               </div>
                          </div>
-                         <dib className="block">
-                              <div className="main-head">
-                                   <h4 className="fw-bold mb-4 mt-3">History</h4>
-                              </div>
-                              <div className="bg-white px-5 py-3">
-                                   <CTable align="middle" className="mb-0" small bordered>
-                                        <CTableBody>
-                                             <CTableRow color="warning">
-                                                  <CTableDataCell>Revision</CTableDataCell>
-                                                  <CTableDataCell>3</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Unique Code</CTableDataCell>
-                                                  <CTableDataCell>NA-002</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Product Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Generic Name</CTableDataCell>
-                                                  <CTableDataCell>NA</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Action By</CTableDataCell>
-                                                  <CTableDataCell>Manager</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Action On</CTableDataCell>
-                                                  <CTableDataCell>Mar 22nd 2024 11:48</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Re-Testing Period</CTableDataCell>
-                                                  <CTableDataCell>45 Days</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell color="info">Status</CTableDataCell>
-                                                  <CTableDataCell>INITIATED</CTableDataCell>
-                                             </CTableRow>
-                                        </CTableBody>
-                                   </CTable>
-                              </div>
-                         </dib>
+                        
                     </div>
                </div>
 

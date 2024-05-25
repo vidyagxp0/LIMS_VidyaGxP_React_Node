@@ -309,6 +309,58 @@ const PdfDocument = () => (
     </Document>
 );
 
+const loginData = [
+    { key1: 'A.R No.', value1: 'ARPC0000097', key2: 'Registered On', value2: '17/05/2024' },
+    { key1: 'Sample Type', value1: 'Petrochemical', key2: 'Party Name', value2: 'MIT Power' },
+    { key1: 'Product/Material Code', value1: 'Hydraulic Oil', key2: 'Days to Complete', value2: '10' },
+    { key1: 'Generic Name', value1: 'hyo', key2: 'Specification Id', value2: 'HOS 234' },
+    { key1: 'Set Days to Complete', value1: '10', key2: 'Due On', value2: '2024-12-12' },
+    { key1: 'Sample In Charge', value1: 'Analyst two', key2: 'QA approval Required', value2: 'Yes' }
+];
+
+const specificationData = [
+    { SNo: 1, Specification: 'HOS 234', TestName: 'Water Content PPM', Worksheet: 'water content kf worksheet', TestInCharge: 'Analyst', TestStatus: 'APPROVED', UpdatedOn: '21/05/2024' },
+    { SNo: 2, Specification: 'HOS 234', TestName: 'Viscosity @40C', Worksheet: '-', TestInCharge: 'Analyst', TestStatus: 'APPROVED', UpdatedOn: '21/05/2024' },
+    { SNo: 3, Specification: 'HOS 234', TestName: 'Total Acid Number (TAN)', Worksheet: '-', TestInCharge: 'Analyst', TestStatus: 'APPROVED', UpdatedOn: '21/05/2024' }
+];
+
+const handleDisplayKey1 = (item) => {
+    if (item.key1 === 'Set Days to Complete') {
+        return <input type="text" className='form-control' defaultValue={item.value1} readOnly />;
+    } else if (item.key1 === 'Sample In Charge') {
+        return (
+            <select className='form-select'>
+                <option>Select</option>
+                <option value="Analyst two">Analyst two</option>
+                <option value="Analyst">Analyst</option>
+            </select>
+        );
+    } else {
+        return item.value1;
+    }
+}
+
+const handleDisplayKey2 = (item) => {
+    if (item.key2 === 'Due On') {
+        return <input type="date" className='form-control' defaultValue={item.value2} />;
+    } else if (item.key2 === 'QA approval Required') {
+        return (
+            <div className='d-flex gap-3'>
+                <div>
+                    <input type="radio" className='form-check-input mx-2' id="yes" name='approval' defaultChecked={item.value2 === 'Yes'} />
+                    <label htmlFor="yes">Yes</label>
+                </div>
+                <div>
+                    <input type="radio" className='form-check-input mx-2' id="no" name='approval' defaultChecked={item.value2 === 'No'} />
+                    <label htmlFor="no">No</label>
+                </div>
+            </div>
+        );
+    } else {
+        return item.value2;
+    }
+}
+
 const SampleLoginDetails = () => {
     return (
         <div className='m-5 shadow rounded px-5 py-3'>
@@ -335,51 +387,14 @@ const SampleLoginDetails = () => {
             </div>
             <table className='table table-bordered border-dark'>
                 <tbody>
-                    <tr>
-                        <td className="text-light bg-info">A.R No.</td>
-                        <td>ARPC0000097	</td>
-                        <td className="text-light bg-info">Registered On</td>
-                        <td>17/05/2024</td>
-                    </tr>
-                    <tr>
-                        <td className="text-light bg-info">Sample Type</td>
-                        <td>Petrochemical</td>
-                        <td className="text-light bg-info">Party Name</td>
-                        <td>MIT Power</td>
-                    </tr>
-                    <tr>
-                        <td className="text-light bg-info">Product/Material Code</td>
-                        <td>Hydraulic Oil</td>
-                        <td className="text-light bg-info">Days to Complete</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td className="text-light bg-info">Generic Name</td>
-                        <td>hyo</td>
-                        <td className="text-light bg-info">Specification Id</td>
-                        <td>HOS 234</td>
-                    </tr>
-                    <tr>
-                        <td className="text-light bg-info">Set Days to Complete</td>
-                        <td><input type="text" className='form-control' defaultValue={10} readOnly /></td>
-                        <td className="text-light bg-info">Due On</td>
-                        <td><input type="date" className='form-control' defaultValue={'2024-12-12'} /></td>
-                    </tr>
-                    <tr>
-                        <td className="text-light bg-info">Sample In Charge</td>
-                        <td>
-                            <select className='form-select'>
-                                <option >Select</option>
-                                <option value="Analyst two">Analyst two</option>
-                                <option value="Analyst">Analyst</option>
-                            </select>
-                        </td>
-                        <td className="text-light bg-info">QA approval Required</td>
-                        <td className='d-flex gap-3'>
-                            <input type="radio" className='form-check-input' id="yes" name='approval' /> <label htmlFor="yes">Yes</label>
-                            <input type="radio" className='form-check-input' id="no" name='approval' /> <label htmlFor="no">No</label>
-                        </td>
-                    </tr>
+                    {loginData.map((item, index) => (
+                        <tr key={index}>
+                            <td className="text-light bg-info">{item.key1}</td>
+                            <td>{handleDisplayKey1(item)}</td>
+                            <td className="text-light bg-info">{item.key2}</td>
+                            <td>{handleDisplayKey2(item)}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
             <div className="btn btn-primary mx-4 my-2">Submit</div>
@@ -396,51 +411,23 @@ const SampleLoginDetails = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>HOS 234</td>
-                        <td>Water Content PPM</td>
-                        <td>water content kf worksheet</td>
-                        <td>
-                            <select className='form-select' disabled>
-                                <option value="Analyst" selected>Analyst</option>
-                                <option value="Analyst two">Analyst two</option>
-                            </select>
-                        </td>
-                        <td className='d-flex'><IoEyeSharp className='mt-1 mx-1 cursor-pointer' data-bs-toggle="modal" data-bs-target="#approvedStatusModal" /> <span>APPROVED</span></td>
-                        <td>21/05/2024</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>HOS 234</td>
-                        <td>	Viscosity @40C</td>
-                        <td>-</td>
-                        <td>
-                            <select className='form-select' disabled>
-                                <option value="Analyst" selected>Analyst</option>
-                                <option value="Analyst two">Analyst two</option>
-                            </select>
-                        </td>
-                        <td className='d-flex'><IoEyeSharp className='mt-1 mx-1 cursor-pointer' data-bs-toggle="modal" data-bs-target="#approvedStatusModal" /> <span>APPROVED</span></td>
-                        <td>21/05/2024</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>HOS 234</td>
-                        <td>	Total Acid Number (TAN)</td>
-                        <td>-</td>
-                        <td>
-                            <select className='form-select' disabled>
-                                <option value="Analyst" selected>Analyst</option>
-                                <option value="Analyst two">Analyst two</option>
-                            </select>
-                        </td>
-                        <td className='d-flex'><IoEyeSharp className='mt-1 mx-1 cursor-pointer' data-bs-toggle="modal" data-bs-target="#approvedStatusModal" /> <span>APPROVED</span></td>
-                        <td>21/05/2024</td>
-                    </tr>
-
+                    {specificationData.map((row, index) => (
+                        <tr key={index}>
+                            <td>{row.SNo}</td>
+                            <td>{row.Specification}</td>
+                            <td>{row.TestName}</td>
+                            <td>{row.Worksheet}</td>
+                            <td>
+                                <select className='form-select' disabled>
+                                    <option value="Analyst" selected>{row.TestInCharge}</option>
+                                    <option value="Analyst two">Analyst two</option>
+                                </select>
+                            </td>
+                            <td className='d-flex gap-3 justify-content-start align-items-center'><IoEyeSharp className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#approvedStatusModal" /> <span>{row.TestStatus}</span></td>
+                            <td>{row.UpdatedOn}</td>
+                        </tr>
+                    ))}
                 </tbody>
-
             </table>
             <div className="d-flex gap-4 mt-4 mx-4">
                 <div className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#coaPreviewModal" >Coa Preview</div>
