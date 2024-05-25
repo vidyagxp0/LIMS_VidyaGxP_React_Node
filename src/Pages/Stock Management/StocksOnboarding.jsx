@@ -59,7 +59,7 @@ export default function StocksOnboarding() {
         <td>
           <div className="d-flex gap-3">
             <Link to="/stock-management/stock-onboarding-details"><FontAwesomeIcon icon={faEye} /></Link>
-            <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#editVerify" aria-controls="offcanvasRight"><FontAwesomeIcon icon={faPenToSquare} /></div>
+            <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#editVerify" aria-controls="offcanvasRight"><FontAwesomeIcon icon={faTrashCan} /></div>
           </div>
         </td>
       </tr>
@@ -86,49 +86,45 @@ export default function StocksOnboarding() {
       </div>
 
 
-      <div id="div2" style={{ display: 'flex', justifyContent: 'space-between' }}>
-
-        <div id="searchmain">
-          <div id="searchicon">
-            <CiSearch />
+      <div id="div2" className="d-flex justify-content-between">
+        <div className="d-flex gap-4 w-75">
+          <div id="searchmain">
+            <div id="searchicon">
+              <CiSearch />
+            </div>
+            <div className="">
+              <input type="text" className="w-75" id="" placeholder="Search..." />
+            </div>
           </div>
-
-          <div className="">
-            <input type="text" className="" id="" placeholder="search" />
-          </div>
-        </div>
-        <div className="dropdown m-5">
-        </div>
-
-        <div className="dropdown">
-          <div>
-            <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-              <select id='selectOption'>
-                <option>All</option>
-                <option>Initiated</option>
-                <option>Approved</option>
-                <option>Rejected</option>
-                <option>Reinitiated</option>
-                <option>Droped</option>
-              </select>
-
-            </button>
-
+          <div className="dropdown w-25">
+            <div>
+              <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <select id='selectOption'>
+                  <option>All</option>
+                  <option>Initiated</option>
+                  <option>Approved</option>
+                  <option>Rejected</option>
+                  <option>Reinitiated</option>
+                  <option>Droped</option>
+                </select>
+              </button>
+            </div>
           </div>
         </div>
 
 
-        <button
-          id="Addbtn"
-          className="btn btn-primary m-5"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
-          aria-controls="offcanvasRight"
-        >
-          <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Stock</span>
-        </button>
+        <div className="">
+          <button
+            id="Addbtn"
+            className="btn btn-primary m-5"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight"
+          >
+            <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Stock</span>
+          </button>
+        </div>
 
         <div
           className="offcanvas offcanvas-end"
@@ -154,9 +150,10 @@ export default function StocksOnboarding() {
           <div style={{ marginLeft: '18px', }}>
             <label>
               <input
+                className="mx-2"
                 type="radio"
                 name="options"
-                value=" rm-stock"
+                value="rm-stock"
 
               />
               RM Stock
@@ -164,6 +161,7 @@ export default function StocksOnboarding() {
             <br />
             <label style={{ padding: '7px 0' }}>
               <input
+                className="mx-2"
                 type="radio"
                 name="options"
                 value="pm-stock"
@@ -173,6 +171,7 @@ export default function StocksOnboarding() {
             <br />
             <label>
               <input
+                className="mx-2"
                 type="radio"
                 name="options"
                 value="chemical-stock"
@@ -222,15 +221,27 @@ export default function StocksOnboarding() {
         </table>
         <div className="offcanvas offcanvas-end" tabIndex="-1" id="editVerify" aria-labelledby="offcanvasRightLabel">
           <div className="offcanvas-header border-bottom pb-2 border-2 border-dark mx-3 px-0">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">View Stock Verification</h5>
+            <h5 className="offcanvas-title" id="offcanvasRightLabel">Delete Stock</h5>
             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div className="offcanvas-body">
-
+            <p className="mb-3">Do you want to delete this Stock <code>SO0000018</code>?</p>
+            <div className="mb-3">
+              <label htmlFor="userID" class="form-label">User Id</label>
+              <input type="text" class="form-control" id="userID" defaultValue={'User-062023-0000001'} placeholder="User Id" />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="Password" defaultValue={'Password'} placeholder="Password" />
+            </div>
+            <div className="d-flex gap-4 my-5">
+              <button className="btn btn-secondary w-100" data-bs-dismiss="offcanvas" aria-label="Close">Back</button>
+              <button className="btn btn-primary w-100">Submit</button>
+            </div>
           </div>
         </div>
 
-        <div className="pagination" style={{ margin: '0 35px' }}>
+        <div className="pagination my-4 mx-3">
 
           <div className="pagination ">
             <div className='mr-5'>
@@ -241,9 +252,7 @@ export default function StocksOnboarding() {
             </div>
             <div>
               <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
             </div>
-
           </div>
 
           <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
