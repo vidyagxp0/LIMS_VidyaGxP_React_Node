@@ -2,7 +2,7 @@ import { CButton, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, C
 import { useState } from "react"
 
 
-function CalibrationDataSheetDetails() {
+function ClientsDetails() {
      const [statusModal, setStatusModal] = useState(false)
      return (
           <>
@@ -90,4 +90,4 @@ const StatusModal = (_props) => {
      )
 }
 
-export default CalibrationDataSheetDetails
+export default ClientsDetails

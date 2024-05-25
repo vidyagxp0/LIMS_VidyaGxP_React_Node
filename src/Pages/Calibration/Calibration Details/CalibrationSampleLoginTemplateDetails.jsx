@@ -17,23 +17,23 @@ function CalibrationSampleLoginTemplateDetails() {
                                    <CTable align="middle" className="mb-0" small bordered>
                                         <CTableBody>
                                         <CTableRow>
-                                                  <CTableDataCell color="info">Sequence No</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Sequence No</CTableDataCell>
                                                   <CTableDataCell>CDSR0000007</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Sample Login template</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Sample Login template</CTableDataCell>
                                                   <CTableDataCell>weight balancer 1</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Test Plan</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Test Plan</CTableDataCell>
                                                   <CTableDataCell>Calcium Hydroxide</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Auto Sample Allotment Required</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Auto Sample Allotment Required</CTableDataCell>
                                                   <CTableDataCell>yes</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell color="info">Status</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
                                                   <CTableDataCell>APPROVED</CTableDataCell>
                                              </CTableRow>
                                         </CTableBody>
