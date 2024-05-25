@@ -1,34 +1,28 @@
 import React from 'react'
 
 export default function StockMaterialDetail() {
+
+  const materialData = [
+    { key: 'Material Name', value: 'M1' },
+    { key: 'Description', value: 'material 1' },
+    { key: 'Created On', value: '20/06/2023' },
+    { key: 'Updated On', value: '23/06/2023' },
+    { key: 'Status', value: 'APPROVED' }
+  ];
+
   return (
-    <div style={{ margin: '20px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-    <h3 style={{marginLeft:'160px',paddingTop:'30px'}}>Material Details</h3>
-      
-       <div style={{margin: '0 auto',border:'2px solid',width:'70%',display:'flex'
-       }}>
-           
-
-
-
-           <div style={{ borderRight:'2px solid',width:'45%',backgroundColor:'blue',color:'white', }}>
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Material Name </p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Desciption</p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}> Created On</p> 
-           <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>Updated On</p>
-            <p style={{borderBottom:'1px solid white',paddingLeft:'20px'}}>   Status </p>
-           </div>
-          
-           <div style={{width:'55%'}}>
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>test OP</p> 
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> 
-           Operation</p> 
-           <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>20/02/2023</p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}>20/02/2023</p> 
-            <p style={{borderBottom:'1px solid black',paddingLeft:'20px'}}> INITIATED</p>
-           </div>
-     
-      </div>
-   </div>
+    <div className='m-5 p-5 rounded shadow'>
+      <h4 className='fw-bold'>Material Details</h4>
+      <table className='table-responsive table-bordered border-dark mb-4 w-100'>
+        <tbody>
+          {materialData.map((data) => {
+            return <tr key={data.key}>
+              <td className="text-light bg-info w-25 px-2 py-1">{data.key}</td>
+              <td className='px-2 py-1'>{data.value}	</td>
+            </tr>
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 }

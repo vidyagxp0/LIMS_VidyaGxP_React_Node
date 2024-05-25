@@ -26,7 +26,7 @@ import { useState } from "react";
 import { FaArrowRight, FaDownload } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-function Sample_Login() {
+function StabilitySampleLogin() {
   const [addModal, setAddModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false)
   const [permanentlyDeleteModal, setPermanentlyDeleteModal] = useState(false)
@@ -408,4 +408,4 @@ const PermanentlyDeleteModal = (_props) => {
   )
 }
 
-export default Sample_Login;
+export default StabilitySampleLogin;

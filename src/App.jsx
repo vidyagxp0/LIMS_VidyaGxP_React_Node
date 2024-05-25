@@ -17,8 +17,11 @@ import QualityCheck from "./Pages/UserManagement/Department/QualityCheck"
 import Store from "./Pages/UserManagement/Department/Store"
 import Roles from "./Pages/UserManagement/Roles"
 import Samplelogin from "./Pages/Samplelogin/Samplelogin"
+import SampleLoginDetails from "./Pages/Samplelogin/SampleloginView/SampleLoginDetails.jsx"
+import TestResultsDetails from "./Pages/Samplelogin/SampleloginView/TestResultsDetails.jsx"
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1"
 import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2"
+
 import Storage_Condition from "./Pages/Stability/Storage_Condition"
 import ChamberConditionMapping from "./Pages/Stability/ChamberConditionMapping"
 import ChamberTransfer from "./Pages/Stability/ChamberTransfer"
@@ -27,12 +30,22 @@ import StorageChamber from "./Pages/Stability/StorageChamber"
 import StandardProtocol from "./Pages/Stability/StandardProtocol"
 import StabilityProtocol from "./Pages/Stability/StabilityProtocol"
 import SampleStorage from "./Pages/Stability/SampleStorage"
-import Sample_Login from "./Pages/Stability/Sample_Login"
+import StabilitySampleLogin from "./Pages/Stability/StabilitySampleLogin.jsx"
 import SampleAcceptance from "./Pages/Stability/SampleAcceptance"
 import SampleAcceptanceTemplate from "./Pages/Stability/SampleAcceptanceTemplate"
 import SampleLoginTemplate from "./Pages/Stability/SampleLoginTemplate"
 import SummaryReportHeader from "./Pages/Stability/SummaryReportHeader"
 import WorkSheetHeader from "./Pages/Stability/WorkSheetHeader"
+
+import SampleLoginTemplateDetails from "./Pages/Stability/StabilityDetails/SampleLoginTemplateDetails.jsx"
+import WorksheetHeaderDetails from "./Pages/Stability/StabilityDetails/WorksheetHeaderDetails.jsx"
+import SummaryReportHeaderDetails from "./Pages/Stability/StabilityDetails/SummaryReportHeaderDetails.jsx"
+import Sample_LoginDetails from "./Pages/Stability/StabilityDetails/Sample_LoginDetails.jsx"
+import StorageChamberDetails from './Pages/Stability/StabilityDetails/StorageChamberDetails.jsx'
+import StabilityProtocolDetails from "./Pages/Stability/StabilityDetails/StabilityProtocolDetails.jsx"
+import SampleStorageDetails from "./Pages/Stability/StabilityDetails/SampleStorageDetails.jsx"
+import CoaTemplateDetails from "./Pages/Stability/StabilityDetails/CoaTemplateDetails.jsx"
+
 import SamplingConfiguration from "./Pages/Sampling/SamplingConfiguration"
 import SamplingRule from "./Pages/Sampling/SamplingRule"
 import ESampling from "./Pages/Sampling/ESampling"
@@ -47,11 +60,15 @@ import TestCategories from "./Pages/Masters/TestCategories"
 import TestRegistrations from "./Pages/Masters/TestRegistrations"
 import TestPlan from "./Pages/Masters/TestPlan"
 import MyTests from "./Pages/Masters/MyTests"
+
 import Registration from "./Pages/Instruments Master/Registration"
 import InstrumentCategory from "./Pages/Instruments Master/InstrumentCategory"
 import InstrumentModule from "./Pages/Instruments Master/InstrumentModule"
 import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage"
 import MasterProductDetail from "./Pages/Masters/MasterProductDetail.jsx"
+
+import RegistrationDetails from "./Pages/Instruments Master/InstrumentMasterDetails/RegistrationDetails.jsx"
+import InstrumentModuleDetails from "./Pages/Instruments Master/InstrumentMasterDetails/InstrumentModuleDetails.jsx"
 
 
 // import Inventory from './Pages/Inventory/Inventory.jsx'
@@ -118,9 +135,6 @@ import AcknowledgeSample from "./Pages/Inventory/AcknowledgeSample.jsx"
 import BatchSampleAllotment from "./Pages/Inventory/BatchSampleAllotment.jsx"
 import BatchTestslist from "./Pages/Inventory/BatchTestslist.jsx"
 
-
-
-
 import StocksVerification from "./Pages/Stock Management/StocksVerification"
 import StocksOnboarding from "./Pages/Stock Management/StocksOnboarding"
 import Material from "./Pages/Stock Management/Material"
@@ -153,11 +167,15 @@ import ProblemReportingDetails from "./Pages/ReportsCertificate/ReportsCertifica
 import ServiceReportingdetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/ServiceReportingdetails.jsx"
 import Coa_TemplateDetails from "./Pages/ReportsCertificate/ReportsCertificateDetails/Coa_TemplateDetails.jsx"
 
-import Vender from "./Pages/Vender/Vender.jsx"
+import Vendors from "./Pages/Vendors/Vendors.jsx"
 import Clients from "./Pages/Clientss/Clients.jsx"
 import Plants from './Pages/Plants/Plants.jsx'
 import WorkFlow from "./Pages/WorkFlow/WorkFlow.jsx"
 import AuditTrail from './Pages/AuditTrail/AuditTrail.jsx';
+
+import VendorDetails from "./Pages/Vendors/VendorDetails.jsx"
+import ClientsDetails from "./Pages/Clientss/ClientsDetail.jsx"
+
 
 import BussinessAssociate from "./Pages/Settings/BussinessAssociate.jsx"
 import LabelManagement from   "./Pages/Settings/LabelManagement.jsx"
@@ -187,12 +205,9 @@ import SettingStability from "./Pages/Settings/SettingStability.jsx"
 import TestHistory from "./Pages/Settings/TestHistory.jsx"
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx"
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx"
-import StorageChamberDetails from './Pages/Stability/StorageChamber.jsx';
-import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
-import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
-import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
-
-
+// import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
+// import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
+// import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
 
 
 function App() {
@@ -218,11 +233,13 @@ function App() {
             <Route path="/department/admin" element={<Admin/>}/>
             <Route path="/department/qualityAssurance" element={<QualityAssurance/>} />
             <Route path="/department/qualityCheck" element={< QualityCheck/>} />
-            <Route path="/store" element={< Store/>} />
+            <Route path="/department/store" element={< Store/>} />
             <Route path="/users" element={<Users />} />
             <Route path="/roles" element={<Roles/>} />
 
             <Route path="/samplelogin" element={<Samplelogin/>} />
+            <Route path="/viewDetails" element={<SampleLoginDetails/>} />
+            <Route path="/testResultsDetails" element={<TestResultsDetails/>} />
             <Route path="/investigationl1" element={<InvestigationL1/>} />
             <Route path="/investigationl2" element={<InvestigationL2/>}/>
             
@@ -238,7 +255,7 @@ function App() {
             <Route path="/worksheetHeader" element={< WorkSheetHeader/>} />
             <Route path="/summaryReportHeader" element={< SummaryReportHeader />} />
             <Route path="/sampleAcceptanceTemplate" element={< SampleAcceptanceTemplate/>} />
-            <Route path="/sampleLogin1321" element={< Sample_Login />} />
+            <Route path="/sampleLogin1321" element={< StabilitySampleLogin />} />
             <Route path="/sampleAcceptance" element={< SampleAcceptance />} />
 
             <Route path="/Masters/Product" element={<Product/>} />
@@ -322,13 +339,13 @@ function App() {
             <Route path="Inventory/BatchSampleAllotment" element={<BatchSampleAllotment/>}/>
             <Route path="Inventory/BatchTestslist" element={<BatchTestslist/>}/>
 
-            
-            
-
             <Route path="/instrumentMaster/registration" element={<Registration />} />
             <Route path="/instrumentMaster/instrumentCategory" element={<InstrumentCategory />} />
             <Route path="/instrumentMaster/instrumentModule" element={<InstrumentModule />} />
             <Route path="/instrumentMaster/instrumentUsage" element={<InstrumentUsage />} /> 
+
+            <Route path="/instrumentMaster/registrationDetails" element={< RegistrationDetails/>}/>
+            <Route path="/instrumentMaster/instrumentModuleDetails" element={< InstrumentModuleDetails/>}/>
 
             <Route path="/stock-management/stocks-verification" element={< StocksVerification />} />
             <Route path="/stock-management/stocks-onboarding" element={<StocksOnboarding />} />
@@ -364,11 +381,14 @@ function App() {
             <Route path="/reportsCertificate/ServiceReportingDetails" element={< ServiceReportingdetails/>}/>
             <Route path="/reportsCertificate/coa_TemplateDetails" element={< Coa_TemplateDetails/>}/>
 
-            <Route path="/vender" element={<Vender />} />
             <Route path="/clients" element={<Clients />} />
             <Route path="/plants" element={< Plants />} />
             <Route path="/workFlow" element={< WorkFlow />} />
             <Route path="/auditTrail" element={<AuditTrail />} />
+            <Route path="/vender" element={<Vendors />} />
+
+            <Route path="/vendors/vendor-details" element={<VendorDetails />} />
+            <Route path="/clientss/clients-details" element={<ClientsDetails/>}/>
 
             <Route path="/settings/businessAssociate" element={<  BussinessAssociate />} />
             <Route path="/settings/labelManagement" element={< LabelManagement />} />
@@ -404,6 +424,11 @@ function App() {
             <Route path="/stability/stabilityProtocolDetails"element={< StabilityProtocolDetails/>}/>
             <Route path="/stability/sampleStorageDetails"element={< SampleStorageDetails/>}/>
             <Route path="/stability/CoaTemplateDetails"element={< CoaTemplateDetails/>}/>
+
+            <Route path="/stability/sampleLoginTemplateDetails" element={< SampleLoginTemplateDetails/>}/>
+            <Route path="/stability/worksheetHeaderDetails" element={< WorksheetHeaderDetails/>}/>
+            <Route path="/stability/SummaryReportHeaderDetails" element={< SummaryReportHeaderDetails/>}/>
+            <Route path="/stability/sample_LoginDetails" element={< Sample_LoginDetails/>}/>
 
           </Route>
         </Routes>

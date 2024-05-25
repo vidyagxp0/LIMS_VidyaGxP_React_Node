@@ -102,7 +102,7 @@ const ESampling = () => {
                         className="btn btn-primary btn-right"
                         type="button"
                         data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight"
+                        data-bs-target="#addESampling"
                         aria-controls="offcanvasRight"
                     >
                         <CgAddR />  <span>Add E-Sampling</span>
@@ -112,7 +112,7 @@ const ESampling = () => {
                 <div
                     className="offcanvas offcanvas-end overflow-y-scroll"
                     tabIndex="-1"
-                    id="offcanvasRight"
+                    id="addESampling"
                     aria-labelledby="offcanvasRightLabel"
                 >
                     <div className="offcanvas-header ">
