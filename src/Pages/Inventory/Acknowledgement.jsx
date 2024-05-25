@@ -7,14 +7,14 @@ import {
   // CModalBody,
   CFormInput,
   CForm,
-  CFormLabel,
-  CFormCheck,
+  // CFormLabel,
+  // CFormCheck,
   CModalFooter,
   CModalHeader,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
+  // CDropdown,
+  // CDropdownToggle,
+  // CDropdownMenu,
+  // CDropdownItem,
   // CDropdownDivider,
   CModalTitle,
   CRow,
@@ -36,13 +36,73 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Acknowledgement() {
-  const [selectedStatus, setSelectedStatus] = useState("Select Status");
-
-  const handleSelect = (status) => {
-    setSelectedStatus(status);
-  };
   const [addModal, setAddModal] = useState(false);
-  const badgeStyle = { background: "#cdffca" };
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " green",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "red", color: "white", width: "110px" };
+
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [data, setData] = useState([
+    {
+      id: 1,
+      ScheduleCode	: "55",
+      ScheduleDate	: "55",
+      
+
+      status: "Active",
+    },
+    {
+      id: 2,
+      ScheduleCode	: "55",
+      ScheduleDate	: "55",
+      
+      status: "Active",
+    },
+
+    {
+      id: 3,
+      ScheduleCode	: "55",
+      ScheduleDate	: "55",
+      
+      status: "Active",
+    },
+    {
+      id: 4,
+      ScheduleCode	: "55",
+      ScheduleDate	: "55",
+      
+      status: "Inactive",
+    },
+    {
+      id: 5,
+      ScheduleCode	: "55",
+      ScheduleDate	: "55",
+     
+      status: "Inactive",
+    },
+
+    {
+      id: 6,
+      ScheduleCode	: "55",
+      ScheduleDate	: "55",
+     
+      status: "Inactive",
+    },
+  ]);
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return data;
+    }
+
+    return data.filter((item) => item.status === selectedStatus);
+  };
+
+  const [search, setSearch] = useState("");
+  console.log(search);
   return (
     <>
       <div id="approval-page" className="h-100 mx-5">
@@ -56,56 +116,22 @@ function Acknowledgement() {
             <div className="chart-widgets w-100"></div>
           </div>
           <div>
-            <CRow className="mb-3 ">
-              <CDropdown
-                style={{
-                  width: "220px",
-                  border: "2px solid gray",
-                  
-                  borderRadius: "5px",
-                }}
-              >
-                <CDropdownToggle color="">
-                  {selectedStatus}
-                  Category
-                </CDropdownToggle>
-                <CDropdownMenu>
-                  <CDropdownItem header>Select Status</CDropdownItem>
-                  <CDropdownItem onClick={() => handleSelect("Active")}>
-                    Active
-                  </CDropdownItem>
-                  <CDropdownItem onClick={() => handleSelect("Inactive")}>
-                    Inactive
-                  </CDropdownItem>
-                </CDropdownMenu>
-              </CDropdown>
+          <CRow className="mb-3">
               <CCol sm={3}>
                 <CFormSelect
-                  options={[
-                    "Select Sample Area",
-                    { label: "All" },
-                    { label: "Initiated" },
-                    { label: "Approved" },
-                    { label: "Rejected" },
-                    { label: "Reinitiated" },
-                    { label: "Dropped" },
-                    
-                  ]}
-                  style={{border :"2px solid gray"}}
-                />
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  value={selectedStatus}
+                  style={{ border: "2px solid gray" }}
+                >
+                  <option value="All">All</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </CFormSelect>
               </CCol>
-                
-              
               <CCol sm={2}></CCol>
               <CCol sm={3}>
-                <div className="d-flex justify-content-end ">
-                  <CButton
-                    color="info"
-                    text="white"
-                    style={{ marginLeft: "50px" }}
-                    onClick={() => setAddModal(true)}
-                    className="text-white"
-                  >
+                <div className="d-flex justify-content-end">
+                  <CButton color="primary" onClick={() => setAddModal(true)}>
                     Acknowledgement
                   </CButton>
                 </div>
@@ -113,169 +139,76 @@ function Acknowledgement() {
             </CRow>
           </div>
           <div className="bg-white mt-5" style={{boxShadow:"0 0 4px black"}}>
-            <CTable align="middle" responsive className=" ">
+          <CTable align="middle" responsive className=" ">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">SNo.</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Schedule Code	 </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Schedule Code{" "}
+                  Schedule Date	
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Schedule Date
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions </CTableHeaderCell>
+
+                  
+
+                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>1</CTableDataCell>
+                {filterData()
+                  .filter((item) => {
+                    return search.toLowerCase() === ""
+                      ? item
+                      : item.ScheduleCode.toLowerCase().includes(search);
+                  })
+                  .map((item, index) => (
+                    <CTableRow key={index}>
+                      <CTableHeaderCell scope="row" className="text-center">
+                        <input type="checkbox" />
+                      </CTableHeaderCell>
+                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell key={item.id}>
+                        {item.ScheduleCode	}
+                      </CTableDataCell>
 
-                  <CTableDataCell>stmp1</CTableDataCell>
-                  <CTableDataCell>loc1</CTableDataCell>
-                  <CTableDataCell className="d-flex">
-                  
+                      <CTableDataCell>{item.ScheduleDate	}</CTableDataCell>
+                      
 
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      APPROVED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>2</CTableDataCell>
-                  
-                  <CTableDataCell>testing</CTableDataCell>
-                
-                  <CTableDataCell>Plant1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-                  <CTableDataCell className="d-flex">
-
-               
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  {/* <CTableDataCell>test</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>*/}
-                  {/* <CTableDataCell>testing525</CTableDataCell>  */}
-                  {/* <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell> */}
-                  <CTableDataCell>testing525</CTableDataCell>
-                  {/* <CTableDataCell>25255488</CTableDataCell> */}
-                  <CTableDataCell>Lab1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
+                      <CTableDataCell className="d-flex">
+                        <div
+                          className="py-2 px-3 small rounded fw-bold"
+                          style={
+                            item.status === "Active"
+                              ? badgeStyle2
+                              : item.status === "Inactive"
+                              ? badgeStyle3
+                              : badgeStyle
+                          }
+                        >
+                          {item.status}
+                        </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div className="d-flex gap-3">
+                          <Link to="/approval/1321">
+                            <FontAwesomeIcon icon={faEye} />
+                          </Link>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => setAddModal(true)}
+                          >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                          </div>
+                          <Link to="#">
+                            <FontAwesomeIcon icon={faTrashCan} />
+                          </Link>
+                        </div>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
               </CTableBody>
             </CTable>
           </div>

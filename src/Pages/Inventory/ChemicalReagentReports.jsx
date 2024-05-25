@@ -3,9 +3,9 @@ import ReactPDF from "@react-pdf/renderer";
 import {
   CButton,
   CCol,
-  // CFormInput,
   CFormSelect,
   CModal,
+  CBadge,
   CCardBody,
   CFormInput,
   CCard,
@@ -15,8 +15,22 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHeaderCell,
+  CTableHead,
+  CTableRow,
 } from "@coreui/react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+
 const Header = () => (
   <ReactPDF.View
     style={{
@@ -31,36 +45,118 @@ const Header = () => (
     >
       <ReactPDF.Image
         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
-        style={{ width: 50, height: 50 }}
+        style={{ width: 100, height: 100 }}
       />
       <ReactPDF.Text>Vijay Nagar, Indore, Madhya Pradesh 452010</ReactPDF.Text>
     </ReactPDF.View>
-    <ReactPDF.Text style={{ color: "blue", fontWeight: "bold", marginTop: 10 }}>
+    <ReactPDF.Text style={{ color: "blue", fontWeight: "bold", marginBottom: "10" }}>
       Chemical/Reagent Index
     </ReactPDF.Text>
   </ReactPDF.View>
 );
 
-function ChemicalReagentReports() {
-  const [addModal, setAddModal] = useState(false);
+const PDFTable = ({ data }) => (
+  <ReactPDF.View>
+    <ReactPDF.Text style={{ fontWeight: "bold", marginBottom: 10 }}>
+      Chemicals/Reagents List
+    </ReactPDF.Text>
+    <ReactPDF.View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        borderBottom: "1px solid black",
+        padding: 5,
+      }}
+    >
+      <ReactPDF.Text style={{ width: "10%" }}>S No.</ReactPDF.Text>
+      <ReactPDF.Text style={{ width: "30%" }}>
+        Chemical / Reagent Name
+      </ReactPDF.Text>
+      <ReactPDF.Text style={{ width: "30%" }}>
+        Chemical / Reagent Unique Code
+      </ReactPDF.Text>
+      <ReactPDF.Text style={{ width: "30%" }}>Status</ReactPDF.Text>
+    </ReactPDF.View>
+    {data.map((item, index) => (
+      <ReactPDF.View
+        key={index}
+        style={{ display: "flex", flexDirection: "row", padding: 5 }}
+      >
+        <ReactPDF.Text style={{ width: "10%" }}>{item.id}</ReactPDF.Text>
+        <ReactPDF.Text style={{ width: "30%" }}>
+          {item.ChemicalReagentName}
+        </ReactPDF.Text>
+        <ReactPDF.Text style={{ width: "30%" }}>
+          {item.ChemicalReagentCode}
+        </ReactPDF.Text>
+        <ReactPDF.Text style={{ width: "30%" }}>{item.status}</ReactPDF.Text>
+      </ReactPDF.View>
+    ))}
+  </ReactPDF.View>
+);
 
-  const PDFDocument = () => (
-    <ReactPDF.Document>
-      <ReactPDF.Page size="A4" style={{ padding: 20 }}>
-        <Header />
-        <ReactPDF.View style={{ marginTop: 20 }}>
-          <ReactPDF.Text>No Chemicals Found</ReactPDF.Text>
-          <ReactPDF.Text style={{ marginTop: 20 }}>
-            Printed By: Admin
-          </ReactPDF.Text>
-          <ReactPDF.Text>Printed On: 20/05/2024 10:26</ReactPDF.Text>
-        </ReactPDF.View>
-      </ReactPDF.Page>
-    </ReactPDF.Document>
-  );
+const PDFDocument = ({ data }) => (
+  <ReactPDF.Document>
+    <ReactPDF.Page size="A4" style={{ padding: 5 }}>
+      <Header />
+      <ReactPDF.View style={{ marginTop: 10 }}>
+        <PDFTable data={data} style={{ fontSize:"10px"}}/>
+        <ReactPDF.Text style={{ marginTop: 20, fontSize:"10px" }}>Printed By: Admin</ReactPDF.Text>
+        <ReactPDF.Text style={{ fontSize:"10px"}}>Printed On: 20/05/2024 10:26</ReactPDF.Text>
+      </ReactPDF.View>
+    </ReactPDF.Page>
+  </ReactPDF.Document>
+);
+
+function ChemicalReagentReports() {
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  const [addModal, setAddModal] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const filterData = () => [
+    {
+      id: 1,
+      ChemicalReagentName: "Chemical A",
+      ChemicalReagentCode: "123ABC",
+      CAS_CAT_No: "154654",
+      Category: "Organic Acid",
+      Minimum_Quantity: "5",
+      status: "INITIATED",
+    },
+    {
+      id: 2,
+      ChemicalReagentName: "Chemical B",
+      ChemicalReagentCode: "456DEF",
+      CAS_CAT_No: "154654",
+      Category: "Organic Acid",
+      Minimum_Quantity: "5",
+      status: "APPROVED",
+    },
+    // Add more data as needed
+  ];
+
+  const filterData1 = () => {
+    const data = filterData();
+    if (selectedStatus === "All") {
+      return data;
+    }
+
+    return data.filter((item) => item.status === selectedStatus.toUpperCase());
+  };
 
   const downloadPDF = async () => {
-    const blob = await pdf(<PDFDocument />).toBlob();
+    const data = filterData1().filter(
+      (item) =>
+        search.toLowerCase() === "" ||
+        item.ChemicalReagentName.toLowerCase().includes(search.toLowerCase())
+    );
+    const blob = await pdf(<PDFDocument data={data} />).toBlob();
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -75,58 +171,30 @@ function ChemicalReagentReports() {
           <div className="main-head">
             <div className="title fw-bold fs-5">Chemical / Reagent List</div>
           </div>
-          <div className="d-flex gap-4">
-            <div className="chart-widgets w-100">
-              <div className="">
-                <div className="row">
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#0d6efd, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">2</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#d63384, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#ffc107, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">APPROVED</div>
-                    <div className="count fs-1 text-light fw-bolder">1</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#dc3545, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div className="d-flex gap-4 py-4"></div>
           <div>
             <CRow className="mb-3">
               <CCol sm={4}>
-                <CFormInput type="email" placeholder="Search..." />
+                <CFormInput
+                  style={{ border: "2px solid gray" }}
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </CCol>
               <CCol sm={3}>
                 <CFormSelect
-                  options={[
-                    { label: "All" },
-                    { label: "Initiated" },
-                    { label: "Approved" },
-                    { label: "Rejected" },
-                    { label: "Reinitiated" },
-                    { label: "Dropped" },
-                  ]}
-                />
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  value={selectedStatus}
+                  style={{ border: "2px solid gray" }}
+                >
+                  <option value="All">All</option>
+                  <option value="Initiated">Initiated</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Reinitiated">Reinitiated</option>
+                  <option value="Dropped">Dropped</option>
+                </CFormSelect>
               </CCol>
               <CCol sm={2}></CCol>
               <CCol sm={3}>
@@ -173,56 +241,148 @@ function ChemicalReagentReports() {
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
                                 alt="Logo"
                                 className="img-fluid"
-                                style={{
-                                  width: "150px",
-                                  height: "150px",
-                                  border: "1px solid lightgray",
-                                  position: "relative",
-                                }}
+                                style={{ height: "150px", width: "160px" }}
                               />
                             </CCol>
-
                             <CCol
-                              md={10}
+                              md={3}
                               style={{
                                 display: "flex",
-                                alignItems: "center",
-                                paddingLeft: "10px",
+                                flexDirection: "column",
                                 position: "absolute",
-                                left: "500px",
-                                top: "110px",
+                                left: "24%",
+                                bottom: "10%",
                               }}
                             >
-                              <center>
-                                <p>
-                                  Vijay Nagar, Indore,
-                                  <br /> Madhya Pradesh 452010
-                                </p>
-                              </center>
+                              <h3 style={{ color: "black", fontWeight: "bolder", position:"absolute", bottom:"250px", left:"150px", width:"500px" }}>
+                                Chemical / Reagent Index
+                              </h3>
+                              <p  style={{ color: "black", fontWeight: "500", position:"absolute", bottom:"195px", left:"150px", width:"500px" }}>Vijay Nagar, Indore, Madhya Pradesh 452010</p>
                             </CCol>
                           </CRow>
-
-                          <CRow className="mt-4">
-                            <CCol
-                              md={12}
+                          <CTable className="mt-5 text-center">
+                            <CTableHead
                               style={{
-                                textAlign: "center",
-                                color: "Blue",
-                                fontWeight: "bolder",
+                                backgroundColor: "blue",
+                                color: "white",
                               }}
                             >
-                              <h5>Chemical/Reagent Issue Record</h5>
-                              <p>No Chemicals Found</p>
-                            </CCol>
-                          </CRow>
-                          <CRow className="mt-4">
-                            <CCol md={6}>
-                              <p>Printed By:Admin</p>
-                            </CCol>
-                            <CCol md={6} className="text-end">
-                              <p>Printed On:20/05/2024 10:26</p>
-                            </CCol>
-                          </CRow>
+                              <CTableRow>
+                                <CTableHeaderCell scope="col">
+                                  S.No
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">
+                                  Chemical / Reagent Name
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">
+                                  Chemical / Reagent Unique Code
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">
+                                  CAS CAT No.
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">
+                                  Category
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">
+                                  Minimum Quantity
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">
+                                  Status
+                                </CTableHeaderCell>
+                                <CTableHeaderCell scope="col">
+                                  Action
+                                </CTableHeaderCell>
+                              </CTableRow>
+                            </CTableHead>
+                            <CTableBody>
+                              {filterData1()
+                                .filter((item) =>
+                                  search.toLowerCase() === ""
+                                    ? true
+                                    : item.ChemicalReagentName.toLowerCase().includes(
+                                        search.toLowerCase()
+                                      )
+                                )
+                                .map((item, index) => (
+                                  <CTableRow key={index}>
+                                    <CTableDataCell>{item.id}</CTableDataCell>
+                                    <CTableDataCell>
+                                      {item.ChemicalReagentName}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                      {item.ChemicalReagentCode}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                      {item.CAS_CAT_No}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                      {item.Category}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                      {item.Minimum_Quantity}
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                      <CBadge
+                                        style={
+                                          item.status === "INITIATED"
+                                            ? badgeStyle2
+                                            : item.status === "APPROVED"
+                                            ? badgeStyle3
+                                            : item.status === "REJECTED"
+                                            ? badgeStyle4
+                                            : item.status === "REINITIATED"
+                                            ? badgeStyle5
+                                            : item.status === "DROPPED"
+                                            ? badgeStyle6
+                                            : badgeStyle
+                                        }
+                                      >
+                                        {item.status}
+                                      </CBadge>
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                      <div className="d-flex flex-row justify-content-center gap-2">
+                                        <Link to={`/Viewchemical`}>
+                                          <CButton
+                                            style={{
+                                              backgroundColor: "black",
+                                              color: "white",
+                                            }}
+                                          >
+                                            <FontAwesomeIcon icon={faEye} />
+                                          </CButton>
+                                        </Link>
+                                        <Link to={`/Editchemical`}>
+                                          <CButton
+                                            style={{
+                                              backgroundColor: "blue",
+                                              color: "white",
+                                            }}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faPenToSquare}
+                                            />
+                                          </CButton>
+                                        </Link>
+                                        <CButton
+                                          style={{
+                                            backgroundColor: "red",
+                                            color: "white",
+                                          }}
+                                          onClick={() =>
+                                            window.confirm(
+                                              "Are you sure you want to delete this item?"
+                                            )
+                                          }
+                                        >
+                                          <FontAwesomeIcon icon={faTrashCan} />
+                                        </CButton>
+                                      </div>
+                                    </CTableDataCell>
+                                  </CTableRow>
+                                ))}
+                            </CTableBody>
+                          </CTable>
                         </CCardBody>
                       </CCol>
                     </CRow>
@@ -233,86 +393,8 @@ function ChemicalReagentReports() {
           </div>
         </div>
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
     </>
   );
 }
-
-const StatusModal = (props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={props.visible}
-        onClose={props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Add Chemicals</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p style={{ fontWeight: "bolder" }}>Registration Initiation</p>
-          <CFormInput
-            type="text"
-            label="Preparation No."
-            placeholder="Preparation No."
-          />
-          <CFormInput type="text" label="Name" placeholder="Name" />
-          <CFormInput
-            type="text"
-            label="Unique Code"
-            placeholder="Unique Code"
-          />
-          <CFormInput
-            type="text"
-            label="CAS / CAT no."
-            placeholder="Enter CAS"
-          />
-          <CFormInput type="text" label="Category" placeholder="Select" />
-          <CFormInput type="number" label="Grade" placeholder="Grade" />
-          <CFormInput
-            type="number"
-            label="Handling Symbol"
-            placeholder="Select..."
-          />
-          <CFormInput
-            type="number"
-            label="Storage Conditions"
-            placeholder="Select"
-          />
-          <CFormInput type="number" label="Lot UOM" placeholder="Select" />
-          <CFormInput type="number" label="Usage UOM" placeholder="Select" />
-          <CFormInput
-            type="number"
-            label="Issues Display Order For Usage"
-            placeholder="Select"
-          />
-          <p style={{ fontWeight: "bolder" }}>Inventory Control</p>
-          <CFormInput type="number" label="Minimum Qty." placeholder="Select" />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-            }}
-          >
-            <label>Comments</label>
-            <textarea name="" id=""></textarea>
-          </div>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add Chemical
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
 
 export default ChemicalReagentReports;

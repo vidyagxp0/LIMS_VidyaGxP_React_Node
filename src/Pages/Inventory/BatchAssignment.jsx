@@ -27,7 +27,88 @@ import { Link } from "react-router-dom";
 
 function BatchAssignment() {
   const [addModal, setAddModal] = useState(false);
-  const badgeStyle = { background: "#cdffca" };
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [data, setData] = useState([
+    {
+      id: 1,
+      ColumnName			: "describe",
+      ColumnNumber			: "describe",
+      ColumnApplication			: "describe",
+      BrandName			: "describe",
+      PackingMaterial				: "describe",
+      
+
+      status: "INITIATED",
+    },
+    {
+      id: 2,
+      ColumnName			: "describe",
+      ColumnNumber			: "describe",
+      ColumnApplication			: "describe",
+      BrandName			: "describe",
+      PackingMaterial				: "describe",
+      status: "INITIATED",
+    },
+
+    {
+      id: 3,
+      ColumnName			: "describe",
+      ColumnNumber			: "describe",
+      ColumnApplication			: "describe",
+      BrandName			: "describe",
+      PackingMaterial				: "describe",
+      status: "REJECTED",
+    },
+    {
+      id: 4,
+      ColumnName			: "describe",
+      ColumnNumber			: "describe",
+      ColumnApplication			: "describe",
+      BrandName			: "describe",
+      PackingMaterial				: "describe",
+      status: "APPROVED",
+    },
+    {
+      id: 5,
+      ColumnName			: "describe",
+      ColumnNumber			: "describe",
+      ColumnApplication			: "describe",
+      BrandName			: "describe",
+      PackingMaterial				: "describe",
+      status: "APPROVED",
+    },
+
+    {
+      id: 6,
+      ColumnName			: "describe",
+      ColumnNumber			: "describe",
+      ColumnApplication			: "describe",
+      BrandName			: "describe",
+      PackingMaterial				: "describe",
+      status: "APPROVED",
+    },
+  ]);
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return data;
+    }
+
+    return data.filter((item) => item.status === selectedStatus.toUpperCase());
+  };
+
+  const [search, setSearch] = useState("");
+  console.log(search);
   return (
     <>
       <div id="approval-page" className="h-100 mx-5">
@@ -37,251 +118,215 @@ function BatchAssignment() {
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
-              <div className="">
-                <div className="row">
+              <div className="row" style={{ cursor: "pointer" }}>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("INITIATED")}
+                >
+                  <div className="text-light fs-5">INITIATED</div>
                   <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#0d6efd, #9ec5fe)" }}
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">2</div>
+                    {
+                      filterData().filter((item) => item.status === "INITIATED")
+                        .length
+                    }
                   </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#d63384, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#ffc107, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">APPROVED</div>
-                    <div className="count fs-1 text-light fw-bolder">1</div>
-                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                    textAlign: "left",
+                    boxShadow: "0px 10px 20px  black !important",
+                  }}
+                  onClick={() => setSelectedStatus("REINITIATED")}
+                >
+                  <div className="text-light fs-5">REINITIATED</div>
 
                   <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#dc3545, #9ec5fe)" }}
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
+                    {
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }
                   </div>
-                </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("APPROVED")}
+                >
+                  <butto className="text-light fs-5">APPROVED</butto>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white", textAlign: "left" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "APPROVED")
+                        .length
+                    }
+                  </div>
+                </button>
+
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("REJECTED")}
+                >
+                  <div className="text-light fs-5">REJECTED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "REJECTED")
+                        .length
+                    }
+                  </div>
+                </button>
               </div>
             </div>
           </div>
           <div>
-            <CRow className="mb-3">
-              <CCol sm={4}>
-                <CFormInput type="email" placeholder="Search..." />
-              </CCol>
-              <CCol sm={3}>
-                <CFormSelect
-                  options={[
-                    "All",
-                    { label: "All" },
-                    { label: "Initiated" },
-                    { label: "Approved" },
-                    { label: "Rejected" },
-                    { label: "Reinitiated" },
-                    { label: "Dropped" },
-                  ]}
-                />
-              </CCol>
-              <CCol sm={2}></CCol>
-              <CCol sm={3}>
-                <div className="d-flex justify-content-end">
-                  <CButton color="info" onClick={() => setAddModal(true)}>
-                    Add Batch Assignment
-                  </CButton>
-                </div>
-              </CCol>
-            </CRow>
+          <CRow className="mb-3">
+            <CCol sm={4}>
+              <CFormInput
+                style={{ border: "2px solid gray" }}
+                type="email"
+                placeholder="Search..."
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </CCol>
+
+            <CCol sm={3}>
+              <CFormSelect
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                value={selectedStatus}
+                style={{ border: "2px solid gray" }}
+              >
+                <option value="All">All</option>
+                <option value="Initiated">Initiated</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Reinitiated">Reinitiated</option>
+                <option value="Dropped">Dropped</option>
+              </CFormSelect>
+            </CCol>
+            <CCol sm={2}></CCol>
+            <CCol sm={3}>
+              <div className="d-flex justify-content-end">
+                <CButton color="primary" onClick={() => setAddModal(true)}>
+                  Add Usage
+
+                </CButton>
+              </div>
+            </CCol>
+          </CRow>
+
           </div>
           <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Column Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Column Number</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Column Application
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Brand Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Packing Material
-                  </CTableHeaderCell>
-                  {/* <CTableHeaderCell scope="col">Recieved On</CTableHeaderCell> */}
+          <CTable align="middle" responsive className=" ">
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell scope="col" className="text-center">
+                  <input type="checkbox" />
+                </CTableHeaderCell>
+                <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Column Name	  		 </CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                Column Number	
+                </CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  {/* <CTableHeaderCell scope="col">Comments</CTableHeaderCell> */}
+                <CTableHeaderCell scope="col">Column Application	</CTableHeaderCell>
+                <CTableHeaderCell scope="col">
+                Brand Name	
+                </CTableHeaderCell>
+                
+                <CTableHeaderCell scope="col">Packing Material	</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody>
+              {filterData()
+                .filter((item) => {
+                  return search.toLowerCase() === ""
+                    ? item
+                    : item.ColumnName		.toLowerCase().includes(search);
+                })
+                .map((item, index) => (
+                  <CTableRow key={index}>
+                    <CTableHeaderCell scope="row" className="text-center">
+                      <input type="checkbox" />
+                    </CTableHeaderCell>
+                    <CTableDataCell>{item.id}</CTableDataCell>
+                    <CTableDataCell key={item.id}>
+                      {item.ColumnName	}
+                    </CTableDataCell>
 
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>1</CTableDataCell>
-                  <CTableDataCell>1</CTableDataCell>
+                    <CTableDataCell>{item.ColumnNumber				}</CTableDataCell>
+                    <CTableDataCell>{item.ColumnApplication					}</CTableDataCell>
+                    <CTableDataCell>{item.BrandName					}</CTableDataCell>
+                    <CTableDataCell>{item.PackingMaterial				}</CTableDataCell>
+                    
 
-                  {/* <CTableDataCell>stmp1</CTableDataCell> */}
-                  <CTableDataCell>describe</CTableDataCell>
-                  {/* <CTableDataCell>isubus111</CTableDataCell> */}
-                  <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>loc1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      APPROVED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
+                    <CTableDataCell className="d-flex">
                       <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
+                        className="py-2 px-3 small rounded fw-bold"
+                        style={
+                          item.status === "INITIATED"
+                            ? badgeStyle2
+                            : item.status === "APPROVED"
+                            ? badgeStyle3
+                            : item.status === "REJECTED"
+                            ? badgeStyle4
+                            : item.status === "REINITIATED"
+                            ? badgeStyle5
+                            : item.status === "DROPPED"
+                            ? badgeStyle6
+                            : item.status === "ALL"
+                            ? badgeStyle
+                            : badgeStyle
+                        }
                       >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                        {item.status}
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>2</CTableDataCell>
-                  {/* <CTableDataCell>test21</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell> */}
-                  <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell>
-                  {/* <CTableDataCell>testing</CTableDataCell> */}
-                  <CTableDataCell>25365488</CTableDataCell>
-                  <CTableDataCell>Plant1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <div className="d-flex gap-3">
+                        <Link to="/approval/1321">
+                          <FontAwesomeIcon icon={faEye} />
+                        </Link>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => setAddModal(true)}
+                        >
+                          <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        <Link to="#">
+                          <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
                       </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  {/* <CTableDataCell>test</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell> */}
-                  <CTableDataCell>testing525</CTableDataCell>
-                  {/* <CTableDataCell>25255488</CTableDataCell> */}
-                  <CTableDataCell>Lab1</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  {/* <CTableDataCell>test</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell> */}
-                  <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-
-                  {/* <CTableDataCell>Lab1</CTableDataCell> */}
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-              </CTableBody>
-            </CTable>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+            </CTableBody>
+          </CTable>
           </div>
         </div>
       </div>

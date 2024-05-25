@@ -34,269 +34,205 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function CultureLotAcceptance() {
-  const [selectedStatus, setSelectedStatus] = useState("Select Status");
-
-  const handleSelect = (status) => {
-    setSelectedStatus(status);
-  };
+function MediaOnboarding() {
   const [addModal, setAddModal] = useState(false);
-  const badgeStyle = { background: "#cdffca" };
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " green",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "red", color: "white", width: "110px" };
+  
+
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [data, setData] = useState([
+    {
+      id: 1,
+      MediaName: "55",
+      MediaPrefix: "Infra",
+      StorageCondition: "55",
+      UOM: "55",
+      ModeOfPreparation: "55",
+      AddedOn: "55",
+
+      status: "Active",
+    },
+    {
+      id: 2,
+      MediaName: "55",
+      MediaPrefix: "Infra",
+      StorageCondition: "55",
+      UOM: "55",
+      ModeOfPreparation: "55",
+      AddedOn: "55",
+      status: "Active",
+    },
+
+    {
+      id: 3,
+      MediaName: "55",
+      MediaPrefix: "Infra",
+      StorageCondition: "55",
+      UOM: "55",
+      ModeOfPreparation: "55",
+      AddedOn: "55",
+      status: "Active",
+    },
+    {
+      id: 4,
+      MediaName: "55",
+      MediaPrefix: "Infra",
+      StorageCondition: "55",
+      UOM: "55",
+      ModeOfPreparation: "55",
+      AddedOn: "55",
+      status: "Inactive",
+    },
+    {
+      id: 5,
+      MediaName: "55",
+      MediaPrefix: "Infra",
+      StorageCondition: "55",
+      UOM: "55",
+      ModeOfPreparation: "55",
+      AddedOn: "55",
+      status: "Inactive",
+    },
+
+    {
+      id: 6,
+      MediaName: "55",
+      MediaPrefix: "Infra",
+      StorageCondition: "55",
+      UOM: "55",
+      ModeOfPreparation: "55",
+      AddedOn: "55",
+      status: "Inactive",
+    },
+  ]);
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return data;
+    }
+
+    return data.filter((item) => item.status === selectedStatus);
+  };
+
+  const [search, setSearch] = useState("");
+  console.log(search);
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div id="approval-page" className="h-100 mx-5 ">
+        <div className="container-fluid my-5 ">
           <div className="main-head">
-            <div className="title fw-bold fs-5">Media Onboarding</div>
+            <div className="title fw-bold fs-5 py-4">Media Onboarding</div>
           </div>
-          <div className="d-flex gap-4">
-            <div className="chart-widgets w-100">
-              <div className="">
-                <div className="row">
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#0d6efd, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">2</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#d63384, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#ffc107, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">APPROVED</div>
-                    <div className="count fs-1 text-light fw-bolder">1</div>
-                  </div>
 
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#dc3545, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div>
-            <CRow className="mb-3 ">
-              <CDropdown
-                style={{
-                  width: "250px",
-                  border: "1px solid black",
-                  borderRadius: "5px",
-                }}
-              >
-                <CDropdownToggle color="" style={{ color: "gray" }}>
-                  Show {selectedStatus}
-                </CDropdownToggle>
-                <CDropdownMenu>
-                  <CDropdownItem header>Select Status</CDropdownItem>
-                  <CDropdownItem onClick={() => handleSelect("Active")}>
-                    Active
-                  </CDropdownItem>
-                  <CDropdownItem onClick={() => handleSelect("Inactive")}>
-                    Inactive
-                  </CDropdownItem>
-                </CDropdownMenu>
-              </CDropdown>
+            <CRow className="mb-3">
+              
+
+              <CCol sm={3}>
+              <CFormSelect
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  value={selectedStatus}
+                  style={{ border: "2px solid gray" }}
+                >
+                  <option value="All">All</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </CFormSelect>
+              </CCol>
               <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton
-                    color="info"
-                    style={{ marginLeft: "50px" }}
-                    onClick={() => setAddModal(true)}
-                  >
-                    Media Onboarding
+                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                    Media onboarding
                   </CButton>
                 </div>
               </CCol>
             </CRow>
           </div>
           <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+            <CTable align="middle" responsive className=" ">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">SNo.</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Media Name</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Media Prefix</CTableHeaderCell>
+
                   <CTableHeaderCell scope="col">
-                    Storage Condition
+                    Storage Condition{" "}
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">UOM </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                    Mode Of Preparation
+                    Mode Of Preparation{" "}
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Added On </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
 
+                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>1</CTableDataCell>
+                {filterData()
+                  .filter((item) => {
+                    return search.toLowerCase() === ""
+                      ? item
+                      : item.MediaName.toLowerCase().includes(search);
+                  })
+                  .map((item, index) => (
+                    <CTableRow key={index}>
+                      <CTableHeaderCell scope="row" className="text-center">
+                        <input type="checkbox" />
+                      </CTableHeaderCell>
+                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell key={item.id}>
+                        {item.MediaName}
+                      </CTableDataCell>
 
-                  <CTableDataCell>stmp1</CTableDataCell>
-                  <CTableDataCell>describe</CTableDataCell>
-                  <CTableDataCell>isubus111</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>54255455</CTableDataCell>
-                  <CTableDataCell>loc1</CTableDataCell>
+                      <CTableDataCell>{item.MediaPrefix}</CTableDataCell>
+                      <CTableDataCell>{item.StorageCondition}</CTableDataCell>
+                      <CTableDataCell>{item.UOM}</CTableDataCell>
+                      <CTableDataCell>{item.ModeOfPreparation}</CTableDataCell>
+                      <CTableDataCell>{item.AddedOn}</CTableDataCell>
 
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      APPROVED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>2</CTableDataCell>
-                  <CTableDataCell>test21</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>testing</CTableDataCell>
-                  <CTableDataCell>25365488</CTableDataCell>
-                  <CTableDataCell>Plant1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  <CTableDataCell>test</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>25255488</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  <CTableDataCell>test</CTableDataCell>
-                  <CTableDataCell>NA</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>testing525</CTableDataCell>
-                  <CTableDataCell>25255488</CTableDataCell>
-                  <CTableDataCell>Lab1</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <Link to="#">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Link>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
+                      <CTableDataCell className="d-flex">
+                        <div
+                          className="py-2 px-3 small rounded fw-bold"
+                          style={
+                            item.status === "Active"
+                              ? badgeStyle2
+                              : item.status === "Inactive"
+                              ? badgeStyle3
+                              : badgeStyle
+                          }
+                        >
+                          {item.status}
+                        </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div className="d-flex gap-3">
+                          <Link to="/approval/1321">
+                            <FontAwesomeIcon icon={faEye} />
+                          </Link>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => setAddModal(true)}
+                          >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                          </div>
+                          <Link to="#">
+                            <FontAwesomeIcon icon={faTrashCan} />
+                          </Link>
+                        </div>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
               </CTableBody>
             </CTable>
           </div>
@@ -336,20 +272,11 @@ const StatusModal = (_props) => {
             "
             placeholder=""
           />
-         
 
-          <CFormInput
-            type="text"
-            label="Storage Condition"
-            placeholder=""
-          />
+          <CFormInput type="text" label="Storage Condition" placeholder="" />
 
-           <CFormInput
-            type="text"
-            label="UOM"
-            placeholder=""
-          />
-           <CForm>
+          <CFormInput type="text" label="UOM" placeholder="" />
+          <CForm>
             <CFormLabel>Mode of Prepration</CFormLabel>
             <div>
               <CFormCheck
@@ -373,9 +300,6 @@ const StatusModal = (_props) => {
             label="Refrence Document if Any"
             placeholder="choose file"
           />
-
-
-          
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
@@ -390,4 +314,4 @@ const StatusModal = (_props) => {
   );
 };
 
-export default CultureLotAcceptance;
+export default MediaOnboarding;
