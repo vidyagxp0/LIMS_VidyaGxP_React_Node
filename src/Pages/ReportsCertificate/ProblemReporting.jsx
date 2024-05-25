@@ -99,7 +99,7 @@ function ProblemReporting() {
                             <CCol sm={6}></CCol>
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Problem</CButton>
+                                    <CButton color="primary" onClick={() => setAddModal(true)}>Add Problem</CButton>
                                 </div>
                             </CCol>
                         </CRow>

@@ -215,9 +215,9 @@ function App() {
             <Route path="/stCondition" element={<StorageCondition />} />
 
             <Route path="/department" element={<Department />} />
-            <Route path="/admin" element={<Admin/>}/>
-            <Route path="/qualityAssurance" element={<QualityAssurance/>} />
-            <Route path="/qualityCheck" element={< QualityCheck/>} />
+            <Route path="/department/admin" element={<Admin/>}/>
+            <Route path="/department/qualityAssurance" element={<QualityAssurance/>} />
+            <Route path="/department/qualityCheck" element={< QualityCheck/>} />
             <Route path="/store" element={< Store/>} />
             <Route path="/users" element={<Users />} />
             <Route path="/roles" element={<Roles/>} />
