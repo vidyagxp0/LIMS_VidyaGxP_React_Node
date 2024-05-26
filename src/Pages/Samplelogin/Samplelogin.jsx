@@ -123,32 +123,32 @@ export default function Samplelogin() {
                     </div>
                     <p className='m-3'>Add information and add new sample login</p>
 
-                    <label id="line3" htmlFor="">Client</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Client</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
 
-                    <label id="line3" htmlFor="">Test Plan / Revision No.</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Test Plan / Revision No.</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
 
-                    <label id="line3" htmlFor="">Product / Material</label>
-                    <input id="line4" required type="text" placeholder="Prefix" />
+                    <label className="line3" htmlFor="">Product / Material</label>
+                    <input className="line4" required type="text" placeholder="Prefix" />
 
-                    <label id="line3" htmlFor="">Product / Material Code</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Product / Material Code</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Generic Name</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Generic Name</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Specification ID</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Specification ID</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Copy Sample from</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Copy Sample from</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
 
-                    <label id="line3" htmlFor="">Sample Type</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Sample Type</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Certificates (If any)</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Certificates (If any)</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
 
                     <div id="line5">
                         <button type="button"
@@ -179,32 +179,32 @@ export default function Samplelogin() {
                     </div>
                     <p className='m-3'>Update information and add new sample login</p>
 
-                    <label id="line3" htmlFor="">Client</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Client</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
 
-                    <label id="line3" htmlFor="">Test Plan / Revision No.</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Test Plan / Revision No.</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
 
-                    <label id="line3" htmlFor="">Product / Material</label>
-                    <input id="line4" required type="text" placeholder="Prefix" />
+                    <label className="line3" htmlFor="">Product / Material</label>
+                    <input className="line4" required type="text" placeholder="Prefix" />
 
-                    <label id="line3" htmlFor="">Product / Material Code</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Product / Material Code</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Generic Name</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Generic Name</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Specification ID</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Specification ID</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Copy Sample from</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Copy Sample from</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
 
-                    <label id="line3" htmlFor="">Sample Type</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Sample Type</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Certificates (If any)</label>
-                    <input id="line4" required type="text" placeholder="Select..." />
+                    <label className="line3" htmlFor="">Certificates (If any)</label>
+                    <input className="line4" required type="text" placeholder="Select..." />
                     <div className="m-4">
                         <table className='table table-bordered table-responsive'>
                             <thead>

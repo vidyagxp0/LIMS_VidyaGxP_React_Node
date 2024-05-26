@@ -111,17 +111,17 @@ const nextToLastPage = () => {
           </div>
         </div>
             
-        <label id="line3" htmlFor="">Name</label>
-        <input id="line4" required type="text" placeholder="Product Name"/>
+        <label className="line3" htmlFor="">Name</label>
+        <input className="line4" required type="text" placeholder="Product Name"/>
 
-        <label id="line3" htmlFor="">Unique Code</label>
-        <input id="line4" required type="text" placeholder="Product Code"/>
+        <label className="line3" htmlFor="">Unique Code</label>
+        <input className="line4" required type="text" placeholder="Product Code"/>
 
-        <label id="line3" htmlFor="">Generic Name</label>
-        <input id="line4" required type="text" placeholder="Generic Name"/> 
+        <label className="line3" htmlFor="">Generic Name</label>
+        <input className="line4" required type="text" placeholder="Generic Name"/> 
         
-        <label id="line3" htmlFor="">Re-testing Period</label>
-        <input id="line4" required type="text" placeholder="Retesting Period"/>
+        <label className="line3" htmlFor="">Re-testing Period</label>
+        <input className="line4" required type="text" placeholder="Retesting Period"/>
 
         <p style={{margin:'4px 23px'}}>Days</p>
     

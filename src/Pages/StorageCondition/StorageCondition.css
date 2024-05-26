@@ -89,12 +89,12 @@
         font-weight: 500;
 
 }
-#line3{
+.line3{
         /* border: 1px solid ; */
         margin:20px 0 10px 20px;
 
 }
-#line4{
+.line4{
     margin:0 20px;
     /* border: none; */
     border: 1px solid #cad1f6;

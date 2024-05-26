@@ -153,7 +153,7 @@ const nextToLastPage = () => {
               ></button>
             </div>
           </div>
-          <label id="line3" htmlFor="">
+          <label className="line3" htmlFor="">
           Product/Material Code
           </label>
                 <Autocomplete
@@ -164,51 +164,51 @@ const nextToLastPage = () => {
               renderInput={(params) => <TextField {...params} label="" />}
             />
 
-            <label id="line3" htmlFor="">
+            <label className="line3" htmlFor="">
             Product Name
                </label>
-              <input id="line4" type="text" placeholder="Product Name" /> 
+              <input className="line4" type="text" placeholder="Product Name" /> 
               
-              <label id="line3" htmlFor="">
+              <label className="line3" htmlFor="">
               Specification Name
                </label>
-              <input id="line4" type="text" placeholder="Specification Name" /> 
+              <input className="line4" type="text" placeholder="Specification Name" /> 
              
-              <label id="line3" htmlFor="">
+              <label className="line3" htmlFor="">
               Specification ID
                </label>
-              <input id="line4" type="text" placeholder="Specification ID" />
+              <input className="line4" type="text" placeholder="Specification ID" />
          
 
           
-            <label id="line3" htmlFor="">Sample Type</label>
-             <select name="Sample Type" id="line4">
+            <label className="line3" htmlFor="">Sample Type</label>
+             <select name="Sample Type" className="line4">
                 <option value="">Select Sample Type</option>
                 <option value="raw-material">Raw Material</option><option value="hcl">hcl</option>
                 <option value="hydrochloric-acid">Hydrochloric Acid</option><option value="petrochemical">Petrochemical</option><option value="initiated-product">Initiated Product</option><option value="semi-finished">Semi Finished</option><option value="abcd">ABCD</option><option value="h2so4">H2So4</option><option value="att108">ATT108</option><option value="micro-media">Micro Media </option><option value="fg-templage">FG Templage</option><option value="water-type">water type</option><option value="sodium">Sodium</option><option value="test-sample-type">test sample type</option><option value="new-product-sample-type">New Product Sample Type</option><option value="packing-material">Packing Material</option><option value="raw-material-1">Raw Material-1</option><option value="finished-product">Finished Product</option>
               </select>
               
-               <label id="line3" htmlFor="">Specification Type</label>
-             <select name="Specification Type" id="line4">
+               <label className="line3" htmlFor="">Specification Type</label>
+             <select name="Specification Type" className="line4">
                 <option value="">Select Specification Type</option>
               <option value="environment">environment</option><option value="culture">culture</option><option value="culture1">culture1</option><option value="working-standard">working standard</option><option value="tentative">tentative</option><option value="release">release</option><option value="regulatory">regulatory</option><option value="raw-material">Raw Material</option><option value="instrument">instrument</option><option value="shell-life">shell life</option><option value="lupin-mitra-s-25-tablet">LUPIN MIRA S 25 TABLET</option>
               </select>
 
            
-        <label id="line3" htmlFor="">Effective From</label>
-        <input id="line4" style={{padding:'14px'}}  type="date" placeholder="" />  
+        <label className="line3" htmlFor="">Effective From</label>
+        <input className="line4" style={{padding:'14px'}}  type="date" placeholder="" />  
         
-        <label id="line3" htmlFor="">Review Date</label>
-        <input id="line4" style={{padding:'14px'}} type="date" placeholder="" />  
+        <label className="line3" htmlFor="">Review Date</label>
+        <input className="line4" style={{padding:'14px'}} type="date" placeholder="" />  
         
-        <label id="line3" htmlFor="">Supersedes</label>
-        <input id="line4" type="text" placeholder="Supersedes" /> 
+        <label className="line3" htmlFor="">Supersedes</label>
+        <input className="line4" type="text" placeholder="Supersedes" /> 
 
-         <label id="line3" htmlFor="">Standard Test Procedure No.</label>
-        <input id="line4" type="text" placeholder="Standard Test Procedure No." />
+         <label className="line3" htmlFor="">Standard Test Procedure No.</label>
+        <input className="line4" type="text" placeholder="Standard Test Procedure No." />
         
-        <label id="line3" for="formFile" className="form-label">Document</label>
-      <input id="line4" style={{padding:'25px',fontSize:'12px'}} type="file"/>
+        <label className="line3" for="formFile">Document</label>
+      <input className="line4" style={{padding:'25px',fontSize:'12px'}} type="file"/>
 
          
 

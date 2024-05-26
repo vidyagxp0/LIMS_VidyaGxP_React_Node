@@ -167,26 +167,26 @@ const CalibrationSampleLogin = () => {
             </div>
           </div>
           <div className="offcanvas-body">
-            <label id="line3" htmlFor="">Sample Login Template/ Revision No.</label>
-            <input id="line4" required type="text" placeholder=" " />
+            <label className="line3" htmlFor="">Sample Login Template/ Revision No.</label>
+            <input className="line4" required type="text" placeholder=" " />
 
-            <label id="line3" htmlFor="">Test Plan / Revision No.</label>
-            <input id="line4" required type="text" placeholder="prefix" />
+            <label className="line3" htmlFor="">Test Plan / Revision No.</label>
+            <input className="line4" required type="text" placeholder="prefix" />
 
-            <label id="line3" htmlFor="">Product / Material</label>
-            <input id="line4" required type="text" placeholder="prefix" />
+            <label className="line3" htmlFor="">Product / Material</label>
+            <input className="line4" required type="text" placeholder="prefix" />
 
-            <label id="line3" htmlFor="">Product / Material Code</label>
-            <input id="line4" required type="text" placeholder="" />
+            <label className="line3" htmlFor="">Product / Material Code</label>
+            <input className="line4" required type="text" placeholder="" />
 
-            <label id="line3" htmlFor="">Generic Name</label>
-            <input id="line4" required type="text" placeholder="" />
+            <label className="line3" htmlFor="">Generic Name</label>
+            <input className="line4" required type="text" placeholder="" />
 
-            <label id="line3" htmlFor="">Specification ID</label>
-            <input id="line4" required type="text" placeholder="" />
+            <label className="line3" htmlFor="">Specification ID</label>
+            <input className="line4" required type="text" placeholder="" />
 
-            <label id="line3" htmlFor="">Sample Type</label>
-            <input id="line4" required type="text" placeholder="" />
+            <label className="line3" htmlFor="">Sample Type</label>
+            <input className="line4" required type="text" placeholder="" />
 
             <FormLabel style={{ margin: '15px 20px' }} id="demo-row-radio-buttons-group-label">Auto Sample Allotted</FormLabel>
             <RadioGroup style={{ margin: '15px 20px' }}

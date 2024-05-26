@@ -211,11 +211,11 @@ const CalibrationDataSheet = () => {
             </div>
           </div>
 
-          <label id="line3" htmlFor="">Name</label>
-          <input id="line4" required type="text" placeholder="Name " />
+          <label className="line3" htmlFor="">Name</label>
+          <input className="line4" required type="text" placeholder="Name " />
 
-          <label id="line3" htmlFor="">Unique code</label>
-          <input id="line4" required type="text" placeholder="" />
+          <label className="line3" htmlFor="">Unique code</label>
+          <input className="line4" required type="text" placeholder="" />
 
           <div style={{ margin: '15px 20px', }}>
             <label> Quantitative Parameters &nbsp;
@@ -228,10 +228,10 @@ const CalibrationDataSheet = () => {
               <>
                 <br />
                 <label>No. of Quantitative Parameters</label>
-                <input style={{width:'240px'}} id="line4" type="text" placeholder="No. of Quantitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
+                <input style={{width:'240px'}} className="line4" type="text" placeholder="No. of Quantitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
            
                 <label>Parameters and No. of Set Points</label>
-                <input style={{width:'240px'}} id="line4" type="text" placeholder="Parameters and No. of Set Points" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Set</button>
+                <input style={{width:'240px'}} className="line4" type="text" placeholder="Parameters and No. of Set Points" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Set</button>
               </>
             )}
             <br />
@@ -242,7 +242,7 @@ const CalibrationDataSheet = () => {
               <>
                 <br />
                 <label>No. of Qualitative Parameters</label>
-                <input style={{width:'240px'}} id="line4" type="text" placeholder="No. of Qualitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
+                <input style={{width:'240px'}} className="line4" type="text" placeholder="No. of Qualitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
             
               </>
             )}

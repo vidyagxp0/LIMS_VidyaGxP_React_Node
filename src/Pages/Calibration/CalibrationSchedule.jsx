@@ -192,28 +192,28 @@ export default function CalibrationSchedule() {
                         </div>
                     </div>
 
-                    <label id="line3" htmlFor="">Instrument Category</label>
-                    <select name="Instrument_Category" id="line4">
+                    <label className="line3" htmlFor="">Instrument Category</label>
+                    <select name="Instrument_Category" className="line4">
                         <option value="">Select Intrument Category</option>
                         <option value="chromathograpy">chromathograpy</option>
                         <option value="weighing balance">weighing balance</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Calibration Type</label>
-                    <select name="Calibration Type" id="line4">
+                    <label className="line3" htmlFor="">Calibration Type</label>
+                    <select name="Calibration Type" className="line4">
                         <option value="">Select Calibration Type</option>
                         <option value="yearly">yearly</option>
                         <option value="monthly">monthly</option>
                         <option value="daily">daily</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Instrument (Instrument ID)</label>
-                    <select name="Instrument_(Instrument ID)" id="line4">
+                    <label className="line3" htmlFor="">Instrument (Instrument ID)</label>
+                    <select name="Instrument_(Instrument ID)" className="line4">
                         <option value="">Select Instrument ID</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Module (Module ID)</label>
-                    <select name="Module_(Module ID)" id="line4">
+                    <label className="line3" htmlFor="">Module (Module ID)</label>
+                    <select name="Module_(Module ID)" className="line4">
                         <option value="">Select Module ID</option>
                     </select>
 
@@ -229,21 +229,21 @@ export default function CalibrationSchedule() {
                         </RadioGroup>
                     </FormControl>
 
-                    <label id="line3" htmlFor="">Calibration Datasheet</label>
-                    <select name="Calibration Datasheet" id="line4">
+                    <label className="line3" htmlFor="">Calibration Datasheet</label>
+                    <select name="Calibration Datasheet" className="line4">
                         <option value="">Select </option>
                         <option value="CAl data sheet">CAl data sheet </option>
                         <option value="Data sheet1">Data sheet1</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Schedule Description</label>
-                    <input id="line4" required type="text" placeholder="Schedule Description" />
+                    <label className="line3" htmlFor="">Schedule Description</label>
+                    <input className="line4" required type="text" placeholder="Schedule Description" />
 
-                    <label id="line3" htmlFor="">Start Date</label>
-                    <input id="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
+                    <label className="line3" htmlFor="">Start Date</label>
+                    <input className="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
 
-                    <label id="line3" htmlFor="">Frequency
-                        <select name="Frequency" id="line4">
+                    <label className="line3" htmlFor="">Frequency
+                        <select name="Frequency" className="line4">
                             <option value="">Period </option>
                             <option value="Daily">Daily</option>
                             <option value="Weekly">Weekly</option>
@@ -251,7 +251,7 @@ export default function CalibrationSchedule() {
                             <option value="Yearly">Yearly</option>
                         </select>
 
-                        <select name="Frequency" id="line4">
+                        <select name="Frequency" className="line4">
                             <option value="">Period </option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -259,8 +259,8 @@ export default function CalibrationSchedule() {
                             <option value="4">...</option>
                         </select></label>
 
-                    <label id="line3" htmlFor="">Tolerance Period</label>
-                    <input id="line4" required type="text" placeholder="Tolerance Period" />
+                    <label className="line3" htmlFor="">Tolerance Period</label>
+                    <input className="line4" required type="text" placeholder="Tolerance Period" />
 
                     <div id="line5">
                         <button

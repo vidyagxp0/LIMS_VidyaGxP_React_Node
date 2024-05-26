@@ -151,27 +151,27 @@ const SettingVendors = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information and add new Vendor</p>
 
-          <label id="line3" htmlFor="">Material Name</label>
-          <input id="line4" required type="text" placeholder="Name " />
+          <label className="line3" htmlFor="">Material Name</label>
+          <input className="line4" required type="text" placeholder="Name " />
 
-          <label id="line3" htmlFor="">Supplier Name</label>
-          <input id="line4" required type="text" placeholder="Supplier Name" />
-<label id="line3" htmlFor="">Email</label>
-          <input id="line4" required type="Email" placeholder="Email" />
-<label id="line3" htmlFor="">Phone</label>
-          <input id="line4" required type="text" placeholder="Phone" />
+          <label className="line3" htmlFor="">Supplier Name</label>
+          <input className="line4" required type="text" placeholder="Supplier Name" />
+<label className="line3" htmlFor="">Email</label>
+          <input className="line4" required type="Email" placeholder="Email" />
+<label className="line3" htmlFor="">Phone</label>
+          <input className="line4" required type="text" placeholder="Phone" />
 
-        <label id="line3" htmlFor="" >Address</label>
-              <textarea name=""  style={{padding:'35px'}} id="line4" placeholder='Address'></textarea>
+        <label className="line3" htmlFor="" >Address</label>
+              <textarea name=""  style={{padding:'35px'}} className="line4" placeholder='Address'></textarea>
               
-              <label id="line3" htmlFor="">Comments</label>
-              <textarea name="" style={{padding:'35px'}} rows="4" cols="50" id="line4" placeholder='Comments'></textarea>
+              <label className="line3" htmlFor="">Comments</label>
+              <textarea name="" style={{padding:'35px'}} rows="4" cols="50" className="line4" placeholder='Comments'></textarea>
              
-              <label id="line3" htmlFor="">Contact person number</label>
-              <textarea name=""  style={{padding:'35px'}} id="line4" placeholder='Contact person '></textarea> 
+              <label className="line3" htmlFor="">Contact person number</label>
+              <textarea name=""  style={{padding:'35px'}} className="line4" placeholder='Contact person '></textarea> 
               
-              <label id="line3" htmlFor="">Website</label>
-              <textarea name=""  style={{padding:'35px'}} id="line4" placeholder='Website'></textarea>
+              <label className="line3" htmlFor="">Website</label>
+              <textarea name=""  style={{padding:'35px'}} className="line4" placeholder='Website'></textarea>
 
           <div id="line5">
             <button type="button"

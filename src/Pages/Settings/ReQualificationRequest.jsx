@@ -136,19 +136,19 @@ const nextToLastPage = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information about Re-Qualification Request</p>
         
-        <label id="line3" htmlFor="">Analyst</label>
-        <input id="line4" required type="text" placeholder="Resource Name"/>
-         <label id="line3" htmlFor="">Employee ID</label>
-        <input id="line4" required type="text" placeholder="Employee ID"/> 
-        <label id="line3" htmlFor="">Role/Title</label>
-        <input id="line4" required type="text" placeholder="Role/Title"/> 
-        <label id="line3" htmlFor="">Test Technique
+        <label className="line3" htmlFor="">Analyst</label>
+        <input className="line4" required type="text" placeholder="Resource Name"/>
+         <label className="line3" htmlFor="">Employee ID</label>
+        <input className="line4" required type="text" placeholder="Employee ID"/> 
+        <label className="line3" htmlFor="">Role/Title</label>
+        <input className="line4" required type="text" placeholder="Role/Title"/> 
+        <label className="line3" htmlFor="">Test Technique
 </label>
-        <input id="line4" required type="text" placeholder="Test Technique
+        <input className="line4" required type="text" placeholder="Test Technique
 "/>  
-<label id="line3" htmlFor="">Justification For Requalification
+<label className="line3" htmlFor="">Justification For Requalification
 </label>
-        <input id="line4" required type="text" placeholder="Training Details
+        <input className="line4" required type="text" placeholder="Training Details
 "/>
          
           <div id="line5">

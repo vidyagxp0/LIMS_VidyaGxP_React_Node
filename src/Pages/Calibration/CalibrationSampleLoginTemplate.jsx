@@ -168,7 +168,7 @@ export default function CalibrationSampleLoginTemplate() {
                 </button>
 
                 <div
-                    className="offcanvas offcanvas-end"
+                    className="offcanvas offcanvas-end overflow-y-scroll"
                     tabIndex="-1"
                     id="offcanvasRight"
                     aria-labelledby="offcanvasRightLabel"
@@ -186,10 +186,10 @@ export default function CalibrationSampleLoginTemplate() {
                         </div>
                     </div>
 
-                    <label id="line3" htmlFor="">Sample Login Template</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Sample Login Template</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Test Plan / Revision No.</label>
+                    <label className="line3" htmlFor="">Test Plan / Revision No.</label>
                     <Autocomplete
                         disablePortal
                         id="combo-box-demo"
@@ -198,17 +198,17 @@ export default function CalibrationSampleLoginTemplate() {
                         renderInput={(params) => <TextField {...params} label="" />}
                     />
 
-                    <label id="line3" htmlFor="">Product / Material</label>
-                    <input id="line4" required type="text" placeholder="prefix" />
+                    <label className="line3" htmlFor="">Product / Material</label>
+                    <input className="line4" required type="text" placeholder="prefix" />
 
-                    <label id="line3" htmlFor="">Product / Material Code</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Product / Material Code</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Generic Name</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Generic Name</label>
+                    <input className="line4" required type="text" placeholder="" />
 
-                    <label id="line3" htmlFor="">Specification ID</label>
-                    <input id="line4" required type="text" placeholder="" />
+                    <label className="line3" htmlFor="">Specification ID</label>
+                    <input className="line4" required type="text" placeholder="" />
 
                     <div id="line5">
                         <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>

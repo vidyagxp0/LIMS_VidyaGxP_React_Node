@@ -111,35 +111,35 @@ const nextToLastPage = () => {
         </div>
             <p style={{marginLeft:'20px'}}>Add information and add new Client</p>
             
-        <label id="line3" htmlFor="">Client Name</label>
-        <input id="line4" required type="text" placeholder="Bussiness Associate Name"/>
+        <label className="line3" htmlFor="">Client Name</label>
+        <input className="line4" required type="text" placeholder="Bussiness Associate Name"/>
 
-        <label id="line3" htmlFor="">Alternate Name</label>
-        <input id="line4" required type="text" placeholder="Alternate Name"/>
+        <label className="line3" htmlFor="">Alternate Name</label>
+        <input className="line4" required type="text" placeholder="Alternate Name"/>
 
-        <label id="line3" htmlFor="">Email</label>
-        <input id="line4" required type="email" placeholder="Email"/> 
+        <label className="line3" htmlFor="">Email</label>
+        <input className="line4" required type="email" placeholder="Email"/> 
         
-        <label id="line3" htmlFor="">Phone</label>
-        <input id="line4" required type="number" placeholder="Phone"/>    
+        <label className="line3" htmlFor="">Phone</label>
+        <input className="line4" required type="number" placeholder="Phone"/>    
         
-        <label id="line3" htmlFor="">Address</label>
-        <input id="line4" required type="text" placeholder="Address"/>
+        <label className="line3" htmlFor="">Address</label>
+        <input className="line4" required type="text" placeholder="Address"/>
        
-        <label id="line3" htmlFor="">Contact Person</label>
-        <input id="line4" required type="text" placeholder="Contact Person"/>
+        <label className="line3" htmlFor="">Contact Person</label>
+        <input className="line4" required type="text" placeholder="Contact Person"/>
         
-        <label id="line3" htmlFor="">Contact Person Number</label>
-        <input id="line4" required type="text" placeholder="Contact Person Number"/>
+        <label className="line3" htmlFor="">Contact Person Number</label>
+        <input className="line4" required type="text" placeholder="Contact Person Number"/>
         
-        <label id="line3" htmlFor="">Tax Number</label>
-        <input id="line4" required type="text" placeholder="Tax Number"/> 
+        <label className="line3" htmlFor="">Tax Number</label>
+        <input className="line4" required type="text" placeholder="Tax Number"/> 
         
-        <label id="line3" htmlFor="">Fax</label>
-        <input id="line4" required type="number" placeholder="Fax"/> 
+        <label className="line3" htmlFor="">Fax</label>
+        <input className="line4" required type="number" placeholder="Fax"/> 
         
-        <label id="line3" htmlFor="">Website</label>
-        <input id="line4" required type="text" placeholder="Website"/>
+        <label className="line3" htmlFor="">Website</label>
+        <input className="line4" required type="text" placeholder="Website"/>
 
          <div id="line5">
           <button type="button"

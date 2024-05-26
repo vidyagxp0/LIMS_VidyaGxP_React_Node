@@ -147,11 +147,11 @@ export default function CalibrationType() {
                 </div>
                 <p style={{ marginLeft: '20px' }}>Add information and add new calibration type</p>
 
-                <label id="line3" htmlFor="">Calibration Type</label>
-                <input id="line4" required type="text" placeholder="Calibration Type" />
+                <label className="line3" htmlFor="">Calibration Type</label>
+                <input className="line4" required type="text" placeholder="Calibration Type" />
 
-                <label id="line3" htmlFor="">Calibration Type Prefix</label>
-                <input id="line4" required type="text" placeholder="Calibration Type Prefix" />
+                <label className="line3" htmlFor="">Calibration Type Prefix</label>
+                <input className="line4" required type="text" placeholder="Calibration Type Prefix" />
 
                 <div id="line5">
                     <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>

@@ -202,17 +202,17 @@ const nextToLastPage = () => {
         </div>
         <p style={{marginLeft:'20px'}}>Add information and Add Test Plan</p>
             
-        <label id="line3" htmlFor="">Specification ID</label>
-        <input id="line4" required type="text" placeholder="Select..."/>
+        <label className="line3" htmlFor="">Specification ID</label>
+        <input className="line4" required type="text" placeholder="Select..."/>
 
-        <label id="line3" htmlFor="">Product/Material Name</label>
-        <input id="line4" required type="text" placeholder="Product/Material Name"/>
+        <label className="line3" htmlFor="">Product/Material Name</label>
+        <input className="line4" required type="text" placeholder="Product/Material Name"/>
 
-        <label id="line3" htmlFor="">Test Plan Comments</label>
-        <input id="line4" required type="text" placeholder="Test Plan Comments"/> 
+        <label className="line3" htmlFor="">Test Plan Comments</label>
+        <input className="line4" required type="text" placeholder="Test Plan Comments"/> 
         
-        <label id="line3" htmlFor="">Sampling Quantity UOM</label>
-            	 <select name="Specification Type" id="line4">
+        <label className="line3" htmlFor="">Sampling Quantity UOM</label>
+            	 <select name="Specification Type" className="line4">
             		    <option value="">Select UOM</option>
              		    <option value="gm">gm</option>
              		    <option value="ml">ml</option>
@@ -247,15 +247,15 @@ const nextToLastPage = () => {
             </div>
             
                
-        <label id="line3" htmlFor="">Coa Template</label>
-            	 <select name="Specification Type" id="line4">
+        <label className="line3" htmlFor="">Coa Template</label>
+            	 <select name="Specification Type" className="line4">
             		    <option value="">Select Coa Template</option>
              		    <option value="gm">Test Coa</option>
              		    <option value="ml">Windlas Template</option>
              	 </select>
 
-        <label id="line3" htmlFor="">Remarks</label>
-        <textarea id="line4" style={{padding:'40px'}} rows="4" cols="50" ></textarea>                 
+        <label className="line3" htmlFor="">Remarks</label>
+        <textarea className="line4" style={{padding:'40px'}} rows="4" cols="50" ></textarea>                 
 
          <div id="line5">
           <button type="button"

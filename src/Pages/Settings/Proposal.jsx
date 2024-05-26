@@ -137,37 +137,37 @@ const nextToLastPage = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information and add new Analyst Proposal</p>
         
-        <label id="line3" htmlFor="">Training Confirmation ID</label>
-        <input id="line4" required type="text" placeholder=" "/>
+        <label className="line3" htmlFor="">Training Confirmation ID</label>
+        <input className="line4" required type="text" placeholder=" "/>
 
-         <label id="line3" htmlFor="">Analyst</label>
-        <input id="line4" required type="text" placeholder="Analyst "/> 
+         <label className="line3" htmlFor="">Analyst</label>
+        <input className="line4" required type="text" placeholder="Analyst "/> 
 
-        <label id="line3" htmlFor="">Employee ID</label>
-        <input id="line4" required type="text" placeholder="Employee ID"/> 
-        <label id="line3" htmlFor="">Test Technique
+        <label className="line3" htmlFor="">Employee ID</label>
+        <input className="line4" required type="text" placeholder="Employee ID"/> 
+        <label className="line3" htmlFor="">Test Technique
 </label>
-        <input id="line4" required type="text" placeholder="Test Technique
+        <input className="line4" required type="text" placeholder="Test Technique
 "/>  
-<label id="line3" htmlFor="">Type Of Technique
+<label className="line3" htmlFor="">Type Of Technique
 </label>
-        <input id="line4" required type="text" placeholder="Type Of Technique
+        <input className="line4" required type="text" placeholder="Type Of Technique
 "/>
-<label id="line3" htmlFor="">Test Plan
+<label className="line3" htmlFor="">Test Plan
 </label>
-        <input id="line4" required type="text" placeholder="
+        <input className="line4" required type="text" placeholder="
 "/>
-     <label id="line3" htmlFor="">AR Number
+     <label className="line3" htmlFor="">AR Number
 </label>
-        <input id="line4" required type="text" placeholder="AR Number
+        <input className="line4" required type="text" placeholder="AR Number
 "/>
-     <label id="line3" htmlFor="">Due Date
+     <label className="line3" htmlFor="">Due Date
 </label>
-        <input id="line4" style={{padding:'14px'}} required type="date" placeholder="
+        <input className="line4" style={{padding:'14px'}} required type="date" placeholder="
 "/>
-     <label id="line3" htmlFor="">Comments
+     <label className="line3" htmlFor="">Comments
 </label>
-        <input id="line4" required type="text" placeholder="Comments
+        <input className="line4" required type="text" placeholder="Comments
 "/>
          
           <div id="line5">

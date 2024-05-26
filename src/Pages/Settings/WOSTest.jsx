@@ -159,7 +159,7 @@ const WOSTest = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information about WOS test</p>
       
-          <label id="line3" htmlFor="">Specification ID</label>
+          <label className="line3" htmlFor="">Specification ID</label>
         <Autocomplete
       disablePortal
       id="combo-box-demo"
@@ -168,19 +168,19 @@ const WOSTest = () => {
       renderInput={(params) => <TextField {...params} label="" />}
     />
 
-          <label id="line3" htmlFor="">Product/Material Name</label>
-          <input id="line4" required type="text" placeholder="Product/Material Name" />
+          <label className="line3" htmlFor="">Product/Material Name</label>
+          <input className="line4" required type="text" placeholder="Product/Material Name" />
           
-          <label id="line3" htmlFor="">Test Name</label>
-          <input id="line4" required type="text" placeholder="Test Name" />
+          <label className="line3" htmlFor="">Test Name</label>
+          <input className="line4" required type="text" placeholder="Test Name" />
           
-          <label id="line3" htmlFor="">Test Code</label>
-          <input id="line4" required type="text" placeholder="Test Code" />
+          <label className="line3" htmlFor="">Test Code</label>
+          <input className="line4" required type="text" placeholder="Test Code" />
           
-          <label id="line3" htmlFor="">Method No.</label>
-          <input id="line4" required type="text" placeholder="Method No." />
+          <label className="line3" htmlFor="">Method No.</label>
+          <input className="line4" required type="text" placeholder="Method No." />
           
-          <label id="line3" htmlFor="">Copy Test From</label>
+          <label className="line3" htmlFor="">Copy Test From</label>
         <Autocomplete
       disablePortal
       id="combo-box-demo"
@@ -190,20 +190,20 @@ const WOSTest = () => {
     />   
 
     
-<label id="line3" htmlFor="">Test Category</label>
-        <select name="Instrument_Category" id="line4">
+<label className="line3" htmlFor="">Test Category</label>
+        <select name="Instrument_Category" className="line4">
             <option value="">Select Test Category</option>
             <option value="QA-1">QA-1</option>
         </select> 
         
-<label id="line3" htmlFor="">Test Technique</label>
-        <select name="Test Technique" id="line4">
+<label className="line3" htmlFor="">Test Technique</label>
+        <select name="Test Technique" className="line4">
             <option value="">Select Test Technique</option>
             <option value="QA-1">QA-1</option>
         </select> 
         
-<label id="line3" htmlFor="">Test Type</label>
-        <select name="Instrument_Category" id="line4">
+<label className="line3" htmlFor="">Test Type</label>
+        <select name="Instrument_Category" className="line4">
             <option value="">Select Test Type</option>
             <option value="QA-1">QA-1</option>
         </select> 

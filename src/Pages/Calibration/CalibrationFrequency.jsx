@@ -175,11 +175,11 @@ export default function CalibrationFrequency() {
           </div>
           <p style={{ marginLeft: '20px' }}>Add information and add new calibration frequency</p>
 
-          <label id="line3" htmlFor="">Calibration Frequency</label>
-          <input id="line4" required type="text" placeholder="Calibration type" />
+          <label className="line3" htmlFor="">Calibration Frequency</label>
+          <input className="line4" required type="text" placeholder="Calibration type" />
 
-          <label id="line3" htmlFor="">Calibration Frequency Prefix</label>
-          <input id="line4" required type="text" placeholder="type prefix" />
+          <label className="line3" htmlFor="">Calibration Frequency Prefix</label>
+          <input className="line4" required type="text" placeholder="type prefix" />
 
           <div id="line5">
             <button
