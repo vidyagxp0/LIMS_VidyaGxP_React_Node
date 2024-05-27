@@ -15,15 +15,23 @@ export default function CalibrationFrequency() {
   const [filterStatus, setFilterStatus] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState(null);
+
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+
   const [employees, setEmployees] = useState([
-    { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },{ user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
   ]);
 
   const pageSize = 8;
@@ -45,10 +53,14 @@ export default function CalibrationFrequency() {
     setFilterStatus(e.target.value);
   };
 
-  const filteredEmployees = employees.filter(employee => {
-    const matchesSearch = employee.role.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === "" || employee.status === filterStatus;
-    return matchesSearch && matchesFilter;
+  const filteredEmployees = employees.filter((employee) => {
+    const fieldName = employee.fieldName || "";
+    const status = employee.status || "";
+
+    return (
+      fieldName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filterStatus === "" || status === filterStatus)
+    );
   });
 
   const startIndex = (currentPage - 1) * pageSize;
@@ -59,16 +71,29 @@ export default function CalibrationFrequency() {
       <tr key={startIndex + index}>
         <td><input type="checkbox" /></td>
         <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
+        <td>{employee.fieldName}</td>
         <td>{employee.role}</td>
         <td>{employee.addedBy}</td>
-        <td className={`rounded-5 ${employee.status === 'ACTIVE' ? 'bg-success' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'ACTIVE' ? 'success' : 'warning'} d-flex justify-content-center p-1 m-2`}>{employee.status}</td>
+        <td>  
+          <div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.status === "ACTIVE"
+                ? badgeStyle3
+                : employee.status === "INACTIVE"
+                ? badgeStyle4
+                : badgeStyle
+            }
+          > 
+            {employee.status}
+          </div>
+        </td>
         <td>
           <div className="d-flex gap-3">
-            <div className="cursor-pointer" onClick={() => handleEdit(employee)}>
+            <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
               <FontAwesomeIcon icon={faPenToSquare} />
             </div>
-            <Link to="#" onClick={() => deleteEmployee(index)}>
+            <Link to="#" onClick={() => confirmDeleteEmployee(index)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </Link>
           </div>
@@ -89,10 +114,18 @@ export default function CalibrationFrequency() {
     setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
   };
 
-  const deleteEmployee = (index) => {
+  const confirmDeleteEmployee = (index) => {
+    setShowDeleteConfirmation(true);
+    setEmployeeToDelete(startIndex + index);
+  };
+
+  const deleteEmployee = () => {
     const updatedEmployees = [...employees];
-    updatedEmployees.splice(startIndex + index, 1);
+    updatedEmployees.splice(employeeToDelete, 1);
     setEmployees(updatedEmployees);
+    setShowDeleteConfirmation(false);
+    setEmployeeToDelete(null);
+    toast.success("Employee deleted successfully");
   };
 
   const handleEdit = (employee) => {
@@ -133,7 +166,7 @@ export default function CalibrationFrequency() {
         <div className="dropdown">
           <div>
             <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <select id='selectOption' value={filterStatus} onChange={handleFilterChange}>
+              <select id='selectOption' value={filterStatus} onChange={handleFilterChange} style={{ outline: 'none' }}>
                 <option value="">Select Status</option>
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
@@ -143,7 +176,7 @@ export default function CalibrationFrequency() {
         </div>
 
         <button
-          id="Addbtn"
+          id=""
           className="btn btn-primary m-5"
           type="button"
           data-bs-toggle="offcanvas"
@@ -232,8 +265,30 @@ export default function CalibrationFrequency() {
         <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
       </div>
 
+      {showDeleteConfirmation && (
+        <div className="modal show" style={{ display: 'block' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Confirm Delete</h5>
+                <button type="button" className="close" onClick={() => setShowDeleteConfirmation(false)}>
+                  <span>&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete this employee?</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowDeleteConfirmation(false)}>Cancel</button>
+                <button type="button" className="btn btn-primary" onClick={deleteEmployee}>Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isEditing && (
-        <div className="modal" style={{ display: 'block' }}>
+        <div className="modal show" style={{ display: 'block' }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
