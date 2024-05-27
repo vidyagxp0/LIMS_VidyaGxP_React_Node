@@ -31,16 +31,7 @@ export default function CalibrationRecord() {
         { label: '12 Angry Men', year: 1957 },];
 
   const [storageName, setStorageName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.")
-    }
-  };
-  const notify = () => toast("Wow so easy!");
 
 
   const pageSize = 10; 
@@ -79,12 +70,14 @@ export default function CalibrationRecord() {
             <td>{employee.role}</td>
             <td>{employee.role}</td>
             <td>{employee.addedBy}</td>
-            <td className={`rounded-5 ${employee.status === 'Pending' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Pending' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+            <td >{employee.status}</td>
             <td>
             <div className="d-flex gap-3">
 			
                         <div className="cursor-pointer" >
-                            <FontAwesomeIcon icon={faPenToSquare} />
+                            <FontAwesomeIcon  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasRight"
+                  aria-controls="offcanvasRight" icon={faPenToSquare} />
                         </div>
                         
                     </div>
@@ -112,6 +105,69 @@ const nextToLastPage = () => {
         <div id="div1">
         <h5>Calibration Records</h5>
       </div>
+
+
+      <div
+                    className="offcanvas offcanvas-end overflow-y-scroll"
+                    tabIndex="-1"
+                    id="offcanvasRight"
+                    aria-labelledby="offcanvasRightLabel"
+                >
+                    <div className="offcanvas-header ">
+                        <div id="line1">
+                            <h5 className="offcanvas-title" id="offcanvasRightLabel">
+                                Add Calibration Record
+                            </h5>
+                            <button
+                                id="closebtn"
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="offcanvas"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                    </div>
+
+                    <label className="line3" htmlFor="">Calibration id</label>
+                    <input className="line4" required type="text" placeholder="" />
+                    
+                    <label className="line3" htmlFor="">Instrument (Instrument ID)</label>
+                    <input className="line4" required type="text" placeholder="" />
+                  
+                    <label className="line3" htmlFor="">Module (Module ID)</label>
+                    <input className="line4" required type="text" placeholder="" />
+                    
+                    <label className="line3" htmlFor="">Calibration Record Template</label>
+                    <input className="line4" required type="text" placeholder="" />
+
+                    <label className="line3" htmlFor="">Certificates</label>
+          <input className="line4" style={{padding:'25px',fontSize:'12px'}} required type="file" placeholder="" />
+         
+
+                    <label className="line3" htmlFor="">Calibration Type</label>
+                    <input className="line4" required type="text" placeholder="daily" />
+                  <br />
+                  <span><input className="line4" type="checkbox"/>   By Pass</span>
+                
+
+                                       <div id="line5">
+                        <button
+                            type="button"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                        >
+                            &lt; Back
+                        </button>
+                        <button >Generate</button>
+                    </div>
+                    <div>
+                        <ToastContainer />
+                    </div>
+                </div>
+
+
+
+
 
       <div className='table-responsive p-4 container1'>
                 <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>

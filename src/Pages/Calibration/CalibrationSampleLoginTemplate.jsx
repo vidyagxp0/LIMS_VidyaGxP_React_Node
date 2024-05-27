@@ -23,14 +23,30 @@ export default function CalibrationSampleLoginTemplate() {
     const [errorMessage, setErrorMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
+
+
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+
+
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Initiated' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'DROPPED' },
+        { user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'REJECTED' },
+        { user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' }, { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'REJECTED' },
+        { user: 'hpcl', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INITIATED' },
     ]);
 
-    const pageSize = 4;
+    const pageSize = 8;
     const [currentPage, setCurrentPage] = useState(1);
     const [editRowIndex, setEditRowIndex] = useState(null);
     const [editFormData, setEditFormData] = useState({
@@ -93,11 +109,33 @@ export default function CalibrationSampleLoginTemplate() {
                 <td>{employee.user}</td>
                 <td>{employee.role}</td>
                 <td>{employee.addedBy}</td>
-                <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+                <td  ><div
+                          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+                          style={
+                            employee.status === "INITIATED"
+                              ? badgeStyle2
+                              : employee.status === "APPROVED"
+                              ? badgeStyle3
+                              : employee.status === "REJECTED"
+                              ? badgeStyle4
+                              : employee.status === "REINITIATED"
+                              ? badgeStyle5
+                              : employee.status === "DROPPED"
+                              ? badgeStyle6
+                              : employee.status === "ALL"
+                              ? badgeStyle
+                              : badgeStyle
+                          }
+                        >
+                          {employee.status}
+                        </div>
+                        </td>
                 <td>
                     <div className="d-flex gap-3">
                         <Link to="/calibration/sample-login-template-details"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer" onClick={() => handleEdit(index)}>
+                        <div className="cursor-pointer"  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasRight"
+                  aria-controls="offcanvasRight">
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
                         <Link to="#" onClick={() => handleDelete(index)}>
@@ -143,14 +181,13 @@ export default function CalibrationSampleLoginTemplate() {
                 <div className="dropdown">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <select id='selectOption' onChange={handleStatusChange}>
-                                <option value="">Select Status</option>
-                                <option value="All">All</option>
-                                <option value="Initiated">Initiated</option>
-                                <option value="Approved">Approved</option>
-                                <option value="Rejected">Rejected</option>
-                                <option value="Reinitiated">Reinitiated</option>
-                                <option value="Dropped">Dropped</option>
+                            <select id='selectOption' onChange={handleStatusChange} style={{outline:'none'}}>
+                                <option value="">All</option>
+                                <option value="INITIATED">Initiated</option>
+                                <option value="APPROVED">Approved</option>
+                                <option value="REJECTED">Rejected</option>
+                                <option value="REINITIATED">Reinitiated</option>
+                                <option value="DROPPED">Dropped</option>
                             </select>
                         </button>
                     </div>

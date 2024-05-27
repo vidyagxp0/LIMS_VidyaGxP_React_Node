@@ -16,6 +16,19 @@ const CalibrationSampleLogin = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('1');
+
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+
   const  [employees, setEmployees] = useState([
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
     { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
@@ -24,7 +37,7 @@ const CalibrationSampleLogin = () => {
     { fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
     { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
     { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
     { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
   ]);
@@ -58,7 +71,26 @@ const CalibrationSampleLogin = () => {
         <td>{employee.fieldType}</td>
         <td>{employee.registeredBy}</td>
         <td>{employee.registeredOn}</td>
-        <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`}>{employee.status}</td>
+        <td > <div
+                          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+                          style={
+                            employee.status === "INITIATED"
+                              ? badgeStyle2
+                              : employee.status === "APPROVED"
+                              ? badgeStyle3
+                              : employee.status === "REJECTED"
+                              ? badgeStyle4
+                              : employee.status === "REINITIATED"
+                              ? badgeStyle5
+                              : employee.status === "DROPPED"
+                              ? badgeStyle6
+                              : employee.status === "ALL"
+                              ? badgeStyle
+                              : badgeStyle
+                          }
+                        >
+                          {employee.status}
+                        </div></td>
         <td>
           <div className="d-flex gap-3">
             <Link to="/viewDetails"><FontAwesomeIcon icon={faEye} /></Link>

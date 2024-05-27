@@ -12,19 +12,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Samplelogin() {
     const pageSize = 8;
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
 
-    const employees = [
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+
+    const [employees, setEmployees] = useState([
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INITIATED' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INITIATED' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'REJECTED' },
+        { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
+        { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'DROPPED' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
+        { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'DROPPED' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-    ];
+    ]);
 
     const testData = [
         { sno: '1', testName: 'Ph test', groupName: '', selection: false },
@@ -32,11 +46,17 @@ export default function Samplelogin() {
         { sno: '3', testName: 'Water Ph test', groupName: '', selection: false }
     ];
 
+    const filteredEmployees = employees.filter(employee =>
+        (employee.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            employee.role.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (statusFilter === "" || employee.status === statusFilter)
+    );
+
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employees.length);
+    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
     const renderRows = () => {
-        return employees.slice(startIndex, endIndex).map((employee, index) => (
+        return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
             <tr key={startIndex + index}>
                 <td>{startIndex + index + 1}</td>
                 <td>{employee.user}</td>
@@ -44,17 +64,33 @@ export default function Samplelogin() {
                 <td>{employee.departments}</td>
                 <td>{employee.joiningDate}</td>
                 <td>{employee.addedBy}</td>
-                <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+                <td className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+                          style={
+                            employee.status === "INITIATED"
+                              ? badgeStyle2
+                              : employee.status === "APPROVED"
+                              ? badgeStyle3
+                              : employee.status === "REJECTED"
+                              ? badgeStyle4
+                              : employee.status === "REINITIATED"
+                              ? badgeStyle5
+                              : employee.status === "DROPPED"
+                              ? badgeStyle6
+                              : employee.status === "ALL"
+                              ? badgeStyle
+                              : badgeStyle
+                          } >{employee.status}</td>
                 <td>
                     <div className="d-flex gap-3">
                         <Link to="/viewDetails"><FontAwesomeIcon icon={faEye} /></Link>
                         <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#updateSampleLogin" aria-controls="offcanvasRight"><FontAwesomeIcon icon={faPenToSquare} /></div>
-                        <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#removeSampleLogin" aria-controls="offcanvasRight"><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer" onClick={() => deleteEmployee(startIndex + index)}><FontAwesomeIcon icon={faTrashCan} /></div>
                     </div>
                 </td>
             </tr>
         ));
     };
+
     const nextPage = () => {
         setCurrentPage(currentPage + 1);
     };
@@ -64,8 +100,15 @@ export default function Samplelogin() {
     };
 
     const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(employees.length / pageSize));
+        setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
     };
+
+    const deleteEmployee = (index) => {
+        const newEmployees = [...employees];
+        newEmployees.splice(index, 1);
+        setEmployees(newEmployees);
+    };
+
     return (
         <>
             <div className="m-4 p-4">
@@ -76,21 +119,24 @@ export default function Samplelogin() {
                     <CRow className="my-5">
                         <CCol sm={4}>
                             <CFormInput
-                                type="email"
+                                type="text"
                                 placeholder="Search..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </CCol>
                         <CCol sm={3}>
                             <CFormSelect
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
                                 options={[
                                     'Select Status',
-                                    { label: 'All', value: '1' },
-                                    { label: 'Initiated', value: 'Initiated' },
-                                    { label: 'Approved', value: 'Approved' },
-                                    { label: 'Rejected', value: 'Rejected' },
-                                    { label: 'Approved', value: 'Approved' },
-                                    { label: 'Reinitiated', value: 'Reinitiated' },
-                                    { label: 'Dropped', value: 'Dropped' }
+                                    { label: 'All', value: '' },
+                                    { label: 'Initiated', value: 'INITIATED' },
+                                    { label: 'Approved', value: 'APPROVED' },
+                                    { label: 'Rejected', value: 'REJECTED' },
+                                    { label: 'Reinitiated', value: 'REINITIATED' },
+                                    { label: 'Dropped', value: 'DROPPED' }
                                 ]}
                             />
                         </CCol>
@@ -276,8 +322,7 @@ export default function Samplelogin() {
                 </div>
 
                 <div className="pagination">
-
-                    <div className="pagination ">
+                    <div className="pagination">
                         <div className='mr-5'>
                             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
                         </div>
@@ -285,12 +330,9 @@ export default function Samplelogin() {
                             <button className='btn rounded-circle'> {currentPage} </button>
                         </div>
                         <div>
-                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
+                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
                         </div>
-
                     </div>
-
                     <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
                 </div>
             </div>

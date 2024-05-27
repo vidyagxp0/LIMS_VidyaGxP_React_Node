@@ -7,7 +7,7 @@ import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
 import { Link } from 'react-router-dom';
 
 const CalibrationDataSheet = () => {
-  const pageSize = 8;
+  const pageSize =8;
   const [currentPage, setCurrentPage] = useState(1);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [showAdditionalFields2, setShowAdditionalFields2] = useState(false);
@@ -16,6 +16,28 @@ const CalibrationDataSheet = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
+
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+   const [selectedStatus, setSelectedStatus] = useState("All");
+ 
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return employees;
+    }
+
+    return employees.filter((employees) => employees.status === selectedStatus.toUpperCase());
+  };
+
 
 
   
@@ -28,32 +50,6 @@ const CalibrationDataSheet = () => {
   };
 
 
-
-  const handleEdit = (employee) => {
-    setCurrentEmployee(employee);
-    setIsEditing(true);
-  };
-
-  const handleEditClose = () => {
-    setIsEditing(false);
-    setCurrentEmployee(null);
-  };
-
-  const handleEditSubmit = () => {
-    const updatedEmployees = employees.map(emp =>
-      emp === currentEmployee ? currentEmployee : emp
-    );
-    setEmployees(updatedEmployees);
-    toast.success("Employee updated successfully");
-    handleEditClose();
-  };
-
-
-
-
-
-
-
   const handleDelete = (index) => {
     // Delete row from table
     console.log("Deleting row at index:", index);
@@ -64,15 +60,15 @@ const CalibrationDataSheet = () => {
   
   const [employees, setEmployees] = useState([
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
-    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
+    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'REINITIATED' },
     { fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
+    { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'REJECTED' },
     { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'DROPPED' },
   ]);
   
   const deleteEmployee = (index) => {
@@ -106,10 +102,32 @@ const CalibrationDataSheet = () => {
         <td>{employee.fieldType}</td>
         <td>{employee.registeredBy}</td>
         <td>{employee.registeredOn}</td>
-        <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+        <td  > <div
+                          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+                          style={
+                            employee.status === "INITIATED"
+                              ? badgeStyle2
+                              : employee.status === "APPROVED"
+                              ? badgeStyle3
+                              : employee.status === "REJECTED"
+                              ? badgeStyle4
+                              : employee.status === "REINITIATED"
+                              ? badgeStyle5
+                              : employee.status === "DROPPED"
+                              ? badgeStyle6
+                              : employee.status === "ALL"
+                              ? badgeStyle
+                              : badgeStyle
+                          }
+                        >
+                          {employee.status}
+                        </div></td>
         <td>
           <Link to="/calibration/calibration-datasheet-details"><FontAwesomeIcon icon={faEye} className="mx-1" /></Link>
-          <FontAwesomeIcon icon={faPenToSquare} className="mx-1" onClick={() => handleEdit(employee)} />
+          <FontAwesomeIcon  
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasRight"
+                  aria-controls="offcanvasRight" icon={faPenToSquare} className="mx-2" />
           <Link to="#" onClick={() => deleteEmployee(index)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </Link>
@@ -143,26 +161,97 @@ const CalibrationDataSheet = () => {
           <div className="title fw-bold fs-5">Calibration Data Sheets</div>
         </div>
 
-        <div className="chart-widgets w-100">
-          <div className="row">
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
-              <div className="text-light fs-5">INITIATED</div>
-              <div className="count fs-1 text-light fw-bolder">4</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
-              <div className="text-light fs-5">REINITIATED</div>
-              <div className="count fs-1 text-light fw-bolder">0</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
-              <div className="text-light fs-5">APPROVED</div>
-              <div className="count fs-1 text-light fw-bolder">6</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
-              <div className="text-light fs-5">REJECTED</div>
-              <div className="count fs-1 text-light fw-bolder">0</div>
+        <div className="d-flex gap-4">
+            <div className="chart-widgets w-100">
+              <div className="">
+                <div className="row" style={{ cursor: "pointer" }}>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("INITIATED")}
+                  >
+                    <div className="text-light fs-5">INITIATED</div>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter(
+                          (employees) => employees.status === "INITIATED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                      textAlign: "left",
+                      boxShadow: "0px 10px 20px  black !important",
+                    }}
+                    onClick={() => setSelectedStatus("REINITIATED")}
+                  >
+                    <div className="text-light fs-5">REINITIATED</div>
+
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter(
+                          (employees) => employees.status === "REINITIATED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("APPROVED")}
+                  >
+                    <butto className="text-light fs-5">APPROVED</butto>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white", textAlign: "left" }}
+                    >
+                      {
+                        filterData().filter(
+                          (employees) => employees.status === "APPROVED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("REJECTED")}
+                  >
+                    <div className="text-light fs-5">REJECTED</div>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter(
+                          (employees) => employees.status === "REJECTED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
         <div>
           <CRow className="mb-3">
@@ -171,16 +260,18 @@ const CalibrationDataSheet = () => {
             </CCol>
             <CCol sm={3}>
               <CFormSelect value={filterStatus} onChange={handleStatusChange}>
-                <option value="">Select Status</option>
-                <option value="INITIATED">Initiated</option>
-                <option value="APPROVED">Approved</option>
-                <option value="REJECTED">Rejected</option>
+                                <option value="">All</option>
+                                <option value="INITIATED">Initiated</option>
+                                <option value="APPROVED">Approved</option>
+                                <option value="REJECTED">Rejected</option>
+                                <option value="REINITIATED">Reinitiated</option>
+                                <option value="DROPPED">Dropped</option>
               </CFormSelect>
             </CCol>
             <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton id="Addbtn"
+                <CButton id=""
                   className="btn btn-primary btn-right"
                   type="button"
                   data-bs-toggle="offcanvas"

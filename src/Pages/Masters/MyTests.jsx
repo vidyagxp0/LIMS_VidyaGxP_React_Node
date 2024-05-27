@@ -3,6 +3,10 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { CgAddR, CgCalendarDates } from 'react-icons/cg';
 import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
+
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function MyTests() {
   const pageSize = 8; 
@@ -33,7 +37,7 @@ export default function MyTests() {
               <td>{employee.DayComplete}</td>
               <td>
                   &nbsp; &nbsp; 
-                  <IoEyeSharp/>
+                  <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
               </td> 
           </tr>
       ));
