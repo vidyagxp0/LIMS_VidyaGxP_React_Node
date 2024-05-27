@@ -28,6 +28,7 @@ import { Link } from "react-router-dom";
 
 function WorkingStandardUsage() {
   const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = {
     background: " #2A5298",
@@ -96,16 +97,34 @@ function WorkingStandardUsage() {
       status: "REINITIATED",
     },
   ]);
-  const filterData = () => {
-    if (selectedStatus === "All") {
-      return data;
-    }
-
-    return data.filter((item) => item.status === selectedStatus.toUpperCase());
-  };
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, data.length);
   const [search, setSearch] = useState("");
-  console.log(search);
+
+  const filterData = () => {
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter(
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
+    return filteredData.filter((item) =>
+      item.RefStdLotNo.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+  const filteredData = filterData();
+  const nextPage = () =>
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
+    );
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  const handleDelete = (id) => {
+    setData((prevData) => prevData.filter((item) => item.id !== id));
+    setDeleteModal(false);
+  };
 
   return (
     <>
@@ -254,18 +273,18 @@ function WorkingStandardUsage() {
                     SNo.
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
-                  Ref. Std. Lot. No	
+                    Ref. Std. Lot. No
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
-                  Quantity used	
+                    Quantity used
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
-                  Used On	
+                    Used On
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
-                  Used By	
+                    Used By
                   </CTableHeaderCell>
-                  
+
                   <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
                     Status
                   </CTableHeaderCell>
@@ -277,6 +296,7 @@ function WorkingStandardUsage() {
 
               <CTableBody>
                 {filterData()
+                  .slice(startIndex, endIndex)
                   .filter((item) => {
                     return search.toLowerCase() === ""
                       ? item
@@ -294,11 +314,8 @@ function WorkingStandardUsage() {
 
                       <CTableDataCell>{item.Quantityused}</CTableDataCell>
                       <CTableDataCell>{item.UsedOn}</CTableDataCell>
-                      <CTableDataCell>
-                        
-                        {item.UsedBy}
-                      </CTableDataCell>
-                      
+                      <CTableDataCell>{item.UsedBy}</CTableDataCell>
+
                       <CTableDataCell className="d-flex">
                         <div
                           className="py-2 px-3 small rounded fw-bold"
@@ -332,9 +349,12 @@ function WorkingStandardUsage() {
                           >
                             <FontAwesomeIcon icon={faPenToSquare} />
                           </div>
-                          <Link to="#">
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => setDeleteModal(item.id)}
+                          >
                             <FontAwesomeIcon icon={faTrashCan} />
-                          </Link>
+                          </div>
                         </div>
                       </CTableDataCell>
                     </CTableRow>
@@ -342,11 +362,37 @@ function WorkingStandardUsage() {
               </CTableBody>
             </CTable>
           </div>
+          <div className="pagination mt-5">
+            <button
+              className="btn mr-2"
+              onClick={prevPage}
+              disabled={currentPage === 1}
+            >
+              &lt;&lt;
+            </button>
+            <div className="current-page-number mr-2 bg-dark-subtle page-item">
+              <button className="btn rounded-circle">{currentPage}</button>
+            </div>
+            <button
+              className="btn mr-2"
+              onClick={nextPage}
+              disabled={endIndex >= filteredData.length}
+            >
+              &gt;&gt;
+            </button>
+          </div>
         </div>
       </div>
 
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      )}
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal !== false}
+          closeModal={() => setDeleteModal(false)}
+          handleDelete={() => handleDelete(deleteModal)}
+        />
       )}
     </>
   );
@@ -471,4 +517,55 @@ const StatusModal = (_props) => {
   );
 };
 
+const DeleteModal = (_props) => {
+  return (
+    <CModal
+      alignment="center"
+      visible={_props.visible}
+      onClose={_props.closeModal}
+      size="lg"
+    >
+      <CModalHeader>
+        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+          Delete Batch Sample Allotment
+        </CModalTitle>
+      </CModalHeader>
+      <div
+        className="modal-body"
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: "500",
+          lineHeight: "1.5",
+          marginBottom: "1rem",
+          columnGap: "0px",
+          border: "0px !important",
+        }}
+      >
+        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
+      </div>
+      <CModalFooter>
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="danger"
+          onClick={_props.handleDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
+        </CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
 export default WorkingStandardUsage;

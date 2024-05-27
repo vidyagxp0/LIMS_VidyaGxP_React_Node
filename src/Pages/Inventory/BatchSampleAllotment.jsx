@@ -73,7 +73,7 @@ function BatchSampleAllotment() {
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 3; // Define the page size
+  const pageSize = 5  ; 
 
   const badgeStyle2 = { background: "green", color: "white", width: "110px" };
   const badgeStyle3 = { background: "red", color: "white", width: "110px" };
@@ -291,21 +291,48 @@ const DeleteModal = (_props) => {
       size="lg"
     >
       <CModalHeader>
-        <CModalTitle>Delete Batch Sample Allotment</CModalTitle>
+        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+          Delete Batch Sample Allotment
+        </CModalTitle>
       </CModalHeader>
-      <div className="modal-body">
-        <p>Do you want to delete this Batch Sample Allotment?</p>
+      <div
+        className="modal-body"
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: "500",
+          lineHeight: "1.5",
+          marginBottom: "1rem",
+          columnGap: "0px",
+          border: "0px !important",
+        }}
+      >
+        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
       </div>
       <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Back
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
         </CButton>
-        <CButton className="bg-info text-white" onClick={_props.handleDelete}>
-          Submit
+        <CButton
+          color="danger"
+          onClick={_props.handleDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
         </CButton>
       </CModalFooter>
     </CModal>
   );
 };
+
 
 export default BatchSampleAllotment;

@@ -1,4 +1,5 @@
 import { pdf } from "@react-pdf/renderer";
+import { useState } from "react";
 import ReactPDF from "@react-pdf/renderer";
 import {
   CButton,
@@ -22,7 +23,7 @@ import {
   CTableHead,
   CTableRow,
 } from "@coreui/react";
-import { useState } from "react";
+
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -49,7 +50,9 @@ const Header = () => (
       />
       <ReactPDF.Text>Vijay Nagar, Indore, Madhya Pradesh 452010</ReactPDF.Text>
     </ReactPDF.View>
-    <ReactPDF.Text style={{ color: "blue", fontWeight: "bold", marginBottom: "10" }}>
+    <ReactPDF.Text
+      style={{ color: "blue", fontWeight: "bold", marginBottom: 10 }}
+    >
       Chemical/Reagent Index
     </ReactPDF.Text>
   </ReactPDF.View>
@@ -100,26 +103,25 @@ const PDFDocument = ({ data }) => (
     <ReactPDF.Page size="A4" style={{ padding: 5 }}>
       <Header />
       <ReactPDF.View style={{ marginTop: 10 }}>
-        <PDFTable data={data} style={{ fontSize:"10px"}}/>
-        <ReactPDF.Text style={{ marginTop: 20, fontSize:"10px" }}>Printed By: Admin</ReactPDF.Text>
-        <ReactPDF.Text style={{ fontSize:"10px"}}>Printed On: 20/05/2024 10:26</ReactPDF.Text>
+        <PDFTable data={data} style={{ fontSize: "10px" }} />
+        <ReactPDF.Text style={{ marginTop: 20, fontSize: "10px" }}>
+          Printed By: Admin
+        </ReactPDF.Text>
+        <ReactPDF.Text style={{ fontSize: "10px" }}>
+          Printed On: 20/05/2024 10:26
+        </ReactPDF.Text>
       </ReactPDF.View>
     </ReactPDF.Page>
   </ReactPDF.Document>
 );
 
 function ChemicalReagent() {
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-  const [addModal, setAddModal] = useState(false);
-  const [search, setSearch] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+  const startIndex = (currentPage - 1) * pageSize;
 
-  const filterData = () => [
+  const filterData2 = () => [
     {
       id: 1,
       ChemicalReagentName: "Chemical A",
@@ -140,9 +142,71 @@ function ChemicalReagent() {
     },
     // Add more data as needed
   ];
+  const endIndex = Math.min(startIndex + pageSize, filterData2().length);
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [search, setSearch] = useState("");
+
+  const filterData = () => {
+    const data = filterData2();
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter(
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
+    return filteredData.filter((item) =>
+      item.ChemicalReagentName.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+
+  const filteredData = filterData();
+  
+
+  const handleDelete = (id) => {
+    setData((prevData) => prevData.filter((item) => item.id !== id));
+    setDeleteModal(false);
+  };
+
+  const badgeStyle = {
+    background: "gray",
+    color: "white",
+    width: "110px",
+    height: "32px",
+  };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+    height: "32px",
+  };
+  const badgeStyle3 = {
+    background: "green",
+    color: "white",
+    width: "110px",
+    height: "32px",
+  };
+  const badgeStyle4 = {
+    background: "red",
+    color: "white",
+    width: "110px",
+    height: "32px",
+  };
+  const badgeStyle5 = {
+    background: "orange",
+    color: "white",
+    width: "110px",
+    height: "32px",
+  };
+  const badgeStyle6 = {
+    background: "purple",
+    color: "white",
+    width: "110px",
+    height: "32px",
+  };
+  const [addModal, setAddModal] = useState(false);
 
   const filterData1 = () => {
-    const data = filterData();
+    const data = filterData2();
     if (selectedStatus === "All") {
       return data;
     }
@@ -166,14 +230,14 @@ function ChemicalReagent() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
-          <div className="main-head">
-            <div className="title fw-bold fs-5">Chemical / Reagent List</div>
+      <div id="approval-page" className="h-100 mx-5" style={{zIndex:"2"}}>
+        <div className="container-fluid my-4 ">
+          <div className="main-head mx-5">
+            <div className="title fw-bold fs-5 ">Chemical / Reagent List</div>
           </div>
-          <div className="d-flex gap-4 py-4"></div>
+          <div className="d-flex gap-4 py-4 "></div>
           <div>
-            <CRow className="mb-3">
+            <CRow className="mb-3 mx-4">
               <CCol sm={4}>
                 <CFormInput
                   style={{ border: "2px solid gray" }}
@@ -206,7 +270,7 @@ function ChemicalReagent() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
+          <div className="bg-white ">
             <CContainer className="pt-4">
               <CRow>
                 <CCol>
@@ -254,10 +318,30 @@ function ChemicalReagent() {
                                 bottom: "10%",
                               }}
                             >
-                              <h3 style={{ color: "black", fontWeight: "bolder", position:"absolute", bottom:"250px", left:"150px", width:"500px" }}>
+                              <h3
+                                style={{
+                                  color: "black",
+                                  fontWeight: "bolder",
+                                  position: "absolute",
+                                  bottom: "290px",
+                                  left: "150px",
+                                  width: "500px",
+                                }}
+                              >
                                 Chemical / Reagent Index
                               </h3>
-                              <p  style={{ color: "black", fontWeight: "500", position:"absolute", bottom:"195px", left:"150px", width:"500px" }}>Vijay Nagar, Indore, Madhya Pradesh 452010</p>
+                              <p
+                                style={{
+                                  color: "black",
+                                  fontWeight: "500",
+                                  position: "absolute",
+                                  bottom: "240px",
+                                  left: "150px",
+                                  width: "500px",
+                                }}
+                              >
+                                Vijay Nagar, Indore, Madhya Pradesh 452010
+                              </p>
                             </CCol>
                           </CRow>
                           <CTable className="mt-5 text-center">
@@ -321,8 +405,9 @@ function ChemicalReagent() {
                                     <CTableDataCell>
                                       {item.Minimum_Quantity}
                                     </CTableDataCell>
-                                    <CTableDataCell>
-                                      <CBadge
+                                    <CTableDataCell className="d-flex">
+                                      <div
+                                        className="py-2 px-3 small rounded fw-bold"
                                         style={
                                           item.status === "INITIATED"
                                             ? badgeStyle2
@@ -334,49 +419,35 @@ function ChemicalReagent() {
                                             ? badgeStyle5
                                             : item.status === "DROPPED"
                                             ? badgeStyle6
+                                            : item.status === "ALL"
+                                            ? badgeStyle
                                             : badgeStyle
                                         }
                                       >
                                         {item.status}
-                                      </CBadge>
+                                      </div>
                                     </CTableDataCell>
                                     <CTableDataCell>
-                                      <div className="d-flex flex-row justify-content-center gap-2">
-                                        <Link to={`/Viewchemical`}>
-                                          <CButton
-                                            style={{
-                                              backgroundColor: "black",
-                                              color: "white",
-                                            }}
-                                          >
-                                            <FontAwesomeIcon icon={faEye} />
-                                          </CButton>
+                                      <div className="d-flex gap-3">
+                                        <Link to="/approval/1321">
+                                          <FontAwesomeIcon icon={faEye} />
                                         </Link>
-                                        <Link to={`/Editchemical`}>
-                                          <CButton
-                                            style={{
-                                              backgroundColor: "blue",
-                                              color: "white",
-                                            }}
-                                          >
-                                            <FontAwesomeIcon
-                                              icon={faPenToSquare}
-                                            />
-                                          </CButton>
-                                        </Link>
-                                        <CButton
-                                          style={{
-                                            backgroundColor: "red",
-                                            color: "white",
-                                          }}
+                                        <div
+                                          className="cursor-pointer"
+                                          onClick={() => setAddModal(true)}
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={faPenToSquare}
+                                          />
+                                        </div>
+                                        <div
+                                          className="cursor-pointer"
                                           onClick={() =>
-                                            window.confirm(
-                                              "Are you sure you want to delete this item?"
-                                            )
+                                            setDeleteModal(item.id)
                                           }
                                         >
                                           <FontAwesomeIcon icon={faTrashCan} />
-                                        </CButton>
+                                        </div>
                                       </div>
                                     </CTableDataCell>
                                   </CTableRow>
@@ -392,9 +463,67 @@ function ChemicalReagent() {
             </CContainer>
           </div>
         </div>
+        {deleteModal && (
+          <DeleteModal
+            visible={deleteModal !== false}
+            closeModal={() => setDeleteModal(false)}
+            handleDelete={() => handleDelete(deleteModal)}
+          />
+        )}
       </div>
     </>
   );
 }
+const DeleteModal = (_props) => {
+  return (
+    <CModal
+      alignment="center"
+      visible={_props.visible}
+      onClose={_props.closeModal}
+      size="lg"
+    >
+      <CModalHeader>
+        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+          Delete Batch Sample Allotment
+        </CModalTitle>
+      </CModalHeader>
+      <div
+        className="modal-body"
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: "500",
+          lineHeight: "1.5",
+          marginBottom: "1rem",
+          columnGap: "0px",
+          border: "0px !important",
+        }}
+      >
+        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
+      </div>
+      <CModalFooter>
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="danger"
+          onClick={_props.handleDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
+        </CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
 
 export default ChemicalReagent;
