@@ -10,35 +10,42 @@ import { Link } from 'react-router-dom';
 
 
 const ESampling = () => {
-    const pageSize = 9; // Number of items per page
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState('All');
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
+    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-
-
-    // data for the table
     const employees = [
 
         { product: "LUPIN MIRA S 21", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
         { product: "LUPIN MIRA S 22", containersSampled: '130', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
-        { product: "LUPIN MIRA S 23", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { product: "LUPIN MIRA S 23", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'DROPPED' },
         { product: "LUPIN MIRA S 24", containersSampled: '56', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
         { product: "LUPIN MIRA S 25", containersSampled: '38', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
-        { product: "LUPIN MIRA S 26", containersSampled: '31', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
-        { product: "LUPIN MIRA S 27", containersSampled: '49', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { product: "LUPIN MIRA S 26", containersSampled: '31', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'REINITIATED' },
+        { product: "LUPIN MIRA S 27", containersSampled: '49', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'REJECTED' },
         { product: "LUPIN MIRA S 28", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
         { product: "LUPIN MIRA S 29", containersSampled: '21', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
         { product: "LUPIN MIRA S 30", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
-        2
+
 
     ];
+    const filteredEmployees = employees.filter(employee =>
+        selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+    );
 
-    // Function to calculate start and end indices for current page
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employees.length);
+    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
     // Function to render table rows for current page
     const renderRows = () => {
-        return employees.slice(startIndex, endIndex).map((employee, index) => (
+        return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
             <tr key={startIndex + index}>
                 <td>{startIndex + index + 1}</td>
                 <td>{employee.product}</td>
@@ -46,18 +53,34 @@ const ESampling = () => {
                 <td>{employee.addedOn}</td>
                 <td>{employee.numberOfContainers}</td>
                 <td>{employee.samplingConclusion}</td>
-                <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+                <td >
+                    <button
+                        className="py-2 px-3 small rounded fw-bold"
+                        style={
+                            employee.status === "INITIATED"
+                                ? badgeStyle2
+                                : employee.status === "APPROVED"
+                                    ? badgeStyle3
+                                    : employee.status === "REJECTED"
+                                        ? badgeStyle4
+                                        : employee.status === "REINITIATED"
+                                            ? badgeStyle5
+                                            : employee.status === "DROPPED"
+                                                ? badgeStyle6
+                                                : badgeStyle
+                        }
+                    >
+                        {employee.status}
+                    </button>
+                    </td>
                 <td>
                     <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                    <span
-                        className="btn "
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight"
-                        aria-controls="offcanvasRight"
-                    >
+                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#addESampling" aria-controls="offcanvasRight" className='mx-2'>
                         <FontAwesomeIcon icon={faPenToSquare} />
-                    </span>
-                    <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeESamplingModal"><FontAwesomeIcon icon={faTrashCan} /></span>
+                    </Link>
+                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                    </Link>
 
                 </td>
             </tr>
@@ -74,23 +97,36 @@ const ESampling = () => {
     };
 
     const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(employees.length / pageSize));
+        setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+    };
+
+    const handleDelete = () => {
+        console.log(`Deleting employee: ${selectedEmployee.name}`);
+        // Perform delete operation here
+        setSelectedEmployee(null);
     };
 
     return (
         <div className=" mx-5 ">
             <div className="row my-5 ">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5">E-Sampling</div>
+                    <div className="title fw-bold fs-5 py-4">E-Sampling</div>
                 </div>
                 <div className="col-md-6 pt-4">
                     <div className="dropdown">
                         <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select id='selectOption'>
-                                <option>Select Status</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
+                            <select style={{outline:"none"}} id='selectOption' onChange={(e) => {
+                                setSelectedStatus(e.target.value);
+
+                                setCurrentPage(1); // Reset to the first page on filter change
+                            }}>
+                                <option value="All">All</option>
+                                <option value="INITIATED">Initiated</option>
+                                <option value="APPROVED">Approved</option>
+                                <option value="REJECTED">Rejected</option>
+                                <option value="REINITIATED">Reinitiated</option>
+                                <option value="DROPPED">Dropped</option>
                             </select>
                         </button>
                     </div>
@@ -99,11 +135,12 @@ const ESampling = () => {
                 <div className="col-md-6">
                     <button
                         id="Addbtn"
-                        className="btn btn-primary btn-right"
+                        className="btn btn-right"
                         type="button"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#addESampling"
                         aria-controls="offcanvasRight"
+                        style={{ background: "#4B49B6" }}
                     >
                         <CgAddR />  <span>Add E-Sampling</span>
                     </button>
@@ -132,12 +169,12 @@ const ESampling = () => {
                         <div className="mb-3">
                             <label htmlFor="SamplingConfiguration" className="form-label">Sampling Configuration</label>
                             <select className="form-select" id='SamplingConfiguration' aria-label="Default select example">
-                                <option selected>Select </option>
+                                <option defaultValue>Select </option>
                                 <option value="1">SC-072023-0000001</option>
                                 <option value="2">SC-072023-0000002</option>
                                 <option value="3">SC-072023-0000003</option>
-                                <option value="3">SC-072023-0000004</option>
-                                <option value="3">SC-072023-0000005</option>
+                                <option value="4">SC-072023-0000004</option>
+                                <option value="5">SC-072023-0000005</option>
                             </select>
                         </div>
                         <div className="mb-3">
@@ -151,7 +188,7 @@ const ESampling = () => {
                         <div className="mb-3">
                             <label htmlFor="ARNo" className="form-label">A.R. No</label>
                             <select className="form-select" id='ARNo' aria-label="Default select example">
-                                <option selected>Select </option>
+                                <option defaultValue>Select </option>
                                 <option value="ARPC010110">ARPC010110</option>
                                 <option value="ARPC012122">ARPC012122</option>
                                 <option value="ARPC010110">ARPC010111</option>
@@ -175,7 +212,7 @@ const ESampling = () => {
                         <div className="mb-3">
                             <label htmlFor="sampledContainer" className="form-label">Containers sampled</label>
                             <select className="form-select" id='sampledContainer' aria-label="Default select example">
-                                <option selected>Select </option>
+                                <option defaultValue >Select </option>
                                 <option disabled>No. Of Sampled Containers </option>
                             </select>
                         </div>
@@ -228,9 +265,36 @@ const ESampling = () => {
                         </div>
                     </div>
                 </div>
+                {selectedEmployee && (
+                    <div
+                        className="offcanvas offcanvas-end"
+                        tabIndex="-1"
+                        id="deleteOffcanvas"
+                        aria-labelledby="deleteOffcanvasLabel"
+                    >
+                        <div className="offcanvas-header">
+                            <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete E-Sample</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    data-bs-dismiss="offcanvas"
+                                    aria-label="Close"
+                                    onClick={() => setSelectedEmployee(null)}
+                                ></button>
+                            </div>
+                        </div>
+                        <div className="offcanvas-body">
+                            <p>Do you want to delete this E-Sample {selectedEmployee.product}?</p>
+                            <div className="d-flex justify-content-between">
+                                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
+                                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
-            <div className='table-responsive shadow p-4 container1'>
+            <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
                 <table className='table'>
                     <thead>
                         <tr>
@@ -248,48 +312,24 @@ const ESampling = () => {
                         {renderRows()}
                     </tbody>
                 </table>
-                <div className="modal fade" id="removeESamplingModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete E-Sample</h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <p className="">Do you want to delete this E-Sample <code>LUPIN MIRA S 25 TABLET</code> ?</p>
-                            </div>
-                            <div className="d-flex justify-content-end m-3">
-                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
-                                <button type="button" className="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
-
-
-
 
             {/* Pagination */}
 
-
-
-            <div className="pagination">
-
+            <div className="d-flex justify-content-between align-items-center mt-4">
                 <div className="pagination">
-                    <div className='mr-5'>
-                        <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-                    </div>
-                    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                        <button className='btn rounded-circle'> {currentPage} </button>
-                    </div>
-                    <div>
-                        <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
-                    </div>
-
+                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                        &lt;&lt;
+                    </button>
+                    <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                        &gt;&gt;
+                    </button>
                 </div>
-                <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+                <button className="btn " onClick={nextToLastPage}>
+                    Next <FaArrowRight />
+                </button>
             </div>
 
         </div>

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
 const QualityCheck = () => {
-    const pageSize = 3; // Number of items per page
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
@@ -44,10 +44,8 @@ const QualityCheck = () => {
                     <button className='btn btn-right p-1 m-2'>Resend Email</button>
                 </td>
                 <td>{employee.addedOn}</td>
-                <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-success' : 'bg-danger'} bg-opacity-25 text-${employee.status === 'Active' ? 'success' : 'danger'} d-flex justify-content-center p-1 m-2`}>
-                    {employee.status}
-                </td>
-                <td>
+                <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button></td>
+            <td>
                     <span
                         className="btn"
                         data-bs-toggle="offcanvas"
@@ -112,7 +110,7 @@ const QualityCheck = () => {
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasRight"
                         aria-controls="offcanvasRight"
-                        style={{background:"#4B49B6"}}
+                        style={{ background: "#4B49B6" }}
                     >
                         <CgAddR />  <span>Add user</span>
                     </button>
@@ -146,7 +144,7 @@ const QualityCheck = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="contactNumber" className="form-label">Contact Number</label>
-                            <input type="text" className="form-control" id="contactNumber" placeholder="+91 0000000000" />
+                            <input type="number" className="form-control" id="contactNumber" placeholder="+91 0000000000" />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Gmail Address</label>
@@ -155,7 +153,7 @@ const QualityCheck = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="address" className="form-label">Address</label>
-                            <input type="number" className="form-control" id="address" placeholder="Address" />
+                            <input type="text" className="form-control" id="address" placeholder="Address" />
                         </div>
 
                         <div className="d-flex justify-content-center gap-4 mt-4">
@@ -165,29 +163,37 @@ const QualityCheck = () => {
                     </div>
                 </div>
 
-                <div
-                    className="offcanvas offcanvas-end"
-                    tabIndex="-1"
-                    id="deleteOffcanvas"
-                    aria-labelledby="deleteOffcanvasLabel"
-                >
-                    <div className="offcanvas-header">
-                        <h5 className="offcanvas-title" id="deleteOffcanvasLabel">Confirm Deletion</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div className="offcanvas-body">
-                        <p>Are you sure you want to delete {selectedEmployee && selectedEmployee.name}?</p>
-                        <div className="d-flex justify-content-between">
-                            <button className="btn btn-light"
-                            data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
-                            <button className="btn btn-info" onClick={handleDelete}>Submit</button>
+                {selectedEmployee && (
+                    <div
+                        className="offcanvas offcanvas-end"
+                        tabIndex="-1"
+                        id="deleteOffcanvas"
+                        aria-labelledby="deleteOffcanvasLabel"
+                    >
+                        <div className="offcanvas-header">
+                            <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete User</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    data-bs-dismiss="offcanvas"
+                                    aria-label="Close"
+                                    onClick={() => setSelectedEmployee(null)}
+                                ></button>
+                            </div>
+                        </div>
+                        <div className="offcanvas-body">
+                            <p>Are you sure you want to delete {selectedEmployee.name}?</p>
+                            <div className="d-flex justify-content-between">
+                                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
+                                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
 
             {/* Employee table */}
-            <div className=' table-responsive p-4 container1' style={{ boxShadow: "0px 0px 3px black" }}>
+            <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
                 <table className='table'>
                     <thead>
                         <tr>
@@ -208,21 +214,21 @@ const QualityCheck = () => {
             </div>
 
             {/* Pagination */}
-            
-            <div className="pagination">
-            <div className="pagination">
-                <div className='mr-5'>
-                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-                </div>
-                <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                    <button className='btn rounded-circle'> {currentPage} </button>
-                </div>
-                <div>
-                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
-                </div>
-                </div>
-                <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
-            </div>
+
+            <div className="d-flex justify-content-between align-items-center mt-5">
+                        <div className="pagination">
+                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                        <button className="btn " onClick={nextToLastPage}>
+                            Next <FaArrowRight />
+                        </button>
+                    </div>
         </div>
     );
 };

@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 function Storage_Condition() {
-    const pageSize = 3; // Number of items per page
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedStatus, setSelectedStatus] = useState('All');
     const [addModal, setAddModal] = useState(false);
@@ -39,7 +39,7 @@ function Storage_Condition() {
 
     return (
         <>
-            <div id="approval-page" className="h-100 mx-5">
+            <div  className="h-100 mx-5">
                 <div className="container-fluid my-5">
                     <div className="main-head">
                         <h4 className="fw-bold mb-4 mt-3">Storage Conditions</h4>
@@ -117,7 +117,7 @@ function Storage_Condition() {
                             </CTableBody>
                         </CTable>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center mt-4">
+                    <div className="d-flex justify-content-between align-items-center mt-5">
                         <div className="pagination">
                             <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
                                 &lt;&lt;

@@ -78,38 +78,72 @@ const SamplingTemplate = () => {
     label.classList.add('clicked');
     label.checked = true;
   };
-
-  const pageSize = 9;
+  const pageSize = 5; // Number of items per page
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState('All');
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
   const employees = [
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
-    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
+    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
+    { fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
     { fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
     { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
     { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
+    { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
     { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
   ];
 
+  const filteredEmployees = employees.filter(employee =>
+    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+  );
+
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
+  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
   const renderRows = () => {
-    return employees.slice(startIndex, endIndex).map((employee, index) => (
+    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
       <tr key={startIndex + index}>
         <td>{startIndex + index + 1}</td>
         <td>{employee.fieldName}</td>
         <td>{employee.fieldType}</td>
         <td>{employee.registeredBy}</td>
         <td>{employee.registeredOn}</td>
-        <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+        <td >
+          <button
+            className="py-2 px-3 small rounded fw-bold"
+            style={
+              employee.status === "INITIATED"
+                ? badgeStyle2
+                : employee.status === "APPROVED"
+                  ? badgeStyle3
+                  : employee.status === "REJECTED"
+                    ? badgeStyle4
+                    : employee.status === "REINITIATED"
+                      ? badgeStyle5
+                      : employee.status === "DROPPED"
+                        ? badgeStyle6
+                        : badgeStyle
+            }
+          >
+            {employee.status}
+          </button>
+        </td>
         <td>
-          <Link className='mx-2' to="/approval/1321" ><FontAwesomeIcon icon={faEye} /></Link>
-          <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeSamplingTemplateModal"><FontAwesomeIcon icon={faTrashCan} /></span>
+          <div className='d-flex'>
+            <Link to="/approval/1321" className='mx-2'><FontAwesomeIcon icon={faEye} /></Link>
+            <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
+              <FontAwesomeIcon icon={faTrashCan} />
+            </Link>
+          </div>
 
 
         </td>
@@ -124,9 +158,21 @@ const SamplingTemplate = () => {
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
   };
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return employees;
+    }
+
+    return employees.filter((item) => item.status === selectedStatus.toUpperCase());
+  };
 
   const nextToLastPage = () => {
     setCurrentPage(Math.ceil(employees.length / pageSize));
+  };
+  const handleDelete = () => {
+    console.log(`Deleting employee: ${selectedEmployee.name}`);
+    // Perform delete operation here
+    setSelectedEmployee(null);
   };
 
   return (
@@ -138,23 +184,90 @@ const SamplingTemplate = () => {
 
         <div className="chart-widgets w-100">
           <div className="">
-            <div className="row">
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
+            <div className="row" style={{ cursor: "pointer" }}>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                  textAlign: "left",
+                }}
+                onClick={() => setSelectedStatus("INITIATED")}
+              >
                 <div className="text-light fs-5">INITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">4</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white" }}
+                >
+                  {
+                    filterData().filter(
+                      (item) => item.status === "INITIATED"
+                    ).length
+                  }
+                </div>
+              </button>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                  textAlign: "left",
+                  boxShadow: "0px 10px 20px  black !important",
+                }}
+                onClick={() => setSelectedStatus("REINITIATED")}
+              >
                 <div className="text-light fs-5">REINITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">0</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
+
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white" }}
+                >
+                  {
+                    filterData().filter(
+                      (item) => item.status === "REINITIATED"
+                    ).length
+                  }
+                </div>
+              </button>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                  textAlign: "left",
+                }}
+                onClick={() => setSelectedStatus("APPROVED")}
+              >
                 <div className="text-light fs-5">APPROVED</div>
-                <div className="count fs-1 text-light fw-bolder">6</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white", textAlign: "left" }}
+                >
+                  {
+                    filterData().filter(
+                      (item) => item.status === "APPROVED"
+                    ).length
+                  }
+                </div>
+              </button>
+
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                  textAlign: "left",
+                }}
+                onClick={() => setSelectedStatus("REJECTED")}
+              >
                 <div className="text-light fs-5">REJECTED</div>
-                <div className="count fs-1 text-light fw-bolder">0</div>
-              </div>
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white" }}
+                >
+                  {
+                    filterData().filter(
+                      (item) => item.status === "REJECTED"
+                    ).length
+                  }
+                </div>
+              </button>
             </div>
           </div>
         </div>
@@ -163,18 +276,24 @@ const SamplingTemplate = () => {
           <CRow className="mb-3">
             <CCol sm={4}>
               <CFormInput
+                style={{ border: "2px solid gray" }}
                 type="email"
                 placeholder="Search..."
               />
             </CCol>
             <CCol sm={3}>
               <CFormSelect
-                options={[
-                  'Select Status',
-                  { label: 'Active', value: '1' },
-                  { label: 'Inactive', value: '0' }
-                ]}
-              />
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                value={selectedStatus}
+                style={{ border: "2px solid gray" }}
+              >
+                <option value="All">All</option>
+                <option value="Initiated">Initiated</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Reinitiated">Reinitiated</option>
+                <option value="Dropped">Dropped</option>
+              </CFormSelect>
             </CCol>
             <CCol sm={2}></CCol>
             <CCol sm={3}>
@@ -184,7 +303,10 @@ const SamplingTemplate = () => {
                   type="button"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight"><CgAddR />  <span>Add Template</span></CButton>
+                  aria-controls="offcanvasRight"
+                  style={{ background: "#4B49B6" }}
+                >
+                  <CgAddR />  <span>Add Template</span></CButton>
               </div>
             </CCol>
           </CRow>
@@ -196,17 +318,17 @@ const SamplingTemplate = () => {
           </div>
           <div className="offcanvas-body">
             <p className="text-muted">Add information of Sampling template</p>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Template Name</label>
-              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Template Name" />
+            <div className="mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">Template Name</label>
+              <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Template Name" />
             </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Unique Code</label>
-              <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+            <div className="mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">Unique Code</label>
+              <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
             </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Sample Type</label>
-              <select class="form-select" aria-label="Default select example">
+            <div className="mb-3">
+              <label htmlFor="exampleFormControlInput1" className="form-label">Sample Type</label>
+              <select className="form-select" aria-label="Default select example">
                 <option selected>Select...</option>
                 <option value="1">Raw Material</option>
                 <option value="3">Hydrochloric Acid</option>
@@ -216,13 +338,13 @@ const SamplingTemplate = () => {
             </div>
             <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Header</div>
             <div className="d-flex flex-row mb-3 gap-4">
-              <div class="w-50">
-                <label for="exampleFormControlInput1" class="form-label">Row</label>
-                <input type="number" defaultValue={0} class="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+              <div className="w-50">
+                <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
+                <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
               </div>
-              <div class="w-50">
-                <label for="exampleFormControlInput1" class="form-label">Columns</label>
-                <select class="form-select" aria-label="Default select example">
+              <div className="w-50">
+                <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
+                <select className="form-select" aria-label="Default select example">
                   <option value="2" selected>2</option>
                   <option value="4">4</option>
                   <option value="6">6</option>
@@ -233,7 +355,7 @@ const SamplingTemplate = () => {
             <div className="d-flex">
               <div className="w-100 m-3">
                 <h5>Available</h5>
-                <div className="shadow p-2 rounded border overflow-y-auto" style={{height: '350px'}}>
+                <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
                   <ul className='list-group'>
                     {leftArray.map((data) =>
                       <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark'><input type="checkbox" value={data} id={data} className="check-left d-none" /><label className="labels cursor-pointer" htmlFor={data} onClick={clicked}>{data}</label></li>
@@ -247,7 +369,7 @@ const SamplingTemplate = () => {
               </div>
               <div className="w-100 m-3">
                 <h5>Selected</h5>
-                <div className="shadow p-2 rounded border overflow-y-auto" style={{height: '350px'}}>
+                <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
                   <ul className='list-group'>
                     {rightArray.map((data) =>
                       <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark'><input type="checkbox" value={data} id={data} className="check-right d-none" /><label className="labels cursor-pointer" htmlFor={data} onClick={clicked}>{data}</label></li>
@@ -259,13 +381,13 @@ const SamplingTemplate = () => {
 
             <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Footer</div>
             <div className="d-flex flex-row mb-3 gap-4">
-              <div class="w-50">
-                <label for="exampleFormControlInput1" class="form-label">Row</label>
-                <input type="number" defaultValue={0} class="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+              <div className="w-50">
+                <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
+                <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
               </div>
-              <div class="w-50">
-                <label for="exampleFormControlInput1" class="form-label">Columns</label>
-                <select class="form-select" aria-label="Default select example">
+              <div className="w-50">
+                <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
+                <select className="form-select" aria-label="Default select example">
                   <option value="2" selected>2</option>
                   <option value="4">4</option>
                   <option value="6">6</option>
@@ -278,9 +400,36 @@ const SamplingTemplate = () => {
             </div>
           </div>
         </div>
+        {selectedEmployee && (
+          <div
+            className="offcanvas offcanvas-end"
+            tabIndex="-1"
+            id="deleteOffcanvas"
+            aria-labelledby="deleteOffcanvasLabel"
+          >
+            <div className="offcanvas-header">
+              <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete Sampling template</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                  onClick={() => setSelectedEmployee(null)}
+                ></button>
+              </div>
+            </div>
+            <div className="offcanvas-body">
+              <p>Do you want to delete this Template { }?</p>
+              <div className="d-flex justify-content-between">
+                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
+                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className='table-responsive shadow p-4 container1'>
+      <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
         <table className='table'>
           <thead>
             <tr>
@@ -297,39 +446,22 @@ const SamplingTemplate = () => {
             {renderRows()}
           </tbody>
         </table>
-        <div className="modal fade" id="removeSamplingTemplateModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Sampling template</h1>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div className="modal-body">
-                <p className="">Do you want to delete this Template <code>Raw Smapling Template</code> ?</p>
-              </div>
-              <div className="d-flex justify-content-end m-3">
-                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
-                <button type="button" className="btn btn-primary">Submit</button>
-              </div>
-            </div>
-          </div>
-        </div>
+       
       </div>
 
-      <div className="pagination my-4">
-
+      <div className="d-flex justify-content-between align-items-center mt-4">
         <div className="pagination">
-          <div className='mr-5'>
-            <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-          </div>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-            <button className='btn rounded-circle'> {currentPage} </button>
-          </div>
-          <div>
-            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-          </div>
+          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+            &lt;&lt;
+          </button>
+          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+            &gt;&gt;
+          </button>
         </div>
-        <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+        <button className="btn " onClick={nextToLastPage}>
+          Next <FaArrowRight />
+        </button>
       </div>
 
     </div>

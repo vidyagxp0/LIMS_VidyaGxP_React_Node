@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 function StandardProtocol() {
      const [addModal, setAddModal] = useState(false);
      const [deleteModal, setDeleteModal] = useState(false);
-     const [pageSize] = useState(5); // Number of items per page
+     const pageSize = 5; // Number of items per page
      const [currentPage, setCurrentPage] = useState(1);
      const [selectedStatus, setSelectedStatus] = useState("All");
      const badgeStyle = { background: "green", color: "white", width: "110px" };

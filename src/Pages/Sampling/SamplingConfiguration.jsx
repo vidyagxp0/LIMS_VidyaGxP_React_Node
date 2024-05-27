@@ -9,12 +9,13 @@ import { Link } from 'react-router-dom';
 
 
 const SamplingConfiguration = () => {
-    const pageSize = 9; // Number of items per page
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
-
-
-
-    // data for the table
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState('All');
+    const badgeStyle = { background: "green", color: "white", width: "110px" };
+    const badgeStyle2 = { background: "red", color: "white", width: "110px" };
+    
     const employees = [
 
         { samplingId: "USER-022024-000001", specificationId: 'spsc', sample: 'Micro Media', product: 'tamc', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C2' },
@@ -30,9 +31,12 @@ const SamplingConfiguration = () => {
 
 
     ];
+    const filteredEmployees = employees.filter(employee =>
+        selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+    );
 
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employees.length);
+    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
     const renderRows = () => {
         return employees.slice(startIndex, endIndex).map((employee, index) => (
@@ -46,18 +50,16 @@ const SamplingConfiguration = () => {
                 <td>{employee.sampleTemplate}</td>
                 <td>{employee.sampleRule}</td>
 
-                <td>
+                <td >
+                    <div className='d-flex'>
                     <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                    <span
-                        className="btn "
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight"
-                        aria-controls="offcanvasRight"
-                    >
+                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" className='mx-2'>
                         <FontAwesomeIcon icon={faPenToSquare} />
-                    </span>
-                    <span className='cursor-pointer' data-bs-toggle="modal" data-bs-target="#removeConfigurationModal" ><FontAwesomeIcon icon={faTrashCan} /></span>
-
+                    </Link>
+                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                    </Link>
+                    </div>
                 </td>
             </tr>
 
@@ -74,23 +76,29 @@ const SamplingConfiguration = () => {
     };
 
     const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(employees.length / pageSize));
+        setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+    };
+
+    const handleDelete = () => {
+        console.log(`Deleting employee: ${selectedEmployee.name}`);
+        // Perform delete operation here
+        setSelectedEmployee(null);
     };
 
     return (
         <div className=" mx-5 ">
             <div className="row my-5 ">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5">Sampling Configuration</div>
+                    <div className="title fw-bold fs-5 py-4">Sampling Configuration</div>
                 </div>
                 <div className="col-md-6 pt-4">
-                    <div className="dropdown">
+                    <div className="dropdown">                    
                         <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
                             <select id='selectOption'>
-                                <option>All</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
+                                <option value="ALL">All</option>
+                                <option value="ACTIVE" >Active</option>
+                                <option value="INACTIVE">Inactive</option>
                             </select>
                         </button>
                     </div>
@@ -99,11 +107,12 @@ const SamplingConfiguration = () => {
                 <div className="col-md-6">
                     <button
                         id="Addbtn"
-                        className="btn btn-primary btn-right"
+                        className="btn btn-right"
                         type="button"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasRight"
                         aria-controls="offcanvasRight"
+                        style={{ background: "#4B49B6" }}
                     >
                         <CgAddR />  <span>Add Configuration</span>
                     </button>
@@ -190,13 +199,37 @@ const SamplingConfiguration = () => {
                     </div>
                 </div>
 
-
-
-
+                {selectedEmployee && (
+                    <div
+                        className="offcanvas offcanvas-end"
+                        tabIndex="-1"
+                        id="deleteOffcanvas"
+                        aria-labelledby="deleteOffcanvasLabel"
+                    >
+                        <div className="offcanvas-header">
+                            <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete Sampling Configuration</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    data-bs-dismiss="offcanvas"
+                                    aria-label="Close"
+                                    onClick={() => setSelectedEmployee(null)}
+                                ></button>
+                            </div>
+                        </div>
+                        <div className="offcanvas-body">
+                            <p>Do you want to delete this Sampling Configuration {selectedEmployee.samplingId}?</p>
+                            <div className="d-flex justify-content-between">
+                                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
+                                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Employee table */}
-            <div className='table-responsive shadow p-4 container1'>
+            <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
                 <table className='table'>
                     <thead>
                         <tr>
@@ -215,50 +248,27 @@ const SamplingConfiguration = () => {
                         {renderRows()}
                     </tbody>
                 </table>
-                <div className="modal fade" id="removeConfigurationModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-5 fw-bolder" id="exampleModalLabel">Delete Sampling Configuration</h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <p className="">Do you want to delete this Sampling Configuration <code>Tamc</code> ?</p>
-                            </div>
-                            <div className="d-flex justify-content-end m-3">
-                                <button type="button" className="btn btn-secondary mx-4" data-bs-dismiss="modal">Back</button>
-                                <button type="button" className="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
 
 
 
 
             {/* Pagination */}
-
-
-
-            <div className="pagination">
-
+            <div className="d-flex justify-content-between align-items-center mt-4">
                 <div className="pagination">
-                    <div className='mr-5'>
-                        <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-                    </div>
-                    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                        <button className='btn rounded-circle'> {currentPage} </button>
-                    </div>
-                    <div>
-                        <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
-                    </div>
-
+                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                        &lt;&lt;
+                    </button>
+                    <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                        &gt;&gt;
+                    </button>
                 </div>
-                <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+                <button className="btn " onClick={nextToLastPage}>
+                    Next <FaArrowRight />
+                </button>
             </div>
-
         </div>
     );
 };

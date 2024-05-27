@@ -7,11 +7,13 @@ import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
 
 const Admin = () => {
-    const pageSize = 3; // Number of items per page
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
-
+    const badgeStyle = { background: "green", color: "white", width: "110px" };
+    const badgeStyle2 = { background: " red", color: "white", width: "110px" };
+    
     // Data for the table
     const employees = [
         { id: "USER-022024-000001", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
@@ -46,19 +48,17 @@ const Admin = () => {
                     <button className='btn btn-right p-1 m-2'>Resend Email</button>
                 </td>
                 <td>{employee.addedOn}</td>
-                <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-success' : 'bg-danger'} bg-opacity-25 text-${employee.status === 'Active' ? 'success' : 'danger'} d-flex justify-content-center p-1 m-2`}> {employee.status}</td>
-                <td>
-                    <span
-                        className="btn"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight"
-                        aria-controls="offcanvasRight"
-                    >
+                <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button>
+                </td>
+            <td>
+            <div className='d-flex'>
+                <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" className='mx-2'>
                         <FontAwesomeIcon icon={faPenToSquare} />
-                    </span>
+                    </Link>
                     <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
                         <FontAwesomeIcon icon={faTrashCan} />
                     </Link>
+                    </div>
                 </td>
             </tr>
         ));
@@ -66,15 +66,11 @@ const Admin = () => {
 
     // Function to handle pagination
     const nextPage = () => {
-        if ((currentPage * pageSize) < filteredEmployees.length) {
-            setCurrentPage(currentPage + 1);
-        }
+        setCurrentPage(currentPage + 1);
     };
 
     const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
+        setCurrentPage(currentPage - 1);
     };
 
     const nextToLastPage = () => {
@@ -82,10 +78,12 @@ const Admin = () => {
     };
 
     const handleDelete = () => {
-        // Handle the delete logic here
         console.log(`Deleting employee: ${selectedEmployee.name}`);
+        // Perform delete operation here
         setSelectedEmployee(null);
     };
+
+
 
     return (
         <div className="mx-5">
@@ -95,7 +93,7 @@ const Admin = () => {
                 </div>
                 <div className="col-md-6 pt-4">
                     <div className="dropdown">
-                        <select id='selectOption' className="btn border btn-block" onChange={(e) => {
+                        <select style={{outline:"none"}} id='selectOption' className="btn border btn-block" onChange={(e) => {
                             setSelectedStatus(e.target.value);
                             setCurrentPage(1); // Reset to the first page on filter change
                         }}>
@@ -148,7 +146,7 @@ const Admin = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="contactNumber" className="form-label">Contact Number</label>
-                            <input type="text" className="form-control" id="contactNumber" placeholder="+91 0000000000" />
+                            <input type="number" className="form-control" id="contactNumber" placeholder="+91 0000000000" />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Gmail Address</label>
@@ -157,7 +155,7 @@ const Admin = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="address" className="form-label">Address</label>
-                            <input type="number" className="form-control" id="address" placeholder="Address" />
+                            <input type="text" className="form-control" id="address" placeholder="Address" />
                         </div>
 
                         <div className="d-flex justify-content-center gap-4 mt-4">
@@ -176,14 +174,15 @@ const Admin = () => {
                         aria-labelledby="deleteOffcanvasLabel"
                     >
                         <div className="offcanvas-header">
-                            <h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete Employee</h5>
-                            <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                aria-label="Close"
-                                onClick={() => setSelectedEmployee(null)}
-                            ></button>
+                            <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete User</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    data-bs-dismiss="offcanvas"
+                                    aria-label="Close"
+                                    onClick={() => setSelectedEmployee(null)}
+                                ></button>
+                            </div>
                         </div>
                         <div className="offcanvas-body">
 
@@ -219,20 +218,20 @@ const Admin = () => {
             </div>
 
             {/* Pagination */}
-            <div className="pagination mt-4">
-                <div className="pagination ">
-                    <div className='mr-5'>
-                        <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
+            <div className="d-flex justify-content-between align-items-center mt-5">
+                        <div className="pagination">
+                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                        <button className="btn " onClick={nextToLastPage}>
+                            Next <FaArrowRight />
+                        </button>
                     </div>
-                    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                        <button className='btn rounded-circle'> {currentPage} </button>
-                    </div>
-                    <div>
-                        <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
-                    </div>
-                </div>
-                <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
-            </div>
         </div>
     );
 };

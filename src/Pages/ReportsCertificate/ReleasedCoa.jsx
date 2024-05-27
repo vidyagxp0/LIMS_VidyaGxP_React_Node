@@ -15,10 +15,7 @@ function ReleasedCoa() {
     const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-
-
-    const pageSize = 3; // Number of items per page
-
+    const pageSize = 5; // Number of items per page
     const [data, setData] = useState([
         {
             id: 1,
@@ -74,42 +71,19 @@ function ReleasedCoa() {
             specificationCode: "RPS-TSLV-00",
             status: "REINITIATED",
         },
-        // Add more data items here as needed
+       
     ]);
 
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, data.length);
-    const paginatedData = data.slice(startIndex, endIndex);
-
-    const nextPage = () => {
-        if (endIndex < data.length) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(data.length / pageSize));
-    };
-
-    const filterData = () => {
-        if (selectedStatus === "All") {
-            return paginatedData;
-        }
-
-        return paginatedData.filter((item) => item.status.toUpperCase() === selectedStatus.toUpperCase());
-    };
-
-
-
+    const filteredData = selectedStatus === 'All' ? data : data.filter(item => item.status === selectedStatus);
+    const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+    const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
+   
     return (
         <>
-            <div id="approval-page" className="h-100 mx-5">
+            <div  className="h-100 mx-5">
                 <div className="container-fluid my-5">
                     <div className="main-head">
                         <div className="title fw-bold fs-5 py-4">Released Coa</div>
@@ -126,20 +100,23 @@ function ReleasedCoa() {
                                 </CFormSelect>
                             </CCol>
                             <CCol sm={3}>
-                                <CFormSelect onChange={(e) => setSelectedStatus(e.target.value)} value={selectedStatus} style={{ border: "2px solid gray" }}>
-
-                                    <option value="All">All</option>
-                                    <option value="Initiated">Initiated</option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Rejected">Rejected</option>
-                                    <option value="Reinitiated">Reinitiated</option>
-                                    <option value="Dropped">Dropped</option>
-                                </CFormSelect>
+                            <CFormSelect
+                                    onChange={(e) => setSelectedStatus(e.target.value)}
+                                    value={selectedStatus} style={{ border: "2px solid gray" }}
+                                options={[
+                                    "All",                                
+                                { label: "Initiated" ,value: "INITIATED"},
+                                { label: "Approved" ,value: "APPROVED"},
+                                { label: "Rejected" ,value: "REJECTED"},
+                                { label: "Reinitiated" ,value: "REINITIATED"},
+                                { label: "Dropped" ,value: "DROPPED"},
+                            ]}
+                                />
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded py-3 px-4  mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive className="">
+                    <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
+                        <CTable align="middle" responsive >
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
@@ -153,8 +130,8 @@ function ReleasedCoa() {
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                                {filterData().map((item, index) => (
-                                    <CTableRow key={index}>
+                            {filteredData.slice(startIndex, endIndex).map((item) => (
+                                    <CTableRow key={item.id}>
                                         <CTableDataCell>{item.id}</CTableDataCell>
                                         <CTableDataCell>{item.sampleType}</CTableDataCell>
                                         <CTableDataCell>{item.productMaterial}</CTableDataCell>
@@ -193,7 +170,7 @@ function ReleasedCoa() {
                             <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
                             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>&gt;&gt;</button>
                         </div>
-                        <button className="btn btn-next" onClick={nextToLastPage}>Next <FaArrowRight /></button>
+                        <button className="btn" onClick={nextToLastPage}>Next <FaArrowRight /></button>
                     </div>
 
                 </div>

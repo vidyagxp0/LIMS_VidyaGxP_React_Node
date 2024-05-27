@@ -30,11 +30,168 @@ import { Link } from "react-router-dom";
 
 function StabilityProtocol() {
   const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false)
-  const badgeStyle = { background: "#cdffca" };
+  const [deleteModal, setDeleteModal] = useState(false);
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px", };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const pageSize = 5; // Number of items per page
+  const [currentPage, setCurrentPage] = useState(1);
+
+
+  const data = [
+    {
+      id: 1,
+      product: "Sodium Propyl Paraben IP",
+      specificationId: "EUR/SOP-AD-01",
+      genericName: "Sodium Propyl Paraben IP",
+      sampleType: "Finished Product",
+      protocolType: "New",
+      protocolId: "001",
+      addedOn: "05-may-2024",
+      status: "APPROVED"
+    },
+    {
+      id: 2,
+      product: "Polycaprolactone New",
+      specificationId: "EUR/SOP-AD-02",
+      genericName: "Polycaprolactone New",
+      sampleType: "Finished Product",
+      protocolType: "New",
+      protocolId: "002",
+      addedOn: "15-may-2024",
+      status: "DROPPED"
+    },
+    {
+      id: 3,
+      product: "Aspirin USP",
+      specificationId: "EUR/SOP-AD-03",
+      genericName: "Acetylsalicylic Acid",
+      sampleType: "Active Pharmaceutical Ingredient",
+      protocolType: "Revised",
+      protocolId: "003",
+      addedOn: "20-apr-2024",
+      status: "INITIATED"
+    },
+    {
+      id: 4,
+      product: "Ibuprofen BP",
+      specificationId: "EUR/SOP-AD-04",
+      genericName: "Ibuprofen",
+      sampleType: "Finished Product",
+      protocolType: "New",
+      protocolId: "004",
+      addedOn: "10-may-2024",
+      status: "APPROVED"
+    },
+    {
+      id: 5,
+      product: "Paracetamol IP",
+      specificationId: "EUR/SOP-AD-05",
+      genericName: "Acetaminophen",
+      sampleType: "Finished Product",
+      protocolType: "Revised",
+      protocolId: "005",
+      addedOn: "25-apr-2024",
+      status: "REJECTED"
+    },
+    {
+      id: 6,
+      product: "Metformin HCl IP",
+      specificationId: "EUR/SOP-AD-06",
+      genericName: "Metformin Hydrochloride",
+      sampleType: "Active Pharmaceutical Ingredient",
+      protocolType: "New",
+      protocolId: "006",
+      addedOn: "30-apr-2024",
+      status: "INITIATED"
+    },
+    {
+      id: 7,
+      product: "Amoxicillin Trihydrate",
+      specificationId: "EUR/SOP-AD-07",
+      genericName: "Amoxicillin",
+      sampleType: "Active Pharmaceutical Ingredient",
+      protocolType: "New",
+      protocolId: "007",
+      addedOn: "01-may-2024",
+      status: "APPROVED"
+    },
+    {
+      id: 8,
+      product: "Omeprazole IP",
+      specificationId: "EUR/SOP-AD-08",
+      genericName: "Omeprazole",
+      sampleType: "Finished Product",
+      protocolType: "Revised",
+      protocolId: "008",
+      addedOn: "05-may-2024",
+      status: "DROPPED"
+    },
+    {
+      id: 9,
+      product: "Ciprofloxacin HCl",
+      specificationId: "EUR/SOP-AD-09",
+      genericName: "Ciprofloxacin Hydrochloride",
+      sampleType: "Active Pharmaceutical Ingredient",
+      protocolType: "New",
+      protocolId: "009",
+      addedOn: "12-may-2024",
+      status: "APPROVED"
+    },
+    {
+      id: 10,
+      product: "Lisinopril BP",
+      specificationId: "EUR/SOP-AD-10",
+      genericName: "Lisinopril",
+      sampleType: "Finished Product",
+      protocolType: "New",
+      protocolId: "010",
+      addedOn: "18-may-2024",
+      status: "INITIATED"
+    }
+  ];
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, data.length);
+  const paginatedData = data.slice(startIndex, endIndex);
+
+  const nextPage = () => {
+    if (endIndex < data.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextToLastPage = () => {
+    setCurrentPage(Math.ceil(data.length / pageSize));
+  };
+
+
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return data;
+    }
+
+    return data.filter((item) => item.status === selectedStatus.toUpperCase());
+  };
+
+  const [search, setSearch] = useState("");
+  console.log(search);
+
+
+
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
+      <div className="h-100 mx-5">
         <div className="container-fluid my-5">
           <div className="main-head">
             <div className="title fw-bold fs-5">Stability Protocol</div>
@@ -42,36 +199,90 @@ function StabilityProtocol() {
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
               <div className="">
-                <div className="row">
-                  <div
+                <div className="row" style={{ cursor: "pointer" }}>
+                  <button
                     className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#0d6efd, #9ec5fe)" }}
+                    style={{
+                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("INITIATED")}
                   >
                     <div className="text-light fs-5">INITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">2</div>
-                  </div>
-                  <div
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter(
+                          (item) => item.status === "INITIATED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+                  <button
                     className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#d63384, #9ec5fe)" }}
+                    style={{
+                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                      textAlign: "left",
+                      boxShadow: "0px 10px 20px  black !important",
+                    }}
+                    onClick={() => setSelectedStatus("REINITIATED")}
                   >
                     <div className="text-light fs-5">REINITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
-                  <div
-                    className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#ffc107, #9ec5fe)" }}
-                  >
-                    <div className="text-light fs-5">APPROVED</div>
-                    <div className="count fs-1 text-light fw-bolder">1</div>
-                  </div>
 
-                  <div
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter(
+                          (item) => item.status === "REINITIATED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+                  <button
                     className="col shadow p-3 m-3 rounded"
-                    style={{ background: "linear-gradient(#dc3545, #9ec5fe)" }}
+                    style={{
+                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("APPROVED")}
+                  >
+                    <butto className="text-light fs-5">APPROVED</butto>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white", textAlign: "left" }}
+                    >
+                      {
+                        filterData().filter(
+                          (item) => item.status === "APPROVED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("REJECTED")}
                   >
                     <div className="text-light fs-5">REJECTED</div>
-                    <div className="count fs-1 text-light fw-bolder">0</div>
-                  </div>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter(
+                          (item) => item.status === "REJECTED"
+                        ).length
+                      }
+                    </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -79,26 +290,32 @@ function StabilityProtocol() {
           <div>
             <CRow className="mb-3">
               <CCol sm={4}>
-                <CFormInput type="email" placeholder="Search..." />
+                <CFormInput 
+                style={{ border: "2px solid gray" }}
+                                    type="email"
+                                    placeholder="Search..."
+                                    // onChange={(e) => setSearch(e.target.value)}
+                                />
               </CCol>
               <CCol sm={3}>
                 <CFormSelect
-                  options={[
-                    "Select Status",
-                    { label: "All" },
-                    { label: "Initiated" },
-                    { label: "Approved" },
-                    { label: "Rejected" },
-                    { label: "Reinitiated" },
-                    { label: "Dropped" },
-                  ]}
-                />
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  value={selectedStatus}
+                  style={{ border: "2px solid gray" }}
+                >
+                  <option value="All">All</option>
+                  <option value="Initiated">Initiated</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Reinitiated">Reinitiated</option>
+                  <option value="Dropped">Dropped</option>
+                </CFormSelect>
               </CCol>
               <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <CButton
-                    className="bg-info text-white"
+                    color="primary"
                     onClick={() => setAddModal(true)}
                   >
                     Add Protocol
@@ -107,8 +324,8 @@ function StabilityProtocol() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+          <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 8px black" }}>
+            <CTable align="middle" responsive >
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
@@ -131,140 +348,80 @@ function StabilityProtocol() {
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
+             
               <CTableBody>
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>1</CTableDataCell>
-                  <CTableDataCell>Sodium Propyl Paraben IP</CTableDataCell>
+                {filterData()
+                  .filter((item) => {
+                    return search.toLowerCase() === ""
+                      ? item
+                      : item.chamberId.toLowerCase().includes(search);
+                  })
+                  .map((item, index) => (
+                    <CTableRow key={index}>
+                      <CTableHeaderCell scope="row" className="text-center">
+                        <input type="checkbox" />
+                      </CTableHeaderCell>
+                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{item.product}</CTableDataCell>
+                      <CTableDataCell>{item.specificationId}</CTableDataCell>
+                      <CTableDataCell>{item.genericName}</CTableDataCell>
+                      <CTableDataCell>{item.sampleType}</CTableDataCell>
+                      <CTableDataCell>{item.protocolType}</CTableDataCell>
+                      <CTableDataCell>{item.protocolId}</CTableDataCell>
+                      <CTableDataCell>{item.addedOn}</CTableDataCell>
+                      <CTableDataCell className="d-flex">
+                        <div
+                          className="py-2 px-3 small rounded fw-bold"
+                          style={
+                            item.status === "INITIATED"
+                              ? badgeStyle2
+                              : item.status === "APPROVED"
+                                ? badgeStyle3
+                                : item.status === "REJECTED"
+                                  ? badgeStyle4
+                                  : item.status === "REINITIATED"
+                                    ? badgeStyle5
+                                    : item.status === "DROPPED"
+                                      ? badgeStyle6
+                                      : item.status === "ALL"
+                                        ? badgeStyle
+                                        : badgeStyle
+                          }
+                        >
+                          {item.status}
+                        </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div className="d-flex gap-3">
+                          <Link to="/stability/stabilityProtocolDetails">
+                            <FontAwesomeIcon icon={faEye} />
+                          </Link>
 
-                  <CTableDataCell>EUR/SOP-AD-01</CTableDataCell>
-                  <CTableDataCell>Sodium Propyl Paraben IP</CTableDataCell>
-                  <CTableDataCell>Finised Product</CTableDataCell>
-                  <CTableDataCell>New</CTableDataCell>
-                  <CTableDataCell>05-may-2024</CTableDataCell>
-                  <CTableDataCell>001</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      APPROVED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/stability/stabilityProtocolDetails">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>2</CTableDataCell>
-                  <CTableDataCell>Polycaprolactone New</CTableDataCell>
-
-                  <CTableDataCell>EUR/SOP-AD-02</CTableDataCell>
-                  <CTableDataCell>Polycaprolactone New</CTableDataCell>
-                  <CTableDataCell>Finised Product</CTableDataCell>
-                  <CTableDataCell>New</CTableDataCell>
-                  <CTableDataCell>15-may-2024</CTableDataCell>
-                  <CTableDataCell>002</CTableDataCell>
-
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      DROPPED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/stability/stabilityProtocolDetails">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-
-                <CTableRow>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>3</CTableDataCell>
-                  <CTableDataCell>Polycaprolactone</CTableDataCell>
-
-                  <CTableDataCell>EUR/SOP-AD01</CTableDataCell>
-                  <CTableDataCell>Polycaprolactone</CTableDataCell>
-                  <CTableDataCell>Finised Product</CTableDataCell>
-                  <CTableDataCell>New</CTableDataCell>
-                  <CTableDataCell>09-may-2024</CTableDataCell>
-                  <CTableDataCell>003</CTableDataCell>
-                  <CTableDataCell className="d-flex">
-                    <div
-                      className="py-2 px-3 small rounded fw-bold"
-                      style={badgeStyle}
-                    >
-                      INITIATED
-                    </div>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/stability/stabilityProtocolDetails">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <div className='cursor-pointer' onClick={() => setDeleteModal(true)} ><FontAwesomeIcon icon={faTrashCan} /></div>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
+                          <div className="cursor-pointer" onClick={() => setDeleteModal(true)} >
+                            <FontAwesomeIcon icon={faTrashCan} />
+                          </div>
+                        </div>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
               </CTableBody>
             </CTable>
           </div>
 
-          <div className="pagination">
-            <div className="pagination">
-              <div className="mr-5">
-                <button className="btn  mr-2">&lt;&lt;</button>
-              </div>
-              <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                <button className="btn rounded-circle"> 1 </button>
-              </div>
-              <div>
-                <button className="btn mr-2">&gt;&gt;</button>
-              </div>
-            </div>
-            <button className="btn btn-next">
-              {" "}
-              Next <FaArrowRight />
-            </button>
-          </div>
+          <div className="d-flex justify-content-between align-items-center mt-4">
+                        <div className="pagination">
+                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                        <button className="btn btn-next" onClick={nextToLastPage}>
+                            Next <FaArrowRight />
+                        </button>
+                    </div>
         </div>
       </div>
 
@@ -425,7 +582,7 @@ const StatusModal = (_props) => {
               { label: "Bio Burden Test For PM" },
             ]}
           />
-          
+
           <CFormInput
             type="text"
             label="Instructions"

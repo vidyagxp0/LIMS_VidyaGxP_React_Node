@@ -19,7 +19,7 @@ function Coa_Template() {
 
     const [selectedStatus, setSelectedStatus] = useState("All");
 
-    const pageSize = 3; // Number of items per page
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
 
     const [data, setData] = useState([
@@ -74,42 +74,20 @@ function Coa_Template() {
     ]);
 
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, data.length);
-    const paginatedData = data.slice(startIndex, endIndex);
-
-    const nextPage = () => {
-        if (endIndex < data.length) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(data.length / pageSize));
-    };
-
-    const filterData = () => {
-        if (selectedStatus === "All") {
-            return paginatedData;
-        }
-
-        return paginatedData.filter((item) => item.status === selectedStatus.toUpperCase());
-    };
-
+    const filteredData = selectedStatus === 'All' ? data : data.filter(item => item.status === selectedStatus);
+    const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+    const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
-    }
+    };
 
     const handleDeleteConfirm = () => {
-        setData(data.filter(item => item.id !== deleteId));
+        setData(data.filter((item) => item.id !== deleteId));
         setDeleteModal(false);
-    }
+    };
 
     return (
         <>
@@ -124,14 +102,16 @@ function Coa_Template() {
                                 <CFormSelect
                                     onChange={(e) => setSelectedStatus(e.target.value)}
                                     value={selectedStatus} style={{ border: "2px solid gray" }}
-                                >
-                                    <option value="All">All</option>
-                                    <option value="Initiated">Initiated</option>
-                                    <option value="Approved">Approved</option>
-                                    <option value="Rejected">Rejected</option>
-                                    <option value="Reinitiated">Reinitiated</option>
-                                    <option value="Dropped">Dropped</option>
-                                </CFormSelect>
+                                options={[
+                                    "All",                                
+                                { label: "Initiated" ,value: "INITIATED"},
+                                { label: "Approved" ,value: "APPROVED"},
+                                { label: "Rejected" ,value: "REJECTED"},
+                                { label: "Reinitiated" ,value: "REINITIATED"},
+                                { label: "Dropped" ,value: "DROPPED"},
+                            ]}
+                                />
+                                  
                             </CCol>
 
                             <CCol sm={6}></CCol>
@@ -143,8 +123,8 @@ function Coa_Template() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded py-3 px-4  mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive className="">
+                    <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
+                        <CTable align="middle" responsive >
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
@@ -157,14 +137,14 @@ function Coa_Template() {
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                                {filterData().map((item, index) => (
-                                    <CTableRow key={index}>
+                            {filteredData.slice(startIndex, endIndex).map((item) => (
+                                    <CTableRow key={item.id}>
                                         <CTableDataCell>{item.id}</CTableDataCell>
                                         <CTableDataCell>{item.sampleType}</CTableDataCell>
                                         <CTableDataCell>{item.coaId}</CTableDataCell>
                                         <CTableDataCell>{item.coaType}</CTableDataCell>
                                         <CTableDataCell>{item.updatedAt}</CTableDataCell>
-                                        <CTableDataCell className="d-flex">
+                                        <CTableDataCell >
                                             <div
                                                 className="py-2 px-3 small rounded fw-bold"
                                                 style={
@@ -195,10 +175,7 @@ function Coa_Template() {
                                                 >
                                                     <FontAwesomeIcon icon={faPenToSquare} />
                                                 </div>
-                                                <div
-                                                    className="cursor-pointer"
-                                                    onClick={() => handleDeleteClick(item.id)}
-                                                >
+                                                <div className="cursor-pointer" onClick={() => handleDeleteClick(item.id)}>
                                                     <FontAwesomeIcon icon={faTrashCan} />
                                                 </div>
                                             </div>
@@ -218,7 +195,7 @@ function Coa_Template() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn btn-next" onClick={nextToLastPage}>
+                        <button className="btn" onClick={nextToLastPage}>
                             Next <FaArrowRight />
                         </button>
                     </div>
@@ -399,7 +376,7 @@ const StatusModal = (_props) => {
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton className="bg-info text-white">Submit</CButton>
+                    <CButton color="primary">Submit</CButton>
                 </CModalFooter>
             </CModal>
         </>
@@ -418,7 +395,7 @@ const DeleteModal = (_props) => {
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton className="bg-info text-white" onClick={_props.confirmDelete}>Submit</CButton>
+                    <CButton color="primary" onClick={_props.confirmDelete}>Submit</CButton>
                 </CModalFooter>
             </CModal>
         </>

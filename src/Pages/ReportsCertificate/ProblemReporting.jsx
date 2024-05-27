@@ -29,7 +29,7 @@ function ProblemReporting() {
     const [deleteId, setDeleteId] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState("All");
 
-    const pageSize = 3; // Number of items per page
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
 
     const [data, setData] = useState([
@@ -154,7 +154,7 @@ function ProblemReporting() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn btn-next" onClick={nextToLastPage}>
+                        <button className="btn " onClick={nextToLastPage}>
                             Next <FaArrowRight />
                         </button>
                     </div>

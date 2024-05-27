@@ -18,9 +18,6 @@ import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function InvestigationCoa() {
-  
-  const [deleteId, setDeleteId] = useState(null)
-
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
@@ -30,7 +27,7 @@ function InvestigationCoa() {
 
   const [selectedStatus, setSelectedStatus] = useState("All");
 
-  const pageSize = 3; // Number of items per page
+  const pageSize = 5; // Number of items per page
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([
     {
@@ -90,43 +87,12 @@ function InvestigationCoa() {
   ]);
 
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-  const paginatedData = data.slice(startIndex, endIndex);
-
-  const nextPage = () => {
-      if (endIndex < data.length) {
-          setCurrentPage(currentPage + 1);
-      }
-  };
-
-  const prevPage = () => {
-      if (currentPage > 1) {
-          setCurrentPage(currentPage - 1);
-      }
-  };
-
-  const nextToLastPage = () => {
-      setCurrentPage(Math.ceil(data.length / pageSize));
-  };
-
-  const filterData = () => {
-      if (selectedStatus === "All") {
-          return paginatedData;
-      }
-
-      return paginatedData.filter((item) => item.status === selectedStatus.toUpperCase());
-  };
-
-  const handleDeleteClick = (id) => {
-      setDeleteId(id);
-      setDeleteModal(true);
-  }
-
-  const handleDeleteConfirm = () => {
-      setData(data.filter(item => item.id !== deleteId));
-      setDeleteModal(false);
-  }
-
+  const filteredData = selectedStatus === 'All' ? data : data.filter(item => item.status === selectedStatus);
+  const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+  const nextPage = () => setCurrentPage(currentPage + 1);
+  const prevPage = () => setCurrentPage(currentPage - 1);
+  const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
+  
   return (
     <>
       <div className="h-100 mx-5">
@@ -149,23 +115,22 @@ function InvestigationCoa() {
               </CCol>
               <CCol sm={3}>
                 <CFormSelect
-                  options={[
-                    "Select Status",
-                    { label: "All" },
-                    { label: "Initiated" },
-                    { label: "Approved" },
-                    { label: "Rejected" },
-                    { label: "Reinitiated" },
-                    { label: "Droped" },
-                  ]}
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   value={selectedStatus} style={{ border: "2px solid gray" }}
+                  options={[
+                    "All",
+                    { label: "Initiated", value: "INITIATED" },
+                    { label: "Approved", value: "APPROVED" },
+                    { label: "Rejected", value: "REJECTED" },
+                    { label: "Reinitiated", value: "REINITIATED" },
+                    { label: "Dropped", value: "DROPPED" },
+                  ]}
                 />
               </CCol>
             </CRow>
           </div>
           <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-            <CTable align="middle" responsive className="">
+            <CTable align="middle" responsive >
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
@@ -179,33 +144,33 @@ function InvestigationCoa() {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filterData().map((item, index) => (
+                {filteredData.slice(startIndex, endIndex).map((item) => (
                   <CTableRow key={item.id}>
-                    <CTableDataCell>{index + 1}</CTableDataCell>
+                    <CTableDataCell>{item.id}</CTableDataCell>
                     <CTableDataCell>{item.sampleType}</CTableDataCell>
                     <CTableDataCell>{item.productMaterial}</CTableDataCell>
                     <CTableDataCell>{item.arNo}</CTableDataCell>
                     <CTableDataCell>{item.genericName}</CTableDataCell>
                     <CTableDataCell>{item.specificationCode}</CTableDataCell>
                     <CTableDataCell className="d-flex">
-                    <div
-                                              className="py-2 px-3 small rounded fw-bold"
-                                              style={
-                                                  item.status === "INITIATED"
-                                                      ? badgeStyle2
-                                                      : item.status === "APPROVED"
-                                                          ? badgeStyle3
-                                                          : item.status === "REJECTED"
-                                                              ? badgeStyle4
-                                                              : item.status === "REINITIATED"
-                                                                  ? badgeStyle5
-                                                                  : item.status === "DROPPED"
-                                                                      ? badgeStyle6
-                                                                      : badgeStyle
-                                              }
-                                          >
-                                              {item.status}
-                                          </div>
+                      <div
+                        className="py-2 px-3 small rounded fw-bold"
+                        style={
+                          item.status === "INITIATED"
+                            ? badgeStyle2
+                            : item.status === "APPROVED"
+                              ? badgeStyle3
+                              : item.status === "REJECTED"
+                                ? badgeStyle4
+                                : item.status === "REINITIATED"
+                                  ? badgeStyle5
+                                  : item.status === "DROPPED"
+                                    ? badgeStyle6
+                                    : badgeStyle
+                        }
+                      >
+                        {item.status}
+                      </div>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -221,19 +186,19 @@ function InvestigationCoa() {
           </div>
 
           <div className="d-flex justify-content-between align-items-center mt-4">
-                      <div className="pagination">
-                          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                              &lt;&lt;
-                          </button>
-                          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                              &gt;&gt;
-                          </button>
-                      </div>
-                      <button className="btn btn-next" onClick={nextToLastPage}>
-                          Next <FaArrowRight />
-                      </button>
-                  </div>
+            <div className="pagination">
+              <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                &lt;&lt;
+              </button>
+              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+              <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                &gt;&gt;
+              </button>
+            </div>
+            <button className="btn " onClick={nextToLastPage}>
+              Next <FaArrowRight />
+            </button>
+          </div>
         </div>
       </div>
     </>
