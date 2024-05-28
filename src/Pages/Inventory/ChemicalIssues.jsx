@@ -254,7 +254,7 @@ function ChemicalIssues() {
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
-                    Add Solutions
+                    Add Chemical Issue
                   </CButton>
                 </div>
               </CCol>
@@ -395,78 +395,75 @@ const StatusModal = (_props) => {
         <CModalHeader>
           <CModalTitle>Add Chemicals</CModalTitle>
         </CModalHeader>
-        <p>Add information and Add Chemical</p>
-       <CModalBody>
-        <p style={{fontWeight:"bolder"}}>Registration Initiation</p>
-          <CFormInput type="text" label="Chemical / Regeant Lot No." placeholder="select" />
+        <p style={{ marginLeft: "13px" }}>Add information and Add Chemical</p>
+        <CModalBody>
+          <p style={{ fontWeight: "bolder" }}>Registration Initiation</p>
+          <CFormSelect
+            type="text"
+            label="Chemical / Regeant Lot No."
+            placeholder="Select"
+            className="custom-placeholder mb-3"
+          />
           <CFormInput
             type="text"
-            label=" Chemical / Reagent Name"
-            placeholder=" name  "
-            className="custom-placeholder"
+            label="Chemical / Reagent Name"
+            placeholder="Name"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="text"
             label="Batch No."
             placeholder="Batch No."
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
             label="Lot Received On"
-            placeholder="Lot Received On"
-            className="custom-placeholder"
+            placeholder="Select"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
-            label="Lot Quantity Received "
+            label="Lot Quantity Received"
             placeholder="Lot Quantity Received"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="number"
             label="Available Qty. In This Lot"
             placeholder="Available Qty. In This Lot"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
             label="Expiry Date"
-            placeholder="Select..."
+            placeholder="Select"
+            className="mb-3"
           />
           <CFormInput
             type="text"
             label="Quantity Issued Now"
             placeholder="Select"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
+          <CFormSelect
             type="text"
             label="Issued By"
-            placeholder="select"
+            placeholder="Select"
+            className="mb-3"
           />
-          
           <CFormInput
             type="number"
             label="Valid Upto"
-            placeholder="select"
+            placeholder="Select"
+            className="mb-3"
           />
-          
 
           <div>
-          <p>Remarks</p>
-          <textarea name="" id=""></textarea>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-            }}
-          >
-            
+            <p>Remarks</p>
+            <textarea style={{ width: "400px" }} className="form-control mb-3"></textarea>
           </div>
         </CModalBody>
         <CModalFooter>

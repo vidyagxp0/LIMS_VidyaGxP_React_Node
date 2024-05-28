@@ -100,33 +100,33 @@ function VolumeSolutions() {
     },
   ]);
   const [currentPage, setCurrentPage] = useState(1);
-const pageSize = 5;
-const startIndex = (currentPage - 1) * pageSize;
-const endIndex = Math.min(startIndex + pageSize, data.length);
-const [search, setSearch] = useState("");
+  const pageSize = 5;
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, data.length);
+  const [search, setSearch] = useState("");
 
-const filterData = () => {
-  const filteredData =
-    selectedStatus === "All"
-      ? data
-      : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
-  return filteredData.filter((item) =>
-    item.Name.toLowerCase().includes(search.toLowerCase())
-  );
-};
-const filteredData = filterData();
-const nextPage = () =>
-  setCurrentPage((prev) =>
-    Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-  );
-const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const filterData = () => {
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter(
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
+    return filteredData.filter((item) =>
+      item.Name.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+  const filteredData = filterData();
+  const nextPage = () =>
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
+    );
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-const handleDelete = (id) => {
-  setData((prevData) => prevData.filter((item) => item.id !== id));
-  setDeleteModal(false);
-};
+  const handleDelete = (id) => {
+    setData((prevData) => prevData.filter((item) => item.id !== id));
+    setDeleteModal(false);
+  };
 
   return (
     <>
@@ -289,7 +289,8 @@ const handleDelete = (id) => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filterData().slice(startIndex, endIndex)
+                {filterData()
+                  .slice(startIndex, endIndex)
                   .filter((item) => {
                     return search.toLowerCase() === ""
                       ? item
@@ -344,12 +345,12 @@ const handleDelete = (id) => {
                             <FontAwesomeIcon icon={faPenToSquare} />
                           </div>
                           <CTableDataCell>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => setDeleteModal(item.id)}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </div>
                           </CTableDataCell>
                         </div>
                       </CTableDataCell>
@@ -383,7 +384,7 @@ const handleDelete = (id) => {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-        {deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -403,161 +404,102 @@ const StatusModal = (_props) => {
         onClose={_props.closeModal}
       >
         <CModalHeader>
-          <CModalTitle>New Internal</CModalTitle>
+          <CModalTitle>Add Solutions</CModalTitle>
         </CModalHeader>
+        <p style={{marginLeft: "15px"}}>Add information and Add Solutions</p>
         <CModalBody>
-          <CFormInput type="text" label="Lot Type" placeholder="Select " />
+          <CFormInput type="text" label="Lot Type" placeholder="Select " className="mb-3" />
           <CFormInput
             type="text"
-            label="Sample Refrence No."
-            placeholder="Sample Refrence No. "
-            className="custom-placeholder"
-          />
-
-          <CFormInput
-            type="text"
-            label="Container Type"
-            placeholder="Bottle / vial "
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text"
-            label="Storage Condition"
-            placeholder="Storage Condition "
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="number"
-            label="W.s Batch Quantity"
-            placeholder="W.s Batch Quantity "
-            className="custom-placeholder"
-          />
-          <CFormTextarea
-            type="text"
-            label="Available Quantity for Distribution"
-            placeholder="Available Quantity for Distribution"
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text"
-            label="Lot Quantity for Distribution"
-            placeholder="Lot Quantity "
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="date"
-            label="W.s Validate On"
+            label="Name"
             placeholder=" "
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="date"
-            label="Lot Valid Upto"
-            placeholder=""
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
-            label="Usage Type"
-            placeholder="Single / Multiple"
-            className="custom-placeholder"
+            label="Prefix"
+            placeholder="Bottle / vial "
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
-            label="Direction of Usage"
-            placeholder="Direction of Usage"
-            className="custom-placeholder"
+            label="Theoretical Strength"
+            placeholder="Theoretical Strength"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
-            type="number"
-            label="No. Of Purities"
-            placeholder="1"
-            className="custom-placeholder"
-          />
-
           <CFormInput
             type="number"
             label="UOM"
-            placeholder="Select..."
-            className="custom-placeholder"
+            placeholder="UOM "
+            className="custom-placeholder mb-3"
           />
-
-          <div className="container mt-5 ">
-            <table className="table table-bordered">
-              <thead className="thead-light">
-                <tr>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Sno.
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Purity
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Value-UOM
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <select className="form-control">
-                      <option>Acids</option>
-                      <option>Bases</option>
-                      <option>Salts</option>
-                      <option>Solvents</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <CFormTextarea
+            type="text"
+            label="Solution Expiry Period"
+            placeholder="Solution Expiry Period"
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="text"
+            label="Standardization Schedule"
+            placeholder="Lot Quantity"
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="date"
+            label="Preparation Method"
+            placeholder=" "
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="text"
+            label="Preparation Method"
+            placeholder=""
+            className="custom-placeholder mb-3"
+          />
           <CFormInput
             type="number"
             label="Additional Purities Information"
             placeholder="Additional Information"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
             label="Standard Type"
             placeholder="Standard Type"
+            className="mb-3"
           />
-          <CFormInput type="number" label="Source" placeholder="Source" />
-
-          <CFormInput type="number" label="Comments" placeholder="Comments" />
-
+          <CFormInput type="number" label="Source" placeholder="Source" className="mb-3" />
+          <CFormInput type="number" label="Comments" placeholder="Comments" className="mb-3" />
           <CFormInput
             type="number"
-            label="Container Validaty Period"
-            placeholder="Container Validaty Period"
+            label="Container Validity Period"
+            placeholder="Container Validity Period"
+            className="mb-3"
           />
           <CFormInput
             type="number"
             label="Container Starting No."
             placeholder="Container No."
+            className="mb-3"
           />
           <CFormInput
             type="number"
             label="Minimum No. of Containers for Alert"
             placeholder="1"
+            className="mb-3"
           />
           <CFormInput
             type="number"
             label="No. of Containers Prepared"
             placeholder=""
+            className="mb-3"
           />
           <CFormInput
             type="number"
             label="Total Quantity in containers"
             placeholder="Total Quantity in containers"
+            className="mb-3"
           />
         </CModalBody>
         <CModalFooter>
@@ -623,6 +565,5 @@ const DeleteModal = (_props) => {
     </CModal>
   );
 };
-
 
 export default VolumeSolutions;

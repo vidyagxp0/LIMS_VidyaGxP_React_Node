@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CFormCheck,
   CFormInput,
+  CFormLabel,
   CFormSelect,
   CFormTextarea,
   CModal,
@@ -410,98 +413,137 @@ const StatusModal = (_props) => {
           <CModalTitle>Reference Standard Lot Usage</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput type="text" label="Lot Type" placeholder="Select " />
-          <CFormInput
+          
+          <CFormSelect
             type="text"
             label="W.S Lot No."
             placeholder="Select.. "
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="Product/Material"
             placeholder="Product/Material"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
             label="Lot Created Date"
             placeholder="Lot Created Date "
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
             label="Lot Exp. Date"
             placeholder=" "
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormTextarea
             type="text"
             label="Usage Type"
             placeholder="Usage Type"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="No. of Containers Prepared"
             placeholder="No. of Containers Prepared"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
-            label="ontainer Issued On"
+            label="Container Issued On"
             placeholder=" "
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
             label="Container Valid Upto"
             placeholder=""
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
             label="Total Quantity in containers"
             placeholder=""
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="Available Quantity In Container"
             placeholder="Direction of Usage"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
-            type="number"
-            label="Collection Type"
-            placeholder="1"
-            className="custom-placeholder"
-          />
+          <CForm className="mb-3">
+            <CFormLabel>Collection Type</CFormLabel>
+            <div style={{display:"flex", justifyContent:"space-around"}}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="Manual"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Auto Binding"
+                value="reject"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Set as default"
+                value="reject"
+              />
+            </div>
+          </CForm>
           <CFormInput
             type="number"
             label="Quantity Used Now"
             placeholder="Select..."
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
             label="Used On"
             placeholder="Select..."
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
             label="Used By"
             placeholder="Select..."
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
-            type="radio"
-            options="1"
-            label="Usage for"
-            placeholder="Select..."
-            className="custom-placeholder"
-          />
+          <CForm className="mb-3">
+            <CFormLabel>Usage for</CFormLabel>
+            <div style={{display:"flex", justifyContent:"space-around"}}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="Sample Analysis"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Instrument Calibration"
+                value="reject"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Miscellaneous"
+                value="reject"
+              />
+            </div>
+          </CForm>
         </CModalBody>
 
         <CModalFooter>
@@ -516,7 +558,6 @@ const StatusModal = (_props) => {
     </>
   );
 };
-
 const DeleteModal = (_props) => {
   return (
     <CModal

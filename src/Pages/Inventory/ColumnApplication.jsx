@@ -388,7 +388,7 @@ function ColumnApplication() {
 const StatusModal = (props) => {
   return (
     <>
-      <CModal alignment="" visible={props.visible} onClose={props.closeModal}>
+      <CModal size="lg" alignment="" visible={props.visible} onClose={props.closeModal} size="lg">
         <CModalHeader>
           <CModalTitle>New Application</CModalTitle>
         </CModalHeader>
@@ -400,6 +400,7 @@ const StatusModal = (props) => {
             label="Name"
             placeholder="Name"
             className="custom-placeholder"
+            
           />
           <CFormInput
             type="text"

@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CFormCheck,
   CFormInput,
+  CFormLabel,
   CFormSelect,
   CModal,
   CModalBody,
@@ -43,55 +46,53 @@ function ChemicalUsage() {
   const [data, setData] = useState([
     {
       id: 1,
-      Uniquecode			: "stmp1",
-      ChemicalRegeantName		: "describe",
-      ChemicalRegeantIssueNo			: "isubus111",
-      IssuedOn				: "25-05-2024",
-      
-      status: "INITIATED",
-      
+      Uniquecode: "stmp1",
+      ChemicalRegeantName: "describe",
+      ChemicalRegeantIssueNo: "isubus111",
+      IssuedOn: "25-05-2024",
 
+      status: "INITIATED",
     },
     {
       id: 2,
-      Uniquecode			: "stmp1",
-      ChemicalRegeantName		: "describe",
-      ChemicalRegeantIssueNo			: "isubus111",
-      IssuedOn				: "25-05-2024",
+      Uniquecode: "stmp1",
+      ChemicalRegeantName: "describe",
+      ChemicalRegeantIssueNo: "isubus111",
+      IssuedOn: "25-05-2024",
       status: "INITIATED",
     },
 
     {
       id: 3,
-      Uniquecode			: "stmp1",
-      ChemicalRegeantName		: "describe",
-      ChemicalRegeantIssueNo			: "isubus111",
-      IssuedOn				: "25-05-2024",
+      Uniquecode: "stmp1",
+      ChemicalRegeantName: "describe",
+      ChemicalRegeantIssueNo: "isubus111",
+      IssuedOn: "25-05-2024",
       status: "REJECTED",
     },
     {
       id: 4,
-      Uniquecode			: "stmp1",
-      ChemicalRegeantName		: "describe",
-      ChemicalRegeantIssueNo			: "isubus111",
-      IssuedOn				: "25-05-2024",
+      Uniquecode: "stmp1",
+      ChemicalRegeantName: "describe",
+      ChemicalRegeantIssueNo: "isubus111",
+      IssuedOn: "25-05-2024",
       status: "APPROVED",
     },
     {
       id: 5,
-      Uniquecode			: "stmp1",
-      ChemicalRegeantName		: "describe",
-      ChemicalRegeantIssueNo			: "isubus111",
-      IssuedOn				: "25-05-2024",
+      Uniquecode: "stmp1",
+      ChemicalRegeantName: "describe",
+      ChemicalRegeantIssueNo: "isubus111",
+      IssuedOn: "25-05-2024",
       status: "APPROVED",
     },
 
     {
       id: 6,
-      Uniquecode			: "stmp1",
-      ChemicalRegeantName		: "describe",
-      ChemicalRegeantIssueNo			: "isubus111",
-      IssuedOn				: "25-05-2024",
+      Uniquecode: "stmp1",
+      ChemicalRegeantName: "describe",
+      ChemicalRegeantIssueNo: "isubus111",
+      IssuedOn: "25-05-2024",
       status: "APPROVED",
     },
   ]);
@@ -131,96 +132,93 @@ function ChemicalUsage() {
             <div className="title fw-bold fs-5">Chemical Usage</div>
           </div>
           <div className="d-flex gap-4">
-          <div className="chart-widgets w-100">
-            <div className="row" style={{ cursor: "pointer" }}>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("INITIATED")}
+            <div className="chart-widgets w-100">
+              <div className="row" style={{ cursor: "pointer" }}>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("INITIATED")}
+                >
+                  <div className="text-light fs-5">INITIATED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "INITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
-                      textAlign: "left",
-                      boxShadow: "0px 10px 20px  black !important",
-                    }}
-                    onClick={() => setSelectedStatus("REINITIATED")}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
+                    {
+                      filterData().filter((item) => item.status === "INITIATED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                    textAlign: "left",
+                    boxShadow: "0px 10px 20px  black !important",
+                  }}
+                  onClick={() => setSelectedStatus("REINITIATED")}
+                >
+                  <div className="text-light fs-5">REINITIATED</div>
 
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REINITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("APPROVED")}
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <butto className="text-light fs-5">APPROVED</butto>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white", textAlign: "left" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "APPROVED"
-                        ).length
-                      }
-                    </div>
-                  </button>
+                    {
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("APPROVED")}
+                >
+                  <butto className="text-light fs-5">APPROVED</butto>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white", textAlign: "left" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "APPROVED")
+                        .length
+                    }
+                  </div>
+                </button>
 
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("REJECTED")}
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("REJECTED")}
+                >
+                  <div className="text-light fs-5">REJECTED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REJECTED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                </div>
+                    {
+                      filterData().filter((item) => item.status === "REJECTED")
+                        .length
+                    }
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
           <div>
-          <CRow className="mb-3">
+            <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
                   style={{ border: "2px solid gray" }}
@@ -248,37 +246,40 @@ function ChemicalUsage() {
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
-                    Add Solutions
+                    Add Chemical Usage
                   </CButton>
                 </div>
               </CCol>
             </CRow>
           </div>
           <div className="bg-white mt-5">
-          <CTable align="middle" responsive className=" shadow">
+            <CTable align="middle" responsive className=" shadow">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Unique code</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                  Unique code	
+                    Chemical / Regeant Name{" "}
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Chemical / Regeant Name			</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Chemical / Regeant Issue No.			 </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Issued On.				 </CTableHeaderCell>
-                  
+                  <CTableHeaderCell scope="col">
+                    Chemical / Regeant Issue No.{" "}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Issued On. </CTableHeaderCell>
+
                   <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filterData().slice(startIndex, endIndex)
+                {filterData()
+                  .slice(startIndex, endIndex)
                   .filter((item) => {
                     return search.toLowerCase() === ""
                       ? item
-                      : item.ChemicalRegeantName		.toLowerCase().includes(search);
+                      : item.ChemicalRegeantName.toLowerCase().includes(search);
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
@@ -287,13 +288,17 @@ function ChemicalUsage() {
                       </CTableHeaderCell>
                       <CTableDataCell>{item.id}</CTableDataCell>
                       <CTableDataCell key={item.id}>
-                        {item.Uniquecode		}
+                        {item.Uniquecode}
                       </CTableDataCell>
 
-                      <CTableDataCell>{item.ChemicalRegeantName		}</CTableDataCell>
-                      <CTableDataCell>{item.ChemicalRegeantIssueNo	}</CTableDataCell>
-                      
-                      <CTableDataCell>{item.IssuedOn	}</CTableDataCell>
+                      <CTableDataCell>
+                        {item.ChemicalRegeantName}
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        {item.ChemicalRegeantIssueNo}
+                      </CTableDataCell>
+
+                      <CTableDataCell>{item.IssuedOn}</CTableDataCell>
                       <CTableDataCell className="d-flex">
                         <div
                           className="py-2 px-3 small rounded fw-bold"
@@ -365,7 +370,7 @@ function ChemicalUsage() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-       {deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -387,84 +392,101 @@ const StatusModal = (_props) => {
         <CModalHeader>
           <CModalTitle>Add Chemicals</CModalTitle>
         </CModalHeader>
-        <p>Add information and Add Chemical</p>
-       <CModalBody>
-        <p style={{fontWeight:"bolder"}}>Registration Initiation</p>
-          <CFormInput type="text" label="Chemical / Regeant Name" placeholder="select" />
-          <CFormInput
+        <p style={{ marginLeft: "13px" }}>Add information and Add Chemical</p>
+        <CModalBody>
+          <p style={{ fontWeight: "bolder" }}>Registration Initiation</p>
+          <CFormSelect
             type="text"
-            label=" Chemical / Reageant Issue No."
-            placeholder=" select"
-            className="custom-placeholder"
+            label="Chemical / Reagent Name"
+            placeholder="Select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormSelect
+            type="text"
+            label="Chemical / Reagent Issue No."
+            placeholder="Select"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="text"
             label="Batch No."
             placeholder="Batch No."
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="Issued On"
             placeholder="Issued On"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
-            label="Quantity Issued "
+            label="Quantity Issued"
             placeholder="Quantity Issued"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="number"
             label="Available Qty. In This Issue"
             placeholder="Available Qty. In This Issue"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
-            type="number"
-            label="Collection Type"
-            placeholder="Select..."
-          />
-          <CFormInput
-            type="number"
-            label="Consumed"
-            placeholder="Select"
-          />
-          <CFormInput
-            type="date"
-            label="Used On"
-            placeholder="select"
-          />
-          <CFormInput
-            type="date"
-            label="Used by"
-            placeholder="select"
-          />
-          <CFormInput
-            type="number"
-            label="Valid Upto"
-            placeholder="select"
-          />
-          
+          <CForm className="mb-3">
+            <CFormLabel>Collection Type</CFormLabel>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="Manual"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Auto Binding"
+                value="reject"
+              />
+            </div>
+          </CForm>
+          <CFormInput type="number" label="Consumed" placeholder="" className="mb-3" />
+          <CFormInput type="date" label="Used On" placeholder="Select" className="mb-3" />
+          <CFormSelect type="date" label="Used by" placeholder="Select" className="mb-3" />
+          <CFormInput type="date" label="Valid Upto" placeholder="Select" className="mb-3" />
 
-          <CFormInput
-            type="number"
-            label="Usage for"
-            placeholder="select"
-          />
+          <CForm className="mb-3">
+            <CFormLabel>Usage For</CFormLabel>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="Sample Analysis"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Miscellaneous"
+                value="reject"
+              />
+            </div>
+          </CForm>
 
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
+              marginBottom: "1rem"
             }}
           >
-            <label>Comments</label>
-            <textarea name="" id=""></textarea>
+            <label>Consumption Details</label>
+            <textarea name="" id="" className="form-control"></textarea>
           </div>
         </CModalBody>
         <CModalFooter>

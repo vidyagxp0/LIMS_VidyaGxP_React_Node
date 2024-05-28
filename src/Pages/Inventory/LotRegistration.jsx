@@ -43,47 +43,47 @@ function LotRegistration() {
   const [data, setData] = useState([
     {
       id: 1,
-      ChemicalRegeantName	: "stmp1",
-      ChemicalRegeantLotNo	: "describe",
-      NoofContainers	: "isubus111",
-      
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantLotNo: "describe",
+      NoofContainers: "isubus111",
+
       status: "APPROVED",
     },
     {
       id: 2,
-      ChemicalRegeantName	: "stmp1",
-      ChemicalRegeantLotNo	: "describe",
-      NoofContainers	: "isubus111",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantLotNo: "describe",
+      NoofContainers: "isubus111",
       status: "DROPPED",
     },
 
     {
       id: 3,
-      ChemicalRegeantName	: "stmp1",
-      ChemicalRegeantLotNo	: "describe",
-      NoofContainers	: "isubus111",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantLotNo: "describe",
+      NoofContainers: "isubus111",
       status: "REJECTED",
     },
     {
       id: 4,
-      ChemicalRegeantName	: "Alpha",
-      ChemicalRegeantLotNo	: "describe",
-      NoofContainers	: "isubus111",
+      ChemicalRegeantName: "Alpha",
+      ChemicalRegeantLotNo: "describe",
+      NoofContainers: "isubus111",
       status: "APPROVED",
     },
     {
       id: 5,
-      ChemicalRegeantName	: "stmp1",
-      ChemicalRegeantLotNo	: "describe",
-      NoofContainers	: "isubus111",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantLotNo: "describe",
+      NoofContainers: "isubus111",
       status: "INITIATED",
     },
 
     {
       id: 6,
-      ChemicalRegeantName	: "Alpha",
-      ChemicalRegeantLotNo	: "describe",
-      NoofContainers	: "isubus111",
+      ChemicalRegeantName: "Alpha",
+      ChemicalRegeantLotNo: "describe",
+      NoofContainers: "isubus111",
       status: "APPROVED",
     },
   ]);
@@ -125,7 +125,7 @@ function LotRegistration() {
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
-            <div className="">
+              <div className="">
                 <div className="row" style={{ cursor: "pointer" }}>
                   <button
                     className="col shadow p-3 m-3 rounded"
@@ -215,7 +215,7 @@ function LotRegistration() {
             </div>
           </div>
           <div>
-          <CRow className="mb-3">
+            <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
                   style={{ border: "2px solid gray" }}
@@ -250,29 +250,35 @@ function LotRegistration() {
             </CRow>
           </div>
           <div className="bg-white mt-5">
-          <CTable align="middle" responsive className=" shadow">
+            <CTable align="middle" responsive className=" shadow">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col"> Chemical / Regeant Name	 </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Chemical / Regeant Lot No	</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                  No of Containers	
+                    {" "}
+                    Chemical / Regeant Name{" "}
                   </CTableHeaderCell>
-                  
+                  <CTableHeaderCell scope="col">
+                    Chemical / Regeant Lot No{" "}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">
+                    No of Containers
+                  </CTableHeaderCell>
+
                   <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filterData().slice(startIndex, endIndex)
+                {filterData()
+                  .slice(startIndex, endIndex)
                   .filter((item) => {
                     return search.toLowerCase() === ""
                       ? item
-                      : item.ChemicalRegeantName	.toLowerCase().includes(search);
+                      : item.ChemicalRegeantName.toLowerCase().includes(search);
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
@@ -280,13 +286,15 @@ function LotRegistration() {
                         <input type="checkbox" />
                       </CTableHeaderCell>
                       <CTableDataCell>{item.id}</CTableDataCell>
-                      <CTableDataCell key={item.id}>{item.ChemicalRegeantName}</CTableDataCell>
-
-                      <CTableDataCell>{item.ChemicalRegeantLotNo	}</CTableDataCell>
-                      <CTableDataCell>
-                        {item.NoofContainers	}
+                      <CTableDataCell key={item.id}>
+                        {item.ChemicalRegeantName}
                       </CTableDataCell>
-                      
+
+                      <CTableDataCell>
+                        {item.ChemicalRegeantLotNo}
+                      </CTableDataCell>
+                      <CTableDataCell>{item.NoofContainers}</CTableDataCell>
+
                       <CTableDataCell className="d-flex">
                         <div
                           className="py-2 px-3 small rounded fw-bold"
@@ -321,12 +329,12 @@ function LotRegistration() {
                             <FontAwesomeIcon icon={faPenToSquare} />
                           </div>
                           <CTableDataCell>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => setDeleteModal(item.id)}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </div>
                           </CTableDataCell>
                         </div>
                       </CTableDataCell>
@@ -360,7 +368,7 @@ function LotRegistration() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-        {deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -380,87 +388,141 @@ const StatusModal = (_props) => {
         onClose={_props.closeModal}
       >
         <CModalHeader>
-          <CModalTitle>Add Chemicals</CModalTitle>
+          <CModalTitle>Lot Registration</CModalTitle>
         </CModalHeader>
+        <p style={{ marginLeft: "13px" }}>Add information</p>
         <CModalBody>
-          <p style={{ fontWeight: "bolder" }}>Registration Initiation</p>
-          <CFormInput
+          <p style={{ fontWeight: "800", fontSize: "19px" }}>Registration Initiation</p>
+          <CFormSelect
             type="text"
             label="Chemical / Reagent Name"
-            placeholder="Chemical / Reagent Name
-            "
+            placeholder="Chemical / Reagent Name"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
-            label=" CAS / CAT No
-            "
-            placeholder=" CAS / CAT No
-            "
-            className="custom-placeholder"
+            label="CAS / CAT No"
+            placeholder="CAS / CAT No"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="text"
-            label="Delivery Recepit No"
-            placeholder="Delivery Recepit No"
-            className="custom-placeholder"
+            label="Delivery Receipt No"
+            placeholder="Delivery Receipt No"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="CAS / CAT no."
-            placeholder="Enter CAS  "
-            className="custom-placeholder"
+            placeholder="Enter CAS"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
+          <CFormSelect
             type="text"
-            label="Certificate "
+            label="Certificate"
             placeholder="Certificate"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="number"
             label="No. Of Containers"
             placeholder="No. Of Containers"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
             label="Lot Quantity Received"
             placeholder="Lot Quantity Received"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
             label="Usage Quantity"
             placeholder="Usage Quantity"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput type="number" label="Received by" placeholder="Received by" />
-          <CFormInput type="date" label="Received On" placeholder="select" />
+          <CFormSelect
+            type="number"
+            label="Received by"
+            placeholder="Received by"
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="date"
+            label="Received On"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
           <CFormInput
             type="number"
             label="Supplied by"
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
           <p style={{ fontWeight: "bolder" }}>Inventory Control</p>
 
-          <CFormInput type="number" label="Manufactured By" placeholder="select" />
-          <CFormInput type="number" label="Manufacture's Batch No / Lot No." placeholder="select" />
-          <CFormInput type="number" label="Storage Location" placeholder="select" />
-          <CFormInput type="date" label="Expiry Date" placeholder="select" />
-          <CFormInput type="text" label="Potency" placeholder="select" />
-          <CFormInput type="text" label="UOM" placeholder="select" />
-          <CFormInput type="text" label="Water Content" placeholder="select" />
-          <CFormInput type="text" label="UOM" placeholder="select" />
+          <CFormSelect
+            type="number"
+            label="Manufactured By"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormSelect
+            type="number"
+            label="Manufacture's Batch No / Lot No."
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormSelect
+            type="number"
+            label="Storage Location"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          
+          <CFormInput
+            type="date"
+            label="Expiry Date"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="text"
+            label="Potency"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormSelect
+            type="text"
+            label="UOM"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="text"
+            label="Water Content"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormSelect
+            type="text"
+            label="UOM"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
 
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
+              marginBottom: "1rem"
             }}
           >
             <label>Comments</label>
-            <textarea name="" id=""></textarea>
+            <textarea name="" id="" className="form-control"></textarea>
           </div>
         </CModalBody>
         <CModalFooter>
