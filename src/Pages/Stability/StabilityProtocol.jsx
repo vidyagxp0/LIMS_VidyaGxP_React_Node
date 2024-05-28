@@ -327,12 +327,12 @@ function StabilityProtocol() {
           <div>
             <CRow className="mb-3">
               <CCol sm={4}>
-                <CFormInput 
-                style={{ border: "2px solid gray" }}
-                                    type="email"
-                                    placeholder="Search..."
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
+                <CFormInput
+                  style={{ border: "2px solid gray" }}
+                  type="email"
+                  placeholder="Search..."
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </CCol>
               <CCol sm={3}>
                 <CFormSelect
@@ -385,74 +385,74 @@ function StabilityProtocol() {
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
-             
-              <CTableBody>
-              {filterData().slice(startIndex, endIndex).map((item, index) => (
-                  <CTableRow key={item.id}>
-                      <CTableHeaderCell scope="row" className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      <CTableDataCell>{item.product}</CTableDataCell>
-                      <CTableDataCell>{item.specificationId}</CTableDataCell>
-                      <CTableDataCell>{item.genericName}</CTableDataCell>
-                      <CTableDataCell>{item.sampleType}</CTableDataCell>
-                      <CTableDataCell>{item.protocolType}</CTableDataCell>
-                      <CTableDataCell>{item.protocolId}</CTableDataCell>
-                      <CTableDataCell>{item.addedOn}</CTableDataCell>
-                      <CTableDataCell className="d-flex">
-                        <div
-                          className="py-2 px-3 small rounded fw-bold"
-                          style={
-                            item.status === "INITIATED"
-                              ? badgeStyle2
-                              : item.status === "APPROVED"
-                                ? badgeStyle3
-                                : item.status === "REJECTED"
-                                  ? badgeStyle4
-                                  : item.status === "REINITIATED"
-                                    ? badgeStyle5
-                                    : item.status === "DROPPED"
-                                      ? badgeStyle6
-                                      : item.status === "ALL"
-                                        ? badgeStyle
-                                        : badgeStyle
-                          }
-                        >
-                          {item.status}
-                        </div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/stability/stabilityProtocolDetails">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
 
-                          <div className="cursor-pointer" onClick={() => setDeleteModal(true)} >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
+              <CTableBody>
+                {filterData().slice(startIndex, endIndex).map((item, index) => (
+                  <CTableRow key={item.id}>
+                    <CTableHeaderCell scope="row" className="text-center">
+                      <input type="checkbox" />
+                    </CTableHeaderCell>
+                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
+                    <CTableDataCell>{item.product}</CTableDataCell>
+                    <CTableDataCell>{item.specificationId}</CTableDataCell>
+                    <CTableDataCell>{item.genericName}</CTableDataCell>
+                    <CTableDataCell>{item.sampleType}</CTableDataCell>
+                    <CTableDataCell>{item.protocolType}</CTableDataCell>
+                    <CTableDataCell>{item.protocolId}</CTableDataCell>
+                    <CTableDataCell>{item.addedOn}</CTableDataCell>
+                    <CTableDataCell className="d-flex">
+                      <div
+                        className="py-2 px-3 small rounded fw-bold"
+                        style={
+                          item.status === "INITIATED"
+                            ? badgeStyle2
+                            : item.status === "APPROVED"
+                              ? badgeStyle3
+                              : item.status === "REJECTED"
+                                ? badgeStyle4
+                                : item.status === "REINITIATED"
+                                  ? badgeStyle5
+                                  : item.status === "DROPPED"
+                                    ? badgeStyle6
+                                    : item.status === "ALL"
+                                      ? badgeStyle
+                                      : badgeStyle
+                        }
+                      >
+                        {item.status}
+                      </div>
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <div className="d-flex gap-3">
+                        <Link to="/stability/stabilityProtocolDetails">
+                          <FontAwesomeIcon icon={faEye} />
+                        </Link>
+
+                        <div className="cursor-pointer" onClick={() => setDeleteModal(true)} >
+                          <FontAwesomeIcon icon={faTrashCan} />
                         </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
+                      </div>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
               </CTableBody>
             </CTable>
           </div>
 
           <div className="d-flex justify-content-between align-items-center mt-4">
-                        <div className="pagination">
-                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                        <button className="btn btn-next" onClick={nextToLastPage}>
-                            Next <FaArrowRight />
-                        </button>
-                    </div>
+            <div className="pagination">
+              <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                &lt;&lt;
+              </button>
+              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+              <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                &gt;&gt;
+              </button>
+            </div>
+            <button className="btn btn-next" onClick={nextToLastPage}>
+              Next <FaArrowRight />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -660,7 +660,7 @@ const DeleteModal = (_props) => {
           border: "0px !important",
         }}
       >
-        <p>Are you sure you want to delete this {}?</p>
+        <p>Are you sure you want to delete this { }?</p>
       </div>
       <CModalFooter>
         <CButton
