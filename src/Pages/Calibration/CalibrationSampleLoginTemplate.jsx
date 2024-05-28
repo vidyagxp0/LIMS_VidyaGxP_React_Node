@@ -194,7 +194,7 @@ export default function CalibrationSampleLoginTemplate() {
                 </div>
 
                 <button
-                    id="Addbtn"
+                    id=""
                     className="btn btn-primary m-5"
                     type="button"
                     data-bs-toggle="offcanvas"

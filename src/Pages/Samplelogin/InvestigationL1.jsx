@@ -10,7 +10,7 @@ import {
   import { FaArrowRight } from 'react-icons/fa';
   
   export default function Samplelogin() {
-    const pageSize = 8;
+    const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("");

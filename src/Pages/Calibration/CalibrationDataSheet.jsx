@@ -37,9 +37,6 @@ const CalibrationDataSheet = () => {
 
     return employees.filter((employees) => employees.status === selectedStatus.toUpperCase());
   };
-
-
-
   
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -51,12 +48,8 @@ const CalibrationDataSheet = () => {
 
 
   const handleDelete = (index) => {
-    // Delete row from table
     console.log("Deleting row at index:", index);
   };
-
-  
-  
   
   const [employees, setEmployees] = useState([
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
@@ -76,12 +69,6 @@ const CalibrationDataSheet = () => {
     updatedEmployees.splice(startIndex + index, 1);
     setEmployees(updatedEmployees);
   };
-
-
-
-
-
-
 
   const filteredEmployees = employees.filter((employee) => {
     return (
@@ -269,14 +256,14 @@ const CalibrationDataSheet = () => {
               </CFormSelect>
             </CCol>
             <CCol sm={2}></CCol>
-            <CCol sm={3}>
+            <CCol sm={3} >
               <div className="d-flex justify-content-end">
                 <CButton id=""
-                  className="btn btn-primary btn-right"
+                  className="btn btn-primary"
                   type="button"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight"><CgAddR /> <span>Add Datasheet</span></CButton>
+                  aria-controls="offcanvasRight"><CgAddR /> <span  >Add Datasheet</span></CButton>
               </div>
             </CCol>
           </CRow>

@@ -3,6 +3,8 @@ import { CiSearch } from "react-icons/ci";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { FaArrowRight } from 'react-icons/fa';
+
 
 export default function InvestigationL2() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,6 +34,7 @@ export default function InvestigationL2() {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+  const totalPages = Math.ceil(filteredData.length / pageSize);
 
   const renderRows = () => {
     return filteredData.slice(startIndex, endIndex).map((item, index) => (
@@ -51,11 +54,15 @@ export default function InvestigationL2() {
   };
 
   const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -96,49 +103,41 @@ export default function InvestigationL2() {
         </div>
       </div>
 
+      <div className="m-4 p-4">
       <div className='table table-responsive p-4 shadow rounded'>
-      <table className="table" style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
-        <thead>
-          <tr>
-            <th scope="col"><input type="checkbox" /></th>
-            <th scope="col">Sr.No</th>
-            <th scope="col">Test Name</th>
-            <th scope="col">Test Code</th>
-            <th scope="col">Test Type</th>
-            <th scope="col">Added On</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {renderRows()}
-        </tbody>
-      </table>
+        <table className="table" style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+          <thead>
+            <tr>
+              <th scope="col"><input type="checkbox" /></th>
+              <th scope="col">Sr.No</th>
+              <th scope="col">Test Name</th>
+              <th scope="col">Test Code</th>
+              <th scope="col">Test Type</th>
+              <th scope="col">Added On</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {renderRows()}
+          </tbody>
+        </table>
       </div>
 
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-center">
-          <li className="page-item">
-            <button className="page-link" onClick={prevPage} disabled={currentPage === 1}>
-              Previous
-            </button>
-          </li>
-          {[...Array(Math.ceil(filteredData.length / pageSize)).keys()].map(pageNumber => (
-            <li
-              className={`page-item ${pageNumber + 1 === currentPage ? 'active' : ''}`}
-              key={pageNumber}
-            >
-              <button className="page-link" onClick={() => setCurrentPage(pageNumber + 1)}>
-                {pageNumber + 1}
-              </button>
-            </li>
-          ))}
-          <li className="page-item">
-            <button className="page-link" onClick={nextPage} disabled={endIndex >= filteredData.length}>
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
+      <div className="pagination">
+        <div className="pagination">
+          <div className='mr-5'>
+            <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
+          </div>
+          <div className="current-page-number mr-2 bg-dark-subtle page-item">
+            <button className='btn rounded-circle'>{currentPage}</button>
+          </div>
+          <div>
+            <button className="btn mr-2" onClick={nextPage} disabled={currentPage === totalPages}>&gt;&gt;</button>
+          </div>
+        </div>
+        <button className="btn btn-next" onClick={nextPage}> Next <FaArrowRight /></button>
+      </div>
+      </div>
     </>
   );
 }
