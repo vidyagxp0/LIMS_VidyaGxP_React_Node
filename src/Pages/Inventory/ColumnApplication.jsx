@@ -388,7 +388,7 @@ function ColumnApplication() {
 const StatusModal = (props) => {
   return (
     <>
-      <CModal size="lg" alignment="" visible={props.visible} onClose={props.closeModal} size="lg">
+      <CModal size="lg" alignment="" visible={props.visible} onClose={props.closeModal} >
         <CModalHeader>
           <CModalTitle>New Application</CModalTitle>
         </CModalHeader>

@@ -1,233 +1,347 @@
-import React, { useState } from "react";
-// import "./StorageCondition.css";
-import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { HiDotsHorizontal } from "react-icons/hi";
-import { FaArrowRight } from 'react-icons/fa';
-import { IoEyeSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import {
+	CButton,
+	CCol,
+	CFormCheck,
+	CFormInput,
+	CFormSelect,
+	CModal,
+	CModalBody,
+	CModalFooter,
+	CModalHeader,
+	CModalTitle,
+	CRow,
+	CTable,
+	CTableBody,
+	CTableDataCell,
+	CTableHead,
+	CTableHeaderCell,
+	CTableRow,
+} from "@coreui/react";
+import {
+	faEye,
+	faPenToSquare,
+	faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
+function Proposal() {
+	const [addModal, setAddModal] = useState(false);
+	const [removeModal, setRemoveModal] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+	 const [searchQuery, setSearchQuery] = useState("");
+	const [selectedStatus, setSelectedStatus] = useState("All");
+	const recordsPerPage = 5;
 
-export default function Proposal() {
-  const [storageName, setStorageName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+	const badgeStyle = { background: "#cdffca" };
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.")
-    }
-  };
-  const notify = () => toast("Wow so easy!");
-
-
-  const pageSize = 4; 
-  const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
-    { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
-   
-];
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-  const renderRows = () => {
-    return employees.slice(startIndex, endIndex).map((employee, index) => (
-        <tr key={startIndex + index}>
-            <td><input type="checkbox" /></td>
-            <td>{startIndex + index + 1}</td>
-            <td>{employee.user}</td>
-            <td>{employee.user}</td>
-            <td>{employee.user}</td>
-            <td>{employee.user}</td>
-            <td>{employee.user}</td>
-            <td>{employee.addedBy}</td>
-          
-            <td>
-                &nbsp; &nbsp; &nbsp;
-                <HiDotsHorizontal />
-            </td>
-        </tr>
-    ));
-};
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-};
-
-const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-};
-
-const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(employees.length / pageSize));
-};
-
-
-
-  return (
-    <>
-      <div id="div1">
-        <h5>Analyst Proposal</h5>
-      </div>
-
-      {/* <div id="div2"> */}
-
-      <div id="div2">
+	const tableData = [
+          { id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "Active" },
+          { id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "Active" },
+          { id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "Inactive" },
+          { id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "Active" },
+          { id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "Active" },
+          { id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "Inactive" },
+          { id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "Active" },
+          { id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "Active" }
+        ];
         
-        <div id="searchmain"> 
-          <div id="searchicon">
-            <CiSearch />
-          </div>
 
-          <div className="">
-            <input type="text" className="" id="" placeholder="search" />
-          </div>
-        </div>
-        <div className="dropdown m-5">
-                                    </div>
+	const handleStatusChange = (e) => {
+		setSelectedStatus(e.target.value);
+		setCurrentPage(1);
+	};
 
-                <div className="dropdown">
-                    <div>
-                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            
-                            <select id='selectOption'>
-                            <option>Select Status </option>
-                                <option>Active</option>
-                                <option>Inactive</option>
-                            </select>
+	const handleSearchChange = (e) => {
+		setSearchQuery(e.target.value);
+		setCurrentPage(1);
+	};
 
-                        </button>
+	const filteredData = tableData.filter((data) => {
+		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
+		const matchesSearchQuery = data.analyst.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			data.testTechnique.toLowerCase().includes(searchQuery.toLowerCase());
+		return matchesStatus && matchesSearchQuery;
+	});
 
-                    </div>
-                </div>
+	const indexOfLastRecord = currentPage * recordsPerPage;
+	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+	const currentRecords = filteredData.slice(
+		indexOfFirstRecord,
+		indexOfLastRecord
+	);
+	const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
-           
-        <button
-          id="Addbtn"
-          className="btn btn-primary m-5"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
-          aria-controls="offcanvasRight"
-        >
-          <CgAddR /> <span>Add Proposal</span>
-        </button>
+	const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add Analyst Proposal
-              </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-          <p style={{marginLeft:'20px'}}>Add information and add new Analyst Proposal</p>
-        
-        <label className="line3" htmlFor="">Training Confirmation ID</label>
-        <input className="line4" required type="text" placeholder=" "/>
+	return (
+		<>
+			<div id="approval-page" className="h-100 mx-5">
+				<div className="container-fluid my-5">
+					<div className="main-head mb-4">
+						<div className="title fw-bold fs-5">Analyst Proposal</div>
+					</div>
+					<div>
+						<CRow className="mb-3">
+							<CCol sm={3}><CFormInput
+								className="mb-3"
+								type="text"
+								placeholder="Search..."
+								value={searchQuery}
+								onChange={handleSearchChange}
+							/></CCol>
+							<CCol sm={3}>
+								<CFormSelect
+									value={selectedStatus}
+									onChange={handleStatusChange}
+									options={[
+										"Select Status",
+										{ value: "All", label: "All" },
+										{ value: "Active", label: "Active" },
+										{ value: "Inactive", label: "Inactive" },
+									]}
+								/>
+							</CCol>
+							<CCol sm={3}></CCol>
+							<CCol sm={3}>
+								<div className="d-flex justify-content-end">
+									<CButton
+										className="bg-info text-white"
+										onClick={() => setAddModal(true)}
+									>
+										Add Proposal
+									</CButton>
+								</div>
+							</CCol>
+						</CRow>
+					</div>
+					<div className="bg-white mt-5">
+						<CTable align="middle" responsive className=" shadow">
+							<CTableHead>
+								<CTableRow>
+                                        <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Id</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Analyst</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Test Technique</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Training Details</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                                             <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+								</CTableRow>
+							</CTableHead>
+							<CTableBody>
+								{currentRecords.map((data, index) => (
+									<CTableRow key={index}>
+										<CTableHeaderCell scope="row" className="text-center">
+											<input type="checkbox" />
+										</CTableHeaderCell>
+										<CTableDataCell>{data.id}</CTableDataCell>
+										<CTableDataCell>{data.analyst}</CTableDataCell>
+										<CTableDataCell>{data.testTechnique}</CTableDataCell>
+										<CTableDataCell>{data.trainingDetails}</CTableDataCell>
+										<CTableDataCell>{data.remarks}</CTableDataCell>
+										<CTableDataCell>{data.addedOn}</CTableDataCell>
+										<CTableDataCell>
+											<div
+												className="py-2 px-3 small rounded fw-bold"
+												style={badgeStyle}
+											>
+												{data.status}
+											</div>
+										</CTableDataCell>
+										<CTableDataCell>
+											<div className="d-flex gap-3">
+                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+												<div
+													className="cursor-pointer"
+													onClick={() => setRemoveModal(true)}
+												>
+													<FontAwesomeIcon icon={faTrashCan} />
+												</div>
+											</div>
+										</CTableDataCell>
+									</CTableRow>
+								))}
+							</CTableBody>
+						</CTable>
+					</div>
+					<div className="pagination my-3 d-flex justify-content-between">
+						<div className="d-flex gap-2">
+							<button
+								className="btn mr-2"
+								onClick={() => paginate(1)}
+								disabled={currentPage === 1}
+							>
+								&lt;&lt;
+							</button>
+							<button
+								className="btn mr-2"
+								onClick={() => paginate(currentPage - 1)}
+								disabled={currentPage === 1}
+							>
+								&lt;
+							</button>
+							{[...Array(totalPages)].map((_, index) => (
+								<button
+									key={index + 1}
+									className={`btn mr-2 ${currentPage === index + 1 ? "bg-dark-subtle" : ""
+										}`}
+									onClick={() => paginate(index + 1)}
+								>
+									{index + 1}
+								</button>
+							))}
+							<button
+								className="btn mr-2"
+								onClick={() => paginate(currentPage + 1)}
+								disabled={currentPage === totalPages}
+							>
+								&gt;
+							</button>
+							<button
+								className="btn"
+								onClick={() => paginate(totalPages)}
+								disabled={currentPage === totalPages}
+							>
+								&gt;&gt;
+							</button>
+						</div>
+						<div className="">
+							<button
+								className="btn btn-next ml-2"
+								onClick={() => paginate(currentPage + 1)}
+								disabled={currentPage === totalPages}
+							>
+								{" "}
+								Next <FaArrowRight />
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
-         <label className="line3" htmlFor="">Analyst</label>
-        <input className="line4" required type="text" placeholder="Analyst "/> 
-
-        <label className="line3" htmlFor="">Employee ID</label>
-        <input className="line4" required type="text" placeholder="Employee ID"/> 
-        <label className="line3" htmlFor="">Test Technique
-</label>
-        <input className="line4" required type="text" placeholder="Test Technique
-"/>  
-<label className="line3" htmlFor="">Type Of Technique
-</label>
-        <input className="line4" required type="text" placeholder="Type Of Technique
-"/>
-<label className="line3" htmlFor="">Test Plan
-</label>
-        <input className="line4" required type="text" placeholder="
-"/>
-     <label className="line3" htmlFor="">AR Number
-</label>
-        <input className="line4" required type="text" placeholder="AR Number
-"/>
-     <label className="line3" htmlFor="">Due Date
-</label>
-        <input className="line4" style={{padding:'14px'}} required type="date" placeholder="
-"/>
-     <label className="line3" htmlFor="">Comments
-</label>
-        <input className="line4" required type="text" placeholder="Comments
-"/>
-         
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Submit</button>
-          </div>
-          <div>
-            <ToastContainer/>
-          </div>
-        </div>
-      </div>
-
-      <br />
-      <div className='table-responsive p-4 container1'>
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" /></th>
-                            <th>SNo.</th>
-                            <th>Training Confirmation ID</th>
-                            <th>Analyst</th>
-                            <th>Employee ID</th>
-                            <th>Test Technique</th>
-                            <th>Test Technique Type</th>
-                            <th>Initiated On</th>
-                            <th>Actions </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderRows()}
-                    </tbody>
-                </table>
-            </div>
-
-            <div className="pagination">
-
-<div className="pagination " style={{margin:'0 30px'}}>
-    <div className='mr-5'>
-        <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-    </div>
-    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-        <button className='btn rounded-circle'> {currentPage} </button>
-    </div>
-    <div>
-        <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
-    </div>
-
-</div>
-
-<button className="btn btn-next" style={{margin:'0 30px'}} onClick={nextToLastPage}> Next <FaArrowRight /></button>
-</div>
-
-
-    </>
-  );
+			{addModal && (
+				<StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+			)}
+			{removeModal && (
+				<DeleteModel
+					visible={removeModal}
+					closeModal={() => setRemoveModal(false)}
+				/>
+			)}
+		</>
+	);
 }
+
+const StatusModal = (_props) => {
+
+	return (
+		<CModal
+			alignment="center"
+			visible={_props.visible}
+			onClose={_props.closeModal}
+			size="lg"
+		>
+			<CModalHeader>
+				<CModalTitle>Add Analyst Proposal</CModalTitle>
+			</CModalHeader>
+			<CModalBody>
+				<p className="my-3 fs-5">Add information and add new Analyst Proposal</p>
+                    <CFormSelect
+                               type="text"
+                               className="mb-3"
+                               label="Analyst"
+                               placeholder="Training Confirmation ID"
+                               options={[
+                                 "Select",
+                                 {label:"No Options"}
+                               ]}
+                          />
+                          <CFormInput
+                               type="text"
+                               className="mb-3"
+                               label="Analyst"
+                               placeholder="Analyst"
+                               disabled
+                          />
+                          <CFormInput
+                               type="text"
+                               className="mb-3"
+                               label="Employee ID"
+                               placeholder="Employee ID"
+                               disabled
+                          />
+                          <CFormInput
+                               type="text"
+                               className="mb-3"
+                               label="Test Technique"
+                               placeholder="Test Technique"
+                               disabled
+                          />
+                          <CFormSelect
+                               type="text"
+                               className="mb-3"
+                               label="Analyst"
+                               placeholder="Test Plan"
+                               options={[
+                                 "Select",
+                                 {label:"No Options"}
+                               ]}
+                          />
+                          <CFormInput
+                               type="number"
+                               className="mb-3"
+                               label="AR Number"
+                               placeholder="AR Number"
+                          />
+                          <CFormInput
+                               type="date"
+                               className="mb-3"
+                               label="Due Date"
+                               placeholder="Due Date"
+                          />
+                          <CFormInput
+                               type="text"
+                               className="mb-3"
+                               label="Comments"
+                               placeholder="Comments"
+                          />
+                         
+			</CModalBody>
+			<CModalFooter>
+				<CButton color="light" onClick={_props.closeModal}>
+					Back
+				</CButton>
+				<CButton className="bg-info text-white">Submit</CButton>
+			</CModalFooter>
+		</CModal>
+	);
+};
+
+const DeleteModel = (_props) => {
+	return (
+		<CModal
+			alignment="center"
+			visible={_props.visible}
+			onClose={_props.closeModal}
+		>
+			<CModalHeader>
+				<CModalTitle>Delete Analyst Proposal</CModalTitle>
+			</CModalHeader>
+			<CModalBody>
+				Do you want to delete this Analyst Proposal <code>ARZ ENT</code>?
+			</CModalBody>
+			<CModalFooter>
+				<CButton color="light" onClick={_props.closeModal}>
+					Back
+				</CButton>
+				<CButton className="bg-info text-white">Submit</CButton>
+			</CModalFooter>
+		</CModal>
+	);
+};
+
+export default Proposal;
