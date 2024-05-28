@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CButton, CForm, CFormInput } from "@coreui/react"
+import { CForm, CFormInput, CButton, CFormCheck } from '@coreui/react';
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,55 +28,56 @@ function Login(props) {
 
 	return (
 		<>
-			<div id="login-container">
-				<div className="left-side p-5 d-flex justify-content-center align-items-center">
-					<div className="image">
-						<img src="/images/login.jpg" alt="..." className="w-100" />
-					</div>
-				</div>
-				<div className="right-side p-5 d-flex align-items-center">
-					<div className="w-100">
-						<div className="d-flex justify-content-center">
-							<div className="logo d-block">
-								<img src="/images/logo.png" alt="..." className="w-100" />
-							</div>
-						</div>
-						<div className="head text-center h2">Welcome back!</div>
-						<div className="slogan text-center text-muted fs-6">Enter your credentials to access the LIMS software.</div>
-						<div>
-							<CForm>
-								<div className="mb-3">
-									<CFormInput
-										type="email"
-										label="Email address"
-										placeholder="name@example.com"
-										aria-describedby="exampleFormControlInputHelpInline"
-										onChange={(event) => handleInputData(event, setEmail)}
-									/>
-								</div>
-								<div className="mb-3">
-									<CFormInput
-										type="password"
-										label="Password"
-										placeholder="********"
-										text="Must be 8-20 characters long."
-										aria-describedby="exampleFormControlInputHelpInline"
-										onChange={(event) => handleInputData(event, setPasswd)}
-									/>
-								</div>
-								<div>
-									<CButton color="dark" className="w-100" onClick={handleLogin}>Login</CButton>
-								</div>
-							</CForm>
-						</div>
-					</div>
-				</div>
+		<div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-400 to-blue-400">
+		  <div className="flex max-w-5xl w-full shadow-2xl rounded-lg overflow-hidden" style={{ height: '700px',borderBottomRightRadius: '100px',borderTopLeftRadius: '100px' }}>
+			{/* Image Section */}
+			<div className="w-1/2 hidden md:block">
+			  <img src="https://www.pharmaceutical-technology.com/wp-content/uploads/sites/24/2021/06/shutterstock_1985751242-scaled.jpg" className=" h-full object-cover" style={{ borderTopLeftRadius: '100px' }} alt="Login" />
 			</div>
-
-			<div>
-				<ToastContainer />
+			{/* Form Section */}
+			<div className="w-full md:w-1/2  bg-gradient-to-r from-[#b3cafe] to-[#C0D2FC]  p-10 flex flex-col justify-center" style={{ borderBottomRightRadius: '100px' }}>
+				<div className="flex flex-col gap-2">
+				<div className="flex justify-center items-center">
+				<img src="/login.png" width={"300px"} />
+				</div>
+			  <h2 className="text-3xl font-bold text-center  text-white">Welcome To Laboratory Information Management System.</h2>
+			 {/* <div className="text-center text-lg text-gray-200 mb-6"> <p>Enter your credencials to access the LIMS Software.</p></div> */}
+				</div>
+			  <CForm>
+				<div className="mb-4 text-gray-200">
+				  <CFormInput
+					type="text"
+					placeholder="Username"
+					label="Username"
+					onChange={(event) => handleInputData(event, setEmail)}
+					className="p-3 rounded-full w-full bg-white border border-gray-400"
+				  />
+				</div>
+				<div className="mb-4 text-gray-200">
+				  <CFormInput
+					type="password"
+					placeholder="Password"
+					label="Password"
+					onChange={(event) => handleInputData(event, setPasswd)}
+					className="p-3 rounded-full w-full bg-white border border-gray-400"
+				  />
+				</div>
+				<div className="flex justify-between items-center mb-6 text-white">
+				  <CFormCheck label="Remember me" />
+				  <a href="#" className="text-sm">Forgot Password</a>
+				</div>
+				<div className="mb-6">
+				  <CButton className="w-full p-3 rounded-full bg-black text-white font-bold text-2xl" onClick={handleLogin}>
+					LOGIN
+				  </CButton>
+				</div>
+			  </CForm>
+			  <p className="text-sm text-white text-center">Don’t have an account? <a href="#" className="underline">Register here</a></p>
 			</div>
-		</>
+		  </div>
+		</div>
+		<ToastContainer />
+	  </>
 	)
 }
 
