@@ -2,13 +2,15 @@ import React, { useState } from "react";
 // import "./StorageCondition.css";
 import { CiSearch } from "react-icons/ci";
 import { CgAddR } from "react-icons/cg";
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { Link } from "react-router-dom";
 
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function Specifications() {
@@ -20,37 +22,46 @@ export default function Specifications() {
     { label: '12 Angry Men', year: 1957 },];
 
   const [storageName, setStorageName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [statusFilter, setStatusFilter] = useState('');
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.")
-    }
-  };
-  const notify = () => toast("Wow so easy!");
-
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  
 
   const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
+  const [employees, setEmployees] = useState([
       { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      {  user: 'CHPOIL',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
+      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'INITIATED'  },
+      {  user: 'CHPOIL',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'INITIATED'  },
       {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
       {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
-      {user: 'PM-001',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
+      {user: 'PM-001',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'REJECTED' },
+      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'REINITIATED' },
       {user: 'TSTvl',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
       {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-  ];
+      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'DROPPED' },
+  ]);
+
+  const filteredEmployees = employees.filter(employee =>
+    statusFilter === '' || employee.status.toLowerCase() === statusFilter.toLowerCase()
+  );
+  const deleteEmployee = (index) => {
+    const updatedEmployees = employees.filter((_, i) => i !== index);
+    setEmployees(updatedEmployees);
+  };
+
+
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
   const renderRows = () => {
-      return employees.slice(startIndex, endIndex).map((employee, index) => (
+      return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
           <tr key={startIndex + index}>
               <td>{startIndex + index + 1}</td>
               <td>{employee.user}</td>
@@ -59,10 +70,32 @@ export default function Specifications() {
               <td>{employee.SpecificName}</td>
               <td>{employee.EffectFrom}</td>
               <td>{employee.ReviewDate}</td>
-              <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+              <td > <div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.status === "INITIATED" ? badgeStyle2 :
+              employee.status === "APPROVED" ? badgeStyle3 :
+              employee.status === "REJECTED" ? badgeStyle4 :
+              employee.status === "REINITIATED" ? badgeStyle5 :
+              employee.status === "DROPPED" ? badgeStyle6 :
+              badgeStyle
+            }
+          >
+            {employee.status}
+          </div></td>
               <td>
-                  &nbsp; &nbsp;  &nbsp;
-                  <HiDotsHorizontal />
+              <div className="d-flex gap-3">
+			 <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                        <div className="cursor-pointer" >
+                            <FontAwesomeIcon  data-bs-toggle="offcanvas"
+                data-bs-target="#addSpecification"
+                aria-controls="offcanvasRight" icon={faPenToSquare} />
+                        </div>
+                        <Link to="#" onClick={() => deleteEmployee(startIndex + index)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
+                    </div>
+
               </td>
           </tr>
       ));
@@ -83,31 +116,27 @@ const nextToLastPage = () => {
 
   return (
     <>
-      <div id="div1">
+      <div className="mx-5 my-3">
         <h5>Specifications / Specification List</h5>
       </div>
 
-      <div id="div2" style={{display:'flex',justifyContent:'space-between'}}>
-        <div className="dropdown m-5">
-                    <div>
+      <div id="div2" style={{display:'flex',justifyContent:'space-between',width:'98%',margin:'0 auto'}}>
+        <div style={{display:'flex',justifyContent:'space-around',columnGap:'9px',marginLeft:'27px'}}>
+                  
+              <div  className="dropdown">
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            
                             <select id='selectOption'>
                             <option value="">Select Sample Type</option>
                 <option value="raw-material">Raw Material</option><option value="hcl">hcl</option>
                 <option value="hydrochloric-acid">Hydrochloric Acid</option><option value="petrochemical">Petrochemical</option><option value="initiated-product">Initiated Product</option><option value="semi-finished">Semi Finished</option><option value="abcd">ABCD</option><option value="h2so4">H2So4</option><option value="att108">ATT108</option><option value="micro-media">Micro Media </option><option value="fg-templage">FG Templage</option><option value="water-type">water type</option><option value="sodium">Sodium</option><option value="test-sample-type">test sample type</option><option value="new-product-sample-type">New Product Sample Type</option><option value="packing-material">Packing Material</option><option value="raw-material-1">Raw Material-1</option><option value="finished-product">Finished Product</option>
                             </select>
-                           
                         </button>
+              </div>
 
-                    </div>
-                </div>
-
-                <div className="dropdown">
-                    <div>
+              <div className="dropdown">
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select id='selectOption'>
+                            <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{outline:'none'}}>
                             <option value="">All</option>
                                 <option value="initiated">Initiated</option>
                                 <option value="approved">Approved</option>
@@ -115,19 +144,18 @@ const nextToLastPage = () => {
                                 <option value="reinitiated">Reinitiated</option>
                                 <option value="droped">Droped</option>
                             </select>
-
                         </button>
-
-                    </div>
-                </div>
+              </div>
+               
+        </div>
 
            
         <button
-          id="Addbtn"
+          id=""
           className="btn btn-primary m-5"
           type="button"
           data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
+          data-bs-target="#addSpecification"
           aria-controls="offcanvasRight"
         >
           <CgAddR /> <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Specification</span>
@@ -136,7 +164,7 @@ const nextToLastPage = () => {
         <div
           className="offcanvas offcanvas-end overflow-y-scroll"
           tabIndex="-1"
-          id="offcanvasRight"
+          id="addSpecification"
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-header">
@@ -153,6 +181,9 @@ const nextToLastPage = () => {
               ></button>
             </div>
           </div>
+          
+
+         
           <label className="line3" htmlFor="">
           Product/Material Code
           </label>
@@ -222,9 +253,7 @@ const nextToLastPage = () => {
             </button>
             <button>Add Specification</button>
           </div>
-          <div>
-            <ToastContainer/>
-          </div>
+        
         </div>
       </div>
 
@@ -241,7 +270,7 @@ const nextToLastPage = () => {
                             <th>Effect From</th>
                             <th>Review Date</th>
                             <th>Status</th>
-                            <th>...</th>
+                            <th><HiDotsHorizontal/></th>
                         </tr>
                     </thead>
                     <tbody>

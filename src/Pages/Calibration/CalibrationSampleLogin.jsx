@@ -170,8 +170,8 @@ const CalibrationSampleLogin = () => {
             <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton id="Addbtn"
-                  className="btn btn-primary btn-right"
+                <CButton 
+                  className="btn btn-primary "
                   type="button"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasRight"

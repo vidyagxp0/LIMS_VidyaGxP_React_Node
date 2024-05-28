@@ -187,7 +187,6 @@ export default function CalibrationSchedule() {
                 </div>
                 <div style={{ border: '1px solid #f98d6b', marginLeft: '150px', padding: '8px', width: '40px', display: 'flex', justifyContent: 'center', backgroundColor: '#f98d6b', borderRadius: '5px' }}><PiDownloadBold /></div>
                 <button
-                    id="Addbtn"
                     className="btn btn-primary m-3"
                     type="button"
                     data-bs-toggle="offcanvas"

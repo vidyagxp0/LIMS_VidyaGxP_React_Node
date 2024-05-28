@@ -11,40 +11,50 @@ function ClientsDetails() {
                     <div className="container-fluid">
                          <div className="bock mb-3">
                               <div className="main-head d-flex justify-content-between align-items-center">
-                                   <h4 className="fw-bold mb-4 mt-3">Datasheet Details</h4>
-                                   <CButton color="primary" onClick={() => setStatusModal(true)}>Update Status</CButton>
+                                   <h4 className="fw-bold mb-4 mt-3">Client Details</h4>
+                                   <CButton color="primary" onClick={() => setStatusModal(true)}>Specifications</CButton>
                               </div>
-                              
-
-
-
-
-
-
 
                               <div className="bg-white px-5 py-3">
                                    <CTable align="middle" className="mb-0" small bordered>
                                         <CTableBody>
                                              <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Sequence No</CTableDataCell>
-                                                  <CTableDataCell>CDSR0000007</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Name</CTableDataCell>
+                                                  <CTableDataCell>MIT Power</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Datasheet Name</CTableDataCell>
-                                                  <CTableDataCell>-</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Email</CTableDataCell>
+                                                  <CTableDataCell>mit@gmail.com</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Phone</CTableDataCell>
+                                                  <CTableDataCell>9586842547</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Unique Code</CTableDataCell>
-                                                  <CTableDataCell></CTableDataCell>
+                                                  <CTableDataCell>client0003514</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Quantitative Parameters</CTableDataCell>
-                                                  <CTableDataCell>False</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info">Contact Person</CTableDataCell>
+                                                  <CTableDataCell>dutta</CTableDataCell>
+                                             </CTableRow> 
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Address</CTableDataCell>
+                                                  <CTableDataCell>MIT tala power</CTableDataCell>
                                              </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Tax Number</CTableDataCell>
+                                                  <CTableDataCell>155552</CTableDataCell>
+                                             </CTableRow>
+                                             <CTableRow>
+                                                  <CTableDataCell className="text-light bg-info">Fax</CTableDataCell>
+                                                  <CTableDataCell>55566655565</CTableDataCell>
+                                             </CTableRow> 
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
-                                                  <CTableDataCell>INITIATED</CTableDataCell>
+                                                  <CTableDataCell>ACTIVE</CTableDataCell>
                                              </CTableRow>
+
                                            
                                         </CTableBody>
                                    </CTable>

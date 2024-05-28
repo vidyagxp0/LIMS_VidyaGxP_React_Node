@@ -8,9 +8,23 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from 'react-icons/fa';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { Link } from "react-router-dom";
+
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function TestRegistrations() {
+  const [statusFilter, setStatusFilter] = useState('');
+
+  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+
   const top100Films = [
     { label: 'The Shawshank Redemption', year: 1994 },
     { label: 'The Godfather', year: 1972 },
@@ -21,35 +35,36 @@ export default function TestRegistrations() {
   const [storageName, setStorageName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.")
-    }
-  };
-  const notify = () => toast("Wow so easy!");
-
+ 
 
   const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      {  user: 'CHPOIL',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'APPROVED'  },
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED'},
-      {user: 'PM-001',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      {user: 'TSTvl',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  status: 'APPROVED' },
-  ];
+  const [employees, setEmployees] = useState([
+      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'APPROVED'  },
+      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'INITIATED'  },
+      {  user: 'CHPOIL',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  Status: 'INITIATED'  },
+      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'APPROVED'},
+      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'REINITIATED'},
+      {user: 'PM-001',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'REJECTED' },
+      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'APPROVED' },
+      {user: 'TSTvl',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'APPROVED' },
+      {user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'DROPPED' },
+      { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' , EffectFrom: 'May 18th 24',ReviewDate: 'Aug 18th 24',  Status: 'DROPPED' },
+  ]);
+  const filteredEmployees = employees.filter(employee =>
+    statusFilter === '' || employee.Status.toLowerCase() === statusFilter.toLowerCase()
+  );
+  const deleteEmployee = (index) => {
+    const updatedEmployees = employees.filter((_, i) => i !== index);
+    setEmployees(updatedEmployees);
+  };
+
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
   const renderRows = () => {
-      return employees.slice(startIndex, endIndex).map((employee, index) => (
+      return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
           <tr key={startIndex + index}>
               <td>{startIndex + index + 1}</td>
               <td>{employee.user}</td>
@@ -61,10 +76,31 @@ export default function TestRegistrations() {
               <td>{employee.ProdName}</td>
               {/* <td>{employee.EffectFrom}</td> */}
               {/* <td>{employee.ReviewDate}</td> */}
-              <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+              <td><div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.Status === "INITIATED" ? badgeStyle2 :
+              employee.Status === "APPROVED" ? badgeStyle3 :
+              employee.Status === "REJECTED" ? badgeStyle4 :
+              employee.Status === "REINITIATED" ? badgeStyle5 :
+              employee.Status === "DROPPED" ? badgeStyle6 :
+              badgeStyle
+            }
+          >
+            {employee.Status}
+          </div></td>
               <td>
-                  &nbsp; &nbsp;  &nbsp;
-                  <HiDotsHorizontal />
+              <div className="d-flex gap-3">
+			 <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                        <div className="cursor-pointer" >
+                            <FontAwesomeIcon data-bs-toggle="offcanvas"
+                data-bs-target="#AddRegistration" icon={faPenToSquare} />
+                        </div>
+                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </Link>
+                    </div>
+
               </td>
           </tr>
       ));
@@ -117,13 +153,13 @@ const nextToLastPage = () => {
                              <div className="col flex-item ">
                         <button className="border p-1 rounded" type="button" >
                             Show
-                            <select id='selectOption'>
+                            <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{outline:'none'}}>
                             <option value="">All</option>
                                 <option value="initiated">Initiated</option>
                                 <option value="approved">Approved</option>
                                 <option value="rejected">Rejected</option>
                                 <option value="reinitiated">Reinitiated</option>
-                                <option value="droped">Droped</option>
+                                <option value="dropped">Droped</option>
                             </select>
 
                         </button>
@@ -134,12 +170,12 @@ const nextToLastPage = () => {
            <div className="col flex-item ">
 
         <button
-          id="Addbtn"
+          id=""
           style={{marginLeft:'80px',padding:'4px',width:'160px'}}
           className="btn btn-primary text-small"
           type="button"
           data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
+          data-bs-target="#AddRegistration"
           aria-controls="offcanvasRight"
           >
           <CgAddR /> <span style={{fontSize:'14px',fontWeight:'bold'}}>Add Registration</span>
@@ -150,7 +186,7 @@ const nextToLastPage = () => {
         <div
           className="offcanvas offcanvas-end overflow-y-scroll w-75"
           tabIndex="-1"
-          id="offcanvasRight"
+          id="AddRegistration"
           aria-labelledby="offcanvasRightLabel"
         >
           <div className="offcanvas-header">

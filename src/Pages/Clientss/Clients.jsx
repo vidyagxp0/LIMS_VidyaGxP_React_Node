@@ -9,20 +9,41 @@ import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Clients() {
+    const [statusFilter, setStatusFilter] = useState('');
+
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    const badgeStyle2 = {
+      background: " #2A5298",
+      color: "white",
+      width: "110px",
+    };
+    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
   const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
+  const [employees, setEmployees] = useState([
       { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
-      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
+      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'INACTIVE'  },
       {  user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
       {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'},
-      
-  ];
+  ]);
+  
+  const filteredEmployees = employees.filter(employee =>
+    statusFilter === '' || employee.status.toLowerCase() === statusFilter.toLowerCase()
+  );
+  const deleteEmployee = (index) => {
+    const updatedEmployees = employees.filter((_, i) => i !== index);
+    setEmployees(updatedEmployees);
+  };
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
   const renderRows = () => {
-      return employees.slice(startIndex, endIndex).map((employee, index) => (
+      return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
           <tr key={startIndex + index}>
               <td>{startIndex + index + 1}</td>
               <td>{employee.user}</td>
@@ -30,12 +51,19 @@ export default function Clients() {
               <td>{employee.departments}</td>
               <td>{employee.joiningDate}</td>
               <td>{employee.addedBy}</td>
-              <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+              <td>  <div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.status === "ACTIVE" ? badgeStyle3 : badgeStyle4
+            }
+          >
+            {employee.status}
+          </div></td>
               <td>
               <div className="d-flex gap-3">
               <Link to="/clientss/clients-details"><FontAwesomeIcon icon={faEye} /></Link>
                         
-                        <Link to="#" onClick={() => deleteEmployee(index)}>
+                        <Link to="#" onClick={() => deleteEmployee(startIndex + index)}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </Link>
                     </div>
@@ -60,17 +88,17 @@ const nextToLastPage = () => {
         <h5>Clients</h5>
       </div>
 
-      <div id="div2" className='p-5 '>
+      <div id="div2" className='p-5 ' style={{display:'flex',justifyContent:'space-between'}}>
 
          <div className="dropdown">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select id='selectOption'>
-                                <option>Active</option>
-                                <option>In Active</option>
-                               
-                            </select>
+                            <select id='selectOption' style={{outline:'none'}} onChange={(e) => setStatusFilter(e.target.value)}>
+                <option value="">Select Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
 
                         </button>
 
@@ -78,11 +106,11 @@ const nextToLastPage = () => {
                 </div>
 
          <button
-          id="sampleloginbtn"
+          id=""
           className="btn btn-primary"
           type="button"
           data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
+          data-bs-target="#AddClient"
           aria-controls="offcanvasRight"
           >
           <CgAddR />  <span>Add Client</span>
@@ -93,7 +121,7 @@ const nextToLastPage = () => {
         <div
         className="offcanvas offcanvas-end overflow-y-scroll"
         tabIndex="-1"
-        id="offcanvasRight"
+        id="AddClient"
         aria-labelledby="offcanvasRightLabel"
       >
         <div className="offcanvas-header ">

@@ -10,9 +10,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function CalibrationType() {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false); // New state for delete confirmation modal
+    const [deleteModal, setDeleteModal] = useState(false); 
     const [selectedStatus, setSelectedStatus] = useState('All');
-    const [employeeToDelete, setEmployeeToDelete] = useState(null); // New state for employee index to delete
+    const [employeeToDelete, setEmployeeToDelete] = useState(null); 
 
     const badgeStyle = { background: "gray", color: "white", width: "110px" };
     const badgeStyle2 = {

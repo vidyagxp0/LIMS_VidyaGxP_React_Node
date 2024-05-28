@@ -19,144 +19,86 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 
 export default function StocksVerification() {
-  const steps = [
-    "Material Sample received by QC:YES Updated On:12th Oct 2023 11:39 Updated By:QC ",
-    "Sample analyzed by QC departement:YES Updated On: 12th Oct 2023 11: 39 Updated By: QC",
-    "Material comply the in house specification:YES Updated On:12th Oct 2023 11:39 Updated By:QC",
-    "Sample analyzed by QC departement:YES Updated On: 12th Oct 2023 11: 39 Updated By: QC",
-  ];
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
+    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-  const employees = [
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "PENDING",
-      DayComplete: "10",
-      Status: "APPROVED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "VERIFIED",
-      DayComplete: "10",
-      Status: "APPROVED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "PENDING",
-      DayComplete: "10",
-      Status: "DROPPED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "PENDING",
-      DayComplete: "10",
-      Status: "APPROVED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "PENDING",
-      DayComplete: "10",
-      Status: "DROPPED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "VERIFIED",
-      DayComplete: "10",
-      Status: "APPROVED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "VERIFIED",
-      DayComplete: "10",
-      Status: "APPROVED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "VERIFIED",
-      DayComplete: "10",
-      Status: "DROPPED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "VERIFIED",
-      DayComplete: "10",
-      Status: "DROPPED",
-    },
-    {
-      user: "Initiated Product",
-      invoiceNumber: "INC-343",
-      Date: "May 17th 24 14:34",
-      Statu: "VERIFIED",
-      DayComplete: "10",
-      Status: "APPROVED",
-    },
-  ];
 
-  const renderRows = () => {
-    return employees.map((employee, index) => (
-      <tr key={index}>
-        <td>{index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.invoiceNumber}</td>
-        <td>{employee.DayComplete}</td>
-        <td>{employee.DayComplete}</td>
-        <td
-          id="edatabtn"
-          className={`rounded-5 ${
-            employee.Statu === "VERIFIED" ? "bg-success" : "bg-warning"
-          } bg-opacity-100 text-${
-            employee.Statu === "VERIFIED" ? "success" : "warning"
-          } d-flex justify-content-center p-1 m-2`}
-        >
-          {employee.Statu}
-        </td>
-        <td>{employee.DayComplete}</td>
-        <td
-          id="edatabtn"
-          className={`rounded-5 ${
-            employee.Status === "APPROVED" ? "bg-success" : "bg-warning"
-          } bg-opacity-100 text-${
-            employee.Status === "APPROVED" ? "success" : "warning"
-          } d-flex justify-content-center p-1 m-2`}
-        >
-          {employee.Status}
-        </td>
-        <td>
-          <div className="d-flex gap-3">
-            <Link to="/stock-management/stock-onboarding-details">
-              <FontAwesomeIcon icon={faEye} />
-            </Link>
-            <div
-              className="cursor-pointer"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#editVerify"
-              aria-controls="offcanvasRight"
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </div>
-            {/* <div className='cursor-pointer'><FontAwesomeIcon icon={faTrashCan} /></div> */}
-          </div>
-        </td>
-      </tr>
-    ));
-  };
+    const steps = [
+        "Material Sample received by QC:YES Updated On:12th Oct 2023 11:39 Updated By:QC ",
+        'Sample analyzed by QC departement:YES Updated On: 12th Oct 2023 11: 39 Updated By: QC',
+        'Material comply the in house specification:YES Updated On:12th Oct 2023 11:39 Updated By:QC',
+        'Sample analyzed by QC departement:YES Updated On: 12th Oct 2023 11: 39 Updated By: QC',
+    ];
+
+    const employees = [
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'INITIATED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'INITIATED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'REINITIATED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+    ];
+
+    const renderRows = () => {
+        return employees.map((employee, index) => (
+            <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{employee.user}</td>
+                <td>{employee.invoiceNumber}</td>
+                <td>{employee.DayComplete}</td>
+                <td>{employee.DayComplete}</td>
+                <td  ><div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.veriStatus === "VERIFIED" ? badgeStyle3 :
+              employee.veriStatus === "PENDING" ? badgeStyle4 :
+              badgeStyle
+            }
+          >
+            {employee.veriStatus}
+          </div></td>
+                <td>{employee.DayComplete}</td>
+               
+                <td  ><div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.Status === "INITIATED" ? badgeStyle2 :
+              employee.Status === "APPROVED" ? badgeStyle3 :
+              employee.Status === "REJECTED" ? badgeStyle4 :
+              employee.Status === "REINITIATED" ? badgeStyle5 :
+              employee.Status === "DROPPED" ? badgeStyle6 :
+              badgeStyle
+            }
+          >
+            {employee.Status}
+          </div></td>
+                <td>
+                    <div className="d-flex gap-3">
+                        <Link to="/stock-management/stock-onboarding-details"><FontAwesomeIcon icon={faEye} /></Link>
+                        <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#editVerify" aria-controls="offcanvasRight"><FontAwesomeIcon icon={faPenToSquare} /></div>
+                        {/* <div className='cursor-pointer'><FontAwesomeIcon icon={faTrashCan} /></div> */}
+                    </div>
+                </td>
+            </tr>
+        ));
+    };
 
   return (
     <>

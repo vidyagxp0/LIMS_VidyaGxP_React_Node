@@ -10,25 +10,45 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function Vendors() {
-  const pageSize = 8; 
+    const [statusFilter, setStatusFilter] = useState('');
+    
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
+    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  
+    const pageSize = 8; 
   const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
+  const  [employees, setEmployees] = useState([
       { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
-      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
+      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'INITIATED'  },
       {  user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'  },
+      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'REJECTED'},
       {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'},
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED'},
+      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'REINITIATED' },
       {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
+      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'DROPPED' },
       {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
       { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'APPROVED' },
-  ];
+  ]);
+
+  
+  const filteredEmployees = employees.filter(employee =>
+    statusFilter === '' || employee.status.toLowerCase() === statusFilter.toLowerCase()
+  );
+  const deleteEmployee = (index) => {
+    const updatedEmployees = employees.filter((_, i) => i !== index);
+    setEmployees(updatedEmployees);
+  };
+
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
   const renderRows = () => {
-      return employees.slice(startIndex, endIndex).map((employee, index) => (
+      return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
           <tr key={startIndex + index}>
               <td>{startIndex + index + 1}</td>
               <td>{employee.user}</td>
@@ -36,7 +56,19 @@ export default function Vendors() {
               <td>{employee.departments}</td>
               <td>{employee.joiningDate}</td>
               <td>{employee.addedBy}</td>
-              <td className={`rounded-5 ${employee.status === 'Active' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'Active' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+              <td><div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.status === "INITIATED" ? badgeStyle2 :
+              employee.status === "APPROVED" ? badgeStyle3 :
+              employee.status === "REJECTED" ? badgeStyle4 :
+              employee.status === "REINITIATED" ? badgeStyle5 :
+              employee.status === "DROPPED" ? badgeStyle6 :
+              badgeStyle
+            }
+          >
+            {employee.status}
+          </div></td>
               <td>
               <div className="d-flex gap-3">
 			 <Link to="/vendors/vendor-details"><FontAwesomeIcon icon={faEye} /></Link>
@@ -66,19 +98,19 @@ const nextToLastPage = () => {
         <h5>Approved Vendors</h5>
       </div>
 
-      <div id="div2" className='p-5 '>
+      <div id="div2" className='p-5 ' style={{display:'flex',justifyContent:'space-between'}}>
 
          <div className="dropdown">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select id='selectOption'>
-                                <option>All</option>
-                                <option>Initiated</option>
-                                <option>Approved</option>
-                                <option>Rejected</option>
-                                <option>Reinitiated</option>
-                                <option>Droped</option>
+                            <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{outline:'none'}}>
+                            <option value="">All</option>
+                                <option value="initiated">Initiated</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="reinitiated">Reinitiated</option>
+                                <option value="dropped">Droped</option>
                             </select>
 
                         </button>
@@ -87,14 +119,14 @@ const nextToLastPage = () => {
                 </div>
 
          <button
-          id="sampleloginbtn"
+          id=""
           className="btn btn-primary"
           type="button"
           data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
+          data-bs-target="#AddApprovedVendor"
           aria-controls="offcanvasRight"
           >
-          <CgAddR />  <span>Add Approved Vender</span>
+          <CgAddR />  <span>Add Approved Vendor</span>
         </button>
 
     </div>
@@ -102,7 +134,7 @@ const nextToLastPage = () => {
         <div
         className="offcanvas offcanvas-end overflow-y-scroll"
         tabIndex="-1"
-        id="offcanvasRight"
+        id="AddApprovedVendor"
         aria-labelledby="offcanvasRightLabel"
       >
         <div className="offcanvas-header ">
