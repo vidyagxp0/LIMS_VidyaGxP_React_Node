@@ -151,11 +151,11 @@ const SamplingField = () => {
                         </div>
                     </div>
 
-                    <label id="line3" htmlFor="">Field Name</label>
-                    <input id="line4" required type="text" placeholder="Sample Type Name" />
+                    <label className="line3" htmlFor="">Field Name</label>
+                    <input className="line4" required type="text" placeholder="Sample Type Name" />
 
-                    <label id="line3" htmlFor="">Field Type</label>
-                    <select id="line4" required>
+                    <label className="line3" htmlFor="">Field Type</label>
+                    <select className="line4" required>
                         <option value="">Select Field Type</option>
                         <option value="option1">Radio Button</option>
                         <option value="option2">Label</option>

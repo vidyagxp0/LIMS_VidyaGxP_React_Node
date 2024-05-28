@@ -151,15 +151,15 @@ const SamplingRule = () => {
                         </div>
                     </div>
 
-                    <label id="line3" htmlFor="">Sampling Rule Name</label>
-                    <input id="line4" required type="text" placeholder="Sampling Rule Name" />
+                    <label className="line3" htmlFor="">Sampling Rule Name</label>
+                    <input className="line4" required type="text" placeholder="Sampling Rule Name" />
 
-                    <label id="line3" htmlFor="">Unique Code</label>
-                    <input id="line4" required type="text" placeholder="Unique Code" />
+                    <label className="line3" htmlFor="">Unique Code</label>
+                    <input className="line4" required type="text" placeholder="Unique Code" />
 
-                    <label id="line3" htmlFor="">Number of Ranges</label>
+                    <label className="line3" htmlFor="">Number of Ranges</label>
                     <div className='d-flex '>
-                        <input id="line4" required type="number" placeholder="Number of Ranges" />
+                        <input className="line4" required type="number" placeholder="Number of Ranges" />
                         <button className='btn btn-info text-white' >Add</button>
                     </div>
 

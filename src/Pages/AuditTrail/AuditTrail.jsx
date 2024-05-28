@@ -1,45 +1,90 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { FaArrowRight, FaDownload } from "react-icons/fa"
-import { Link } from "react-router-dom"
-
-function AuditTrail() {
-    const [addModal, setAddModal] = useState(false)
-    const badgeStyle = { background: "#cdffca" }
-    
+import { 
+    CButton, 
+    CCol, 
+    CFormSelect, 
+    CRow, 
+    CTable, 
+    CTableBody, 
+    CTableDataCell, 
+    CTableHead, 
+    CTableHeaderCell, 
+    CTableRow 
+  } from "@coreui/react";
+  import { useState } from "react";
+  import { FaArrowRight, FaDownload } from "react-icons/fa";
+  import { PDFDownloadLink } from '@react-pdf/renderer';
+import AuditTrailPDF from "./AuditTrailPDF";
+  
+  function AuditTrail() {
+    const pageSize = 5; // Number of items per page
+    const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const [selectedProduct, setSelectedProduct] = useState("Select Product");
+    const [selectedOperation, setSelectedOperation] = useState("Select Operations");
+    const [selectedUser, setSelectedUser] = useState("Select Users");
+  
+    const data = [
+        { id: 1, dateTime: 'Feb 11th 2023 10:12', formName: 'Category', actionRowName: '', oldAction: '-', newAction: 'Login', employeeName: 'Admin' },
+        { id: 2, dateTime: 'Feb 15th 2024 18:22', formName: 'Glass', actionRowName: '', oldAction: '-', newAction: 'LogOut', employeeName: 'SuperAdmin' },
+        { id: 3, dateTime: 'Mar 23rd 2024 10:50', formName: 'Hydraulic Oil', actionRowName: '', oldAction: '-', newAction: 'Category Added', employeeName: 'Admin' },
+        { id: 4, dateTime: 'Apr 15th 2024 19:45', formName: 'Category', actionRowName: '', oldAction: '-', newAction: 'Product', employeeName: 'Rajesh' },
+        { id: 5, dateTime: 'May 20th 2024 21:33', formName: 'Sampling Field', actionRowName: 'Room Is Clean', oldAction: 'Active', newAction: 'Updated from ACTIVE to INACTIVE', employeeName: 'Manager' },
+        { id: 6, dateTime: 'May 17th 2024 09:51', formName: 'Login', actionRowName: '', oldAction: '-', newAction: 'Logged IN', employeeName: 'Admin' },
+        { id: 7, dateTime: 'Feb 15th 2024 18:22', formName: 'Handling', actionRowName: '', oldAction: '-', newAction: 'Handling Added', employeeName: 'Admin' },
+        { id: 8, dateTime: 'Mar 23rd 2024 10:50', formName: 'Category', actionRowName: '', oldAction: '-', newAction: 'Category Added', employeeName: 'Admin' },
+        { id: 9, dateTime: 'Apr 15th 2024 19:45', formName: 'Category', actionRowName: '', oldAction: '-', newAction: 'Category Added', employeeName: 'Admin' },
+    ];
+  
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, data.length);
+  
+    const filterData = () => {
+        return data.filter((item) => {
+            const matchesProduct = selectedProduct === "Select Product" || item.formName.toLowerCase().includes(selectedProduct.toLowerCase());
+            const matchesOperation = selectedOperation === "Select Operations" || item.newAction.toLowerCase().includes(selectedOperation.toLowerCase());
+            const matchesUser = selectedUser === "Select Users" || item.employeeName.toLowerCase().includes(selectedUser.toLowerCase());
+            const matchesSearch = item.employeeName.toLowerCase().includes(search.toLowerCase());
+            return matchesProduct && matchesOperation && matchesUser && matchesSearch;
+        });
+    };
+  
+    const filteredData = filterData();
+  
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+    const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
+  
     return (
         <>
-
-            <div id="approval-page" className="h-100 mx-5">
+            <div className="h-100 mx-5">
                 <div className="container-fluid my-5">
-
                     <div className="main-head">
-                        
+                        <div className="title fw-bold fs-5 py-4">Audit Trail</div>
                     </div>
-                    <div className="d-flex gap-4">
-
-
-                    </div>
+                    <div className="d-flex gap-4"></div>
                     <div>
                         <CRow className="mb-3">
                             <CCol sm={3}>
-                            <CFormSelect
+                                <CFormSelect
+                                    style={{ border: "2px solid gray" }}
+                                    value={selectedProduct}
+                                    onChange={(e) => setSelectedProduct(e.target.value)}
                                     options={[
                                         'Select Product',
-                                        { label: 'Apixaban' },
                                         { label: 'Glass' },
                                         { label: 'Hydraulic Oil' },
+                                        { label: 'Apixaban' },
                                         { label: 'chpoil' },
                                         { label: 'Feliconar' },
                                         { label: 'Sulphuric Acid' }
                                     ]}
                                 />
                             </CCol>
-
                             <CCol sm={3}>
-                            <CFormSelect
+                                <CFormSelect
+                                    style={{ border: "2px solid gray" }}
+                                    value={selectedOperation}
+                                    onChange={(e) => setSelectedOperation(e.target.value)}
                                     options={[
                                         'Select Operations',
                                         { label: 'Login' },
@@ -50,10 +95,12 @@ function AuditTrail() {
                                         { label: 'Test Allot' }
                                     ]}
                                 />
-                                
                             </CCol>
                             <CCol sm={3}>
-                            <CFormSelect
+                                <CFormSelect
+                                    style={{ border: "2px solid gray" }}
+                                    value={selectedUser}
+                                    onChange={(e) => setSelectedUser(e.target.value)}
                                     options={[
                                         'Select Users',
                                         { label: 'Rajesh' },
@@ -62,21 +109,27 @@ function AuditTrail() {
                                         { label: 'Aliya' },
                                         { label: 'Admin' },
                                         { label: 'Super Admin' }
-
                                     ]}
                                 />
+                            </CCol>
+                            <CCol sm={2}>
                                 
                             </CCol>
-
                             <CCol sm={1}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton className="bg-danger bg-opacity-75 rounded" ><FaDownload/></CButton>
+                                    <PDFDownloadLink
+                                        document={<AuditTrailPDF data={filteredData} />}
+                                        fileName="audit_trail_report.pdf"
+                                        className="btn btn-danger bg-opacity-75 rounded"
+                                    >
+                                        <FaDownload />
+                                    </PDFDownloadLink>
                                 </div>
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white mt-5">
-                        <CTable align="middle" responsive className=" shadow">
+                    <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
+                        <CTable align="middle" responsive>
                             <CTableHead>
                                 <CTableRow>
                                     <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
@@ -89,131 +142,39 @@ function AuditTrail() {
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                                <CTableRow>
-                                    <CTableDataCell>1</CTableDataCell>
-                                    <CTableDataCell>feb 11th 2023 10:12</CTableDataCell>
-                                    <CTableDataCell>Category</CTableDataCell>
-                                    <CTableDataCell></CTableDataCell>
-                                    <CTableDataCell>-</CTableDataCell>                                    
-                                    <CTableDataCell>Category Added</CTableDataCell>                                 
-                                    <CTableDataCell>Admin</CTableDataCell>
-                                </CTableRow>
-
-                                <CTableRow>
-                                    <CTableDataCell>2</CTableDataCell>
-                                    <CTableDataCell>feb 15th 2024 18:22</CTableDataCell>
-                                    <CTableDataCell>Handling</CTableDataCell>
-                                    <CTableDataCell></CTableDataCell>
-                                    <CTableDataCell>-</CTableDataCell>                                    
-                                    <CTableDataCell>Handling Added</CTableDataCell>                                 
-                                    <CTableDataCell>Admin</CTableDataCell>
-                                </CTableRow>
-                                <CTableRow>
-                                    <CTableDataCell>3</CTableDataCell>
-                                    <CTableDataCell>mar 23rd 2024 10:50</CTableDataCell>
-                                    <CTableDataCell>Category</CTableDataCell>
-                                    <CTableDataCell></CTableDataCell>
-                                    <CTableDataCell>-</CTableDataCell>                                    
-                                    <CTableDataCell>Category Added</CTableDataCell>                                 
-                                    <CTableDataCell>Admin</CTableDataCell>
-                                </CTableRow>
-                                <CTableRow>
-                                    <CTableDataCell>4</CTableDataCell>
-                                    <CTableDataCell>Apr 15th 2024 19:45</CTableDataCell>
-                                    <CTableDataCell>Category</CTableDataCell>
-                                    <CTableDataCell></CTableDataCell>
-                                    <CTableDataCell>-</CTableDataCell>                                    
-                                    <CTableDataCell>Category Added</CTableDataCell>                                 
-                                    <CTableDataCell>Admin</CTableDataCell>
-                                </CTableRow>
-                                <CTableRow>
-                                    <CTableDataCell>5</CTableDataCell>
-                                    <CTableDataCell>may 20th 2024 21:33</CTableDataCell>
-                                    <CTableDataCell>Sampling Field</CTableDataCell>
-                                    <CTableDataCell>Room Is Cleen</CTableDataCell>
-                                    <CTableDataCell>Active</CTableDataCell>                                    
-                                    <CTableDataCell>updated from ACTIVE to INACTIVE</CTableDataCell>                                 
-                                    <CTableDataCell>Admin</CTableDataCell>
-                                </CTableRow>
-                                <CTableRow>
-                                    <CTableDataCell>6</CTableDataCell>
-                                    <CTableDataCell>may 17th 2024 09:51</CTableDataCell>
-                                    <CTableDataCell>Login</CTableDataCell>
-                                    <CTableDataCell></CTableDataCell>
-                                    <CTableDataCell>-</CTableDataCell>                                    
-                                    <CTableDataCell>logged INN</CTableDataCell>                                 
-                                    <CTableDataCell>Admin</CTableDataCell>
-                                </CTableRow>
-
+                                {filteredData.slice(startIndex, endIndex).map((item, index) => (
+                                    <CTableRow key={index}>
+                                        <CTableDataCell>{item.id}</CTableDataCell>
+                                        <CTableDataCell>{item.dateTime}</CTableDataCell>
+                                        <CTableDataCell>{item.formName}</CTableDataCell>
+                                        <CTableDataCell>{item.actionRowName}</CTableDataCell>
+                                        <CTableDataCell>{item.oldAction}</CTableDataCell>
+                                        <CTableDataCell>{item.newAction}</CTableDataCell>
+                                        <CTableDataCell>{item.employeeName}</CTableDataCell>
+                                    </CTableRow>
+                                ))}
                             </CTableBody>
                         </CTable>
                     </div>
-
-                    <div className="pagination">
-
+                    <div className="d-flex justify-content-between align-items-center mt-4">
                         <div className="pagination">
-                            <div className='mr-5'>
-                                <button className="btn  mr-2" >&lt;&lt;</button>
-                            </div>
-                            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                                <button className='btn rounded-circle'> 1 </button>
-                            </div>
-                            <div>
-                                <button className="btn mr-2" >&gt;&gt;</button>
-
-                            </div>
-
+                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredData.length}>
+                                &gt;&gt;
+                            </button>
                         </div>
-                        <button className="btn btn-next" > Next <FaArrowRight /></button>
+                        <button className="btn" onClick={nextToLastPage}>
+                            Next <FaArrowRight />
+                        </button>
                     </div>
-
-
                 </div>
             </div>
-
-            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-
         </>
-    )
-}
-
-const StatusModal = (_props) => {
-    return (
-        <>
-
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-                <CModalHeader>
-                    <CModalTitle>Add Plant</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-
-                    <CFormInput
-                        type="text"
-                        label="Name"
-                        placeholder=" "
-                    />
-                    <CFormInput
-                        type="text"
-                        label="Plant Code"
-                        placeholder=""
-                    />
-
-                    <CFormInput
-                        type="text"
-                        label="Address"
-                        placeholder=" "
-                    />
-                    
-                    
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton className="bg-info text-white">Add</CButton>
-                </CModalFooter>
-            </CModal>
-
-        </>
-    )
-}
-
-export default AuditTrail
+    );
+  }
+  
+  export default AuditTrail;
+  

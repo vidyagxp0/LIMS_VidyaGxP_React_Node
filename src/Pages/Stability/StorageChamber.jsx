@@ -19,7 +19,8 @@ function StorageChamber() {
     const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
     const [selectedStatus, setSelectedStatus] = useState("All");
-    const pageSize = 3; // Number of items per page
+
+    const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
 
 
@@ -40,42 +41,35 @@ function StorageChamber() {
 
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize, data.length);
-    const paginatedData = data.slice(startIndex, endIndex);
-
-    const nextPage = () => {
-        if (endIndex < data.length) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(data.length / pageSize));
-    };
-
+    const [search, setSearch] = useState("");
 
     const filterData = () => {
-        if (selectedStatus === "All") {
-            return data;
-        }
-
-        return data.filter((item) => item.status === selectedStatus.toUpperCase());
+        const filteredData =
+            selectedStatus === "All"
+                ? data
+                : data.filter(
+                    (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+                );
+        return filteredData.filter((item) =>
+            item.chamberId.toLowerCase().includes(search.toLowerCase())
+        );
     };
+    const filteredData = filterData();
 
-    const [search, setSearch] = useState("");
-    console.log(search);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+    const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
+    const handleDelete = (id) => {
+        setData((prevData) => prevData.filter((item) => item.id !== id));
+        setDeleteModal(false);
+    };
 
     return (
         <>
             <div className="h-100 mx-5">
                 <div className="container-fluid my-5">
                     <div className="main-head">
-                        <div className="title fw-bold fs-5">Storage Chamber</div>
+                        <div className="title fw-bold fs-5 py-4">Storage Chamber</div>
                     </div>
                     <div className="d-flex gap-4">
                         <div className="chart-widgets w-100">
@@ -200,7 +194,7 @@ function StorageChamber() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 8px black" }}>
+                    <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
                         <CTable align="middle" responsive >
                             <CTableHead>
                                 <CTableRow>
@@ -217,19 +211,18 @@ function StorageChamber() {
                             </CTableHead>
                             <CTableBody>
 
-                                {filterData()
+                                {filterData().slice(startIndex, endIndex)
                                     .filter((item) => {
                                         return search.toLowerCase() === ""
                                             ? item
                                             : item.chamberId.toLowerCase().includes(search);
                                     })
                                     .map((item, index) => (
-
                                         <CTableRow key={index}>
                                             <CTableHeaderCell scope="row" className="text-center">
                                                 <input type="checkbox" />
                                             </CTableHeaderCell>
-                                            <CTableDataCell>{index + 1}</CTableDataCell>
+                                            <CTableDataCell>{item.id}</CTableDataCell>
                                             <CTableDataCell key={item.id}>{item.chamberId}</CTableDataCell>
                                             <CTableDataCell>{item.description}</CTableDataCell>
                                             <CTableDataCell>{item.makeModel}</CTableDataCell>
@@ -261,8 +254,12 @@ function StorageChamber() {
                                                 <div className="d-flex gap-3">
                                                     <Link to="/stability/storageChamberDetails"><FontAwesomeIcon icon={faEye} /></Link>
                                                     <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                    <div className='cursor-pointer' onClick={() => setDeleteModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>
-                                                </div>
+                                                    <div
+                                                        className="cursor-pointer"
+                                                        onClick={() => setDeleteModal(item.id)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTrashCan} />
+                                                    </div></div>
                                             </CTableDataCell>
                                         </CTableRow>
                                     ))}
@@ -279,14 +276,20 @@ function StorageChamber() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn btn-next" onClick={nextToLastPage}>
+                        <button className="btn " onClick={nextToLastPage}>
                             Next <FaArrowRight />
                         </button>
                     </div>
                 </div>
             </div>
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} />}
+            {deleteModal && (
+                <DeleteModal
+                    visible={deleteModal !== false}
+                    closeModal={() => setDeleteModal(false)}
+                    handleDelete={() => handleDelete(deleteModal)}
+                />
+            )}
         </>
     );
 }
@@ -321,23 +324,54 @@ const StatusModal = (_props) => {
 
 const DeleteModal = (_props) => {
     return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-                <CModalHeader>
-                    <CModalTitle>Delete Storage Chamber</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Do you want to delete this storage chamber <code>stmp23</code>?</p>
-                    <CFormInput type="text" label="User ID" placeholder="Chamber Id " />
-                    <CFormInput type="password" label="Password" placeholder="Your password" />
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton style={{ background: "#0F93C3", color: "white" }}>Submit</CButton>
-                </CModalFooter>
-            </CModal>
-        </>
+        <CModal
+            alignment="center"
+            visible={_props.visible}
+            onClose={_props.closeModal}
+            size="lg"
+        >
+            <CModalHeader>
+                <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+                    Delete Storage Chamber
+                </CModalTitle>
+            </CModalHeader>
+            <div
+                className="modal-body"
+                style={{
+                    fontSize: "1.2rem",
+                    fontWeight: "500",
+                    lineHeight: "1.5",
+                    marginBottom: "1rem",
+                    columnGap: "0px",
+                    border: "0px !important",
+                }}
+            >
+                <p>Do you want to delete this storage chamber</p>
+            </div>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.handleDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
     );
-}
+};
 
 export default StorageChamber;
