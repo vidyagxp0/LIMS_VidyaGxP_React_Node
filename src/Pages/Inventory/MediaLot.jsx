@@ -96,27 +96,27 @@ function MediaLot() {
   
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
+  
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
-
   const badgeStyle2 = { background: "green", color: "white", width: "110px" };
   const badgeStyle3 = { background: "red", color: "white", width: "110px" };
 
   const [search, setSearch] = useState("");
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-
+  
   const filterData = () => {
     const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter((item) => item.status === selectedStatus);
+    selectedStatus === "All"
+    ? data
+    : data.filter((item) => item.status === selectedStatus);
     return filteredData.filter((item) =>
       item.MediaName.toLowerCase().includes(search.toLowerCase())
-    );
-  };
+  );
+};
+const filteredData = filterData();
 
-  const filteredData = filterData();
+const startIndex = (currentPage - 1) * pageSize;
+const endIndex = Math.min(startIndex + pageSize, data.length);
 
   const nextPage = () =>
     setCurrentPage((prev) =>

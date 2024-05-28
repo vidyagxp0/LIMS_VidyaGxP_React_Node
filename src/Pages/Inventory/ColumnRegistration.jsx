@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CFormCheck,
   CFormInput,
+  CFormLabel,
   CFormSelect,
   CModal,
   CModalBody,
@@ -43,60 +46,58 @@ function ColumnRegistration() {
   const [data, setData] = useState([
     {
       id: 1,
-      ColumnName				: "describe",
-      ColumnNumber				: "describe",
-      BrandName						: "stmp1",
-      PackingMaterial						: "isubus111",
-      InnerDiameter						: "Admin",
+      ColumnName: "describe",
+      ColumnNumber: "describe",
+      BrandName: "stmp1",
+      PackingMaterial: "isubus111",
+      InnerDiameter: "Admin",
       status: "INITIATED",
-      
-
     },
     {
       id: 2,
-      ColumnName				: "describe",
-      ColumnNumber				: "describe",
-      BrandName						: "stmp1",
-      PackingMaterial						: "isubus111",
-      InnerDiameter						: "Admin",
+      ColumnName: "describe",
+      ColumnNumber: "describe",
+      BrandName: "stmp1",
+      PackingMaterial: "isubus111",
+      InnerDiameter: "Admin",
       status: "INITIATED",
     },
 
     {
       id: 3,
-      ColumnName				: "describe",
-      ColumnNumber				: "describe",
-      BrandName						: "stmp1",
-      PackingMaterial						: "isubus111",
-      InnerDiameter						: "Admin",
+      ColumnName: "describe",
+      ColumnNumber: "describe",
+      BrandName: "stmp1",
+      PackingMaterial: "isubus111",
+      InnerDiameter: "Admin",
       status: "REJECTED",
     },
     {
       id: 4,
-      ColumnName				: "describe",
-      ColumnNumber				: "describe",
-      BrandName						: "stmp1",
-      PackingMaterial						: "isubus111",
-      InnerDiameter						: "Admin",
+      ColumnName: "describe",
+      ColumnNumber: "describe",
+      BrandName: "stmp1",
+      PackingMaterial: "isubus111",
+      InnerDiameter: "Admin",
       status: "APPROVED",
     },
     {
       id: 5,
-      ColumnName				: "describe",
-      ColumnNumber				: "describe",
-      BrandName						: "stmp1",
-      PackingMaterial						: "isubus111",
-      InnerDiameter						: "Admin",
+      ColumnName: "describe",
+      ColumnNumber: "describe",
+      BrandName: "stmp1",
+      PackingMaterial: "isubus111",
+      InnerDiameter: "Admin",
       status: "APPROVED",
     },
 
     {
       id: 6,
-      ColumnName				: "describe",
-      ColumnNumber				: "describe",
-      BrandName						: "stmp1",
-      PackingMaterial						: "isubus111",
-      InnerDiameter						: "Admin",
+      ColumnName: "describe",
+      ColumnNumber: "describe",
+      BrandName: "stmp1",
+      PackingMaterial: "isubus111",
+      InnerDiameter: "Admin",
       status: "APPROVED",
     },
   ]);
@@ -136,96 +137,93 @@ function ColumnRegistration() {
             <div className="title fw-bold fs-5"> Column Registration</div>
           </div>
           <div className="d-flex gap-4">
-          <div className="chart-widgets w-100">
-            <div className="row" style={{ cursor: "pointer" }}>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("INITIATED")}
+            <div className="chart-widgets w-100">
+              <div className="row" style={{ cursor: "pointer" }}>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("INITIATED")}
+                >
+                  <div className="text-light fs-5">INITIATED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "INITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
-                      textAlign: "left",
-                      boxShadow: "0px 10px 20px  black !important",
-                    }}
-                    onClick={() => setSelectedStatus("REINITIATED")}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
+                    {
+                      filterData().filter((item) => item.status === "INITIATED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                    textAlign: "left",
+                    boxShadow: "0px 10px 20px  black !important",
+                  }}
+                  onClick={() => setSelectedStatus("REINITIATED")}
+                >
+                  <div className="text-light fs-5">REINITIATED</div>
 
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REINITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("APPROVED")}
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <butto className="text-light fs-5">APPROVED</butto>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white", textAlign: "left" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "APPROVED"
-                        ).length
-                      }
-                    </div>
-                  </button>
+                    {
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("APPROVED")}
+                >
+                  <butto className="text-light fs-5">APPROVED</butto>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white", textAlign: "left" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "APPROVED")
+                        .length
+                    }
+                  </div>
+                </button>
 
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("REJECTED")}
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("REJECTED")}
+                >
+                  <div className="text-light fs-5">REJECTED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REJECTED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                </div>
+                    {
+                      filterData().filter((item) => item.status === "REJECTED")
+                        .length
+                    }
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
           <div>
-          <CRow className="mb-3">
+            <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
                   style={{ border: "2px solid gray" }}
@@ -260,32 +258,34 @@ function ColumnRegistration() {
             </CRow>
           </div>
           <div className="bg-white mt-5">
-          <CTable align="middle" responsive className=" ">
+            <CTable align="middle" responsive className=" ">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Column Name	</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Column Name </CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Column Number</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Brand Name </CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                  Column Number	
+                    Packing Material{" "}
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Brand Name		</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Packing Material		</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Inner Diameter	</CTableHeaderCell>
-                  
-                  
+                  <CTableHeaderCell scope="col">
+                    Inner Diameter{" "}
+                  </CTableHeaderCell>
+
                   <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filterData().slice(startIndex, endIndex)
+                {filterData()
+                  .slice(startIndex, endIndex)
                   .filter((item) => {
                     return search.toLowerCase() === ""
                       ? item
-                      : item.ColumnName				.toLowerCase().includes(search);
+                      : item.ColumnName.toLowerCase().includes(search);
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
@@ -294,14 +294,14 @@ function ColumnRegistration() {
                       </CTableHeaderCell>
                       <CTableDataCell>{item.id}</CTableDataCell>
                       <CTableDataCell key={item.id}>
-                        {item.ColumnName			}
+                        {item.ColumnName}
                       </CTableDataCell>
 
-                      <CTableDataCell>{item.ColumnNumber				}</CTableDataCell>
-                      <CTableDataCell>{item.BrandName				}</CTableDataCell>
-                      
-                      <CTableDataCell>{item.PackingMaterial				}</CTableDataCell>
-                      <CTableDataCell>{item.InnerDiameter		}</CTableDataCell>
+                      <CTableDataCell>{item.ColumnNumber}</CTableDataCell>
+                      <CTableDataCell>{item.BrandName}</CTableDataCell>
+
+                      <CTableDataCell>{item.PackingMaterial}</CTableDataCell>
+                      <CTableDataCell>{item.InnerDiameter}</CTableDataCell>
                       <CTableDataCell className="d-flex">
                         <div
                           className="py-2 px-3 small rounded fw-bold"
@@ -374,7 +374,7 @@ function ColumnRegistration() {
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
 
-{deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -396,10 +396,16 @@ const StatusModal = (_props) => {
         <CModalHeader>
           <CModalTitle>Add Registration</CModalTitle>
         </CModalHeader>
-       <CModalBody>
-        <p style={{fontWeight:"bolder"}}>Add information and Add registration.</p>
-          <CFormInput type="text" label="Column Application" placeholder="Column Application " />
+        <CModalBody>
+          <p style={{ marginLeft: "2px" }}>
+            Add information and Add registration.
+          </p>
           <CFormInput
+            type="text"
+            label="Column Application"
+            placeholder="Column Application "
+          />
+          <CFormSelect
             type="text"
             label="Column Name"
             placeholder=" Column Name "
@@ -431,32 +437,19 @@ const StatusModal = (_props) => {
             placeholder="Film Thikness / Particle Size"
             className="custom-placeholder"
           />
-          <CFormInput
-            type="number"
-            label="UOM"
-            placeholder="UOM"
-          />
+          <CFormInput type="number" label="UOM" placeholder="UOM" />
           <CFormInput
             type="number"
             label="Packing Material"
             placeholder="Packing Material"
           />
-          <CFormInput
-            type="number"
-            label="Length"
-            placeholder="select"
-          />
-          <CFormInput
-            type="number"
-            label=" UOM"
-            placeholder="UOM"
-          />
+          <CFormInput type="number" label="Length" placeholder="select" />
+          <CFormInput type="number" label=" UOM" placeholder="UOM" />
           <CFormInput
             type="number"
             label="Inner Diameter"
             placeholder="select"
           />
-          
 
           <CFormInput
             type="number"
@@ -464,25 +457,30 @@ const StatusModal = (_props) => {
             placeholder="Outer Diameter"
           />
 
-          <CFormInput
-            type="date"
-            label="Recieved On"
-            placeholder=""
-          />
+          <CFormInput type="date" label="Recieved On" placeholder="" />
 
-          <CFormInput
-            type="number"
-            label="Certificate Recieved"
-            placeholder="Certificate Recieved"
-          />
+          <CForm className="mb-3">
+            <CFormLabel>Certificate Received</CFormLabel>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="YES"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="NO"
+                value="reject"
+              />
+            </div>
+          </CForm>
 
-          <CFormInput
-            type="number"
-            label="Certificate"
-            placeholder="Browse"
-          />
+          <CFormInput type="number" label="Certificate" placeholder="Browse" />
 
-         
           <div
             style={{
               display: "flex",

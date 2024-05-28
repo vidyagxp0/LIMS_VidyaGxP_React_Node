@@ -599,25 +599,25 @@ function Dashboard(props) {
           <div className="chart-widgets w-75">
             <div className="">
               <div className="row">
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(45deg,#0d6efd, #9ec5fe )' }}>
                   <div className="text-light fs-5">On Going Test</div>
                   <div className="count fs-1 text-light fw-bolder">277</div>
                 </div>
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(45deg, #d63384, #9ec5fe)' }}>
                   <div className="text-light fs-5">Completed Test</div>
                   <div className="count fs-1 text-light fw-bolder">48</div>
                 </div>
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(45deg, #ffc107, #9ec5fe)' }}>
                   <div className="text-light fs-5">Pending Test</div>
                   <div className="count fs-1 text-light fw-bolder">221</div>
                 </div>
               </div>
               <div className="row">
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(45deg, #dc3545, #9ec5fe)' }}>
                   <div className="text-light fs-5">Instruments</div>
                   <div className="count fs-1 text-light fw-bolder">9</div>
                 </div>
-                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0dcaf0, #9ec5fe)' }}>
+                <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(45deg,#0dcaf0, #9ec5fe)' }}>
                   <div className="text-light fs-5">Instrument Under Calibration</div>
                   <div className="count fs-1 text-light fw-bolder">5</div>
                 </div>

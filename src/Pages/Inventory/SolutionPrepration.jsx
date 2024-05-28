@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CFormCheck,
   CFormInput,
+  CFormLabel,
   CFormSelect,
   CFormTextarea,
   CModal,
@@ -261,7 +264,7 @@ function SolutionPreparation() {
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
-                    Add Solutions
+                    Add Solution Prepration
                   </CButton>
                 </div>
               </CCol>
@@ -282,9 +285,7 @@ function SolutionPreparation() {
                   <CTableHeaderCell scope="col">SolutionName</CTableHeaderCell>
                   <CTableHeaderCell scope="col">MethodNo </CTableHeaderCell>
                   <CTableHeaderCell scope="col">Type</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                    Preparation Method
-                  </CTableHeaderCell>
+
                   <CTableHeaderCell scope="col">BatchNo</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
@@ -310,7 +311,7 @@ function SolutionPreparation() {
 
                       <CTableDataCell>{item.SolutionName}</CTableDataCell>
                       <CTableDataCell>{item.MethodNo}</CTableDataCell>
-                      <CTableDataCell>{item.PreparationMethod}</CTableDataCell>
+
                       <CTableDataCell>{item.Type}</CTableDataCell>
                       <CTableDataCell>{item.BatchNo}</CTableDataCell>
                       {/* <CTableDataCell>{item.Comments}</CTableDataCell> */}
@@ -385,7 +386,7 @@ function SolutionPreparation() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-        {deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -403,60 +404,90 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>New Solution Preparation</CModalTitle>
         </CModalHeader>
+        <p style={{ marginLeft: "16px" }}>
+          Add information and add new Solution Preparation.
+        </p>
         <CModalBody>
-          <CFormInput type="text" label="Solution Name" placeholder="Select " />
-          <CFormInput
+          <CFormSelect
             type="text"
             label="Volumetric Solution Name"
             placeholder="Volumetric Solution Name "
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="text"
             label="Preparation Method"
             placeholder="Preparation Method"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="Solution Quantity"
             placeholder="Enter Solution Quantity "
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="Batch No"
             placeholder="Batch No"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
 
-          <CFormInput
-            type="number"
-            label="Type"
-            placeholder="Type"
-            className="custom-placeholder"
-          />
+          <CForm className="mb-3">
+            <CFormLabel>Type</CFormLabel>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="New"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Dilution"
+                value="reject"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Ready Made"
+                value="reject"
+              />
+            </div>
+          </CForm>
           <CFormInput
             type="text"
-            label="Documnets if Any"
-            placeholder="Documnets if Any"
+            label="Documents if Any"
+            placeholder="Documents if Any"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput type="number" label="Comments" placeholder="Comments" />
+          <CFormInput
+            type="number"
+            label="Comments"
+            placeholder="Comments"
+            className="custom-placeholder mb-3"
+          />
 
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
+              marginBottom: "1rem"
             }}
           >
             <label>Comments</label>
-            <textarea name="" id=""></textarea>
+            <textarea name="" id="" className="form-control"></textarea>
           </div>
         </CModalBody>
         <CModalFooter>

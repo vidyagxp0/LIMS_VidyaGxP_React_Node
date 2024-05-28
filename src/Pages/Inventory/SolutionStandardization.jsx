@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CFormCheck,
   CFormInput,
+  CFormLabel,
   CFormSelect,
   CModal,
   CModalBody,
@@ -253,7 +256,7 @@ const handleDelete = (id) => {
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
-                    Add Solutions
+                    Add Standardization
                   </CButton>
                 </div>
               </CCol>
@@ -396,58 +399,87 @@ const StatusModal = (_props) => {
           <CModalTitle>Add Standardization</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput type="text" label="Prepation No." placeholder="Prepation No. " />
+          <CFormSelect
+            type="text"
+            label="Preparation No."
+            placeholder="Preparation No."
+            className="custom-placeholder mb-3"
+          />
           <CFormInput
             type="text"
             label="Solution Name"
-            placeholder="Solution Name "
-            className="custom-placeholder"
+            placeholder="Solution Name"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="text"
             label="Volumetric Solution Name"
             placeholder="Volumetric Solution Name"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="Solution Expiry Period"
-            placeholder="Solution Expiry Period "
-            className="custom-placeholder"
+            placeholder="Solution Expiry Period"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="Solution Quantity"
             placeholder="Solution Quantity"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="number"
             label="Standardization Schedule"
             placeholder="Standardization Schedule"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
             label="Batch No"
             placeholder="Batch No"
+            className="mb-3"
           />
+          <CForm className="mb-3">
+            <CFormLabel>Type</CFormLabel>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="New"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Dilution"
+                value="reject"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Ready Made"
+                value="reject"
+              />
+            </div>
+          </CForm>
           <CFormInput
-            type="number"
-            label="Type"
-            placeholder="Type"
-          />
-          <CFormInput
-            type="number"
+            type="text"
             label="Documents if any"
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
-            type="number"
+            type="text"
             label="Average Value"
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
 
           <div
@@ -455,10 +487,11 @@ const StatusModal = (_props) => {
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
+              marginBottom: "1rem"
             }}
           >
             <label>Comments</label>
-            <textarea name="" id=""></textarea>
+            <textarea name="" id="" className="form-control"></textarea>
           </div>
         </CModalBody>
         <CModalFooter>

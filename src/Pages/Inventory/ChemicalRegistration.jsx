@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CFormCheck,
   CFormInput,
+  CFormLabel,
   CFormSelect,
   CModal,
   CModalBody,
@@ -43,44 +46,42 @@ function ChemicalRegistration() {
   const [data, setData] = useState([
     {
       id: 1,
-      ChemicalRegeantName			: "stmp1",
-      ChemicalRegeantUniqueCode		: "describe",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantUniqueCode: "describe",
       // ModeofUsage		: "isubus111",
-      
-      status: "INITIATED",
-      
 
+      status: "INITIATED",
     },
     {
       id: 2,
-      ChemicalRegeantName			: "stmp1",
-      ChemicalRegeantUniqueCode		: "describe",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantUniqueCode: "describe",
       status: "INITIATED",
     },
 
     {
       id: 3,
-      ChemicalRegeantName			: "stmp1",
-      ChemicalRegeantUniqueCode		: "describe",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantUniqueCode: "describe",
       status: "REJECTED",
     },
     {
       id: 4,
-      ChemicalRegeantName			: "stmp1",
-      ChemicalRegeantUniqueCode		: "describe",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantUniqueCode: "describe",
       status: "APPROVED",
     },
     {
       id: 5,
-      ChemicalRegeantName			: "stmp1",
-      ChemicalRegeantUniqueCode		: "describe",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantUniqueCode: "describe",
       status: "APPROVED",
     },
 
     {
       id: 6,
-      ChemicalRegeantName			: "stmp1",
-      ChemicalRegeantUniqueCode		: "describe",
+      ChemicalRegeantName: "stmp1",
+      ChemicalRegeantUniqueCode: "describe",
       status: "APPROVED",
     },
   ]);
@@ -89,29 +90,29 @@ function ChemicalRegistration() {
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
   const [search, setSearch] = useState("");
-  
-  const filterData = () => {
-  const filteredData =
-    selectedStatus === "All"
-      ? data
-      : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
-  return filteredData.filter((item) =>
-    item.ChemicalRegeantName.toLowerCase().includes(search.toLowerCase())
-  );
-};
-const filteredData = filterData();
-const nextPage = () =>
-  setCurrentPage((prev) =>
-    Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-  );
-const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-const handleDelete = (id) => {
-  setData((prevData) => prevData.filter((item) => item.id !== id));
-  setDeleteModal(false);
-};
+  const filterData = () => {
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter(
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
+    return filteredData.filter((item) =>
+      item.ChemicalRegeantName.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+  const filteredData = filterData();
+  const nextPage = () =>
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
+    );
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  const handleDelete = (id) => {
+    setData((prevData) => prevData.filter((item) => item.id !== id));
+    setDeleteModal(false);
+  };
   return (
     <>
       <div id="approval-page" className="h-100 mx-5">
@@ -121,95 +122,92 @@ const handleDelete = (id) => {
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
-            <div className="row" style={{ cursor: "pointer" }}>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("INITIATED")}
+              <div className="row" style={{ cursor: "pointer" }}>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("INITIATED")}
+                >
+                  <div className="text-light fs-5">INITIATED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "INITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
-                      textAlign: "left",
-                      boxShadow: "0px 10px 20px  black !important",
-                    }}
-                    onClick={() => setSelectedStatus("REINITIATED")}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
+                    {
+                      filterData().filter((item) => item.status === "INITIATED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                    textAlign: "left",
+                    boxShadow: "0px 10px 20px  black !important",
+                  }}
+                  onClick={() => setSelectedStatus("REINITIATED")}
+                >
+                  <div className="text-light fs-5">REINITIATED</div>
 
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REINITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("APPROVED")}
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <butto className="text-light fs-5">APPROVED</butto>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white", textAlign: "left" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "APPROVED"
-                        ).length
-                      }
-                    </div>
-                  </button>
+                    {
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("APPROVED")}
+                >
+                  <butto className="text-light fs-5">APPROVED</butto>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white", textAlign: "left" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "APPROVED")
+                        .length
+                    }
+                  </div>
+                </button>
 
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("REJECTED")}
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("REJECTED")}
+                >
+                  <div className="text-light fs-5">REJECTED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REJECTED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                </div>
+                    {
+                      filterData().filter((item) => item.status === "REJECTED")
+                        .length
+                    }
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
           <div>
-          <CRow className="mb-3">
+            <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
                   style={{ border: "2px solid gray" }}
@@ -244,7 +242,7 @@ const handleDelete = (id) => {
             </CRow>
           </div>
           <div className="bg-white mt-5">
-          <CTable align="middle" responsive className=" shadow">
+            <CTable align="middle" responsive className=" shadow">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
@@ -252,21 +250,24 @@ const handleDelete = (id) => {
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
                   <CTableHeaderCell scope="col">
-                  Chemical / Regeant Name	
+                    Chemical / Regeant Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Chemical / Regeant Unique Code			</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">
+                    Chemical / Regeant Unique Code{" "}
+                  </CTableHeaderCell>
                   {/* <CTableHeaderCell scope="col">Mode of Usage		 </CTableHeaderCell> */}
-                  
+
                   <CTableHeaderCell scope="col">Status</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filterData().slice(startIndex, endIndex)
+                {filterData()
+                  .slice(startIndex, endIndex)
                   .filter((item) => {
                     return search.toLowerCase() === ""
                       ? item
-                      : item.ChemicalRegeantName	.toLowerCase().includes(search);
+                      : item.ChemicalRegeantName.toLowerCase().includes(search);
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
@@ -275,12 +276,14 @@ const handleDelete = (id) => {
                       </CTableHeaderCell>
                       <CTableDataCell>{item.id}</CTableDataCell>
                       <CTableDataCell key={item.id}>
-                        {item.ChemicalRegeantName		}
+                        {item.ChemicalRegeantName}
                       </CTableDataCell>
 
-                      <CTableDataCell>{item.ChemicalRegeantUniqueCode		}</CTableDataCell>
+                      <CTableDataCell>
+                        {item.ChemicalRegeantUniqueCode}
+                      </CTableDataCell>
                       {/* <CTableDataCell>{item.ModeofUsage}</CTableDataCell> */}
-                      
+
                       {/* <CTableDataCell>{item.Comments}</CTableDataCell> */}
                       <CTableDataCell className="d-flex">
                         <div
@@ -353,7 +356,7 @@ const handleDelete = (id) => {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-       {deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -375,72 +378,94 @@ const StatusModal = (_props) => {
         <CModalHeader>
           <CModalTitle>Add Chemicals</CModalTitle>
         </CModalHeader>
-       <CModalBody>
-        <p style={{fontWeight:"bolder"}}>Registration Initiation</p>
-          <CFormInput type="text" label="Prepation No." placeholder="Prepation No. " />
+        <p style={{ marginLeft: "13px" }}>Add information and Add Chemical</p>
+        <CModalBody>
+          <p style={{ fontWeight: "800", fontSize: "20px" }}>
+            Registration Initiation
+          </p>
+
           <CFormInput
             type="text"
-            label=" Name"
-            placeholder=" Name "
-            className="custom-placeholder"
+            label="Name"
+            placeholder="Name"
+            className="custom-placeholder mb-3"
           />
 
           <CFormInput
             type="text"
             label="Unique Code"
             placeholder="Unique Code"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
             label="CAS / CAT no."
-            placeholder="Enter CAS  "
-            className="custom-placeholder"
+            placeholder="Enter CAS"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
+          <CFormSelect
             type="text"
-            label="Category "
+            label="Category"
             placeholder="Select"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
 
-          <CFormInput
+          <CFormSelect
             type="number"
             label="Grade"
             placeholder="Grade"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
+          <CFormSelect
             type="number"
             label="Handling Symbol"
             placeholder="Select..."
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
+          <CFormSelect
             type="number"
             label="Storage Conditions"
             placeholder="Select"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
+          <CFormSelect
             type="number"
             label="Lot UOM"
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
             label="Usage UOM"
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
-          <CFormInput
-            type="number"
-            label="Issues Display Order For Usage"
-            placeholder="select"
-          />
-          <p style={{fontWeight:"bolder"}}>Inventory Control</p>
+          <CForm className="mb-3">
+            <CFormLabel>Issues Display Order For Usage</CFormLabel>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="FIFO"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="FEFO"
+                value="reject"
+              />
+            </div>
+          </CForm>
+          <p style={{ fontWeight: "bolder" }}>Inventory Control</p>
 
           <CFormInput
             type="number"
             label="Minimum Qty."
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
 
           <div
@@ -448,10 +473,11 @@ const StatusModal = (_props) => {
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
+              marginBottom: "1rem"
             }}
           >
             <label>Comments</label>
-            <textarea name="" id=""></textarea>
+            <textarea name="" id="" className="form-control"></textarea>
           </div>
         </CModalBody>
         <CModalFooter>
@@ -466,6 +492,7 @@ const StatusModal = (_props) => {
     </>
   );
 };
+
 const DeleteModal = (_props) => {
   return (
     <CModal

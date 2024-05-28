@@ -126,9 +126,26 @@ function Inventory() {
     setDeleteModal(false);
   };
 
-  // console.log(search);
+  const [selectAll, setSelectAll] = useState(false);
+  const [checkedItems, setCheckedItems] = useState([]);
+  const handleSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    setSelectAll(isChecked);
+    if (isChecked) {
+      setCheckedItems(filterData().map((item) => item.id));
+    } else {
+      setCheckedItems([]);
+    }
+  };
 
-  // const [count, setCount] = useState(0);
+  const handleCheckboxChange = (event, id) => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      setCheckedItems([...checkedItems, id]);
+    } else {
+      setCheckedItems(checkedItems.filter((itemId) => itemId !== id));
+    }
+  };
 
   return (
     <>
@@ -162,7 +179,7 @@ function Inventory() {
                     </div>
                   </button>
                   <button
-                    className="col shadow p-3 m-3 rounded"
+                    className="col shadow p-3 m-3 rounded"    
                     style={{
                       background: "linear-gradient(45deg, #d63384, #9ec5fe)",
                       textAlign: "left",
@@ -267,7 +284,11 @@ function Inventory() {
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={selectAll}
+                      onChange={handleSelectAll}
+                    />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
                     SNo.
@@ -308,7 +329,13 @@ function Inventory() {
                   .map((item, index) => (
                     <CTableRow key={index}>
                       <CTableHeaderCell scope="row" className="text-center">
-                        <input type="checkbox" />
+                        <input
+                          type="checkbox"
+                          checked={checkedItems.includes(item.id)}
+                          onChange={(event) =>
+                            handleCheckboxChange(event, item.id)
+                          }
+                        />
                       </CTableHeaderCell>
                       <CTableDataCell>{item.id}</CTableDataCell>
                       <CTableDataCell key={item.id}>

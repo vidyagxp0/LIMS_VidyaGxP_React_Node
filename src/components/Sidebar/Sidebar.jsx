@@ -1,5 +1,42 @@
-import { cilSpeedometer, cilPuzzle } from "@coreui/icons";
+import {
+  cilSpeedometer,
+  cibStatuspage,
+  cilResizeBoth,
+  cilWarning,
+  cilColumns,
+  
+  
+} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import { TfiDashboard } from "react-icons/tfi";
+import { MdOutlineVerified } from "react-icons/md";
+import { AiOutlineContainer } from "react-icons/ai";
+import { TbCurrentLocation } from "react-icons/tb";
+import { FaUsers } from "react-icons/fa6";
+import { RiLoginCircleLine } from "react-icons/ri";
+import { MdManageHistory } from "react-icons/md";
+import { HiArrowsUpDown } from "react-icons/hi2";
+import { LuListTodo } from "react-icons/lu";
+import { MdOutlineInventory2 } from "react-icons/md";
+import { CiPillsBottle1 } from "react-icons/ci";
+import { LuWarehouse } from "react-icons/lu";
+import { MdOutlineCompassCalibration } from "react-icons/md";
+import { GrCertificate } from "react-icons/gr";
+import { CiShop } from "react-icons/ci";
+import { FaPeopleLine } from "react-icons/fa6";
+import { PiNuclearPlant } from "react-icons/pi";
+import { GoWorkflow } from "react-icons/go";
+import { AiOutlineAudit } from "react-icons/ai";
+import { MdSettingsApplications } from "react-icons/md";
+import { FaPerson } from "react-icons/fa6";
+import { FaPeopleRoof } from "react-icons/fa6";
+import { TfiLayoutMediaOverlay } from "react-icons/tfi";
+import { FaWater } from "react-icons/fa6";
+import { VscServerEnvironment } from "react-icons/vsc";
+
+
+
+
 import {
   CNavGroup,
   CNavItem,
@@ -9,8 +46,12 @@ import {
   CSidebarNav,
 } from "@coreui/react";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function Sidebar() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   return (
     <>
       <CSidebar className="border-end app-sidebar h-100" colorScheme="dark">
@@ -36,39 +77,56 @@ function Sidebar() {
         </CSidebarHeader>
         <CSidebarNav>
           <Link to="/dashboard">
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/dashboard"}
+            >
+              <TfiDashboard />
               Dashboard
             </CNavItem>
           </Link>
           <Link to="/approval">
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/approval"}
+            >
+              <MdOutlineVerified />
               Approval
             </CNavItem>
           </Link>
           <Link to="/stCondition">
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/stCondition"}
+            >
+              <AiOutlineContainer />
               Storage Condition
             </CNavItem>
           </Link>
           <Link to="/storage-location">
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/storage-location"}
+            >
+              <TbCurrentLocation />
               Storage Location
             </CNavItem>
           </Link>
           <CNavGroup
+            active={currentPath === "/department"}
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> User
-                Management
+                <FaUsers />
+                <span style={{ marginLeft: "18px" }}>User Management</span>
               </>
             }
           >
             <Link to="/department">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/department"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -76,7 +134,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/users">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/users"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -84,7 +142,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/roles">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/roles"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -95,13 +153,13 @@ function Sidebar() {
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Sample
-                Logins
+                <RiLoginCircleLine />
+                <span style={{ marginLeft: "18px" }}>Sample Logins</span>
               </>
             }
           >
             <Link to="/samplelogin">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/samplelogin"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -109,7 +167,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/investigationl1">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/investigationl1"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -117,7 +175,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/investigationl2">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/investigationl2"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -128,12 +186,16 @@ function Sidebar() {
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Stability
+                <MdManageHistory />
+                <span style={{ marginLeft: "18px" }}>Stability</span>
               </>
             }
           >
             <Link to="/storageCondition1321">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/storageCondition1321"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -141,7 +203,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/standardProtocol">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/standardProtocol"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -149,7 +211,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/storageChamber">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/storageChamber"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -157,7 +219,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/chamberConditionMapping">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/chamberConditionMapping"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -165,7 +230,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/chamberTransfer">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/chamberTransfer"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -173,7 +238,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/stabilityProtocol">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/stabilityProtocol"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -181,7 +246,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampleStorage">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/sampleStorage"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -189,7 +254,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/coaTemplate">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/coaTemplate"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -197,7 +262,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampleLoginTemplate">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/sampleLoginTemplate"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -205,7 +273,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/worksheetHeader">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/worksheetHeader"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -213,7 +281,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/summaryReportHeader">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/summaryReportHeader"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -221,7 +292,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampleAcceptanceTemplate">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/sampleAcceptanceTemplate"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -229,7 +303,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampleLogin1321">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/sampleLogin1321"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -237,7 +311,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampleAcceptance">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/sampleAcceptance"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -248,12 +322,13 @@ function Sidebar() {
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Masters
+                <HiArrowsUpDown />
+                <span style={{ marginLeft: "18px" }}> Masters</span>
               </>
             }
           >
             <Link to="/Masters/Product">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/Masters/Product"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -261,7 +336,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/Masters/SampleType">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/Masters/SampleType"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -269,7 +344,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/Masters/SpecificationType">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/Masters/SpecificationType"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -277,7 +355,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/Masters/Specifications">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/Masters/Specifications"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -285,7 +366,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/Masters/TestCategories">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/Masters/TestCategories"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -293,7 +377,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/Masters/TestRegistrations">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/Masters/TestRegistrations"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -301,7 +388,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/Masters/TestPlan">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/Masters/TestPlan"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -309,7 +396,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/Masters/MyTests">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/Masters/MyTests"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -317,15 +404,23 @@ function Sidebar() {
               </CNavItem>
             </Link>
           </CNavGroup>
+
+          {/*  */}
+
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Sampling
+                <LuListTodo />
+
+                <span style={{ marginLeft: "18px" }}>Sampling</span>
               </>
             }
           >
             <Link to="/sampling/samplingConfiguration">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/sampling/samplingConfiguration"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -333,7 +428,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampling/samplingRule">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/sampling/samplingRule"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -341,7 +439,7 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampling/eSamping">
-              <CNavItem href="#">
+              <CNavItem href="#" active={currentPath === "/sampling/eSamping"}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -349,7 +447,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampling/samplingField">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/sampling/samplingField"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -357,7 +458,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/sampling/samplingTemplate">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/sampling/samplingTemplate"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -365,35 +469,17 @@ function Sidebar() {
               </CNavItem>
             </Link>
           </CNavGroup>
+
           <CNavGroup
             toggler={
               <>
-                <Link to="/Inventory/Inventory" style={{ color: "white" }}>
-                  <span
-                    className="nav-icon"
-                    style={{
-                      color: "white",
-                      position: "relative",
-                      left: "3px",
-                    }}
-                  >
-                    <CIcon customClassName="nav-icon" icon={cilPuzzle} />
-                    <p
-                      style={{
-                        fontSize: "17px",
-                        position: "relative",
-                        top: "7px",
-                      }}
-                    >
-                      {" "}
-                      Inventory
-                    </p>
-                  </span>
-                </Link>
+                <MdOutlineInventory2 style={{ width: "15px" }} />
+                <span style={{ marginLeft: "18px" }}>Inventory</span>
               </>
             }
           >
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link to="/Inventory/Inventory" style={{ color: "white" }}>
@@ -405,15 +491,18 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                      <CIcon
+                        style={{ position: "absolute", left: "-41px" }}
+                        icon={cibStatuspage}
+                      />
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
                       >
-                        {" "}
                         Working Status
                       </p>
                     </span>
@@ -422,7 +511,15 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/InternalRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  style={{
+                    fontSize: "14px",
+                    position: "relative",
+                    top: "7px",
+                  }}
+                  active={currentPath === "/Inventory/InternalRegistration"}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -431,7 +528,15 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/WorkingStandardIssue">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  style={{
+                    fontSize: "14px",
+                    position: "relative",
+                    top: "7px",
+                  }}
+                  active={currentPath === "/Inventory/WorkingStandardIssue"}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -440,7 +545,15 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/WorkingStandardUsage">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  style={{
+                    fontSize: "14px",
+                    position: "relative",
+                    top: "7px",
+                  }}
+                  active={currentPath === "/Inventory/WorkingStandardUsage"}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -450,9 +563,13 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
-                  <Link to="/Inventory/VolumeSolutions" style={{ color: "white" }}>
+                  <Link
+                    to="/Inventory/VolumeSolutions"
+                    style={{ color: "white" }}
+                  >
                     <span
                       className="nav-icon"
                       style={{
@@ -461,15 +578,17 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                      <CIcon
+                        style={{ position: "absolute", left: "-41px" }}
+                        icon={cilResizeBoth}
+                      />
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
                       >
-                        {" "}
                         Volume Solutions
                       </p>
                     </span>
@@ -483,7 +602,12 @@ function Sidebar() {
                     <Link to="/Inventory/VolumeSolutions">
                       <CNavItem
                         href="#"
-                        style={{ position: "relative", left: "-47px" }}
+                        style={{
+                          position: "relative",
+                          left: "-47px",
+                          fontSize: "14px",
+                        }}
+                        active={currentPath === "/Inventory/VolumeSolutions"}
                       >
                         <span className="nav-icon">
                           <span className="nav-icon-bullet"></span>
@@ -495,16 +619,24 @@ function Sidebar() {
                 }
               ></CNavGroup>
               <Link to="/Inventory/SolutionTemplate">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/SolutionTemplate"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Solutions Template
                 </CNavItem>
-              </Link> 
-              
+              </Link>
+
               <Link to="/Inventory/SolutionPrepration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/SolutionPrepration"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -513,7 +645,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/SolutionStandardization">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/SolutionStandardization"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -522,7 +658,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/SolutionUsage">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/SolutionUsage"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -532,6 +672,7 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link
@@ -546,10 +687,14 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                      <CIcon
+                        style={{ position: "absolute", left: "-41px" }}
+                        icon={cilWarning}
+                      />
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
@@ -562,7 +707,11 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/ChemicalRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ChemicalRegistration"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -571,7 +720,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/ChemicalReagent">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ChemicalReagent"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -580,7 +733,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/LotRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/LotRegistration"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -589,7 +746,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/ChemicalReagentReports">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ChemicalReagentReports"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -597,7 +758,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/ChemicalUsage">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ChemicalUsage"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -605,7 +770,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/ChemicalIssues">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ChemicalIssues"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -615,6 +784,7 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link
@@ -629,10 +799,14 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                      <CIcon
+                        style={{ position: "absolute", left: "-41px" }}
+                        icon={cilColumns}
+                      />
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
@@ -645,7 +819,11 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/ColumnApplication">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ColumnApplication"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -654,7 +832,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/ColumnRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ColumnRegistration"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -663,7 +845,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/PerformanceTest">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/PerformanceTest"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -672,7 +858,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/Assignment">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/Assignment"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -680,7 +870,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/Qualification">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/Qualification"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -688,7 +882,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/ColumnUsage">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ColumnUsage"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -696,7 +894,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/BatchAssignment">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/BatchAssignment"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -706,6 +908,7 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link
@@ -720,10 +923,13 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                      <FaPerson style={{position:"absolute", left:"-41px"}} />
+
+
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
@@ -736,7 +942,11 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/StandardRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/StandardRegistration"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -745,7 +955,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/InvLotRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/InvLotRegistration"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -754,7 +968,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/UsageRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/UsageRegistration"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -764,6 +982,7 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link
@@ -778,10 +997,11 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                      <FaPeopleRoof style={{position:"absolute", left:"-41px"}}/>
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
@@ -794,7 +1014,12 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/CultureRegistration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  ctive={currentPath === "/Inventory/CultureRegistration"}
+                  style={{ fontSize: "14px" }}
+                  a
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -803,7 +1028,12 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/RefrenceCulture">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  ctive={currentPath === "/Inventory/RefrenceCulture"}
+                  style={{ fontSize: "14px" }}
+                  a
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -812,7 +1042,13 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/CultureTemplateConfiguration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={
+                    currentPath === "/Inventory/CultureTemplateConfiguration"
+                  }
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -821,7 +1057,12 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/RefrenceCultureLot">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  ctive={currentPath === "/Inventory/RefrenceCultureLot"}
+                  style={{ fontSize: "14px" }}
+                  a
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -830,7 +1071,12 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/CultureLotAcceptance">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  ctive={currentPath === "/Inventory/CultureLotAcceptance"}
+                  style={{ fontSize: "14px" }}
+                  a
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -840,6 +1086,7 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link
@@ -854,10 +1101,12 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                     <TfiLayoutMediaOverlay style={{position:"absolute", left:"-41px"}}/>
+
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
@@ -870,7 +1119,11 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/MediaOnboarding">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/MediaOnboarding"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -878,7 +1131,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/MediaContainerType">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/MediaContainerType"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -886,7 +1143,13 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/MediaTemplateConfiguration">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={
+                    currentPath === "/Inventory/MediaTemplateConfiguration"
+                  }
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -894,7 +1157,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/MediaLot">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/MediaLot"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -902,7 +1169,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/MediaLotContainerIssue">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/MediaLotContainerIssue"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -910,7 +1181,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/MediaLotAcceptance">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/MediaLotAcceptance"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -918,7 +1193,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>{" "}
               <Link to="/Inventory/MediaLotUsage">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/MediaLotUsage"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -928,6 +1207,7 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link to="/Inventory/SampleArea" style={{ color: "white" }}>
@@ -939,10 +1219,11 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                     <FaWater style={{position:"absolute", left:"-41px"}}/>
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
@@ -955,7 +1236,11 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/SampleArea">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/SampleArea"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -964,7 +1249,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/ProcessingSystem">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ProcessingSystem"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -973,7 +1262,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/Schedule">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/Schedule"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -982,7 +1275,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/Unschedule">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/Unschedule"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -991,7 +1288,11 @@ function Sidebar() {
               </Link>
 
               <Link to="/Inventory/Acknowledgement">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/Acknowledgement"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -999,7 +1300,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/ScheduleTermination">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/ScheduleTermination"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -1009,6 +1314,7 @@ function Sidebar() {
             </CNavGroup>
 
             <CNavGroup
+              style={{ marginLeft: "23px" }}
               toggler={
                 <>
                   <Link to="/Inventory/Facility" style={{ color: "white" }}>
@@ -1020,10 +1326,11 @@ function Sidebar() {
                         left: "33px",
                       }}
                     >
-                      <CIcon customClassName="nav-icon" icon={cilPuzzle} />
+                      <VscServerEnvironment style={{position:"absolute", left:"-41px"}}/>
+
                       <p
                         style={{
-                          fontSize: "17px",
+                          fontSize: "14px",
                           position: "relative",
                           top: "7px",
                         }}
@@ -1036,43 +1343,59 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/Facility">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/Facility"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Facility
                 </CNavItem>
               </Link>
-
               <Link to="/Inventory/Location">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/Location"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Location
                 </CNavItem>
               </Link>
-
               <Link to="/Inventory/EMMoniteringDetails">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/EMMoniteringDetails"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   EM Monitering Details
                 </CNavItem>
               </Link>
-
               <Link to="/Inventory/EMCOATemplate">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  style={{ fontSize: "14px" }}
+                  active={currentPath === "/Inventory/EMCOATemplate"}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   EM COA Template
                 </CNavItem>
               </Link>
-
               <Link to="/Inventory/OOATemplate">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/OOATemplate"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -1080,7 +1403,11 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/LocationSamples">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/LocationSamples"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
@@ -1088,67 +1415,95 @@ function Sidebar() {
                 </CNavItem>
               </Link>
               <Link to="/Inventory/SamplingSchedule">
-                <CNavItem href="#">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/SamplingSchedule"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Sampling Schedule
                 </CNavItem>
-              </Link> <Link to="/Inventory/BatchSample">
-                <CNavItem href="#">
+              </Link>{" "}
+              <Link to="/Inventory/BatchSample">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/BatchSample"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Batch Sample
                 </CNavItem>
-              </Link> <Link to="/Inventory/SampleLogin">
-                <CNavItem href="#">
+              </Link>{" "}
+              <Link to="/Inventory/SampleLogin">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/SampleLogin"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Sample Login
                 </CNavItem>
-              </Link> <Link to="/Inventory/AcknowledgeSample">
-                <CNavItem href="#">
+              </Link>{" "}
+              <Link to="/Inventory/AcknowledgeSample">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/AcknowledgeSample"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Acknowledge Sample
                 </CNavItem>
-              </Link> <Link to="/Inventory/BatchSampleAllotment">
-                <CNavItem href="#">
+              </Link>{" "}
+              <Link to="/Inventory/BatchSampleAllotment">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/BatchSampleAllotment"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Batch Sample Allotment
                 </CNavItem>
-              </Link> <Link to="/Inventory/BatchTestslist">
-                <CNavItem href="#">
+              </Link>{" "}
+              <Link to="/Inventory/BatchTestslist">
+                <CNavItem
+                  href="#"
+                  active={currentPath === "/Inventory/BatchTestslist"}
+                  style={{ fontSize: "14px" }}
+                >
                   <span className="nav-icon">
                     <span className="nav-icon-bullet"></span>
                   </span>
                   Batch Tests list
                 </CNavItem>
               </Link>
-
-
-
-
             </CNavGroup>
           </CNavGroup>
 
+          {/*  */}
 
-{/* 
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Instrument
-                Master
+                <CiPillsBottle1 />
+                <span style={{ marginLeft: "18px" }}>Instrument Master</span>
               </>
             }
           >
             <Link to="/instrumentMaster/registration">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/instrumentMaster/registration"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1156,7 +1511,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/instrumentMaster/instrumentCategory">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/instrumentMaster/instrumentCategory"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1164,7 +1522,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/instrumentMaster/instrumentModule">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/instrumentMaster/instrumentModule"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1172,7 +1533,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/instrumentMaster/instrumentUsage">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/instrumentMaster/instrumentUsage"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1183,14 +1547,17 @@ function Sidebar() {
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Stock
-                Management
+                <LuWarehouse style={{ width: "15px" }} />
+                <span style={{ marginLeft: "18px" }}>Stock Management</span>
               </>
             }
           >
             <Link to="/stock-management/stocks-verification">
               {" "}
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/stock-management/stocks-verification"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1198,7 +1565,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/stock-management/stocks-onboarding">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/stock-management/stocks-onboarding"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1206,7 +1576,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/stock-management/material">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/stock-management/material"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1214,7 +1587,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/stock-management/inventory">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/stock-management/inventory"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1225,70 +1601,118 @@ function Sidebar() {
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} />{" "}
-                Calibration
+                <MdOutlineCompassCalibration />
+                <span style={{ marginLeft: "18px" }}>Calibration</span>
               </>
             }
           >
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Type
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Frequency
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Data Sheet
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Sample Login Template
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Schedule
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Record
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Sample Login
-            </CNavItem>
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Calibration Calendar
-            </CNavItem>
+            <Link to="/calibration/calibration-type">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/calibration-type"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Calibration Type
+              </CNavItem>
+            </Link>
+            <Link to="/calibration/calibration-frequency">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/calibration-frequency"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Calibration Frequency
+              </CNavItem>
+            </Link>
+            <Link to="/calibration/calibration-data-sheet">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/calibration-data-sheet"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Calibration Data Sheet
+              </CNavItem>
+            </Link>
+            <Link to="/calibration/sample-login-template">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/sample-login-template"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Sample Login Template
+              </CNavItem>
+            </Link>
+            <Link to="/calibration/calibration-schedule">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/calibration-schedule"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Calibration Schedule
+              </CNavItem>
+            </Link>
+            <Link to="/calibration/calibration-record">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/calibration-record"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Calibration Record
+              </CNavItem>
+            </Link>
+            <Link to="/calibration/sample-login">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/sample-login"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Sample Login
+              </CNavItem>
+            </Link>
+            <Link to="/calibration/calibration-calender">
+              <CNavItem
+                href="#"
+                active={currentPath === "/calibration/calibration-calender"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Calibration Calendar
+              </CNavItem>
+            </Link>
           </CNavGroup>
+
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Reports /
-                Certificate
+                <GrCertificate />
+                <span style={{ marginLeft: "18px" }}>
+                  Reports / Certificate
+                </span>
               </>
             }
           >
             <Link to="/reportsCertification/problemReporting">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={
+                  currentPath === "/reportsCertification/problemReporting"
+                }
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1296,7 +1720,12 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/reportsCertification/serviceReporting">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={
+                  currentPath === "/reportsCertification/serviceReporting"
+                }
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1304,7 +1733,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/reportsCertification/coaTemplate1321">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/reportsCertification/coaTemplate1321"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1312,7 +1744,10 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/reportsCertification/releasedCoa">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={currentPath === "/reportsCertification/releasedCoa"}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1320,359 +1755,12 @@ function Sidebar() {
               </CNavItem>
             </Link>
             <Link to="/reportsCertification/investigationCoa">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Investigation Coa
-              </CNavItem>
-            </Link>
-          </CNavGroup> */}
-          {/* <CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Vendor
-          </CNavItem>
-          <CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Clients
-          </CNavItem>
-          <CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Plants
-          </CNavItem>
-          <CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Workflow
-          </CNavItem>
-          <CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Audit Trail
-          </CNavItem> */}
-          {/* <CNavGroup
-            toggler={
-              <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Settings
-              </>
-            }
-          >
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Business Associate
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Label Management
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Functional Grouping
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Worksheets
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Group Name
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Investigation Template
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Chemical Category
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Grade
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Handling Symbol
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Access Right
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Projects
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Template
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Training Confirmations
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Proposal
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Nominations
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Re-Qualification Request
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Resources
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Type of Section
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              WOS Test
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Service Provider
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              External Registration
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Test Techniques
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Instrument Regitration
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Stability
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Test History
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Vendor
-            </CNavItem>
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              App Configuration
-            </CNavItem>
-          </CNavGroup> */}
-{/* 
-          <Link to="/Inventory/SolutionUsage">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Solution Usage
-            </CNavItem>
-          </Link>
-
-          <Link to="/Inventory/Chemicals">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Chemicals
-            </CNavItem>
-          </Link>
-          <Link to="/Inventory/Columns">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Columns
-            </CNavItem>
-          </Link>
-          <Link to="/Inventory/ReferenceStandards">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Reference Standards
-            </CNavItem>
-          </Link>
-          <Link to="/Inventory/CultureManagement">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Culture Management
-            </CNavItem>
-          </Link>
-          <Link to="/Inventory/Media">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Media
-            </CNavItem>
-          </Link>
-          <Link to="/Inventory/WaterManagement">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Water Management
-            </CNavItem>
-          </Link>
-          <Link to="/Inventory/Environment">
-            <CNavItem href="#">
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-              Environment
-            </CNavItem>
-          </Link> */}
-
-          <CNavGroup
-            toggler={
-              <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Instrument
-                Master
-              </>
-            }
-          >
-            <Link to="/instrumentMaster/registration">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Registration
-              </CNavItem>
-            </Link>
-            <Link to="/instrumentMaster/instrumentCategory">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Instrument Category
-              </CNavItem>
-            </Link>
-            <Link to="/instrumentMaster/instrumentModule">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Instrument Module
-              </CNavItem>
-            </Link>
-            <Link to="/instrumentMaster/instrumentUsage">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Instrument Usage
-              </CNavItem>
-            </Link>
-          </CNavGroup>
-          <CNavGroup
-            toggler={
-              <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Stock
-                Management
-              </>
-            }
-          >
-            <Link to="/stock-management/stocks-verification">
-              {" "}
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Stocks Verification
-              </CNavItem>
-            </Link>
-            <Link to="/stock-management/stocks-onboarding">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Stocks Onboarding
-              </CNavItem>
-            </Link>
-            <Link to="/stock-management/material">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Material
-              </CNavItem>
-            </Link>
-            <Link to="/stock-management/inventory">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Inventory
-              </CNavItem>
-            </Link>
-          </CNavGroup>
-          <CNavGroup
-            toggler={
-              <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Calibration
-              </>
-            }
-          >
-            <Link to="/calibration/calibration-type"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Type</CNavItem></Link>
-            <Link to="/calibration/calibration-frequency"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Frequency</CNavItem></Link>
-            <Link to="/calibration/calibration-data-sheet"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Data Sheet</CNavItem></Link>
-            <Link to="/calibration/sample-login-template"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login Template</CNavItem></Link>
-            <Link to="/calibration/calibration-schedule"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Schedule</CNavItem></Link>
-            <Link to="/calibration/calibration-record"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Record</CNavItem></Link>
-            <Link to="/calibration/sample-login"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Sample Login</CNavItem></Link>
-            <Link to="/calibration/calibration-calender"><CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span>Calibration Calendar</CNavItem></Link>
-          </CNavGroup>
-
-          <CNavGroup
-            toggler={
-              <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Reports /
-                Certificate
-              </>
-            }
-          >
-            <Link to="/reportsCertification/problemReporting">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Problem Reporting
-              </CNavItem>
-            </Link>
-            <Link to="/reportsCertification/serviceReporting">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Service Reporting
-              </CNavItem>
-            </Link>
-            <Link to="/reportsCertification/coaTemplate1321">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Coa Template
-              </CNavItem>
-            </Link>
-            <Link to="/reportsCertification/releasedCoa">
-              <CNavItem href="#">
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Relaesed Coa
-              </CNavItem>
-            </Link>
-            <Link to="/reportsCertification/investigationCoa">
-              <CNavItem href="#">
+              <CNavItem
+                href="#"
+                active={
+                  currentPath === "/reportsCertification/investigationCoa"
+                }
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1681,148 +1769,338 @@ function Sidebar() {
             </Link>
           </CNavGroup>
           <Link to="/vender">
-            {" "}
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/vender"}
+            >
+              <CiShop />
               Vendor
             </CNavItem>
           </Link>
           <Link to="/clients">
-            <CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/clients"}
+            >
+              <FaPeopleLine />
               Clients
             </CNavItem>
-          </Link><Link to="/plants"><CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Plants
-          </CNavItem></Link>
+          </Link>
+          <Link to="/plants">
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/plants"}
+            >
+              <PiNuclearPlant />
+              Plants
+            </CNavItem>
+          </Link>
 
-          <Link to="/workFlow"><CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Workflow
-          </CNavItem></Link>
+          <Link to="/workFlow">
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/workFlow"}
+            >
+              <GoWorkflow />
+              Workflow
+            </CNavItem>
+          </Link>
 
-          <Link to="/auditTrail"><CNavItem href="#">
-            <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-            Audit Trail
-          </CNavItem></Link>
+          <Link to="/auditTrail">
+            <CNavItem
+              href="#"
+              style={{ gap: "18px" }}
+              active={currentPath === "/auditTrail"}
+            >
+              <AiOutlineAudit />
+              Audit Trail
+            </CNavItem>
+          </Link>
           <CNavGroup
             toggler={
               <>
-                <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Settings
+                <MdSettingsApplications />
+                <span style={{ marginLeft: "18px" }}>Settings</span>
               </>
             }
           >
-            <Link to="/settings/businessAssociate"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Business Associate
-            </CNavItem></Link>
-            <Link to="/settings/labelManagement"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Label Management
-            </CNavItem></Link>
-            <Link to="/settings/functionalGrouping"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Functional Grouping
-            </CNavItem></Link>
-            <Link to="/settings/worksheets"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Worksheets
-            </CNavItem></Link>
-            <Link to="/settings/groupName"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Group Name
-            </CNavItem></Link>
-            <Link to="/settings/investigationTemplate"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Investigation Template
-            </CNavItem></Link>
-            <Link to="/settings/chemicalCategory"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Chemical Category
-            </CNavItem></Link>
-            <Link to="/settings/grade"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Grade
-            </CNavItem></Link>
-            <Link to="/settings/handlingSymbol"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Handling Symbol
-            </CNavItem></Link>
-            <Link to="/settings/accessRight"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Access Right
-            </CNavItem></Link>
-            <Link to="/settings/projects"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Projects
-            </CNavItem></Link>
-            <Link to="/settings/template"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Template
-            </CNavItem></Link>
-            <Link to="/settings/trainingConfirmation"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Training Confirmations
-            </CNavItem></Link>
-            <Link to="/settings/proposal"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Proposal
-            </CNavItem></Link>
-            <Link to="/settings/nominations"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Nominations
-            </CNavItem></Link>
-            <Link to="/settings/reQualificationRequest"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Re-Qualification Request
-            </CNavItem></Link>
-            <Link to="/settings/resources"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Resources
-            </CNavItem></Link>
-            <Link to="/settings/typeOfSection"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Type of Section
-            </CNavItem></Link>
-            <Link to="/settings/wosTest"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              WOS Test
-            </CNavItem></Link>
-            <Link to="/settings/serviceprovider"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Service Provider
-            </CNavItem></Link>
-            <Link to="/settings/externalRegistration"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              External Registration
-            </CNavItem></Link>
-            <Link to="/settings/testTechniques"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Test Techniques
-            </CNavItem></Link>
-            <Link to="/settings/instrumentRegistration"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Instrument Regitration
-            </CNavItem></Link>
-            <Link to="/settings/stability"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Stability
-            </CNavItem></Link>
-            <Link to="/settings/testHistory"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Test History
-            </CNavItem></Link>
-            <Link to="/settings/settingVendors"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              Vendor
-            </CNavItem></Link>
-            <Link to="/settings/appConfiguration"><CNavItem href="#">
-              <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-              App Configuration
-            </CNavItem></Link>
-
-
+            <Link to="/settings/businessAssociate">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/businessAssociate"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Business Associate
+              </CNavItem>
+            </Link>
+            <Link to="/settings/labelManagement">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/labelManagement"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Label Management
+              </CNavItem>
+            </Link>
+            <Link to="/settings/functionalGrouping">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/functionalGrouping"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Functional Grouping
+              </CNavItem>
+            </Link>
+            <Link to="/settings/worksheets">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/worksheets"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Worksheets
+              </CNavItem>
+            </Link>
+            <Link to="/settings/groupName">
+              <CNavItem href="#" active={currentPath === "/settings/groupName"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Group Name
+              </CNavItem>
+            </Link>
+            <Link to="/settings/investigationTemplate">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/investigationTemplate"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Investigation Template
+              </CNavItem>
+            </Link>
+            <Link to="/settings/chemicalCategory">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/chemicalCategory"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Chemical Category
+              </CNavItem>
+            </Link>
+            <Link to="/settings/grade">
+              <CNavItem href="#" active={currentPath === "/settings/grade"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Grade
+              </CNavItem>
+            </Link>
+            <Link to="/settings/handlingSymbol">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/handlingSymbol"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Handling Symbol
+              </CNavItem>
+            </Link>
+            <Link to="/settings/accessRight">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/accessRight"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Access Right
+              </CNavItem>
+            </Link>
+            <Link to="/settings/projects">
+              <CNavItem href="#" active={currentPath === "/settings/projects"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Projects
+              </CNavItem>
+            </Link>
+            <Link to="/settings/template">
+              <CNavItem href="#" active={currentPath === "/settings/template"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Template
+              </CNavItem>
+            </Link>
+            <Link to="/settings/trainingConfirmation">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/trainingConfirmation"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Training Confirmations
+              </CNavItem>
+            </Link>
+            <Link to="/settings/proposal">
+              <CNavItem href="#" active={currentPath === "/settings/proposal"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Proposal
+              </CNavItem>
+            </Link>
+            <Link to="/settings/nominations">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/nominations"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Nominations
+              </CNavItem>
+            </Link>
+            <Link to="/settings/reQualificationRequest">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/reQualificationRequest"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Re-Qualification Request
+              </CNavItem>
+            </Link>
+            <Link to="/settings/resources">
+              <CNavItem href="#" active={currentPath === "/settings/resources"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Resources
+              </CNavItem>
+            </Link>
+            <Link to="/settings/typeOfSection">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/typeOfSection"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Type of Section
+              </CNavItem>
+            </Link>
+            <Link to="/settings/wosTest">
+              <CNavItem href="#" active={currentPath === "/settings/wosTest"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                WOS Test
+              </CNavItem>
+            </Link>
+            <Link to="/settings/serviceprovider">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/serviceprovider"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Service Provider
+              </CNavItem>
+            </Link>
+            <Link to="/settings/externalRegistration">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/externalRegistration"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                External Registration
+              </CNavItem>
+            </Link>
+            <Link to="/settings/testTechniques">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/testTechniques"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Test Techniques
+              </CNavItem>
+            </Link>
+            <Link to="/settings/instrumentRegistration">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/instrumentRegistration"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Instrument Regitration
+              </CNavItem>
+            </Link>
+            <Link to="/settings/stability">
+              <CNavItem href="#" active={currentPath === "/settings/stability"}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Stability
+              </CNavItem>
+            </Link>
+            <Link to="/settings/testHistory">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/testHistory"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Test History
+              </CNavItem>
+            </Link>
+            <Link to="/settings/settingVendors">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/settingVendors"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Vendor
+              </CNavItem>
+            </Link>
+            <Link to="/settings/appConfiguration">
+              <CNavItem
+                href="#"
+                active={currentPath === "/settings/appConfiguration"}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                App Configuration
+              </CNavItem>
+            </Link>
           </CNavGroup>
         </CSidebarNav>
       </CSidebar>

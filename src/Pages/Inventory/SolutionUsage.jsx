@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CForm,
+  CFormCheck,
   CFormInput,
+  CFormLabel,
   CFormSelect,
   CModal,
   CModalBody,
@@ -43,49 +46,47 @@ function SolutionUsage() {
   const [data, setData] = useState([
     {
       id: 1,
-      VolumetricSolutionName		: "stmp1",
-      UsedOn	: "describe",
-      ModeofUsage		: "isubus111",
-      
-      status: "INITIATED",
-      
+      VolumetricSolutionName: "stmp1",
+      UsedOn: "describe",
+      ModeofUsage: "isubus111",
 
+      status: "INITIATED",
     },
     {
       id: 2,
-      VolumetricSolutionName		: "stmp1",
-      UsedOn	: "describe",
-      ModeofUsage		: "isubus111",
+      VolumetricSolutionName: "stmp1",
+      UsedOn: "describe",
+      ModeofUsage: "isubus111",
       status: "INITIATED",
     },
 
     {
       id: 3,
-      VolumetricSolutionName		: "stmp1",
-      UsedOn	: "describe",
-      ModeofUsage		: "isubus111",
+      VolumetricSolutionName: "stmp1",
+      UsedOn: "describe",
+      ModeofUsage: "isubus111",
       status: "REJECTED",
     },
     {
       id: 4,
-      VolumetricSolutionName		: "stmp1",
-      UsedOn	: "describe",
-      ModeofUsage		: "isubus111",
+      VolumetricSolutionName: "stmp1",
+      UsedOn: "describe",
+      ModeofUsage: "isubus111",
       status: "APPROVED",
     },
     {
       id: 5,
-      VolumetricSolutionName		: "stmp1",
-      UsedOn	: "describe",
-      ModeofUsage		: "isubus111",
+      VolumetricSolutionName: "stmp1",
+      UsedOn: "describe",
+      ModeofUsage: "isubus111",
       status: "APPROVED",
     },
 
     {
       id: 6,
-      VolumetricSolutionName		: "stmp1",
-      UsedOn	: "describe",
-      ModeofUsage		: "isubus111",
+      VolumetricSolutionName: "stmp1",
+      UsedOn: "describe",
+      ModeofUsage: "isubus111",
       status: "APPROVED",
     },
   ]);
@@ -94,29 +95,29 @@ function SolutionUsage() {
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
   const [search, setSearch] = useState("");
-  
-  const filterData = () => {
-  const filteredData =
-    selectedStatus === "All"
-      ? data
-      : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
-  return filteredData.filter((item) =>
-    item.VolumetricSolutionName.toLowerCase().includes(search.toLowerCase())
-  );
-};
-const filteredData = filterData();
-const nextPage = () =>
-  setCurrentPage((prev) =>
-    Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-  );
-const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-const handleDelete = (id) => {
-  setData((prevData) => prevData.filter((item) => item.id !== id));
-  setDeleteModal(false);
-};
+  const filterData = () => {
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter(
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
+    return filteredData.filter((item) =>
+      item.VolumetricSolutionName.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+  const filteredData = filterData();
+  const nextPage = () =>
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
+    );
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  const handleDelete = (id) => {
+    setData((prevData) => prevData.filter((item) => item.id !== id));
+    setDeleteModal(false);
+  };
   return (
     <>
       <div id="approval-page" className="h-100 mx-5">
@@ -126,95 +127,92 @@ const handleDelete = (id) => {
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
-            <div className="row" style={{ cursor: "pointer" }}>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("INITIATED")}
+              <div className="row" style={{ cursor: "pointer" }}>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("INITIATED")}
+                >
+                  <div className="text-light fs-5">INITIATED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "INITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
-                      textAlign: "left",
-                      boxShadow: "0px 10px 20px  black !important",
-                    }}
-                    onClick={() => setSelectedStatus("REINITIATED")}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
+                    {
+                      filterData().filter((item) => item.status === "INITIATED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                    textAlign: "left",
+                    boxShadow: "0px 10px 20px  black !important",
+                  }}
+                  onClick={() => setSelectedStatus("REINITIATED")}
+                >
+                  <div className="text-light fs-5">REINITIATED</div>
 
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REINITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("APPROVED")}
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <butto className="text-light fs-5">APPROVED</butto>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white", textAlign: "left" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "APPROVED"
-                        ).length
-                      }
-                    </div>
-                  </button>
+                    {
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("APPROVED")}
+                >
+                  <butto className="text-light fs-5">APPROVED</butto>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white", textAlign: "left" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "APPROVED")
+                        .length
+                    }
+                  </div>
+                </button>
 
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("REJECTED")}
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("REJECTED")}
+                >
+                  <div className="text-light fs-5">REJECTED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REJECTED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                </div>
+                    {
+                      filterData().filter((item) => item.status === "REJECTED")
+                        .length
+                    }
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
           <div>
-          <CRow className="mb-3">
+            <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
                   style={{ border: "2px solid gray" }}
@@ -247,118 +245,123 @@ const handleDelete = (id) => {
                 </div>
               </CCol>
             </CRow>
-          <div className="bg-white mt-5">
-          <CTable align="middle" responsive className=" shadow">
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
-                  Volumetric Solution Name	
-                  </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Used On		</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Mode of Usage		 </CTableHeaderCell>
-                  
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                {filterData().slice(startIndex,endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.VolumetricSolutionName	.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={index}>
-                      <CTableHeaderCell scope="row" className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
-                      <CTableDataCell key={item.id}>
-                        {item.VolumetricSolutionName	}
-                      </CTableDataCell>
+            <div className="bg-white mt-5">
+              <CTable align="middle" responsive className=" shadow">
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col" className="text-center">
+                      <input type="checkbox" />
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">
+                      Volumetric Solution Name
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Used On </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">
+                      Mode of Usage{" "}
+                    </CTableHeaderCell>
 
-                      <CTableDataCell>{item.UsedOn	}</CTableDataCell>
-                      <CTableDataCell>{item.ModeofUsage}</CTableDataCell>
-                      
-                      {/* <CTableDataCell>{item.Comments}</CTableDataCell> */}
-                      <CTableDataCell className="d-flex">
-                        <div
-                          className="py-2 px-3 small rounded fw-bold"
-                          style={
-                            item.status === "INITIATED"
-                              ? badgeStyle2
-                              : item.status === "APPROVED"
-                              ? badgeStyle3
-                              : item.status === "REJECTED"
-                              ? badgeStyle4
-                              : item.status === "REINITIATED"
-                              ? badgeStyle5
-                              : item.status === "DROPPED"
-                              ? badgeStyle6
-                              : item.status === "ALL"
-                              ? badgeStyle
-                              : badgeStyle
-                          }
-                        >
-                          {item.status}
-                        </div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
+                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {filterData()
+                    .slice(startIndex, endIndex)
+                    .filter((item) => {
+                      return search.toLowerCase() === ""
+                        ? item
+                        : item.VolumetricSolutionName.toLowerCase().includes(
+                            search
+                          );
+                    })
+                    .map((item, index) => (
+                      <CTableRow key={index}>
+                        <CTableHeaderCell scope="row" className="text-center">
+                          <input type="checkbox" />
+                        </CTableHeaderCell>
+                        <CTableDataCell>{item.id}</CTableDataCell>
+                        <CTableDataCell key={item.id}>
+                          {item.VolumetricSolutionName}
+                        </CTableDataCell>
+
+                        <CTableDataCell>{item.UsedOn}</CTableDataCell>
+                        <CTableDataCell>{item.ModeofUsage}</CTableDataCell>
+
+                        {/* <CTableDataCell>{item.Comments}</CTableDataCell> */}
+                        <CTableDataCell className="d-flex">
                           <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
+                            className="py-2 px-3 small rounded fw-bold"
+                            style={
+                              item.status === "INITIATED"
+                                ? badgeStyle2
+                                : item.status === "APPROVED"
+                                ? badgeStyle3
+                                : item.status === "REJECTED"
+                                ? badgeStyle4
+                                : item.status === "REINITIATED"
+                                ? badgeStyle5
+                                : item.status === "DROPPED"
+                                ? badgeStyle6
+                                : item.status === "ALL"
+                                ? badgeStyle
+                                : badgeStyle
+                            }
                           >
-                            <FontAwesomeIcon icon={faPenToSquare} />
+                            {item.status}
                           </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          <div className="d-flex gap-3">
+                            <Link to="/approval/1321">
+                              <FontAwesomeIcon icon={faEye} />
+                            </Link>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => setAddModal(true)}
+                            >
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            </div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => setDeleteModal(item.id)}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </div>
                           </div>
-                        </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
-          <div className="pagination mt-5">
-            <button
-              className="btn mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle">{currentPage}</button>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
+                </CTableBody>
+              </CTable>
             </div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredData.length}
-            >
-              &gt;&gt;
-            </button>
+            <div className="pagination mt-5">
+              <button
+                className="btn mr-2"
+                onClick={prevPage}
+                disabled={currentPage === 1}
+              >
+                &lt;&lt;
+              </button>
+              <div className="current-page-number mr-2 bg-dark-subtle page-item">
+                <button className="btn rounded-circle">{currentPage}</button>
+              </div>
+              <button
+                className="btn mr-2"
+                onClick={nextPage}
+                disabled={endIndex >= filteredData.length}
+              >
+                &gt;&gt;
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       </div>
 
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-       {deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -378,72 +381,105 @@ const StatusModal = (_props) => {
         onClose={_props.closeModal}
       >
         <CModalHeader>
-          <CModalTitle>Add Standardization</CModalTitle>
+          <CModalTitle>Add Solution</CModalTitle>
         </CModalHeader>
-       <CModalBody>
-          <CFormInput type="text" label="Prepation No." placeholder="Prepation No. " />
-          <CFormInput
+        <p style={{ marginLeft: "13px" }}>Add information and Add new usage.</p>
+        <CModalBody>
+          <CFormSelect
             type="text"
-            label="Solution Name"
-            placeholder="Solution Name "
-            className="custom-placeholder"
+            label="Standardization No."
+            placeholder=" "
+            className="custom-placeholder mb-3"
           />
-
           <CFormInput
             type="text"
             label="Volumetric Solution Name"
             placeholder="Volumetric Solution Name"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="text"
-            label="Solution Expiry Period"
-            placeholder="Solution Expiry Period "
-            className="custom-placeholder"
+            label="Preparation No."
+            placeholder="Preparation No."
+            className="custom-placeholder mb-3"
           />
           <CFormInput
-            type="text"
-            label="Solution Quantity"
+            type="date"
+            label="Used On"
+            placeholder="Solution Expiry Period"
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="date"
+            label="Preparation Date"
             placeholder="Solution Quantity"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
-
           <CFormInput
-            type="number"
-            label="Standardization Schedule"
+            type="date"
+            label="Standardization Date"
             placeholder="Standardization Schedule"
-            className="custom-placeholder"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
-            label="Batch No"
+            label="Used By"
             placeholder="Batch No"
+            className="mb-3"
           />
-          <CFormInput
+          <CForm className="mb-3">
+            <CFormLabel>Mode of Usage</CFormLabel>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="acceptRadio"
+                label="Sample Analysis"
+                value="accept"
+              />
+              <CFormCheck
+                type="radio"
+                name="sampleRadio"
+                id="rejectRadio"
+                label="Miscellaneous"
+                value="reject"
+              />
+            </div>
+          </CForm>
+          <CFormSelect
             type="number"
-            label="Type"
-            placeholder="Type"
-          />
-          <CFormInput
-            type="number"
-            label="Documents if any"
+            label="Product / Material"
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="number"
-            label="Average Value"
+            label="A.R. No's"
             placeholder="select"
+            className="custom-placeholder mb-3"
           />
-
+          <CFormInput
+            type="number"
+            label="Test Name"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
+          <CFormInput
+            type="number"
+            label="Comments If Any"
+            placeholder="select"
+            className="custom-placeholder mb-3"
+          />
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
+              marginBottom: "1rem"
             }}
           >
             <label>Comments</label>
-            <textarea name="" id=""></textarea>
+            <textarea name="" id="" className="form-control"></textarea>
           </div>
         </CModalBody>
         <CModalFooter>
@@ -451,7 +487,7 @@ const StatusModal = (_props) => {
             Cancel
           </CButton>
           <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add Standardization
+            Add Solution
           </CButton>
         </CModalFooter>
       </CModal>
