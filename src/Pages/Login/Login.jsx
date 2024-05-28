@@ -4,10 +4,13 @@ import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './Login.css'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Login(props) {
 	const [email, setEmail] = useState('');
 	const [passwd, setPasswd] = useState('');
+	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
 
 	const handleInputData = (data, setter) => {
@@ -25,6 +28,10 @@ function Login(props) {
 			toast.error("Invalid Credentials");
 		}
 	}
+
+	const togglePasswordVisibility = () => {
+		setShowPassword(!showPassword);
+	  };
 
 	return (
 		<>
@@ -53,15 +60,23 @@ function Login(props) {
 					className="p-3 rounded-full w-full bg-white border border-gray-400"
 				  />
 				</div>
-				<div className="mb-4 text-gray-200">
-				  <CFormInput
-					type="password"
-					placeholder="Password"
-					label="Password"
-					onChange={(event) => handleInputData(event, setPasswd)}
-					className="p-3 rounded-full w-full bg-white border border-gray-400"
-				  />
-				</div>
+				<div className="mb-4 text-gray-200 relative">
+      <div className="relative">
+        <CFormInput
+          type={showPassword ? 'text' : 'password'}
+          placeholder="Password"
+          label="Password"
+          value={passwd}
+          onChange={(event) => handleInputData(event, setPasswd)}
+          className="p-3 rounded-full w-full bg-white border border-gray-400 pr-12" // Adjusted padding to accommodate icon
+        />
+        <FontAwesomeIcon
+          icon={showPassword ? faEyeSlash : faEye}
+          onClick={togglePasswordVisibility}
+          className="cursor-pointer text-gray-400 absolute top-2/3  transform -translate-y-1/2 right-4" // Positioned icon absolutely to the right
+        />
+      </div>
+    </div>
 				<div className="flex justify-between items-center mb-6 text-white">
 				  <CFormCheck label="Remember me" />
 				  <a href="#" className="text-sm">Forgot Password</a>
