@@ -178,6 +178,7 @@ import ClientsDetails from "./Pages/Clientss/ClientsDetail.jsx"
 
 
 import BussinessAssociate from "./Pages/Settings/BussinessAssociate.jsx"
+import BussinessAssociateDetails from "./Pages/Settings/BussinessAssociateDetails.jsx"
 import LabelManagement from   "./Pages/Settings/LabelManagement.jsx"
 import FuctionalGrouping from "./Pages/Settings/FuctionalGrouping.jsx"
 import WorkSheelField from "./Pages/Settings/WorkSheelField.jsx"
@@ -391,6 +392,7 @@ function App() {
             <Route path="/clientss/clients-details" element={<ClientsDetails/>}/>
 
             <Route path="/settings/businessAssociate" element={<  BussinessAssociate />} />
+            <Route path="/settings/bussinessAssociateDetails" element={<  BussinessAssociateDetails />} />
             <Route path="/settings/labelManagement" element={< LabelManagement />} />
             <Route path="/settings/functionalGrouping" element={< FuctionalGrouping />} />
             <Route path="/settings/worksheetFields" element={< WorkSheelField />} />
