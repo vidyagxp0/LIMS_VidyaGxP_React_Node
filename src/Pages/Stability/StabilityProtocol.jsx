@@ -31,6 +31,7 @@ import { Link } from "react-router-dom";
 function StabilityProtocol() {
   const [addModal, setAddModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px", };
   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
@@ -40,7 +41,7 @@ function StabilityProtocol() {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const pageSize = 5; // Number of items per page
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [search, setSearch] = useState("");
 
   const data = [
     {
@@ -157,10 +158,37 @@ function StabilityProtocol() {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
-  const paginatedData = data.slice(startIndex, endIndex);
+  // const paginatedData = data.slice(startIndex, endIndex);
 
+  // const nextPage = () => {
+  //   if (endIndex < data.length) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
+
+  // const prevPage = () => {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
+
+  // const nextToLastPage = () => {
+  //   setCurrentPage(Math.ceil(data.length / pageSize));
+  // };
+
+
+  // const filterData = () => {
+  //   if (selectedStatus === "All") {
+  //     return data;
+  //   }
+
+  //   return data.filter((item) => item.status === selectedStatus.toUpperCase());
+  // };
+
+  // const [search, setSearch] = useState("");
+  // console.log(search);
   const nextPage = () => {
-    if (endIndex < data.length) {
+    if (endIndex < filterData().length) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -172,21 +200,30 @@ function StabilityProtocol() {
   };
 
   const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(data.length / pageSize));
+    setCurrentPage(Math.ceil(filterData().length / pageSize));
   };
-
 
   const filterData = () => {
-    if (selectedStatus === "All") {
-      return data;
+    let filtered = data;
+
+    if (selectedStatus !== "All") {
+      filtered = filtered.filter((item) => item.status === selectedStatus.toUpperCase());
     }
 
-    return data.filter((item) => item.status === selectedStatus.toUpperCase());
+    if (search) {
+      filtered = filtered.filter((item) =>
+        item.product.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    return filtered;
   };
 
-  const [search, setSearch] = useState("");
-  console.log(search);
-
+  const handleDelete = () => {
+    setData(data.filter(item => item.id !== deleteId));
+    setDeleteModal(false);
+    setDeleteId(null);
+  };
 
 
   return (
@@ -294,7 +331,7 @@ function StabilityProtocol() {
                 style={{ border: "2px solid gray" }}
                                     type="email"
                                     placeholder="Search..."
-                                    // onChange={(e) => setSearch(e.target.value)}
+                                    onChange={(e) => setSearch(e.target.value)}
                                 />
               </CCol>
               <CCol sm={3}>
@@ -350,18 +387,12 @@ function StabilityProtocol() {
               </CTableHead>
              
               <CTableBody>
-                {filterData()
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.chamberId.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={index}>
+              {filterData().slice(startIndex, endIndex).map((item, index) => (
+                  <CTableRow key={item.id}>
                       <CTableHeaderCell scope="row" className="text-center">
                         <input type="checkbox" />
                       </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell>{item.product}</CTableDataCell>
                       <CTableDataCell>{item.specificationId}</CTableDataCell>
                       <CTableDataCell>{item.genericName}</CTableDataCell>
@@ -604,36 +635,57 @@ const StatusModal = (_props) => {
     </>
   );
 };
+
 const DeleteModal = (_props) => {
   return (
-    <>
-
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-        <CModalHeader>
-          <CModalTitle>Delete Protocol</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Do you want to delete this Protocol?</p>
-          <CFormInput
-            type="text"
-            label="User ID"
-            placeholder="User Id "
-          />
-          <CFormInput
-            type="password"
-            label="Password"
-            placeholder="Your password"
-          />
-
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-
-    </>
-  )
-}
+    <CModal
+      alignment="center"
+      visible={_props.visible}
+      onClose={_props.closeModal}
+      size="lg"
+    >
+      <CModalHeader>
+        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+          Delete Instrument Registration
+        </CModalTitle>
+      </CModalHeader>
+      <div
+        className="modal-body"
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: "500",
+          lineHeight: "1.5",
+          marginBottom: "1rem",
+          columnGap: "0px",
+          border: "0px !important",
+        }}
+      >
+        <p>Are you sure you want to delete this {}?</p>
+      </div>
+      <CModalFooter>
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="danger"
+          onClick={_props.handleDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
+        </CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
 
 export default StabilityProtocol;

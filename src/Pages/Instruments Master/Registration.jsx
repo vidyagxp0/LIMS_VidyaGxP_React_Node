@@ -288,6 +288,7 @@ function Registration() {
                     visible={deleteModal}
                     closeModal={() => setDeleteModal(false)}
                     confirmDelete={handleDeleteConfirm}
+                    handleDelete={handleDeleteClick}
                 />
             )}
           </>
@@ -424,7 +425,7 @@ const DeleteModal = (_props) => {
        >
          <CModalHeader>
            <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-             Delete Batch Sample Allotment
+             Delete Instrument Registration
            </CModalTitle>
          </CModalHeader>
          <div
