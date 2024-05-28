@@ -10,7 +10,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function CalibrationType() {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false); // New state for delete confirmation modal
     const [selectedStatus, setSelectedStatus] = useState('All');
+    const [employeeToDelete, setEmployeeToDelete] = useState(null); // New state for employee index to delete
+
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    const badgeStyle2 = {
+      background: " #2A5298",
+      color: "white",
+      width: "110px",
+    };
+    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
@@ -31,9 +45,15 @@ export default function CalibrationType() {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
-    const deleteEmployee = (indexToDelete) => {
-        const newEmployees = employees.filter((_, index) => index !== indexToDelete);
+    const deleteEmployee = () => {
+        const newEmployees = employees.filter((_, index) => index !== employeeToDelete);
         setEmployees(newEmployees);
+        setDeleteModal(false);
+    };
+
+    const openDeleteModal = (index) => {
+        setEmployeeToDelete(index);
+        setDeleteModal(true);
     };
 
     const openEditModal = (index) => {
@@ -64,15 +84,24 @@ export default function CalibrationType() {
                 <td>{employee.user}</td>
                 <td>{employee.role}</td>
                 <td>{employee.addedBy}</td>
-                <td className={`rounded-5 ${employee.status === 'ACTIVE' ? 'bg-success' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'ACTIVE' ? 'success' : 'warning'} d-flex justify-content-center p-1 m-2`} >
-                    {employee.status}
+                <td className="d-flex">
+                    <div
+                        className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+                        style={
+                            employee.status === "ACTIVE"
+                                ? badgeStyle3
+                                : employee.status === "INACTIVE"
+                                    ? badgeStyle4
+                                    : badgeStyle
+                        }
+                    > {employee.status}</div>
                 </td>
                 <td>
                     <div className="d-flex gap-3">
                         <div className="cursor-pointer" onClick={() => openEditModal(index)}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
-                        <Link to="#" onClick={() => deleteEmployee(startIndex + index)}>
+                        <Link to="#" onClick={() => openDeleteModal(startIndex + index)}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </Link>
                     </div>
@@ -104,7 +133,7 @@ export default function CalibrationType() {
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select id='selectOption' onChange={(e) => setSelectedStatus(e.target.value)}>
+                            <select id='selectOption' onChange={(e) => setSelectedStatus(e.target.value)} style={{ outline: 'none' }}>
                                 <option value="All">All</option>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -114,7 +143,7 @@ export default function CalibrationType() {
                 </div>
 
                 <button
-                    id="sampleloginbtn"
+                    
                     className="btn btn-primary"
                     type="button"
                     data-bs-toggle="offcanvas"
@@ -147,21 +176,21 @@ export default function CalibrationType() {
                 </div>
                 <p style={{ marginLeft: '20px' }}>Add information and add new calibration type</p>
 
-                <label id="line3" htmlFor="">Calibration Type</label>
-                <input id="line4" required type="text" placeholder="Calibration Type" />
+                <label className="line3" htmlFor="">Calibration Type</label>
+                <input className="line4" required type="text" placeholder="Calibration Type" />
 
-                <label id="line3" htmlFor="">Calibration Type Prefix</label>
-                <input id="line4" required type="text" placeholder="Calibration Type Prefix" />
+                <label className="line3" htmlFor="">Calibration Type Prefix</label>
+                <input className="line4" required type="text" placeholder="Calibration Type Prefix" />
 
                 <div id="line5">
                     <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
-                    <button>Submit</button>
+                    <button >Submit</button>
                 </div>
             </div>
 
             {/* Edit Modal */}
             {editModal && (
-                <div className="modal" style={{ display: 'block' }} tabindex="-1">
+                <div className="modal" style={{ display: 'block' }} tabIndex="-1">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -206,6 +235,27 @@ export default function CalibrationType() {
                 </div>
             )}
 
+            {/* Delete Confirmation Modal */}
+            {deleteModal && (
+                <div className="modal" style={{ display: 'block' }} tabIndex="-1">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Confirm Deletion</h5>
+                                <button type="button" className="btn-close" onClick={() => setDeleteModal(false)} aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body">
+                                <p>Are you sure you want to delete this employee?</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setDeleteModal(false)}>Cancel</button>
+                                <button type="button" className="btn btn-primary" onClick={deleteEmployee}>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Employee table */}
             <div className='table-responsive p-4 container1'>
                 <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
@@ -216,7 +266,7 @@ export default function CalibrationType() {
                             <th>Calibration Prefix</th>
                             <th>Added On</th>
                             <th>Status</th>
-                            <th>Actions </th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>

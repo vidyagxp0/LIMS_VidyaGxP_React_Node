@@ -11,10 +11,10 @@ import {
   // CFormCheck,
   CModalFooter,
   CModalHeader,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
+  // CDropdown,
+  // CDropdownToggle,
+  // CDropdownMenu,
+  // CDropdownItem,
   // CDropdownDivider,
   CModalTitle,
   CRow,
@@ -32,19 +32,13 @@ import {
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function LocationSamples() {
   const [addModal, setAddModal] = useState(false);
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " green",
-    color: "white",
-    width: "110px",
-  };
-  const badgeStyle3 = { background: "red", color: "white", width: "110px" };
-
+  const [deleteModal, setDeleteModal] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [data, setData] = useState([
     {
@@ -116,16 +110,39 @@ function LocationSamples() {
       status: "Inactive",
     },
   ]);
-  const filterData = () => {
-    if (selectedStatus === "All") {
-      return data;
-    }
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
-    return data.filter((item) => item.status === selectedStatus);
-  };
+  const badgeStyle2 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle3 = { background: "red", color: "white", width: "110px" };
 
   const [search, setSearch] = useState("");
-  console.log(search);
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, data.length);
+
+  const filterData = () => {
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter((item) => item.status === selectedStatus);
+    return filteredData.filter((item) =>
+      item.PlantName.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+
+  const filteredData = filterData();
+
+  const nextPage = () =>
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
+    );
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  const handleDelete = (id) => {
+    setData((prevData) => prevData.filter((item) => item.id !== id));
+    setDeleteModal(false);
+  };
   return (
     <>
       <div id="approval-page" className="h-100 mx-5">
@@ -150,13 +167,7 @@ function LocationSamples() {
                 </CFormSelect>
               </CCol>
               <CCol sm={2}></CCol>
-              {/* <CCol sm={3}>
-                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
-                    Add OOA Template
-                  </CButton> 
-                </div>
-              </CCol> */}
+             
             </CRow>
           </div>
           <div className="bg-white mt-5">
@@ -179,11 +190,11 @@ function LocationSamples() {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filterData()
+                {filterData().slice(startIndex, endIndex)
                   .filter((item) => {
                     return search.toLowerCase() === ""
                       ? item
-                      : item.ConfigurationType.toLowerCase().includes(search);
+                      : item.PlantName.toLowerCase().includes(search);
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
@@ -191,9 +202,9 @@ function LocationSamples() {
                         <input type="checkbox" />
                       </CTableHeaderCell>
                       <CTableDataCell>{item.id}</CTableDataCell>
-                      <CTableDataCell key={item.id}>{item.Name}</CTableDataCell>
+                      <CTableDataCell key={item.id}>{item.PlantName}</CTableDataCell>
 
-                      <CTableDataCell>{item.PlantName	}</CTableDataCell>
+                      
                       <CTableDataCell>{item.Facility}</CTableDataCell>
                       <CTableDataCell>{item.Location}</CTableDataCell>
                       <CTableDataCell>{item.Prefix}</CTableDataCell>
@@ -225,9 +236,12 @@ function LocationSamples() {
                           >
                             <FontAwesomeIcon icon={faPenToSquare} />
                           </div>
-                          <Link to="#">
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => setDeleteModal(item.id)}
+                          >
                             <FontAwesomeIcon icon={faTrashCan} />
-                          </Link>
+                          </div>
                         </div>
                       </CTableDataCell>
                     </CTableRow>
@@ -235,11 +249,37 @@ function LocationSamples() {
               </CTableBody>
             </CTable>
           </div>
+          <div className="pagination mt-5">
+            <button
+              className="btn mr-2"
+              onClick={prevPage}
+              disabled={currentPage === 1}
+            >
+              &lt;&lt;
+            </button>
+            <div className="current-page-number mr-2 bg-dark-subtle page-item">
+              <button className="btn rounded-circle">{currentPage}</button>
+            </div>
+            <button
+              className="btn mr-2"
+              onClick={nextPage}
+              disabled={endIndex >= filteredData.length}
+            >
+              &gt;&gt;
+            </button>
+          </div>
         </div>
       </div>
 
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      )}
+       {deleteModal && (
+        <DeleteModal
+          visible={deleteModal !== false}
+          closeModal={() => setDeleteModal(false)}
+          handleDelete={() => handleDelete(deleteModal)}
+        />
       )}
     </>
   );
@@ -401,6 +441,56 @@ const StatusModal = (_props) => {
         </CModalFooter>
       </CModal>
     </>
+  );
+};const DeleteModal = (_props) => {
+  return (
+    <CModal
+      alignment="center"
+      visible={_props.visible}
+      onClose={_props.closeModal}
+      size="lg"
+    >
+      <CModalHeader>
+        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+          Delete Batch Sample Allotment
+        </CModalTitle>
+      </CModalHeader>
+      <div
+        className="modal-body"
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: "500",
+          lineHeight: "1.5",
+          marginBottom: "1rem",
+          columnGap: "0px",
+          border: "0px !important",
+        }}
+      >
+        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
+      </div>
+      <CModalFooter>
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="danger"
+          onClick={_props.handleDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
+        </CButton>
+      </CModalFooter>
+    </CModal>
   );
 };
 

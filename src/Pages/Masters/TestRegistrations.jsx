@@ -169,7 +169,7 @@ const nextToLastPage = () => {
           </div>
           <p id="line2">Add information Test Registration</p>
          
-          <label id="line3" htmlFor="">
+          <label className="line3" htmlFor="">
           Client
           </label>
                 <Autocomplete
@@ -180,7 +180,7 @@ const nextToLastPage = () => {
               sx={{ width: 370,margin:2 }}
               renderInput={(params) => <TextField {...params} label="" />}
             />
-          <label id="line3" htmlFor="">
+          <label className="line3" htmlFor="">
           Specification ID
           </label>
                 <Autocomplete
@@ -191,34 +191,34 @@ const nextToLastPage = () => {
               renderInput={(params) => <TextField {...params} label="" />}
             />
 
-        <label id="line3" htmlFor="">Product/Material Name</label>
-        <input id="line4" type="text" placeholder="Product/Material Name" />
+        <label className="line3" htmlFor="">Product/Material Name</label>
+        <input className="line4" type="text" placeholder="Product/Material Name" />
        
-        <label id="line3" htmlFor="">Test Name</label>
-        <input id="line4" type="text" placeholder="Test Name" />
+        <label className="line3" htmlFor="">Test Name</label>
+        <input className="line4" type="text" placeholder="Test Name" />
        
-        <label id="line3" htmlFor="">Test Code</label>
-        <input id="line4" type="text" placeholder="Test Code" />
+        <label className="line3" htmlFor="">Test Code</label>
+        <input className="line4" type="text" placeholder="Test Code" />
       
-        <label id="line3" htmlFor="">Method No.</label>
-        <input id="line4" type="text" placeholder="Test Code" />
+        <label className="line3" htmlFor="">Method No.</label>
+        <input className="line4" type="text" placeholder="Test Code" />
 
         
-        <label id="line3" htmlFor="">Test Category</label>
-            	 <select name="Specification Type" id="line4">
+        <label className="line3" htmlFor="">Test Category</label>
+            	 <select name="Specification Type" className="line4">
             		    <option value="">Select Test Category</option>
                     <option value="662a579883eaf2337f410bf7">Apperance</option><option value="65d0a59bde5392629a1ba852">QA 1</option><option value="64febeef4b131677f6617887">Auxiliary Material </option><option value="64d3325c81ca150a656986a5">test</option><option value="64bf87087dd3545dd96ff16c">New Product Category Test</option><option value="64a683c3312857560c9dd82b">Test Cat-1</option><option value="64944309f884891b8187de95">Microbiology</option><option value="649442f5f884891b8187de8c">Instrument</option><option value="649442def884891b8187de83">Chemical</option><option value="649442a6f884891b8187de7a">Physical</option><option value="648c1c5cc30b4b0cb1a453c2">Therapeutic</option>
              	 </select>
 
                
-                <label id="line3" htmlFor="">Test Technique</label>
-            	 <select name="test_technique" id="line4">
+                <label className="line3" htmlFor="">Test Technique</label>
+            	 <select name="test_technique" className="line4">
             		    <option value="">Select Test Technique</option>
                     <option value="default">Default</option><option value="663f2e8e0309b333ba3e0fdc">Description</option>
              	 </select>  
               
-                <label id="line3" htmlFor="">Test Type</label>
-            	 <select name="test_type" id="line4">
+                <label className="line3" htmlFor="">Test Type</label>
+            	 <select name="test_type" className="line4">
             		    <option value="">Select Test Type</option>
                     <option value="QUALITATIVE">Qualitative</option><option value="QUANTITATIVE">Quantitative</option><option value="QUANTITATIVE-2">Quantitative-2</option><option value="STATISTICAL-1">Statistical-1</option><option value="STATISTICAL-2">Statistical-2</option><option value="MULTI-QUALITATIVE">Multi Qualitative</option><option value="MULTI-QUANTITATIVE-FORMULAE">Multi Quantitative Formulae</option><option value="TOTAL-DISSOLVED-SOLIDS"> Total Dissolved Solids</option><option value="OIL-AND-GREASE">Oil &amp; Grease</option><option value="CHEMICAL-OXYGEN-DEMAND">Chemical Oxygen Demand</option><option value="TOTAL-SUSPENDED-SOLIDS">Total Suspended Solids</option>
              	 </select>

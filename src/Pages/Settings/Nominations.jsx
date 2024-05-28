@@ -137,33 +137,33 @@ const nextToLastPage = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information about Nominations</p>
         
-        <label id="line3" htmlFor="">Analyst</label>
-        <input id="line4" required type="text" placeholder="Resource Name"/>
+        <label className="line3" htmlFor="">Analyst</label>
+        <input className="line4" required type="text" placeholder="Resource Name"/>
 
-         <label id="line3" htmlFor="">Employee ID</label>
-        <input id="line4" required type="text" placeholder="Employee ID"/> 
+         <label className="line3" htmlFor="">Employee ID</label>
+        <input className="line4" required type="text" placeholder="Employee ID"/> 
 
-        <label id="line3" htmlFor="">Role/Title</label>
-        <input id="line4" required type="text" placeholder="Role/Title"/> 
-        <label id="line3" htmlFor="">Test Technique
+        <label className="line3" htmlFor="">Role/Title</label>
+        <input className="line4" required type="text" placeholder="Role/Title"/> 
+        <label className="line3" htmlFor="">Test Technique
 </label>
-        <input id="line4" required type="text" placeholder="Test Technique
+        <input className="line4" required type="text" placeholder="Test Technique
 "/>  
-<label id="line3" htmlFor="">Training Documents
+<label className="line3" htmlFor="">Training Documents
 </label>
-        <input id="line4" style={{padding:'23px',fontSize:'10px'}} required type="file" placeholder="Training Details
+        <input className="line4" style={{padding:'23px',fontSize:'10px'}} required type="file" placeholder="Training Details
 "/>
-<label id="line3" htmlFor="">Total Experience / Work Area
+<label className="line3" htmlFor="">Total Experience / Work Area
 </label>
-        <input id="line4" required type="text" placeholder="Total Experience
+        <input className="line4" required type="text" placeholder="Total Experience
 "/>
-     <label id="line3" htmlFor="">Past Experience / Work Area
+     <label className="line3" htmlFor="">Past Experience / Work Area
 </label>
-        <input id="line4" required type="text" placeholder="Past Experience
+        <input className="line4" required type="text" placeholder="Past Experience
 "/>
-     <label id="line3" htmlFor="">Justification for Direct Nomination
+     <label className="line3" htmlFor="">Justification for Direct Nomination
 </label>
-        <input id="line4" required type="text" placeholder="Justification for Direct Nomination
+        <input className="line4" required type="text" placeholder="Justification for Direct Nomination
 "/>
          
           <div id="line5">

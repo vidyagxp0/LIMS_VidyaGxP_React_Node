@@ -132,7 +132,7 @@ export default function StockInventory() {
               ></button>
             </div>
           </div>
-          <label id="line3" htmlFor="">Material Name</label>
+          <label className="line3" htmlFor="">Material Name</label>
           <Autocomplete
             disablePortal
             id="combo-box-demo"
@@ -142,10 +142,10 @@ export default function StockInventory() {
             renderInput={(params) => <TextField {...params} label="" />}
           />
 
-          <label id="line3" htmlFor="">Received Date</label>
-          <input id="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
+          <label className="line3" htmlFor="">Received Date</label>
+          <input className="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
 
-          <label id="line3" htmlFor="">Supplier Name</label>
+          <label className="line3" htmlFor="">Supplier Name</label>
           <Autocomplete
             disablePortal
             id="combo-box-demo"
@@ -154,16 +154,16 @@ export default function StockInventory() {
             sx={{ width: 370, margin: 2 }}
             renderInput={(params) => <TextField {...params} label="" />}
           />
-          <label id="line3" htmlFor="">Truck No.</label>
-          <input id="line4" type="number" placeholder="Truck No." />
-          <label id="line3" htmlFor="">Ch No.</label>
-          <input id="line4" type="number" placeholder="Ch No." />
-          <label id="line3" htmlFor="">Invoice Number</label>
-          <input id="line4" type="number" placeholder="Invoice Number" />
-          <label id="line3" htmlFor="">Quantity In MT</label>
-          <input id="line4" type="text" placeholder="Quantity In MT" />
-          <label id="line3" htmlFor="">Remarks</label>
-          <input id="line4" type="text" placeholder="Remarks" />
+          <label className="line3" htmlFor="">Truck No.</label>
+          <input className="line4" type="number" placeholder="Truck No." />
+          <label className="line3" htmlFor="">Ch No.</label>
+          <input className="line4" type="number" placeholder="Ch No." />
+          <label className="line3" htmlFor="">Invoice Number</label>
+          <input className="line4" type="number" placeholder="Invoice Number" />
+          <label className="line3" htmlFor="">Quantity In MT</label>
+          <input className="line4" type="text" placeholder="Quantity In MT" />
+          <label className="line3" htmlFor="">Remarks</label>
+          <input className="line4" type="text" placeholder="Remarks" />
 
           <div id="line5">
             <button
@@ -200,7 +200,7 @@ export default function StockInventory() {
             ></button>
           </div>
         </div>
-        <label id="line3" htmlFor="">Material Name</label>
+        <label className="line3" htmlFor="">Material Name</label>
         <Autocomplete
           disablePortal
           id="combo-box-demo"
@@ -210,10 +210,10 @@ export default function StockInventory() {
           renderInput={(params) => <TextField {...params} label="" />}
         />
 
-        <label id="line3" htmlFor="">Received Date</label>
-        <input id="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
+        <label className="line3" htmlFor="">Received Date</label>
+        <input className="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
 
-        <label id="line3" htmlFor="">Supplier Name</label>
+        <label className="line3" htmlFor="">Supplier Name</label>
         <Autocomplete
           disablePortal
           id="combo-box-demo"
@@ -222,16 +222,16 @@ export default function StockInventory() {
           sx={{ width: 370, margin: 2 }}
           renderInput={(params) => <TextField {...params} label="" />}
         />
-        <label id="line3" htmlFor="">Truck No.</label>
-        <input id="line4" type="number" placeholder="Truck No." />
-        <label id="line3" htmlFor="">Ch No.</label>
-        <input id="line4" type="number" placeholder="Ch No." />
-        <label id="line3" htmlFor="">Invoice Number</label>
-        <input id="line4" type="number" placeholder="Invoice Number" />
-        <label id="line3" htmlFor="">Quantity In MT</label>
-        <input id="line4" type="text" placeholder="Quantity In MT" />
-        <label id="line3" htmlFor="">Remarks</label>
-        <input id="line4" type="text" placeholder="Remarks" />
+        <label className="line3" htmlFor="">Truck No.</label>
+        <input className="line4" type="number" placeholder="Truck No." />
+        <label className="line3" htmlFor="">Ch No.</label>
+        <input className="line4" type="number" placeholder="Ch No." />
+        <label className="line3" htmlFor="">Invoice Number</label>
+        <input className="line4" type="number" placeholder="Invoice Number" />
+        <label className="line3" htmlFor="">Quantity In MT</label>
+        <input className="line4" type="text" placeholder="Quantity In MT" />
+        <label className="line3" htmlFor="">Remarks</label>
+        <input className="line4" type="text" placeholder="Remarks" />
 
         <div id="line5">
           <button

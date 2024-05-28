@@ -110,14 +110,14 @@ const nextToLastPage = () => {
         </div>
         <p style={{marginLeft:'20px'}}>Add information of Test Category</p>
             
-        <label id="line3" htmlFor="">Name</label>
-        <input id="line4" required type="text" placeholder="Category Name"/>
+        <label className="line3" htmlFor="">Name</label>
+        <input className="line4" required type="text" placeholder="Category Name"/>
 
-        <label id="line3" htmlFor="">Unique Code</label>
-        <input id="line4" required type="text" placeholder="Unique Code"/>
+        <label className="line3" htmlFor="">Unique Code</label>
+        <input className="line4" required type="text" placeholder="Unique Code"/>
 
-        <label id="line3" htmlFor="">Description</label>
-        <input id="line4" required type="text" placeholder="Description"/> 
+        <label className="line3" htmlFor="">Description</label>
+        <input className="line4" required type="text" placeholder="Description"/> 
        
 
          <div id="line5">

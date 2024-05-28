@@ -151,43 +151,43 @@ const ServiceProvider = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information and add new service provider</p>
 
-          <label id="line3" htmlFor="">Name</label>
-          <input id="line4" required type="text" placeholder="Service provider Name " />
+          <label className="line3" htmlFor="">Name</label>
+          <input className="line4" required type="text" placeholder="Service provider Name " />
 
-          <label id="line3" htmlFor="">Unique code</label>
-          <input id="line4" required type="text" placeholder="Unique code" />
+          <label className="line3" htmlFor="">Unique code</label>
+          <input className="line4" required type="text" placeholder="Unique code" />
 
           
-          <label id="line3" htmlFor="">Reference Documents</label>
-          <input id="line4" style={{padding:'25px',fontSize:'12px'}} required type="file" placeholder="" />
+          <label className="line3" htmlFor="">Reference Documents</label>
+          <input className="line4" style={{padding:'25px',fontSize:'12px'}} required type="file" placeholder="" />
          
-          <label id="line3" htmlFor="">Valid Upto</label>
-          <input id="line4" style={{padding:'15px'}} required type="date" placeholder="Unique code" />
+          <label className="line3" htmlFor="">Valid Upto</label>
+          <input className="line4" style={{padding:'15px'}} required type="date" placeholder="Unique code" />
 
           
-          <label id="line3" htmlFor="">Service Type</label>
-          <input id="line4" required type="text" placeholder="Service Type" />
+          <label className="line3" htmlFor="">Service Type</label>
+          <input className="line4" required type="text" placeholder="Service Type" />
           
-          <label id="line3" htmlFor="">Contact Person</label>
-          <input id="line4" required type="text" placeholder="" />
+          <label className="line3" htmlFor="">Contact Person</label>
+          <input className="line4" required type="text" placeholder="" />
           
-          <label id="line3" htmlFor="">Address : Line 1</label>
-          <input id="line4" required type="text" placeholder="Address : Line 1" />
+          <label className="line3" htmlFor="">Address : Line 1</label>
+          <input className="line4" required type="text" placeholder="Address : Line 1" />
           
-          <label id="line3" htmlFor="">Address : Line 2</label>
-          <input id="line4" required type="text" placeholder="Address : Line 1" />
+          <label className="line3" htmlFor="">Address : Line 2</label>
+          <input className="line4" required type="text" placeholder="Address : Line 1" />
           
-          <label id="line3" htmlFor="">Address : Line 3</label>
-          <input id="line4" required type="text" placeholder="Address : Line 3" />
+          <label className="line3" htmlFor="">Address : Line 3</label>
+          <input className="line4" required type="text" placeholder="Address : Line 3" />
           
-          <label id="line3" htmlFor="">City</label>
-          <input id="line4" required type="text" placeholder="City" /> <label id="line3" htmlFor="">State</label>
-          <input id="line4" required type="text" placeholder="State" /> <label id="line3" htmlFor="">Country</label>
-          <input id="line4" required type="text" placeholder="Country" /> <label id="line3" htmlFor="">ZIP/PIN</label>
-          <input id="line4" required type="text" placeholder="ZIP/PIN" /> <label id="line3" htmlFor="">Phone</label>
-          <input id="line4" required type="text" placeholder="Phone" /> <label id="line3" htmlFor="">Fax</label>
-          <input id="line4" required type="text" placeholder="Fax" /> <label id="line3" htmlFor="">Email</label>
-          <input id="line4" required type="email" placeholder="Email" />
+          <label className="line3" htmlFor="">City</label>
+          <input className="line4" required type="text" placeholder="City" /> <label className="line3" htmlFor="">State</label>
+          <input className="line4" required type="text" placeholder="State" /> <label className="line3" htmlFor="">Country</label>
+          <input className="line4" required type="text" placeholder="Country" /> <label className="line3" htmlFor="">ZIP/PIN</label>
+          <input className="line4" required type="text" placeholder="ZIP/PIN" /> <label className="line3" htmlFor="">Phone</label>
+          <input className="line4" required type="text" placeholder="Phone" /> <label className="line3" htmlFor="">Fax</label>
+          <input className="line4" required type="text" placeholder="Fax" /> <label className="line3" htmlFor="">Email</label>
+          <input className="line4" required type="email" placeholder="Email" />
           
 
           <div id="line5">

@@ -137,11 +137,11 @@ const nextToLastPage = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information and add new Type Of Section</p>
         
-        <label id="line3" htmlFor="">Type Of Section</label>
-        <input id="line4" required type="text" placeholder="Type Of Section"/>
+        <label className="line3" htmlFor="">Type Of Section</label>
+        <input className="line4" required type="text" placeholder="Type Of Section"/>
 
-        <label id="line3" htmlFor="">Prefix</label>
-        <input id="line4" required type="text" placeholder="prefix"/>
+        <label className="line3" htmlFor="">Prefix</label>
+        <input className="line4" required type="text" placeholder="prefix"/>
          
           <div id="line5">
             <button

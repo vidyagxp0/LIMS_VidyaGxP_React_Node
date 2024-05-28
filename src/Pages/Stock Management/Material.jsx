@@ -136,11 +136,11 @@ export default function Material() {
             </div>
           </div>
 
-          <label id="line3" htmlFor="">Material Name</label>
-          <input id="line4" required type="text" placeholder="" />
+          <label className="line3" htmlFor="">Material Name</label>
+          <input className="line4" required type="text" placeholder="" />
 
-          <label id="line3" htmlFor="">Description</label>
-          <input id="line4" required type="text" placeholder="" />
+          <label className="line3" htmlFor="">Description</label>
+          <input className="line4" required type="text" placeholder="" />
 
           {errorMessage && (
             <div id="error" style={{ color: "red", fontSize: "10px", marginLeft: "30px" }}>
@@ -225,11 +225,11 @@ export default function Material() {
           </div>
         </div>
 
-        <label id="line3" htmlFor="">Material Name</label>
-        <input id="line4" required type="text" placeholder="" />
+        <label className="line3" htmlFor="">Material Name</label>
+        <input className="line4" required type="text" placeholder="" />
 
-        <label id="line3" htmlFor="">Description</label>
-        <input id="line4" required type="text" placeholder="" />
+        <label className="line3" htmlFor="">Description</label>
+        <input className="line4" required type="text" placeholder="" />
 
         {errorMessage && (
           <div id="error" style={{ color: "red", fontSize: "10px", marginLeft: "30px" }}>

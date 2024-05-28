@@ -133,8 +133,8 @@ const nextToLastPage = () => {
           </div>
           <p style={{marginLeft:'20px'}}>Add information and add new worksheet resource</p>
         
-        <label id="line3" htmlFor="">Resource Name</label>
-        <input id="line4" required type="text" placeholder="Resource Name"/>
+        <label className="line3" htmlFor="">Resource Name</label>
+        <input className="line4" required type="text" placeholder="Resource Name"/>
          
           <div id="line5">
             <button

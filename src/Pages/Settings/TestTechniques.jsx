@@ -146,8 +146,8 @@ const nextToLastPage = () => {
             </div>
           </div>
         <p style={{marginLeft:'20px'}}>Add information and add new Test Technique.</p>
-        <label id="line3" htmlFor="">Technique Name</label>
-        <input id="line4" required type="text" placeholder="Technique Name"/>
+        <label className="line3" htmlFor="">Technique Name</label>
+        <input className="line4" required type="text" placeholder="Technique Name"/>
 
         <FormControl style={{margin:'20px'}}>
         <FormLabel id="demo-row-radio-buttons-group-label">Type of technique</FormLabel>
@@ -164,8 +164,8 @@ Complex
       </RadioGroup> 
       </FormControl>
 
-      <label id="line3" htmlFor="">Technique Description</label>
-        <input id="line4" required type="text" placeholder="Technique Description"/>
+      <label className="line3" htmlFor="">Technique Description</label>
+        <input className="line4" required type="text" placeholder="Technique Description"/>
         
           {errorMessage && (
             <div id="error" style={{ color: "red" ,fontSize:"10px",marginLeft:"30px"}}>

@@ -116,16 +116,16 @@ const nextToLastPage = () => {
           </div>
         </div>
             
-        <label id="line3" htmlFor="">Sample Name</label>
-        <input id="line4" required type="text" placeholder="ID"/>
+        <label className="line3" htmlFor="">Sample Name</label>
+        <input className="line4" required type="text" placeholder="ID"/>
 
-        <label id="line3" htmlFor="">Prefix</label>
-        <input id="line4" required type="text" placeholder="Model Number"/>
+        <label className="line3" htmlFor="">Prefix</label>
+        <input className="line4" required type="text" placeholder="Model Number"/>
 
-        <label id="line3" htmlFor="">Days To Complete(Days)</label>
-        <input id="line4" required type="text" placeholder="Number"/> 
+        <label className="line3" htmlFor="">Days To Complete(Days)</label>
+        <input className="line4" required type="text" placeholder="Number"/> 
         
-        <label id="line3" htmlFor="">Selected Standard Fields Displays At Sample Registration</label>
+        <label className="line3" htmlFor="">Selected Standard Fields Displays At Sample Registration</label>
         <FormGroup style={{marginLeft:'20px'}}>
   <FormControlLabel control={<Checkbox/>} label="Manufacturing Date" />
   <FormControlLabel control={<Checkbox />} label="Expiry Date" />

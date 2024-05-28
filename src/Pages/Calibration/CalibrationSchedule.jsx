@@ -30,11 +30,26 @@ export default function CalibrationSchedule() {
     const [filterStatus, setFilterStatus] = useState("");
     const [storageName, setStorageName] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+    
+    const badgeStyle = { background: "gray", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+
+
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
         { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-        { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        { user: 'hcpl Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
     ]);
 
     const pageSize = 4;
@@ -104,11 +119,22 @@ export default function CalibrationSchedule() {
                 <td>{employee.role}</td>
                 <td>{employee.role}</td>
                 <td>{employee.addedBy}</td>
-                <td className={`rounded-5 ${employee.status === 'ACTIVE' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'ACTIVE' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
+                <td > <div
+                        className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+                        style={
+                            employee.status === "ACTIVE"
+                                ? badgeStyle3
+                                : employee.status === "INACTIVE"
+                                    ? badgeStyle4
+                                    : badgeStyle
+                        }
+                    > {employee.status}</div></td>
                 <td>
                     <div className="d-flex gap-3">
                         <Link to="/calibration/calibration-schedule-details"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer" onClick={() => handleEdit(index)}>
+                        <div className="cursor-pointer"  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasRight"
+                  aria-controls="offcanvasRight">
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
                         <Link to="#" onClick={() => handleDelete(index)}>
@@ -151,7 +177,7 @@ export default function CalibrationSchedule() {
                 <div className="dropdown">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <select id='selectOption' onChange={handleStatusChange}>
+                            <select id='selectOption' onChange={handleStatusChange} style={{outline:'none'}}>
                                 <option value="">Select Status </option>
                                 <option value="ACTIVE">Active</option>
                                 <option value="INACTIVE">Inactive</option>
@@ -192,28 +218,28 @@ export default function CalibrationSchedule() {
                         </div>
                     </div>
 
-                    <label id="line3" htmlFor="">Instrument Category</label>
-                    <select name="Instrument_Category" id="line4">
+                    <label className="line3" htmlFor="">Instrument Category</label>
+                    <select name="Instrument_Category" className="line4">
                         <option value="">Select Intrument Category</option>
                         <option value="chromathograpy">chromathograpy</option>
                         <option value="weighing balance">weighing balance</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Calibration Type</label>
-                    <select name="Calibration Type" id="line4">
+                    <label className="line3" htmlFor="">Calibration Type</label>
+                    <select name="Calibration Type" className="line4">
                         <option value="">Select Calibration Type</option>
                         <option value="yearly">yearly</option>
                         <option value="monthly">monthly</option>
                         <option value="daily">daily</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Instrument (Instrument ID)</label>
-                    <select name="Instrument_(Instrument ID)" id="line4">
+                    <label className="line3" htmlFor="">Instrument (Instrument ID)</label>
+                    <select name="Instrument_(Instrument ID)" className="line4">
                         <option value="">Select Instrument ID</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Module (Module ID)</label>
-                    <select name="Module_(Module ID)" id="line4">
+                    <label className="line3" htmlFor="">Module (Module ID)</label>
+                    <select name="Module_(Module ID)" className="line4">
                         <option value="">Select Module ID</option>
                     </select>
 
@@ -229,21 +255,21 @@ export default function CalibrationSchedule() {
                         </RadioGroup>
                     </FormControl>
 
-                    <label id="line3" htmlFor="">Calibration Datasheet</label>
-                    <select name="Calibration Datasheet" id="line4">
+                    <label className="line3" htmlFor="">Calibration Datasheet</label>
+                    <select name="Calibration Datasheet" className="line4">
                         <option value="">Select </option>
                         <option value="CAl data sheet">CAl data sheet </option>
                         <option value="Data sheet1">Data sheet1</option>
                     </select>
 
-                    <label id="line3" htmlFor="">Schedule Description</label>
-                    <input id="line4" required type="text" placeholder="Schedule Description" />
+                    <label className="line3" htmlFor="">Schedule Description</label>
+                    <input className="line4" required type="text" placeholder="Schedule Description" />
 
-                    <label id="line3" htmlFor="">Start Date</label>
-                    <input id="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
+                    <label className="line3" htmlFor="">Start Date</label>
+                    <input className="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
 
-                    <label id="line3" htmlFor="">Frequency
-                        <select name="Frequency" id="line4">
+                    <label className="line3" htmlFor="">Frequency
+                        <select name="Frequency" className="line4">
                             <option value="">Period </option>
                             <option value="Daily">Daily</option>
                             <option value="Weekly">Weekly</option>
@@ -251,7 +277,7 @@ export default function CalibrationSchedule() {
                             <option value="Yearly">Yearly</option>
                         </select>
 
-                        <select name="Frequency" id="line4">
+                        <select name="Frequency" className="line4">
                             <option value="">Period </option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -259,8 +285,8 @@ export default function CalibrationSchedule() {
                             <option value="4">...</option>
                         </select></label>
 
-                    <label id="line3" htmlFor="">Tolerance Period</label>
-                    <input id="line4" required type="text" placeholder="Tolerance Period" />
+                    <label className="line3" htmlFor="">Tolerance Period</label>
+                    <input className="line4" required type="text" placeholder="Tolerance Period" />
 
                     <div id="line5">
                         <button

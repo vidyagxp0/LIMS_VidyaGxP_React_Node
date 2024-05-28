@@ -120,27 +120,27 @@ const nextToLastPage = () => {
         </div>
             <p style={{marginLeft:'20px'}}>Add information and add new approved vendor</p>
             
-            <label id="line3" htmlFor="">Product/Material Name</label>
-        <select name="Product/Material Name" id="line4">
+            <label className="line3" htmlFor="">Product/Material Name</label>
+        <select name="Product/Material Name" className="line4">
             <option value="">Select Product</option>
             <option value="Tadalafil">Tadalafil</option>
             <option value="Diclofenac Resinate">Diclofenac Resinate</option>
         </select>
 
-        <label id="line3" htmlFor="">Unique Code</label>
-        <input id="line4" required type="text" placeholder="Product Code"/>
+        <label className="line3" htmlFor="">Unique Code</label>
+        <input className="line4" required type="text" placeholder="Product Code"/>
 
-        <label id="line3" htmlFor="">Vendor Name</label>
-        <select name="Vendor Name" id="line4">
+        <label className="line3" htmlFor="">Vendor Name</label>
+        <select name="Vendor Name" className="line4">
             <option value="">Select Vendors</option>
             <option value="Aavis Pharmaceuticals">Aavis Pharmaceuticals</option>
         </select> 
         
-        <label id="line3" htmlFor="">Qualification Criteria</label>
-        <input id="line4" required type="text" placeholder="Qualification Criteria"/>    
+        <label className="line3" htmlFor="">Qualification Criteria</label>
+        <input className="line4" required type="text" placeholder="Qualification Criteria"/>    
         
-        <label id="line3" htmlFor="">Comments If Any</label>
-        <input id="line4" required type="text" placeholder="Comments If Any"/>
+        <label className="line3" htmlFor="">Comments If Any</label>
+        <input className="line4" required type="text" placeholder="Comments If Any"/>
 
          <div id="line5">
           <button type="button"
