@@ -1,15 +1,21 @@
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
+import { useState } from "react";
+import {
+  CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow
+} from "@coreui/react";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import { FaArrowRight } from 'react-icons/fa';
 import "./StorageCondition.css";
-import { Link } from "react-router-dom"
 
 function StorageLocation() {
-  const [addModal, setAddModal] = useState(false)
-  const [delModal, setDelModal] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [filterStatus, setFilterStatus] = useState("")
+  const [addModal, setAddModal] = useState(false);
+  const [delModal, setDelModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const pageSize = 5;
   const [storageConditions, setStorageConditions] = useState([
     { code: 'na-001', condition: 'Product Material', date: '03/05/2024', status: 'ACTIVE', id: 1321 },
     { code: 'na-002', condition: 'Product Material', date: '02/05/2024', status: 'INACTIVE', id: 1322 },
@@ -24,26 +30,47 @@ function StorageLocation() {
   ]);
 
   const handleSearch = (event) => {
-    setSearchQuery(event.target.value)
-  }
+    setSearchQuery(event.target.value);
+    setCurrentPage(1);  // Reset to the first page when searching
+  };
 
   const handleFilter = (event) => {
-    setFilterStatus(event.target.value)
-  }
+    setFilterStatus(event.target.value);
+    setCurrentPage(1);  // Reset to the first page when filtering
+  };
 
   const handleDelete = (id) => {
-    setStorageConditions(storageConditions.filter(item => item.id !== id))
-  }
+    setStorageConditions(storageConditions.filter(item => item.id !== id));
+  };
 
   const filteredConditions = storageConditions.filter(item => {
     return (
-      (item.code.toLowerCase().includes(searchQuery.toLowerCase()) || 
-       item.condition.toLowerCase().includes(searchQuery.toLowerCase())) && 
-      (filterStatus === "" || 
-       (filterStatus === "1" && item.status === "ACTIVE") || 
-       (filterStatus === "0" && item.status === "INACTIVE"))
-    )
+      (item.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.condition.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (filterStatus === "" ||
+        (filterStatus === "1" && item.status === "ACTIVE") ||
+        (filterStatus === "0" && item.status === "INACTIVE"))
+    );
   });
+
+  const totalPages = Math.ceil(filteredConditions.length / pageSize);
+  const paginatedConditions = filteredConditions.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  const handleLastPage = () => {
+    setCurrentPage(totalPages);
+  };
 
   return (
     <>
@@ -58,6 +85,7 @@ function StorageLocation() {
                 <CFormInput
                   type="text"
                   placeholder="Search..."
+                  className="border-2"
                   value={searchQuery}
                   onChange={handleSearch}
                 />
@@ -66,8 +94,10 @@ function StorageLocation() {
                 <CFormSelect
                   value={filterStatus}
                   onChange={handleFilter}
+                  className="border-2"
                   options={[
-                    { label: 'Select Status', value: "" },
+                    { disabled:true, label: 'Select Status', value: "" },
+                    { label: 'All', value: "" },
                     { label: 'Active', value: '1' },
                     { label: 'Inactive', value: '0' }
                   ]}
@@ -81,7 +111,7 @@ function StorageLocation() {
               </CCol>
             </CRow>
           </div>
-          <div className="p-4 shadow rounded">
+          <div className="p-4 shadow rounded border-2">
             <CTable align="middle" responsive className="mb-0">
               <CTableHead>
                 <CTableRow>
@@ -94,7 +124,7 @@ function StorageLocation() {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filteredConditions.map((item, index) => (
+                {paginatedConditions.map((item, index) => (
                   <CTableRow key={index}>
                     <CTableHeaderCell scope="row" className="text-center">
                       <input type="checkbox" />
@@ -107,7 +137,7 @@ function StorageLocation() {
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
-                        <Link to={`/approval/${item.id}`}><FontAwesomeIcon icon={faEye} /></Link>
+                        <Link to={`/approval/1321`}><FontAwesomeIcon icon={faEye} /></Link>
                         <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                         <div className="cursor-pointer" onClick={() => handleDelete(item.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
@@ -117,14 +147,23 @@ function StorageLocation() {
               </CTableBody>
             </CTable>
           </div>
+            <div className="d-flex justify-content-between my-4">
+              <div className="d-flex gap-3">
+                <CButton onClick={handlePreviousPage} disabled={currentPage === 1}>&lt; &lt;</CButton>
+                <button className='btn border'>{currentPage}</button>
+                <CButton onClick={handleNextPage} disabled={currentPage === totalPages}>&gt; &gt;</CButton>
+              </div>
+              <div>
+                <CButton onClick={handleNextPage} className='d-flex gap-2 border' disabled={currentPage === totalPages}>Next <FaArrowRight className="mt-1"/></CButton>
+              </div>
+            </div>
         </div>
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
       {delModal && <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} />}
-
     </>
-  )
+  );
 }
 
 const StatusModal = (_props) => {
@@ -145,8 +184,8 @@ const StatusModal = (_props) => {
         <CButton color="primary">Add</CButton>
       </CModalFooter>
     </CModal>
-  )
-}
+  );
+};
 
 const RemoveModal = (_props) => {
   return (
@@ -162,7 +201,7 @@ const RemoveModal = (_props) => {
         <CButton color="primary">Submit</CButton>
       </CModalFooter>
     </CModal>
-  )
-}
+  );
+};
 
-export default StorageLocation
+export default StorageLocation;

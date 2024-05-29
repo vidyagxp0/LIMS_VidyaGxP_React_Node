@@ -33,7 +33,7 @@ function Template() {
 	const [addModal, setAddModal] = useState(false);
 	const [removeModal, setRemoveModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
-	 const [searchQuery, setSearchQuery] = useState("");
+	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
@@ -183,7 +183,7 @@ function Template() {
 					<div>
 						<CRow className="mb-3">
 							<CCol sm={3}><CFormInput
-								className="mb-3"
+								className="mb-3 border-2"
 								type="text"
 								placeholder="Search..."
 								value={searchQuery}
@@ -192,9 +192,9 @@ function Template() {
 							<CCol sm={3}>
 								<CFormSelect
 									value={selectedStatus}
+									className="border-2"
 									onChange={handleStatusChange}
 									options={[
-										"Select Status",
 										{ value: "All", label: "All" },
 										{ value: "Active", label: "Active" },
 										{ value: "Inactive", label: "Inactive" },
@@ -214,8 +214,8 @@ function Template() {
 							</CCol>
 						</CRow>
 					</div>
-					<div className="bg-white mt-5">
-						<CTable align="middle" responsive className=" shadow">
+					<div className="bg-white mt-5 border-2 rounded shadow p-3">
+						<CTable align="middle" responsive className="table-responsive">
 							<CTableHead>
 								<CTableRow>
 									<CTableHeaderCell scope="col" className="text-center">
@@ -225,10 +225,10 @@ function Template() {
 									<CTableHeaderCell scope="col">Template Name</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Description</CTableHeaderCell>
 									<CTableHeaderCell scope="col">
-                                             No. of Check Items
+										No. of Check Items
 									</CTableHeaderCell>
 									<CTableHeaderCell scope="col">
-                                             Updated At
+										Updated At
 									</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
@@ -246,16 +246,14 @@ function Template() {
 										<CTableDataCell>{data.testTechniques}</CTableDataCell>
 										<CTableDataCell>{data.initiatedAt}</CTableDataCell>
 										<CTableDataCell>
-											<div
-												className="py-2 px-3 small rounded fw-bold"
-												style={badgeStyle}
-											>
-												{data.status}
+											<div className=" w-75">
+												<div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
+													: 'red-700'}`} >{data.status.toUpperCase()}</div>
 											</div>
 										</CTableDataCell>
 										<CTableDataCell>
 											<div className="d-flex gap-3">
-                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+												<div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
 												<div
 													className="cursor-pointer"
 													onClick={() => setRemoveModal(true)}
@@ -271,54 +269,12 @@ function Template() {
 					</div>
 					<div className="pagination my-3 d-flex justify-content-between">
 						<div className="d-flex gap-2">
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(1)}
-								disabled={currentPage === 1}
-							>
-								&lt;&lt;
-							</button>
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage - 1)}
-								disabled={currentPage === 1}
-							>
-								&lt;
-							</button>
-							{[...Array(totalPages)].map((_, index) => (
-								<button
-									key={index + 1}
-									className={`btn mr-2 ${currentPage === index + 1 ? "bg-dark-subtle" : ""
-										}`}
-									onClick={() => paginate(index + 1)}
-								>
-									{index + 1}
-								</button>
-							))}
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;
-							</button>
-							<button
-								className="btn"
-								onClick={() => paginate(totalPages)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;&gt;
-							</button>
+							<button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+							<button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
+							<button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
 						</div>
 						<div className="">
-							<button
-								className="btn btn-next ml-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								{" "}
-								Next <FaArrowRight />
-							</button>
+							<button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
 						</div>
 					</div>
 				</div>
@@ -351,37 +307,37 @@ const StatusModal = (_props) => {
 			</CModalHeader>
 			<CModalBody>
 				<p className="my-3 fs-5">Add information and add new Analyst Template</p>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label={
-            <>
-              Analyst Template
-            </>
-          }
-          placeholder="Analyst Template"
-          required
-        />
+				<CFormInput
+					className="mb-3"
+					type="text"
+					label={
+						<>
+							Analyst Template
+						</>
+					}
+					placeholder="Analyst Template"
+					required
+				/>
 
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label={
-            <>
-              Unique Code 
-            </>
-          }
-          placeholder="Unique Code"
-          required
-        />
+				<CFormInput
+					className="mb-3"
+					type="text"
+					label={
+						<>
+							Unique Code
+						</>
+					}
+					placeholder="Unique Code"
+					required
+				/>
 
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="No. of Check Items"
-          placeholder="No. of Check Items"
-          required
-        />
+				<CFormInput
+					className="mb-3"
+					type="text"
+					label="No. of Check Items"
+					placeholder="No. of Check Items"
+					required
+				/>
 			</CModalBody>
 			<CModalFooter>
 				<CButton color="light" onClick={_props.closeModal}>

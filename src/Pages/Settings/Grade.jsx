@@ -17,17 +17,10 @@ import {
 	CTableHeaderCell,
 	CTableRow,
 } from "@coreui/react";
-import {
-	faEye,
-	faPenToSquare,
-	faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { TiArrowRightThick } from "react-icons/ti";
-import { TiArrowLeftThick } from "react-icons/ti";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { FaArrowRight } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 function Grade() {
 	const [addModal, setAddModal] = useState(false);
@@ -37,19 +30,16 @@ function Grade() {
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
-	const badgeStyle = { background: "#cdffca" };
-
 	const tableData = [
-          { code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
-          { code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
-          { code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
-          { code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
-          { code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
-          { code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
-          { code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
-          { code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" }
-        ];
-        
+		{ code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
+		{ code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
+		{ code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
+		{ code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
+		{ code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
+		{ code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
+		{ code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
+		{ code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" },
+	];
 
 	const handleStatusChange = (e) => {
 		setSelectedStatus(e.target.value);
@@ -70,13 +60,16 @@ function Grade() {
 
 	const indexOfLastRecord = currentPage * recordsPerPage;
 	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-	const currentRecords = filteredData.slice(
-		indexOfFirstRecord,
-		indexOfLastRecord
-	);
+	const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
 	const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
-	const paginate = (pageNumber) => setCurrentPage(pageNumber);
+	const handleNextPage = () => {
+		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+	};
+
+	const handlePreviousPage = () => {
+		if (currentPage > 1) setCurrentPage(currentPage - 1);
+	};
 
 	return (
 		<>
@@ -87,22 +80,24 @@ function Grade() {
 					</div>
 					<div>
 						<CRow className="mb-3">
-							<CCol sm={3}><CFormInput
-								className="mb-3"
-								type="text"
-								placeholder="Search..."
-								value={searchQuery}
-								onChange={handleSearchChange}
-							/></CCol>
+							<CCol sm={3}>
+								<CFormInput
+									className="mb-3 border-2"
+									type="text"
+									placeholder="Search..."
+									value={searchQuery}
+									onChange={handleSearchChange}
+								/>
+							</CCol>
 							<CCol sm={3}>
 								<CFormSelect
 									value={selectedStatus}
 									onChange={handleStatusChange}
+									className="border-2"
 									options={[
-										"Select Status",
 										{ value: "All", label: "All" },
-										{ value: "Active", label: "Active" },
-										{ value: "Inactive", label: "Inactive" },
+										{ value: "ACTIVE", label: "Active" },
+										{ value: "INACTIVE", label: "Inactive" },
 									]}
 								/>
 							</CCol>
@@ -119,17 +114,15 @@ function Grade() {
 							</CCol>
 						</CRow>
 					</div>
-					<div className="bg-white mt-5">
-						<CTable align="middle" responsive className=" shadow">
+					<div className="bg-white mt-5 border-2 rounded shadow p-3">
+						<CTable align="middle" responsive className="table-responsive">
 							<CTableHead>
 								<CTableRow>
 									<CTableHeaderCell scope="col" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Grade Code</CTableHeaderCell>
-									<CTableHeaderCell scope="col">
-                                             Grade Name
-									</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Grade Name</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
@@ -143,25 +136,17 @@ function Grade() {
 										<CTableDataCell>{data.code}</CTableDataCell>
 										<CTableDataCell>{data.name}</CTableDataCell>
 										<CTableDataCell>
-											<div
-												className="py-2 px-3 small rounded fw-bold"
-												style={badgeStyle}
-											>
-												{data.status}
+											<div className=" w-75">
+												<div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'ACTIVE' ? 'green-700'
+													: 'red-700'}`} >{data.status}</div>
 											</div>
 										</CTableDataCell>
 										<CTableDataCell>
 											<div className="d-flex gap-3">
-                                                            <div
-													className="cursor-pointer"
-													onClick={() => setAddModal(true)}
-												>
+												<div className="cursor-pointer" onClick={() => setAddModal(true)}>
 													<FontAwesomeIcon icon={faPenToSquare} />
 												</div>
-												<div
-													className="cursor-pointer"
-													onClick={() => setRemoveModal(true)}
-												>
+												<div className="cursor-pointer" onClick={() => setRemoveModal(true)}>
 													<FontAwesomeIcon icon={faTrashCan} />
 												</div>
 											</div>
@@ -173,54 +158,14 @@ function Grade() {
 					</div>
 					<div className="pagination my-3 d-flex justify-content-between">
 						<div className="d-flex gap-2">
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(1)}
-								disabled={currentPage === 1}
-							>
-								&lt;&lt;
-							</button>
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage - 1)}
-								disabled={currentPage === 1}
-							>
-								&lt;
-							</button>
-							{[...Array(totalPages)].map((_, index) => (
-								<button
-									key={index + 1}
-									className={`btn mr-2 ${currentPage === index + 1 ? "bg-dark-subtle" : ""
-										}`}
-									onClick={() => paginate(index + 1)}
-								>
-									{index + 1}
-								</button>
-							))}
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;
-							</button>
-							<button
-								className="btn"
-								onClick={() => paginate(totalPages)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;&gt;
-							</button>
+							<CButton onClick={handlePreviousPage} disabled={currentPage === 1}>&lt;&lt;</CButton>
+							<CButton className="btn bg-dark-subtle">{currentPage}</CButton>
+							<CButton onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;&gt;</CButton>
 						</div>
-						<div className="">
-							<button
-								className="btn btn-next ml-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								{" "}
-								Next <FaArrowRight />
-							</button>
+						<div>
+							<CButton onClick={handleNextPage} className='d-flex gap-2 border' disabled={currentPage === totalPages}>
+								Next <FaArrowRight className="mt-1" />
+							</CButton>
 						</div>
 					</div>
 				</div>
@@ -259,7 +204,6 @@ const StatusModal = (_props) => {
 					placeholder="Name"
 					required
 				/>
-
 			</CModalBody>
 			<CModalFooter>
 				<CButton color="light" onClick={_props.closeModal}>
@@ -282,7 +226,7 @@ const DeleteModel = (_props) => {
 				<CModalTitle>Delete Grades</CModalTitle>
 			</CModalHeader>
 			<CModalBody>
-               Do you want to delete this Grade <code>HPLC Grade</code>?
+				Do you want to delete this Grade <code>HPLC Grade</code>?
 			</CModalBody>
 			<CModalFooter>
 				<CButton color="light" onClick={_props.closeModal}>

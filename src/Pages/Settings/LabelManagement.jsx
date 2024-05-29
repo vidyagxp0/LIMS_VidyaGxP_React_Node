@@ -85,9 +85,9 @@ function LabelManagement() {
               <CCol sm={3}>
                 <CFormSelect
                   value={selectedStatus}
+                  className="border-2"
                   onChange={handleStatusChange}
                   options={[
-                    'Select Status',
                     { value: 'All', label: 'All' },
                     { value: 'INITIATED', label: 'Initiated' },
                     { value: 'APPROVED', label: 'Approved' },
@@ -105,8 +105,8 @@ function LabelManagement() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+          <div className="bg-white mt-5 shadow p-3 rounded border-2">
+            <CTable align="middle" responsive className="table-responsive">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
@@ -135,7 +135,18 @@ function LabelManagement() {
                     <CTableDataCell>{data.country}</CTableDataCell>
                     <CTableDataCell>{data.zip}</CTableDataCell>
                     <CTableDataCell>
-                      <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>{data.status}</div>
+                      <div className=" w-75">
+                        <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
+                          : data.status === "APPROVED"
+                            ? 'green-700'
+                            : data.status === "REJECTED"
+                              ? 'red-700'
+                              : data.status === "REINITIATED"
+                                ? 'yellow-500'
+                                : data.status === "DROPPED"
+                                  ? 'purple-700'
+                                  : 'white'}`} >{data.status}</div>
+                      </div>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -150,22 +161,12 @@ function LabelManagement() {
           </div>
           <div className="pagination my-3 d-flex justify-content-between">
             <div className="d-flex gap-2">
-              <button className="btn mr-2" onClick={() => paginate(1)} disabled={currentPage === 1}>&lt;&lt;</button>
-              <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index + 1}
-                  className={`btn mr-2 ${currentPage === index + 1 ? 'bg-dark-subtle' : ''}`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
-              <button className="btn" onClick={() => paginate(totalPages)} disabled={currentPage === totalPages}>&gt;&gt;</button>
+              <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+              <button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
+              <button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
             </div>
             <div className="">
-              <button className="btn btn-next ml-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight /></button>
+              <button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
             </div>
           </div>
         </div>

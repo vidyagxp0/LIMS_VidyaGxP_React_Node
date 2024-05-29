@@ -2,13 +2,16 @@ import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFoote
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
+import { FaArrowRight } from 'react-icons/fa';
 import { Link } from "react-router-dom"
 
 function StorageLocation() {
-  const [addModal, setAddModal] = useState(false)
-  const [delModal, setDelModal] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [filterStatus, setFilterStatus] = useState("")
+  const pageSize = 5;
+  const [addModal, setAddModal] = useState(false);
+  const [delModal, setDelModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [storageLocations, setStorageLocations] = useState([
     { code: 'na-001', name: 'Product Material 1', status: 'ACTIVE', id: 1 },
     { code: 'na-002', name: 'Product Material 2', status: 'ACTIVE', id: 2 },
@@ -23,15 +26,17 @@ function StorageLocation() {
   ]);
 
   const handleSearch = (event) => {
-    setSearchQuery(event.target.value)
+    setSearchQuery(event.target.value);
+    setCurrentPage(1);
   }
 
   const handleFilter = (event) => {
-    setFilterStatus(event.target.value)
+    setFilterStatus(event.target.value);
+    setCurrentPage(1);
   }
 
   const handleDelete = (id) => {
-    setStorageLocations(storageLocations.filter(item => item.id !== id))
+    setStorageLocations(storageLocations.filter(item => item.id !== id));
   }
 
   const filteredLocations = storageLocations.filter(item => {
@@ -44,7 +49,16 @@ function StorageLocation() {
     )
   });
 
-  const badgeStyle = { background: "#cdffca" }
+  const totalPages = Math.ceil(filteredLocations.length / pageSize);
+  const paginatedLocations = filteredLocations.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  }
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  }
 
   return (
     <>
@@ -58,6 +72,7 @@ function StorageLocation() {
               <CCol sm={4}>
                 <CFormInput
                   type="text"
+                  className="border-2"
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={handleSearch}
@@ -67,8 +82,10 @@ function StorageLocation() {
                 <CFormSelect
                   value={filterStatus}
                   onChange={handleFilter}
+                  className="border-2"
                   options={[
-                    { label: 'Select Status', value: "" },
+                    { disabled: true, label: 'Select Status', value: "" },
+                    { label: 'All', value: "" },
                     { label: 'Active', value: '1' },
                     { label: 'Inactive', value: '0' }
                   ]}
@@ -82,7 +99,7 @@ function StorageLocation() {
               </CCol>
             </CRow>
           </div>
-          <div className="p-4 shadow rounded">
+          <div className="p-4 shadow rounded border-2">
             <CTable align="middle" responsive className="mb-0">
               <CTableHead>
                 <CTableRow>
@@ -94,7 +111,7 @@ function StorageLocation() {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filteredLocations.map((item, index) => (
+                {paginatedLocations.map((item, index) => (
                   <CTableRow key={index}>
                     <CTableHeaderCell scope="row" className="text-center">
                       <input type="checkbox" />
@@ -116,6 +133,16 @@ function StorageLocation() {
               </CTableBody>
             </CTable>
           </div>
+            <div className="d-flex justify-content-between my-4">
+              <div className="d-flex gap-3">
+                <CButton onClick={handlePreviousPage} disabled={currentPage === 1}>&lt; &lt;</CButton>
+                <span className="btn border">{currentPage}</span>
+                <CButton onClick={handleNextPage} disabled={currentPage === totalPages}>&gt; &gt;</CButton>
+              </div>
+              <div>
+                <CButton onClick={handleNextPage} className='d-flex gap-2 border' disabled={currentPage === totalPages}>Next <FaArrowRight className="mt-1"/></CButton>
+              </div>
+            </div>
         </div>
       </div>
 

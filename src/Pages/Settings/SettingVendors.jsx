@@ -1,192 +1,238 @@
-
 import React, { useState } from 'react';
-
-import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR } from 'react-icons/cg';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
-
+import {
+  CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow
+} from "@coreui/react";
+import {
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { FaArrowRight } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SettingVendors = () => {
-  const pageSize = 9; 
+  const [addModal, setAddModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const recordsPerPage = 5;
 
-    { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
-    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    2
-
+  const tableData = [
+    // { id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "INITIATED" },
+    // { id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "APPROVED" },
+    // { id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "REJECTED" },
+    // { id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "REINITIATED" },
+    // { id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "INITIATED" },
+    // { id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "APPROVED" },
+    // { id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "REJECTED" },
+    // { id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "REINITIATED" }
   ];
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
 
-  const renderRows = () => {
-    return employees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td><input type="checkbox" /></td>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.fieldName}</td>
-        <td>{employee.fieldType}</td>
-        <td>{employee.registeredBy}</td>
-        <td>{employee.registeredOn}</td>
-        <td className={`rounded-5 ${employee.status === 'APPROVED' ? 'bg-danger' : 'bg-warning'} bg-opacity-25 text-${employee.status === 'APPROVED' ? 'danger' : 'warning'} d-flex justify-content-center p-1 m-2`} >{employee.status}</td>
-        <td>
-          <FontAwesomeIcon icon={faEye} />
-          <FontAwesomeIcon icon={faPenToSquare} />
-          <FontAwesomeIcon icon={faTrashCan} />
-
-
-        </td>
-      </tr>
-    ));
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
+    setCurrentPage(1);
   };
 
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const filteredData = tableData.filter((data) => {
+    const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
+    const matchesSearchQuery = data.analyst.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      data.testTechnique.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesStatus && matchesSearchQuery;
+  });
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(employees.length / pageSize));
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleWidgetClick = (status) => {
+    setSelectedStatus(status);
+    setCurrentPage(1);
+  };
+
+  const statusCounts = {
+    INITIATED: tableData.filter(data => data.status === 'INITIATED').length,
+    REINITIATED: tableData.filter(data => data.status === 'REINITIATED').length,
+    APPROVED: tableData.filter(data => data.status === 'APPROVED').length,
+    REJECTED: tableData.filter(data => data.status === 'REJECTED').length,
+    DROPPED: tableData.filter(data => data.status === 'DROPPED').length,
   };
 
   return (
-    <div className=" mx-5 ">
-      <div className="row my-5 ">
+    <div className="mx-5">
+      <div className="row my-5">
         <div className="main-head">
           <div className="title fw-bold fs-5">Vendors</div>
         </div>
 
         <div className="chart-widgets w-100">
-          <div className="">
-            <div className="row">
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
-                <div className="text-light fs-5">INITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">4</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
-                <div className="text-light fs-5">REINITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">0</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
-                <div className="text-light fs-5">APPROVED</div>
-                <div className="count fs-1 text-light fw-bolder">6</div>
-              </div>
-            
-              <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
-                <div className="text-light fs-5">REJECTED</div>
-                <div className="count fs-1 text-light fw-bolder">0</div>
-              </div>
+          <div className="row">
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }} onClick={() => handleWidgetClick('INITIATED')}>
+              <div className="text-light fs-5">INITIATED</div>
+              <div className="count fs-1 text-light fw-bolder">{statusCounts.INITIATED}</div>
+            </div>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }} onClick={() => handleWidgetClick('REINITIATED')}>
+              <div className="text-light fs-5">REINITIATED</div>
+              <div className="count fs-1 text-light fw-bolder">{statusCounts.REINITIATED}</div>
+            </div>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }} onClick={() => handleWidgetClick('APPROVED')}>
+              <div className="text-light fs-5">APPROVED</div>
+              <div className="count fs-1 text-light fw-bolder">{statusCounts.APPROVED}</div>
+            </div>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }} onClick={() => handleWidgetClick('REJECTED')}>
+              <div className="text-light fs-5">REJECTED</div>
+              <div className="count fs-1 text-light fw-bolder">{statusCounts.REJECTED}</div>
             </div>
           </div>
-          
-        
         </div>
-        
-        <div>
+
+        <div className='my-3'>
           <CRow className="mb-3">
             <CCol sm={4}>
               <CFormInput
-                type="email"
+                type="text"
+                className='border-2'
                 placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
               />
             </CCol>
-            <CCol sm={3}> 
+            <CCol sm={3}>
               <CFormSelect
+                value={selectedStatus}
+                className='border-2'
+                onChange={handleStatusChange}
                 options={[
-                  'Select Status',
-                  { label: 'All', value: '1' },
-                  { label: 'Initiated', value: '0' } ,
-                  { label: 'Approved', value: '1' },
-                  { label: 'Rejected', value: '0' },
-                  { label: 'Reinitiated', value: '0'},
-                  { label: 'Droped', value: '0' }
+                  { value: 'All', label: 'All' },
+                  { value: 'INITIATED', label: 'Initiated' },
+                  { value: 'APPROVED', label: 'Approved' },
+                  { value: 'REJECTED', label: 'Rejected' },
+                  { value: 'REINITIATED', label: 'Reinitiated' },
+                  { value: 'DROPPED', label: 'Dropped' }
                 ]}
               />
             </CCol>
             <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton id="Addbtn"
-                  className="btn btn-primary btn-right"
+                <button
+                  className="d-flex rounded btn-primary btn-right p-2"
                   type="button"
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight"><CgAddR />  <span>Add Vendor</span></CButton>
+                  onClick={() => setAddModal(true)}><span>Add Vendor</span></button>
               </div>
             </CCol>
           </CRow>
         </div>
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header ">
-            <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-            Add Vendor
-            </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
+
+        {/* If data does not found then */}
+        {filteredData.length === 0 ? <center className='my-5'><h5>No Vendors Found</h5></center> :<div className="notFound">
+          <div className="mt-4 border-2 rounded shadow p-3">
+            <CTable align="middle" responsive className="table-responsive">
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Id</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Vendor</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Test Technique</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Training Details</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {currentRecords.map((data, index) => (
+                  <CTableRow key={index}>
+                    <CTableHeaderCell scope="row" className="text-center">
+                      <input type="checkbox" />
+                    </CTableHeaderCell>
+                    <CTableDataCell>{data.id}</CTableDataCell>
+                    <CTableDataCell>{data.analyst}</CTableDataCell>
+                    <CTableDataCell>{data.testTechnique}</CTableDataCell>
+                    <CTableDataCell>{data.trainingDetails}</CTableDataCell>
+                    <CTableDataCell>{data.remarks}</CTableDataCell>
+                    <CTableDataCell>{data.addedOn}</CTableDataCell>
+                    <CTableDataCell>
+                      <div className=" w-75">
+                        <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
+                          : data.status === "APPROVED"
+                            ? 'green-700'
+                            : data.status === "REJECTED"
+                              ? 'red-700'
+                              : data.status === "REINITIATED"
+                                ? 'yellow-500'
+                                : data.status === "DROPPED"
+                                  ? 'purple-700'
+                                  : 'white'}`} >{data.status}</div>
+                      </div>
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <div className="d-flex gap-3">
+                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+                        <div className="cursor-pointer"><FontAwesomeIcon icon={faTrashCan} /></div>
+                      </div>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
+          </div>
+          <div className="pagination my-4 d-flex justify-content-between">
+            <div className="d-flex gap-2">
+              <button className="btn" onClick={handlePreviousPage} disabled={currentPage === 1}>&lt;&lt;</button>
+              <button className="btn bg-dark-subtle">{currentPage}</button>
+              <button className="btn" onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;&gt;</button>
+            </div>
+            <div>
+              <button className="d-flex btn btn-next gap-2" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                Next <FaArrowRight className="mt-1" />
+              </button>
             </div>
           </div>
-          <p style={{marginLeft:'20px'}}>Add information and add new Vendor</p>
-
-          <label className="line3" htmlFor="">Material Name</label>
-          <input className="line4" required type="text" placeholder="Name " />
-
-          <label className="line3" htmlFor="">Supplier Name</label>
-          <input className="line4" required type="text" placeholder="Supplier Name" />
-<label className="line3" htmlFor="">Email</label>
-          <input className="line4" required type="Email" placeholder="Email" />
-<label className="line3" htmlFor="">Phone</label>
-          <input className="line4" required type="text" placeholder="Phone" />
-
-        <label className="line3" htmlFor="" >Address</label>
-              <textarea name=""  style={{padding:'35px'}} className="line4" placeholder='Address'></textarea>
-              
-              <label className="line3" htmlFor="">Comments</label>
-              <textarea name="" style={{padding:'35px'}} rows="4" cols="50" className="line4" placeholder='Comments'></textarea>
-             
-              <label className="line3" htmlFor="">Contact person number</label>
-              <textarea name=""  style={{padding:'35px'}} className="line4" placeholder='Contact person '></textarea> 
-              
-              <label className="line3" htmlFor="">Website</label>
-              <textarea name=""  style={{padding:'35px'}} className="line4" placeholder='Website'></textarea>
-
-          <div id="line5">
-            <button type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close">&lt; Back</button>
-            <button>Add</button>
-
-
-          </div>
-        </div>
-
+        </div>}
       </div>
-                <div ><center><h5>No Vendors Found</h5></center></div>
+
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </div>
   );
 };
 
-export default SettingVendors
+const StatusModal = (_props) => {
+  return (
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size='lg'>
+      <CModalHeader>
+        <CModalTitle>Add Vendor</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <h5 className='mb-4'>Add information and add new Vendor</h5>
+        <CFormInput type="text" className='mb-3' label="Material Name" placeholder="Material Name" />
+        <CFormInput type="text" className='mb-3' label="Supplier Name" placeholder="Supplier Name" />
+        <CFormInput type="text" className='mb-3' label="Email" placeholder="email@xyz.com" />
+        <CFormInput type="number" className='mb-3' label="Phone" placeholder="Phone" />
+        <CFormInput type="text" className='mb-3' label="Address" placeholder="Address" />
+        <CFormInput type="text" className='mb-3' label="Comments" placeholder="Comments" />
+        <CFormInput type="number" className='mb-3' label="Contact person number" placeholder="Contact person" />
+        <CFormInput type="text" className='mb-3' label="Website" placeholder="https://yourweb.com" />
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
+        <CButton color="primary">Add</CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
+
+export default SettingVendors;
