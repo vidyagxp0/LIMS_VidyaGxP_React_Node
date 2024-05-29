@@ -132,7 +132,7 @@ export default function StocksVerification() {
           id="editVerify"
           aria-labelledby="offcanvasRightLabel"
         >
-          <div className="offcanvas-header border-bottom pb-2 border-2 border-dark mx-3 px-0">
+          <div className="offcanvas-header border-bottom pb-2  mx-3 px-0">
             <h5 className="offcanvas-title" id="offcanvasRightLabel">
               View Stock Verification
             </h5>

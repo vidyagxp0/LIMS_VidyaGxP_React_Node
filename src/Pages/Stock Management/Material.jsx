@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 export default function Material() {
   const [storageName, setStorageName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [addModal, setAddModal] = useState(false)
+
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
@@ -19,15 +22,47 @@ export default function Material() {
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
+  const StatusModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Material</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+        <CFormInput
+          label='Material Name'
+          className="mb-3"
+          type="text"
+          placeholder="Material Name"
+          /> 
+          <CFormInput
+          label='Description'
+          className="mb-3"
+          type="text"
+          placeholder="Description"
+          />
+
+          <div className="d-flex gap-3 mt-">
+            <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+            <CButton color="primary w-50">Add Material</CButton>
+          </div>
+        
+        </CModalBody>
+      </CModal>
+    )
+  }
+
   const [employees, setEmployees] = useState([
     { id: 1, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
     { id: 2, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'INITIATED' },
     { id: 3, user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
     { id: 4, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'REINITIATED' },
-    { id: 5, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
+    { id: 5, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' }, 
+    { id: 6, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'REINITIATED' },
+    { id: 7, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
   ]);
 
-  const pageSize = 4;
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredEmployees = employees.filter(employee => {
@@ -69,7 +104,7 @@ export default function Material() {
         <td>
           <div className="d-flex gap-3">
             <Link to="/stock-management/stock-material-details"><FontAwesomeIcon icon={faEye} /></Link>
-            <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#updateMaterial" aria-controls="offcanvasRight"><FontAwesomeIcon icon={faPenToSquare} /></div>
+            <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
             <div className="cursor-pointer" onClick={() => deleteEmployee(employee.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
           </div>
         </td>
@@ -140,59 +175,13 @@ export default function Material() {
           <button
             className="btn btn-primary m-5"
             type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRight"
-            aria-controls="offcanvasRight"
+            onClick={() => setAddModal(true)}
           >
-            <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Material</span>
+          <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Material</span>
           </button>
         </div>
-        <div
-          className="offcanvas offcanvas-end"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Material
-              </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-
-          <label className="line3" htmlFor="">Material Name</label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">Description</label>
-          <input className="line4" required type="text" placeholder="" />
-
-          {errorMessage && (
-            <div id="error" style={{ color: "red", fontSize: "10px", marginLeft: "30px" }}>
-              {errorMessage}
-            </div>
-          )}
-
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Add Material</button>
-          </div>
         </div>
-      </div>
-
+       
       <br />
       <div className='table-responsive p-4 container1'>
         <table className='table shadow ' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
@@ -211,76 +200,11 @@ export default function Material() {
             {renderRows()}
           </tbody>
         </table>
-        <div className="offcanvas offcanvas-end" tabIndex="-1" id="removeMaterial" aria-labelledby="offcanvasRightLabel">
-          <div className="offcanvas-header border-bottom pb-2 border-2 border-dark mx-3 px-0">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">Delete Stock</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-          <div className="offcanvas-body">
-            <p className="mb-3">Do you want to delete this Material <code>INL0000001</code>?</p>
-            <div className="mb-3">
-              <label htmlFor="userID" className="form-label">User Id</label>
-              <input type="text" className="form-control" id="userID" defaultValue={'User-062023-0000001'} placeholder="User Id" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="Password" className="form-label">Password</label>
-              <input type="password" className="form-control" id="Password" defaultValue={'Password'} placeholder="Password" />
-            </div>
-            <div className="d-flex gap-4 my-5">
-              <button className="btn btn-secondary w-100" data-bs-dismiss="offcanvas" aria-label="Close">Back</button>
-              <button className="btn btn-primary w-100">Submit</button>
-            </div>
-          </div>
-        </div>
       </div>
-      <div
-        className="offcanvas offcanvas-end"
-        tabIndex="-1"
-        id="updateMaterial"
-        aria-labelledby="offcanvasRightLabel"
-      >
-        <div className="offcanvas-header">
-          <div id="line1">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Update Material
-            </h5>
-            <button
-              id="closebtn"
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            ></button>
-          </div>
-        </div>
-
-        <label className="line3" htmlFor="">Material Name</label>
-        <input className="line4" required type="text" placeholder="" />
-
-        <label className="line3" htmlFor="">Description</label>
-        <input className="line4" required type="text" placeholder="" />
-
-        {errorMessage && (
-          <div id="error" style={{ color: "red", fontSize: "10px", marginLeft: "30px" }}>
-            {errorMessage}
-          </div>
-        )}
-
-        <div id="line5">
-          <button
-            type="button"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          >
-            &lt; Back
-          </button>
-          <button>Add Material</button>
-        </div>
-      </div>
-
+        
       <div className="pagination" style={{ margin: '0 35px' }}>
         <div className="pagination">
-          <div className='mr-5'>
+          <div>
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
           </div>
           <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -290,8 +214,11 @@ export default function Material() {
             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
           </div>
         </div>
-        <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+        <button className="btn btn-next d-flex align-items-center" onClick={nextToLastPage}> Next <FaArrowRight className="ms-2" /></button>
       </div>
+
+      
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </>
   );
 }

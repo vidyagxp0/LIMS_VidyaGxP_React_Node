@@ -2,7 +2,6 @@ import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFoote
 import React, { useState } from 'react'
 import './Samplelogin.css'
 import { HiDotsHorizontal } from "react-icons/hi";
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
 import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
@@ -14,6 +13,8 @@ export default function Samplelogin() {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
+  const [addModal, setAddModal] = useState(false)
+
 
     const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = {
@@ -143,7 +144,7 @@ export default function Samplelogin() {
                         <CCol sm={2}></CCol>
                         <CCol sm={3}>
                             <div className="d-flex justify-content-end">
-                                <CButton color="primary" data-bs-toggle="offcanvas" data-bs-target="#addLoginSample" aria-controls="offcanvasRight"><CgAddR className="mx-1 fs-4" /> Add Sample Login</CButton>
+                                <CButton color="primary"  onClick={() => setAddModal(true)}> Add Sample Login</CButton>
                             </div>
                         </CCol>
                     </CRow>
@@ -251,6 +252,8 @@ export default function Samplelogin() {
 
                     <label className="line3" htmlFor="">Certificates (If any)</label>
                     <input className="line4" required type="text" placeholder="Select..." />
+              
+
                     <div className="m-4">
                         <table className='table table-bordered table-responsive'>
                             <thead>
@@ -279,6 +282,9 @@ export default function Samplelogin() {
                             </tbody>
                         </table>
                     </div>
+
+
+
                     <div id="line5">
                         <button type="button"
                             data-bs-dismiss="offcanvas"
@@ -323,7 +329,7 @@ export default function Samplelogin() {
 
                 <div className="pagination">
                     <div className="pagination">
-                        <div className='mr-5'>
+                        <div>
                             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
                         </div>
                         <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -333,9 +339,81 @@ export default function Samplelogin() {
                             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
                         </div>
                     </div>
-                    <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+                    <button className="btn btn-next d-flex align-items-center " onClick={nextToLastPage}> Next <FaArrowRight className="ms-2"/></button>
                 </div>
             </div>
+            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
         </>
     )
 }
+
+const StatusModal = (_props) => {
+    return (
+      <CModal className="w-5" alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>New Storage Condition</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Client"
+            placeholder="Select..."
+          /> 
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Test Plan / Revision No."
+            placeholder="Select..."
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Product / Material"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Product / Material Code"
+            placeholder=""
+          />
+           <CFormInput
+            type="text"
+            className="mb-3"
+            label="Generic Name"
+            placeholder=""
+          />
+           <CFormInput
+            type="text"
+            className="mb-3"
+            label="Specification ID"
+            placeholder=""
+          />
+           <CFormInput
+            type="text"
+            className="mb-3"
+            label="Copy Sample from"
+            placeholder=""
+          />
+           <CFormInput
+            type="text"
+            className="mb-3"
+            label="Sample Type"
+            placeholder=""
+          />
+           <CFormInput
+            type="text"
+            className="mb-3"
+            label="Certificates (If any)"
+            placeholder=""
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton color="primary">Add Sample</CButton>
+        </CModalFooter>
+      </CModal>
+    )
+  }
+  
