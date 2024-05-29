@@ -16,55 +16,55 @@ function GroupName() {
 
   const tableData = [
     {
-        SNo: 1,
-        groupName: "Dissolution",
-        description: "dissolution",
-        addedOn: "Jun 17th 23 14:45",
-        status: "APPROVED",
+      SNo: 1,
+      groupName: "Dissolution",
+      description: "dissolution",
+      addedOn: "Jun 17th 23 14:45",
+      status: "APPROVED",
     },
     {
-        SNo: 2,
-        groupName: "Uniformity of dosage units (By Content uniformity)",
-        description: "uniformity",
-        addedOn: "Jun 17th 23 14:45",
-        status: "APPROVED",
+      SNo: 2,
+      groupName: "Uniformity of dosage units (By Content uniformity)",
+      description: "uniformity",
+      addedOn: "Jun 17th 23 14:45",
+      status: "APPROVED",
     },
     {
-        SNo: 3,
-        groupName: "Related substances",
-        description: "rs",
-        addedOn: "Jun 17th 23 14:46",
-        status: "APPROVED",
+      SNo: 3,
+      groupName: "Related substances",
+      description: "rs",
+      addedOn: "Jun 17th 23 14:46",
+      status: "APPROVED",
     },
     {
-        SNo: 4,
-        groupName: "Each film coated bilayered tablet contains",
-        description: "tablets",
-        addedOn: "Jun 17th 23 14:50",
-        status: "APPROVED",
+      SNo: 4,
+      groupName: "Each film coated bilayered tablet contains",
+      description: "tablets",
+      addedOn: "Jun 17th 23 14:50",
+      status: "APPROVED",
     },
     {
-        SNo: 5,
-        groupName: "Microbial Limit Test",
-        description: "mct",
-        addedOn: "Jun 17th 23 14:50",
-        status: "APPROVED",
+      SNo: 5,
+      groupName: "Microbial Limit Test",
+      description: "mct",
+      addedOn: "Jun 17th 23 14:50",
+      status: "APPROVED",
     },
     {
-        SNo: 6,
-        groupName: "Assay",
-        description: "Assay",
-        addedOn: "Aug 16th 23 13:16",
-        status: "APPROVED",
+      SNo: 6,
+      groupName: "Assay",
+      description: "Assay",
+      addedOn: "Aug 16th 23 13:16",
+      status: "APPROVED",
     },
     {
-        SNo: 7,
-        groupName: "Specific Gravity",
-        description: "sg",
-        addedOn: "Mar 16th 24 16:29",
-        status: "APPROVED",
+      SNo: 7,
+      groupName: "Specific Gravity",
+      description: "sg",
+      addedOn: "Mar 16th 24 16:29",
+      status: "APPROVED",
     }
-];
+  ];
 
 
   const handleStatusChange = (e) => {
@@ -123,8 +123,8 @@ function GroupName() {
                 <CFormSelect
                   value={selectedStatus}
                   onChange={handleStatusChange}
+                  className="border-2"
                   options={[
-                    'Select Status',
                     { value: 'All', label: 'All' },
                     { value: 'INITIATED', label: 'Initiated' },
                     { value: 'APPROVED', label: 'Approved' },
@@ -142,10 +142,10 @@ function GroupName() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+          <div className="bg-white mt-5 border-2 rounded shadow p-3">
+            <CTable align="middle" responsive className=" table-responsive">
               <CTableHead>
-                <CTableRow>		
+                <CTableRow>
                   <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Group Name</CTableHeaderCell>
                   <CTableHeaderCell scope="col">Description</CTableHeaderCell>
@@ -162,7 +162,18 @@ function GroupName() {
                     <CTableDataCell>{data.description}</CTableDataCell>
                     <CTableDataCell>{data.addedOn}</CTableDataCell>
                     <CTableDataCell>
-                      <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>{data.status}</div>
+                      <div className=" w-75">
+                        <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
+                            : data.status === "APPROVED"
+                              ? 'green-700'
+                              : data.status === "REJECTED"
+                                ? 'red-700'
+                                : data.status === "REINITIATED"
+                                  ? 'yellow-500'
+                                  : data.status === "DROPPED"
+                                    ? 'purple-700'
+                                    : 'white'}`} >{data.status}</div>
+                      </div>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -177,22 +188,12 @@ function GroupName() {
           </div>
           <div className="pagination my-3 d-flex justify-content-between">
             <div className="d-flex gap-2">
-              <button className="btn mr-2" onClick={() => paginate(1)} disabled={currentPage === 1}>&lt;&lt;</button>
-              <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index + 1}
-                  className={`btn mr-2 ${currentPage === index + 1 ? 'bg-dark-subtle' : ''}`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
-              <button className="btn" onClick={() => paginate(totalPages)} disabled={currentPage === totalPages}>&gt;&gt;</button>
+              <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+              <button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
+              <button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
             </div>
             <div className="">
-              <button className="btn btn-next ml-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight /></button>
+              <button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
             </div>
           </div>
         </div>

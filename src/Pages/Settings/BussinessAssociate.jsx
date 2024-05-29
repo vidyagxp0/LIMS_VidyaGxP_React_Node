@@ -20,13 +20,13 @@ function BussinessAssociate() {
     { id: 3, name: "test", code: "NA", city: "testing525", state: "Lab1", country: "test", zip: "25255488", status: "APPROVED" },
     { id: 4, name: "Alpha", code: "ALP", city: "Mumbai", state: "Maharashtra", country: "India", zip: "400001", status: "INITIATED" },
     { id: 5, name: "Beta", code: "BET", city: "Delhi", state: "Delhi", country: "India", zip: "110001", status: "REINITIATED" },
-    { id: 6, name: "Gamma", code: "GAM", city: "Chennai", state: "Tamil Nadu", country: "India", zip: "600001", status: "REJECTED" },
+    { id: 6, name: "Gamma", code: "GAM", city: "Chennai", state: "Tamil Nadu", country: "India", zip: "700001", status: "REJECTED" },
     { id: 7, name: "Delta", code: "DEL", city: "Kolkata", state: "West Bengal", country: "India", zip: "700001", status: "APPROVED" },
-    { id: 8, name: "Epsilon", code: "EPS", city: "Bangalore", state: "Karnataka", country: "India", zip: "560001", status: "APPROVED" },
+    { id: 8, name: "Epsilon", code: "EPS", city: "Bangalore", state: "Karnataka", country: "India", zip: "570001", status: "APPROVED" },
     { id: 9, name: "Zeta", code: "ZET", city: "Pune", state: "Maharashtra", country: "India", zip: "411001", status: "INITIATED" },
     { id: 10, name: "Eta", code: "ETA", city: "Jaipur", state: "Rajasthan", country: "India", zip: "302001", status: "APPROVED" },
-    { id: 11, name: "Theta", code: "THE", city: "Lucknow", state: "Uttar Pradesh", country: "India", zip: "226001", status: "REJECTED" },
-    { id: 12, name: "Iota", code: "IOT", city: "Chandigarh", state: "Punjab", country: "India", zip: "160001", status: "APPROVED" },
+    { id: 11, name: "Theta", code: "THE", city: "Lucknow", state: "Uttar Pradesh", country: "India", zip: "227001", status: "REJECTED" },
+    { id: 12, name: "Iota", code: "IOT", city: "Chandigarh", state: "Punjab", country: "India", zip: "170001", status: "APPROVED" },
     { id: 13, name: "Kappa", code: "KAP", city: "Bhopal", state: "Madhya Pradesh", country: "India", zip: "462001", status: "REINITIATED" },
   ];
 
@@ -85,9 +85,9 @@ function BussinessAssociate() {
               <CCol sm={3}>
                 <CFormSelect
                   value={selectedStatus}
+                  className="border-2"
                   onChange={handleStatusChange}
                   options={[
-                    'Select Status',
                     { value: 'All', label: 'All' },
                     { value: 'INITIATED', label: 'Initiated' },
                     { value: 'APPROVED', label: 'Approved' },
@@ -105,8 +105,8 @@ function BussinessAssociate() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" shadow">
+          <div className="bg-white mt-5 border-2 rounded shadow p-3">
+            <CTable align="middle" responsive className="table-responsive">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
@@ -135,7 +135,18 @@ function BussinessAssociate() {
                     <CTableDataCell>{data.country}</CTableDataCell>
                     <CTableDataCell>{data.zip}</CTableDataCell>
                     <CTableDataCell>
-                      <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>{data.status}</div>
+                      <div className=" w-75">
+                        <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
+                          : data.status === "APPROVED"
+                            ? 'green-700'
+                            : data.status === "REJECTED"
+                              ? 'red-700'
+                              : data.status === "REINITIATED"
+                                ? 'yellow-500'
+                                : data.status === "DROPPED"
+                                  ? 'purple-700'
+                                  : 'white'}`} >{data.status}</div>
+                      </div>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -150,22 +161,12 @@ function BussinessAssociate() {
           </div>
           <div className="pagination my-3 d-flex justify-content-between">
             <div className="d-flex gap-2">
-              <button className="btn mr-2" onClick={() => paginate(1)} disabled={currentPage === 1}>&lt;&lt;</button>
-              <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt;</button>
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index + 1}
-                  className={`btn mr-2 ${currentPage === index + 1 ? 'bg-dark-subtle' : ''}`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt;</button>
-              <button className="btn" onClick={() => paginate(totalPages)} disabled={currentPage === totalPages}>&gt;&gt;</button>
+              <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+              <button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
+              <button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
             </div>
             <div className="">
-              <button className="btn btn-next ml-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight /></button>
+              <button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1"/></button>
             </div>
           </div>
         </div>
@@ -258,7 +259,7 @@ const StatusModal = (_props) => {
           type="text"
           label={
             <>
-              Address : Line 2 
+              Address : Line 2
             </>
           }
           placeholder="Address : Line 2"
@@ -270,7 +271,7 @@ const StatusModal = (_props) => {
           type="text"
           label={
             <>
-              Address : Line 3 
+              Address : Line 3
             </>
           }
           placeholder="Address : Line 3"
