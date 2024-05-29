@@ -7,10 +7,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Button } from 'react-bootstrap';
+
 
 function Header() {
   const [drop, setDrop] = useState(false);
   const [notification, setNotification] = useState(false);
+  
 
   return (
     <header
@@ -86,16 +89,13 @@ function Header() {
                   <FontAwesomeIcon icon={faAudible} className="mr-2" />
                   Audit Trail
                 </Link>
+
                 <Link to="#" className="block py-2 px-4 hover:bg-gray-100">
-                  <FontAwesomeIcon className="mr-2" />
-                  <select name="" id="">
-                    
-                    <option value=""><span className="mr-3">♣</span> About</option>
-                    <option value="">2</option>
-                    <option value="">3</option>
-                  </select>
-                  
+                  <button>
+                    <span className="mr-3">♣</span> About
+                  </button>
                 </Link>
+
                 <Link to="/" className="block py-2 px-4 hover:bg-gray-100">
                   <FontAwesomeIcon
                     icon={faArrowRightFromBracket}
