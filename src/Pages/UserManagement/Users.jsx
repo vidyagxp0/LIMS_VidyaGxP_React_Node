@@ -53,9 +53,7 @@ const Users = () => {
 
                 <td>{employee.addedBy}</td>
                 <td>
-
                     <div className="d-flex gap-3">
-
                         <div
                             className="cursor-pointer"
                             onClick={() => setAddModal(true)}
@@ -107,7 +105,7 @@ const Users = () => {
                 </div>
                 <div className="col-md-6 pt-4">
                     <div className="dropdown">
-                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
                             <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
                                 setSelectedStatus(e.target.value);

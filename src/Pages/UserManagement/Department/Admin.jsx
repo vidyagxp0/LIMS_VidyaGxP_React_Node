@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import './Admin.css';
 import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR } from 'react-icons/cg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { Link } from 'react-router-dom';
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 
 const Admin = () => {
     const [addModal, setAddModal] = useState(false);
@@ -16,10 +14,10 @@ const Admin = () => {
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
     const badgeStyle = { background: "green", color: "white", width: "110px" };
-    const badgeStyle2 = { background: " red", color: "white", width: "110px" };
+    const badgeStyle2 = { background: "red", color: "white", width: "110px" };
 
-    // Data for the table
-    const employees = [
+    
+    const [employees, setEmployees] = useState([
         { id: "USER-022024-000001", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
         { id: "USER-022024-000002", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
         { id: "USER-022024-000003", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
@@ -30,7 +28,7 @@ const Admin = () => {
         { id: "USER-022024-000008", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
         { id: "USER-022024-000009", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
         { id: "USER-022024-000010", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
-    ];
+    ]);
 
     // Calculate start and end indices for current page
     const startIndex = (currentPage - 1) * pageSize;
@@ -52,12 +50,19 @@ const Admin = () => {
                     <button className='btn btn-right p-1 m-2'>Resend Email</button>
                 </td>
                 <td>{employee.addedOn}</td>
-                <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button>
+                <td>
+                    <button
+                        style={{
+                            background: employee.status === 'Active' ? 'green' : 'red',
+                            color: 'white',
+                            width: '110px'
+                        }}
+                        className="btn d-flex py-2 px-3 small rounded fw-bold">
+                        {employee.status}
+                    </button>
                 </td>
                 <td>
-
                     <div className="d-flex gap-3">
-
                         <div
                             className="cursor-pointer"
                             onClick={() => setAddModal(true)}
@@ -86,50 +91,46 @@ const Admin = () => {
         setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
     };
 
-    const handleDelete = () => {
-        console.log(`Deleting employee: ${selectedEmployee.name}`);
-        setSelectedEmployee(null);
-    };
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
     };
 
     const handleDeleteConfirm = () => {
-        setData(employees.filter((employee) => employee.id !== deleteId));
+        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
         setDeleteModal(false);
     };
-
-
 
     return (
         <div className="mx-5">
             <div className="row my-5">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5">Admin/Employee</div>
+                    <div className="title fw-bold fs-5 py-4">Admin/Employee</div>
                 </div>
                 <div className="col-md-6 pt-4">
                     <div className="dropdown">
-                        <select style={{ outline: "none" }} id='selectOption' className="btn border btn-block" onChange={(e) => {
-                            setSelectedStatus(e.target.value);
-                            setCurrentPage(1); // Reset to the first page on filter change
-                        }}>
-                            <option value="All">All</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
+                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Show
+                            <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
+                                setSelectedStatus(e.target.value);
+                                setCurrentPage(1); // Reset to the first page on filter change
+                            }}>
+                                <option value="All">All</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </button>
                     </div>
                 </div>
 
                 <div className="d-flex justify-content-end">
                     <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
                 </div>
-
             </div>
 
             {/* Employee table */}
             <div className=' table-responsive bg-white rounded py-3 px-4 mt-5 ' style={{ boxShadow: "0px 0px 3px black" }}>
-                <table className='table' >
+                <table className='table'>
                     <thead>
                         <tr>
                             <th>S.No.</th>
@@ -159,92 +160,87 @@ const Admin = () => {
                         &gt;&gt;
                     </button>
                 </div>
-                <button className="btn d-flex align-items-center " onClick={nextToLastPage}>
+                <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
                     Next <FaArrowRight className='ms-2' />
                 </button>
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
             {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
         </div>
     );
 };
+
 const StatusModal = (_props) => {
     return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-                <CModalHeader>
-                    <CModalTitle>Add User </CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Please Add User To fill This Details</p>
-
-                    <CFormInput
-                        type="text"
-                        label="User Name"
-                        placeholder="UserName "
-                    />
-                    <CFormInput
-                        type="number"
-                        label="Contact Number"
-                        placeholder="+91 0000000000 "
-                    />
-                    <CFormInput
-                        type="email"
-                        label="Gmail Address"
-                        placeholder=" sample@gmail.com"
-                    />
-
-                    <CFormInput
-                        type="text"
-                        label="Address"
-                        placeholder="Address "
-                    />
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton color="primary">Submit</CButton>
-                </CModalFooter>
-            </CModal>
-        </>
-    )
-}
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+            <CModalHeader>
+                <CModalTitle>Add User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Please Add User To fill This Details</p>
+                <CFormInput
+                    type="text"
+                    label="User Name"
+                    placeholder="UserName "
+                />
+                <CFormInput
+                    type="number"
+                    label="Contact Number"
+                    placeholder="+91 0000000000 "
+                />
+                <CFormInput
+                    type="email"
+                    label="Gmail Address"
+                    placeholder="sample@gmail.com"
+                />
+                <CFormInput
+                    type="text"
+                    label="Address"
+                    placeholder="Address "
+                />
+            </CModalBody>
+            <CModalFooter>
+                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                <CButton color="primary">Submit</CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
 
 const DeleteModal = (_props) => {
     return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-                <CModalHeader>
-                    <CModalTitle>Delete User</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Are you sure you want to delete this user { } ?</p>
-                </CModalBody>
-                <CModalFooter>
-                    <CButton
-                        color="secondary"
-                        onClick={_props.closeModal}
-                        style={{
-                            marginRight: "0.5rem",
-                            fontWeight: "500",
-                        }}
-                    >
-                        Cancel
-                    </CButton>
-                    <CButton
-                        color="danger"
-                        onClick={_props.handleDelete}
-                        style={{
-                            fontWeight: "500",
-                            color: "white",
-                        }}
-                    >
-                        Delete
-                    </CButton>
-                </CModalFooter>
-            </CModal>
-        </>
-    )
-}
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this user?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
 export default Admin;

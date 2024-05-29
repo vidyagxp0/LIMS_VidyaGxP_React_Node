@@ -1,9 +1,11 @@
-
 import React, { useState } from 'react';
 import '../UserManagement/Department/Admin.css';
+import { FaArrowRight } from 'react-icons/fa';
 
 const Roles = () => {
-
+    const pageSize = 5; // Number of items per page
+    const [currentPage, setCurrentPage] = useState(1);
+    
     const employees = [
 
         { role: 'sd_manager', status: 'Active' },
@@ -29,12 +31,27 @@ const Roles = () => {
 
 
     ];
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, employees.length);
+    
+
+    const nextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+        setCurrentPage(currentPage - 1);
+    };
+
+    const nextToLastPage = () => {
+        setCurrentPage(Math.ceil(employees.length / pageSize));
+    };
 
     // Function to render table rows for current page
     const renderRows = () => {
-        return employees.slice().map((employee, index) => (
-            <tr key={index}>
-                <td>{index + 1}</td>
+    return employees.slice(startIndex, endIndex).map((employee, index) => (
+        <tr key={startIndex + index}>
+            <td>{startIndex + index + 1}</td>
                 <td>{employee.role}</td>
                 <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button></td>
             </tr>
@@ -45,25 +62,39 @@ const Roles = () => {
         <div className=" mx-5 ">
             <div className="row my-5 ">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5">Roles</div>
+                    <div className="title fw-bold fs-5 py-4">Roles</div>
                 </div>
 
             </div>
 
             {/* Employee table */}
-            <div className='table-responsive bg-white rounded py-3 px-4 mt-5 ' style={{ boxShadow: "0px 0px 3px black" }}>
-                <table className='table'>
+            <div className='table-responsive bg-white rounded py-3 px-4 mt-5  ' style={{ boxShadow: "0px 0px 3px black" }}>
+                <table className='table '>
                     <thead>
                         <tr>
-                            <th>S.No.</th>
-                            <th>Role</th>
-                            <th>Status</th>
+                            <th className='w-25'>S.No.</th>
+                            <th className='w-25'>Role</th>
+                            <th className='w-25'>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {renderRows()}
                     </tbody>
                 </table>
+            </div>
+            <div className="d-flex justify-content-between align-items-center mt-5">
+                <div className="pagination">
+                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                        &lt;&lt;
+                    </button>
+                    <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                        &gt;&gt;
+                    </button>
+                </div>
+                <button className="btn d-flex align-items-center " onClick={nextToLastPage}>
+                    Next <FaArrowRight className='ms-2' />
+                </button>
             </div>
         </div>
     );

@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import './Admin.css';
 import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR } from 'react-icons/cg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { Link } from 'react-router-dom';
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 const QualityAssurance = () => {
+    const [addModal, setAddModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
     const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
+    const badgeStyle = { background: "green", color: "white", width: "110px" };
+    const badgeStyle2 = { background: " red", color: "white", width: "110px" };
 
-    const employees = [
+    const [employees, setEmployees] = useState([
         { id: "USER-022024-000001", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
         { id: "USER-022024-000002", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
         { id: "USER-022024-000003", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
@@ -23,14 +27,14 @@ const QualityAssurance = () => {
         { id: "USER-022024-000008", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
         { id: "USER-022024-000009", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
         { id: "USER-022024-000010", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
-    ];
+    ]);
 
     const filteredEmployees = employees.filter(employee =>
         selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
     );
 
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
+    const endIndex = Math.min(startIndex + pageSize, employees.length);
 
     const renderRows = () => {
         return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
@@ -45,49 +49,43 @@ const QualityAssurance = () => {
                 <td>{employee.addedOn}</td>
                 <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button></td>
                 <td>
-                    <span
-                        className="btn"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight"
-                        aria-controls="offcanvasRight"
-                    >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                    </span>
-                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                    </Link>
+
+                    <div className="d-flex gap-3">
+
+                        <div
+                            className="cursor-pointer"
+                            onClick={() => setAddModal(true)}
+                        >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </div>
+                    </div>
                 </td>
             </tr>
         ));
     };
 
     const nextPage = () => {
-        if (endIndex < filteredEmployees.length) {
-            setCurrentPage(currentPage + 1);
-        }
+        setCurrentPage(currentPage + 1);
     };
 
     const prevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
+        setCurrentPage(currentPage - 1);
     };
 
     const nextToLastPage = () => {
         setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
     };
-
-    const handleDelete = () => {
-        console.log(`Deleting employee: ${selectedEmployee.name}`);
-        setSelectedEmployee(null);
-    };
+    
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
     };
 
     const handleDeleteConfirm = () => {
-        setData(employees.filter((employee) => employee.id !== deleteId));
+        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
         setDeleteModal(false);
     };
 
@@ -101,7 +99,7 @@ const QualityAssurance = () => {
                     <div className="dropdown">
                         <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select id='selectOption' onChange={(e) => {
+                            <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
                                 setSelectedStatus(e.target.value);
                                 setCurrentPage(1); // Reset to the first page on filter change
                             }}>
@@ -224,7 +222,7 @@ const DeleteModal = (_props) => {
                     </CButton>
                     <CButton
                         color="danger"
-                        onClick={_props.handleDelete}
+                        onClick={_props.confirmDelete}
                         style={{
                             fontWeight: "500",
                             color: "white",
