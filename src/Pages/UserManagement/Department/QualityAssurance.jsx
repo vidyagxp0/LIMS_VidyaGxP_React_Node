@@ -44,7 +44,7 @@ const QualityAssurance = () => {
                 </td>
                 <td>{employee.addedOn}</td>
                 <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button></td>
-            <td>
+                <td>
                     <span
                         className="btn"
                         data-bs-toggle="offcanvas"
@@ -81,6 +81,15 @@ const QualityAssurance = () => {
         console.log(`Deleting employee: ${selectedEmployee.name}`);
         setSelectedEmployee(null);
     };
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setData(employees.filter((employee) => employee.id !== deleteId));
+        setDeleteModal(false);
+    };
 
     return (
         <div className="mx-5">
@@ -103,94 +112,10 @@ const QualityAssurance = () => {
                         </button>
                     </div>
                 </div>
-                <div className="col-md-6">
-                    <button
-                        id="Addbtn"
-                        className="btn btn-right"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight"
-                        aria-controls="offcanvasRight"
-                        style={{ background: "#4B49B6" }}
-                    >
-                        <CgAddR /> <span>Add user</span>
-                    </button>
+                <div className="d-flex justify-content-end">
+                    <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
                 </div>
 
-                <div
-                    className="offcanvas offcanvas-end overflow-y-scroll"
-                    tabIndex="-1"
-                    id="offcanvasRight"
-                    aria-labelledby="offcanvasRightLabel"
-                >
-                    <div className="offcanvas-header ">
-                        <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add User
-                        </h5>
-                            <button
-                                id="closebtn"
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                    </div>
-                    <div className="offcanvas-body">
-                        <p className='mb-3'>Please Add User To fill This Details</p>
-
-                        <div className="mb-3">
-                            <label htmlFor="userName" className="form-label">User Name</label>
-                            <input type="text" className="form-control" id="userName" placeholder="UserName" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="contactNumber" className="form-label">Contact Number</label>
-                            <input type="number" className="form-control" id="contactNumber" placeholder="+91 0000000000" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="email" className="form-label">Gmail Address</label>
-                            <input type="text" className="form-control" id="email" placeholder="sample@gmail.com" />
-
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="address" className="form-label">Address</label>
-                            <input type="text" className="form-control" id="address" placeholder="Address" />
-                        </div>
-
-                        <div className="d-flex justify-content-center gap-4 mt-4">
-                            <button type="button" className='btn btn-secondary w-100' data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
-                            <button type="button" className='btn btn-primary w-100'>Create User ID</button>
-                        </div>
-                    </div>
-                </div>
-
-                {selectedEmployee && (
-                    <div
-                        className="offcanvas offcanvas-end"
-                        tabIndex="-1"
-                        id="deleteOffcanvas"
-                        aria-labelledby="deleteOffcanvasLabel"
-                    >
-                        <div className="offcanvas-header">
-                            <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete User</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="offcanvas"
-                                    aria-label="Close"
-                                    onClick={() => setSelectedEmployee(null)}
-                                ></button>
-                            </div>
-                        </div>
-                        <div className="offcanvas-body">
-                            <p>Are you sure you want to delete {selectedEmployee.name}?</p>
-                            <div className="d-flex justify-content-between">
-                                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
-                                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
 
             <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
@@ -214,21 +139,103 @@ const QualityAssurance = () => {
             </div>
 
             <div className="d-flex justify-content-between align-items-center mt-5">
-                        <div className="pagination">
-                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                        <button className="btn " onClick={nextToLastPage}>
-                            Next <FaArrowRight />
-                        </button>
-                    </div>
+                <div className="pagination">
+                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                        &lt;&lt;
+                    </button>
+                    <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                        &gt;&gt;
+                    </button>
+                </div>
+                <button className="btn d-flex align-items-center " onClick={nextToLastPage}>
+                    Next <FaArrowRight className='ms-2' />
+                </button>
+            </div>
+
+            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
+
         </div>
     );
 };
+
+const StatusModal = (_props) => {
+    return (
+        <>
+            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+                <CModalHeader>
+                    <CModalTitle>Add User </CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <p>Please Add User To fill This Details</p>
+
+                    <CFormInput
+                        type="text"
+                        label="User Name"
+                        placeholder="UserName "
+                    />
+                    <CFormInput
+                        type="number"
+                        label="Contact Number"
+                        placeholder="+91 0000000000 "
+                    />
+                    <CFormInput
+                        type="email"
+                        label="Gmail Address"
+                        placeholder=" sample@gmail.com"
+                    />
+
+                    <CFormInput
+                        type="text"
+                        label="Address"
+                        placeholder="Address "
+                    />
+                </CModalBody>
+                <CModalFooter>
+                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                    <CButton color="primary">Submit</CButton>
+                </CModalFooter>
+            </CModal>
+        </>
+    )
+}
+
+const DeleteModal = (_props) => {
+    return (
+        <>
+            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+                <CModalHeader>
+                    <CModalTitle>Delete User</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <p>Are you sure you want to delete this user { } ?</p>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton
+                        color="secondary"
+                        onClick={_props.closeModal}
+                        style={{
+                            marginRight: "0.5rem",
+                            fontWeight: "500",
+                        }}
+                    >
+                        Cancel
+                    </CButton>
+                    <CButton
+                        color="danger"
+                        onClick={_props.handleDelete}
+                        style={{
+                            fontWeight: "500",
+                            color: "white",
+                        }}
+                    >
+                        Delete
+                    </CButton>
+                </CModalFooter>
+            </CModal>
+        </>
+    )
+}
 
 export default QualityAssurance;

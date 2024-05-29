@@ -142,7 +142,7 @@ import {
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
-                        <Link to={`/approval/${item.id}`}><FontAwesomeIcon icon={faEye} /></Link>
+                        <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
                         <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                         <div className="cursor-pointer" onClick={() => setDeleteModal(item.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
