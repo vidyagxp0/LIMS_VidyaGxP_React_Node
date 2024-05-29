@@ -1,5 +1,4 @@
 #div1{
-    /* border: 1px solid ; */
     margin-top: 30px;
     margin-left: 40px;
 }
@@ -9,7 +8,6 @@
     display: flex;
     align-items: center;
     height: 100px;
-    /* justify-content: space-evenly; */
 }
 #searchmain{
 
@@ -23,7 +21,6 @@
 
 }
 #searchicon{
-    /* border: 2px solid red; */
     width: 23px;
     margin-left: 8px;
 }

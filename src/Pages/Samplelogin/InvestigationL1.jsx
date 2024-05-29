@@ -118,7 +118,7 @@ import {
   
           <div className="pagination">
             <div className="pagination ">
-              <div className='mr-5'>
+              <div>
                 <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
               </div>
               <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -128,7 +128,7 @@ import {
                 <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
               </div>
             </div>
-            <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+            <button className="btn btn-next d-flex align-items-center" onClick={nextToLastPage}> Next <FaArrowRight className="ms-2" /></button>
           </div>
         </div>
       </>

@@ -125,7 +125,7 @@ export default function InvestigationL2() {
 
       <div className="pagination">
         <div className="pagination">
-          <div className='mr-5'>
+          <div>
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
           </div>
           <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -135,7 +135,7 @@ export default function InvestigationL2() {
             <button className="btn mr-2" onClick={nextPage} disabled={currentPage === totalPages}>&gt;&gt;</button>
           </div>
         </div>
-        <button className="btn btn-next" onClick={nextPage}> Next <FaArrowRight /></button>
+        <button className="btn btn-next  d-flex align-items-center" onClick={nextPage}> Next <FaArrowRight className="ms-2" /></button>
       </div>
       </div>
     </>

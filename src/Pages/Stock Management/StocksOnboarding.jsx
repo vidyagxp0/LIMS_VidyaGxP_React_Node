@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
-import 'react-toastify/dist/ReactToastify.css';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody,CFormCheck, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+
 
 export default function StocksOnboarding() {
   const [storageName, setStorageName] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [addModal, setAddModal] = useState(false)
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
     const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
@@ -19,6 +20,44 @@ export default function StocksOnboarding() {
     const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
+    const StatusModal = (_props) => {
+      return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+          <CModalHeader>
+            <CModalTitle>Stock Registration</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+          <CFormCheck 
+                                        type="radio" 
+                                        name="options" 
+                                        value="rm-stock"
+                                        label="RM Stock"
+                                       
+                                    />
+                                    <CFormCheck 
+                                        type="radio" 
+                                        name="options" 
+                                        value="pm-stock"
+                                        label="PM Stock"
+                                       
+                                    />
+                                    <CFormCheck 
+                                        type="radio" 
+                                        name="options" 
+                                        value="chemical-stock"
+                                        label=" Chemical Stock"
+                                       
+                                    />
+          
+            <div className="d-flex gap-3 mt-5">
+              <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+              <CButton color="primary w-50">Next</CButton>
+            </div>
+          
+          </CModalBody>
+        </CModal>
+      )
+    }
 
   const [employees, setEmployees] = useState([
     { id: 1, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
@@ -51,7 +90,7 @@ export default function StocksOnboarding() {
     );
   });
 
-  const pageSize = 8;
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
@@ -149,11 +188,9 @@ export default function StocksOnboarding() {
           <button
             className="btn btn-primary m-5"
             type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRight"
-            aria-controls="offcanvasRight"
+            onClick={() => setAddModal(true)}
           >
-            <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Stock</span>
+            <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Stock</span>
           </button>
         </div>
 
@@ -248,7 +285,7 @@ export default function StocksOnboarding() {
         </table>
         <div className="pagination my-4 mx-3">
           <div className="pagination">
-            <div className='mr-5'>
+            <div >
               <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
             </div>
             <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -258,9 +295,11 @@ export default function StocksOnboarding() {
               <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
             </div>
           </div>
-          <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+          <button className="btn btn-next d-flex align-items-center" onClick={nextToLastPage}> Next <FaArrowRight className="ms-2" /></button>
         </div>
       </div>
+       
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </>
   )
 }
