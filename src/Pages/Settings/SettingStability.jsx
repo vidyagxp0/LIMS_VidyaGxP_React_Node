@@ -3,8 +3,11 @@ import MyCalendar from '../../components/Calender/Calender'
 
 const SettingStability = () => {
   return (
-    <div >
-      <MyCalendar/>
+    <div className='m-5'>
+      <div className="my-5 fw-medium fs-5">Stability Calender</div>
+      <div className='bg-light p-3 rounded'>
+        <MyCalendar/>
+      </div>
     </div>
   )
 }

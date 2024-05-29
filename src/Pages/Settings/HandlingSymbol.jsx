@@ -40,16 +40,16 @@ function HandlingSymbol() {
 	const badgeStyle = { background: "#cdffca" };
 
 	const tableData = [
-          { code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
-          { code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
-          { code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
-          { code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
-          { code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
-          { code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
-          { code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
-          { code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" }
-        ];
-        
+		{ code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
+		{ code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
+		{ code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
+		{ code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
+		{ code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
+		{ code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
+		{ code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
+		{ code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" }
+	];
+
 
 	const handleStatusChange = (e) => {
 		setSelectedStatus(e.target.value);
@@ -88,7 +88,7 @@ function HandlingSymbol() {
 					<div>
 						<CRow className="mb-3">
 							<CCol sm={3}><CFormInput
-								className="mb-3"
+								className="mb-3 border-2"
 								type="text"
 								placeholder="Search..."
 								value={searchQuery}
@@ -97,9 +97,9 @@ function HandlingSymbol() {
 							<CCol sm={3}>
 								<CFormSelect
 									value={selectedStatus}
+									className="border-2"
 									onChange={handleStatusChange}
 									options={[
-										"Select Status",
 										{ value: "All", label: "All" },
 										{ value: "Active", label: "Active" },
 										{ value: "Inactive", label: "Inactive" },
@@ -119,8 +119,8 @@ function HandlingSymbol() {
 							</CCol>
 						</CRow>
 					</div>
-					<div className="bg-white mt-5">
-						<CTable align="middle" responsive className=" shadow">
+					<div className="bg-white mt-5 border-2 rounded shadow p-3">
+						<CTable align="middle" responsive className="table-responsive">
 							<CTableHead>
 								<CTableRow>
 									<CTableHeaderCell scope="col" className="text-center">
@@ -128,7 +128,7 @@ function HandlingSymbol() {
 									</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Symbol Code</CTableHeaderCell>
 									<CTableHeaderCell scope="col">
-                                             Symbol Name
+										Symbol Name
 									</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
 									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
@@ -143,16 +143,14 @@ function HandlingSymbol() {
 										<CTableDataCell>{data.code}</CTableDataCell>
 										<CTableDataCell>{data.name}</CTableDataCell>
 										<CTableDataCell>
-											<div
-												className="py-2 px-3 small rounded fw-bold"
-												style={badgeStyle}
-											>
-												{data.status}
+											<div className=" w-50">
+												<div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'ACTIVE' ? 'green-700'
+													: 'red-700'}`} >{data.status}</div>
 											</div>
 										</CTableDataCell>
 										<CTableDataCell>
 											<div className="d-flex gap-3">
-                                                            <div
+												<div
 													className="cursor-pointer"
 													onClick={() => setAddModal(true)}
 												>
@@ -173,54 +171,12 @@ function HandlingSymbol() {
 					</div>
 					<div className="pagination my-3 d-flex justify-content-between">
 						<div className="d-flex gap-2">
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(1)}
-								disabled={currentPage === 1}
-							>
-								&lt;&lt;
-							</button>
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage - 1)}
-								disabled={currentPage === 1}
-							>
-								&lt;
-							</button>
-							{[...Array(totalPages)].map((_, index) => (
-								<button
-									key={index + 1}
-									className={`btn mr-2 ${currentPage === index + 1 ? "bg-dark-subtle" : ""
-										}`}
-									onClick={() => paginate(index + 1)}
-								>
-									{index + 1}
-								</button>
-							))}
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;
-							</button>
-							<button
-								className="btn"
-								onClick={() => paginate(totalPages)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;&gt;
-							</button>
+							<button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+							<button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
+							<button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
 						</div>
 						<div className="">
-							<button
-								className="btn btn-next ml-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								{" "}
-								Next <FaArrowRight />
-							</button>
+							<button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
 						</div>
 					</div>
 				</div>
@@ -282,7 +238,7 @@ const DeleteModel = (_props) => {
 				<CModalTitle>Delete Symbols</CModalTitle>
 			</CModalHeader>
 			<CModalBody>
-               Do you want to delete this Symbol <code>HS-052024-0000003</code>?
+				Do you want to delete this Symbol <code>HS-052024-0000003</code>?
 			</CModalBody>
 			<CModalFooter>
 				<CButton color="light" onClick={_props.closeModal}>
@@ -295,157 +251,3 @@ const DeleteModel = (_props) => {
 };
 
 export default HandlingSymbol;
-
-
-
-
-// import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-// import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-// import { useState } from "react"
-// import { FaArrowRight } from "react-icons/fa"
-// import { Link } from "react-router-dom"
-
-// function HandlingSymbol() {
-//      const [addModal, setAddModal] = useState(false)
-//      const badgeStyle = { background: "#cdffca" }
-//      return (
-//           <>
-
-//                <div id="approval-page" className="h-100 mx-5">
-//                     <div className="container-fluid my-5">
-
-//                          <div className="main-head">
-//                               <h4 className="fw-bold mb-4 mt-3">Symbols</h4>
-//                          </div>
-//                          <div>
-//                               <CRow className="mb-3">
-//                                    <CCol sm={4}>
-//                                         <CFormInput
-//                                              type="email"
-//                                              placeholder="Search..."
-//                                         />
-//                                    </CCol>
-//                                    <CCol sm={3}>
-//                                         <CFormSelect
-//                                              options={[
-//                                                   'Select Status',
-//                                                   { label: 'Active', value: '1' },
-//                                                   { label: 'Inactive', value: '0' }
-//                                              ]}
-//                                         />
-//                                    </CCol>
-//                                    <CCol sm={2}></CCol>
-//                                    <CCol sm={3}>
-//                                         <div className="d-flex justify-content-end">
-//                                              <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Symbol</CButton>
-//                                         </div>
-//                                    </CCol>
-//                               </CRow>
-//                          </div>
-//                          <div className="bg-white mt-5">
-//                               <CTable align="middle" responsive className=" shadow">
-//                                    <CTableHead>
-//                                         <CTableRow>
-//                                              <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-//                                              <CTableHeaderCell scope="col">Symbol Code</CTableHeaderCell>
-//                                              <CTableHeaderCell scope="col">Symbol Name</CTableHeaderCell>
-//                                              <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-//                                              <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-//                                         </CTableRow>
-//                                    </CTableHead>
-//                                    <CTableBody>
-//                                         <CTableRow>
-//                                              <CTableHeaderCell scope="row" className="text-center">
-//                                                   <input type="checkbox" />
-//                                              </CTableHeaderCell>
-//                                              <CTableDataCell>HS-052024-0000008</CTableDataCell>
-//                                              <CTableDataCell>GHS07, GHS08</CTableDataCell>                                        
-//                                              <CTableDataCell className="d-flex">
-//                                                   <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
-//                                              </CTableDataCell>
-//                                              <CTableDataCell>
-//                                                   <div className="d-flex gap-3">
-//                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-//                                                        <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-//                                                   </div>
-//                                              </CTableDataCell>
-//                                         </CTableRow>
-
-//                                         <CTableRow>
-//                                              <CTableHeaderCell scope="row" className="text-center">
-//                                                   <input type="checkbox" />
-//                                              </CTableHeaderCell>
-//                                              <CTableDataCell>HS-052024-0000008</CTableDataCell>
-//                                              <CTableDataCell>GHS02, GHS07, GHS08</CTableDataCell>                                        
-//                                              <CTableDataCell className="d-flex">
-//                                                   <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>ACTIVE</div>
-//                                              </CTableDataCell>
-//                                              <CTableDataCell>
-//                                                   <div className="d-flex gap-3">
-//                                                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-//                                                        <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-//                                                   </div>
-//                                              </CTableDataCell>
-//                                         </CTableRow>
-
-//                                    </CTableBody>
-//                               </CTable>
-//                          </div>
-
-//                          <div className="pagination">
-
-//                               <div className="pagination">
-//                                    <div className='mr-5'>
-//                                         <button className="btn  mr-2" >&lt;&lt;</button>
-//                                    </div>
-//                                    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-//                                         <button className='btn rounded-circle'> 1 </button>
-//                                    </div>
-//                                    <div>
-//                                         <button className="btn mr-2" >&gt;&gt;</button>
-
-//                                    </div>
-
-//                               </div>
-//                               <button className="btn btn-next" > Next <FaArrowRight /></button>
-//                          </div>
-
-
-//                     </div>
-//                </div>
-
-//                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-
-//           </>
-//      )
-// }
-
-// const StatusModal = (_props) => {
-//      return (
-//           <>
-
-//                <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//                     <CModalHeader>
-//                          <CModalTitle>New Symbol</CModalTitle>
-//                     </CModalHeader>
-//                     <CModalBody>
-
-//                          <CFormInput
-//                               type="text"
-//                               label="Name"
-//                               placeholder="Symbol Name"
-//                          />
-                        
-//                     </CModalBody>
-//                     <CModalFooter>
-//                          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//                          <CButton className="bg-info text-white">Add Symbol</CButton>
-//                     </CModalFooter>
-//                </CModal>
-
-//           </>
-//      )
-// }
-
-// export default HandlingSymbol

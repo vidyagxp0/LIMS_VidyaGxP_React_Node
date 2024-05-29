@@ -1,7 +1,6 @@
 import {
 	CButton,
 	CCol,
-	CFormCheck,
 	CFormInput,
 	CFormSelect,
 	CModal,
@@ -31,23 +30,21 @@ function Proposal() {
 	const [addModal, setAddModal] = useState(false);
 	const [removeModal, setRemoveModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
-	 const [searchQuery, setSearchQuery] = useState("");
+	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
-	const badgeStyle = { background: "#cdffca" };
-
 	const tableData = [
-          { id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "Active" },
-          { id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "Active" },
-          { id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "Inactive" },
-          { id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "Active" },
-          { id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "Active" },
-          { id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "Inactive" },
-          { id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "Active" },
-          { id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "Active" }
-        ];
-        
+		{ id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "Active" },
+		{ id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "Active" },
+		{ id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "Inactive" },
+		{ id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "Active" },
+		{ id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "Active" },
+		{ id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "Inactive" },
+		{ id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "Active" },
+		{ id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "Active" }
+	];
+
 
 	const handleStatusChange = (e) => {
 		setSelectedStatus(e.target.value);
@@ -86,7 +83,7 @@ function Proposal() {
 					<div>
 						<CRow className="mb-3">
 							<CCol sm={3}><CFormInput
-								className="mb-3"
+								className="mb-3 border-2"
 								type="text"
 								placeholder="Search..."
 								value={searchQuery}
@@ -94,6 +91,7 @@ function Proposal() {
 							/></CCol>
 							<CCol sm={3}>
 								<CFormSelect
+									className="border-2"
 									value={selectedStatus}
 									onChange={handleStatusChange}
 									options={[
@@ -117,19 +115,19 @@ function Proposal() {
 							</CCol>
 						</CRow>
 					</div>
-					<div className="bg-white mt-5">
-						<CTable align="middle" responsive className=" shadow">
+					<div className="bg-white mt-5 border-2 rounded shadow p-3">
+						<CTable align="middle" responsive className="table-responsive">
 							<CTableHead>
 								<CTableRow>
-                                        <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Id</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Analyst</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Test Technique</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Training Details</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+									<CTableHeaderCell scope="col">Id</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Analyst</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Test Technique</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Training Details</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Added On</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
@@ -145,16 +143,14 @@ function Proposal() {
 										<CTableDataCell>{data.remarks}</CTableDataCell>
 										<CTableDataCell>{data.addedOn}</CTableDataCell>
 										<CTableDataCell>
-											<div
-												className="py-2 px-3 small rounded fw-bold"
-												style={badgeStyle}
-											>
-												{data.status}
+											<div className=" w-75">
+												<div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
+													: 'red-700'}`} >{data.status.toUpperCase()}</div>
 											</div>
 										</CTableDataCell>
 										<CTableDataCell>
 											<div className="d-flex gap-3">
-                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+												<div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
 												<div
 													className="cursor-pointer"
 													onClick={() => setRemoveModal(true)}
@@ -170,54 +166,12 @@ function Proposal() {
 					</div>
 					<div className="pagination my-3 d-flex justify-content-between">
 						<div className="d-flex gap-2">
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(1)}
-								disabled={currentPage === 1}
-							>
-								&lt;&lt;
-							</button>
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage - 1)}
-								disabled={currentPage === 1}
-							>
-								&lt;
-							</button>
-							{[...Array(totalPages)].map((_, index) => (
-								<button
-									key={index + 1}
-									className={`btn mr-2 ${currentPage === index + 1 ? "bg-dark-subtle" : ""
-										}`}
-									onClick={() => paginate(index + 1)}
-								>
-									{index + 1}
-								</button>
-							))}
-							<button
-								className="btn mr-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;
-							</button>
-							<button
-								className="btn"
-								onClick={() => paginate(totalPages)}
-								disabled={currentPage === totalPages}
-							>
-								&gt;&gt;
-							</button>
+							<button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+							<button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
+							<button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
 						</div>
 						<div className="">
-							<button
-								className="btn btn-next ml-2"
-								onClick={() => paginate(currentPage + 1)}
-								disabled={currentPage === totalPages}
-							>
-								{" "}
-								Next <FaArrowRight />
-							</button>
+							<button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
 						</div>
 					</div>
 				</div>
@@ -250,66 +204,66 @@ const StatusModal = (_props) => {
 			</CModalHeader>
 			<CModalBody>
 				<p className="my-3 fs-5">Add information and add new Analyst Proposal</p>
-                    <CFormSelect
-                               type="text"
-                               className="mb-3"
-                               label="Analyst"
-                               placeholder="Training Confirmation ID"
-                               options={[
-                                 "Select",
-                                 {label:"No Options"}
-                               ]}
-                          />
-                          <CFormInput
-                               type="text"
-                               className="mb-3"
-                               label="Analyst"
-                               placeholder="Analyst"
-                               disabled
-                          />
-                          <CFormInput
-                               type="text"
-                               className="mb-3"
-                               label="Employee ID"
-                               placeholder="Employee ID"
-                               disabled
-                          />
-                          <CFormInput
-                               type="text"
-                               className="mb-3"
-                               label="Test Technique"
-                               placeholder="Test Technique"
-                               disabled
-                          />
-                          <CFormSelect
-                               type="text"
-                               className="mb-3"
-                               label="Analyst"
-                               placeholder="Test Plan"
-                               options={[
-                                 "Select",
-                                 {label:"No Options"}
-                               ]}
-                          />
-                          <CFormInput
-                               type="number"
-                               className="mb-3"
-                               label="AR Number"
-                               placeholder="AR Number"
-                          />
-                          <CFormInput
-                               type="date"
-                               className="mb-3"
-                               label="Due Date"
-                               placeholder="Due Date"
-                          />
-                          <CFormInput
-                               type="text"
-                               className="mb-3"
-                               label="Comments"
-                               placeholder="Comments"
-                          />
-                         
+				<CFormSelect
+					type="text"
+					className="mb-3"
+					label="Analyst"
+					placeholder="Training Confirmation ID"
+					options={[
+						"Select",
+						{ label: "No Options" }
+					]}
+				/>
+				<CFormInput
+					type="text"
+					className="mb-3"
+					label="Analyst"
+					placeholder="Analyst"
+					disabled
+				/>
+				<CFormInput
+					type="text"
+					className="mb-3"
+					label="Employee ID"
+					placeholder="Employee ID"
+					disabled
+				/>
+				<CFormInput
+					type="text"
+					className="mb-3"
+					label="Test Technique"
+					placeholder="Test Technique"
+					disabled
+				/>
+				<CFormSelect
+					type="text"
+					className="mb-3"
+					label="Analyst"
+					placeholder="Test Plan"
+					options={[
+						"Select",
+						{ label: "No Options" }
+					]}
+				/>
+				<CFormInput
+					type="number"
+					className="mb-3"
+					label="AR Number"
+					placeholder="AR Number"
+				/>
+				<CFormInput
+					type="date"
+					className="mb-3"
+					label="Due Date"
+					placeholder="Due Date"
+				/>
+				<CFormInput
+					type="text"
+					className="mb-3"
+					label="Comments"
+					placeholder="Comments"
+				/>
+
 			</CModalBody>
 			<CModalFooter>
 				<CButton color="light" onClick={_props.closeModal}>
