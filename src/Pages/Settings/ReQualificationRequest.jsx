@@ -355,22 +355,22 @@ export default function ReQualificationRequest() {
           </CRow>
         </div>
 
-        <div className="shadow p-3 rounded border-2 my-4">
-          <table className="table table-responsive">
+        <div className="bg-light shadow rounded border-dark-subtle border-2 my-4">
+          <table className="table table-responsive table-striped">
             <thead>
               <tr>
-                <th>
+                <th style={{background:"#3C496A", color:"white"}}>
                   <input type="checkbox" />
                 </th>
-                <th>Id</th>
-                <th>Analyst</th>
-                <th>Qualification ID</th>
-                <th>Qualification Type</th>
-                <th>Employee ID </th>
-                <th>Test Technique</th>
-                <th>Initiated On</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th style={{background:"#3C496A", color:"white"}}>Id</th>
+                <th style={{background:"#3C496A", color:"white"}}>Analyst</th>
+                <th style={{background:"#3C496A", color:"white"}}>Qualification ID</th>
+                <th style={{background:"#3C496A", color:"white"}}>Qualification Type</th>
+                <th style={{background:"#3C496A", color:"white"}}>Employee ID </th>
+                <th style={{background:"#3C496A", color:"white"}}>Test Technique</th>
+                <th style={{background:"#3C496A", color:"white"}}>Initiated On</th>
+                <th style={{background:"#3C496A", color:"white"}}>Status</th>
+                <th style={{background:"#3C496A", color:"white"}}>Action</th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>

@@ -175,7 +175,7 @@ function WorkSheet() {
               <CCol sm={3}>
                 <CFormSelect
                   value={selectedStatus}
-                  className="border-2"
+                  className="border-dark-subtle border-2"
                   onChange={handleStatusChange}
                   options={[
                     { value: 'All', label: 'All' },
@@ -195,19 +195,19 @@ function WorkSheet() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5 border-2 rounded shadow p-3">
-            <CTable align="middle" responsive className="table-responsive text-xs">
+          <div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
+            <CTable align="middle" responsive className="table-responsive table-striped" style={{fontSize:'14px'}}>
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col">SNo.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Sequence Number</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Worksheets Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Product Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Gtp Number</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Method Validation No.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Standard Prepration</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">SNo.</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Sequence Number</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Worksheets Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Product Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Gtp Number</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Method Validation No.</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Standard Prepration</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -235,7 +235,7 @@ function WorkSheet() {
                       </div>
                     </CTableDataCell>
                     <CTableDataCell>
-                      <div className="d-flex gap-3">
+                      <div className="d-flex gap-2">
                         <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
                         <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
                         <div className="cursor-pointer" onClick={() => setRemoveModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>

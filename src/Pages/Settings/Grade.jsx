@@ -82,7 +82,7 @@ function Grade() {
 						<CRow className="mb-3">
 							<CCol sm={3}>
 								<CFormInput
-									className="mb-3 border-2"
+									className="mb-3 border-dark-subtle border-2"
 									type="text"
 									placeholder="Search..."
 									value={searchQuery}
@@ -93,7 +93,7 @@ function Grade() {
 								<CFormSelect
 									value={selectedStatus}
 									onChange={handleStatusChange}
-									className="border-2"
+									className="border-dark-subtle border-2"
 									options={[
 										{ value: "All", label: "All" },
 										{ value: "ACTIVE", label: "Active" },
@@ -114,17 +114,17 @@ function Grade() {
 							</CCol>
 						</CRow>
 					</div>
-					<div className="bg-white mt-5 border-2 rounded shadow p-3">
-						<CTable align="middle" responsive className="table-responsive">
+					<div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
+						<CTable align="middle" responsive className="table-responsive table-striped">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell scope="col" className="text-center">
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Grade Code</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Grade Name</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Grade Code</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Grade Name</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>

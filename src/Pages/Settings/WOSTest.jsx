@@ -296,47 +296,46 @@ function WOSTest() {
             </CRow>
           </div>
           <div
-            className="bg-white mt-5 rounded p-3"
-            style={{ boxShadow: "0px 0px 3px black" }}
+            className="bg-light border-2 border-dark-subtle mt-5 rounded"
           >
-            <CTable className="table table-responsive">
+            <CTable className="table table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     SNo.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Specification Id
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Product Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Test Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Test Code
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Method No.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Test Category
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Test Technique
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Test Type
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Status
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
                     Actions{" "}
                   </CTableHeaderCell>
                 </CTableRow>

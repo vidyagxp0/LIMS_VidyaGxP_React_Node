@@ -83,7 +83,7 @@ function Proposal() {
 					<div>
 						<CRow className="mb-3">
 							<CCol sm={3}><CFormInput
-								className="mb-3 border-2"
+								className="mb-3 border-dark-subtle border-2"
 								type="text"
 								placeholder="Search..."
 								value={searchQuery}
@@ -91,7 +91,7 @@ function Proposal() {
 							/></CCol>
 							<CCol sm={3}>
 								<CFormSelect
-									className="border-2"
+									className="border-dark-subtle border-2"
 									value={selectedStatus}
 									onChange={handleStatusChange}
 									options={[
@@ -115,19 +115,19 @@ function Proposal() {
 							</CCol>
 						</CRow>
 					</div>
-					<div className="bg-white mt-5 border-2 rounded shadow p-3">
-						<CTable align="middle" responsive className="table-responsive">
+					<div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
+						<CTable align="middle" responsive className="table-responsive table-striped">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-									<CTableHeaderCell scope="col">Id</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Analyst</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Test Technique</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Training Details</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Id</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Analyst</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Test Technique</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Training Details</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Remarks</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
