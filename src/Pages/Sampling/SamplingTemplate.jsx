@@ -1,11 +1,8 @@
-
 import './SamplingTemplate.css'
 import React, { useState } from 'react';
 import { TiArrowRightThick } from "react-icons/ti";
 import { TiArrowLeftThick } from "react-icons/ti";
 import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR } from 'react-icons/cg';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
@@ -78,6 +75,9 @@ const SamplingTemplate = () => {
     label.classList.add('clicked');
     label.checked = true;
   };
+  const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const pageSize = 5; // Number of items per page
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -89,7 +89,7 @@ const SamplingTemplate = () => {
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-  const employees = [
+  const [employees, setEmployees] = useState([
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
     { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
     { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
@@ -100,14 +100,13 @@ const SamplingTemplate = () => {
     { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
     { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
     { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-  ];
+  ]);
 
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, employees.length);
   const filteredEmployees = employees.filter(employee =>
     selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
   );
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
   const renderRows = () => {
     return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
@@ -138,6 +137,22 @@ const SamplingTemplate = () => {
           </button>
         </td>
         <td>
+
+          <div className='d-flex gap-3'>
+            <div>
+              <Link to="/approval/1321" className='mx-2'><FontAwesomeIcon icon={faEye} /></Link>
+
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => setAddModal(true)}
+            >
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </div>
+            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.fieldName)}>
+              <FontAwesomeIcon icon={faTrashCan} />
+            </div>
+          </div>
           <div className='d-flex'>
             <Link to="/approval/1321" className='mx-2'><FontAwesomeIcon icon={faEye} /></Link>
             <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
@@ -150,7 +165,6 @@ const SamplingTemplate = () => {
       </tr>
     ));
   };
-
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -158,22 +172,28 @@ const SamplingTemplate = () => {
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
   };
+
+  const nextToLastPage = () => {
+    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+  };
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.fieldName !== deleteId));
+    setDeleteModal(false);
+  };
   const filterData = () => {
     if (selectedStatus === "All") {
       return employees;
     }
 
     return employees.filter((item) => item.status === selectedStatus.toUpperCase());
-  };
+  };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(employees.length / pageSize));
-  };
-  const handleDelete = () => {
-    console.log(`Deleting employee: ${selectedEmployee.name}`);
-    // Perform delete operation here
-    setSelectedEmployee(null);
-  };
 
   return (
     <div className=" mx-5 ">
@@ -297,21 +317,13 @@ const SamplingTemplate = () => {
             </CCol>
             <CCol sm={2}></CCol>
             <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton id="Addbtn"
-                  className="btn btn-primary btn-right"
-                  type="button"
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight"
-                  style={{ background: "#4B49B6" }}
-                >
-                  <CgAddR />  <span>Add Template</span></CButton>
+              <div className="">
+                <CButton color="primary" onClick={() => setAddModal(true)}>Add Template</CButton>
               </div>
             </CCol>
           </CRow>
         </div>
-        <div className="offcanvas offcanvas-end w-50" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        {/* <div className="offcanvas offcanvas-end w-50" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
           <div className="offcanvas-header border-bottom pb-1 border-2 border-dark px-0 mx-3">
             <h5 className="offcanvas-title" id="offcanvasRightLabel">Add Sampling template</h5>
             <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -399,8 +411,8 @@ const SamplingTemplate = () => {
               <button className="btn btn-primary px-3"> Submit</button>
             </div>
           </div>
-        </div>
-        {selectedEmployee && (
+        </div> */}
+        {/* {selectedEmployee && (
           <div
             className="offcanvas offcanvas-end"
             tabIndex="-1"
@@ -426,27 +438,27 @@ const SamplingTemplate = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
 
-      <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
-        <table className='table'>
+      <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+        <table className="mb-0 table-striped table table-responsive">
           <thead>
             <tr>
-              <th>S.No.</th>
-              <th>Field Name</th>
-              <th>Field Type</th>
-              <th>Registered By</th>
-              <th>Registered On</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Field Name</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Field Type</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Registered By</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Registered On</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Action</th>
             </tr>
           </thead>
           <tbody>
             {renderRows()}
           </tbody>
         </table>
-       
+
       </div>
 
       <div className="d-flex justify-content-between align-items-center mt-4">
@@ -459,12 +471,84 @@ const SamplingTemplate = () => {
             &gt;&gt;
           </button>
         </div>
-        <button className="btn " onClick={nextToLastPage}>
-          Next <FaArrowRight />
+        <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+          Next <FaArrowRight className='ms-2' />
         </button>
       </div>
 
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
     </div>
+  );
+};
+const StatusModal = (_props) => {
+  return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+          <CModalHeader>
+              <CModalTitle>Add Fields</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+              
+              <CFormInput
+                  className="mb-3"
+                  type="text"
+                  label="Field Name"
+                  placeholder="Sample Type Name"                    
+              />                
+              <CFormSelect
+                  className="mb-3"
+                  type="select"
+                  label="Field Type"
+                  options={[
+                      "Select",
+                      { label: "Radio Button", value: "Radio Button" },
+                      { label: "Label", value: "Label" },
+                      { label: "Entry Field", value: "Entry Field" },
+                      { label: "Date Field", value: "Date Field" }
+                  ]}
+              />
+              
+          </CModalBody>
+          <CModalFooter>
+              <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+              <CButton color="primary">Submit</CButton>
+          </CModalFooter>
+      </CModal>
+  );
+};
+
+const DeleteModal = (_props) => {
+  return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+          <CModalHeader>
+              <CModalTitle>Delete Sampling template</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+              <p>Are you sure you want to delete this Sampling Template { }?</p>
+          </CModalBody>
+          <CModalFooter>
+              <CButton
+                  color="secondary"
+                  onClick={_props.closeModal}
+                  style={{
+                      marginRight: "0.5rem",
+                      fontWeight: "500",
+                  }}
+              >
+                  Cancel
+              </CButton>
+              <CButton
+                  color="danger"
+                  onClick={_props.confirmDelete}
+                  style={{
+                      fontWeight: "500",
+                      color: "white",
+                  }}
+              >
+                  Delete
+              </CButton>
+          </CModalFooter>
+      </CModal>
   );
 };
 

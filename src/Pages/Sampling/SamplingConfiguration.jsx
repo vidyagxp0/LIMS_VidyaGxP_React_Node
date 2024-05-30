@@ -102,17 +102,15 @@ const SamplingConfiguration = () => {
                 </div>
                 <div className="d-flex justify-content-between my-3 ">
                     <div className="dropdown">
-                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Show
-                            <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
-                                setSelectedStatus(e.target.value);
-                                setCurrentPage(1); // Reset to the first page on filter change
-                            }}>
-                                <option value="All">All</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                        </button>
+                    <CFormSelect
+                            // onChange={(e) => setSelectedStatus(e.target.value)}
+                            value={selectedStatus}
+                            style={{ border: "2px solid gray" }}
+                        >
+                            <option value="All">All</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </CFormSelect>
                     </div>
                     <div className="">
                         <CButton color="primary" onClick={() => setAddModal(true)}>Add Configuration</CButton>
@@ -121,20 +119,19 @@ const SamplingConfiguration = () => {
 
             </div>
 
-            {/* Employee table */}
-            <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
-                <table className='table'>
+            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                <table className="mb-0 table-striped table table-responsive">
                     <thead>
                         <tr>
-                            <th>S.No.</th>
-                            <th>Sampling ID</th>
-                            <th>Specification ID</th>
-                            <th>Sample Type</th>
-                            <th>Product Name</th>
-                            <th>Test Plan</th>
-                            <th>Sample Template</th>
-                            <th>Sample Rule</th>
-                            <th>Action</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Sampling ID</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Specification ID</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Sample Type</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Product Name</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Test Plan</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Sample Template</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Sample Rule</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -176,6 +173,7 @@ const StatusModal = (_props) => {
 
 
                 <CFormSelect
+                className='mb-3'
                     type="select"
                     label="Test Plan / Revision No."
 
@@ -188,6 +186,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormInput
+                className='mb-3'
                     type="text"
                     label="Specification ID"
                     placeholder="Specification ID"
@@ -195,24 +194,28 @@ const StatusModal = (_props) => {
                 />
 
                 <CFormInput
+                className='mb-3'
                     type="text"
                     label="Product/Material Name"
                     placeholder="Product/Material Name"
                     disabled
                 />
                 <CFormInput
+                className='mb-3'
                     type="text"
                     label="Product/Material Code"
                     placeholder="Product/Material Code"
                     disabled
                 />
                 <CFormInput
+                className='mb-3'
                     type="text"
                     label="Sample Type"
                     placeholder="Sample Type"
                     disabled
                 />
                 <CFormSelect
+                className='mb-3'
                     type="select"
                     label="Sampling Template"
                     options={[
@@ -224,6 +227,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormSelect
+                className='mb-3'
                     type="select"
                     label="Sampling Rule"
                     options={[
@@ -235,6 +239,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormSelect
+                className='mb-3'
                     type="select"
                     label="Sampling Test"
                     options={[
@@ -244,6 +249,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormInput
+                className='mb-3'
                     type="text"
                     label="Comment"
                     placeholder="Comment"

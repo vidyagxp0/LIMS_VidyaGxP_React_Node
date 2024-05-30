@@ -104,21 +104,17 @@ const SamplingRule = () => {
                 <div className="main-head">
                     <div className="title fw-bold fs-5 py-4">Sampling Rule</div>
                 </div>
-                <div className="d-flex justify-content-between my-3 ">
+                <div className="d-flex justify-content-between my-3">
                     <div className="dropdown">
-                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Show
-                            <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
-                                setSelectedStatus(e.target.value);
-
-                                setCurrentPage(1); // Reset to the first page on filter change
-                            }}>
-                                <option value="All">All</option>
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
-
-                            </select>
-                        </button>
+                        <CFormSelect
+                            onChange={(e) => setSelectedStatus(e.target.value)}
+                            value={selectedStatus}
+                            style={{ border: "2px solid gray" }}
+                        >
+                            <option value="All">All</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </CFormSelect>
                     </div>
                     <div className="">
                         <CButton color="primary" onClick={() => setAddModal(true)}>Add Sampling Rule</CButton>
@@ -128,17 +124,17 @@ const SamplingRule = () => {
 
             </div>
 
-            <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
-                <table className='table'>
+            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                <table className="mb-0 table-striped table table-responsive">
                     <thead>
                         <tr>
-                            <th>S.No.</th>
-                            <th>Unique Code</th>
-                            <th>Description</th>
-                            <th>Number Of Ranges</th>
-                            <th>Updated At</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Unique Code</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Description</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Number Of Ranges</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Updated At</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -178,18 +174,21 @@ const StatusModal = (_props) => {
             <CModalBody>
 
                 <CFormInput
+                className="mb-3"
                     type="text"
                     label="Sampling Rule Name"
                     placeholder="Sampling Rule Name"
                 />
 
                 <CFormInput
+                className="mb-3"
                     type="text"
                     label="Unique Code"
                     placeholder="Unique Code"
                 />
 
                 <CFormInput
+                className="mb-3"
                     type="number"
                     label="Number of Ranges"
                     placeholder="Number of Ranges"
