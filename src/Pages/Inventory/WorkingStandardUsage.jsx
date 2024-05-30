@@ -262,36 +262,33 @@ function WorkingStandardUsage() {
               </CCol>
             </CRow>
           </div>
-          <div
-            className="bg-white mt-5"
-            style={{ boxShadow: "0px 0px 3px black" }}
-          >
-            <CTable>
+          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell scope="col" style={{background:"#3C496A", color:"white"}} className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     SNo.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col"style={{background:"#3C496A", color:"white"}}>
                     Ref. Std. Lot. No
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Quantity used
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Used On
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Used By
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Status
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Actions{" "}
                   </CTableHeaderCell>
                 </CTableRow>

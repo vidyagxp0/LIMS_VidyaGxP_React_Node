@@ -14,9 +14,10 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CTable } from '@coreui/react';
 
 export default function SampleType() {
-  const pageSize = 8; 
+  const pageSize = 5; 
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('');
 
@@ -110,15 +111,15 @@ export default function SampleType() {
   return (
     <>
       <div id="div1">
-        <h5>Specifications/Sample Type</h5>
+        <h5 style={{fontWeight:"bolder"}}>Specifications/Sample Type</h5>
       </div>
 
       <div id="div2" className='p-5' style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div className="dropdown">
           <div>
             <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Show
-              <select id='selectOption' style={{ outline: 'none' }} onChange={(e) => setStatusFilter(e.target.value)}>
+              
+              <select id='selectOption' style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }} onChange={(e) => setStatusFilter(e.target.value)}>
                 <option value="">All</option>
                 <option value="initiated">Initiated</option>
                 <option value="approved">Approved</option>
@@ -137,7 +138,7 @@ export default function SampleType() {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Sample Type</span>
+          <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Sample Type</span>
         </button>
       </div>
 
@@ -258,22 +259,22 @@ export default function SampleType() {
         </div>
       </div>
 
-      <div className='table-responsive p-4 container1'>
-        <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+      <div className=" rounded  m-4 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
           <thead>
             <tr>
-              <th>Sr.no.</th>
-              <th>Sample Type Name</th>
-              <th>Add Date</th>
-              <th>Days to Complete</th>
-              <th>Status</th>
-              <th><HiDotsHorizontal/></th>
+              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+              <th style={{background:"#3C496A", color:"white"}}>Sample Type Name</th>
+              <th style={{background:"#3C496A", color:"white"}}>Add Date</th>
+              <th style={{background:"#3C496A", color:"white"}}>Days to Complete</th>
+              <th style={{background:"#3C496A", color:"white"}}>Status</th>
+              <th style={{background:"#3C496A", color:"white"}}><HiDotsHorizontal/></th>
             </tr>
           </thead>
           <tbody>
             {renderRows()}
           </tbody>
-        </table>
+        </CTable>
       </div>
 
       <div className="pagination">

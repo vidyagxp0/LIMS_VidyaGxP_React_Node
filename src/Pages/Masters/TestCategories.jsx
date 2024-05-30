@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom'
 
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CTable } from '@coreui/react';
 
 
 
@@ -21,7 +22,7 @@ export default function TestCategories() {
     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
     
 
-  const pageSize = 8; 
+  const pageSize = 5; 
   const [currentPage, setCurrentPage] = useState(1);
   const [employees, setEmployees] = useState([
       { user: 'Initiated Product',  Date: 'May 17th 24 14:34', DayComplete: '10',AddedON:'May 17th 24 14:34', Status: 'APPROVED' },
@@ -99,7 +100,7 @@ const nextToLastPage = () => {
   return (
     <>
      <div id="div1">
-        <h5>Test Category</h5>
+        <h5  style={{fontWeight:"bolder"}}>Test Category</h5>
       </div>
 
       <div id="div2" className='p-5 ' style={{display:'flex',justifyContent:'space-between'}}>
@@ -107,8 +108,8 @@ const nextToLastPage = () => {
          <div className="dropdown">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Show
-                            <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{outline:'none'}}>
+                            
+                            <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }}>
                             <option value="">All</option>
                                 <option value="initiated">Initiated</option>
                                 <option value="approved">Approved</option>
@@ -130,7 +131,7 @@ const nextToLastPage = () => {
           data-bs-target="#AddTestCategory"
           aria-controls="offcanvasRight"
           >
-          <CgAddR />  <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Test Category</span>
+         <span style={{fontSize:'14px',fontWeight:'bold',marginLeft:'5px'}}>Add Test Category</span>
         </button>
 
     </div>
@@ -175,23 +176,23 @@ const nextToLastPage = () => {
            </div>
 
            {/* Employee table */}
-           <div className='table-responsive p-4 container1'>
-                <table className='table shadow' style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
+           <div className=" rounded m-4   bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
                     <thead>
                         <tr>
-                            <th>Sr.no.</th>
-                            <th>Category Name</th>
-                            <th>Unique Code</th>
-                            <th>Description</th>
-                            <th>Added On</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Category Name</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Unique Code</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Description</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Added On</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Status</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {renderRows()}
                     </tbody>
-                </table>
+                </CTable>
             </div>
 
             <div className="pagination"  style={{margin:'0 35px'}}>

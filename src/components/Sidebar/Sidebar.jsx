@@ -178,7 +178,7 @@ function Sidebar() {
               <>
                 <RiLoginCircleLine />
                 <span
-                  style={{ ...isActive("/samplelogin"), marginLeft: "18px" }}
+                  style={{marginLeft: "18px" }}
                 >
                   Sample Logins
                 </span>

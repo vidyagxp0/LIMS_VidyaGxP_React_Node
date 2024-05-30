@@ -1,6 +1,6 @@
 import {
-    CButton, CCol, CFormInput, CFormSelect, CRow, CTable, CTableBody, CTableDataCell,
-    CTableHead, CTableHeaderCell, CTableRow
+     CCol, CFormInput, CFormSelect, CRow,
+     CTableHeaderCell, CTableRow,
   } from "@coreui/react";
   import React, { useState } from 'react';
   import './Samplelogin.css';
@@ -75,6 +75,7 @@ import {
               <CCol sm={4}>
                 <CFormInput
                   type="text"
+                  style={{border:"2px solid gray"}}
                   placeholder="Search..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -83,6 +84,7 @@ import {
               <CCol sm={3}>
                 <CFormSelect
                   value={statusFilter}
+                  style={{border:"2px solid gray"}}
                   onChange={(e) => setStatusFilter(e.target.value)}
                   options={[
                     'Select Status',
@@ -97,17 +99,17 @@ import {
             </CRow>
           </div>
   
-          <div className='table table-responsive p-4 shadow rounded'>
-            <table className='table'>
+          <div className=" rounded    bg-white" style={{ border: "2px solid gray" }}>
+                <table className='table table-striped '>
               <thead>
                 <tr>
-                  <th scope="col"><input type="checkbox" /></th>
-                  <th scope="col">Sr.No</th>
-                  <th scope="col">Test Name</th>
-                  <th scope="col">Test Code</th>
-                  <th scope="col">Test Type</th>
-                  <th scope="col">Added On</th>
-                  <th scope="col">Actions</th>
+                  <th style={{background:"#3C496A", color:"white"}} scope="col"><input type="checkbox" /></th>
+                  <th style={{background:"#3C496A", color:"white"}} scope="col">Sr.No</th>
+                  <th style={{background:"#3C496A", color:"white"}} scope="col">Test Name</th>
+                  <th style={{background:"#3C496A", color:"white"}} scope="col">Test Code</th>
+                  <th style={{background:"#3C496A", color:"white"}} scope="col">Test Type</th>
+                  <th style={{background:"#3C496A", color:"white"}} scope="col">Added On</th>
+                  <th style={{background:"#3C496A", color:"white"}} scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -116,7 +118,7 @@ import {
             </table>
           </div>
   
-          <div className="pagination">
+          <div className="pagination my-4">
             <div className="pagination ">
               <div>
                 <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>

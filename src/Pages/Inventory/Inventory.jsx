@@ -276,43 +276,40 @@ function Inventory() {
               </CCol>
             </CRow>
           </div>
-          <div
-            className="bg-white mt-5"
-            style={{ boxShadow: "0px 0px 8px black" }}
-          >
-            <CTable>
+          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
                     <input
                       type="checkbox"
                       checked={selectAll}
                       onChange={handleSelectAll}
                     />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     SNo.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Product Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Sequence No.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Additional Information
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Container Starting No.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Sample Refrence No.
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Status
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
                     Actions{" "}
                   </CTableHeaderCell>
                 </CTableRow>

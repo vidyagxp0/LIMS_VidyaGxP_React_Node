@@ -79,16 +79,16 @@ function StandardProtocol() {
                                    </CCol>
                               </CRow>
                          </div>
-                         <div className=' table-responsive bg-white rounded py-3 px-4 mt-5 ' style={{ boxShadow: "0px 0px 3px black" }}>
-                              <CTable align="middle" responsive className=" ">
+                         <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
                                    <CTableHead>
                                         <CTableRow>
-                                             <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Standard Protocol Name</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Standard Protocol Id</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Standard Protocol Description</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                             <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col">Standard Protocol Name</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col">Standard Protocol Id</CTableHeaderCell>
+                                             <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Standard Protocol Description</CTableHeaderCell>
+                                             <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                                             <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                                         </CTableRow>
                                    </CTableHead>
                                    <CTableBody>

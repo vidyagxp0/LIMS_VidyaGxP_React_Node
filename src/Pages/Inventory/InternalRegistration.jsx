@@ -262,30 +262,27 @@ function InternalRegistration() {
               </CCol>
             </CRow>
           </div>
-          <div
-            className="bg-white mt-5"
-            style={{ boxShadow: "0px 0px 3px black" }}
-          >
-            <CTable align="middle" responsive className=" shadow">
+          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Product Name </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Sequence No.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Product Name </CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Sequence No.</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Additional Information
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col">
                     Container Starting No.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Sample Refrence no.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
 

@@ -89,11 +89,11 @@ function Approval() {
                 ]}
               />
             </CCol>
-            <CCol sm={6}></CCol>
+            
           </CRow>
         </div>
         <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-responsive">
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
             <CTableHead >
               <CTableRow > 
                 <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
@@ -137,7 +137,7 @@ function Approval() {
             </CTableBody>
           </CTable>
         </div>
-        <div className="d-flex justify-content-around my-4">
+        <div className="d-flex justify-content-between my-4">
           <div className="d-flex gap-3">
             <CButton onClick={handlePrevPage} disabled={currentPage === 1}>&lt; &lt;</CButton>
             <button className='btn border'>{currentPage}</button>

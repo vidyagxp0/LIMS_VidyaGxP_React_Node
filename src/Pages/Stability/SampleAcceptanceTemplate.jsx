@@ -96,18 +96,18 @@ function SampleAcceptanceTemplate() {
                                    </CCol>
                               </CRow>
                          </div>
-                         <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                              <CTable align="middle" responsive >
+                         <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
                                    <CTableHead>
                                         <CTableRow>
-                                             <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Unique Code</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">No. Of Check Items</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Updated At</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Name</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Unique Code</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">No. Of Check Items</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Updated At</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                                             <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                                         </CTableRow>
                                    </CTableHead>
                                    <CTableBody>

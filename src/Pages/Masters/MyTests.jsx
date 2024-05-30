@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CTable } from '@coreui/react';
 
 export default function MyTests() {
-  const pageSize = 8; 
+  const pageSize = 5; 
   const [currentPage, setCurrentPage] = useState(1);
   const employees = [
       { user: 'Initiated Product',  Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
@@ -56,27 +57,27 @@ const nextToLastPage = () => {
   return (
     <>
      <div id="div1">
-        <h5>My Tests</h5>
+        <h5  style={{fontWeight:"bolder"}}>My Tests</h5>
       </div>
      
            {/* Employee table */}
-           <div className='table-responsive p-4 container1'>
-                <table className='table shadow'  style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
+           <div className=" rounded  m-4 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
                     <thead>
                         <tr>
-                            <th>Sr.no.</th>
-                            <th>A.R. No.</th>
-                            <th>Product Name</th>
-                            <th>Sample Incharge</th>
-                            <th>Assigned On</th>
-                            <th>Sample Type</th>
-                            <th>Actions</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+                            <th style={{background:"#3C496A", color:"white"}}>A.R. No.</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Product Name</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Sample Incharge</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Assigned On</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Sample Type</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {renderRows()}
                     </tbody>
-                </table>
+                </CTable>
             </div>
             <div className="pagination">
 

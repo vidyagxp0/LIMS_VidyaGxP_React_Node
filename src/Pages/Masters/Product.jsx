@@ -6,9 +6,10 @@ import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CTable } from '@coreui/react';
 
 export default function Product() {
-  const pageSize = 8; 
+  const pageSize = 5; 
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('');
 
@@ -108,15 +109,15 @@ export default function Product() {
   return (
     <>
       <div id="div1">
-        <h5>Products/Materials</h5>
+        <h5 style={{fontWeight:"bolder"}}>Products/Materials</h5>
       </div>
 
       <div id="div2" className='p-5' style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div className="dropdown">
-          <div>
-            <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Show
-              <select id='selectOption' style={{ outline: 'none' }} onChange={(e) => setStatusFilter(e.target.value)}>
+        <div className="dropdown" >
+          <div >
+            <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+              
+              <select id='selectOption' style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }} onChange={(e) => setStatusFilter(e.target.value)}>
                 <option value="">All</option>
                 <option value="initiated">Initiated</option>
                 <option value="approved">Approved</option>
@@ -135,7 +136,7 @@ export default function Product() {
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Product/Material</span>
+          <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Product/Material</span>
         </button>
       </div>
 
@@ -179,24 +180,24 @@ export default function Product() {
       </div>
 
       {/* Employee table */}
-      <div className='table-responsive p-4 container1'>
-        <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+      <div className=" rounded m-4  bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
           <thead>
             <tr>
-              <th>Sr.no.</th>
-              <th>Unique Code</th>
-              <th>Product Name</th>
-              <th>Generic Name</th>
-              <th>Re-Testing Period</th>
-              <th>Add Date</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+              <th style={{background:"#3C496A", color:"white"}}>Unique Code</th>
+              <th style={{background:"#3C496A", color:"white"}}>Product Name</th>
+              <th style={{background:"#3C496A", color:"white"}}>Generic Name</th>
+              <th style={{background:"#3C496A", color:"white"}}>Re-Testing Period</th>
+              <th style={{background:"#3C496A", color:"white"}}>Add Date</th>
+              <th style={{background:"#3C496A", color:"white"}}>Status</th>
+              <th style={{background:"#3C496A", color:"white"}}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {renderRows()}
           </tbody>
-        </table>
+        </CTable>
       </div>
 
       <div className="pagination">

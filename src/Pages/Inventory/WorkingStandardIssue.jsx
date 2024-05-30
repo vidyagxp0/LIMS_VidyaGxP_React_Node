@@ -104,18 +104,17 @@ function WorkingStandardIssue() {
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
 
-  
   const filterData = () => {
     const filteredData =
       selectedStatus === "All"
         ? data
-        : data.filter((item) => item.status.toUpperCase() === selectedStatus.toUpperCase());
+        : data.filter(
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
     return filteredData.filter((item) =>
       item.WorkingContainerno.toLowerCase().includes(search.toLowerCase())
     );
   };
-  
-  
 
   const filteredData = filterData();
 
@@ -152,7 +151,7 @@ function WorkingStandardIssue() {
                 </CFormSelect>
               </CCol>
               <CCol sm={2}></CCol>
-              
+
               <CCol sm={7}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
@@ -163,33 +162,81 @@ function WorkingStandardIssue() {
             </CRow>
           </div>
           <div
-            className="bg-white mt-5"
-            style={{ boxShadow: "0px 0px 4px black" }}
+            className=" rounded  m-1 bg-white"
+            style={{ border: "2px solid gray" }}
           >
-            <CTable align="middle" responsive className=" ">
+            <CTable
+              align="middle"
+              responsive
+              className="mb-0 table-striped table-responsive"
+            >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                    className="text-center"
+                  >
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    S NO.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
                     Working Container no.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Container Qty</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Container Qty
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
                     Container Validity Period Day(s)
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
                     Container Valid Upto
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Lot Valid Upto</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Lot Valid Upto
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Added On
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Status
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Action
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filteredData.slice(startIndex,endIndex).map((item, index) => (
+                {filteredData.slice(startIndex, endIndex).map((item, index) => (
                   <CTableRow key={index}>
                     <CTableHeaderCell scope="row" className="text-center">
                       <input type="checkbox" />
@@ -197,7 +244,9 @@ function WorkingStandardIssue() {
                     <CTableDataCell>{item.id}</CTableDataCell>
                     <CTableDataCell>{item.WorkingContainerno}</CTableDataCell>
                     <CTableDataCell>{item.ContainerQty}</CTableDataCell>
-                    <CTableDataCell>{item.ContainerValidityPeriodDays}</CTableDataCell>
+                    <CTableDataCell>
+                      {item.ContainerValidityPeriodDays}
+                    </CTableDataCell>
                     <CTableDataCell>{item.ContainerValidUpto}</CTableDataCell>
                     <CTableDataCell>{item.LotValidUpto}</CTableDataCell>
                     <CTableDataCell>{item.AddedOn}</CTableDataCell>
@@ -227,11 +276,11 @@ function WorkingStandardIssue() {
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
                         <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
+                          className="cursor-pointer"
+                          onClick={() => setDeleteModal(item.id)}
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} />
+                        </div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -264,7 +313,7 @@ function WorkingStandardIssue() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-       {deleteModal && (
+      {deleteModal && (
         <DeleteModal
           visible={deleteModal !== false}
           closeModal={() => setDeleteModal(false)}
@@ -307,7 +356,9 @@ const StatusModal = (_props) => {
                 <th style={{ background: "#0F93C3", color: "white" }}>
                   Lot Valid Upto
                 </th>
-                <th style={{ background: "#0F93C3", color: "white" }}>Select</th>
+                <th style={{ background: "#0F93C3", color: "white" }}>
+                  Select
+                </th>
               </tr>
             </thead>
             <tbody>

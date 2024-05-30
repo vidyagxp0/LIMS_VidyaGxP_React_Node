@@ -6,6 +6,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CTable } from '@coreui/react';
 
 export default function SpecificationType() {
   const pageSize = 8;
@@ -125,15 +126,15 @@ export default function SpecificationType() {
   return (
     <>
       <div id="div1">
-        <h5>Specifications Type</h5>
+        <h5 style={{fontWeight:"bolder"}}>Specifications Type</h5>
       </div>
 
       <div id="div2" className='p-5'>
         <div className="dropdown">
           <div>
             <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Show
-              <select id='selectOption' style={{outline:'none'}} onChange={(e) => setStatusFilter(e.target.value)}>
+              
+              <select id='selectOption' style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }} onChange={(e) => setStatusFilter(e.target.value)}>
                 <option value="">Select Status</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -143,21 +144,21 @@ export default function SpecificationType() {
         </div>
       </div>
 
-      <div className='table-responsive p-4 container1'>
-        <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+      <div className="m-4 rounded   bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
           <thead>
             <tr>
-              <th>Sr.no.</th>
-              <th>Specification Type</th>
-              <th>Added On</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+              <th style={{background:"#3C496A", color:"white"}}>Specification Type</th>
+              <th style={{background:"#3C496A", color:"white"}}>Added On</th>
+              <th style={{background:"#3C496A", color:"white"}}>Status</th>
+              <th style={{background:"#3C496A", color:"white"}}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {renderRows()}
           </tbody>
-        </table>
+        </CTable>
       </div>
 
       <div className="pagination">

@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CTable } from "@coreui/react";
 
 
 export default function TestRegistrations() {
@@ -37,7 +38,7 @@ export default function TestRegistrations() {
 
  
 
-  const pageSize = 8; 
+  const pageSize = 5; 
   const [currentPage, setCurrentPage] = useState(1);
   const [employees, setEmployees] = useState([
       { user: 'HYO',  ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test' ,EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24',  Status: 'APPROVED'  },
@@ -122,27 +123,27 @@ const nextToLastPage = () => {
   return (
     <>
       <div id="div1">
-        <h5>Test Resistrations</h5>
+        <h5  style={{fontWeight:"bolder"}}>Test Resistrations</h5>
       </div>
 
       <div  className="container mt-5" >
         <div className="row justify-content-between m-3">
-          <div className="col flex-item "> <select  className="p-2 rounded" style={{fontSize:'12px',width:'150px',}}>
-          <option value="">Select Sample Type</option>
+          <div className="col flex-item "> <select  className="p-2 rounded"style={{border:"2px solid gray", width:"150px", borderRadius:"5px", padding:"4px" }}>
+          <option value="">Select Type</option>
                 <option value="raw-material">Raw Material</option><option value="hcl">hcl</option>
                 <option value="hydrochloric-acid">Hydrochloric Acid</option><option value="petrochemical">Petrochemical</option><option value="initiated-product">Initiated Product</option><option value="semi-finished">Semi Finished</option><option value="abcd">ABCD</option><option value="h2so4">H2So4</option><option value="att108">ATT108</option><option value="micro-media">Micro Media </option><option value="fg-templage">FG Templage</option><option value="water-type">water type</option><option value="sodium">Sodium</option><option value="test-sample-type">test sample type</option><option value="new-product-sample-type">New Product Sample Type</option><option value="packing-material">Packing Material</option><option value="raw-material-1">Raw Material-1</option><option value="finished-product">Finished Product</option>
                             </select ></div>
 
                             <div className="col flex-item ">
-                            <select  className="p-2 rounded " style={{fontSize:'12px',width:'150px',}} >
+                            <select  className="p-2 rounded " style={{border:"2px solid gray", width:"150px", borderRadius:"5px", padding:"4px" }} >
                                 <option value="">Select Client</option>
                                 <option  value="mit-power">MIT Power</option>
                                 <option  value="ravi-kandala">Ravi Kandala</option>
                             </select>
                             </div>
                             <div className="col flex-item ">
-                            <select className=" p-2 rounded" style={{fontSize:'12px',width:'150px',}}>
-                                <option value="">Select Specification</option>
+                            <select className=" p-2 rounded" style={{border:"2px solid gray", width:"150px", borderRadius:"5px", padding:"4px" }}>
+                                <option value="">Select Specs</option>
                              <option value="RMS-TDL-01 - Tadalfil Raw material testing specification">RMS-TDL-01 - Tadalfil Raw material testing specification</option><option value="DR123 - Resinate02">DR123 - Resinate02</option><option value="DCU-1 - DCU-01">DCU-1 - DCU-01</option><option value="DS-02 - Salts2">DS-02 - Salts2</option><option value="DS02 - Diclofenac Sodium-01">DS02 - Diclofenac Sodium-01</option><option value="DFA-1 - DFA-01">DFA-1 - DFA-01</option><option value="">DS2 - DHS-1</option><option value="">DFD-1 - DFD-01</option><option value="">DVS-1 - DVS-01</option><option value="MIR1 - Mirabegron1">MIR1 - Mirabegron1</option><option value="">CLO-1 - CLO-01</option><option value="">ESZ123 - Eslica12</option><option value="">CTH-1 - CTH-01</option><option value="HYDRO89 - HydrochL">HYDRO89 - HydrochL</option><option value="LEV2 - Levetiracetam">LEV2 - Levetiracetam</option><option value="">CPZ-1 - CPZ-01</option><option value="">MM24 - M/M</option><option value="">CLB-1 - CBN-01</option><option value="OM01 - Medoxomil">OM01 - Medoxomil</option><option value="OX12 - Oxcarbazepine1">OX12 - Oxcarbazepine1</option><option value="P101 - Pirfenidone1">P101 - Pirfenidone1</option><option value="RAN124 - Ranolazine">RAN124 - Ranolazine</option><option value="RR12 - Rivaroxaban">RR12 - Rivaroxaban</option><option value="R12 - SOP for Rosuvastatin">R12 - SOP for Rosuvastatin</option><option value="">CBN-1 - CBN-01</option><option 
                              
                              value="HCL89 - Sertraline">HCL89 - Sertraline</option><option value="SC2 - Citrate">SC2 - Citrate</option><option value="SPA12 - Sitagliptin Phosphate">SPA12 - Sitagliptin Phosphate</option><option value="SS6 - Solifenacin">SS6 - Solifenacin </option><option value="SSC12 - Succinylcholine">SSC12 - Succinylcholine </option><option value="">TA12 - TAD-01</option><option value="APB024 - SOP for Deferasirox">APB024 - SOP for Deferasirox</option><option value="VT12 - SOP for vt">VT12 - SOP for vt</option><option value="RMS-DFX-01 - Deferasirox Raw material testing specification">RMS-DFX-01 - Deferasirox Raw material testing specification</option><option value="tr12 - Ticagrelor">tr12 - Ticagrelor</option><option value="HCL123 - HCL">HCL123 - HCL</option><option value="ACC-1 - ACC-01">ACC-1 - ACC-01</option><option value="HCL10132% - Hydrochloric Acid">HCL10132% - Hydrochloric Acid</option><option value="HOS 234 - Hydraulic Oil Spec">HOS 234 - Hydraulic Oil Spec</option><option value="CHPOIL001 - CHPOIL">CHPOIL001 - CHPOIL</option><option value="MB-PM-001/01 - Microbiology">MB-PM-001/01 - Microbiology</option><option value="RPS-TSLV-00 - test">RPS-TSLV-00 - test</option><option value="rest0001 - Testamine Spec-1">rest0001 - Testamine Spec-1</option><option value="123 - test">123 - test</option><option value="FP 00055 - VAD Spec">FP 00055 - VAD Spec</option><option value="FPS-EM-01 - FPS-EM-01">FPS-EM-01 - FPS-EM-01</option><option value="plcspec - plc-spec">plcspec - plc-spec</option><option value="Tamc/01/00 - Tamc">Tamc/01/00 - Tamc</option><option value="EUR/SOP-AD-01 - EUR/SOP-AD-01">EUR/SOP-AD-01 - EUR/SOP-AD-01</option><option value="EUR/SOP-AD-04 - Eureka SPP">EUR/SOP-AD-04 - Eureka SPP</option><option value="WBL/FPS/FG/2893 - 03 - Finished Goods">WBL/FPS/FG/2893 - 03 - Finished Goods</option><option value="WBL/FPS/FG/2893-02 - FINISHED PRODUCT ">WBL/FPS/FG/2893-02 - FINISHED PRODUCT </option>
@@ -152,8 +153,8 @@ const nextToLastPage = () => {
 
                              <div className="col flex-item ">
                         <button className="border p-1 rounded" type="button" >
-                            Show
-                            <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{outline:'none'}}>
+                            
+                            <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{border:"2px solid gray", width:"150px", borderRadius:"5px", padding:"4px" }}>
                             <option value="">All</option>
                                 <option value="initiated">Initiated</option>
                                 <option value="approved">Approved</option>
@@ -178,7 +179,7 @@ const nextToLastPage = () => {
           data-bs-target="#AddRegistration"
           aria-controls="offcanvasRight"
           >
-          <CgAddR /> <span style={{fontSize:'14px',fontWeight:'bold'}}>Add Registration</span>
+          <span style={{fontSize:'14px',fontWeight:'bold'}}>Add Registration</span>
         </button>
            </div>
           </div>
@@ -278,26 +279,26 @@ const nextToLastPage = () => {
       </div>
 
       <br />
-      <div className='table-responsive p-4 container1'>
-                <table className='table shadow ' style={{fontSize:'0.8rem',margin:'0px auto',width:'98%'}}>
+      <div className=" rounded  m-4 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
                     <thead>
                         <tr>
-                            <th>Sr.no.</th>
-                            <th>Specification ID</th>
-                            <th>Product Name</th>
-                            <th>Test Name</th>
-                            <th>Test Code</th>
-                            <th>Method</th>
-                            <th>Category</th>
-                            <th>Test type</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Sr.no.</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Specification ID</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Product Name</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Test Name</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Test Code</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Method</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Category</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Test type</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Status</th>
+                            <th style={{background:"#3C496A", color:"white"}} >Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {renderRows()}
                     </tbody>
-                </table>
+                </CTable>
             </div>
 
             <div className="pagination" style={{margin:'0 35px'}}>

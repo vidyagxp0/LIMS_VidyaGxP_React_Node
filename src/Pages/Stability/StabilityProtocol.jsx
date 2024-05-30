@@ -361,28 +361,28 @@ function StabilityProtocol() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 8px black" }}>
-            <CTable align="middle" responsive >
+          <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
                     Product/Material
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
                     Specification ID
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Generic Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Sample Type</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Protocol Type</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Protocol Id</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Generic Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Sample Type</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Protocol Type</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Protocol Id</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
 

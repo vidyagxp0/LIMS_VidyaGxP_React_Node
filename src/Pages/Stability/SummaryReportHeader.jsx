@@ -187,16 +187,16 @@ import {
                  </CCol>
                </CRow>
              </div>
-             <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-            <CTable align="middle" responsive >
+             <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
                  <CTableHead>
                    <CTableRow>
-                     <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                     <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                     <CTableHeaderCell scope="col">Product Caption</CTableHeaderCell>
-                     <CTableHeaderCell scope="col">Report Title</CTableHeaderCell>
-                     <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                     <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                     <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                     <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                     <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Product Caption</CTableHeaderCell>
+                     <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Report Title</CTableHeaderCell>
+                     <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                     <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                    </CTableRow>
                  </CTableHead>
                  <CTableBody>

@@ -60,21 +60,21 @@ const Roles = () => {
 
     return (
         <div className=" mx-5 ">
-            <div className="row my-5 ">
+            <div className="row  ">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5 py-4">Roles</div>
+                    <div className="title fw-bold fs-5 my-4">Roles</div>
                 </div>
 
             </div>
 
             {/* Employee table */}
-            <div className='table-responsive bg-white rounded py-3 px-4 mt-5  ' style={{ boxShadow: "0px 0px 3px black" }}>
-                <table className='table '>
+            <div className=" rounded    bg-white" style={{ border: "2px solid gray" }}>
+                <table className='table table-striped '>
                     <thead>
                         <tr>
-                            <th className='w-25'>S.No.</th>
-                            <th className='w-25'>Role</th>
-                            <th className='w-25'>Status</th>
+                            <th style={{background:"#3C496A", color:"white"}} className='w-25'>S.No.</th>
+                            <th style={{background:"#3C496A", color:"white"}} className='w-25'>Role</th>
+                            <th style={{background:"#3C496A", color:"white"}} className='w-25'>Status</th>
                         </tr>
                     </thead>
                     <tbody>
