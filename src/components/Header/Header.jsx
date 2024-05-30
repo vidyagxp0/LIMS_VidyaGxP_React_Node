@@ -7,41 +7,28 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from 'react-bootstrap';
-
+import { Button } from "react-bootstrap";
 
 function Header() {
   const [drop, setDrop] = useState(false);
   const [notification, setNotification] = useState(false);
-  
 
   return (
     <header
       className=" text-dark py-4"
-      style={{ background: "#091C3F", height: "72px" }}
+      style={{
+        background: "linear-gradient(45deg, #091C3F,#3b8d99, #091C3F )",
+        height: "72px",
+      }}
     >
-      <div className="container mx-auto flex items-center justify-between">
-        <div>
-          <h3 className="text-2xl font-bold text-light">
-            <span style={{ color: "orange" }}>VidyaGxP</span>-LIMS
+      <div className="container mx-auto text-center flex items-center justify-around">
+        <div className="text-center">
+          <h3 style={{ fontFamily: "serif" }} className="text-light">
+            Welcome to Laboratory Information Management System
           </h3>
         </div>
-        <div className="text-center">
-          {/* <div className="text-sm font-semibold text-green-500">Laboratory Information Management System</div>
-          <div className="text-sm text-gray-400">
-            <strong className="text-dark">E-Mail:</strong> admin@vidyagxp.com
-          </div>
-          <div className="text-sm text-gray-400">
-            <strong className="text-dark">Mobile:</strong> +91-7354654474
-          </div> */}
-          <h1 className="text-light">Welcome to Our laboratory</h1>
-        </div>
-        {/* <div className="text-right">
-          <div className="text-sm text-gray-400">
-            <span className="text-dark font-semibold">Expiry:</span> 31/10/2025
-          </div>
-        </div> */}
-        <div className="flex items-center">
+
+        <div className="flex items-center " >
           <div className="relative mr-4">
             <button
               onClick={() => setNotification(!notification)}
