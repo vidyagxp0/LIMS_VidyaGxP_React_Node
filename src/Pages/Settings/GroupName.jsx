@@ -123,7 +123,7 @@ function GroupName() {
                 <CFormSelect
                   value={selectedStatus}
                   onChange={handleStatusChange}
-                  className="border-2"
+                  className="border-dark-subtle border-2"
                   options={[
                     { value: 'All', label: 'All' },
                     { value: 'INITIATED', label: 'Initiated' },
@@ -142,16 +142,16 @@ function GroupName() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5 border-2 rounded shadow p-3">
-            <CTable align="middle" responsive className=" table-responsive">
+          <div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
+            <CTable align="middle" responsive className=" table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Group Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Group Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Description</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

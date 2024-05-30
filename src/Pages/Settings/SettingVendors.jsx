@@ -17,14 +17,14 @@ const SettingVendors = () => {
   const recordsPerPage = 5;
 
   const tableData = [
-    // { id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "INITIATED" },
-    // { id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "APPROVED" },
-    // { id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "REJECTED" },
-    // { id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "REINITIATED" },
-    // { id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "INITIATED" },
-    // { id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "APPROVED" },
-    // { id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "REJECTED" },
-    // { id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "REINITIATED" }
+    { id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "INITIATED" },
+    { id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "APPROVED" },
+    { id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "REJECTED" },
+    { id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "REINITIATED" },
+    { id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "INITIATED" },
+    { id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "APPROVED" },
+    { id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "REJECTED" },
+    { id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "REINITIATED" }
   ];
 
   const handleStatusChange = (e) => {
@@ -103,7 +103,7 @@ const SettingVendors = () => {
             <CCol sm={4}>
               <CFormInput
                 type="text"
-                className='border-2'
+                className='border-dark-subtle border-2'
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchChange}
@@ -112,7 +112,7 @@ const SettingVendors = () => {
             <CCol sm={3}>
               <CFormSelect
                 value={selectedStatus}
-                className='border-2'
+                className='border-dark-subtle border-2'
                 onChange={handleStatusChange}
                 options={[
                   { value: 'All', label: 'All' },
@@ -136,21 +136,20 @@ const SettingVendors = () => {
           </CRow>
         </div>
 
-        {/* If data does not found then */}
         {filteredData.length === 0 ? <center className='my-5'><h5>No Vendors Found</h5></center> :<div className="notFound">
-          <div className="mt-4 border-2 rounded shadow p-3">
-            <CTable align="middle" responsive className="table-responsive">
+          <div className="bg-light mt-4 border-dark-subtle border-2 rounded shadow">
+            <CTable align="middle" responsive className="table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Id</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Vendor</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Test Technique</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Training Details</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Id</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Vendor</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Test Technique</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Training Details</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Remarks</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

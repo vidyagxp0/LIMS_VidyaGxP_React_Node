@@ -1,28 +1,28 @@
-import { 
-    CButton, 
-    CCol, 
-    CFormSelect, 
-    CRow, 
-    CTable, 
-    CTableBody, 
-    CTableDataCell, 
-    CTableHead, 
-    CTableHeaderCell, 
-    CTableRow 
-  } from "@coreui/react";
-  import { useState } from "react";
-  import { FaArrowRight, FaDownload } from "react-icons/fa";
-  import { PDFDownloadLink } from '@react-pdf/renderer';
+import {
+    CButton,
+    CCol,
+    CFormSelect,
+    CRow,
+    CTable,
+    CTableBody,
+    CTableDataCell,
+    CTableHead,
+    CTableHeaderCell,
+    CTableRow
+} from "@coreui/react";
+import { useState } from "react";
+import { FaArrowRight, FaDownload } from "react-icons/fa";
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import AuditTrailPDF from "./AuditTrailPDF";
-  
-  function AuditTrail() {
+
+function AuditTrail() {
     const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     const [selectedProduct, setSelectedProduct] = useState("Select Product");
     const [selectedOperation, setSelectedOperation] = useState("Select Operations");
     const [selectedUser, setSelectedUser] = useState("Select Users");
-  
+
     const data = [
         { id: 1, dateTime: 'Feb 11th 2023 10:12', formName: 'Category', actionRowName: '', oldAction: '-', newAction: 'Login', employeeName: 'Admin' },
         { id: 2, dateTime: 'Feb 15th 2024 18:22', formName: 'Glass', actionRowName: '', oldAction: '-', newAction: 'LogOut', employeeName: 'SuperAdmin' },
@@ -34,10 +34,10 @@ import AuditTrailPDF from "./AuditTrailPDF";
         { id: 8, dateTime: 'Mar 23rd 2024 10:50', formName: 'Category', actionRowName: '', oldAction: '-', newAction: 'Category Added', employeeName: 'Admin' },
         { id: 9, dateTime: 'Apr 15th 2024 19:45', formName: 'Category', actionRowName: '', oldAction: '-', newAction: 'Category Added', employeeName: 'Admin' },
     ];
-  
+
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize, data.length);
-  
+
     const filterData = () => {
         return data.filter((item) => {
             const matchesProduct = selectedProduct === "Select Product" || item.formName.toLowerCase().includes(selectedProduct.toLowerCase());
@@ -47,13 +47,13 @@ import AuditTrailPDF from "./AuditTrailPDF";
             return matchesProduct && matchesOperation && matchesUser && matchesSearch;
         });
     };
-  
+
     const filteredData = filterData();
-  
+
     const nextPage = () => setCurrentPage(currentPage + 1);
     const prevPage = () => setCurrentPage(currentPage - 1);
     const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
-  
+
     return (
         <>
             <div className="h-100 mx-5">
@@ -66,7 +66,7 @@ import AuditTrailPDF from "./AuditTrailPDF";
                         <CRow className="mb-3">
                             <CCol sm={3}>
                                 <CFormSelect
-                                    style={{ border: "2px solid gray" }}
+                                    className='border-dark-subtle border-2'
                                     value={selectedProduct}
                                     onChange={(e) => setSelectedProduct(e.target.value)}
                                     options={[
@@ -82,7 +82,7 @@ import AuditTrailPDF from "./AuditTrailPDF";
                             </CCol>
                             <CCol sm={3}>
                                 <CFormSelect
-                                    style={{ border: "2px solid gray" }}
+                                    className='border-dark-subtle border-2'
                                     value={selectedOperation}
                                     onChange={(e) => setSelectedOperation(e.target.value)}
                                     options={[
@@ -98,7 +98,7 @@ import AuditTrailPDF from "./AuditTrailPDF";
                             </CCol>
                             <CCol sm={3}>
                                 <CFormSelect
-                                    style={{ border: "2px solid gray" }}
+                                    className='border-dark-subtle border-2'
                                     value={selectedUser}
                                     onChange={(e) => setSelectedUser(e.target.value)}
                                     options={[
@@ -113,7 +113,7 @@ import AuditTrailPDF from "./AuditTrailPDF";
                                 />
                             </CCol>
                             <CCol sm={2}>
-                                
+
                             </CCol>
                             <CCol sm={1}>
                                 <div className="d-flex justify-content-end">
@@ -128,17 +128,17 @@ import AuditTrailPDF from "./AuditTrailPDF";
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive>
+                    <div className="bg-white border-dark-subtle border-2 mt-5 rounded">
+                        <CTable align="middle" responsive className="table-striped">
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Date Time</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Form Name</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Action Row Name</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Old Action</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">New Action</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Employee Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Date Time</CTableHeaderCell>
+                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Form Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Action Row Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Old Action</CTableHeaderCell>
+                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">New Action</CTableHeaderCell>
+                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Employee Name</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
@@ -157,24 +157,23 @@ import AuditTrailPDF from "./AuditTrailPDF";
                         </CTable>
                     </div>
                     <div className="d-flex justify-content-between align-items-center mt-4">
-                        <div className="pagination">
-                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                        <div className="pagination gap-3">
+                            <button className="btn" onClick={prevPage} disabled={currentPage === 1}>
                                 &lt;&lt;
                             </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredData.length}>
+                            <button className="btn bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button className="btn" onClick={nextPage} disabled={endIndex >= filteredData.length}>
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn" onClick={nextToLastPage}>
-                            Next <FaArrowRight />
+                        <button className="btn d-flex gap-2 border-1 border-dark" onClick={nextToLastPage}>
+                            Next <FaArrowRight className="mt-1"/>
                         </button>
                     </div>
                 </div>
             </div>
         </>
     );
-  }
-  
-  export default AuditTrail;
-  
+}
+
+export default AuditTrail;
