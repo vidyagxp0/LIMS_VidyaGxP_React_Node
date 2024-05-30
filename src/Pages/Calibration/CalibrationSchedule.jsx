@@ -49,9 +49,9 @@ export default function CalibrationSchedule() {
     return (
         <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
         <CModalHeader>
-          <CModalTitle> Add Calibration Type</CModalTitle>
+          <CModalTitle>  Add Calibration Schedule</CModalTitle>
         </CModalHeader>
-          <p className='ms-3 m-2'>Add information and add new calibration type</p>
+        
         <CModalBody>
         <CFormSelect 
           className="mb-3"
@@ -145,37 +145,15 @@ export default function CalibrationSchedule() {
          ]}
             />   
                  
+                 <CFormInput
+              label='Tolerance Period'
+              className="mb-3"
+              type="text"
+              placeholder="Tolerance Period"
+              />  
 
-                    <label className="line3" htmlFor="">Frequency
-                        <select name="Frequency" className="line4">
-                            <option value="">Period </option>
-                            <option value="Daily">Daily</option>
-                            <option value="Weekly">Weekly</option>
-                            <option value="Monthly">Monthly</option>
-                            <option value="Yearly">Yearly</option>
-                        </select>
-
-                        <select name="Frequency" className="line4">
-                            <option value="">Period </option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">...</option>
-                        </select></label>
-
-                    <label className="line3" htmlFor="">Tolerance Period</label>
-                    <input className="line4" required type="text" placeholder="Tolerance Period" />
-
-                    <div id="line5">
-                        <button
-                            type="button"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close"
-                        >
-                            &lt; Back
-                        </button>
-                        <button onClick={handleAddStorage}>Submit</button>
-                    </div>
+        <span>Day(s)</span>
+                  
 
          <div className="d-flex gap-3 mt-4">
         <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
@@ -276,9 +254,7 @@ export default function CalibrationSchedule() {
                 <td>
                     <div className="d-flex gap-3">
                         <Link to="/calibration/calibration-schedule-details"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer"  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight">
+                        <div onClick={() => setAddModal(true)}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
                         <Link to="#" onClick={() => handleDelete(index)}>
