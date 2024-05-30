@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from 'react-icons/fa';
 
+
 function Approval() {
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,13 +46,7 @@ function Approval() {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const handleLastPage = () => {
-    setCurrentPage(totalPages);
-  };
-
-  const handleFirstPage = () => {
-    setCurrentPage(1);
-  };
+  
 
   return (
     <>
@@ -63,7 +58,8 @@ function Approval() {
           <CRow className="mb-3">
             <CCol sm={3}>
               <CFormInput
-                className="mb-3 border-2"
+                className="mb-3 "
+                style={{border:"2px solid gray"}}
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
@@ -76,6 +72,7 @@ function Approval() {
             <CCol sm={3}>
               <CFormSelect
                 className="border-2"
+                style={{border:"2px solid gray"}}
                 value={statusFilter}
                 onChange={(e) => {
                   setStatusFilter(e.target.value);
@@ -95,22 +92,22 @@ function Approval() {
             <CCol sm={6}></CCol>
           </CRow>
         </div>
-        <div className="shadow rounded p-4 border-2">
+        <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
           <CTable align="middle" responsive className="mb-0 table-responsive">
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell scope="col">S No.</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Name</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Code</CTableHeaderCell>
-                <CTableHeaderCell scope="col">User</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                <CTableHeaderCell scope="col">Action</CTableHeaderCell>
+            <CTableHead >
+              <CTableRow > 
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Name</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Code</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">User</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Action</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {paginatedData.map((item, index) => (
                 <CTableRow key={item.id}>
-                  <CTableDataCell>{(currentPage - 1) * pageSize + index + 1}</CTableDataCell>
+                  <CTableDataCell style={{marginLeft:"10px"}}>{(currentPage - 1) * pageSize + index + 1}</CTableDataCell>
                   <CTableDataCell>{item.name}</CTableDataCell>
                   <CTableDataCell>{item.code}</CTableDataCell>
                   <CTableDataCell>{item.description}</CTableDataCell>
@@ -140,7 +137,7 @@ function Approval() {
             </CTableBody>
           </CTable>
         </div>
-        <div className="d-flex justify-content-between my-4">
+        <div className="d-flex justify-content-around my-4">
           <div className="d-flex gap-3">
             <CButton onClick={handlePrevPage} disabled={currentPage === 1}>&lt; &lt;</CButton>
             <button className='btn border'>{currentPage}</button>

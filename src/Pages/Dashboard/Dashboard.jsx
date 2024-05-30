@@ -28,7 +28,7 @@ function Dashboard(props) {
   const ARNumber = [
     "ARPC0000099",
     "ARPC0000098",
-    "ARPC0000097",
+    // "ARPC0000097",
     "ARPC0000096",
     "ARIP0000095",
     "ARFFT0000094",
@@ -595,15 +595,20 @@ function Dashboard(props) {
           <div
             className="-lg m-1 p-4 text-center"
             style={{
-              background: "linear-gradient(45deg, #6a11cb, #2575fc)", // purple to blue
+              // background: "linear-gradient(45deg, #6a11cb, #2575fc)", // purple to blue
+              backgroundImage:
+                'url("https://media.istockphoto.com/id/1410455925/vector/dynamic-blue-particle-wave-abstract-sound-visualization-digital-structure-of-the-wave-flow.jpg?s=612x612&w=0&k=20&c=RL7do3aEvte0cKukjC30eHQ4nujXUIOa2TvQbIN8eKw=")',
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
               width: "170px",
-              height: "150px",
-              borderRadius: "45px",
+              height: "130px",
+              borderRadius: "30px",
+
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
-              boxShadow: "0 0 10px #6a11cb",
+              // boxShadow: "0 0 10px #6a11cb",
             }}
           >
             <div className="text-light fs-6">On Going Test</div>
@@ -613,10 +618,14 @@ function Dashboard(props) {
           <div
             className="shadow-lg m-1 p-4 text-center"
             style={{
-              background: "linear-gradient(45deg, #00bcd4, #ff4b2b)", // orange to red
+              // background: "linear-gradient(45deg, #00bcd4, #ff4b2b)", // orange to red
+              backgroundImage:
+                "url('https://c4.wallpaperflare.com/wallpaper/624/336/42/science-the-big-bang-theory-atoms-wallpaper-preview.jpg')",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
               width: "170px",
-              height: "150px",
-              borderRadius: "45px",
+              height: "130px",
+              borderRadius: "30px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -630,10 +639,14 @@ function Dashboard(props) {
           <div
             className="shadow-lg m-1 p-4 text-center"
             style={{
-              background: "linear-gradient(45deg, #42e695, #3bb2b8)", // green to blue
+              // background: "linear-gradient(45deg, #42e695, #3bb2b8)", // green to blue
+              backgroundImage:
+                "url('https://static.vecteezy.com/system/resources/thumbnails/006/712/955/small/abstract-health-medical-science-consist-doctor-digital-wireframe-concept-modern-medical-technology-treatment-medicine-on-gray-background-for-template-web-design-or-presentation-vector.jpg')",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
               width: "170px",
-              height: "150px",
-              borderRadius: "45px",
+              height: "130px",
+              borderRadius: "30px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -647,10 +660,14 @@ function Dashboard(props) {
           <div
             className="shadow-lg m-1 p-4 text-center"
             style={{
-              background: "linear-gradient(45deg, #ff416c, #ff4b2b)", // pink to red
+              // background: "linear-gradient(45deg, #ff416c, #ff4b2b)",
+              backgroundImage:
+                "url('https://img.freepik.com/premium-photo/high-angle-view-eyeglasses-table-against-black-background_1048944-215100.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1715731200&semt=ais_user')",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
               width: "170px",
-              height: "150px",
-              borderRadius: "45px",
+              height: "130px",
+              borderRadius: "30px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -664,10 +681,14 @@ function Dashboard(props) {
           <div
             className="shadow-lg m-1 p-4 text-center"
             style={{
-              background: "linear-gradient(45deg, #3b8d99, #6b6b83)", // teal to yellow
+              // background: "linear-gradient(45deg, #3b8d99, #6b6b83)",
+              backgroundImage:
+                "url('https://png.pngtree.com/thumb_back/fh260/background/20210716/pngtree-abstract-geometric-medical-background-of-science-and-technology-style-gene-atom-image_743373.jpg')",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
               width: "170px",
-              height: "150px",
-              borderRadius: "45px",
+              height: "130px",
+              borderRadius: "30px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -686,7 +707,7 @@ function Dashboard(props) {
               <div
                 className="w-100 h-75  rounded px-3"
                 style={{
-                  // //backgroundColor: "#f8f9fa",
+                  backgroundColor: "#ffffff",
                   boxShadow: "0px 0px 10px black",
                 }}
               >
@@ -751,19 +772,25 @@ function Dashboard(props) {
                     <span className="text-muted">Dropped</span>
                   </div>
                 </div>
-                <div className="d-flex justify-content-around py-5">
+                <div
+                  className="d-flex justify-content-around py-5"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "20px",
+                  }}
+                >
                   <CircularProgressbar
                     className="p-3"
-                    background
-                    backgroundPadding={6}
                     value={2.13}
-                    text={"2.13%"}
-                    strokeWidth={8}
+                    text={`${2.13}%`}
+                    strokeWidth={12}
                     styles={buildStyles({
-                      backgroundColor: "orange",
-                      textColor: "#212529",
-                      pathColor: "red",
-                      trailColor: "transparent",
+                      pathColor: "#FF6347",
+                      textColor: "#333333",
+                      trailColor: "#F0F0F0",
+                      backgroundColor: "#FFFFFF",
                     })}
                   />
                   <CircularProgressbar
@@ -816,6 +843,7 @@ function Dashboard(props) {
               <div
                 className="w-50 my-4 rounded p-4"
                 style={{
+                  background: "#ffffff",
                   boxShadow: "0px 0px 10px black",
                 }}
               >
@@ -839,7 +867,7 @@ function Dashboard(props) {
                 className="my-4  w-50  rounded"
                 style={{
                   boxShadow: "0px 0px 10px black",
-                  //backgroundColor: "#f8f9fa",
+                  background: "#ffffff",
                 }}
               >
                 <div className="py-4 mx-3 fw-bolder">Material Status</div>
@@ -850,10 +878,14 @@ function Dashboard(props) {
             </div>
           </div>
 
-          <div className="d-flex flex-column gap-4 w-25 mt-3">
+          <div className="d-flex flex-column gap-4 w-25 mt-2">
             <div
               className="rounded "
-              style={{ background: "#ffffff",color:"black", boxShadow: "  0 0px 5px black" }}
+              style={{
+                background: "#ffffff",
+                color: "black",
+                boxShadow: "  0 0px 5px black",
+              }}
             >
               <div className="h5 m-4 fw-bold"> Latest Products</div>
               <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
@@ -868,8 +900,12 @@ function Dashboard(props) {
             </div>
 
             <div
-              className="rounded "
-              style={{ background: "#ffffff",color:"black", boxShadow: "  0 0px 5px black" }}
+              className="rounded mt-5"
+              style={{
+                background: "#ffffff",
+                color: "black",
+                boxShadow: "  0 0px 5px black",
+              }}
             >
               <div className="h5 m-4 fw-bold text-dark">AR Number</div>
               <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
@@ -897,7 +933,7 @@ function Dashboard(props) {
             className="my-4 w-50 rounded"
             style={{
               boxShadow: "0px 0px 10px black",
-              //backgroundColor: "#f8f9fa",
+              background: "#ffffff",
             }}
           >
             <div className="py-4 mx-3 fw-bolder text-center">
@@ -911,7 +947,7 @@ function Dashboard(props) {
             className="my-4 w-50 rounded"
             style={{
               boxShadow: "0px 0px 10px black",
-              //backgroundColor: "#f8f9fa",
+              background: "#ffffff",
             }}
           >
             <div className="py-4 mx-3 fw-bolder text-center">Test Stats</div>
@@ -926,7 +962,7 @@ function Dashboard(props) {
             className="mb-4 w-50 rounded"
             style={{
               boxShadow: "0px 0px 10px black",
-              //backgroundColor: "#f8f9fa",
+              background: "#ffffff",
             }}
           >
             <div className="py-4 mx-3 fw-bolder">Product Wise Test stats</div>
@@ -938,7 +974,7 @@ function Dashboard(props) {
             className="mb-4 w-50 rounded"
             style={{
               boxShadow: "0px 0px 10px black",
-              //backgroundColor: "#f8f9fa",
+              background: "#ffffff",
             }}
           >
             <div className="py-4 mx-3 fw-bolder">Test Wise stats</div>
