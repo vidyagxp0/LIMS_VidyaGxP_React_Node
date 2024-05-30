@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaArrowRight } from 'react-icons/fa';
@@ -16,8 +15,11 @@ import Checkbox from '@mui/material/Checkbox';
 import { PiDownloadBold } from "react-icons/pi";
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 export default function CalibrationSchedule() {
+    const [addModal, setAddModal] = useState(false);
+
     const top100Films = [
         { label: 'The Shawshank Redemption', year: 1994 },
         { label: 'The Godfather', year: 1972 },
@@ -43,16 +45,158 @@ export default function CalibrationSchedule() {
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
+  const StatusModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle> Add Calibration Type</CModalTitle>
+        </CModalHeader>
+          <p className='ms-3 m-2'>Add information and add new calibration type</p>
+        <CModalBody>
+        <CFormSelect 
+          className="mb-3"
+         label="Instrument Category"
+         options={[
+        'Select Intrument Category',
+         { label: 'chromathograpy', value: 'chromathograpy' },
+         { label: 'weighing balance', value: 'weighing-balance' },
+        ]}    
+        />
+         <CFormSelect 
+           className="mb-3"
+         label="Calibration Type"
+         options={[
+        'Select Calibration Type',
+        { label: 'yearly', value: 'yearly' },
+         { label: 'monthly', value: 'monthly' },
+         { label: 'daily', value: 'daily' },
+         ]}
+       /> 
+       <CFormSelect 
+           className="mb-3"
+         label="Calibration Type"
+         options={[
+        'Select Calibration Type',
+        { label: 'yearly', value: 'yearly' },
+         { label: 'monthly', value: 'monthly' },
+         { label: 'daily', value: 'daily' },
+         ]}
+       />
+       <CFormSelect 
+           className="mb-3"
+         label="Instrument (Instrument ID)"
+         options={[
+        'Select Instrument ID',
+         ]}
+       /> 
+        <CFormSelect 
+           className="mb-3"
+         label="Module (Module ID)"
+         options={[
+        'Select Module ID',
+         ]}
+       />
 
+       <FormControl style={{ margin: '20px' }}>
+                        <FormLabel id="demo-row-radio-buttons-group-label">Calibration Work Flow</FormLabel>
+                        <RadioGroup
+                            row
+                            aria-labelledby="demo-row-radio-buttons-group-label"
+                            name="row-radio-buttons-group"
+                        >
+                            <FormControlLabel value="Calibration Data Sheet" control={<Radio />} label="Calibration Data Sheet" />
+                            <FormControlLabel value="Sample Login Template" control={<Radio />} label="Sample Login Template" />
+                        </RadioGroup>
+         </FormControl>
+
+         <CFormSelect 
+           className="mb-3"
+         label="Calibration Datasheet"
+         options={[
+        'Select',
+        { label: 'CAl data sheet', value: 'cal-data-sheet' },
+        { label: 'Data sheet1', value: 'data-sheet1' },
+         ]}
+       />
+
+        <CFormInput
+              label='Schedule Description'
+              className="mb-3"
+              type="text"
+              placeholder="Schedule Description"
+              />   
+              
+              <CFormInput
+              label='Start Date'
+              className="mb-3"
+              type="date"
+              placeholder=""
+              />  
+
+        <CFormSelect 
+           className="mb-3"
+         label="Frequency"
+         options={[
+        'Period',
+        { label: 'Daily', value: 'daily' },
+        { label: 'Weekly', value: 'weekly' },
+        { label: 'Monthly', value: 'monthly' },
+        { label: 'Yearly', value: 'yearly' },
+         ]}
+            />   
+                 
+
+                    <label className="line3" htmlFor="">Frequency
+                        <select name="Frequency" className="line4">
+                            <option value="">Period </option>
+                            <option value="Daily">Daily</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Yearly">Yearly</option>
+                        </select>
+
+                        <select name="Frequency" className="line4">
+                            <option value="">Period </option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">...</option>
+                        </select></label>
+
+                    <label className="line3" htmlFor="">Tolerance Period</label>
+                    <input className="line4" required type="text" placeholder="Tolerance Period" />
+
+                    <div id="line5">
+                        <button
+                            type="button"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                        >
+                            &lt; Back
+                        </button>
+                        <button onClick={handleAddStorage}>Submit</button>
+                    </div>
+
+         <div className="d-flex gap-3 mt-4">
+        <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+        <CButton color="primary w-50">Submit</CButton>
+      </div>
+
+        </CModalBody>
+      </CModal>
+    )
+  }
 
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
         { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
         { user: 'hcpl Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        { user: 'hcpl Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
     ]);
 
-    const pageSize = 4;
+    const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
     const [editRowIndex, setEditRowIndex] = useState(null);
     const [editFormData, setEditFormData] = useState({
@@ -187,13 +331,11 @@ export default function CalibrationSchedule() {
                 </div>
                 <div style={{ border: '1px solid #f98d6b', marginLeft: '150px', padding: '8px', width: '40px', display: 'flex', justifyContent: 'center', backgroundColor: '#f98d6b', borderRadius: '5px' }}><PiDownloadBold /></div>
                 <button
-                    className="btn btn-primary m-3"
+                    className="btn btn-primary m-5"
                     type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRight"
-                    aria-controls="offcanvasRight"
+                    onClick={() => setAddModal(true)}
                 >
-                    <CgAddR /> <span>Calibration Schedule</span>
+                    <span>Calibration Schedule</span>
                 </button>
 
                 <div
@@ -304,7 +446,7 @@ export default function CalibrationSchedule() {
             </div>
 
             <br />
-            <div className='table-responsive p-4 container1'>
+            <div className='table-responsive p-4 container1 '>
                 <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
                     <thead>
                         <tr>
@@ -328,7 +470,7 @@ export default function CalibrationSchedule() {
 
             <div className="pagination">
                 <div className="pagination" style={{ margin: '0 30px' }}>
-                    <div className='mr-5'>
+                    <div >
                         <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
                     </div>
                     <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -338,8 +480,10 @@ export default function CalibrationSchedule() {
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
                     </div>
                 </div>
-                <button className="btn btn-next" style={{ margin: '0 30px' }} onClick={nextToLastPage}> Next <FaArrowRight /></button>
+                <button className="btn btn-next d-flex align-items-center" style={{ margin: '0 30px' }} onClick={nextPage}> Next <FaArrowRight className="ms-2" /></button>
             </div>
+                      
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
         </>
     );
 }

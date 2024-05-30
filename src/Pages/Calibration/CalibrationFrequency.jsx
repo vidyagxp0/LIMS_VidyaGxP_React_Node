@@ -7,10 +7,12 @@ import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 export default function CalibrationFrequency() {
+  const [addModal, setAddModal] = useState(false);
+
   const [storageName, setStorageName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -22,6 +24,36 @@ export default function CalibrationFrequency() {
   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
   const badgeStyle4 = { background: "red", color: "white", width: "110px" };
 
+  const StatusModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle> Add Calibration Frequency</CModalTitle>
+        </CModalHeader>
+          <p className='ms-3 m-2'>Add information and add new calibration frequency</p>
+        <CModalBody>
+        <CFormInput
+          label='Calibration Frequency'
+          className="mb-3"
+          type="text"
+          placeholder="Calibration Frequency"
+          />  
+          <CFormInput
+          label='Calibration Frequency Prefix'
+          className="mb-3"
+          type="text"
+          placeholder="Type Prefix"
+          /> 
+         
+         <div className="d-flex gap-3 mt-4">
+        <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+        <CButton color="primary w-50">Submit</CButton>
+      </div>
+        </CModalBody>
+      </CModal>
+    )
+  }
+
   const [employees, setEmployees] = useState([
     { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
     { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
@@ -31,20 +63,19 @@ export default function CalibrationFrequency() {
     { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
     { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
     { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },{ fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
     { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
   ]);
 
-  const pageSize = 8;
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.");
-    }
-  };
-
+ 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -90,7 +121,7 @@ export default function CalibrationFrequency() {
         </td>
         <td>
           <div className="d-flex gap-3">
-            <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            <div onClick={() => setAddModal(true)}>
               <FontAwesomeIcon icon={faPenToSquare} />
             </div>
             <Link to="#" onClick={() => confirmDeleteEmployee(index)}>
@@ -179,55 +210,11 @@ export default function CalibrationFrequency() {
           id=""
           className="btn btn-primary m-5"
           type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
-          aria-controls="offcanvasRight"
+          onClick={() => setAddModal(true)}
         >
-          <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Calibration Type</span>
+          <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Calibration Type</span>
         </button>
 
-        <div
-          className="offcanvas offcanvas-end"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Calibration Frequency
-              </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-          <p style={{ marginLeft: '20px' }}>Add information and add new calibration frequency</p>
-
-          <label className="line3" htmlFor="">Calibration Frequency</label>
-          <input className="line4" required type="text" placeholder="Calibration type" />
-
-          <label className="line3" htmlFor="">Calibration Frequency Prefix</label>
-          <input className="line4" required type="text" placeholder="type prefix" />
-
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Submit</button>
-          </div>
-          <div>
-            <ToastContainer />
-          </div>
-        </div>
       </div>
 
       <br />
@@ -252,7 +239,7 @@ export default function CalibrationFrequency() {
 
       <div className="pagination" style={{ margin: '0 35px' }}>
         <div className="pagination ">
-          <div className='mr-5'>
+          <div>
             <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
           </div>
           <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -262,7 +249,7 @@ export default function CalibrationFrequency() {
             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
           </div>
         </div>
-        <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+        <button className="btn btn-next d-flex align-items-center" onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
       </div>
 
       {showDeleteConfirmation && (
@@ -287,43 +274,8 @@ export default function CalibrationFrequency() {
         </div>
       )}
 
-      {isEditing && (
-        <div className="modal show" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Employee</h5>
-                <button type="button" className="close" onClick={handleEditClose}>
-                  <span>&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <div className="form-group">
-                    <label>Calibration Type</label>
-                    <input type="text" className="form-control" value={currentEmployee.role} onChange={(e) => setCurrentEmployee({ ...currentEmployee, role: e.target.value })} />
-                  </div>
-                  <div className="form-group">
-                    <label>Calibration Prefix</label>
-                    <input type="text" className="form-control" value={currentEmployee.departments} onChange={(e) => setCurrentEmployee({ ...currentEmployee, departments: e.target.value })} />
-                  </div>
-                  <div className="form-group">
-                    <label>Status</label>
-                    <select className="form-control" value={currentEmployee.status} onChange={(e) => setCurrentEmployee({ ...currentEmployee, status: e.target.value })}>
-                      <option value="ACTIVE">Active</option>
-                      <option value="INACTIVE">Inactive</option>
-                    </select>
-                  </div>
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleEditClose}>Close</button>
-                <button type="button" className="btn btn-primary" onClick={handleEditSubmit}>Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+     
+{addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </>
   );
 }

@@ -9,8 +9,11 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 export default function CalibrationSampleLoginTemplate() {
+    const [addModal, setAddModal] = useState(false);
+
     const top100Films = [
         { label: 'The Shawshank Redemption', year: 1994 },
         { label: 'The Godfather', year: 1972 },
@@ -20,7 +23,6 @@ export default function CalibrationSampleLoginTemplate() {
     ];
 
     const [storageName, setStorageName] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
 
@@ -36,7 +38,60 @@ export default function CalibrationSampleLoginTemplate() {
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
+  const StatusModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Sample Login Template</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+        <CFormInput
+          label='Sample Login Template'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          />  
+           <label className="" htmlFor="">Test Plan / Revision No.</label>
+           <Autocomplete
+                        disablePortal
+                        className="mb-3"
+                        id="combo-box-demo"
+                        options={top100Films}
+                        renderInput={(params) => <TextField {...params} label="" />}
+                    />
 
+          <CFormInput
+          label='Product / Material'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          /> 
+           <CFormInput
+          label='Product / Material Code'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          /> 
+           <CFormInput
+          label='Generic Name'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          />  
+          <CFormInput
+          label='Specification ID'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          /> 
+         <div className="d-flex gap-3 mt-4">
+        <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+        <CButton color="primary w-50">Add</CButton>
+      </div>
+        </CModalBody>
+      </CModal>
+    )
+  }
 
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
@@ -46,7 +101,7 @@ export default function CalibrationSampleLoginTemplate() {
         { user: 'hpcl', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INITIATED' },
     ]);
 
-    const pageSize = 8;
+    const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
     const [editRowIndex, setEditRowIndex] = useState(null);
     const [editFormData, setEditFormData] = useState({
@@ -133,9 +188,7 @@ export default function CalibrationSampleLoginTemplate() {
                 <td>
                     <div className="d-flex gap-3">
                         <Link to="/calibration/sample-login-template-details"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer"  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight">
+                        <div onClick={() => setAddModal(true)}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
                         <Link to="#" onClick={() => handleDelete(index)}>
@@ -197,64 +250,10 @@ export default function CalibrationSampleLoginTemplate() {
                     id=""
                     className="btn btn-primary m-5"
                     type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRight"
-                    aria-controls="offcanvasRight"
+                    onClick={() => setAddModal(true)}
                 >
-                    <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Login Template</span>
+                   <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Login Template</span>
                 </button>
-
-                <div
-                    className="offcanvas offcanvas-end overflow-y-scroll"
-                    tabIndex="-1"
-                    id="offcanvasRight"
-                    aria-labelledby="offcanvasRightLabel"
-                >
-                    <div className="offcanvas-header">
-                        <div id="line1">
-                            <h5 className="offcanvas-title" id="offcanvasRightLabel">Add Sample Login Template</h5>
-                            <button
-                                id="closebtn"
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                    </div>
-
-                    <label className="line3" htmlFor="">Sample Login Template</label>
-                    <input className="line4" required type="text" placeholder="" />
-
-                    <label className="line3" htmlFor="">Test Plan / Revision No.</label>
-                    <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options={top100Films}
-                        sx={{ width: 370, margin: 2 }}
-                        renderInput={(params) => <TextField {...params} label="" />}
-                    />
-
-                    <label className="line3" htmlFor="">Product / Material</label>
-                    <input className="line4" required type="text" placeholder="prefix" />
-
-                    <label className="line3" htmlFor="">Product / Material Code</label>
-                    <input className="line4" required type="text" placeholder="" />
-
-                    <label className="line3" htmlFor="">Generic Name</label>
-                    <input className="line4" required type="text" placeholder="" />
-
-                    <label className="line3" htmlFor="">Specification ID</label>
-                    <input className="line4" required type="text" placeholder="" />
-
-                    <div id="line5">
-                        <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
-                        <button onClick={handleAddStorage}>Add</button>
-                    </div>
-                    <div>
-                        <ToastContainer />
-                    </div>
-                </div>
             </div>
 
             <br />
@@ -278,7 +277,7 @@ export default function CalibrationSampleLoginTemplate() {
 
             <div className="pagination">
                 <div className="pagination" style={{ margin: '0 30px' }}>
-                    <div className='mr-5'>
+                    <div>
                         <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
                     </div>
                     <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -288,8 +287,11 @@ export default function CalibrationSampleLoginTemplate() {
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
                     </div>
                 </div>
-                <button className="btn btn-next" style={{ margin: '0 30px' }} onClick={nextToLastPage}> Next <FaArrowRight /></button>
+                <button className="btn btn-next d-flex align-items-center" style={{ margin: '0 30px' }} onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
             </div>
+
+                       
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
         </>
     );
 }

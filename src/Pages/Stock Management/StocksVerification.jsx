@@ -5,6 +5,8 @@ import {
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
+import { FaArrowRight } from 'react-icons/fa';
+
 import {
   VerticalTimeline,
   VerticalTimelineElement,
@@ -17,8 +19,14 @@ import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 export default function StocksVerification() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [addModal, setAddModal] = useState(false)
+
+  const itemsPerPage = 5;
+
     const badgeStyle = { background: "gray", color: "white", width: "110px" };
     const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
     const badgeStyle3 = { background: "green", color: "white", width: "110px" };
@@ -34,115 +42,14 @@ export default function StocksVerification() {
         'Sample analyzed by QC departement:YES Updated On: 12th Oct 2023 11: 39 Updated By: QC',
     ];
 
-    const employees = [
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'INITIATED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'INITIATED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'REINITIATED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
-        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
-    ];
-
-    const renderRows = () => {
-        return employees.map((employee, index) => (
-            <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{employee.user}</td>
-                <td>{employee.invoiceNumber}</td>
-                <td>{employee.DayComplete}</td>
-                <td>{employee.DayComplete}</td>
-                <td  ><div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.veriStatus === "VERIFIED" ? badgeStyle3 :
-              employee.veriStatus === "PENDING" ? badgeStyle4 :
-              badgeStyle
-            }
-          >
-            {employee.veriStatus}
-          </div></td>
-                <td>{employee.DayComplete}</td>
-               
-                <td  ><div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.Status === "INITIATED" ? badgeStyle2 :
-              employee.Status === "APPROVED" ? badgeStyle3 :
-              employee.Status === "REJECTED" ? badgeStyle4 :
-              employee.Status === "REINITIATED" ? badgeStyle5 :
-              employee.Status === "DROPPED" ? badgeStyle6 :
-              badgeStyle
-            }
-          >
-            {employee.Status}
-          </div></td>
-                <td>
-                    <div className="d-flex gap-3">
-                        <Link to="/stock-management/stock-onboarding-details"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer" data-bs-toggle="offcanvas" data-bs-target="#editVerify" aria-controls="offcanvasRight"><FontAwesomeIcon icon={faPenToSquare} /></div>
-                        {/* <div className='cursor-pointer'><FontAwesomeIcon icon={faTrashCan} /></div> */}
-                    </div>
-                </td>
-            </tr>
-        ));
-    };
-
-  return (
-    <>
-      <div id="div1">
-        <h5>Stocks</h5>
-      </div>
-
-      <div className="table-responsive p-4 container1">
-        <table
-          className="table shadow"
-          style={{ fontSize: "0.8rem", margin: "0px auto", width: "98%" }}
-        >
-          <thead>
-            <tr>
-              <th>Sr.no.</th>
-              <th>Material Type</th>
-              <th>Invoice Number</th>
-              <th>Supplier Name</th>
-              <th>Supplier approved by QA</th>
-              <th>Verification Status</th>
-              <th>Stock Type</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
-        <div
-          className="offcanvas offcanvas-end w-75"
-          tabIndex="-1"
-          id="editVerify"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header border-bottom pb-2  mx-3 px-0">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              View Stock Verification
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            ></button>
-          </div>
+    const StatusModal = (_props) => {
+      return (
+        <CModal  alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+          <CModalHeader>
+            <CModalTitle>View Stock Verification</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+          
           <div className="offcanvas-body">
             <div className="d-flex gap-4 mb-3">
               <div className="w-100">
@@ -534,15 +441,140 @@ export default function StocksVerification() {
               <div
                 className="btn btn-secondary px-4"
                 data-bs-dismiss="offcanvas"
-                aria-label="Close"
+                onClick={_props.closeModal}
               >
                 Back
               </div>
               <div className="btn btn-primary px-4">Submit</div>
             </div>
           </div>
-        </div>
+          </CModalBody>
+        </CModal>
+      )
+    }
+
+    const employees = [
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'test Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'INITIATED' },
+        { user: 'test Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'INITIATED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'test2 Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'test2 Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'test2 Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'test1 Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'PENDING', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'REINITIATED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+        { user: 'test1 Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'DROPPED' },
+        { user: 'Initiated Product', invoiceNumber: 'INC-343', Date: 'May 17th 24 14:34', veriStatus: 'VERIFIED', DayComplete: '10', Status: 'APPROVED' },
+    ];
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentEmployees = employees.slice(startIndex, endIndex);
+  
+    const nextPage = () => {
+      setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(employees.length / itemsPerPage)));
+    };
+  
+    const prevPage = () => {
+      setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+  
+    const nextToLastPage = () => {
+      setCurrentPage(Math.ceil(employees.length / itemsPerPage));
+    };
+
+    const renderRows = () => {
+        return currentEmployees.map((employee, index) => (
+            <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{employee.user}</td>
+                <td>{employee.invoiceNumber}</td>
+                <td>{employee.DayComplete}</td>
+                <td>{employee.DayComplete}</td>
+                <td  ><div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.veriStatus === "VERIFIED" ? badgeStyle3 :
+              employee.veriStatus === "PENDING" ? badgeStyle4 :
+              badgeStyle
+            }
+          >
+            {employee.veriStatus}
+          </div></td>
+                <td>{employee.DayComplete}</td>
+               
+                <td  ><div
+            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+            style={
+              employee.Status === "INITIATED" ? badgeStyle2 :
+              employee.Status === "APPROVED" ? badgeStyle3 :
+              employee.Status === "REJECTED" ? badgeStyle4 :
+              employee.Status === "REINITIATED" ? badgeStyle5 :
+              employee.Status === "DROPPED" ? badgeStyle6 :
+              badgeStyle
+            }
+          >
+            {employee.Status}
+          </div></td>
+                <td>
+                    <div className="d-flex gap-3">
+                        <Link to="/stock-management/stock-onboarding-details"><FontAwesomeIcon icon={faEye} /></Link>
+                        <div  onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+                    </div>
+                </td>
+            </tr>
+        ));
+    };
+
+  return (
+    <>
+      <div id="div1">
+        <h5>Stocks</h5>
       </div>
+
+      <div className="table-responsive p-4 container1">
+        <table
+          className="table shadow"
+          style={{ fontSize: "0.8rem", margin: "0px auto", width: "98%" }}
+        >
+          <thead>
+            <tr>
+              <th>Sr.no.</th>
+              <th>Material Type</th>
+              <th>Invoice Number</th>
+              <th>Supplier Name</th>
+              <th>Supplier approved by QA</th>
+              <th>Verification Status</th>
+              <th>Stock Type</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{renderRows()}</tbody>
+        </table>
+        </div>
+
+      <div className="pagination" style={{ margin: '0 35px' }}>
+        <div className="pagination">
+          <button onClick={prevPage} disabled={currentPage === 1}  className="btn  mr-2" >&lt;&lt;</button>
+          <div className="current-page-number mr-2 bg-dark-subtle page-item">
+         <button className='btn rounded-circle'> {currentPage}  </button></div>
+          
+          <button onClick={nextPage} disabled={currentPage === Math.ceil(employees.length / itemsPerPage)} className="btn mr-2">&gt;&gt;</button>
+          
+        </div>
+
+          <button onClick={nextPage} disabled={currentPage === Math.ceil(employees.length / itemsPerPage)} className="btn btn-next d-flex align-items-center" >Next <FaArrowRight className="ms-2" /></button>
+        </div>
+        
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </>
   );
 }
