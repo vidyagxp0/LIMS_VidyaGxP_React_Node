@@ -1,15 +1,15 @@
-
 import React, { useState } from 'react';
-
 import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR } from 'react-icons/cg';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 
 
 const ESampling = () => {
+    const [addModal, setAddModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
     const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -21,27 +21,26 @@ const ESampling = () => {
     const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-    const employees = [
+    const [employees, setEmployees] = useState([
 
-        { product: "LUPIN MIRA S 21", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
-        { product: "LUPIN MIRA S 22", containersSampled: '130', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
-        { product: "LUPIN MIRA S 23", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'DROPPED' },
-        { product: "LUPIN MIRA S 24", containersSampled: '56', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
-        { product: "LUPIN MIRA S 25", containersSampled: '38', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
-        { product: "LUPIN MIRA S 26", containersSampled: '31', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'REINITIATED' },
-        { product: "LUPIN MIRA S 27", containersSampled: '49', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'REJECTED' },
-        { product: "LUPIN MIRA S 28", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
-        { product: "LUPIN MIRA S 29", containersSampled: '21', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
-        { product: "LUPIN MIRA S 30", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { id: "1", product: "LUPIN MIRA S 21", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { id: "2", product: "LUPIN MIRA S 22", containersSampled: '130', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { id: "3", product: "LUPIN MIRA S 23", containersSampled: '37', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'DROPPED' },
+        { id: "4", product: "LUPIN MIRA S 24", containersSampled: '56', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { id: "5", product: "LUPIN MIRA S 25", containersSampled: '38', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { id: "6", product: "LUPIN MIRA S 26", containersSampled: '31', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'REINITIATED' },
+        { id: "7", product: "LUPIN MIRA S 27", containersSampled: '49', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'REJECTED' },
+        { id: "8", product: "LUPIN MIRA S 28", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
+        { id: "9", product: "LUPIN MIRA S 29", containersSampled: '21', numberOfContainers: '3', addedOn: '2024-05-15', samplingConclusion: 'PASS', status: 'APPROVED' },
+        { id: "10", product: "LUPIN MIRA S 30", containersSampled: '37', numberOfContainers: '5', addedOn: '2024-05-16', samplingConclusion: 'PASS', status: 'INITIATED' },
 
 
-    ];
+    ]);
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, employees.length);
     const filteredEmployees = employees.filter(employee =>
         selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
     );
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
     // Function to render table rows for current page
     const renderRows = () => {
@@ -72,16 +71,23 @@ const ESampling = () => {
                     >
                         {employee.status}
                     </button>
-                    </td>
+                </td>
                 <td>
-                    <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#addESampling" aria-controls="offcanvasRight" className='mx-2'>
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                    </Link>
-                    <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
-                        <FontAwesomeIcon icon={faTrashCan} />
-                    </Link>
+                    <div className='d-flex gap-3'>
+                        <div>
+                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
 
+                        </div>
+                        <div
+                            className="cursor-pointer"
+                            onClick={() => setAddModal(true)}
+                        >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                        </div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </div>
+                    </div>                    
                 </td>
             </tr>
         ));
@@ -100,10 +106,14 @@ const ESampling = () => {
         setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
     };
 
-    const handleDelete = () => {
-        console.log(`Deleting employee: ${selectedEmployee.name}`);
-        // Perform delete operation here
-        setSelectedEmployee(null);
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+        setDeleteModal(false);
     };
 
     return (
@@ -112,11 +122,11 @@ const ESampling = () => {
                 <div className="main-head">
                     <div className="title fw-bold fs-5 py-4">E-Sampling</div>
                 </div>
-                <div className="col-md-6 pt-4">
+                <div className="d-flex justify-content-between my-3 ">
                     <div className="dropdown">
                         <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
-                            <select style={{outline:"none"}} id='selectOption' onChange={(e) => {
+                            <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
                                 setSelectedStatus(e.target.value);
 
                                 setCurrentPage(1); // Reset to the first page on filter change
@@ -130,23 +140,12 @@ const ESampling = () => {
                             </select>
                         </button>
                     </div>
+                    <div className="">
+                        <CButton color="primary" onClick={() => setAddModal(true)}>Add E-Sampling</CButton>
+                    </div>
                 </div>
-
-                <div className="col-md-6">
-                    <button
-                        id="Addbtn"
-                        className="btn btn-right"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#addESampling"
-                        aria-controls="offcanvasRight"
-                        style={{ background: "#4B49B6" }}
-                    >
-                        <CgAddR />  <span>Add E-Sampling</span>
-                    </button>
-                </div>
-
-                <div
+            
+                {/* <div
                     className="offcanvas offcanvas-end overflow-y-scroll"
                     tabIndex="-1"
                     id="addESampling"
@@ -264,34 +263,8 @@ const ESampling = () => {
                             <button type="button" className='btn btn-primary w-100'>Add</button>
                         </div>
                     </div>
-                </div>
-                {selectedEmployee && (
-                    <div
-                        className="offcanvas offcanvas-end"
-                        tabIndex="-1"
-                        id="deleteOffcanvas"
-                        aria-labelledby="deleteOffcanvasLabel"
-                    >
-                        <div className="offcanvas-header">
-                            <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete E-Sample</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="offcanvas"
-                                    aria-label="Close"
-                                    onClick={() => setSelectedEmployee(null)}
-                                ></button>
-                            </div>
-                        </div>
-                        <div className="offcanvas-body">
-                            <p>Do you want to delete this E-Sample {selectedEmployee.product}?</p>
-                            <div className="d-flex justify-content-between">
-                                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
-                                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                </div> */}
+                
             </div>
 
             <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
@@ -312,7 +285,7 @@ const ESampling = () => {
                         {renderRows()}
                     </tbody>
                 </table>
-                
+
             </div>
 
             {/* Pagination */}
@@ -327,13 +300,87 @@ const ESampling = () => {
                         &gt;&gt;
                     </button>
                 </div>
-                <button className="btn " onClick={nextToLastPage}>
-                    Next <FaArrowRight />
+                <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+                    Next <FaArrowRight className='ms-2' />
                 </button>
             </div>
 
+            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
         </div>
     );
 };
+
+const StatusModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+            <CModalHeader>
+                <CModalTitle>Add E-Sample</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+
+                <CFormInput
+                    type="text"
+                    label="Sampling Rule Name"
+                    placeholder="Sampling Rule Name"
+                />
+
+                <CFormInput
+                    type="text"
+                    label="Unique Code"
+                    placeholder="Unique Code"
+                />
+
+                <CFormInput
+                    type="number"
+                    label="Number of Ranges"
+                    placeholder="Number of Ranges"
+                />
+
+
+            </CModalBody>
+            <CModalFooter>
+                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                <CButton color="primary">Submit</CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
+const DeleteModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete E-Sample</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this E-Sample { }?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
 
 export default ESampling
