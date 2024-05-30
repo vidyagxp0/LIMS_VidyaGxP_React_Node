@@ -1,32 +1,41 @@
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaArrowRight } from "react-icons/fa";
+
 import React, { useState } from "react";
 // import "./StorageCondition.css";
-import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { HiDotsHorizontal } from "react-icons/hi";
-import { FaArrowRight } from "react-icons/fa";
-import { IoEyeSharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
 
 export default function TypeOfSection() {
-  const [storageName, setStorageName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [filterStatus, setFilterStatus] = useState("Select Status");
-
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning(
-        "Apologies, an unexpected error occurred while adding the Storage Condition."
-      );
-    }
-  };
-  const notify = () => toast("Wow so easy!");
+  const [addModal, setAddModal] = useState(false);
+  const [removeModal, setRemoveModal] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("All");
 
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
+
   const employees = [
     {
       user: "Initiated Product",
@@ -61,6 +70,7 @@ export default function TypeOfSection() {
       status: "ACTIVE",
     },
   ];
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (e) => {
@@ -73,7 +83,7 @@ export default function TypeOfSection() {
     )
     .filter(
       (employee) =>
-        filterStatus === "Select Status" || employee.status === filterStatus
+        filterStatus === "All" || employee.status === filterStatus
     );
 
   const startIndex = (currentPage - 1) * pageSize;
@@ -89,16 +99,24 @@ export default function TypeOfSection() {
         <td>{employee.user}</td>
         <td>{employee.role}</td>
         <td>{employee.addedBy}</td>
-        <td style={{width:"110px"}}
-          className={`rounded-3 ${
-            employee.status === "ACTIVE" ? "bg-success text-white" : "bg-danger text-white"
-          } d-flex justify-content-center p-1 m-2 `}
-        >
-          {employee.status}
+        <td>
+          <div className=" w-50">
+            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${employee.status === 'ACTIVE' ? 'green-700'
+              : 'red-700'}`} >{employee.status}</div>
+          </div>
         </td>
         <td>
-          &nbsp; &nbsp; &nbsp;
-          <HiDotsHorizontal />
+          <div className="d-flex gap-3">
+            <div className="cursor-pointer"
+             onClick={() => setAddModal(true)}
+            ><FontAwesomeIcon icon={faPenToSquare} /></div>
+            <div
+              className="cursor-pointer"
+            onClick={() => setRemoveModal(true)}
+            >
+              <FontAwesomeIcon icon={faTrashCan} />
+            </div>
+          </div>
         </td>
       </tr>
     ));
@@ -115,177 +133,171 @@ export default function TypeOfSection() {
     setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
   };
 
-  return (
-    <>
-      <div id="div1">
-        <h5>Type Of Section</h5>
-      </div>
+  const StatusModal = (_props) => {
 
-      {/* <div id="div2"> */}
-
-      <div id="div2">
-        <div id="searchmain">
-          <div id="searchicon">
-            <CiSearch />
-          </div>
-
-          <div className="">
-            <input
-              type="text"
-              className=""
-              id=""
-              placeholder="search"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </div>
-        </div>
-        <div className="dropdown m-5"></div>
-
-        <div className="dropdown">
-          <div>
-            <button
-              className="btn border"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <select
-                id="selectOption"
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-              >
-                <option style={{border:"none"}}>Select Status </option>
-                <option>ACTIVE</option>
-                <option>INACTIVE</option>
-              </select>
-            </button>
-          </div>
-        </div>
-
-        <button
-          id="Addbtn"
-          className="btn btn-primary m-5"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
-          aria-controls="offcanvasRight"
-          style={{position:"absolute", left:"990px"}}
-        >
-          <CgAddR /> <span>Add Section Type</span>
-        </button>
-
-        <div
-          className="offcanvas offcanvas-end"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Type Of Section
-              </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-          <p style={{ marginLeft: "20px" }}>
-            Add information and add new Type Of Section
-          </p>
-
-          <label className="line3" htmlFor="">
-            Type Of Section
-          </label>
-          <input
-            className="line4"
-            required
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Type Of Section</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="my-3 fs-6 fw-bold"> Add information and add new Type Of Section</p>
+          <CFormInput
             type="text"
+            className="mb-3"
+            label="Type Of Section"
             placeholder="Type Of Section"
           />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Prefix"
+            placeholder="Prefix"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white">Add</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
-          <label className="line3" htmlFor="">
-            Prefix
-          </label>
-          <input className="line4" required type="text" placeholder="prefix" />
+  const DeleteModel = (_props) => {
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>Delete Worksheet Section Type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+        Do you want to delete this worksheet section type <code>Sampling Phase</code>?
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-danger text-white">Delete</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Submit</button>
+  return (
+    <>
+      <div className="m-5">
+
+        <div className="my-4">
+          <h5>Type Of Section</h5>
+        </div>
+
+        <div>
+          <CRow className="my-5">
+            <CCol sm={4}>
+              <CFormInput
+                style={{ border: "2px solid gray" }}
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </CCol>
+
+            <CCol sm={3}>
+              <CFormSelect
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                style={{ border: "2px solid gray" }}
+              >
+                <option value="All">All</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </CFormSelect>
+            </CCol>
+            <CCol sm={2}></CCol>
+            <CCol sm={3}>
+              <div className="d-flex justify-content-end">
+                <CButton color="primary" onClick={() => setAddModal(true)}>
+                  Add Section Type
+                </CButton>
+              </div>
+            </CCol>
+          </CRow>
+        </div>
+
+        <div className="shadow p-3 rounded border-2 my-4">
+          <table className="table table-responsive">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" />
+                </th>
+                <th>Sr.no.</th>
+                <th>Type Of Section</th>
+                <th>Prefix</th>
+                <th>Added On</th>
+                <th>Status</th>
+                <th>Actions </th>
+              </tr>
+            </thead>
+            <tbody>{renderRows()}</tbody>
+          </table>
+        </div>
+
+        <div className="pagination">
+          <div className="pagination gap-3">
+            <div className="">
+              <button
+                className="btn"
+                onClick={prevPage}
+                disabled={currentPage === 1}
+              >
+                &lt;&lt;
+              </button>
+            </div>
+            <div className="current-page-number bg-dark-subtle page-item rounded">
+              <button className="btn rounded-circle"> {currentPage} </button>
+            </div>
+            <div>
+              <button
+                className="btn"
+                onClick={nextPage}
+                disabled={endIndex >= filteredEmployees.length}
+              >
+                &gt;&gt;
+              </button>
+            </div>
           </div>
-          <div>
-            <ToastContainer />
-          </div>
+
+          <button
+            className="btn btn-next d-flex gap-2"
+            onClick={nextToLastPage}
+          >
+            Next <FaArrowRight className="mt-1" />
+          </button>
         </div>
       </div>
 
-      <br />
-      <div className="table-responsive p-4 container1">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>
-                <input type="checkbox" />
-              </th>
-              <th>Sr.no.</th>
-              <th>Type Of Section</th>
-              <th>Prefix</th>
-              <th>Added On</th>
-              <th>Status</th>
-              <th>Actions </th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
-      </div>
+      {addModal && (
+        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      )}
 
-      <div className="pagination">
-        <div className="pagination " style={{ margin: "0 30px" }}>
-          <div className="mr-5">
-            <button
-              className="btn  mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-          </div>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-            <button className="btn rounded-circle"> {currentPage} </button>
-          </div>
-          <div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredEmployees.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
-
-        <button
-          className="btn btn-next"
-          style={{ margin: "0 30px" }}
-          onClick={nextToLastPage}
-        >
-          {" "}
-          Next <FaArrowRight />
-        </button>
-      </div>
+      {removeModal && (
+        <DeleteModel
+          visible={removeModal}
+          closeModal={() => setRemoveModal(false)}
+        />
+      )}
     </>
   );
 }

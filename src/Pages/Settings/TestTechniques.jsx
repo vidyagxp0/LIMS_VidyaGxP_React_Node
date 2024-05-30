@@ -1,40 +1,43 @@
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
 import React, { useState } from "react";
 // import "./StorageCondition.css";
-import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from "react-icons/fa";
-import { IoEyeSharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
-
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 export default function TestTechniques() {
-  const [storageName, setStorageName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [filterStatus, setFilterStatus] = useState("Select Status");
+  const [addModal, setAddModal] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false)
+  const [removeModal, setRemoveModal] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("All");
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning(
-        "Apologies, an unexpected error occurred while adding the Storage Condition."
-      );
-    }
-  };
-  const notify = () => toast("Wow so easy!");
-
-  const pageSize = 4;
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
-  const employees = [
+
+  const tableData = [
     {
       user: "HYO",
       ProdName: "Sacubitril",
@@ -80,6 +83,24 @@ export default function TestTechniques() {
       ReviewDate: "Aug 18th 24",
       status: "INACTIVE",
     },
+    {
+      user: "HYO",
+      ProdName: "Sacubitril",
+      SpecificID: "ARIP0000095",
+      SpecificName: "test",
+      EffectFrom: "May 18th 24",
+      ReviewDate: "Aug 18th 24",
+      status: "INACTIVE",
+    },
+    {
+      user: "HYO",
+      ProdName: "Sacubitril",
+      SpecificID: "ARIP0000095",
+      SpecificName: "test",
+      EffectFrom: "May 18th 24",
+      ReviewDate: "Aug 18th 24",
+      status: "INACTIVE",
+    },
   ];
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -88,41 +109,44 @@ export default function TestTechniques() {
     setSearchTerm(e.target.value);
   };
 
-  const filteredEmployees = employees
-    .filter((employee) =>
-      employee.user.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredtableData = tableData
+    .filter((data) =>
+      data.user.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .filter(
-      (employee) =>
-        filterStatus === "Select Status" || employee.status === filterStatus
+      (data) =>
+        filterStatus === "All" || data.status === filterStatus
     );
 
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
+  const endIndex = Math.min(startIndex + pageSize, filteredtableData.length);
 
   const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
+    return filteredtableData.slice(startIndex, endIndex).map((data, index) => (
       <tr key={startIndex + index}>
         <td>
           <input type="checkbox" />
         </td>
         <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.ProdName}</td>
-        <td>{employee.SpecificID}</td>
-        <td
-          style={{ width: "110px" }}
-          className={`rounded-3 ${employee.status === "ACTIVE"
-            ? "bg-success text-white"
-            : "bg-danger text-white"
-            } d-flex justify-content-center p-1 m-2 `}
-        >
-          {employee.status}
-        </td>
-        <td>{employee.SpecificID}</td>
+        <td>{data.user}</td>
+        <td>{data.ProdName}</td>
+        <td>{data.SpecificID}</td>
+        <td>{data.SpecificID}</td>
         <td>
-          &nbsp; &nbsp;&nbsp;
-          <HiDotsHorizontal />
+          <div className=" w-75">
+            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'ACTIVE' ? 'green-700'
+              : 'red-700'}`} >{data.status}</div>
+          </div>
+        </td>
+        <td><div className="d-flex gap-3">
+          <div className="cursor-pointer" onClick={() => setUpdateModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+          <div
+            className="cursor-pointer"
+            onClick={() => setRemoveModal(true)}
+          >
+            <FontAwesomeIcon icon={faTrashCan} />
+          </div>
+        </div>
         </td>
       </tr>
     ));
@@ -136,7 +160,153 @@ export default function TestTechniques() {
   };
 
   const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+    setCurrentPage(Math.ceil(filteredtableData.length / pageSize));
+  };
+
+
+  const StatusModal = (_props) => {
+
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Test Technique</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Technique Name"
+            placeholder="Technique Name"
+          />
+
+          <FormControl>
+            <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
+              Type of technique
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel
+                value="Complex"
+                control={<Radio />}
+                label="Complex"
+              />
+              <FormControlLabel
+                value="Non-complex"
+                control={<Radio />}
+                label="Non-complex"
+              />
+            </RadioGroup>
+          </FormControl>
+          <br />
+          <br />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Technique Description"
+            placeholder="Technique Description"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const UpdateModal = (_props) => {
+
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Update Test Technique</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Technique Name"
+            placeholder="Technique Name"
+          />
+
+          <FormControl>
+            <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
+              Type of technique
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel
+                value="Complex"
+                control={<Radio />}
+                label="Complex"
+              />
+              <FormControlLabel
+                value="Non-complex"
+                control={<Radio />}
+                label="Non-complex"
+              />
+            </RadioGroup>
+          </FormControl>
+          <br />
+          <br />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Technique Description"
+            placeholder="Technique Description"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const DeleteModel = (_props) => {
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>Delete Test Technique</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          Do you want to delete this Test Technique <code>Description</code>?
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-danger text-white">Delete</CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
   return (
@@ -146,156 +316,43 @@ export default function TestTechniques() {
           <h5>Test Techniques</h5>
         </div>
 
-        <div className="">
-          <div >
-            <div id="searchicon">
-              <CiSearch />
-            </div>
-
-            <div className="">
-              <input
-                type="text"
-                className=""
-                id=""
-                placeholder="search"
-                value={searchTerm}
-                onChange={handleSearchChange}
+        <div className="my-4">
+          <CRow className="mb-3">
+            <CCol sm={3}><CFormInput
+              className="mb-3 border-2"
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+            /></CCol>
+            <CCol sm={3}>
+              <CFormSelect
+                className="border-2"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                options={[
+                  { value: "All", label: "All" },
+                  { value: "ACTIVE", label: "Active" },
+                  { value: "INACTIVE", label: "Inactive" },
+                ]}
               />
-            </div>
-          </div>
-          <div className="dropdown m-5"></div>
-
-          <div className="dropdown">
-            <div>
-              <button
-                className="btn border"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <select
-                  id="selectOption"
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
+            </CCol>
+            <CCol sm={3}></CCol>
+            <CCol sm={3}>
+              <div className="d-flex justify-content-end">
+                <CButton
+                  className="bg-info text-white"
+                  onClick={() => setAddModal(true)}
                 >
-                  <option>Select Status </option>
-                  <option>ACTIVE</option>
-                  <option>INACTIVE</option>
-                </select>
-              </button>
-            </div>
-          </div>
-
-          <button
-            id="Addbtn"
-            className="btn btn-primary m-5"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasRight"
-            aria-controls="offcanvasRight"
-            style={{ position: "absolute", left: "990px" }}
-          >
-            <CgAddR /> <span>Add Technique</span>
-          </button>
-
-          <div
-            className="offcanvas offcanvas-end"
-            tabIndex="-1"
-            id="offcanvasRight"
-            aria-labelledby="offcanvasRightLabel"
-          >
-            <div className="offcanvas-header">
-              <div id="line1">
-                <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                  Add Test Technique
-                </h5>
-                <button
-                  id="closebtn"
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
-                ></button>
+                  Add Technique
+                </CButton>
               </div>
-            </div>
-            <p style={{ marginLeft: "20px" }}>
-              Add information and add new Test Technique.
-            </p>
-            <label className="line3" htmlFor="">
-              Technique Name
-            </label>
-            <input
-              className="line4"
-              required
-              type="text"
-              placeholder="Technique Name"
-            />
-
-            <FormControl style={{ margin: "20px" }}>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                Type of technique
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-row-radio-buttons-group-label"
-                name="row-radio-buttons-group"
-              >
-                <FormControlLabel
-                  value="Complex
-"
-                  control={<Radio />}
-                  label="
-Complex
-"
-                />
-                <FormControlLabel
-                  value="Non-complex"
-                  control={<Radio />}
-                  label="Non-complex"
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <label className="line3" htmlFor="">
-              Technique Description
-            </label>
-            <input
-              className="line4"
-              required
-              type="text"
-              placeholder="Technique Description"
-            />
-
-            {errorMessage && (
-              <div
-                id="error"
-                style={{ color: "red", fontSize: "10px", marginLeft: "30px" }}
-              >
-                {errorMessage}
-              </div>
-            )}
-
-            <div id="line5">
-              <button
-                type="button"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              >
-                &lt; Back
-              </button>
-              <button>Submit</button>
-            </div>
-            <div>
-              <ToastContainer />
-            </div>
-          </div>
+            </CCol>
+          </CRow>
         </div>
 
-        <br />
-        <div className="table-responsive p-4 container1">
-          <table className="table shadow ">
+        <div className="shadow rounded border-2 p-3 my-4">
+          <table className="table table-responsive">
             <thead>
               <tr>
                 <th>
@@ -306,7 +363,8 @@ Complex
                 <th>Type</th>
                 <th>Description</th>
                 <th>Added On</th>
-                <th>Actions</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>
@@ -314,24 +372,24 @@ Complex
         </div>
 
         <div className="pagination">
-          <div className="pagination " style={{ margin: "0 30px" }}>
-            <div className="mr-5">
+          <div className="pagination gap-3">
+            <div className="">
               <button
-                className="btn  mr-2"
+                className="btn"
                 onClick={prevPage}
                 disabled={currentPage === 1}
               >
                 &lt;&lt;
               </button>
             </div>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle"> {currentPage} </button>
+            <div className="current-page-number bg-dark-subtle page-item rounded">
+              <button className="btn"> {currentPage} </button>
             </div>
             <div>
               <button
                 className="btn mr-2"
                 onClick={nextPage}
-                disabled={endIndex >= employees.length}
+                disabled={endIndex >= tableData.length}
               >
                 &gt;&gt;
               </button>
@@ -339,15 +397,26 @@ Complex
           </div>
 
           <button
-            className="btn btn-next"
-            style={{ margin: "0 30px" }}
+            className="btn btn-next d-flex gap-2"
             onClick={nextToLastPage}
           >
-            {" "}
-            Next <FaArrowRight />
+            Next <FaArrowRight className="mt-1"/>
           </button>
         </div>
       </div>
+
+      {addModal && (
+        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      )}
+      {updateModal && (
+        <UpdateModal visible={updateModal} closeModal={() => setUpdateModal(false)} />
+      )}
+      {removeModal && (
+        <DeleteModel
+          visible={removeModal}
+          closeModal={() => setRemoveModal(false)}
+        />
+      )}
     </>
   );
 }

@@ -1,92 +1,225 @@
-import React, { useState } from "react";
-import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { HiDotsHorizontal } from "react-icons/hi";
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaArrowRight } from "react-icons/fa";
-import { IoEyeSharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
+
+import React, { useState } from "react";
+// import "./StorageCondition.css";
 
 export default function ReQualificationRequest() {
-  const [storageName, setStorageName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [filterStatus, setFilterStatus] = useState("Select Status");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [addModal, setAddModal] = useState(false);
+  const [removeModal, setRemoveModal] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("All");
+
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleAddStorage = () => {
-    if (storageName.trim() === "") {
-      setErrorMessage("Storage condition is Required");
-    } else {
-      toast.warning(
-        "Apologies, an unexpected error occurred while adding the Storage Condition."
-      );
+  const tableData = [
+    { 
+      id: 1,
+      analyst: 'John Doe',
+      qualificationId: 'Q123',
+      qualificationType: 'Type A',
+      employeeId: 'E001',
+      testTechnique: 'Technique 1',
+      initiatedOn: '2024-05-30',
+      status: 'Active'
+    },
+    { 
+      id: 2,
+      analyst: 'Jane Smith',
+      qualificationId: 'Q124',
+      qualificationType: 'Type B',
+      employeeId: 'E002',
+      testTechnique: 'Technique 2',
+      initiatedOn: '2024-05-30',
+      status: 'Active'
+    },
+    { 
+      id: 3,
+      analyst: 'Alice Johnson',
+      qualificationId: 'Q125',
+      qualificationType: 'Type C',
+      employeeId: 'E003',
+      testTechnique: 'Technique 3',
+      initiatedOn: '2024-05-30',
+      status: 'Active'
+    },
+    { 
+      id: 4,
+      analyst: 'Bob Brown',
+      qualificationId: 'Q126',
+      qualificationType: 'Type D',
+      employeeId: 'E004',
+      testTechnique: 'Technique 4',
+      initiatedOn: '2024-05-30',
+      status: 'Active'
+    },
+    { 
+      id: 5,
+      analyst: 'Ella Davis',
+      qualificationId: 'Q127',
+      qualificationType: 'Type E',
+      employeeId: 'E005',
+      testTechnique: 'Technique 5',
+      initiatedOn: '2024-05-30',
+      status: 'Active'
+    },
+    { 
+      id: 6,
+      analyst: 'Chris Wilson',
+      qualificationId: 'Q128',
+      qualificationType: 'Type F',
+      employeeId: 'E006',
+      testTechnique: 'Technique 6',
+      initiatedOn: '2024-05-30',
+      status: 'Active'
+    },
+    { 
+      id: 7,
+      analyst: 'Emily Martinez',
+      qualificationId: 'Q129',
+      qualificationType: 'Type G',
+      employeeId: 'E007',
+      testTechnique: 'Technique 7',
+      initiatedOn: '2024-05-30',
+      status: 'Inactive'
+    },
+    { 
+      id: 8,
+      analyst: 'David Rodriguez',
+      qualificationId: 'Q130',
+      qualificationType: 'Type H',
+      employeeId: 'E008',
+      testTechnique: 'Technique 8',
+      initiatedOn: '2024-05-30',
+      status: 'Inactive'
+    },
+    { 
+      id: 9,
+      analyst: 'Grace Garcia',
+      qualificationId: 'Q131',
+      qualificationType: 'Type I',
+      employeeId: 'E009',
+      testTechnique: 'Technique 9',
+      initiatedOn: '2024-05-30',
+      status: 'Inactive'
+    },
+    { 
+      id: 10,
+      analyst: 'Samuel Hernandez',
+      qualificationId: 'Q132',
+      qualificationType: 'Type J',
+      employeeId: 'E010',
+      testTechnique: 'Technique 10',
+      initiatedOn: '2024-05-30',
+      status: 'Inactive'
+    },
+    { 
+      id: 11,
+      analyst: 'Olivia Lopez',
+      qualificationId: 'Q133',
+      qualificationType: 'Type K',
+      employeeId: 'E011',
+      testTechnique: 'Technique 11',
+      initiatedOn: '2024-05-30',
+      status: 'Inactive'
+    },
+    { 
+      id: 12,
+      analyst: 'Andrew King',
+      qualificationId: 'Q134',
+      qualificationType: 'Type L',
+      employeeId: 'E012',
+      testTechnique: 'Technique 12',
+      initiatedOn: '2024-05-30',
+      status: 'Inactive'
     }
-  };
-
-  const employees = [
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "ACTIVE",
-    },
-    {
-      user: "Completed Product",
-      role: "Valsartan",
-      departments: "ARIP0000096",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-01",
-      status: "INACTIVE",
-    },
-    // ... add more employees here
   ];
+  
+  
+  
 
-  const pageSize = 4;
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredEmployees = employees.filter(employee =>
-    employee.user.toLowerCase().includes(searchTerm.toLowerCase())
-  ).filter(employee => 
-    filterStatus === "Select Status" || employee.status === filterStatus
-  );
+  const handleSelect = (data) => {
+    setFilterStatus(data);
+    setCurrentPage(1);
+  }
+
+  const filteredtableData = tableData
+    .filter((data) =>
+      data.analyst.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter(
+      (data) =>
+        filterStatus === "All" || data.status === filterStatus
+    );
 
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
+  const endIndex = Math.min(startIndex + pageSize, filteredtableData.length);
 
   const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
+    return filteredtableData.slice(startIndex, endIndex).map((data, index) => (
       <tr key={startIndex + index}>
         <td>
           <input type="checkbox" />
         </td>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.role}</td>
-        <td>{employee.departments}</td>
-        <td>{employee.joiningDate}</td>
-        <td>{employee.addedBy}</td>
-        <td
-          className={`rounded-5 ${
-            employee.status === "ACTIVE" ? "bg-success text-white" : "bg-danger text-white"
-          } d-flex justify-content-center p-1 m-2`}
-        >
-          {employee.status}
+        <td>{data.id}</td>
+        <td>{data.analyst}</td>
+        <td>{data.qualificationId}</td>
+        <td>{data.qualificationType}</td>
+        <td>{data.employeeId}</td>
+        <td>{data.testTechnique}</td>
+        <td>{data.initiatedOn}</td>
+        <td>
+          <div className=" w-75">
+            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
+              : 'red-700'}`} >{data.status}</div>
+          </div>
         </td>
         <td>
-          &nbsp; &nbsp; &nbsp;
-          <HiDotsHorizontal />
+          <div className="d-flex gap-3">
+            <div className="cursor-pointer"
+             onClick={() => setAddModal(true)}
+            ><FontAwesomeIcon icon={faPenToSquare} /></div>
+            <div
+              className="cursor-pointer"
+            onClick={() => setRemoveModal(true)}
+            >
+              <FontAwesomeIcon icon={faTrashCan} />
+            </div>
+          </div>
         </td>
       </tr>
     ));
   };
-
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -96,210 +229,198 @@ export default function ReQualificationRequest() {
   };
 
   const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+    setCurrentPage(Math.ceil(filteredtableData.length / pageSize));
+  };
+
+  const StatusModal = (_props) => {
+
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle> Add Re-Qualification Request</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="my-3 fs-6 fw-bold"> Add information about Re-Qualification Request.</p>
+          <CFormSelect
+            className="mb-3"
+            label="Name"
+						options={[
+							{ value: "Analyst", label: "Analyst" },
+							{ value: "Analyst Two", label: "Analyst Two" },
+						]}
+					/>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Employee ID"
+            placeholder="Employee ID"
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Role/Title"
+            placeholder="Role/Title"
+          />
+          <CFormSelect
+            label="Test Technique"
+            className="mb-3"
+						options={[
+							{ value: "Description", label: "Description" },
+						]}
+					/>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Justification For Requalification"
+            placeholder="Training Details"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white">Add</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const DeleteModel = (_props) => {
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>Delete Re-Qualification Request</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+        Do you want to delete this Re-Qualification Request <code>Q126</code>?
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-danger text-white">Delete</CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
   return (
     <>
-      <div id="div1">
-        <h5>Re-Qualification Request</h5>
-      </div>
+      <div className="m-5">
 
-      <div id="div2">
-        <div id="searchmain">
-          <div id="searchicon">
-            <CiSearch />
-          </div>
-          <div className="">
-            <input
-              type="text"
-              className=""
-              id=""
-              placeholder="search"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </div>
+        <div className="my-4">
+          <h5>Re-Qualification Request</h5>
         </div>
-        <div className="dropdown m-5"></div>
 
-        <div className="dropdown">
-          <div>
-            <button
-              className="btn border"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <select
-                id="selectOption"
+        <div>
+          <CRow className="my-5">
+            <CCol sm={4}>
+              <CFormInput
+                style={{ border: "2px solid gray" }}
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </CCol>
+
+            <CCol sm={3}>
+              <CFormSelect
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
+                onChange={(e) => handleSelect(e.target.value)}
+                style={{ border: "2px solid gray" }}
               >
-                <option>Select Status </option>
-                <option>ACTIVE</option>
-                <option>INACTIVE</option>
-              </select>
-            </button>
-          </div>
+                <option value="All">All</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </CFormSelect>
+            </CCol>
+            <CCol sm={2}></CCol>
+            <CCol sm={3}>
+              <div className="d-flex justify-content-end">
+                <CButton color="primary" onClick={() => setAddModal(true)}>
+                  Add Request
+                </CButton>
+              </div>
+            </CCol>
+          </CRow>
         </div>
 
-        <button
-          id="Addbtn"
-          className="btn btn-primary m-5"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
-          aria-controls="offcanvasRight"
-          style={{position:"absolute", left:"990px"}}
-        >
-          <CgAddR /> <span>Add Request</span>
-        </button>
+        <div className="shadow p-3 rounded border-2 my-4">
+          <table className="table table-responsive">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" />
+                </th>
+                <th>Id</th>
+                <th>Analyst</th>
+                <th>Qualification ID</th>
+                <th>Qualification Type</th>
+                <th>Employee ID </th>
+                <th>Test Technique</th>
+                <th>Initiated On</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>{renderRows()}</tbody>
+          </table>
+        </div>
 
-        <div
-          className="offcanvas offcanvas-end"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Re-Qualification Request
-              </h5>
+        <div className="pagination">
+          <div className="pagination gap-3">
+            <div className="">
               <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
+                className="btn"
+                onClick={prevPage}
+                disabled={currentPage === 1}
+              >
+                &lt;&lt;
+              </button>
+            </div>
+            <div className="current-page-number bg-dark-subtle page-item rounded">
+              <button className="btn rounded-circle"> {currentPage} </button>
+            </div>
+            <div>
+              <button
+                className="btn"
+                onClick={nextPage}
+                disabled={endIndex >= filteredtableData.length}
+              >
+                &gt;&gt;
+              </button>
             </div>
           </div>
-          <p style={{ marginLeft: "20px" }}>
-            Add information about Re-Qualification Request
-          </p>
 
-          <label className="line3" htmlFor="">
-            Analyst
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Resource Name"
-          />
-          <label className="line3" htmlFor="">
-            Employee ID
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Employee ID"
-          />
-          <label className="line3" htmlFor="">
-            Role/Title
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Role/Title"
-          />
-          <label className="line3" htmlFor="">
-            Test Technique
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Test Technique"
-          />
-          <label className="line3" htmlFor="">
-            Justification For Requalification
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Justification for Requalification"
-          />
-
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Submit</button>
-          </div>
-          <div>
-            <ToastContainer />
-          </div>
+          <button
+            className="btn btn-next d-flex gap-2"
+            onClick={nextToLastPage}
+          >
+            Next <FaArrowRight className="mt-1" />
+          </button>
         </div>
       </div>
 
-      <br />
-      <div className="table-responsive p-4 container1">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>
-                <input type="checkbox" />
-              </th>
-              <th>Id</th>
-              <th>Qualification ID</th>
-              <th>Qualification Type</th>
-              <th>Employee ID</th>
-              <th>Test Technique</th>
-              <th>Initiated On</th>
-              <th>Status</th>
-              <th>Actions </th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
-      </div>
+      {addModal && (
+        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      )}
 
-      <div className="pagination">
-        <div className="pagination " style={{ margin: "0 30px" }}>
-          <div className="mr-5">
-            <button
-              className="btn  mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-          </div>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-            <button className="btn rounded-circle"> {currentPage} </button>
-          </div>
-          <div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredEmployees.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
-
-        <button
-          className="btn btn-next"
-          style={{ margin: "0 30px" }}
-          onClick={nextToLastPage}
-        >
-          {" "}
-          Next <FaArrowRight />
-        </button>
-      </div>
+      {removeModal && (
+        <DeleteModel
+          visible={removeModal}
+          closeModal={() => setRemoveModal(false)}
+        />
+      )}
     </>
   );
 }

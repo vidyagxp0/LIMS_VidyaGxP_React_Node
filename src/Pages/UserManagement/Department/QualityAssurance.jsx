@@ -78,7 +78,7 @@ const QualityAssurance = () => {
     const nextToLastPage = () => {
         setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
     };
-    
+
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
@@ -95,7 +95,7 @@ const QualityAssurance = () => {
                 <div className="main-head">
                     <div className="title fw-bold fs-5">Quality Assurance/Employee</div>
                 </div>
-                <div className="col-md-6 pt-4">
+                <div className="d-flex justify-content-between my-4">
                     <div className="dropdown">
                         <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
@@ -109,9 +109,9 @@ const QualityAssurance = () => {
                             </select>
                         </button>
                     </div>
-                </div>
-                <div className="d-flex justify-content-end">
-                    <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
+                    <div className="">
+                        <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
+                    </div>
                 </div>
 
             </div>
@@ -136,7 +136,7 @@ const QualityAssurance = () => {
                 </table>
             </div>
 
-            <div className="d-flex justify-content-between align-items-center mt-5">
+            <div className="d-flex justify-content-between align-items-center my-5">
                 <div className="pagination">
                     <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
                         &lt;&lt;
@@ -146,7 +146,7 @@ const QualityAssurance = () => {
                         &gt;&gt;
                     </button>
                 </div>
-                <button className="btn d-flex align-items-center " onClick={nextToLastPage}>
+                <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
                     Next <FaArrowRight className='ms-2' />
                 </button>
             </div>
