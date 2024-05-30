@@ -3,19 +3,21 @@ import { FaArrowRight } from 'react-icons/fa';
 import { CgAddR } from 'react-icons/cg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
 import { Link } from 'react-router-dom';
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 const CalibrationDataSheet = () => {
-  const pageSize =8;
+  const [addModal, setAddModal] = useState(false);
+
+  const pageSize =5;
   const [currentPage, setCurrentPage] = useState(1);
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [showAdditionalFields2, setShowAdditionalFields2] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
 
-  const [isEditing, setIsEditing] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("All");
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = {
@@ -28,7 +30,67 @@ const CalibrationDataSheet = () => {
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-   const [selectedStatus, setSelectedStatus] = useState("All");
+   const StatusModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Calibration Data Sheet</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+        <CFormInput
+          label='Name'
+          className="mb-3"
+          type="text"
+          placeholder="Name"
+          />  
+          <CFormInput
+          label='Unique code'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          /> 
+           <div style={{ margin: '15px 0px', }}>
+            <label> Quantitative Parameters &nbsp;
+              <input
+                type="checkbox"
+                onChange={handleCheckboxChange}
+              />
+            </label>
+            {showAdditionalFields && (
+              <>
+                <br />
+                <label>No. of Quantitative Parameters</label>
+                <input style={{width:'80%'}} className="line4" type="text" placeholder="No. of Quantitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
+           
+                <label>Parameters and No. of Set Points</label>
+                <input style={{width:'80%'}} className="line4" type="text" placeholder="Parameters and No. of Set Points" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Set</button>
+              </>
+            )}
+            <br />
+            <label style={{ padding: '7px 0px',marginTop:'3px' }}>Qualitative Parameter &nbsp;
+              <input type="checkbox"  onChange={handleCheckboxChange2} />
+            </label>
+            {showAdditionalFields2 && (
+              <>
+                <br />
+                <label>No. of Qualitative Parameters</label>
+                <input style={{width:'240px'}} className="line4" type="text" placeholder="No. of Qualitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
+            
+              </>
+            )}
+            <br />
+          </div>
+
+         
+         <div className="d-flex gap-3 mt-4">
+        <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+        <CButton color="primary w-50">Submit</CButton>
+      </div>
+
+        </CModalBody>
+      </CModal>
+    )
+  }
  
   const filterData = () => {
     if (selectedStatus === "All") {
@@ -112,9 +174,7 @@ const CalibrationDataSheet = () => {
         <td>
           <Link to="/calibration/calibration-datasheet-details"><FontAwesomeIcon icon={faEye} className="mx-1" /></Link>
           <FontAwesomeIcon  
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight" icon={faPenToSquare} className="mx-2" />
+                  onClick={() => setAddModal(true)} icon={faPenToSquare} className="mx-2" />
           <Link to="#" onClick={() => deleteEmployee(index)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </Link>
@@ -261,79 +321,12 @@ const CalibrationDataSheet = () => {
                 <CButton id=""
                   className="btn btn-primary"
                   type="button"
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight"><CgAddR /> <span  >Add Datasheet</span></CButton>
+                  onClick={() => setAddModal(true)}> <span  >Add Datasheet</span></CButton>
               </div>
             </CCol>
           </CRow>
         </div>
 
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header ">
-            <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Add Calibration Data Sheet
-            </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-
-          <label className="line3" htmlFor="">Name</label>
-          <input className="line4" required type="text" placeholder="Name " />
-
-          <label className="line3" htmlFor="">Unique code</label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <div style={{ margin: '15px 20px', }}>
-            <label> Quantitative Parameters &nbsp;
-              <input
-                type="checkbox"
-                onChange={handleCheckboxChange}
-              />
-            </label>
-            {showAdditionalFields && (
-              <>
-                <br />
-                <label>No. of Quantitative Parameters</label>
-                <input style={{width:'240px'}} className="line4" type="text" placeholder="No. of Quantitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
-           
-                <label>Parameters and No. of Set Points</label>
-                <input style={{width:'240px'}} className="line4" type="text" placeholder="Parameters and No. of Set Points" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Set</button>
-              </>
-            )}
-            <br />
-            <label style={{ padding: '7px 0' }}>Qualitative Parameter &nbsp;
-              <input type="checkbox"  onChange={handleCheckboxChange2} />
-            </label>
-            {showAdditionalFields2 && (
-              <>
-                <br />
-                <label>No. of Qualitative Parameters</label>
-                <input style={{width:'240px'}} className="line4" type="text" placeholder="No. of Qualitative Parameters" /><button style={{backgroundColor:'#0f93c3',borderRadius:'4px',border:'1px solid #0f93c3',color:'white',padding:'2px 8px'}}>Add</button>
-            
-              </>
-            )}
-            <br />
-          </div>
-
-          <div id="line5">
-            <button type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close">&lt; Back</button>
-            <button>Submit</button>
-          </div>
-        </div>
       </div>
 
       {/* Employee table */}
@@ -360,7 +353,7 @@ const CalibrationDataSheet = () => {
       {/* Pagination */}
       <div className="pagination"  style={{ margin: '20px 0' }}>
         <div className="pagination">
-          <div className='mr-5'>
+          <div >
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
           </div>
           <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -370,47 +363,13 @@ const CalibrationDataSheet = () => {
             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
           </div>
         </div>
-        <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+        <button className="btn btn-next d-flex align-items-center" onClick={nextPage}> Next <FaArrowRight className="ms-2" /></button>
       </div>
 
 
-{isEditing && (
-  <div className="modal" style={{ display: 'block' }}>
-    <div className="modal-dialog">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">Edit Employee</h5>
-          <button type="button" className="close" onClick={handleEditClose}>
-            <span>&times;</span>
-          </button>
-        </div>
-        <div className="modal-body">
-          <form>
-            <div className="form-group">
-              <label>Unique code</label>
-              <input type="text" className="form-control" value={currentEmployee.role} onChange={(e) => setCurrentEmployee({ ...currentEmployee, role: e.target.value })} />
-            </div>
-            <div className="form-group">
-              <label>Data Sheet Name</label>
-              <input type="text" className="form-control" value={currentEmployee.departments} onChange={(e) => setCurrentEmployee({ ...currentEmployee, departments: e.target.value })} />
-            </div>
-            <div className="form-group">
-              <label>Status</label>
-              <select className="form-control" value={currentEmployee.status} onChange={(e) => setCurrentEmployee({ ...currentEmployee, status: e.target.value })}>
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div className="modal-footer">
-          <button type="button" className="btn btn-secondary" onClick={handleEditClose}>Close</button>
-          <button type="button" className="btn btn-primary" onClick={handleEditSubmit}>Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+
+{addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+
 </div>
   );
 };

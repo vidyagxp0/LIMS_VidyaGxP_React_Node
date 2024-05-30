@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { HiDotsHorizontal } from "react-icons/hi";
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
 import { FaArrowRight } from 'react-icons/fa';
 import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 export default function CalibrationType() {
     const [addModal, setAddModal] = useState(false);
@@ -25,8 +25,44 @@ export default function CalibrationType() {
     const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
   
+    const StatusModal = (_props) => {
+        return (
+            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+            <CModalHeader>
+              <CModalTitle> Add Calibration Type</CModalTitle>
+            </CModalHeader>
+              <p className='ms-3 m-2'>Add information and add new calibration type</p>
+            <CModalBody>
+            <CFormInput
+              label='Calibration Type'
+              className="mb-3"
+              type="text"
+              placeholder="Calibration Type"
+              />  
+              <CFormInput
+              label='Calibration Type Prefix'
+              className="mb-3"
+              type="text"
+              placeholder="Calibration Type Prefix"
+              /> 
+             
+             <div className="d-flex gap-3 mt-4">
+            <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+            <CButton color="primary w-50">Submit</CButton>
+          </div>
+
+            </CModalBody>
+          </CModal>
+        )
+      }
+
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' }, 
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' }, 
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' }, 
@@ -98,7 +134,7 @@ export default function CalibrationType() {
                 </td>
                 <td>
                     <div className="d-flex gap-3">
-                        <div className="cursor-pointer" onClick={() => openEditModal(index)}>
+                        <div className="cursor-pointer" onClick={() => setAddModal(true)}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
                         <Link to="#" onClick={() => openDeleteModal(startIndex + index)}>
@@ -128,7 +164,7 @@ export default function CalibrationType() {
                 <h5>Calibration Type</h5>
             </div>
 
-            <div id="div2" className='p-5' style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className='p-5' style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div className="dropdown">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -146,95 +182,12 @@ export default function CalibrationType() {
                     
                     className="btn btn-primary"
                     type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRight"
-                    aria-controls="offcanvasRight"
+                    onClick={() => setAddModal(true)}
                 >
-                    <CgAddR /> <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Calibration Type</span>
+                     <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Calibration Type</span>
                 </button>
             </div>
-
-            <div
-                className="offcanvas offcanvas-end overflow-y-scroll"
-                tabIndex="-1"
-                id="offcanvasRight"
-                aria-labelledby="offcanvasRightLabel"
-            >
-                <div className="offcanvas-header ">
-                    <div id="line1">
-                        <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add Calibration Type
-                        </h5>
-                        <button
-                            id="closebtn"
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                </div>
-                <p style={{ marginLeft: '20px' }}>Add information and add new calibration type</p>
-
-                <label className="line3" htmlFor="">Calibration Type</label>
-                <input className="line4" required type="text" placeholder="Calibration Type" />
-
-                <label className="line3" htmlFor="">Calibration Type Prefix</label>
-                <input className="line4" required type="text" placeholder="Calibration Type Prefix" />
-
-                <div id="line5">
-                    <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
-                    <button >Submit</button>
-                </div>
-            </div>
-
-            {/* Edit Modal */}
-            {editModal && (
-                <div className="modal" style={{ display: 'block' }} tabIndex="-1">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Edit Employee</h5>
-                                <button type="button" className="btn-close" onClick={() => setEditModal(false)} aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <div className="mb-3">
-                                    <label htmlFor="user" className="form-label">User</label>
-                                    <input type="text" className="form-control" id="user" name="user" value={employeeToEdit.user} onChange={handleEditChange} />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="role" className="form-label">Role</label>
-                                    <input type="text" className="form-control" id="role" name="role" value={employeeToEdit.role} onChange={handleEditChange} />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="departments" className="form-label">Departments</label>
-                                    <input type="text" className="form-control" id="departments" name="departments" value={employeeToEdit.departments} onChange={handleEditChange} />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="joiningDate" className="form-label">Joining Date</label>
-                                    <input type="text" className="form-control" id="joiningDate" name="joiningDate" value={employeeToEdit.joiningDate} onChange={handleEditChange} />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="addedBy" className="form-label">Added By</label>
-                                    <input type="text" className="form-control" id="addedBy" name="addedBy" value={employeeToEdit.addedBy} onChange={handleEditChange} />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="status" className="form-label">Status</label>
-                                    <select className="form-control" id="status" name="status" value={employeeToEdit.status} onChange={handleEditChange}>
-                                        <option value="ACTIVE">Active</option>
-                                        <option value="INACTIVE">Inactive</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setEditModal(false)}>Close</button>
-                                <button type="button" className="btn btn-primary" onClick={saveEmployee}>Save changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
+         
             {/* Delete Confirmation Modal */}
             {deleteModal && (
                 <div className="modal" style={{ display: 'block' }} tabIndex="-1">
@@ -277,7 +230,7 @@ export default function CalibrationType() {
 
             <div className="pagination" style={{ margin: '0 35px' }}>
                 <div className="pagination ">
-                    <div className='mr-5'>
+                    <div >
                         <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
                     </div>
                     <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -287,8 +240,11 @@ export default function CalibrationType() {
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
                     </div>
                 </div>
-                <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+                <button className="btn btn-next d-flex align-items-center"onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
             </div>
+
+              
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
         </>
     );
 }
