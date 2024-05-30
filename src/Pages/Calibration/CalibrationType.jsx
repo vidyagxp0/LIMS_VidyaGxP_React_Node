@@ -168,12 +168,17 @@ export default function CalibrationType() {
                 <div className="dropdown">
                     <div>
                         <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Show
-                            <select id='selectOption' onChange={(e) => setSelectedStatus(e.target.value)} style={{ outline: 'none' }}>
-                                <option value="All">All</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
+                          
+                            <CFormSelect
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  value={selectedStatus}
+                  style={{ border: "2px solid gray" }}
+                >
+                  <option value="All">All</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  
+                </CFormSelect>
                         </button>
                     </div>
                 </div>

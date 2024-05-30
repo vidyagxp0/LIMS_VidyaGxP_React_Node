@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR } from 'react-icons/cg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link } from 'react-router-dom';
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 const CalibrationSampleLogin = () => {
-  const pageSize = 9;
+  const [addModal, setAddModal] = useState(false);
+
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('1');
@@ -28,6 +29,75 @@ const CalibrationSampleLogin = () => {
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
+  const StatusModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Sample Login</CModalTitle>
+        </CModalHeader>
+         
+        <CModalBody>
+        <CFormInput
+          label='Sample Login Template/ Revision No.'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          />  
+          <CFormInput
+          label='Test Plan / Revision No.'
+          className="mb-3"
+          type="text"
+          placeholder=" Prefix"
+          /> 
+           <CFormInput
+          label='Product / Material'
+          className="mb-3"
+          type="text"
+          placeholder=" Prefix"
+          /> 
+           <CFormInput
+          label='Product / Material Code'
+          className="mb-3"
+          type="text"
+          placeholder=" "
+          />  
+          <CFormInput
+          label='Generic Name'
+          className="mb-3"
+          type="text"
+          placeholder=" "
+          />  
+          <CFormInput
+          label='Specification ID'
+          className="mb-3"
+          type="text"
+          placeholder=" "
+          /> 
+          <CFormInput
+          label='Sample Type'
+          className="mb-3"
+          type="text"
+          placeholder=" "
+          /> 
+         <FormLabel style={{ margin: '15px 20px' }} id="demo-row-radio-buttons-group-label">Auto Sample Allotted</FormLabel>
+            <RadioGroup style={{ margin: '15px 20px' }}
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="No" control={<Radio />} label="No" />
+            </RadioGroup>
+
+         <div className="d-flex gap-3 mt-4">
+        <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+        <CButton color="primary w-50">Submit</CButton>
+      </div>
+
+        </CModalBody>
+      </CModal>
+    )
+  }
 
   const  [employees, setEmployees] = useState([
     { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
@@ -173,9 +243,7 @@ const CalibrationSampleLogin = () => {
                 <CButton 
                   className="btn btn-primary "
                   type="button"
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight"
-                  aria-controls="offcanvasRight"><CgAddR />  <span>Add Sample Login</span></CButton>
+                  onClick={() => setAddModal(true)}> <span>Add Sample Login</span></CButton>
               </div>
             </CCol>
           </CRow>
@@ -260,7 +328,7 @@ const CalibrationSampleLogin = () => {
 
       <div className="pagination" style={{ margin: '20px 0' }}>
         <div className="pagination">
-          <div className='mr-5'>
+          <div >
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
           </div>
           <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -270,8 +338,10 @@ const CalibrationSampleLogin = () => {
             <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
           </div>
         </div>
-        <button className="btn btn-next" onClick={nextToLastPage}> Next <FaArrowRight /></button>
+        <button className="btn btn-next  d-flex align-items-center" onClick={nextPage}> Next <FaArrowRight  className="ms-2"/></button>
       </div>
+
+{addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </div>
   );
 };

@@ -330,8 +330,8 @@ const CalibrationDataSheet = () => {
       </div>
 
       {/* Employee table */}
-      <div className='table-responsive shadow p-4 container1'>
-        <table className='table' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+      <div className='table-responsive rounded bg-white p-4 container1' style={{border:" 2px solid gray"}}>
+        <table className='table ' style={{ fontSize: '0.8rem',  width: '100%' }}>
           <thead>
             <tr>
               <th><input type="checkbox" /></th>
@@ -351,7 +351,7 @@ const CalibrationDataSheet = () => {
       </div>
 
       {/* Pagination */}
-      <div className="pagination"  style={{ margin: '20px 0' }}>
+      <div className="d-flex justify-content-between my-4">
         <div className="pagination">
           <div >
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
