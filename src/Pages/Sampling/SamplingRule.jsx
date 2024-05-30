@@ -1,43 +1,41 @@
-
 import React, { useState } from 'react';
-
 import { FaArrowRight } from 'react-icons/fa';
-import { CgAddR } from 'react-icons/cg';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { Link } from 'react-router-dom';
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 
 
 const SamplingRule = () => {
+    const [addModal, setAddModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
     const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
     const badgeStyle = { background: "green", color: "white", width: "110px" };
-    const badgeStyle2 = { background: " red", color: "white", width: "110px" };
+    const badgeStyle2 = { background: "red", color: "white", width: "110px" };
 
-    const employees = [
+    const [employees, setEmployees] = useState([
 
-        { uniqueCode: "USER-022024-000001", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { uniqueCode: "USER-022024-000002", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { uniqueCode: "USER-022024-000003", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { uniqueCode: "USER-022024-000004", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { uniqueCode: "USER-022024-000005", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { uniqueCode: "USER-022024-000006", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { uniqueCode: "USER-022024-000007", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { uniqueCode: "USER-022024-000008", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { uniqueCode: "USER-022024-000009", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { uniqueCode: "USER-022024-0000010", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
+        { id: "1", uniqueCode: "USER-022024-000001", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
+        { id: "2", uniqueCode: "USER-022024-000002", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
+        { id: "3", uniqueCode: "USER-022024-000003", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
+        { id: "4", uniqueCode: "USER-022024-000004", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
+        { id: "5", uniqueCode: "USER-022024-000005", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
+        { id: "6", uniqueCode: "USER-022024-000006", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
+        { id: "7", uniqueCode: "USER-022024-000007", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
+        { id: "8", uniqueCode: "USER-022024-000008", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
+        { id: "9", uniqueCode: "USER-022024-000009", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
+        { id: "10", uniqueCode: "USER-022024-0000010", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
 
 
-    ];
+    ]);
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, employees.length);
     const filteredEmployees = employees.filter(employee =>
         selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
     );
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
     const renderRows = () => {
         return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
@@ -60,13 +58,16 @@ const SamplingRule = () => {
                     </button>
                 </td>
                 <td>
-                    <div className='d-flex'>
-                        <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" className='mx-2'>
+                    <div className='d-flex gap-3'>
+                        <div
+                            className="cursor-pointer"
+                            onClick={() => setAddModal(true)}
+                        >
                             <FontAwesomeIcon icon={faPenToSquare} />
-                        </Link>
-                        <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
+                        </div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
                             <FontAwesomeIcon icon={faTrashCan} />
-                        </Link>
+                        </div>
                     </div>
 
                 </td>
@@ -86,10 +87,14 @@ const SamplingRule = () => {
         setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
     };
 
-    const handleDelete = () => {
-        console.log(`Deleting employee: ${selectedEmployee.name}`);
-        // Perform delete operation here
-        setSelectedEmployee(null);
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+        setDeleteModal(false);
     };
 
 
@@ -99,9 +104,9 @@ const SamplingRule = () => {
                 <div className="main-head">
                     <div className="title fw-bold fs-5 py-4">Sampling Rule</div>
                 </div>
-                <div className="col-md-6 pt-4">
+                <div className="d-flex justify-content-between my-3 ">
                     <div className="dropdown">
-                    <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
                             <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
                                 setSelectedStatus(e.target.value);
@@ -115,90 +120,12 @@ const SamplingRule = () => {
                             </select>
                         </button>
                     </div>
-                </div>
-
-                <div className="col-md-6">
-                    <button
-                        id="Addbtn"
-                        className="btn btn-right"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasRight"
-                        aria-controls="offcanvasRight"
-                        style={{ background: "#4B49B6" }}
-                    >
-                        <CgAddR />  <span>Add Sampling Rule</span>
-                    </button>
-                </div>
-
-                <div
-                    className="offcanvas offcanvas-end overflow-y-scroll"
-                    tabIndex="-1"
-                    id="offcanvasRight"
-                    aria-labelledby="offcanvasRightLabel"
-                >
-                    <div className="offcanvas-header ">
-                        <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add Rule
-                        </h5>
-                            <button
-                                id="closebtn"
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                    </div>
-
-                    <label className="line3" htmlFor="">Sampling Rule Name</label>
-                    <input className="line4" required type="text" placeholder="Sampling Rule Name" />
-
-                    <label className="line3" htmlFor="">Unique Code</label>
-                    <input className="line4" required type="text" placeholder="Unique Code" />
-
-                    <label className="line3" htmlFor="">Number of Ranges</label>
-                    <div className='d-flex '>
-                        <input className="line4" required type="number" placeholder="Number of Ranges" />
-                        <button className='btn btn-info text-white' >Add</button>
-                    </div>
-
-                    <div id="line5">
-                        <button type="button"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close">&lt; Back</button>
-                        <button>Submit</button>
+                    <div className="">
+                        <CButton color="primary" onClick={() => setAddModal(true)}>Add Sampling Rule</CButton>
                     </div>
                 </div>
 
-                {selectedEmployee && (
-                    <div
-                        className="offcanvas offcanvas-end"
-                        tabIndex="-1"
-                        id="deleteOffcanvas"
-                        aria-labelledby="deleteOffcanvasLabel"
-                    >
-                        <div className="offcanvas-header">
-                            <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete Sampling Rule</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="offcanvas"
-                                    aria-label="Close"
-                                    onClick={() => setSelectedEmployee(null)}
-                                ></button>
-                            </div>
-                        </div>
-                        <div className="offcanvas-body">
-                            <p>Do you want to delete this Sampling Rule { }?</p>
-                            <div className="d-flex justify-content-between">
-                                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
-                                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                
+
             </div>
 
             <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
@@ -218,7 +145,7 @@ const SamplingRule = () => {
                         {renderRows()}
                     </tbody>
                 </table>
-                
+
             </div>
 
             <div className="d-flex justify-content-between align-items-center mt-4">
@@ -231,12 +158,85 @@ const SamplingRule = () => {
                         &gt;&gt;
                     </button>
                 </div>
-                <button className="btn " onClick={nextToLastPage}>
-                    Next <FaArrowRight />
+                <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+                    Next <FaArrowRight className='ms-2' />
                 </button>
             </div>
 
+            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
         </div>
+    );
+};
+
+const StatusModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+            <CModalHeader>
+                <CModalTitle>Add Rule</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+
+                <CFormInput
+                    type="text"
+                    label="Sampling Rule Name"
+                    placeholder="Sampling Rule Name"
+                />
+
+                <CFormInput
+                    type="text"
+                    label="Unique Code"
+                    placeholder="Unique Code"
+                />
+
+                <CFormInput
+                    type="number"
+                    label="Number of Ranges"
+                    placeholder="Number of Ranges"
+                />
+
+
+            </CModalBody>
+            <CModalFooter>
+                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                <CButton color="primary">Submit</CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
+const DeleteModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete Sampling Rule</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this Sampling Rule { }?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
     );
 };
 
