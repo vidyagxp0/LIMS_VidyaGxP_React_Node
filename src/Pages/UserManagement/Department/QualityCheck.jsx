@@ -99,9 +99,9 @@ const QualityCheck = () => {
                 <div className="main-head">
                     <div className="title fw-bold fs-5 py-4">Quality Check/Employee</div>
                 </div>
-                <div className="col-md-6 pt-4">
+                <div className="d-flex justify-content-between my-4">
                     <div className="dropdown">
-                    <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
                             <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
                                 setSelectedStatus(e.target.value);
@@ -113,14 +113,12 @@ const QualityCheck = () => {
                             </select>
                         </button>
                     </div>
+                    <div className="">
+                        <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
+                    </div>
                 </div>
-                <div className="d-flex justify-content-end">
-                    <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
-                </div>
-
             </div>
 
-            {/* Employee table */}
             <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
                 <table className='table'>
                     <thead>

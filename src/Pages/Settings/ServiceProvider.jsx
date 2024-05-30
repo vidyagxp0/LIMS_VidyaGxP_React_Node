@@ -24,6 +24,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function ServiceProvider() {
@@ -41,6 +42,12 @@ function ServiceProvider() {
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
   const [selectedStatus, setSelectedStatus] = useState("All");
+
+  const handleSelect = (data) => {
+    setSelectedStatus(data);
+    setCurrentPage(1);
+  }
+
   const [data, setData] = useState([
     {
       id: 1,
@@ -114,10 +121,22 @@ function ServiceProvider() {
       status: "REINITIATED",
     },
   ]);
-  const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
+  const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
+
+  const nextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const nextToLastPage = () => {
+    setCurrentPage(Math.ceil(filterData().length / pageSize));
+  };
   const [search, setSearch] = useState("");
 
   const filterData = () => {
@@ -125,18 +144,13 @@ function ServiceProvider() {
       selectedStatus === "All"
         ? data
         : data.filter(
-            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-          );
+          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+        );
     return filteredData.filter((item) =>
       item.ServiceProviderName.toLowerCase().includes(search.toLowerCase())
     );
   };
-  const filteredData = filterData();
-  const nextPage = () =>
-    setCurrentPage((prev) =>
-      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-    );
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
 
   const handleDelete = (id) => {
     setData((prevData) => prevData.filter((item) => item.id !== id));
@@ -150,7 +164,7 @@ function ServiceProvider() {
           <div className="main-head">
             <div className="title fw-bold fs-5">Service Provider</div>
           </div>
-          <div className="d-flex gap-4">
+          <div className="d-flex gap-4 my-3">
             <div className="chart-widgets w-100">
               <div className="">
                 <div className="row" style={{ cursor: "pointer" }}>
@@ -254,7 +268,7 @@ function ServiceProvider() {
 
               <CCol sm={3}>
                 <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  onChange={(e) => handleSelect(e.target.value)}
                   value={selectedStatus}
                   style={{ border: "2px solid gray" }}
                 >
@@ -277,10 +291,10 @@ function ServiceProvider() {
             </CRow>
           </div>
           <div
-            className="bg-white mt-5"
+            className="bg-white mt-5 p-3 rounded"
             style={{ boxShadow: "0px 0px 3px black" }}
           >
-            <CTable>
+            <CTable className="table table-responsive">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell scope="col" className="text-center">
@@ -352,16 +366,16 @@ function ServiceProvider() {
                             item.status === "INITIATED"
                               ? badgeStyle2
                               : item.status === "APPROVED"
-                              ? badgeStyle3
-                              : item.status === "REJECTED"
-                              ? badgeStyle4
-                              : item.status === "REINITIATED"
-                              ? badgeStyle5
-                              : item.status === "DROPPED"
-                              ? badgeStyle6
-                              : item.status === "ALL"
-                              ? badgeStyle
-                              : badgeStyle
+                                ? badgeStyle3
+                                : item.status === "REJECTED"
+                                  ? badgeStyle4
+                                  : item.status === "REINITIATED"
+                                    ? badgeStyle5
+                                    : item.status === "DROPPED"
+                                      ? badgeStyle6
+                                      : item.status === "ALL"
+                                        ? badgeStyle
+                                        : badgeStyle
                           }
                         >
                           {item.status}
@@ -391,27 +405,41 @@ function ServiceProvider() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination mt-5">
-            <button
-              className="btn mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle">{currentPage}</button>
+          <div className="pagination my-4">
+            <div className="pagination gap-3">
+              <div className="">
+                <button
+                  className="btn"
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                >
+                  &lt;&lt;
+                </button>
+              </div>
+              <div className="current-page-number bg-dark-subtle page-item rounded">
+                <button className="btn"> {currentPage} </button>
+              </div>
+              <div>
+                <button
+                  className="btn mr-2"
+                  onClick={nextPage}
+                  disabled={endIndex >= filterData().length}
+                >
+                  &gt;&gt;
+                </button>
+              </div>
             </div>
+
             <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredData.length}
+              className="btn btn-next d-flex gap-2"
+              onClick={nextToLastPage}
             >
-              &gt;&gt;
+              Next <FaArrowRight className="mt-1" />
             </button>
           </div>
         </div>
       </div>
+
 
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
