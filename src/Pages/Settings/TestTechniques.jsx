@@ -319,7 +319,7 @@ export default function TestTechniques() {
         <div className="my-4">
           <CRow className="mb-3">
             <CCol sm={3}><CFormInput
-              className="mb-3 border-2"
+              className="mb-3 border-dark-subtle border-2"
               type="text"
               placeholder="Search..."
               value={searchTerm}
@@ -327,7 +327,7 @@ export default function TestTechniques() {
             /></CCol>
             <CCol sm={3}>
               <CFormSelect
-                className="border-2"
+                className="border-dark-subtle border-2"
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
                 options={[
@@ -351,20 +351,20 @@ export default function TestTechniques() {
           </CRow>
         </div>
 
-        <div className="shadow rounded border-2 p-3 my-4">
-          <table className="table table-responsive">
+        <div className="bg-light shadow rounded border-dark-subtle border-2 my-4">
+          <table className="table table-responsive table-striped">
             <thead>
               <tr>
-                <th>
+                <th style={{background:"#3C496A", color:"white"}}>
                   <input type="checkbox" />
                 </th>
-                <th>Sr.no.</th>
-                <th>Technique Name</th>
-                <th>Type</th>
-                <th>Description</th>
-                <th>Added On</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+                <th style={{background:"#3C496A", color:"white"}}>Technique Name</th>
+                <th style={{background:"#3C496A", color:"white"}}>Type</th>
+                <th style={{background:"#3C496A", color:"white"}}>Description</th>
+                <th style={{background:"#3C496A", color:"white"}}>Added On</th>
+                <th style={{background:"#3C496A", color:"white"}}>Status</th>
+                <th style={{background:"#3C496A", color:"white"}}>Action</th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>

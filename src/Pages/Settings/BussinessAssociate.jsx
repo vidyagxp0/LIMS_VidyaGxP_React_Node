@@ -2,7 +2,7 @@ import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody,
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function BussinessAssociate() {
@@ -60,20 +60,20 @@ function BussinessAssociate() {
             <div className="chart-widgets w-100">
               <div className="">
                 <div className="row">
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }} onClick={() => handleChartClick('INITIATED')}>
-                    <div className="text-light fs-5">INITIATED</div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#9ec5fe, #0d6efd)' }} onClick={() => handleChartClick('INITIATED')}>
+                    <div className="text-light fs-5 fw-bolder">INITIATED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'INITIATED').length}</div>
                   </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }} onClick={() => handleChartClick('REINITIATED')}>
-                    <div className="text-light fs-5">REINITIATED</div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#9ec5fe, #d63384)' }} onClick={() => handleChartClick('REINITIATED')}>
+                    <div className="text-light fs-5 fw-bolder">REINITIATED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REINITIATED').length}</div>
                   </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }} onClick={() => handleChartClick('APPROVED')}>
-                    <div className="text-light fs-5">APPROVED</div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#9ec5fe, #ffc107)' }} onClick={() => handleChartClick('APPROVED')}>
+                    <div className="text-light fs-5 fw-bolder">APPROVED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'APPROVED').length}</div>
                   </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }} onClick={() => handleChartClick('REJECTED')}>
-                    <div className="text-light fs-5">REJECTED</div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#006957, #dc3545)' }} onClick={() => handleChartClick('REJECTED')}>
+                    <div className="text-light fs-5 fw-bolder">REJECTED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REJECTED').length}</div>
                   </div>
                 </div>
@@ -81,11 +81,11 @@ function BussinessAssociate() {
             </div>
           </div>
           <div>
-            <CRow className="mb-3">
+            <CRow className="my-3">
               <CCol sm={3}>
                 <CFormSelect
                   value={selectedStatus}
-                  className="border-2"
+                  className="border-dark-subtle border-2"
                   onChange={handleStatusChange}
                   options={[
                     { value: 'All', label: 'All' },
@@ -105,20 +105,20 @@ function BussinessAssociate() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5 border-2 rounded shadow p-3">
-            <CTable align="middle" responsive className="table-responsive">
-              <CTableHead>
+          <div className="bg-white border-dark-subtle border-2 rounded shadow mt-5">
+            <CTable align="middle" responsive className="table-responsive table-striped" >
+              <CTableHead className="">
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Business Associate Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Unique Code</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">City</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">State</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Country</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">ZIP code</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Business Associate Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Unique Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">City</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">State</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Country</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">ZIP code</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -159,6 +159,10 @@ function BussinessAssociate() {
               </CTableBody>
             </CTable>
           </div>
+          {/* <div className="d-flex justify-content-end my-4">
+            <button className="bg-blue-950 px-3 py-2 rounded mr-3" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}><FaArrowLeft className="text-light"/></button>
+            <button className="bg-blue-950 px-3 py-2 rounded mr-3" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}><FaArrowRight className="text-light"/></button>
+          </div> */}
           <div className="pagination my-3 d-flex justify-content-between">
             <div className="d-flex gap-2">
               <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>

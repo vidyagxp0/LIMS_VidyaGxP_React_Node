@@ -235,19 +235,19 @@ export default function TypeOfSection() {
           </CRow>
         </div>
 
-        <div className="shadow p-3 rounded border-2 my-4">
-          <table className="table table-responsive">
+        <div className="bg-light shadow rounded border-dark-subtle border-2 my-4">
+          <table className="table table-responsive table-striped">
             <thead>
               <tr>
-                <th>
+                <th style={{background:"#3C496A", color:"white"}}>
                   <input type="checkbox" />
                 </th>
-                <th>Sr.no.</th>
-                <th>Type Of Section</th>
-                <th>Prefix</th>
-                <th>Added On</th>
-                <th>Status</th>
-                <th>Actions </th>
+                <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+                <th style={{background:"#3C496A", color:"white"}}>Type Of Section</th>
+                <th style={{background:"#3C496A", color:"white"}}>Prefix</th>
+                <th style={{background:"#3C496A", color:"white"}}>Added On</th>
+                <th style={{background:"#3C496A", color:"white"}}>Status</th>
+                <th style={{background:"#3C496A", color:"white"}}>Actions </th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>

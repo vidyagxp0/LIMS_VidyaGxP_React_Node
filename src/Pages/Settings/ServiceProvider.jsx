@@ -291,44 +291,44 @@ function ServiceProvider() {
             </CRow>
           </div>
           <div
-            className="bg-white mt-5 p-3 rounded"
+            className="bg-white mt-5 rounded border-2 border-dark-subtle"
             style={{ boxShadow: "0px 0px 3px black" }}
           >
-            <CTable className="table table-responsive">
+            <CTable className="table table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     SNo.
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Service Provider Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Unique Code
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     City
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     State
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Country
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Pin Code
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Valid Upto
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Status
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ fontSize: "17px" }}>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Actions{" "}
                   </CTableHeaderCell>
                 </CTableRow>
