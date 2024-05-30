@@ -3,7 +3,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 
 
 const ESampling = () => {
@@ -87,7 +87,7 @@ const ESampling = () => {
                         <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </div>
-                    </div>                    
+                    </div>
                 </td>
             </tr>
         ));
@@ -124,161 +124,40 @@ const ESampling = () => {
                 </div>
                 <div className="d-flex justify-content-between my-3 ">
                     <div className="dropdown">
-                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Show
-                            <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
-                                setSelectedStatus(e.target.value);
 
-                                setCurrentPage(1); // Reset to the first page on filter change
-                            }}>
-                                <option value="All">All</option>
-                                <option value="INITIATED">Initiated</option>
-                                <option value="APPROVED">Approved</option>
-                                <option value="REJECTED">Rejected</option>
-                                <option value="REINITIATED">Reinitiated</option>
-                                <option value="DROPPED">Dropped</option>
-                            </select>
-                        </button>
+                        <CFormSelect
+                            onChange={(e) => setSelectedStatus(e.target.value)}
+                            value={selectedStatus}
+                            style={{ border: "2px solid gray" }}
+                        >
+                            <option value="All">All</option>
+                            <option value="Initiated">Initiated</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Reinitiated">Reinitiated</option>
+                            <option value="Dropped">Dropped</option>
+                        </CFormSelect>
                     </div>
+
                     <div className="">
                         <CButton color="primary" onClick={() => setAddModal(true)}>Add E-Sampling</CButton>
                     </div>
                 </div>
-            
-                {/* <div
-                    className="offcanvas offcanvas-end overflow-y-scroll"
-                    tabIndex="-1"
-                    id="addESampling"
-                    aria-labelledby="offcanvasRightLabel"
-                >
-                    <div className="offcanvas-header ">
-                        <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-                            Add E-Sampling
-                        </h5>
-                            <button
-                                id="closebtn"
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                    </div>
-                    <div className="offcanvas-body">
-                        <div className="mb-3">
-                            <label htmlFor="SamplingConfiguration" className="form-label">Sampling Configuration</label>
-                            <select className="form-select" id='SamplingConfiguration' aria-label="Default select example">
-                                <option defaultValue>Select </option>
-                                <option value="1">SC-072023-0000001</option>
-                                <option value="2">SC-072023-0000002</option>
-                                <option value="3">SC-072023-0000003</option>
-                                <option value="4">SC-072023-0000004</option>
-                                <option value="5">SC-072023-0000005</option>
-                            </select>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="productName" className="form-label">Product/Material Name</label>
-                            <input type="text" className="form-control" id="productName" placeholder="Product" readOnly />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="testPlan" className="form-label">Test Plan</label>
-                            <input type="text" className="form-control" id="testPlan" placeholder="Test Plan" readOnly />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="ARNo" className="form-label">A.R. No</label>
-                            <select className="form-select" id='ARNo' aria-label="Default select example">
-                                <option defaultValue>Select </option>
-                                <option value="ARPC010110">ARPC010110</option>
-                                <option value="ARPC012122">ARPC012122</option>
-                                <option value="ARPC010110">ARPC010111</option>
-                                <option value="ARPC010110">ARPC010111</option>
-                                <option value="ARPC010111">ARPC010111</option>
-                                <option value="ARPC010110">ARPC010111</option>
-                                <option value="ARPC010110">ARPC010111</option>
-                                <option value="ARPC010110">ARPC010111</option>
-                                <option value="ARPC010110">ARPC010111</option>
-                                <option value="ARPC010110">ARPC010111</option>
-                            </select>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="noOfContainers" className="form-label">Total No. of containers</label>
-                            <input type="number" className="form-control" id="noOfContainers" placeholder="Total No. of containers" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="sampledContainerNo" className="form-label">No. of containers to be sampled</label>
-                            <input type="number" className="form-control" id="sampledContainerNo" placeholder="No. of containers to be sampled" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="sampledContainer" className="form-label">Containers sampled</label>
-                            <select className="form-select" id='sampledContainer' aria-label="Default select example">
-                                <option defaultValue >Select </option>
-                                <option disabled>No. Of Sampled Containers </option>
-                            </select>
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Sampling Conclusion</label>
-                            <div className="d-flex flex-row gap-4" >
-                                <div>
-                                    <input type="radio" className='form-check-input mx-3' name="conclusion" id="pass" />
-                                    <label htmlFor="pass">Pass</label>
-                                </div>
-                                <div>
-                                    <input type="radio" className='form-check-input mx-3' name="conclusion" id="fail" />
-                                    <label htmlFor="fail">Fail</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Check point passed</label>
-                            <div className="d-flex flex-row gap-4" >
-                                <div>
-                                    <input type="radio" className='form-check-input mx-3' name="CheckPointPassed" id="pass" />
-                                    <label htmlFor="yes">Yes</label>
-                                </div>
-                                <div>
-                                    <input type="radio" className='form-check-input mx-3' name="CheckPointPassed" id="fail" />
-                                    <label htmlFor="no">No</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="formFile" className="form-label">Document if any</label>
-                            <input className="form-control" type="file" id="formFile" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="comments" className="form-label">Comments</label>
-                            <input type="text" className="form-control" id="comments" placeholder="Comment here ..." />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="InitiatedBy" className="form-label">Initiated By</label>
-                            <input type="number" className="form-control" id="InitiatedBy" placeholder="Admin" readOnly />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="InitiatedOn" className="form-label">Initiated On</label>
-                            <input type="date" className="form-control" id="InitiatedOn" placeholder="2024-05-23" />
-                        </div>
 
-                        <div className="d-flex justify-content-center gap-4 mt-4">
-                            <button type="button" className='btn btn-secondary w-100' data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
-                            <button type="button" className='btn btn-primary w-100'>Add</button>
-                        </div>
-                    </div>
-                </div> */}
-                
             </div>
 
-            <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
-                <table className='table'>
+            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                <table className="mb-0 table-striped table table-responsive">
                     <thead>
                         <tr>
-                            <th>S.No.</th>
-                            <th>Product/Material Name</th>
-                            <th>Containers Sampled</th>
-                            <th>Added On</th>
-                            <th>Number Of Containers</th>
-                            <th>Sampling Conclusion</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Product/Material Name</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Containers Sampled</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Number Of Containers</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Sampling Conclusion</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -318,23 +197,124 @@ const StatusModal = (_props) => {
                 <CModalTitle>Add E-Sample</CModalTitle>
             </CModalHeader>
             <CModalBody>
+                <CFormSelect className="mb-3"
+                    type="select"
+                    label="Sampling Configuration"
 
-                <CFormInput
-                    type="text"
-                    label="Sampling Rule Name"
-                    placeholder="Sampling Rule Name"
+                    options={[
+                        "Select",
+                        { label: "SC-072023-0000001", value: "SC-072023-0000001" },
+                        { label: "SC-072023-0000002", value: "SC-072023-0000002" },
+                        { label: "SC-072023-0000003", value: "SC-072023-0000003" },
+                        { label: "SC-072023-0000004", value: "SC-072023-0000004" }
+                    ]}
                 />
 
                 <CFormInput
+                    className="mb-3"
                     type="text"
-                    label="Unique Code"
-                    placeholder="Unique Code"
+                    label="Product/Material Name"
+                    placeholder="Product/Material Name"
+                    disabled
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Test Plan"
+                    placeholder="Test Plan"
+                />
+                <CFormSelect
+                    className="mb-3"
+                    type="select"
+                    label="A.R. No"
+                    options={[
+                        "Select",
+                        { label: "ARPC010110", value: "ARPC010110" },
+                        { label: "ARPC010111", value: "ARPC010111" },
+                        { label: "ARPC010112", value: "ARPC010112" },
+                        { label: "ARPC010113", value: "ARPC010113" }
+                    ]}
                 />
 
                 <CFormInput
+                    className="mb-3"
                     type="number"
-                    label="Number of Ranges"
-                    placeholder="Number of Ranges"
+                    label="Total No. of containers"
+                    placeholder="Total No. of containers"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="number"
+                    label="No. of containers to be sampled"
+                    placeholder="No. of containers to be sampled"
+                />
+                <CFormSelect
+                    className="mb-3"
+                    type="select"
+                    label="Containers sampled"
+
+                    options={[
+                        "Select",
+                        { label: "No. Of Sampled Containers", value: "No. Of Sampled Containers" },
+
+                    ]}
+                />
+
+                <label className="mb-3">Sampling Conclusion</label>
+                <CFormCheck
+                    type="radio"
+                    id="SamplingConclusionPass"
+                    name="SamplingConclusion"
+                    label="Pass"
+                />
+                <CFormCheck
+                    className="mb-3"
+                    type="radio"
+                    id="SamplingConclusionFail"
+                    name="SamplingConclusion"
+                    label="Fail"
+                />
+
+                <label className="mb-3">Check point passed</label>
+                <CFormCheck
+                    type="radio"
+                    id="CheckPointPassedYes"
+                    name="CheckPointPassed"
+                    label="Yes"
+                />
+                <CFormCheck
+                    className="mb-3"
+                    type="radio"
+                    id="CheckPointPassedNo"
+                    name="CheckPointPassed"
+                    label="No"
+                />
+
+                <CFormInput
+                    className="mb-3"
+                    type="file"
+                    label="Document If Any"
+                    placeholder="Choose File"
+                />
+
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Comments"
+                    placeholder="Comment here..."
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Initiated By"
+                    placeholder="Admin"
+                    disabled
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="date"
+                    label="Initiated On"
+                    placeholder="05/24/2024"
                 />
 
 
