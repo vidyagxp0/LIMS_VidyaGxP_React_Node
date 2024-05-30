@@ -16,7 +16,7 @@ const Admin = () => {
     const badgeStyle = { background: "green", color: "white", width: "110px" };
     const badgeStyle2 = { background: "red", color: "white", width: "110px" };
 
-    
+
     const [employees, setEmployees] = useState([
         { id: "USER-022024-000001", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
         { id: "USER-022024-000002", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
@@ -107,7 +107,7 @@ const Admin = () => {
                 <div className="main-head">
                     <div className="title fw-bold fs-5 py-4">Admin/Employee</div>
                 </div>
-                <div className="col-md-6 pt-4">
+                <div className="d-flex justify-content-between my-4">
                     <div className="dropdown">
                         <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show
@@ -121,14 +121,13 @@ const Admin = () => {
                             </select>
                         </button>
                     </div>
+                    <div className="">
+                        <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
+                    </div>
                 </div>
 
-                <div className="d-flex justify-content-end">
-                    <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
-                </div>
             </div>
 
-            {/* Employee table */}
             <div className=' table-responsive bg-white rounded py-3 px-4 mt-5 ' style={{ boxShadow: "0px 0px 3px black" }}>
                 <table className='table'>
                     <thead>
@@ -149,8 +148,7 @@ const Admin = () => {
                 </table>
             </div>
 
-            {/* Pagination */}
-            <div className="d-flex justify-content-between align-items-center mt-5">
+            <div className="d-flex justify-content-between align-items-center my-4">
                 <div className="pagination">
                     <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
                         &lt;&lt;
@@ -160,7 +158,7 @@ const Admin = () => {
                         &gt;&gt;
                     </button>
                 </div>
-                <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+                <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
                     Next <FaArrowRight className='ms-2' />
                 </button>
             </div>
