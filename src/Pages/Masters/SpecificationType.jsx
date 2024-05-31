@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { HiDotsHorizontal } from "react-icons/hi";
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
 import { FaArrowRight } from 'react-icons/fa';
-import { IoEyeSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CTable } from '@coreui/react';
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+
 
 export default function SpecificationType() {
   const [addModal, setAddModal] = useState(false);
@@ -19,49 +16,36 @@ export default function SpecificationType() {
   const [statusFilter, setStatusFilter] = useState('');
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
-    const badgeStyle2 = {
-      background: " #2A5298",
-      color: "white",
-      width: "110px",
-    };
-    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-    
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
   const [employees, setEmployees] = useState([
-    {id: 1, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    {id: 2, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    {id: 3, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    {id: 4, user: 'culture 1', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    {id: 5, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    {id: 6, user: 'environment', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    {id: 7, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    {id: 8, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    {id: 9, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    {id: 10, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    { id: 1, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    { id: 2, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    { id: 3, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
+    { id: 4, user: 'culture 1', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    { id: 5, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    { id: 6, user: 'environment', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
+    { id: 7, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
+    { id: 8, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    { id: 9, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    { id: 10, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
   ]);
 
   const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+    selectedStatus === 'All' ? true : employee.Status.toUpperCase() === selectedStatus.toUpperCase()
   );
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [selectedEmployee, setSelectedEmployee] = useState(null);
-  // const [updatedUser, setUpdatedUser] = useState('');
-  // const [updatedStatus, setUpdatedStatus] = useState('');
-
-  // const filteredEmployees = employees.filter(employee =>
-  //   statusFilter === '' || employee.Status.toLowerCase() === statusFilter.toLowerCase()
-  // );
-
-  // const startIndex = (currentPage - 1) * pageSize;
-  // const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
-
+  
   const renderRows = () => {
     return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
       <tr key={startIndex + index}>
@@ -80,7 +64,7 @@ export default function SpecificationType() {
         </td>
         <td>
           <div className="d-flex gap-3">
-          <div
+            <div
               className="cursor-pointer"
               onClick={() => setAddModal(true)}
             >
@@ -95,11 +79,7 @@ export default function SpecificationType() {
     ));
   };
 
-  // const deleteEmployee = (index) => {
-  //   const updatedEmployees = employees.filter((_, i) => i !== index);
-  //   setEmployees(updatedEmployees);
-  // };
-
+  
   const nextPage = () => {
     if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
       setCurrentPage(currentPage + 1);
@@ -127,59 +107,43 @@ export default function SpecificationType() {
 
   };
 
-  // const openModal = (employee, index) => {
-  //   setSelectedEmployee({ ...employee, index });
-  //   setUpdatedUser(employee.user);
-  //   setUpdatedStatus(employee.Status);
-  //   setIsModalOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  //   setSelectedEmployee(null);
-  // };
-
-  // const handleUpdate = () => {
-  //   const updatedEmployees = [...employees];
-  //   updatedEmployees[selectedEmployee.index] = {
-  //     ...selectedEmployee,
-  //     user: updatedUser,
-  //     Status: updatedStatus
-  //   };
-  //   setEmployees(updatedEmployees);
-  //   closeModal();
-  // };
-
+  
   return (
-    <>
-      <div id="div1">
-        <h5 style={{fontWeight:"bolder"}}>Specifications Type</h5>
-      </div>
-
-      <div id="div2" className='p-5'>
-        <div className="dropdown">
-          <div>
-            <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              
-              <select id='selectOption' style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }} onChange={(e) => setStatusFilter(e.target.value)}>
-                <option value="">Select Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </button>
-          </div>
+    <div className="mx-5">
+            <div className="row my-5">
+        <div className="main-head">
+          <div className="title fw-bold fs-5 py-4">Specifications Type</div>
         </div>
+        <div className="d-flex justify-content-between my-4">
+          <div className="dropdown">
+            <CFormSelect
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+                setCurrentPage(1);
+              }}
+              value={selectedStatus}
+              style={{ border: "2px solid gray", width: "220px" }}
+            >
+
+              <option value="All">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </CFormSelect>
+          </div>
+          
+        </div>
+
       </div>
 
-      <div className="m-4 rounded   bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+      <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
           <thead>
             <tr>
-              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
-              <th style={{background:"#3C496A", color:"white"}}>Specification Type</th>
-              <th style={{background:"#3C496A", color:"white"}}>Added On</th>
-              <th style={{background:"#3C496A", color:"white"}}>Status</th>
-              <th style={{background:"#3C496A", color:"white"}}>Actions</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Specification Type</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -188,52 +152,25 @@ export default function SpecificationType() {
         </CTable>
       </div>
 
-      <div className="pagination">
-        <div className="pagination" style={{ margin: '0 35px' }}>
-          <div className='mr-5'>
-            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-          </div>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-            <button className='btn rounded-circle'> {currentPage} </button>
-          </div>
-          <div>
-            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
-          </div>
+      <div className="d-flex justify-content-between align-items-center my-4">
+        <div className="pagination">
+          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+            &lt;&lt;
+          </button>
+          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+            &gt;&gt;
+          </button>
         </div>
-        <button className="btn btn-next" style={{ margin: '0 35px' }} onClick={nextToLastPage}> Next <FaArrowRight /></button>
+        <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
+          Next <FaArrowRight className='ms-2' />
+        </button>
       </div>
 
-      {isModalOpen && (
-        <div className="modal" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Update Employee</h5>
-                <button type="button" className="close" onClick={closeModal}>
-                  <span>&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label>Specification Type</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={updatedUser}
-                    onChange={(e) => setUpdatedUser(e.target.value)}
-                  />
-                </div>
-               
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
-                <button type="button" className="btn btn-primary" onClick={handleUpdate}>Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
+      
+    </div>
   );
 }
 const StatusModal = (_props) => {
@@ -251,7 +188,7 @@ const StatusModal = (_props) => {
           label="Specification Type Name"
           placeholder="Specification Type Name"
         />
-        
+
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
