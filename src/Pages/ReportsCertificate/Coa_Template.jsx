@@ -79,6 +79,7 @@ function Coa_Template() {
     const nextPage = () => setCurrentPage(currentPage + 1);
     const prevPage = () => setCurrentPage(currentPage - 1);
     const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
+    
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
@@ -102,16 +103,16 @@ function Coa_Template() {
                                 <CFormSelect
                                     onChange={(e) => setSelectedStatus(e.target.value)}
                                     value={selectedStatus} style={{ border: "2px solid gray" }}
-                                options={[
-                                    "All",                                
-                                { label: "Initiated" ,value: "INITIATED"},
-                                { label: "Approved" ,value: "APPROVED"},
-                                { label: "Rejected" ,value: "REJECTED"},
-                                { label: "Reinitiated" ,value: "REINITIATED"},
-                                { label: "Dropped" ,value: "DROPPED"},
-                            ]}
+                                    options={[
+                                        "All",
+                                        { label: "Initiated", value: "INITIATED" },
+                                        { label: "Approved", value: "APPROVED" },
+                                        { label: "Rejected", value: "REJECTED" },
+                                        { label: "Reinitiated", value: "REINITIATED" },
+                                        { label: "Dropped", value: "DROPPED" },
+                                    ]}
                                 />
-                                  
+
                             </CCol>
 
                             <CCol sm={6}></CCol>
@@ -123,23 +124,23 @@ function Coa_Template() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive >
+                    <div className="bg-white rounded mt-5 border-2 border-dark-subtle">
+                        <CTable align="middle" responsive className="table-striped">
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Sample Type</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Coa ID</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Coa Type</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Updated At</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Sample Type</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Coa ID</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Coa Type</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Updated At</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                            {filteredData.slice(startIndex, endIndex).map((item) => (
+                                {filteredData.slice(startIndex, endIndex).map((item, index) => (
                                     <CTableRow key={item.id}>
-                                        <CTableDataCell>{item.id}</CTableDataCell>
+                                        <CTableDataCell>{index + 1}</CTableDataCell>
                                         <CTableDataCell>{item.sampleType}</CTableDataCell>
                                         <CTableDataCell>{item.coaId}</CTableDataCell>
                                         <CTableDataCell>{item.coaType}</CTableDataCell>
@@ -195,8 +196,8 @@ function Coa_Template() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn" onClick={nextToLastPage}>
-                            Next <FaArrowRight />
+                        <button className="btn border-dark d-flex gap-2" onClick={nextToLastPage}>
+                            Next <FaArrowRight className="mt-1"/>
                         </button>
                     </div>
 
@@ -221,6 +222,7 @@ const StatusModal = (_props) => {
 
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Sample Type"
                         placeholder="Select... "
                         options={[
@@ -234,6 +236,7 @@ const StatusModal = (_props) => {
 
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Coa Type"
                         placeholder="Select Coa Type "
                         options={[
@@ -245,29 +248,33 @@ const StatusModal = (_props) => {
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Report Title"
                         placeholder=" Report Title"
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Product/Material Caption"
                         placeholder="Report Title "
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Serial No."
                         placeholder="Serial Number "
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Format No."
                         placeholder="Format No. "
                     />
 
-                    <CModalTitle className="bg-light">Header</CModalTitle>
+                    <CModalTitle className="bg-light mb-3">Header</CModalTitle>
 
                     <div className="d-flex pb-2">
-                        <div className="pe-3">
+                        <div className="mb-3">
                             <CFormInput
                                 type="text"
                                 label="Rows"
@@ -288,10 +295,10 @@ const StatusModal = (_props) => {
                         </div>
                     </div>
 
-                    <CModalTitle className="bg-light">Footer</CModalTitle>
+                    <CModalTitle className="bg-light mb-3">Footer</CModalTitle>
 
                     <div className="d-flex pb-2">
-                        <div className="pe-3">
+                        <div className="mb-2">
                             <CFormInput
                                 type="text"
                                 label="Rows"
@@ -316,6 +323,7 @@ const StatusModal = (_props) => {
                         <div className="pe-3">
                             <CFormInput
                                 type="text"
+                                className="mb-3"
                                 label=""
                                 placeholder="Approved By "
                             />
@@ -324,6 +332,7 @@ const StatusModal = (_props) => {
                             <CFormSelect
                                 type="text"
                                 label=""
+                                className="mb-3"
                                 placeholder="approved_by "
                                 options={[
                                     "approved_by",
@@ -336,6 +345,7 @@ const StatusModal = (_props) => {
                         <div className="pe-3">
                             <CFormInput
                                 type="text"
+                                className="mb-3"
                                 label=""
                                 placeholder="Reviewed By"
                             />
@@ -343,6 +353,7 @@ const StatusModal = (_props) => {
                         <div className="ps-3 w-50">
                             <CFormSelect
                                 type="text"
+                                className="mb-3"
                                 label=""
                                 placeholder="reviewed_by "
                                 options={[
@@ -357,6 +368,7 @@ const StatusModal = (_props) => {
                         <div className="pe-3">
                             <CFormInput
                                 type="text"
+                                className="mb-3"
                                 label=""
                                 placeholder="Checked By "
                             />
@@ -364,6 +376,7 @@ const StatusModal = (_props) => {
                         <div className="ps-3 w-50">
                             <CFormSelect
                                 type="text"
+                                className="mb-3"
                                 label=""
                                 placeholder="checked_by "
                                 options={[
@@ -395,7 +408,7 @@ const DeleteModal = (_props) => {
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton color="primary" onClick={_props.confirmDelete}>Submit</CButton>
+                    <CButton color="danger" onClick={_props.confirmDelete}>Delete</CButton>
                 </CModalFooter>
             </CModal>
         </>

@@ -10,11 +10,12 @@ function BussinessAssociate() {
   const [removeModal, setRemoveModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState('All');
+  const [deleteId, setDeleteId] = useState(null)
   const recordsPerPage = 5;
 
   const badgeStyle = { background: "#cdffca" };
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     { id: 1, name: "stmp1", code: "stm", city: "ahmedabad", state: "gujarat", country: "India", zip: "54255455", status: "APPROVED" },
     { id: 2, name: "ARZ ENT", code: "ARE", city: "Hyderabad", state: "Telangana", country: "India", zip: "5253654", status: "APPROVED" },
     { id: 3, name: "test", code: "NA", city: "testing525", state: "Lab1", country: "test", zip: "25255488", status: "APPROVED" },
@@ -28,7 +29,7 @@ function BussinessAssociate() {
     { id: 11, name: "Theta", code: "THE", city: "Lucknow", state: "Uttar Pradesh", country: "India", zip: "227001", status: "REJECTED" },
     { id: 12, name: "Iota", code: "IOT", city: "Chandigarh", state: "Punjab", country: "India", zip: "170001", status: "APPROVED" },
     { id: 13, name: "Kappa", code: "KAP", city: "Bhopal", state: "Madhya Pradesh", country: "India", zip: "462001", status: "REINITIATED" },
-  ];
+  ]);
 
   const handleStatusChange = (e) => {
     setSelectedStatus(e.target.value);
@@ -39,6 +40,17 @@ function BussinessAssociate() {
     setSelectedStatus(status);
     setCurrentPage(1);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
 
   const filteredData = selectedStatus === 'All' ? tableData : tableData.filter(data => data.status === selectedStatus);
 
@@ -60,19 +72,19 @@ function BussinessAssociate() {
             <div className="chart-widgets w-100">
               <div className="">
                 <div className="row">
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#9ec5fe, #0d6efd)' }} onClick={() => handleChartClick('INITIATED')}>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(45deg, #0d6efd, #9ec5fe)' }} onClick={() => handleChartClick('INITIATED')}>
                     <div className="text-light fs-5 fw-bolder">INITIATED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'INITIATED').length}</div>
                   </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#9ec5fe, #d63384)' }} onClick={() => handleChartClick('REINITIATED')}>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(45deg, #d63384, #9ec5fe)' }} onClick={() => handleChartClick('REINITIATED')}>
                     <div className="text-light fs-5 fw-bolder">REINITIATED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REINITIATED').length}</div>
                   </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#9ec5fe, #ffc107)' }} onClick={() => handleChartClick('APPROVED')}>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(45deg, #ffc107, #9ec5fe)' }} onClick={() => handleChartClick('APPROVED')}>
                     <div className="text-light fs-5 fw-bolder">APPROVED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'APPROVED').length}</div>
                   </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#006957, #dc3545)' }} onClick={() => handleChartClick('REJECTED')}>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(45deg, #dc3545, #9ec5fe)" }} onClick={() => handleChartClick('REJECTED')}>
                     <div className="text-light fs-5 fw-bolder">REJECTED</div>
                     <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REJECTED').length}</div>
                   </div>
@@ -151,7 +163,7 @@ function BussinessAssociate() {
                     <CTableDataCell>
                       <div className="d-flex gap-3">
                         <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer" onClick={() => setRemoveModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -177,7 +189,7 @@ function BussinessAssociate() {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} />}
+      {removeModal && <DeleteModel visible={removeModal} closeModal={() => handleDeleteClick(false)} handleDelete={handleDelete}/>}
 
     </>
   );
@@ -386,7 +398,7 @@ const DeleteModel = (_props) => {
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );

@@ -26,12 +26,12 @@ function ServiceReporting() {
   const [addModal, setAddModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const badgeStyle = { background: "green", color: "white", width: "110px" };
-  const badgeStyle2 = { background: "red", color: "white", width: "110px" };
   const [selectedStatus, setSelectedStatus] = useState("All");
 
   const pageSize = 5; // Number of items per page
   const [currentPage, setCurrentPage] = useState(1);
+  const badgeStyle = { background: "green", color: "white", width: "80px" };
+  const badgeStyle2 = { background: "red", color: "white", width: "80px" };
 
   const [data, setData] = useState([
     {
@@ -108,6 +108,7 @@ function ServiceReporting() {
   const nextPage = () => setCurrentPage(currentPage + 1);
   const prevPage = () => setCurrentPage(currentPage - 1);
   const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
+
   const handleDeleteClick = (id) => {
     setDeleteId(id);
     setDeleteModal(true);
@@ -116,6 +117,7 @@ function ServiceReporting() {
   const handleDeleteConfirm = () => {
     setData(data.filter((item) => item.id !== deleteId));
     setDeleteModal(false);
+    setDeleteId(null);
   };
 
   return (
@@ -144,26 +146,26 @@ function ServiceReporting() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-            <CTable align="middle" responsive >
+          <div className="bg-white rounded mt-5 border-2 border-dark-subtle" >
+            <CTable align="middle" responsive className="table-striped" >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Problem ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Instrument ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Module ID</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Problem In Brief</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Problem In Details</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Expected Closure Date</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Job Details</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Module ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem In Brief</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem In Details</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Expected Closure Date</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Job Details</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filteredData.slice(startIndex, endIndex).map((item) => (
+                {filteredData.slice(startIndex, endIndex).map((item, index) => (
                   <CTableRow key={item.id}>
-                    <CTableDataCell>{item.id}</CTableDataCell>
+                    <CTableDataCell>{index + 1}</CTableDataCell>
                     <CTableDataCell>{item.problemID}</CTableDataCell>
                     <CTableDataCell>{item.instrumentID}</CTableDataCell>
                     <CTableDataCell>{item.moduleID}</CTableDataCell>
@@ -207,8 +209,8 @@ function ServiceReporting() {
                 &gt;&gt;
               </button>
             </div>
-            <button className="btn " onClick={nextToLastPage}>
-              Next <FaArrowRight />
+            <button className="btn d-flex gap-2 border-dark" onClick={nextToLastPage}>
+              Next <FaArrowRight className="mt-1" />
             </button>
           </div>
         </div>
@@ -232,6 +234,7 @@ const StatusModal = (_props) => {
           <CFormSelect
             type="text"
             label="Problem ID"
+            className="mb-3"
             options={["Select...", { label: "SHMDZ" }]}
             placeholder="Select... "
           />
@@ -239,17 +242,18 @@ const StatusModal = (_props) => {
           <CFormSelect
             type="text"
             label="Module ID"
+            className="mb-3"
             options={["Select...", { label: "wl/wb/m/001" }]}
             placeholder="Select... "
           />
-          <CFormInput type="text" label="Problem In Brief" placeholder="Problem In Brief " />
-          <CFormInput type="text" label="Problem In Details" placeholder="Problem In Details" />
-          <CFormInput type="file" label="Reference Document" placeholder=" choose file" />
-          <CFormInput type="date" label="Occurred On" placeholder=" " />
-          <CFormInput type="date" label="Reported On" placeholder=" " />
-          <CFormInput type="date" label="Attended On" placeholder=" " />
-          <CFormInput type="date" label="Expected Closure Date" placeholder=" " />
-          <CFormInput type="text" label="Job Details" placeholder=" Job Details" />
+          <CFormInput type="text" className="mb-3" label="Problem In Brief" placeholder="Problem In Brief " />
+          <CFormInput type="text" className="mb-3" label="Problem In Details" placeholder="Problem In Details" />
+          <CFormInput type="file" className="mb-3" label="Reference Document" placeholder=" choose file" />
+          <CFormInput type="date" className="mb-3" label="Occurred On" placeholder=" " />
+          <CFormInput type="date" className="mb-3" label="Reported On" placeholder=" " />
+          <CFormInput type="date" className="mb-3" label="Attended On" placeholder=" " />
+          <CFormInput type="date" className="mb-3" label="Expected Closure Date" placeholder=" " />
+          <CFormInput type="text" className="mb-3" label="Job Details" placeholder=" Job Details" />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
@@ -294,7 +298,7 @@ const DeleteModal = (_props) => {
         </CButton>
         <CButton
           color="danger"
-          onClick={_props.handleDelete}
+          onClick={_props.confirmDelete}
           style={{
             fontWeight: "500",
             color: "white",
