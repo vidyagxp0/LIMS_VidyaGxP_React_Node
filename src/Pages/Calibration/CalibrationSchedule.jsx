@@ -284,146 +284,51 @@ export default function CalibrationSchedule() {
                 <h5>Calibration Schedule</h5>
             </div>
 
-            <div id="div2" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div id="searchmain">
-                    <div id="searchicon">
-                        <CiSearch />
-                    </div>
-                    <div className="">
-                        <input type="text" className="" id="" placeholder="search" onChange={handleSearchChange} />
-                    </div>
-                </div>
-                <div className="dropdown m-5"></div>
-                <div className="dropdown">
-                    <div>
-                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <select id='selectOption' onChange={handleStatusChange} style={{outline:'none'}}>
-                                <option value="">Select Status </option>
-                                <option value="ACTIVE">Active</option>
-                                <option value="INACTIVE">Inactive</option>
-                            </select>
-                        </button>
-                    </div>
-                </div>
-                <div style={{ border: '1px solid #f98d6b', marginLeft: '150px', padding: '8px', width: '40px', display: 'flex', justifyContent: 'center', backgroundColor: '#f98d6b', borderRadius: '5px' }}><PiDownloadBold /></div>
-                <button
-                    className="btn btn-primary m-5"
-                    type="button"
-                    onClick={() => setAddModal(true)}
-                >
-                    <span>Calibration Schedule</span>
-                </button>
+            
+      <div className="d-flex m-4 mt-5 justify-content-around">
+      <div className="w-50 d-flex ms-3 gap-3">
+        <CCol sm={6}>
+          <CFormInput
+            type="text"
+            placeholder="Search..."
+            style={{ border: "2px solid gray" }}
+            className="border-2"
+            onChange={handleSearchChange}
+          />
+        </CCol>
 
-                <div
-                    className="offcanvas offcanvas-end overflow-y-scroll"
-                    tabIndex="-1"
-                    id="offcanvasRight"
-                    aria-labelledby="offcanvasRightLabel"
-                >
-                    <div className="offcanvas-header ">
-                        <div id="line1">
-                            <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                                Add Calibration Schedule
-                            </h5>
-                            <button
-                                id="closebtn"
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="offcanvas"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                    </div>
+        <CCol sm={5} >
+          <CFormSelect
+           onChange={handleStatusChange}
+            className="border-2"
+            style={{ border: "2px solid gray" }}
+            options={[
+              { label: "All", value: "" },
+              { label: "Active", value: "ACTIVE" },
+              { label: "Inactive", value: "INACTIVE" },
+            ]}
+          />
+        </CCol>
+        </div>
+        <div className="w-50 gap-2 d-flex ms-5 justify-content-end">
+        <CCol sm={1}>
+        <div style={{ border: '1px solid #f98d6b', padding: '9px', width: '41px',display:'flex',justifyContent:'center', backgroundColor: '#f98d6b', borderRadius: '5px' }}><PiDownloadBold /></div>
+        </CCol>
 
-                    <label className="line3" htmlFor="">Instrument Category</label>
-                    <select name="Instrument_Category" className="line4">
-                        <option value="">Select Intrument Category</option>
-                        <option value="chromathograpy">chromathograpy</option>
-                        <option value="weighing balance">weighing balance</option>
-                    </select>
+        <CCol sm={5}>
+          <div className="">
+            <CButton color="primary" onClick={() => setAddModal(true)}>
+            Calibration Schedule
+            </CButton>
+          </div>
+        </CCol>
+        </div>
+      </div>
 
-                    <label className="line3" htmlFor="">Calibration Type</label>
-                    <select name="Calibration Type" className="line4">
-                        <option value="">Select Calibration Type</option>
-                        <option value="yearly">yearly</option>
-                        <option value="monthly">monthly</option>
-                        <option value="daily">daily</option>
-                    </select>
-
-                    <label className="line3" htmlFor="">Instrument (Instrument ID)</label>
-                    <select name="Instrument_(Instrument ID)" className="line4">
-                        <option value="">Select Instrument ID</option>
-                    </select>
-
-                    <label className="line3" htmlFor="">Module (Module ID)</label>
-                    <select name="Module_(Module ID)" className="line4">
-                        <option value="">Select Module ID</option>
-                    </select>
-
-                    <FormControl style={{ margin: '20px' }}>
-                        <FormLabel id="demo-row-radio-buttons-group-label">Calibration Work Flow</FormLabel>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                        >
-                            <FormControlLabel value="Calibration Data Sheet" control={<Radio />} label="Calibration Data Sheet" />
-                            <FormControlLabel value="Sample Login Template" control={<Radio />} label="Sample Login Template" />
-                        </RadioGroup>
-                    </FormControl>
-
-                    <label className="line3" htmlFor="">Calibration Datasheet</label>
-                    <select name="Calibration Datasheet" className="line4">
-                        <option value="">Select </option>
-                        <option value="CAl data sheet">CAl data sheet </option>
-                        <option value="Data sheet1">Data sheet1</option>
-                    </select>
-
-                    <label className="line3" htmlFor="">Schedule Description</label>
-                    <input className="line4" required type="text" placeholder="Schedule Description" />
-
-                    <label className="line3" htmlFor="">Start Date</label>
-                    <input className="line4" style={{ padding: '14px' }} required type="date" placeholder="" />
-
-                    <label className="line3" htmlFor="">Frequency
-                        <select name="Frequency" className="line4">
-                            <option value="">Period </option>
-                            <option value="Daily">Daily</option>
-                            <option value="Weekly">Weekly</option>
-                            <option value="Monthly">Monthly</option>
-                            <option value="Yearly">Yearly</option>
-                        </select>
-
-                        <select name="Frequency" className="line4">
-                            <option value="">Period </option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">...</option>
-                        </select></label>
-
-                    <label className="line3" htmlFor="">Tolerance Period</label>
-                    <input className="line4" required type="text" placeholder="Tolerance Period" />
-
-                    <div id="line5">
-                        <button
-                            type="button"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close"
-                        >
-                            &lt; Back
-                        </button>
-                        <button onClick={handleAddStorage}>Submit</button>
-                    </div>
-                    <div>
-                        <ToastContainer />
-                    </div>
-                </div>
-            </div>
-
+          
             <br />
-            <div className='table-responsive p-4 container1 '>
-                <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+            <div className='border-dark-subtle border-2 bg-light mx-5 mt-2 mb-4 rounded'>
+                <table className='table table-responsive table-striped text-xs' >
                     <thead>
                         <tr>
                             <th><input type="checkbox" /></th>
@@ -444,8 +349,8 @@ export default function CalibrationSchedule() {
                 </table>
             </div>
 
-            <div className="pagination">
-                <div className="pagination" style={{ margin: '0 30px' }}>
+            <div className="pagination mx-5">
+                <div className="pagination ">
                     <div >
                         <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
                     </div>
@@ -456,7 +361,7 @@ export default function CalibrationSchedule() {
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
                     </div>
                 </div>
-                <button className="btn btn-next d-flex align-items-center" style={{ margin: '0 30px' }} onClick={nextPage}> Next <FaArrowRight className="ms-2" /></button>
+                <button className="btn btn-next d-flex align-items-center" onClick={nextPage}> Next <FaArrowRight className="ms-2" /></button>
             </div>
                       
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}

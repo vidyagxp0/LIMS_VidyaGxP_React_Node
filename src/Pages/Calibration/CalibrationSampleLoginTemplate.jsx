@@ -218,55 +218,53 @@ export default function CalibrationSampleLoginTemplate() {
                 <h5>Sample Login Template</h5>
             </div>
 
-            <div id="div2" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div id="searchmain">
-                    <div id="searchicon">
-                        <CiSearch />
-                    </div>
-                    <div className="">
-                        <input type="text" className="" id="" placeholder="search" onChange={handleSearchChange} />
-                    </div>
-                </div>
+            <div className="d-flex m-4 mt-5 justify-content-around">
+        <CCol sm={4}>
+          <CFormInput
+            type="text"
+            placeholder="Search..."
+            style={{ border: "2px solid gray" }}
+            className="border-2"
+            onChange={handleSearchChange}
+          />
+        </CCol>
 
-                <div className="dropdown m-5">
-                </div>
+        <CCol sm={3}>
+          <CFormSelect
+            onChange={handleStatusChange}
+            className="border-2"
+            style={{ border: "2px solid gray" }}
+            options={[
+              { label: "All", value: "" },
+              { label: "Initiated", value: "INITIATED" },
+              { label: "Approved", value: "APPROVED" },
+              { label: "Rejected", value: "REJECTED" },
+              { label: "Reinitiated", value: "REINITIATED" },
+              { label: "Dropped", value: "DROPPED" },
+            ]}
+          />
+        </CCol>
 
-                <div className="dropdown">
-                    <div>
-                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <select id='selectOption' onChange={handleStatusChange} style={{outline:'none'}}>
-                                <option value="">All</option>
-                                <option value="INITIATED">Initiated</option>
-                                <option value="APPROVED">Approved</option>
-                                <option value="REJECTED">Rejected</option>
-                                <option value="REINITIATED">Reinitiated</option>
-                                <option value="DROPPED">Dropped</option>
-                            </select>
-                        </button>
-                    </div>
-                </div>
+        <CCol sm={3}>
+          <div className="d-flex justify-content-end">
+            <CButton color="primary" onClick={() => setAddModal(true)}>
+            Add Login Template
+            </CButton>
+          </div>
+        </CCol>
+      </div>
 
-                <button
-                    id=""
-                    className="btn btn-primary m-5"
-                    type="button"
-                    onClick={() => setAddModal(true)}
-                >
-                   <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Login Template</span>
-                </button>
-            </div>
-
-            <br />
-            <div className='table-responsive p-4 container1'>
-                <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+          
+            <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
+                <table className='table table-responsive table-striped text-xs' >
                     <thead>
                         <tr>
-                            <th><input type="checkbox" /></th>
-                            <th>Sample Login Template</th>
-                            <th>Test Plan</th>
-                            <th>Auto Sample Allotment Required</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}><input type="checkbox" /></th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Sample Login Template</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Test Plan</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Auto Sample Allotment Required</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Status</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -275,8 +273,8 @@ export default function CalibrationSampleLoginTemplate() {
                 </table>
             </div>
 
-            <div className="pagination">
-                <div className="pagination" style={{ margin: '0 30px' }}>
+            <div className="pagination mx-5">
+                <div className="pagination" >
                     <div>
                         <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
                     </div>
@@ -287,7 +285,7 @@ export default function CalibrationSampleLoginTemplate() {
                         <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
                     </div>
                 </div>
-                <button className="btn btn-next d-flex align-items-center" style={{ margin: '0 30px' }} onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
+                <button className="btn btn-next d-flex align-items-center"  onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
             </div>
 
                        

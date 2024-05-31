@@ -11,14 +11,13 @@ import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFoote
 
 export default function CalibrationFrequency() {
   const [addModal, setAddModal] = useState(false);
-
   const [storageName, setStorageName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [employeeToDelete, setEmployeeToDelete] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
@@ -54,28 +53,73 @@ export default function CalibrationFrequency() {
     )
   }
 
+  const DeleteModal = (_props) => {
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Delete User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Are you sure you want to delete this material?</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={_props.closeModal}
+            style={{
+              marginRight: "0.5rem",
+              fontWeight: "500",
+            }}
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="danger"
+            onClick={_props.confirmDelete}
+            style={{
+              fontWeight: "500",
+              color: "white",
+            }}
+          >
+            Delete
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  
   const [employees, setEmployees] = useState([
-    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },{ fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { fieldName: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 1, fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { id: 2, fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 3, fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { id: 4, fieldName: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 5, fieldName: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { id: 6, fieldName: 'test2 Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 7, fieldName: 'test2 Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { id: 8, fieldName: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    // add more employees as necessary
   ]);
 
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) =>
+      prevEmployees.filter((employee) => employee.id !== deleteId)
+    );
+    setDeleteModal(false);
+  };
+  
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
- 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -99,7 +143,7 @@ export default function CalibrationFrequency() {
 
   const renderRows = () => {
     return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
+      <tr key={employee.id}>
         <td><input type="checkbox" /></td>
         <td>{startIndex + index + 1}</td>
         <td>{employee.fieldName}</td>
@@ -124,7 +168,7 @@ export default function CalibrationFrequency() {
             <div onClick={() => setAddModal(true)}>
               <FontAwesomeIcon icon={faPenToSquare} />
             </div>
-            <Link to="#" onClick={() => confirmDeleteEmployee(index)}>
+            <Link to="#" onClick={() => handleDeleteClick(employee.id)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </Link>
           </div>
@@ -184,51 +228,50 @@ export default function CalibrationFrequency() {
         <h5>Calibration Frequency</h5>
       </div>
 
-      <div id="div2" style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div id="searchmain">
-          <div id="searchicon">
-            <CiSearch />
-          </div>
-          <div className="">
-            <input type="text" className="" id="" placeholder="search" value={searchTerm} onChange={handleSearchChange} />
-          </div>
-        </div>
+      <div className="d-flex m-4 mt-5 justify-content-around">
+        <CCol sm={4}>
+          <CFormInput
+            type="text"
+            placeholder="Search..."
+            style={{ border: "2px solid gray" }}
+            className="border-2"
+            value={searchTerm} onChange={handleSearchChange}
+          />
+        </CCol>
 
-        <div className="dropdown">
-          <div>
-            <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <select id='selectOption' value={filterStatus} onChange={handleFilterChange} style={{ outline: 'none' }}>
-                <option value="">Select Status</option>
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </button>
+        <CCol sm={3}>
+          <CFormSelect
+           value={filterStatus} onChange={handleFilterChange}
+            className="border-2"
+            style={{ border: "2px solid gray" }}
+            options={[
+              { label: "All", value: "" },
+              { label: "Active", value: "ACTIVE" },
+              { label: "Inactive", value: "INACTIVE" },
+            ]}
+          />
+        </CCol>
+
+        <CCol sm={3}>
+          <div className="d-flex justify-content-end">
+            <CButton color="primary" onClick={() => setAddModal(true)}>
+            Calibration Type
+            </CButton>
           </div>
-        </div>
-
-        <button
-          id=""
-          className="btn btn-primary m-5"
-          type="button"
-          onClick={() => setAddModal(true)}
-        >
-          <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Calibration Type</span>
-        </button>
-
+        </CCol>
       </div>
 
-      <br />
-      <div className='table-responsive p-4 container1'>
-        <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+      <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
+        <table className='table table-responsive table-striped text-xs' >
           <thead>
             <tr>
-              <th><input type="checkbox" /></th>
-              <th>Sr.no.</th>
-              <th>Calibration Type</th>
-              <th>Calibration Prefix</th>
-              <th>Added On</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{ background: "#3C496A", color: "white" }}><input type="checkbox" /></th>
+              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Calibration Type</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Calibration Prefix</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -237,7 +280,7 @@ export default function CalibrationFrequency() {
         </table>
       </div>
 
-      <div className="pagination" style={{ margin: '0 35px' }}>
+      <div className="pagination mx-5" >
         <div className="pagination ">
           <div>
             <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
@@ -252,30 +295,14 @@ export default function CalibrationFrequency() {
         <button className="btn btn-next d-flex align-items-center" onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
       </div>
 
-      {showDeleteConfirmation && (
-        <div className="modal show" style={{ display: 'block' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Delete</h5>
-                <button type="button" className="close" onClick={() => setShowDeleteConfirmation(false)}>
-                  <span>&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <p>Are you sure you want to delete this employee?</p>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowDeleteConfirmation(false)}>Cancel</button>
-                <button type="button" className="btn btn-primary" onClick={deleteEmployee}>Delete</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
       )}
-
-     
-{addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </>
   );
 }
