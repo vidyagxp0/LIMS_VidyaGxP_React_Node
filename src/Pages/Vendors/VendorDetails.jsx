@@ -6,93 +6,91 @@ function VendorDetails() {
      const [statusModal, setStatusModal] = useState(false)
      return (
           <>
+               <div className="m-5">
+                    <div className="py-3 bg-light rounded">
+                         <div className="container-fluid">
+                              <div className="bock mb-3">
+                                   <div className="main-head d-flex justify-content-between align-items-center">
+                                        <h4 className="fw-bold mb-4 mt-3">Approved Vendor Details</h4>
+                                   </div>
+                                   <div className="bg-white">
+                                        <CTable align="middle" className="" small bordered>
+                                             <CTableBody>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info w-25">Product Name</CTableDataCell>
+                                                       <CTableDataCell>Polycaprolactone New</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Vendor Name</CTableDataCell>
+                                                       <CTableDataCell>Ariz tech</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Unique Code</CTableDataCell>
+                                                       <CTableDataCell>uc</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Qualification Data</CTableDataCell>
+                                                       <CTableDataCell>
+                                                            na</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Comments</CTableDataCell>
+                                                       <CTableDataCell>na</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
+                                                       <CTableDataCell>APPROVED</CTableDataCell>
+                                                  </CTableRow>
 
-               <div id="approval-page" className="py-3 bg-light h-100">
-                    <div className="container-fluid">
-                         <div className="bock mb-3">
-                              <div className="main-head d-flex justify-content-between align-items-center">
-                                   <h4 className="fw-bold mb-4 mt-3">Approved Vendor Details</h4>
+                                             </CTableBody>
+                                        </CTable>
+                                   </div>
                               </div>
-                              <div className="bg-white px-5 py-3">
-                                   <CTable align="middle" className="mb-0" small bordered>
-                                        <CTableBody>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Product Name</CTableDataCell>
-                                                  <CTableDataCell>Polycaprolactone New</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Vendor Name</CTableDataCell>
-                                                  <CTableDataCell>Ariz tech</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Unique Code</CTableDataCell>
-                                                  <CTableDataCell>uc</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Qualification Data</CTableDataCell>
-                                                  <CTableDataCell>
-na</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Comments</CTableDataCell>
-                                                  <CTableDataCell>na</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
-                                                  <CTableDataCell>APPROVED</CTableDataCell>
-                                             </CTableRow>
-                                          
-                                        </CTableBody>
-                                   </CTable>
+                              <div className="block mt-5">
+                                   <div className="main-head">
+                                        <h4 className="fw-bold mb-4 mt-3">History</h4>
+                                   </div>
+                                   <div className="bg-white">
+                                        <CTable align="middle" className="" small bordered>
+                                             <CTableBody>
+                                                  <CTableRow color="warning">
+                                                       <CTableDataCell className="w-25">Revision</CTableDataCell>
+                                                       <CTableDataCell>-</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Product Name</CTableDataCell>
+                                                       <CTableDataCell>Polycaprolactone New</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Vendor Name</CTableDataCell>
+                                                       <CTableDataCell>Ariz tech</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Unique Code</CTableDataCell>
+                                                       <CTableDataCell>uc</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Qualification Data</CTableDataCell>
+                                                       <CTableDataCell>
+                                                            na</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Comments</CTableDataCell>
+                                                       <CTableDataCell>na</CTableDataCell>
+                                                  </CTableRow>
+                                                  <CTableRow>
+                                                       <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
+                                                       <CTableDataCell>APPROVED</CTableDataCell>
+                                                  </CTableRow>
+                                             </CTableBody>
+                                        </CTable>
+                                   </div>
                               </div>
                          </div>
-                         <dib className="block">
-                              <div className="main-head">
-                                   <h4 className="fw-bold mb-4 mt-3">History</h4>
-                              </div>
-                             <div className="bg-white px-5 py-3">
-                                   <CTable align="middle" className="mb-0" small bordered>
-                                        <CTableBody>
-                                             <CTableRow color="warning">
-                                                   <CTableDataCell>Revision</CTableDataCell>
-                                                  <CTableDataCell>-</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Product Name</CTableDataCell>
-                                                  <CTableDataCell>Polycaprolactone New</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Vendor Name</CTableDataCell>
-                                                  <CTableDataCell>Ariz tech</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Unique Code</CTableDataCell>
-                                                  <CTableDataCell>uc</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Qualification Data</CTableDataCell>
-                                                  <CTableDataCell>
-na</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Comments</CTableDataCell>
-                                                  <CTableDataCell>na</CTableDataCell>
-                                             </CTableRow>
-                                             <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
-                                                  <CTableDataCell>APPROVED</CTableDataCell>
-                                             </CTableRow>                                        
-                                        </CTableBody>
-                                   </CTable>
-                              </div>
-
-                            
-                         </dib>
                     </div>
+
+                    {statusModal && <StatusModal visible={statusModal} closeModal={() => setStatusModal(false)} />}
                </div>
-
-               {statusModal && <StatusModal visible={statusModal} closeModal={() => setStatusModal(false)} />}
-
           </>
      )
 }

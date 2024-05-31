@@ -29,7 +29,7 @@ function ProblemReporting() {
     const [deleteId, setDeleteId] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState("All");
 
-    const pageSize = 5; // Number of items per page
+    const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
 
     const [data, setData] = useState([
@@ -85,7 +85,6 @@ function ProblemReporting() {
                     <div className="main-head">
                         <div className="title fw-bold fs-5 py-4">Problem Reporting</div>
                     </div>
-
                     <div>
                         <CRow className="mb-3">
                             <CCol sm={3}>
@@ -104,19 +103,19 @@ function ProblemReporting() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive>
+                    <div className="bg-white rounded mt-5 border-2 border-dark-subtle">
+                        <CTable align="middle" responsive className="table-responsive table-striped">
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Instrument</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Instrument Category</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Supplied By</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Problem ID</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Problem In Brief</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Problem In Details</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Occurred On</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument Category</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Supplied By</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem ID</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem In Brief</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem In Details</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Occurred On</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
@@ -154,8 +153,8 @@ function ProblemReporting() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn " onClick={nextToLastPage}>
-                            Next <FaArrowRight />
+                        <button className="btn border-dark d-flex gap-2" onClick={nextToLastPage}>
+                            Next <FaArrowRight className="mt-1"/>
                         </button>
                     </div>
                 </div>
@@ -197,17 +196,20 @@ const StatusModal = (_props) => {
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Instrument Category"
                         placeholder="weighing balance "
                         disabled
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Supplied By"
                         placeholder="Supplied By "
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Problem ID"
                         placeholder="Problem ID"
                     />
@@ -220,17 +222,20 @@ const StatusModal = (_props) => {
                     />
                     <CFormCheck
                         type="radio"
+                        className="mb-3"
                         id="ProblemInModule"
                         name="ProblemIn"
                         label="Module"
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Problem In Brief"
                         placeholder=" Problem In Brief"
                     />
                     <CFormInput
                         type="file"
+                        className="mb-3"
                         label="Reference Document"
                         placeholder=" choose file"
                     />
@@ -241,11 +246,13 @@ const StatusModal = (_props) => {
                     />
                     <CFormInput
                         type="date"
+                        className="mb-3"
                         label="Reported On"
                         placeholder=" "
                     />
                     <CFormInput
                         type="text"
+                        className="mb-3"
                         label="Problem In Details"
                         placeholder=" Problem In Details"
                     />
@@ -273,7 +280,7 @@ const DeleteModal = (_props) => {
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton className="bg-info text-white" onClick={_props.confirmDelete}>Submit</CButton>
+                    <CButton className="bg-danger text-white" onClick={_props.confirmDelete}>Delete</CButton>
                 </CModalFooter>
             </CModal>
         </>
