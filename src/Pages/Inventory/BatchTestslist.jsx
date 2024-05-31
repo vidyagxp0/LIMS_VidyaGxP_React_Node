@@ -124,15 +124,16 @@ function BatchTestslist() {
                   <option value="Inactive">Inactive</option>
                 </CFormSelect>
               </CCol>
-              <CCol sm={6}>
+              <CCol sm={3}>
                 <CFormInput
                   type="text"
+                  style={{border:"2px solid gray"}}
                   placeholder="Search by Batch Sample ID"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </CCol>
-              <CCol sm={3}>
+              <CCol sm={6}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
                     Batch Test list
@@ -141,20 +142,20 @@ function BatchTestslist() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" ">
+          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Batch Sample ID
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Registered On</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Registered On</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -167,10 +168,10 @@ function BatchTestslist() {
                   })
                   .map((item, index) => (
                     <CTableRow key={item.id}>
-                      <CTableHeaderCell scope="row" className="text-center">
+                      <CTableHeaderCell className="text-center">
                         <input type="checkbox" />
                       </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell>{item.BatchSampleID}</CTableDataCell>
                       <CTableDataCell>{item.RegisteredOn}</CTableDataCell>
                       <CTableDataCell className="d-flex">
@@ -207,7 +208,7 @@ function BatchTestslist() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination mt-5">
+          <div className="pagination mt-4">
             <button
               className="btn mr-2"
               onClick={prevPage}

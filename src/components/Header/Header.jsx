@@ -19,6 +19,9 @@ function Header() {
       style={{
         background: "linear-gradient(45deg, #091C3F,#3b8d99, #091C3F )",
         height: "72px",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center"
       }}
     >
       <div className="container mx-auto text-center flex items-center justify-around">
@@ -27,8 +30,9 @@ function Header() {
             Welcome to Laboratory Information Management System
           </h3>
         </div>
+        </div>
 
-        <div className="flex items-center " >
+        <div className="flex "  style={{ marginRight:"50px"}}>
           <div className="relative mr-4">
             <button
               onClick={() => setNotification(!notification)}
@@ -55,7 +59,7 @@ function Header() {
               </div>
             )}
           </div>
-          <div className="relative">
+          <div className="relative" >
             <button
               onClick={() => setDrop(!drop)}
               className="flex items-center text-light hover:text-gray-300"
@@ -94,7 +98,7 @@ function Header() {
             )}
           </div>
         </div>
-      </div>
+      
     </header>
   );
 }

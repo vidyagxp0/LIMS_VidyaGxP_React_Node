@@ -113,7 +113,7 @@ function ChamberConditionMapping() {
                     <CTableHeaderCell scope="row" className="text-center">
                       <input type="checkbox" />
                     </CTableHeaderCell>
-                    <CTableDataCell>{item.id}</CTableDataCell>
+                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                     <CTableDataCell>{item.chamberId}</CTableDataCell>
                     <CTableDataCell>{item.description}</CTableDataCell>
                     <CTableDataCell>{item.condition}</CTableDataCell>

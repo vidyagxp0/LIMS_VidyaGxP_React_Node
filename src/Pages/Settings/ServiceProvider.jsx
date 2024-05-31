@@ -347,7 +347,7 @@ function ServiceProvider() {
                       <CTableHeaderCell scope="row" className="text-center">
                         <input type="checkbox" />
                       </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell key={item.id}>
                         {item.ServiceProviderName}
                       </CTableDataCell>

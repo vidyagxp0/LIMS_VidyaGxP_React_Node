@@ -233,7 +233,7 @@ function CoaTemplate() {
                                                        <CTableHeaderCell scope="row" className="text-center">
                                                             <input type="checkbox" />
                                                        </CTableHeaderCell>
-                                                       <CTableDataCell>{item.id}</CTableDataCell>
+                                                       <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                                        <CTableDataCell key={item.id}>{item.caption}</CTableDataCell>
                                                        <CTableDataCell>{item.title}</CTableDataCell>
                                                        <CTableDataCell>{item.type}</CTableDataCell>

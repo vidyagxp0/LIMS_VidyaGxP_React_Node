@@ -155,7 +155,7 @@ function EMCOATemplate() {
                 </CFormSelect>
               </CCol>
               {/* <CCol sm={2}></CCol> */}
-              <CCol sm={8}>
+              <CCol sm={9}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
                     Add Coa Template
@@ -164,24 +164,24 @@ function EMCOATemplate() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" ">
+          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Configuration Type{" "}
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Unique Code</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Report Title </CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Unique Code</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Report Title </CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col">Updated At</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Updated At</CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -195,10 +195,10 @@ function EMCOATemplate() {
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
-                      <CTableHeaderCell scope="row" className="text-center">
+                      <CTableHeaderCell className="text-center">
                         <input type="checkbox" />
                       </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell key={item.id}>
                         {item.ConfigurationType}
                       </CTableDataCell>

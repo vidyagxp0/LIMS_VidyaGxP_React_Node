@@ -49,7 +49,9 @@ const Header = () => (
       />
       <ReactPDF.Text>Vijay Nagar, Indore, Madhya Pradesh 452010</ReactPDF.Text>
     </ReactPDF.View>
-    <ReactPDF.Text style={{ color: "blue", fontWeight: "bold", marginBottom: "10" }}>
+    <ReactPDF.Text
+      style={{ color: "blue", fontWeight: "bold", marginBottom: "10" }}
+    >
       Chemical/Reagent Index
     </ReactPDF.Text>
   </ReactPDF.View>
@@ -100,9 +102,13 @@ const PDFDocument = ({ data }) => (
     <ReactPDF.Page size="A4" style={{ padding: 5 }}>
       <Header />
       <ReactPDF.View style={{ marginTop: 10 }}>
-        <PDFTable data={data} style={{ fontSize:"10px"}}/>
-        <ReactPDF.Text style={{ marginTop: 20, fontSize:"10px" }}>Printed By: Admin</ReactPDF.Text>
-        <ReactPDF.Text style={{ fontSize:"10px"}}>Printed On: 20/05/2024 10:26</ReactPDF.Text>
+        <PDFTable data={data} style={{ fontSize: "10px" }} />
+        <ReactPDF.Text style={{ marginTop: 20, fontSize: "10px" }}>
+          Printed By: Admin
+        </ReactPDF.Text>
+        <ReactPDF.Text style={{ fontSize: "10px" }}>
+          Printed On: 20/05/2024 10:26
+        </ReactPDF.Text>
       </ReactPDF.View>
     </ReactPDF.Page>
   </ReactPDF.Document>
@@ -111,7 +117,11 @@ const PDFDocument = ({ data }) => (
 function ChemicalReagentReports() {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
+  const badgeStyle2 = {
+    background: " #2A5298",
+    color: "white",
+    width: "110px",
+  };
   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
   const badgeStyle4 = { background: "red", color: "white", width: "110px" };
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
@@ -166,7 +176,7 @@ function ChemicalReagentReports() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
+      <div id="approval-page" className="h-100 mx-2">
         <div className="container-fluid my-5">
           <div className="main-head">
             <div className="title fw-bold fs-5">Chemical / Reagent List</div>
@@ -196,10 +206,13 @@ function ChemicalReagentReports() {
                   <option value="Dropped">Dropped</option>
                 </CFormSelect>
               </CCol>
-              <CCol sm={2}></CCol>
-              <CCol sm={3}>
+
+              <CCol sm={5}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="info" onClick={downloadPDF}>
+                  <CButton
+                    style={{ color: "white", background: "#5856D5" }}
+                    onClick={downloadPDF}
+                  >
                     Print
                   </CButton>
                 </div>
@@ -241,7 +254,7 @@ function ChemicalReagentReports() {
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
                                 alt="Logo"
                                 className="img-fluid"
-                                style={{ height: "150px", width: "160px" }}
+                                style={{ height: "170px", width: "170px" }}
                               />
                             </CCol>
                             <CCol
@@ -254,10 +267,30 @@ function ChemicalReagentReports() {
                                 bottom: "10%",
                               }}
                             >
-                              <h3 style={{ color: "black", fontWeight: "bolder", position:"absolute", bottom:"250px", left:"150px", width:"500px" }}>
+                              <h3
+                                style={{
+                                  color: "black",
+                                  fontWeight: "bolder",
+                                  position: "absolute",
+                                  bottom: "280px",
+                                  left: "150px",
+                                  width: "500px",
+                                }}
+                              >
                                 Chemical / Reagent Index
                               </h3>
-                              <p  style={{ color: "black", fontWeight: "500", position:"absolute", bottom:"195px", left:"150px", width:"500px" }}>Vijay Nagar, Indore, Madhya Pradesh 452010</p>
+                              <p
+                                style={{
+                                  color: "black",
+                                  fontWeight: "500",
+                                  position: "absolute",
+                                  bottom: "245px",
+                                  left: "150px",
+                                  width: "500px",
+                                }}
+                              >
+                                Vijay Nagar, Indore, Madhya Pradesh 452010
+                              </p>
                             </CCol>
                           </CRow>
                           <CTable className="mt-5 text-center">

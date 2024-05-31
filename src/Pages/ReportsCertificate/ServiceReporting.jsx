@@ -163,7 +163,7 @@ function ServiceReporting() {
               <CTableBody>
                 {filteredData.slice(startIndex, endIndex).map((item) => (
                   <CTableRow key={item.id}>
-                    <CTableDataCell>{item.id}</CTableDataCell>
+                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                     <CTableDataCell>{item.problemID}</CTableDataCell>
                     <CTableDataCell>{item.instrumentID}</CTableDataCell>
                     <CTableDataCell>{item.moduleID}</CTableDataCell>

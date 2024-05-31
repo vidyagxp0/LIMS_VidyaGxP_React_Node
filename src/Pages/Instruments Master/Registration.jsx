@@ -226,7 +226,7 @@ function Registration() {
                                    <CTableBody>
                                        {filteredData.slice(startIndex, endIndex).map((item) => (
                                              <CTableRow key={item.id}>
-                                                  <CTableDataCell>{item.id}</CTableDataCell>
+                                                  <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                                   <CTableDataCell>{item.category}</CTableDataCell>
                                                   <CTableDataCell>{item.instrumentID}</CTableDataCell>
                                                   <CTableDataCell>{item.instrument}</CTableDataCell>

@@ -227,7 +227,7 @@ function SampleLoginTemplate() {
                       <CTableHeaderCell scope="row" className="text-center">
                         <input type="checkbox" />
                       </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell key={item.id}>{item.title}</CTableDataCell>
                       <CTableDataCell>{item.addedOn}</CTableDataCell>
                       <CTableDataCell className="d-flex">

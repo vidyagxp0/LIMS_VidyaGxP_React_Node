@@ -150,7 +150,7 @@ const endIndex = Math.min(startIndex + pageSize, data.length);
                 </CFormSelect>
               </CCol>
               {/* <CCol sm={2}></CCol> */}
-              <CCol sm={8}>
+              <CCol sm={9}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
                     Media Lot
@@ -159,27 +159,27 @@ const endIndex = Math.min(startIndex + pageSize, data.length);
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5">
-            <CTable align="middle" responsive className=" ">
+          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" className="text-center">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Media Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Batch No. </CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Media Name</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Batch No. </CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     Quantity Received
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
                     No. of Containers Prepared{" "}
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
 
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -191,10 +191,10 @@ const endIndex = Math.min(startIndex + pageSize, data.length);
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
-                      <CTableHeaderCell scope="row" className="text-center">
+                      <CTableHeaderCell  className="text-center">
                         <input type="checkbox" />
                       </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell key={item.id}>
                         {item.MediaName}
                       </CTableDataCell>

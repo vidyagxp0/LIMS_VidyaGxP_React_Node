@@ -144,7 +144,7 @@ function AuditTrail() {
                             <CTableBody>
                                 {filteredData.slice(startIndex, endIndex).map((item, index) => (
                                     <CTableRow key={index}>
-                                        <CTableDataCell>{item.id}</CTableDataCell>
+                                        <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                         <CTableDataCell>{item.dateTime}</CTableDataCell>
                                         <CTableDataCell>{item.formName}</CTableDataCell>
                                         <CTableDataCell>{item.actionRowName}</CTableDataCell>

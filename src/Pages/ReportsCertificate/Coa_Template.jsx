@@ -139,7 +139,7 @@ function Coa_Template() {
                             <CTableBody>
                             {filteredData.slice(startIndex, endIndex).map((item) => (
                                     <CTableRow key={item.id}>
-                                        <CTableDataCell>{item.id}</CTableDataCell>
+                                        <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                         <CTableDataCell>{item.sampleType}</CTableDataCell>
                                         <CTableDataCell>{item.coaId}</CTableDataCell>
                                         <CTableDataCell>{item.coaType}</CTableDataCell>

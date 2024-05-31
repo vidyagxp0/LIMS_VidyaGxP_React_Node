@@ -88,7 +88,7 @@ function InternalRegistration() {
       AdditionalInformation: "isubus111",
       ContainerStartingNo: "54255455",
       SampleRefrenceNo: "loc1",
-      status: "INITIATED",
+      status: "DROPPED",
     },
     {
       id: 6,
@@ -139,91 +139,111 @@ function InternalRegistration() {
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
               <div className="">
-                <div className="row" style={{ cursor: "pointer" }}>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("INITIATED")}
-                  >
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "INITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
-                      textAlign: "left",
-                      boxShadow: "0px 10px 20px  black !important",
-                    }}
-                    onClick={() => setSelectedStatus("REINITIATED")}
-                  >
-                    <div className="text-light fs-5">REINITIATED</div>
+              <div className="row" style={{ cursor: "pointer" }}>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
 
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REINITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("APPROVED")}
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("DROPPED")}
+                >
+                  <div className="text-light font-bold fs-5">DROPPED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <butto className="text-light fs-5">APPROVED</butto>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white", textAlign: "left" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "APPROVED"
-                        ).length
-                      }
-                    </div>
-                  </button>
+                    {
+                      filterData().filter((item) => item.status === "DROPPED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("INITIATED")}
+                >
+                  <div className="text-light font-bold fs-5">INITIATED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "INITIATED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(25deg, orange , #f7e05f )",
 
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("REJECTED")}
+                    textAlign: "left",
+                    boxShadow: "0px 10px 20px  black !important",
+                  }}
+                  onClick={() => setSelectedStatus("REINITIATED")}
+                >
+                  <div className="text-light font-bold fs-5">REINITIATED</div>
+
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
                   >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REJECTED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                </div>
+                    {
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(27deg, green , #0fd850  )",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("APPROVED")}
+                >
+                  <butto className="text-light font-bold fs-5">APPROVED</butto>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white", textAlign: "left" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "APPROVED")
+                        .length
+                    }
+                  </div>
+                </button>
+
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(27deg ,red, #FF719A)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setSelectedStatus("REJECTED")}
+                >
+                  <div className="text-light font-bold fs-5">REJECTED</div>
+                  <div className="count fs-1 text-light fw-bolder">
+                    {
+                      filterData().filter((item) => item.status === "REJECTED")
+                        .length
+                    }
+                  </div>
+                </button>
+              </div>
               </div>
             </div>
           </div>
@@ -252,8 +272,8 @@ function InternalRegistration() {
                   <option value="Dropped">Dropped</option>
                 </CFormSelect>
               </CCol>
-              <CCol sm={2}></CCol>
-              <CCol sm={3}>
+              {/* <CCol sm={2}></CCol> */}
+              <CCol sm={5}>
                 <div className="d-flex justify-content-end">
                   <CButton color="primary" onClick={() => setAddModal(true)}>
                     Add Internal
@@ -262,27 +282,72 @@ function InternalRegistration() {
               </CCol>
             </CRow>
           </div>
-          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <div
+            className=" rounded  m-1 bg-white"
+            style={{ border: "2px solid gray" }}
+          >
+            <CTable
+              align="middle"
+              responsive
+              className="mb-0 table-striped table-responsive"
+            >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col" className="text-center">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                    className="text-center"
+                  >
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Product Name </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Sequence No.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    S NO.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Product Name{" "}
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Sequence No.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
                     Additional Information
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
                     Container Starting No.
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
                     Sample Refrence no.
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}}  scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Status
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Actions
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
 
@@ -299,7 +364,8 @@ function InternalRegistration() {
                       <CTableHeaderCell scope="row" className="text-center">
                         <input type="checkbox" />
                       </CTableHeaderCell>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
+                      {/* <CTableDataCell></CTableDataCell> */}
                       <CTableDataCell key={item.id}>
                         {item.ProductName}
                       </CTableDataCell>

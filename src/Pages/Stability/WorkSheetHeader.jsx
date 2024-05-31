@@ -213,7 +213,7 @@ import {
                        <CTableHeaderCell scope="row" className="text-center">
                          <input type="checkbox" />
                        </CTableHeaderCell>
-                       <CTableDataCell>{item.id}</CTableDataCell>
+                       <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                        <CTableDataCell key={item.id}>{item.sampleType}</CTableDataCell>
                        <CTableDataCell>{item.worksheetType}</CTableDataCell>
                        <CTableDataCell>{item.product}</CTableDataCell>

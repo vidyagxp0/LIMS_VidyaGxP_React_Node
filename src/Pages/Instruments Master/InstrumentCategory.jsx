@@ -102,7 +102,7 @@ function InstrumentCategory() {
                             <CTableBody>
                                 {filteredData.slice(startIndex, endIndex).map((item) => (
                                     <CTableRow key={item.id}>
-                                        <CTableDataCell>{item.id}</CTableDataCell>
+                                        <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                         <CTableDataCell>{item.categoryName}</CTableDataCell>
                                         <CTableDataCell>{item.description}</CTableDataCell>
                                         <CTableDataCell>{item.addedOn}</CTableDataCell>

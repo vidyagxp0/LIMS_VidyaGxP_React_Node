@@ -129,7 +129,7 @@ function WorkFlow() {
               <CTableBody>
                 {filteredData.slice(startIndex, endIndex).map((item, index) => (
                   <CTableRow key={index}>
-                    <CTableDataCell>{item.id}</CTableDataCell>
+                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                     <CTableDataCell>{item.plantCode}</CTableDataCell>
                     <CTableDataCell>{item.plantName}</CTableDataCell>
                     <CTableDataCell>{item.address}</CTableDataCell>

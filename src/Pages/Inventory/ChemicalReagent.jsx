@@ -260,7 +260,7 @@ function ChemicalReagent() {
                   <option value="Dropped">Dropped</option>
                 </CFormSelect>
               </CCol>
-              <CCol sm={2}></CCol>
+              
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
                   <CButton color="info" onClick={downloadPDF}>

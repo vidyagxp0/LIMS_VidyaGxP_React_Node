@@ -91,7 +91,7 @@ function InstrumentModule() {
                             <CTableBody>
                             {filteredData.slice(startIndex, endIndex).map((item) => (
                                     <CTableRow key={item.id}>
-                                        <CTableDataCell>{item.id}</CTableDataCell>
+                                        <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                         <CTableDataCell>{item.category}</CTableDataCell>
                                         <CTableDataCell>{item.module}</CTableDataCell>
                                         <CTableDataCell>{item.moduleId}</CTableDataCell>

@@ -3,7 +3,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,  } from "@coreui/react";
 
 
 const SamplingConfiguration = () => {
@@ -12,7 +12,7 @@ const SamplingConfiguration = () => {
     const [deleteId, setDeleteId] = useState(null);
     const pageSize = 5; // Number of items per page
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
+    // const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
     
     const [employees, setEmployees] = useState([

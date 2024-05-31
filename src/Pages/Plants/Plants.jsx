@@ -122,7 +122,7 @@ import {
                   })
                   .map((item, index) => (
                     <CTableRow key={index}>
-                      <CTableDataCell>{item.id}</CTableDataCell>
+                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell key={item.id}>{item.plantCode}</CTableDataCell>
                       <CTableDataCell>{item.plantName}</CTableDataCell>
                       <CTableDataCell>{item.address}</CTableDataCell>
