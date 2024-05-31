@@ -1,4 +1,4 @@
-import { CButton, CCol, CFormInput, CFormSelect,  CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
@@ -47,7 +47,7 @@ function InstrumentModule() {
 
     return (
         <>
-            <div  className="h-100 mx-5">
+            <div className="h-100 mx-5">
                 <div className="container-fluid my-5">
                     <div className="main-head">
                         <div className="title fw-bold fs-5 py-4">Instrument Module</div>
@@ -56,8 +56,8 @@ function InstrumentModule() {
                     <div>
                         <CRow className="mb-3">
                             <CCol sm={3}>
-                            <CFormSelect
-                                    options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
+                                <CFormSelect
+                                    options={[ { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
                                     onChange={(e) => setSelectedStatus(e.target.value)}
                                     value={selectedStatus} style={{ border: "2px solid gray" }}
                                 />
@@ -70,26 +70,26 @@ function InstrumentModule() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive >
+                    <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                        <CTable className="mb-0 table-striped table table-responsive" >
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Category</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Module</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Module Id</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Make</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Model</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Manufacturer No.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Supplied By</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Install On</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Expires On</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Category</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Module</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Module Id</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Make</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Model</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Manufacturer No.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Supplied By</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Install On</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Expires On</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                            {filteredData.slice(startIndex, endIndex).map((item) => (
+                                {filteredData.slice(startIndex, endIndex).map((item) => (
                                     <CTableRow key={item.id}>
                                         <CTableDataCell>{item.id}</CTableDataCell>
                                         <CTableDataCell>{item.category}</CTableDataCell>
@@ -116,7 +116,7 @@ function InstrumentModule() {
                                                 <div className="cursor-pointer" onClick={() => handleDeleteClick(item.id)}>
                                                     <FontAwesomeIcon icon={faTrashCan} />
                                                 </div>
-                                                </div>
+                                            </div>
                                         </CTableDataCell>
                                     </CTableRow>
                                 ))}
@@ -134,8 +134,8 @@ function InstrumentModule() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn btn-next" onClick={nextToLastPage}>
-                            Next <FaArrowRight />
+                        <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+                            Next <FaArrowRight className='ms-2' />
                         </button>
                     </div>
                 </div>
@@ -143,7 +143,7 @@ function InstrumentModule() {
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
             {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-</>
+        </>
     )
 }
 
@@ -157,6 +157,7 @@ const StatusModal = (_props) => {
                 <CModalBody>
                     <p>Add information and Add Instrument Module</p>
                     <CFormSelect
+                    className="mb-3"
                         type="text"
                         label="Instrument (Instrument ID)"
                         placeholder="Select... "
@@ -171,58 +172,68 @@ const StatusModal = (_props) => {
                         ]}
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="Instruction Category"
                         placeholder="Weighing Balance"
                         disabled
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="Module"
                         placeholder="Module"
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="Module ID"
                         placeholder="Module ID"
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="Make"
                         placeholder="Shimadu"
                         disabled
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="Model"
                         placeholder="Ser33"
                         disabled
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="Manufacturer's Serial No."
                         placeholder="adf3434"
                         disabled
                     />
                     <CFormInput
-                        type="text"
+                    className="mb-3"
+                        type="date"
                         label="Installed On"
                         placeholder="05/10/2024"
                         disabled
                     />
                     <CFormInput
-                        type="text"
+                    className="mb-3"
+                        type="date"
                         label="Warranty Expires On"
                         placeholder="05/05/2023"
                         disabled
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="Supplied By"
                         placeholder="VidyaGxP"
                         disabled
                     />
                     <CFormInput
+                    className="mb-3"
                         type="text"
                         label="SOP No."
                         placeholder="ASTM6453"
@@ -238,23 +249,57 @@ const StatusModal = (_props) => {
     )
 }
 
+
 const DeleteModal = (_props) => {
     return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-                <CModalHeader>
-                    <CModalTitle>Delete Instrument Module</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Do you want to delete this instrument module <code>Weighing</code>?</p>
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton color="primary">Submit</CButton>
-                </CModalFooter>
-            </CModal>
-        </>
-    )
-}
+        <CModal
+            alignment="center"
+            visible={_props.visible}
+            onClose={_props.closeModal}
+            size="lg"
+        >
+            <CModalHeader>
+                <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+                    Delete Instrument Module
+                </CModalTitle>
+            </CModalHeader>
+            <div
+                className="modal-body"
+                style={{
+                    fontSize: "1.2rem",
+                    fontWeight: "500",
+                    lineHeight: "1.5",
+                    marginBottom: "1rem",
+                    columnGap: "0px",
+                    border: "0px !important",
+                }}
+            >
+                <p>Are you sure you want to delete this instrument module { }?</p>
+            </div>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
 
 export default InstrumentModule

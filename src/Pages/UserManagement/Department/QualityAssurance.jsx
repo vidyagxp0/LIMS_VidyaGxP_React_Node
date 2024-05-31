@@ -97,17 +97,19 @@ const QualityAssurance = () => {
                 </div>
                 <div className="d-flex justify-content-between my-4">
                     <div className="dropdown">
-                        <button className="btn border btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Show
-                            <select style={{ outline: "none" }} id='selectOption' onChange={(e) => {
+                    <CFormSelect
+                            onChange={(e) => {
                                 setSelectedStatus(e.target.value);
-                                setCurrentPage(1); // Reset to the first page on filter change
-                            }}>
-                                <option value="All">All</option>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                        </button>
+                                setCurrentPage(1);
+                            }}
+                            value={selectedStatus}
+                            style={{ border: "2px solid gray", width: "220px" }}
+                        >
+
+                            <option value="All">All</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </CFormSelect>
                     </div>
                     <div className="">
                         <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
@@ -116,18 +118,18 @@ const QualityAssurance = () => {
 
             </div>
 
-            <div className='table-responsive bg-white rounded py-3 px-4 mt-5' style={{ boxShadow: "0px 0px 3px black" }}>
-                <table className='table'>
+            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                <table className="mb-0 table-striped table table-responsive">
                     <thead>
                         <tr>
-                            <th>S.No.</th>
-                            <th>Employee ID</th>
-                            <th>Analyst Name</th>
-                            <th>Role</th>
-                            <th>Email verified</th>
-                            <th>Added On</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Employee ID</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Analyst Name</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Role</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Email verified</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+                            <th style={{ background: "#3C496A", color: "white" }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,44 +162,44 @@ const QualityAssurance = () => {
 
 const StatusModal = (_props) => {
     return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-                <CModalHeader>
-                    <CModalTitle>Add User </CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Please Add User To fill This Details</p>
-
-                    <CFormInput
-                        type="text"
-                        label="User Name"
-                        placeholder="UserName "
-                    />
-                    <CFormInput
-                        type="number"
-                        label="Contact Number"
-                        placeholder="+91 0000000000 "
-                    />
-                    <CFormInput
-                        type="email"
-                        label="Gmail Address"
-                        placeholder=" sample@gmail.com"
-                    />
-
-                    <CFormInput
-                        type="text"
-                        label="Address"
-                        placeholder="Address "
-                    />
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton color="primary">Submit</CButton>
-                </CModalFooter>
-            </CModal>
-        </>
-    )
-}
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+            <CModalHeader>
+                <CModalTitle>Add User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Please Add User To fill This Details</p>
+                <CFormInput
+                className='mb-3'
+                    type="text"
+                    label="User Name"
+                    placeholder="UserName "
+                />
+                <CFormInput
+                className='mb-3'
+                    type="number"
+                    label="Contact Number"
+                    placeholder="+91 0000000000 "
+                />
+                <CFormInput
+                className='mb-3'
+                    type="email"
+                    label="Gmail Address"
+                    placeholder="sample@gmail.com"
+                />
+                <CFormInput
+                className='mb-3'
+                    type="text"
+                    label="Address"
+                    placeholder="Address "
+                />
+            </CModalBody>
+            <CModalFooter>
+                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+                <CButton color="primary">Submit</CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
 
 const DeleteModal = (_props) => {
     return (

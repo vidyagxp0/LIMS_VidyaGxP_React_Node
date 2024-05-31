@@ -48,7 +48,7 @@ function InstrumentUsage() {
     return (
         <>
 
-            <div  className="h-100 mx-5">
+            <div className="h-100 mx-5">
                 <div className="container-fluid my-5">
 
                     <div className="main-head">
@@ -58,7 +58,7 @@ function InstrumentUsage() {
                     <div>
                         <CRow className="mb-3">
                             <CCol sm={3}>
-                            <CFormSelect
+                                <CFormSelect
                                     options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
                                     onChange={(e) => setSelectedStatus(e.target.value)}
                                     value={selectedStatus} style={{ border: "2px solid gray" }}
@@ -68,30 +68,30 @@ function InstrumentUsage() {
                             <CCol sm={6}></CCol>
 
                             <CCol sm={3}>
-                            <div className="d-flex justify-content-end">
+                                <div className="d-flex justify-content-end">
                                     <CButton color="primary" onClick={() => setAddModal(true)}>Add Usage</CButton>
                                 </div>
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive >
+                    <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                        <CTable className="mb-0 table-striped table table-responsive" >
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Instrument ID</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Instrument Category</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Usage Code</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Product Name</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Ar.No</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Used For</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Used By</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument ID</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument Category</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Usage Code</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Product Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Ar.No</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Used For</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Used By</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                            {filteredData.slice(startIndex, endIndex).map((item) => (
+                                {filteredData.slice(startIndex, endIndex).map((item) => (
                                     <CTableRow key={item.id}>
                                         <CTableDataCell>{item.id}</CTableDataCell>
                                         <CTableDataCell>{item.instrumentId}</CTableDataCell>
@@ -116,7 +116,7 @@ function InstrumentUsage() {
                                                 <div className="cursor-pointer" onClick={() => handleDeleteClick(item.id)}>
                                                     <FontAwesomeIcon icon={faTrashCan} />
                                                 </div>
-                                                </div>
+                                            </div>
                                         </CTableDataCell>
                                     </CTableRow>
                                 ))}
@@ -134,8 +134,8 @@ function InstrumentUsage() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn " onClick={nextToLastPage}>
-                            Next <FaArrowRight />
+                        <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+                            Next <FaArrowRight className='ms-2' />
                         </button>
                     </div>
 
@@ -160,6 +160,7 @@ const StatusModal = (_props) => {
                     <p>Add information and Add Instrument Usage</p>
 
                     <CFormSelect
+                        className="mb-3"
                         type="text"
                         label="Instrument (Instrument ID)"
                         placeholder="Select... "
@@ -175,6 +176,7 @@ const StatusModal = (_props) => {
                     />
 
                     <CFormInput
+                        className="mb-3"
                         type="text"
                         label="Instrument Category"
                         placeholder="chromatography "
@@ -182,12 +184,14 @@ const StatusModal = (_props) => {
                     />
 
                     <CFormInput
+                        className="mb-3"
                         type="text"
                         label="Usage Code"
                         placeholder="Usage Code"
                     />
 
                     <CFormSelect
+                        className="mb-3"
                         type="text"
                         label="Instrument (Instrument ID)"
                         placeholder="Select Product "
@@ -203,34 +207,40 @@ const StatusModal = (_props) => {
                     />
 
                     <CFormInput
+                        className="mb-3"
                         type="text"
                         label="A.R.No."
                         placeholder="A.R.No."
                     />
 
                     <CFormInput
+                        className="mb-3"
                         type="text"
                         label="Used For"
                         placeholder="Used For"
                     />
 
                     <CFormInput
+                        className="mb-3"
                         type="text"
                         label="Used By"
                         placeholder="Used By"
                     />
 
                     <CFormInput
+                        className="mb-3"
                         type="date"
                         label="Used From"
                         placeholder=""
                     />
                     <CFormInput
+                        className="mb-3"
                         type="date"
                         label="Used To"
                         placeholder=""
                     />
                     <CFormInput
+                        className="mb-3"
                         type="text"
                         label="Comment If Any"
                         placeholder="Comment"
@@ -247,26 +257,58 @@ const StatusModal = (_props) => {
     )
 }
 
+
+
 const DeleteModal = (_props) => {
     return (
-        <>
-
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-                <CModalHeader>
-                    <CModalTitle>Delete Instrument Usage</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Do you want to delete this instrument usage <code>gd534</code>?</p>
-
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton color="primary">Submit</CButton>
-                </CModalFooter>
-            </CModal>
-
-        </>
-    )
-}
+        <CModal
+            alignment="center"
+            visible={_props.visible}
+            onClose={_props.closeModal}
+            size="lg"
+        >
+            <CModalHeader>
+                <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+                    Delete Instrument Usage
+                </CModalTitle>
+            </CModalHeader>
+            <div
+                className="modal-body"
+                style={{
+                    fontSize: "1.2rem",
+                    fontWeight: "500",
+                    lineHeight: "1.5",
+                    marginBottom: "1rem",
+                    columnGap: "0px",
+                    border: "0px !important",
+                }}
+            >
+                <p>Are you sure you want to delete this Instrument Usage { }?</p>
+            </div>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
 
 export default InstrumentUsage
