@@ -9,7 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CTable } from '@coreui/react';
 
 export default function SpecificationType() {
-  const pageSize = 8;
+  const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState('All');
+
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('');
 
@@ -25,29 +30,37 @@ export default function SpecificationType() {
     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
     
   const [employees, setEmployees] = useState([
-    { user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { user: 'working standard', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    { user: 'culture 1', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { user: 'environment', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    { user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { user: 'working standard', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    {id: 1, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    {id: 2, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    {id: 3, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
+    {id: 4, user: 'culture 1', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    {id: 5, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    {id: 6, user: 'environment', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
+    {id: 7, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
+    {id: 8, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    {id: 9, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
+    {id: 10, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
   ]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [updatedUser, setUpdatedUser] = useState('');
-  const [updatedStatus, setUpdatedStatus] = useState('');
-
   const filteredEmployees = employees.filter(employee =>
-    statusFilter === '' || employee.Status.toLowerCase() === statusFilter.toLowerCase()
+    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
   );
 
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
+  const endIndex = Math.min(startIndex + pageSize, employees.length);
+
+
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedEmployee, setSelectedEmployee] = useState(null);
+  // const [updatedUser, setUpdatedUser] = useState('');
+  // const [updatedStatus, setUpdatedStatus] = useState('');
+
+  // const filteredEmployees = employees.filter(employee =>
+  //   statusFilter === '' || employee.Status.toLowerCase() === statusFilter.toLowerCase()
+  // );
+
+  // const startIndex = (currentPage - 1) * pageSize;
+  // const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
   const renderRows = () => {
     return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
@@ -67,22 +80,25 @@ export default function SpecificationType() {
         </td>
         <td>
           <div className="d-flex gap-3">
-            <div className="cursor-pointer" onClick={() => openModal(employee, startIndex + index)}>
+          <div
+              className="cursor-pointer"
+              onClick={() => setAddModal(true)}
+            >
               <FontAwesomeIcon icon={faPenToSquare} />
             </div>
-            <Link to="#" onClick={() => deleteEmployee(startIndex + index)}>
+            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
               <FontAwesomeIcon icon={faTrashCan} />
-            </Link>
+            </div>
           </div>
         </td>
       </tr>
     ));
   };
 
-  const deleteEmployee = (index) => {
-    const updatedEmployees = employees.filter((_, i) => i !== index);
-    setEmployees(updatedEmployees);
-  };
+  // const deleteEmployee = (index) => {
+  //   const updatedEmployees = employees.filter((_, i) => i !== index);
+  //   setEmployees(updatedEmployees);
+  // };
 
   const nextPage = () => {
     if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
@@ -100,28 +116,39 @@ export default function SpecificationType() {
     setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
   };
 
-  const openModal = (employee, index) => {
-    setSelectedEmployee({ ...employee, index });
-    setUpdatedUser(employee.user);
-    setUpdatedStatus(employee.Status);
-    setIsModalOpen(true);
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedEmployee(null);
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+    setDeleteModal(false);
+
   };
 
-  const handleUpdate = () => {
-    const updatedEmployees = [...employees];
-    updatedEmployees[selectedEmployee.index] = {
-      ...selectedEmployee,
-      user: updatedUser,
-      Status: updatedStatus
-    };
-    setEmployees(updatedEmployees);
-    closeModal();
-  };
+  // const openModal = (employee, index) => {
+  //   setSelectedEmployee({ ...employee, index });
+  //   setUpdatedUser(employee.user);
+  //   setUpdatedStatus(employee.Status);
+  //   setIsModalOpen(true);
+  // };
+
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  //   setSelectedEmployee(null);
+  // };
+
+  // const handleUpdate = () => {
+  //   const updatedEmployees = [...employees];
+  //   updatedEmployees[selectedEmployee.index] = {
+  //     ...selectedEmployee,
+  //     user: updatedUser,
+  //     Status: updatedStatus
+  //   };
+  //   setEmployees(updatedEmployees);
+  //   closeModal();
+  // };
 
   return (
     <>
@@ -209,3 +236,62 @@ export default function SpecificationType() {
     </>
   );
 }
+const StatusModal = (_props) => {
+  return (
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModalHeader>
+        <CModalTitle>Update specification type</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <p>Update information and add new specification type</p>
+
+        <CFormInput
+          className='mb-3'
+          type="text"
+          label="Specification Type Name"
+          placeholder="Specification Type Name"
+        />
+        
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+        <CButton color="primary">Submit</CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
+
+const DeleteModal = (_props) => {
+  return (
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+      <CModalHeader>
+        <CModalTitle>Delete Sample Type</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <p>Are you sure you want to delete this Sample Type { }?</p>
+      </CModalBody>
+      <CModalFooter>
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="danger"
+          onClick={_props.confirmDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
+        </CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};

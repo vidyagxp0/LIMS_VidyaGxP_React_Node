@@ -72,7 +72,7 @@ function InstrumentCategory() {
                         <CRow className="mb-3">
                             <CCol sm={3}>
                                 <CFormSelect
-                                    options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
+                                    options={[{ label: "All" }, { label: "Active" }, { label: "Inactive" }]}
                                     onChange={(e) => setSelectedStatus(e.target.value)}
                                     value={selectedStatus} style={{ border: "2px solid gray" }}
                                 />
@@ -87,16 +87,16 @@ function InstrumentCategory() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                        <CTable align="middle" responsive >
+                    <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                        <CTable className="mb-0 table-striped table table-responsive" >
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Category Name</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Category Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Description</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Added On</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
@@ -108,7 +108,7 @@ function InstrumentCategory() {
                                         <CTableDataCell>{item.addedOn}</CTableDataCell>
                                         <CTableDataCell >
                                             <div
-                                                className="py-2 px-3 small rounded fw-bold"
+                                                className="py-2 px-3 small rounded fw-bold d-flex justify-content-center"
                                                 style={item.status === "Active" ? badgeStyle : badgeStyle2}
                                             >
                                                 {item.status}
@@ -140,8 +140,8 @@ function InstrumentCategory() {
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn btn-next" onClick={nextToLastPage}>
-                            Next <FaArrowRight />
+                        <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+                            Next <FaArrowRight className='ms-2' />
                         </button>
                     </div>
                 </div>
@@ -162,8 +162,8 @@ const StatusModal = (_props) => {
                 </CModalHeader>
                 <CModalBody>
                     <p>Add information and add new Instrument Category</p>
-                    <CFormInput type="text" label="Category Name" placeholder="Category Name" />
-                    <CFormInput type="text" label="Description" placeholder="Description" />
+                    <CFormInput className="mb-3" type="text" label="Category Name" placeholder="Category Name" />
+                    <CFormInput className="mb-3" type="text" label="Description" placeholder="Description" />
                 </CModalBody>
                 <CModalFooter>
                     <CButton color="light" onClick={_props.closeModal}>
@@ -176,26 +176,56 @@ const StatusModal = (_props) => {
     );
 };
 
+
 const DeleteModal = (_props) => {
     return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-                <CModalHeader>
-                    <CModalTitle>Delete Instrument Category</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>
-                        Do you want to delete this Instrument Category <code>thermal analysis</code>?
-                    </p>
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>
-                        Back
-                    </CButton>
-                    <CButton color="primary">Submit</CButton>
-                </CModalFooter>
-            </CModal>
-        </>
+        <CModal
+            alignment="center"
+            visible={_props.visible}
+            onClose={_props.closeModal}
+            size="lg"
+        >
+            <CModalHeader>
+                <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+                    Delete Instrument Category
+                </CModalTitle>
+            </CModalHeader>
+            <div
+                className="modal-body"
+                style={{
+                    fontSize: "1.2rem",
+                    fontWeight: "500",
+                    lineHeight: "1.5",
+                    marginBottom: "1rem",
+                    columnGap: "0px",
+                    border: "0px !important",
+                }}
+            >
+                <p>Are you sure you want to delete Instrument Category { }?</p>
+            </div>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
     );
 };
 

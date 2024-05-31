@@ -128,7 +128,7 @@ const ESampling = () => {
                         <CFormSelect
                             onChange={(e) => setSelectedStatus(e.target.value)}
                             value={selectedStatus}
-                            style={{ border: "2px solid gray" }}
+                            style={{ border: "2px solid gray",width:"220px" }}
                         >
                             <option value="All">All</option>
                             <option value="Initiated">Initiated</option>

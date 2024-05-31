@@ -167,6 +167,7 @@ function Registration() {
      const handleDeleteConfirm = () => {
           setData(data.filter((item) => item.id !== deleteId));
           setDeleteModal(false);
+          setDeleteId(null);
      };
 
 
@@ -182,7 +183,7 @@ function Registration() {
                               <CRow className="mb-3">
                                    <CCol sm={3}>
                                         <CFormSelect
-                                             options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
+                                             options={[{ label: "All" }, { label: "Active" }, { label: "Inactive" }]}
                                              onChange={(e) => setSelectedStatus(e.target.value)}
                                              value={selectedStatus} style={{ border: "2px solid gray" }}
                                         />
@@ -205,26 +206,26 @@ function Registration() {
                                    </CCol>
                               </CRow>
                          </div>
-                         <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-                              <CTable align="middle" responsive >
+                         <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+                              <CTable className="mb-0 table-striped table table-responsive" >
                                    <CTableHead>
-                                        <CTableRow>
-                                             <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Category</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Instrument ID</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Instrument</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Made</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Model</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Manu no.</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Installed At</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Expire On</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Calibration Status</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                                        <CTableRow >
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Category</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument ID</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Made</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Model</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Manu no.</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Installed At</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Expire On</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Calibration Status</CTableHeaderCell>
+                                             <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                                         </CTableRow>
                                    </CTableHead>
                                    <CTableBody>
-                                       {filteredData.slice(startIndex, endIndex).map((item) => (
+                                        {filteredData.slice(startIndex, endIndex).map((item) => (
                                              <CTableRow key={item.id}>
                                                   <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                                   <CTableDataCell>{item.category}</CTableDataCell>
@@ -251,7 +252,7 @@ function Registration() {
                                                             {item.calibrationStatus}
                                                        </div>
                                                   </CTableDataCell>
-                                                
+
                                                   <CTableDataCell>
                                                        <div className="d-flex gap-3">
                                                             <Link to="/instrumentMaster/registrationDetails"><FontAwesomeIcon icon={faEye} /></Link>
@@ -276,21 +277,21 @@ function Registration() {
                                         &gt;&gt;
                                    </button>
                               </div>
-                              <button className="btn btn-next" onClick={nextToLastPage}>
-                                   Next <FaArrowRight />
+                              <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+                                   Next <FaArrowRight className='ms-2' />
                               </button>
                          </div>
                     </div>
                </div>
                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
                {deleteModal && (
-                <DeleteModal
-                    visible={deleteModal}
-                    closeModal={() => setDeleteModal(false)}
-                    confirmDelete={handleDeleteConfirm}
-                    handleDelete={handleDeleteClick}
-                />
-            )}
+                    <DeleteModal
+                         visible={deleteModal}
+                         closeModal={() => setDeleteModal(false)}
+                         confirmDelete={handleDeleteConfirm}
+                         handleDelete={handleDeleteClick}
+                    />
+               )}
           </>
      );
 }
@@ -304,6 +305,7 @@ const StatusModal = (_props) => {
                <CModalBody>
                     <p>Add information and register new Instrument</p>
                     <CFormSelect
+                         className="mb-3"
                          type="text"
                          label="Instrument Category"
                          placeholder="Select... "
@@ -314,48 +316,63 @@ const StatusModal = (_props) => {
                          ]}
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Instrument Category Description"
                          placeholder="chroma "
                          disabled
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Instrument"
                          placeholder=" Instrument"
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Instrument ID"
                          placeholder="Instrument ID "
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Make"
                          placeholder=" Make"
                     />
+                    <CRow className="d-flex align-items-center justify-content-center">
+                         <CCol sm={8}>
+                              <CFormInput
+                                   className="mb-3"
+                                   type="text"
+                                   label="Model"
+                                   placeholder="Model "
+                              ></CFormInput>
+                         </CCol>
+                         <CCol sm={4}>
+                              <CButton className="bg-info text-white  mt-4 mb-3 " >Add Fields</CButton>
+                         </CCol>
+                    </CRow>
                     <CFormInput
-                         type="text"
-                         label="Model"
-                         placeholder="Model "
-                    />
-                    <CButton className="bg-info text-white d-flex ">Add Fields</CButton>
-                    <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Manufacturer's Serial No."
                          placeholder=" Manufacturer's Serial No."
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Capacity Size"
                          placeholder="Capacity Size "
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Equip No."
                          placeholder=" Equip No."
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Installed At"
                          placeholder="Installed At"
@@ -366,39 +383,46 @@ const StatusModal = (_props) => {
                          placeholder=" "
                     />
                     <CFormInput
+                         className="mb-3"
                          type="date"
                          label="Warranty Expires On"
                          placeholder=" "
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Supplied By"
                          placeholder="Supplied By"
                     />
-                    <label>Contains module ?</label>
+                    <label className="mb-3">Contains module ?</label>
                     <CFormCheck
+                         className="mb-3"
                          type="radio"
                          id="ContainsModuleYes"
                          name="ContainsModule"
                          label="Yes"
                     />
                     <CFormCheck
+                         className="mb-3"
                          type="radio"
                          id="ContainsModuleNo"
                          name="ContainsModule"
                          label="No"
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="SOP No."
                          placeholder="SOP Number"
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Software"
                          placeholder="Software"
                     />
                     <CFormTextarea
+                         className="mb-3"
                          type="text"
                          label="Description"
                          placeholder=""
@@ -417,54 +441,54 @@ const StatusModal = (_props) => {
 
 const DeleteModal = (_props) => {
      return (
-       <CModal
-         alignment="center"
-         visible={_props.visible}
-         onClose={_props.closeModal}
-         size="lg"
-       >
-         <CModalHeader>
-           <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-             Delete Instrument Registration
-           </CModalTitle>
-         </CModalHeader>
-         <div
-           className="modal-body"
-           style={{
-             fontSize: "1.2rem",
-             fontWeight: "500",
-             lineHeight: "1.5",
-             marginBottom: "1rem",
-             columnGap: "0px",
-             border: "0px !important",
-           }}
-         >
-           <p>Are you sure you want to delete this {}?</p>
-         </div>
-         <CModalFooter>
-           <CButton
-             color="secondary"
-             onClick={_props.closeModal}
-             style={{
-               marginRight: "0.5rem",
-               fontWeight: "500",
-             }}
-           >
-             Cancel
-           </CButton>
-           <CButton
-             color="danger"
-             onClick={_props.handleDelete}
-             style={{
-               fontWeight: "500",
-               color: "white",
-             }}
-           >
-             Delete
-           </CButton>
-         </CModalFooter>
-       </CModal>
+          <CModal
+               alignment="center"
+               visible={_props.visible}
+               onClose={_props.closeModal}
+               size="lg"
+          >
+               <CModalHeader>
+                    <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+                         Delete Instrument Registration
+                    </CModalTitle>
+               </CModalHeader>
+               <div
+                    className="modal-body"
+                    style={{
+                         fontSize: "1.2rem",
+                         fontWeight: "500",
+                         lineHeight: "1.5",
+                         marginBottom: "1rem",
+                         columnGap: "0px",
+                         border: "0px !important",
+                    }}
+               >
+                    <p>Are you sure you want to delete this { }?</p>
+               </div>
+               <CModalFooter>
+                    <CButton
+                         color="secondary"
+                         onClick={_props.closeModal}
+                         style={{
+                              marginRight: "0.5rem",
+                              fontWeight: "500",
+                         }}
+                    >
+                         Cancel
+                    </CButton>
+                    <CButton
+                         color="danger"
+                         onClick={_props.confirmDelete}
+                         style={{
+                              fontWeight: "500",
+                              color: "white",
+                         }}
+                    >
+                         Delete
+                    </CButton>
+               </CModalFooter>
+          </CModal>
      );
-   };
+};
 
 export default Registration;
