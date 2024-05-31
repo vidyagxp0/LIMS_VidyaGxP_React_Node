@@ -11,6 +11,8 @@ export default function Material() {
   const [errorMessage, setErrorMessage] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const [addModal, setAddModal] = useState(false)
 
@@ -51,6 +53,52 @@ export default function Material() {
       </CModal>
     )
   }
+
+  
+  const DeleteModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this material?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
+const handleDeleteClick = (id) => {
+  setDeleteId(id);
+  setDeleteModal(true);
+};
+
+const handleDeleteConfirm = () => {
+  setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+  setDeleteModal(false);
+};
 
   const [employees, setEmployees] = useState([
     { id: 1, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
@@ -105,7 +153,7 @@ export default function Material() {
           <div className="d-flex gap-3">
             <Link to="/stock-management/stock-material-details"><FontAwesomeIcon icon={faEye} /></Link>
             <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-            <div className="cursor-pointer" onClick={() => deleteEmployee(employee.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
+            <div className="cursor-pointer"  onClick={() => handleDeleteClick(employee.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
           </div>
         </td>
       </tr>
@@ -134,66 +182,57 @@ export default function Material() {
       <div id="div1">
         <h5>Inventory Labels</h5>
       </div>
-      <div id="div2" className="d-flex justify-content-between">
-        <div className="d-flex gap-4 w-75">
-          <div id="searchmain">
-            <div id="searchicon">
-              <CiSearch />
-            </div>
-            <div className="">
-              <input
-                type="text"
-                className="w-75"
-                id=""
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="dropdown w-25">
-            <div>
-              <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <select
-                  id='selectOption'
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  style={{ outline: 'none' }}
-                >
-                  <option value="">All</option>
-                  <option value="initiated">Initiated</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                  <option value="reinitiated">Reinitiated</option>
-                  <option value="dropped">Dropped</option>
-                </select>
-              </button>
-            </div>
-          </div>
-        </div>
 
-        <div className="">
-          <button
-            className="btn btn-primary m-5"
-            type="button"
-            onClick={() => setAddModal(true)}
-          >
-          <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Material</span>
-          </button>
-        </div>
-        </div>
-       
-      <br />
-      <div className='table-responsive p-4 container1'>
-        <table className='table shadow ' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+    
+      <div className="d-flex m-4 mt-5 justify-content-around">
+        <CCol sm={4}>
+          <CFormInput
+            type="text"
+            placeholder="Search..."
+            style={{ border: "2px solid gray" }}
+            className="border-2"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </CCol>
+
+        <CCol sm={3}>
+          <CFormSelect
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="border-2"
+            style={{ border: "2px solid gray" }}
+            options={[
+              { label: "All", value: "" },
+              { label: "Initiated", value: "initiated" },
+              { label: "Approved", value: "approved" },
+              { label: "Rejected", value: "rejected" },
+              { label: "Reinitiated", value: "reinitiated" },
+              { label: "Dropped", value: "dropped" },
+            ]}
+          />
+        </CCol>
+
+        <CCol sm={3}>
+          <div className="d-flex justify-content-end">
+            <CButton color="primary" onClick={() => setAddModal(true)}>
+              Add Material
+            </CButton>
+          </div>
+        </CCol>
+      </div>
+
+
+      <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
+        <table className='table table-responsive table-striped text-xs' >
           <thead>
             <tr>
-              <th><input type="checkbox" /></th>
-              <th>Sr.no.</th>
-              <th>Unique Code</th>
-              <th>Material Name</th>
-              <th>Description</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
+              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+              <th style={{background:"#3C496A", color:"white"}}>Unique Code</th>
+              <th style={{background:"#3C496A", color:"white"}}>Material Name</th>
+              <th style={{background:"#3C496A", color:"white"}}>Description</th>
+              <th style={{background:"#3C496A", color:"white"}}>Status</th>
+              <th style={{background:"#3C496A", color:"white"}}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -202,7 +241,7 @@ export default function Material() {
         </table>
       </div>
         
-      <div className="pagination" style={{ margin: '0 35px' }}>
+      <div className="pagination mx-5" >
         <div className="pagination">
           <div>
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
@@ -219,6 +258,14 @@ export default function Material() {
 
       
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
+
     </>
   );
 }

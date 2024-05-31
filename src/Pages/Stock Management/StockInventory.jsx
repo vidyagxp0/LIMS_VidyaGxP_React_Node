@@ -9,8 +9,9 @@ import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function StockInventory() {
-  const [addModal, setAddModal] = useState(false)
-  const [delModal, setDelModal] = useState(false)
+  const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const top100Films = [
     { label: 'The Shawshank Redemption', year: 1994 },
@@ -21,20 +22,19 @@ export default function StockInventory() {
   ];
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
-    const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
-    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
+  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-
-    const StatusModal = (_props) => {
-      return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-          <CModalHeader>
-            <CModalTitle>Add Inventory</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
+  const StatusModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Inventory</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
           <label className="mb-2" htmlFor="">Material Name</label>
           <Autocomplete
             disablePortal
@@ -44,12 +44,12 @@ export default function StockInventory() {
             renderInput={(params) => <TextField {...params} label="" />}
           />
           <CFormInput
-          label='Received Date'
-          className="mb-3"
-          type="date"
-          placeholder="Received Date"
+            label='Received Date'
+            className="mb-3"
+            type="date"
+            placeholder="Received Date"
           />
-           <label className="mb-2" htmlFor="">Supplier Name</label>
+          <label className="mb-2" htmlFor="">Supplier Name</label>
           <Autocomplete
             disablePortal
             id="combo-box-demo"
@@ -57,72 +57,90 @@ export default function StockInventory() {
             options={top100Films}
             renderInput={(params) => <TextField {...params} label="" />}
           />
-           <CFormInput
-          label='Truck No.'
-          className="mb-3"
-          type="number"
-          placeholder="Truck No."
+          <CFormInput
+            label='Truck No.'
+            className="mb-3"
+            type="number"
+            placeholder="Truck No."
           />
           <CFormInput
-          label='Ch No.'
-          className="mb-3"
-          type="number"
-          placeholder="Ch No."
+            label='Ch No.'
+            className="mb-3"
+            type="number"
+            placeholder="Ch No."
           />
           <CFormInput
-          label='Invoice Number'
-          className="mb-3"
-          type="number"
-          placeholder="Invoice Number"
+            label='Invoice Number'
+            className="mb-3"
+            type="number"
+            placeholder="Invoice Number"
           />
           <CFormInput
-          label='Quantity In MT'
-          className="mb-3"
-          type="text"
-          placeholder="Quantity In MT"
+            label='Quantity In MT'
+            className="mb-3"
+            type="text"
+            placeholder="Quantity In MT"
           />
           <CFormInput
-          label='Remarks'
-          className="mb-3"
-          type="number"
-          placeholder="Remarks"
+            label='Remarks'
+            className="mb-3"
+            type="number"
+            placeholder="Remarks"
           />
           <div className="d-flex gap-3 mt-">
             <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
             <CButton color="primary w-50">Submit</CButton>
           </div>
-          </CModalBody>
-        </CModal>
-      )
-    }
-    
-    // const RemoveModal = (_props) => {
-    //   return (
-    //     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-    //       <CModalHeader>
-    //         <CModalTitle>Delete Storage Condition</CModalTitle>
-    //       </CModalHeader>
-    //       <CModalBody>
-    //         Do you want to delete this Storage Condition <code>below 25°c (77°f) in a flammable cabinet</code>?
-    //       </CModalBody>
-    //       <CModalFooter>
-    //         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-    //         <CButton color="primary">Submit</CButton>
-    //       </CModalFooter>
-    //     </CModal>
-    //   )
-    // }
+        </CModalBody>
+      </CModal>
+    );
+  };
+
+  const DeleteModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Delete User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Are you sure you want to delete this material?</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={_props.closeModal}
+            style={{
+              marginRight: "0.5rem",
+              fontWeight: "500",
+            }}
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="danger"
+            onClick={_props.confirmDelete}
+            style={{
+              fontWeight: "500",
+              color: "white",
+            }}
+          >
+            Delete
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [employees, setEmployees] = useState([
-    { user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
-    { user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'INITIATED' },
-    { user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'REJECTED' },
-    { user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'DROPPED' },
-    { user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
-    { user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'REJECTED' },
-    { user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
+    { id: 1, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
+    { id: 2, user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'INITIATED' },
+    { id: 3, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'REJECTED' },
+    { id: 4, user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'DROPPED' },
+    { id: 5, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
+    { id: 6, user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'REJECTED' },
+    { id: 7, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', status: 'APPROVED' },
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -148,19 +166,22 @@ export default function StockInventory() {
     setFilterStatus(event.target.value);
   };
 
-  const deleteEmployee = (index) => {
-    const newEmployees = [...employees];
-    newEmployees.splice(index, 1);
-    setEmployees(newEmployees);
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
   };
 
-  
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+    setDeleteModal(false);
+  };
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
   const renderRows = () => {
     return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
+      <tr key={employee.id}>
         <td><input type="checkbox" /></td>
         <td>{startIndex + index + 1}</td>
         <td>{employee.user}</td>
@@ -169,24 +190,24 @@ export default function StockInventory() {
         <td>{employee.SpecificID}</td>
         <td>{employee.SpecificID}</td>
         <td>{employee.ProdName}</td>
-        <td ><div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.status === "INITIATED" ? badgeStyle2 :
+        <td><div
+          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+          style={
+            employee.status === "INITIATED" ? badgeStyle2 :
               employee.status === "APPROVED" ? badgeStyle3 :
-              employee.status === "REJECTED" ? badgeStyle4 :
-              employee.status === "REINITIATED" ? badgeStyle5 :
-              employee.status === "DROPPED" ? badgeStyle6 :
-              badgeStyle
-            }
-          >
-            {employee.status}
-          </div></td>
+                employee.status === "REJECTED" ? badgeStyle4 :
+                  employee.status === "REINITIATED" ? badgeStyle5 :
+                    employee.status === "DROPPED" ? badgeStyle6 :
+                      badgeStyle
+          }
+        >
+          {employee.status}
+        </div></td>
         <td>
           <div className="d-flex gap-3">
             <Link to="/stock-management/stock-inventory-details"><FontAwesomeIcon icon={faEye} /></Link>
-            <div className="cursor-pointer"   onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-            <div className="cursor-pointer" onClick={() => deleteEmployee(startIndex + index)}><FontAwesomeIcon icon={faTrashCan} /></div>
+            <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
           </div>
         </td>
       </tr>
@@ -210,67 +231,58 @@ export default function StockInventory() {
       <div id="div1">
         <h5>Inventory/Inventory Registration</h5>
       </div>
-      <div id="div2" className="d-flex justify-content-between">
-        <div className="d-flex gap-4 w-75">
-          <div id="searchmain">
-            <div id="searchicon">
-              <CiSearch />
-            </div>
-            <div className="">
-              <input 
-                type="text" 
-                className="w-75" 
-                placeholder="Search..." 
-                value={searchTerm} 
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="dropdown w-25">
-            <div>
-              <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <select
-                  id='selectOption'
-                  onChange={handleFilterChange}
-                  style={{ outline: 'none' }}
-                >
-                  <option value="">All</option>
-                  <option value="initiated">Initiated</option>
-                  <option value="approved">Approved</option>
-                  <option value="rejected">Rejected</option>
-                  <option value="reinitiated">Reinitiated</option>
-                  <option value="dropped">Dropped</option>
-                </select>
-              </button>
-            </div>
-          </div>
-        </div>
 
-        <div className="">
-          <button
-            className="btn btn-primary m-5 "
-            type="button"
-            onClick={() => setAddModal(true)}
-          >
-           <span style={{fontSize:'0.7rem',fontWeight:'bold'}}>Add Inventory Registration</span>
-          </button>
-        </div>
-        </div>
-     
-      <div className='mx-3 table-responsive p-4 container1'>
-        <table className='table shadow' style={{ fontSize: '0.8rem' }}>
+      <div className="d-flex m-4 mt-5 justify-content-around">
+        <CCol sm={4}>
+          <CFormInput
+            type="text"
+            placeholder="Search..."
+            style={{ border: "2px solid gray" }}
+            className="border-2"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </CCol>
+
+        <CCol sm={3}>
+          <CFormSelect
+            onChange={handleFilterChange}
+            className="border-2"
+            style={{ border: "2px solid gray" }}
+            options={[
+              { label: "All", value: "" },
+              { label: "Initiated", value: "initiated" },
+              { label: "Approved", value: "approved" },
+              { label: "Rejected", value: "rejected" },
+              { label: "Reinitiated", value: "reinitiated" },
+              { label: "Dropped", value: "dropped" },
+            ]}
+          />
+        </CCol>
+
+        <CCol sm={3}>
+          <div className="d-flex justify-content-end">
+            <CButton color="primary" onClick={() => setAddModal(true)}>
+              Add Inventory Registration
+            </CButton>
+          </div>
+        </CCol>
+      </div>
+
+      <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
+        <table className='table table-responsive table-striped text-xs'>
           <thead>
             <tr>
-              <th><input type="checkbox" /></th>
-              <th>Sr.no.</th>
-              <th>Material Name</th>
-              <th>Supplier Name</th>
-              <th>Truck No.</th>
-              <th>CH No.</th>
-              <th>Invoice No.</th>
-              <th>Quantity In Mt</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{ background: "#3C496A", color: "white" }}><input type="checkbox" /></th>
+              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Material Name</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Supplier Name</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Truck No.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>CH No.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Invoice No.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Quantity In Mt</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -279,9 +291,9 @@ export default function StockInventory() {
         </table>
       </div>
 
-      <div className="pagination" style={{ margin: '0 40px' }}>
-        <div className="pagination ">
-          <div >
+      <div className="pagination mx-5">
+        <div className="pagination">
+          <div>
             <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
           </div>
           <div className="current-page-number mr-2 bg-dark-subtle page-item">
@@ -295,9 +307,14 @@ export default function StockInventory() {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {/* {delModal && <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} />} */}
+
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
     </>
   );
 }
-
-

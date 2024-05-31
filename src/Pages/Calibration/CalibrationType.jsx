@@ -10,10 +10,11 @@ import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFoote
 export default function CalibrationType() {
     const [addModal, setAddModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false); 
     const [selectedStatus, setSelectedStatus] = useState('All');
     const [employeeToDelete, setEmployeeToDelete] = useState(null); 
-
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+  
     const badgeStyle = { background: "gray", color: "white", width: "110px" };
     const badgeStyle2 = {
       background: " #2A5298",
@@ -55,6 +56,58 @@ export default function CalibrationType() {
           </CModal>
         )
       }
+
+      
+  const DeleteModal = (_props) => {
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Delete User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Are you sure you want to delete this material?</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={_props.closeModal}
+            style={{
+              marginRight: "0.5rem",
+              fontWeight: "500",
+            }}
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="danger"
+            onClick={_props.confirmDelete}
+            style={{
+              fontWeight: "500",
+              color: "white",
+            }}
+          >
+            Delete
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const handleDeleteClick = (index) => {
+    setDeleteId(index);
+    setDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((_, index) => index !== deleteId));
+    setDeleteModal(false);
+  };
+
 
     const [employees, setEmployees] = useState([
         { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
@@ -115,7 +168,7 @@ export default function CalibrationType() {
 
     const renderRows = () => {
         return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
+            <tr key={index}>
                 <td>{startIndex + index + 1}</td>
                 <td>{employee.user}</td>
                 <td>{employee.role}</td>
@@ -137,7 +190,7 @@ export default function CalibrationType() {
                         <div className="cursor-pointer" onClick={() => setAddModal(true)}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
-                        <Link to="#" onClick={() => openDeleteModal(startIndex + index)}>
+                        <Link to="#" onClick={() => handleDeleteClick(startIndex + index)}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </Link>
                     </div>
@@ -164,67 +217,41 @@ export default function CalibrationType() {
                 <h5>Calibration Type</h5>
             </div>
 
-            <div className='p-5' style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div className="dropdown">
-                    <div>
-                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          
-                            <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus}
-                  style={{ border: "2px solid gray" }}
-                >
-                  <option value="All">All</option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                  
-                </CFormSelect>
-                        </button>
-                    </div>
-                </div>
+      <div className="d-flex mx-5 mt-5 justify-content-between">
+        <CCol sm={3}>
+          <CFormSelect
+             onChange={(e) => setSelectedStatus(e.target.value)}
+             value={selectedStatus}
+            className="border-2"
+            style={{ border: "2px solid gray" }}
+            options={[
+              { label: "All", value: "All" },
+              { label: "Active", value: "active" },
+              { label: "Inactive", value: "inactive" },
+            ]}
+          />
+        </CCol>
 
-                <button
-                    
-                    className="btn btn-primary"
-                    type="button"
-                    onClick={() => setAddModal(true)}
-                >
-                     <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Calibration Type</span>
-                </button>
-            </div>
-         
-            {/* Delete Confirmation Modal */}
-            {deleteModal && (
-                <div className="modal" style={{ display: 'block' }} tabIndex="-1">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Confirm Deletion</h5>
-                                <button type="button" className="btn-close" onClick={() => setDeleteModal(false)} aria-label="Close"></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>Are you sure you want to delete this employee?</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setDeleteModal(false)}>Cancel</button>
-                                <button type="button" className="btn btn-primary" onClick={deleteEmployee}>Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+        <CCol sm={3}>
+          <div className="d-flex justify-content-end">
+            <CButton color="primary" onClick={() => setAddModal(true)}>
+            Calibration Type
+            </CButton>
+          </div>
+        </CCol>
+      </div>
 
             {/* Employee table */}
-            <div className='table-responsive p-4 container1'>
-                <table className='table shadow' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+            <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
+                <table className='table table-responsive table-striped text-xs' >
                     <thead>
                         <tr>
-                            <th>Sr.no.</th>
-                            <th>Calibration Type</th>
-                            <th>Calibration Prefix</th>
-                            <th>Added On</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Calibration Type</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Calibration Prefix</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Added On</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Status</th>
+                            <th  style={{ background: "#3C496A", color: "white" }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -233,7 +260,7 @@ export default function CalibrationType() {
                 </table>
             </div>
 
-            <div className="pagination" style={{ margin: '0 35px' }}>
+            <div className="pagination mx-5" >
                 <div className="pagination ">
                     <div >
                         <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
@@ -248,8 +275,15 @@ export default function CalibrationType() {
                 <button className="btn btn-next d-flex align-items-center"onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
             </div>
 
-              
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
         </>
     );
 }

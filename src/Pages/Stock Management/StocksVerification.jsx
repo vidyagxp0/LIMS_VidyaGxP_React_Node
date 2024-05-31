@@ -539,29 +539,29 @@ export default function StocksVerification() {
         <h5>Stocks</h5>
       </div>
 
-      <div className="table-responsive p-4 container1">
+      <div className="border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded">
         <table
-          className="table shadow"
-          style={{ fontSize: "0.8rem", margin: "0px auto", width: "98%" }}
+          className="table table-responsive table-striped text-xs"
+          
         >
           <thead>
             <tr>
-              <th>Sr.no.</th>
-              <th>Material Type</th>
-              <th>Invoice Number</th>
-              <th>Supplier Name</th>
-              <th>Supplier approved by QA</th>
-              <th>Verification Status</th>
-              <th>Stock Type</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
+              <th style={{background:"#3C496A", color:"white"}}>Material Type</th>
+              <th style={{background:"#3C496A", color:"white"}}>Invoice Number</th>
+              <th style={{background:"#3C496A", color:"white"}}>Supplier Name</th>
+              <th style={{background:"#3C496A", color:"white"}}>Supplier approved by QA</th>
+              <th style={{background:"#3C496A", color:"white"}}>Verification Status</th>
+              <th style={{background:"#3C496A", color:"white"}}>Stock Type</th>
+              <th style={{background:"#3C496A", color:"white"}}>Status</th>
+              <th style={{background:"#3C496A", color:"white"}}>Actions</th>
             </tr>
           </thead>
           <tbody>{renderRows()}</tbody>
         </table>
         </div>
 
-      <div className="pagination" style={{ margin: '0 35px' }}>
+      <div className="pagination mx-5" >
         <div className="pagination">
           <button onClick={prevPage} disabled={currentPage === 1}  className="btn  mr-2" >&lt;&lt;</button>
           <div className="current-page-number mr-2 bg-dark-subtle page-item">
