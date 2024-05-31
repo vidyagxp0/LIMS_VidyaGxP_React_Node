@@ -1,3 +1,21 @@
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
 import './SamplingTemplate.css'
 import React, { useState } from 'react';
 import { TiArrowRightThick } from "react-icons/ti";
@@ -5,82 +23,16 @@ import { TiArrowLeftThick } from "react-icons/ti";
 import { FaArrowRight } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { CButton, CCol, CFormInput, CFormSelect, CRow } from '@coreui/react';
 import { Link } from 'react-router-dom';
 
 
 const SamplingTemplate = () => {
-  const [leftArray, setLeftArray] = useState([
-    "Change Control",
-    "CAPA",
-    "Internal Audit",
-    "External Audit",
-    "Initiator",
-    "SQM",
-    "CTMS", ,
-    "Calendar",
-    "EHS",
-    "Environment",
-    "Documents",
-    "Deviation",
-
-  ]);
-
-  const [rightArray, setRightArray] = useState([
-    "Inspections",
-    "Audit",
-    "Refference",
-    "CCTT",
-  ]);
-
-  const moveRight = () => {
-    let leftElement = document.getElementsByClassName('check-left');
-    for (let index = 0; index < leftElement.length; index++) {
-      if (leftElement[index].checked) {
-        let data = leftElement[index].value;
-        let left = leftArray.filter((value) => value !== data);
-        setLeftArray(left);
-        rightArray.push(data);
-        setRightArray(rightArray);
-        break  // Important
-      }
-    }
-  }
-
-  const moveLeft = () => {
-    let rightElement = document.getElementsByClassName('check-right');
-    for (let index = 0; index < rightElement.length; index++) {
-      if (rightElement[index].checked) {
-        let data = rightElement[index].value;
-        let right = rightArray.filter((value) => value !== data);
-        setRightArray(right);
-        leftArray.push(data);
-        setLeftArray(leftArray);
-        break         // Important
-      }
-    }
-  }
-
-  const clicked = () => {
-    let checkboxes = document.querySelectorAll('.check-left, .check-right');
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = false;
-    });
-    let allLabels = document.querySelectorAll('.labels');
-    allLabels.forEach((label) => {
-      label.classList.remove('clicked');
-    });
-
-    let label = event.target;
-    label.classList.add('clicked');
-    label.checked = true;
-  };
   const [addModal, setAddModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const pageSize = 5; // Number of items per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
@@ -104,9 +56,13 @@ const SamplingTemplate = () => {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-  );
+
+  const filteredEmployees = employees.filter((employee) => {
+    const searchFilter = employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.fieldType.toLowerCase().includes(searchTerm.toLowerCase());
+    const selectCheck = selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase();
+    return searchFilter && selectCheck
+  });
 
   const renderRows = () => {
     return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
@@ -140,7 +96,7 @@ const SamplingTemplate = () => {
 
           <div className='d-flex gap-3'>
             <div>
-              <Link to="/approval/1321" className='mx-2'><FontAwesomeIcon icon={faEye} /></Link>
+              <Link to="/approval/1321" className=''><FontAwesomeIcon icon={faEye} /></Link>
 
             </div>
             <div
@@ -153,14 +109,6 @@ const SamplingTemplate = () => {
               <FontAwesomeIcon icon={faTrashCan} />
             </div>
           </div>
-          <div className='d-flex'>
-            <Link to="/approval/1321" className='mx-2'><FontAwesomeIcon icon={faEye} /></Link>
-            <Link to="#" onClick={() => setSelectedEmployee(employee)} data-bs-toggle="offcanvas" data-bs-target="#deleteOffcanvas" aria-controls="deleteOffcanvas">
-              <FontAwesomeIcon icon={faTrashCan} />
-            </Link>
-          </div>
-
-
         </td>
       </tr>
     ));
@@ -186,13 +134,14 @@ const SamplingTemplate = () => {
     setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.fieldName !== deleteId));
     setDeleteModal(false);
   };
+
   const filterData = () => {
     if (selectedStatus === "All") {
       return employees;
     }
 
     return employees.filter((item) => item.status === selectedStatus.toUpperCase());
-  };
+  };
 
 
   return (
@@ -293,12 +242,14 @@ const SamplingTemplate = () => {
         </div>
 
         <div>
-          <CRow className="mb-3">
-            <CCol sm={4}>
+          <CRow className="my-3">
+            <CCol sm={3}>
               <CFormInput
                 style={{ border: "2px solid gray" }}
                 type="email"
                 placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </CCol>
             <CCol sm={3}>
@@ -315,130 +266,14 @@ const SamplingTemplate = () => {
                 <option value="Dropped">Dropped</option>
               </CFormSelect>
             </CCol>
-            <CCol sm={2}></CCol>
+            <CCol sm={3}></CCol>
             <CCol sm={3}>
-              <div className="">
+              <div className="d-flex justify-content-end">
                 <CButton color="primary" onClick={() => setAddModal(true)}>Add Template</CButton>
               </div>
             </CCol>
           </CRow>
         </div>
-        {/* <div className="offcanvas offcanvas-end w-50" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-          <div className="offcanvas-header border-bottom pb-1 border-2 border-dark px-0 mx-3">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">Add Sampling template</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-          </div>
-          <div className="offcanvas-body">
-            <p className="text-muted">Add information of Sampling template</p>
-            <div className="mb-3">
-              <label htmlFor="exampleFormControlInput1" className="form-label">Template Name</label>
-              <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Template Name" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="exampleFormControlInput1" className="form-label">Unique Code</label>
-              <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="exampleFormControlInput1" className="form-label">Sample Type</label>
-              <select className="form-select" aria-label="Default select example">
-                <option selected>Select...</option>
-                <option value="1">Raw Material</option>
-                <option value="3">Hydrochloric Acid</option>
-                <option value="2">Hcl</option>
-                <option value="2">Petrochemical</option>
-              </select>
-            </div>
-            <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Header</div>
-            <div className="d-flex flex-row mb-3 gap-4">
-              <div className="w-50">
-                <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
-                <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
-              </div>
-              <div className="w-50">
-                <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
-                <select className="form-select" aria-label="Default select example">
-                  <option value="2" selected>2</option>
-                  <option value="4">4</option>
-                  <option value="6">6</option>
-                </select>
-              </div>
-            </div>
-            <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Body</div>
-            <div className="d-flex">
-              <div className="w-100 m-3">
-                <h5>Available</h5>
-                <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
-                  <ul className='list-group'>
-                    {leftArray.map((data) =>
-                      <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark'><input type="checkbox" value={data} id={data} className="check-left d-none" /><label className="labels cursor-pointer" htmlFor={data} onClick={clicked}>{data}</label></li>
-                    )}
-                  </ul>
-                </div>
-              </div>
-              <div className="m-auto justify-content-center">
-                <button className="btn shadow py-1 px-3 mt-5 text-warning fs-4" onClick={moveRight}><TiArrowRightThick /></button>
-                <button className="btn shadow py-1 px-3 mt-2 text-warning fs-4" onClick={moveLeft}><TiArrowLeftThick /></button>
-              </div>
-              <div className="w-100 m-3">
-                <h5>Selected</h5>
-                <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
-                  <ul className='list-group'>
-                    {rightArray.map((data) =>
-                      <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark'><input type="checkbox" value={data} id={data} className="check-right d-none" /><label className="labels cursor-pointer" htmlFor={data} onClick={clicked}>{data}</label></li>
-                    )}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Footer</div>
-            <div className="d-flex flex-row mb-3 gap-4">
-              <div className="w-50">
-                <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
-                <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
-              </div>
-              <div className="w-50">
-                <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
-                <select className="form-select" aria-label="Default select example">
-                  <option value="2" selected>2</option>
-                  <option value="4">4</option>
-                  <option value="6">6</option>
-                </select>
-              </div>
-            </div>
-            <div className="d-flex gap-5 mt-5">
-              <button className="btn btn-secondary px-3" data-bs-dismiss="offcanvas" aria-label="Close"> Back</button>
-              <button className="btn btn-primary px-3"> Submit</button>
-            </div>
-          </div>
-        </div> */}
-        {/* {selectedEmployee && (
-          <div
-            className="offcanvas offcanvas-end"
-            tabIndex="-1"
-            id="deleteOffcanvas"
-            aria-labelledby="deleteOffcanvasLabel"
-          >
-            <div className="offcanvas-header">
-              <div id="line1"><h5 className="offcanvas-title" id="deleteOffcanvasLabel">Delete Sampling template</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="offcanvas"
-                  aria-label="Close"
-                  onClick={() => setSelectedEmployee(null)}
-                ></button>
-              </div>
-            </div>
-            <div className="offcanvas-body">
-              <p>Do you want to delete this Template { }?</p>
-              <div className="d-flex justify-content-between">
-                <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => setSelectedEmployee(null)}>Back</button>
-                <button className="btn btn-info" onClick={handleDelete}>Submit</button>
-              </div>
-            </div>
-          </div>
-        )} */}
       </div>
 
       <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
@@ -471,7 +306,7 @@ const SamplingTemplate = () => {
             &gt;&gt;
           </button>
         </div>
-        <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
+        <button className="btn d-flex align-items-center border-dark" onClick={nextToLastPage}>
           Next <FaArrowRight className='ms-2' />
         </button>
       </div>
@@ -482,73 +317,197 @@ const SamplingTemplate = () => {
   );
 };
 const StatusModal = (_props) => {
+  const [leftArray, setLeftArray] = useState([
+    "Change Control",
+    "CAPA",
+    "Internal Audit",
+    "External Audit",
+    "Initiator",
+    "SQM",
+    "CTMS", ,
+    "Calendar",
+    "EHS",
+    "Environment",
+    "Documents",
+    "Deviation",
+
+  ]);
+
+  const [rightArray, setRightArray] = useState([
+    "Inspections",
+    "Audit",
+    "Refference",
+    "CCTT",
+  ]);
+
+  const moveRight = () => {
+    let leftElement = document.getElementsByClassName('check-left');
+    for (let index = 0; index < leftElement.length; index++) {
+      if (leftElement[index].checked) {
+        let data = leftElement[index].value;
+        let left = leftArray.filter((value) => value !== data);
+        setLeftArray(left);
+        rightArray.push(data);
+        setRightArray(rightArray);
+        break  // Important
+      }
+    }
+  }
+
+  const moveLeft = () => {
+    let rightElement = document.getElementsByClassName('check-right');
+    for (let index = 0; index < rightElement.length; index++) {
+      if (rightElement[index].checked) {
+        let data = rightElement[index].value;
+        let right = rightArray.filter((value) => value !== data);
+        setRightArray(right);
+        leftArray.push(data);
+        setLeftArray(leftArray);
+        break         // Important
+      }
+    }
+  }
+
+  const clicked = () => {
+    let checkboxes = document.querySelectorAll('.check-left, .check-right');
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    let allLabels = document.querySelectorAll('.labels');
+    allLabels.forEach((label) => {
+      label.classList.remove('clicked');
+    });
+
+    let label = event.target;
+    label.classList.add('clicked');
+    label.checked = true;
+  };
+
   return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-          <CModalHeader>
-              <CModalTitle>Add Fields</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-              
-              <CFormInput
-                  className="mb-3"
-                  type="text"
-                  label="Field Name"
-                  placeholder="Sample Type Name"                    
-              />                
-              <CFormSelect
-                  className="mb-3"
-                  type="select"
-                  label="Field Type"
-                  options={[
-                      "Select",
-                      { label: "Radio Button", value: "Radio Button" },
-                      { label: "Label", value: "Label" },
-                      { label: "Entry Field", value: "Entry Field" },
-                      { label: "Date Field", value: "Date Field" }
-                  ]}
-              />
-              
-          </CModalBody>
-          <CModalFooter>
-              <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-              <CButton color="primary">Submit</CButton>
-          </CModalFooter>
-      </CModal>
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+      <CModalHeader>
+        <CModalTitle>Add Sampling template</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <p className="text-muted">Add information of Sampling template</p>
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlInput1" className="form-label">Template Name</label>
+          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Template Name" />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlInput1" className="form-label">Unique Code</label>
+          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="exampleFormControlInput1" className="form-label">Sample Type</label>
+          <select className="form-select" aria-label="Default select example">
+            <option selected>Select...</option>
+            <option value="1">Raw Material</option>
+            <option value="3">Hydrochloric Acid</option>
+            <option value="2">Hcl</option>
+            <option value="2">Petrochemical</option>
+          </select>
+        </div>
+        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Header</div>
+        <div className="d-flex flex-row mb-3 gap-4">
+          <div className="w-50">
+            <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
+            <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+          </div>
+          <div className="w-50">
+            <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
+            <select className="form-select" aria-label="Default select example">
+              <option value="2" selected>2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </div>
+        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Body</div>
+        <div className="d-flex">
+          <div className="w-100 m-3">
+            <h5>Available</h5>
+            <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
+              <ul className='list-group'>
+                {leftArray.map((data) =>
+                  <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark rounded'><input type="checkbox" value={data} id={data} className="check-left d-none" /><label className="labels cursor-pointer bg-dark-subtle" htmlFor={data} onClick={clicked}>{data}</label></li>
+                )}
+              </ul>
+            </div>
+          </div>
+          <div className="m-auto justify-content-center">
+            <button className="btn shadow py-1 px-3 mt-5 text-warning fs-4" onClick={moveRight}><TiArrowRightThick /></button>
+            <button className="btn shadow py-1 px-3 mt-2 text-warning fs-4" onClick={moveLeft}><TiArrowLeftThick /></button>
+          </div>
+          <div className="w-100 m-3">
+            <h5>Selected</h5>
+            <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
+              <ul className='list-group'>
+                {rightArray.map((data) =>
+                  <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark rounded'><input type="checkbox" value={data} id={data} className="check-right d-none" /><label className="labels cursor-pointer bg-dark-subtle" htmlFor={data} onClick={clicked}>{data}</label></li>
+                )}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Footer</div>
+        <div className="d-flex flex-row mb-3 gap-4">
+          <div className="w-50">
+            <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
+            <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+          </div>
+          <div className="w-50">
+            <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
+            <select className="form-select" aria-label="Default select example">
+              <option value="2" selected>2</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </div>
+
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+        <CButton color="primary">Submit</CButton>
+      </CModalFooter>
+    </CModal>
   );
 };
 
 const DeleteModal = (_props) => {
   return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-          <CModalHeader>
-              <CModalTitle>Delete Sampling template</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-              <p>Are you sure you want to delete this Sampling Template { }?</p>
-          </CModalBody>
-          <CModalFooter>
-              <CButton
-                  color="secondary"
-                  onClick={_props.closeModal}
-                  style={{
-                      marginRight: "0.5rem",
-                      fontWeight: "500",
-                  }}
-              >
-                  Cancel
-              </CButton>
-              <CButton
-                  color="danger"
-                  onClick={_props.confirmDelete}
-                  style={{
-                      fontWeight: "500",
-                      color: "white",
-                  }}
-              >
-                  Delete
-              </CButton>
-          </CModalFooter>
-      </CModal>
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+      <CModalHeader>
+        <CModalTitle>Delete Sampling template</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <p>Are you sure you want to delete this Sampling Template { }?</p>
+      </CModalBody>
+      <CModalFooter>
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="danger"
+          onClick={_props.confirmDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
+        </CButton>
+      </CModalFooter>
+    </CModal>
   );
 };
 

@@ -129,18 +129,18 @@ function InvestigationCoa() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white rounded py-3 px-4 mt-5" style={{ boxShadow: "0px 0px 3px black" }}>
-            <CTable align="middle" responsive >
+          <div className="bg-white rounded border-dark-subtle border-2 mt-5">
+            <CTable align="middle" responsive className="table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Sample Type</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Product / Material</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">A.R No.</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Generic Name</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Specification Code</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Sample Type</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Product / Material</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">A.R No.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Generic Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Specification Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -195,8 +195,8 @@ function InvestigationCoa() {
                 &gt;&gt;
               </button>
             </div>
-            <button className="btn " onClick={nextToLastPage}>
-              Next <FaArrowRight />
+            <button className="btn d-flex gap-2 border-dark " onClick={nextToLastPage}>
+              Next <FaArrowRight className="mt-1"/>
             </button>
           </div>
         </div>

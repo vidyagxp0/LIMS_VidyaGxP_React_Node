@@ -7,7 +7,7 @@ function ClientsDetails() {
      return (
           <>
 
-               <div id="approval-page" className="py-3 bg-light h-100">
+               <div className="m-5 rounded py-3 bg-light">
                     <div className="container-fluid">
                          <div className="bock mb-3">
                               <div className="main-head d-flex justify-content-between align-items-center">
@@ -15,11 +15,11 @@ function ClientsDetails() {
                                    <CButton color="primary" onClick={() => setStatusModal(true)}>Specifications</CButton>
                               </div>
 
-                              <div className="bg-white px-5 py-3">
+                              <div className="bg-white mt-4">
                                    <CTable align="middle" className="mb-0" small bordered>
                                         <CTableBody>
                                              <CTableRow>
-                                                  <CTableDataCell className="text-light bg-info">Name</CTableDataCell>
+                                                  <CTableDataCell className="text-light bg-info w-25">Name</CTableDataCell>
                                                   <CTableDataCell>MIT Power</CTableDataCell>
                                              </CTableRow>
                                              <CTableRow>
@@ -37,7 +37,7 @@ function ClientsDetails() {
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Contact Person</CTableDataCell>
                                                   <CTableDataCell>dutta</CTableDataCell>
-                                             </CTableRow> 
+                                             </CTableRow>
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Address</CTableDataCell>
                                                   <CTableDataCell>MIT tala power</CTableDataCell>
@@ -49,18 +49,18 @@ function ClientsDetails() {
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Fax</CTableDataCell>
                                                   <CTableDataCell>55566655565</CTableDataCell>
-                                             </CTableRow> 
+                                             </CTableRow>
                                              <CTableRow>
                                                   <CTableDataCell className="text-light bg-info">Status</CTableDataCell>
                                                   <CTableDataCell>ACTIVE</CTableDataCell>
                                              </CTableRow>
 
-                                           
+
                                         </CTableBody>
                                    </CTable>
                               </div>
                          </div>
-                        
+
                     </div>
                </div>
 
@@ -73,10 +73,9 @@ function ClientsDetails() {
 const StatusModal = (_props) => {
      return (
           <>
-
                <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
                     <CModalHeader>
-                         <CModalTitle style={{backgroundColor:'#854fff'}}>Update Status</CModalTitle>
+                         <CModalTitle>Update Status</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                          <CFormSelect
@@ -92,10 +91,9 @@ const StatusModal = (_props) => {
                     </CModalBody>
                     <CModalFooter>
                          <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-                         <CButton color="dark">Update</CButton>
+                         <CButton color="primary">Update</CButton>
                     </CModalFooter>
                </CModal>
-
           </>
      )
 }

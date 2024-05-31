@@ -8,13 +8,14 @@ import { Link } from "react-router-dom";
 function LabelManagement() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null)
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const recordsPerPage = 5;
 
   const badgeStyle = { background: "#cdffca" };
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     { id: 1, name: "stmp1", code: "stm", city: "ahmedabad", state: "gujarat", country: "India", zip: "54255455", status: "APPROVED" },
     { id: 2, name: "ARZ ENT", code: "ARE", city: "Hyderabad", state: "Telangana", country: "India", zip: "5253654", status: "APPROVED" },
     { id: 3, name: "test", code: "NA", city: "testing525", state: "Lab1", country: "test", zip: "25255488", status: "APPROVED" },
@@ -28,7 +29,7 @@ function LabelManagement() {
     { id: 11, name: "Theta", code: "THE", city: "Lucknow", state: "Uttar Pradesh", country: "India", zip: "226001", status: "REJECTED" },
     { id: 12, name: "Iota", code: "IOT", city: "Chandigarh", state: "Punjab", country: "India", zip: "160001", status: "APPROVED" },
     { id: 13, name: "Kappa", code: "KAP", city: "Bhopal", state: "Madhya Pradesh", country: "India", zip: "462001", status: "REINITIATED" },
-  ];
+  ]);
 
   const handleStatusChange = (e) => {
     setSelectedStatus(e.target.value);
@@ -39,6 +40,18 @@ function LabelManagement() {
     setSelectedStatus(status);
     setCurrentPage(1);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
+
 
   const filteredData = selectedStatus === 'All' ? tableData : tableData.filter(data => data.status === selectedStatus);
 
@@ -109,16 +122,16 @@ function LabelManagement() {
             <CTable align="middle" responsive className="table-responsive table-striped">
               <CTableHead className="table-dark" >
                 <CTableRow >
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col ">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Label Name</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Unique Code</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">City</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">State</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Country</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">ZIP code</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col ">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Label Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Unique Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">City</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">State</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Country</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">ZIP code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -151,7 +164,7 @@ function LabelManagement() {
                     <CTableDataCell>
                       <div className="d-flex gap-3">
                         <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer" onClick={() => setRemoveModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -173,7 +186,7 @@ function LabelManagement() {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} />}
+      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}/>}
 
     </>
   );
@@ -253,7 +266,7 @@ const DeleteModel = (_props) => {
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-danger text-white"  onClick={_props.handleDelete}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );

@@ -41,12 +41,12 @@ function WorkFlow() {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5; // Number of items per page
+  const pageSize = 5; 
 
   const badgeStyles = {
-    Approved: { background: "green", color: "white", width: "110px" },
-    Rejected: { background: "red", color: "white", width: "110px" },
-    Pending: { background: "orange", color: "white", width: "110px" },
+    Approved: { background: "green", color: "white", width: "100px" },
+    Rejected: { background: "red", color: "white", width: "100px" },
+    Pending: { background: "orange", color: "white", width: "100px" },
   };
 
   const filterData = () => {
@@ -114,7 +114,7 @@ function WorkFlow() {
             </CRow>
           </div>
           <div className="bg-white mt-5 border-dark-subtle border-2 rounded">
-            <CTable align="middle" responsive>
+            <CTable align="middle" responsive className="table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
@@ -185,10 +185,10 @@ const StatusModal = ({ visible, closeModal }) => {
         <CModalTitle>New Plant</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <CFormInput type="text" label="Name" placeholder=" " />
-        <CFormInput type="text" label="Unique Code" placeholder="" />
-        <CFormInput type="text" label="Generic Name" placeholder=" " />
-        <CFormInput type="text" label="Re-testing Period(Days)" placeholder=" " />
+        <CFormInput type="text" className="mb-3" label="Name" placeholder=" Name" />
+        <CFormInput type="text" className="mb-3" label="Unique Code" placeholder="Unique Code" />
+        <CFormInput type="text" className="mb-3" label="Generic Name" placeholder="Generic Name " />
+        <CFormInput type="text" className="mb-3" label="Re-testing Period(Days)" placeholder="Re-testing Period(Days)" />
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={closeModal}>Back</CButton>

@@ -1,222 +1,250 @@
-import React,{useState} from 'react'
-import { HiDotsHorizontal } from "react-icons/hi";
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import React, { useState } from 'react'
 import { FaArrowRight } from 'react-icons/fa';
-import { IoEyeSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Clients() {
-    const [statusFilter, setStatusFilter] = useState('');
+  const [addModal, setAddModal] = useState(false);
+  const [removeModal, setRemoveModal] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [deleteId, setDeleteId] = useState(null);
+ 
+  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
+  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
 
-    const badgeStyle = { background: "gray", color: "white", width: "110px" };
-    const badgeStyle2 = {
-      background: " #2A5298",
-      color: "white",
-      width: "110px",
-    };
-    const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-    const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-    const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-    const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-  const pageSize = 8; 
+  const pageSize = 8;
   const [currentPage, setCurrentPage] = useState(1);
+
   const [employees, setEmployees] = useState([
-      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
-      { user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'INACTIVE'  },
-      {  user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'  },
-      {user: 'Initiated Product',  role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A' , addedBy: 'RPS-TSLV-00',  status: 'ACTIVE'},
+    { id: 1, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 2, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { id: 3, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 4, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
   ]);
-  
+
   const filteredEmployees = employees.filter(employee =>
     statusFilter === '' || employee.status.toLowerCase() === statusFilter.toLowerCase()
   );
-  const deleteEmployee = (index) => {
-    const updatedEmployees = employees.filter((_, i) => i !== index);
-    setEmployees(updatedEmployees);
-  };
-
+  
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, employees.length);
 
   const renderRows = () => {
-      return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-          <tr key={startIndex + index}>
-              <td>{startIndex + index + 1}</td>
-              <td>{employee.user}</td>
-              <td>{employee.role}</td>
-              <td>{employee.departments}</td>
-              <td>{employee.joiningDate}</td>
-              <td>{employee.addedBy}</td>
-              <td>  <div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.status === "ACTIVE" ? badgeStyle3 : badgeStyle4
-            }
-          >
-            {employee.status}
-          </div></td>
-              <td>
-              <div className="d-flex gap-3">
-              <Link to="/clientss/clients-details"><FontAwesomeIcon icon={faEye} /></Link>
-                        
-                        <Link to="#" onClick={() => deleteEmployee(startIndex + index)}>
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </Link>
-                    </div>
-              </td>
-          </tr>
-      ));
+    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
+      <tr key={startIndex + index}>
+        <td>{startIndex + index + 1}</td>
+        <td>{employee.user}</td>
+        <td>{employee.role}</td>
+        <td>{employee.departments}</td>
+        <td>{employee.joiningDate}</td>
+        <td>{employee.addedBy}</td>
+        <td>  <div
+          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
+          style={
+            employee.status === "ACTIVE" ? badgeStyle3 : badgeStyle4
+          }
+        >
+          {employee.status}
+        </div></td>
+        <td>
+          <div className="d-flex gap-3">
+            <Link to="/clientss/clients-details"><FontAwesomeIcon icon={faEye} /></Link>
+
+            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)} >
+              <FontAwesomeIcon icon={faTrashCan} />
+            </div>
+          </div>
+        </td>
+      </tr>
+    ));
   };
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
-};
+  };
 
-const prevPage = () => {
+  const prevPage = () => {
     setCurrentPage(currentPage - 1);
-};
+  };
 
-const nextToLastPage = () => {
+  const nextToLastPage = () => {
     setCurrentPage(Math.ceil(employees.length / pageSize));
-};
+  };
+
+  const handleDelete = () => {
+    setEmployees(employees.filter(employee => employee.id !== deleteId));
+    setRemoveModal(false);
+  };
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  };
+
+  const StatusModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Client</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="mb-3 fw-bold">Add information and add new Client</p>
+          <CFormInput type="text" className="mb-3" label="Client Name" placeholder="Bussiness Associate Name" />
+          <CFormInput type="text" className="mb-3" label="Alternate Name" placeholder="Alternate Name" />
+          <CFormInput type="email" className="mb-3" label="Email" placeholder="Email" />
+          <CFormInput type="number" className="mb-3" label="Phone" placeholder="Phone" />
+          <CFormInput type="text" className="mb-3" label="Address" placeholder="Address" />
+          <CFormInput type="text" className="mb-3" label="Contact Person" placeholder="Contact Person" />
+          <CFormInput type="number" className="mb-3" label="Contact Person Number" placeholder="Contact Person Number" />
+          <CFormInput type="text" className="mb-3" label="Tax Number" placeholder="Tax Number" />
+          <CFormInput type="text" className="mb-3" label="Fax" placeholder="Fax" />
+          <CFormInput type="text" className="mb-3" label="Website" placeholder="Website" />
+          <CFormInput type="text" className="mb-3" label="Name" placeholder="Name" />
+          <CFormInput type="text" className="mb-3" label="Plant Code" placeholder="Plant Code" />
+          <CFormInput type="text" className="mb-3" label="Address" placeholder="Address" />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton color="primary">Add</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const DeleteModal = (_props) => {
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>
+          Delete Calibration Type
+          </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+
+          <p className="fs-5">Do you want to delete this Client ?</p>
+        </CModalBody>
+
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={_props.closeModal}
+            style={{
+              marginRight: "0.5rem",
+              fontWeight: "500",
+            }}
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="danger"
+            onClick={_props.handleDelete}
+            style={{
+              fontWeight: "500",
+              color: "white",
+            }}
+          >
+            Delete
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   return (
     <>
-     <div id="div1">
-        <h5>Clients</h5>
+      <div className="m-5 px-2 d-flex flex-column gap-5">
+
+        <div className="">
+          <h5 className="fw-bold">Clients</h5>
+        </div>
+
+        <div>
+          <CRow className="">
+            <CCol sm={3}>
+              <CFormSelect
+                onChange={(e) => setStatusFilter(e.target.value)}
+                value={statusFilter}
+                style={{ border: "2px solid gray" }}
+              >
+                <option value="All">All</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </CFormSelect>
+            </CCol>
+            <CCol sm={3}></CCol>
+            <CCol sm={3}></CCol>
+            <CCol sm={3}>
+              <div className="d-flex justify-content-end">
+                <CButton color="primary" onClick={() => setAddModal(true)}>Add Client</CButton>
+              </div>
+            </CCol>
+          </CRow>
+        </div>
+
+        <div className='shadow rounded border-2 bg-light border-dark-subtle'>
+          <table className='table table-responsive table-striped'>
+            <thead>
+              <tr>
+                <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Client Name</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Email Address</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Contact Number</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Address</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Actions </th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderRows()}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="pagination">
+          <div className="pagination d-flex gap-3">
+            <div className=''>
+              <button className="btn" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
+            </div>
+            <div className="current-page-number bg-dark-subtle page-item rounded-circle">
+              <button className='btn'> {currentPage} </button>
+            </div>
+            <div>
+              <button className="btn" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
+            </div>
+          </div>
+
+          <button className="btn btn-next border-dark d-flex gap-2" onClick={nextToLastPage}> Next <FaArrowRight className="mt-1" /></button>
+        </div>
       </div>
 
-      <div id="div2" className='p-5 ' style={{display:'flex',justifyContent:'space-between'}}>
-
-         <div className="dropdown">
-                    <div>
-                        <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Show
-                            <select id='selectOption' style={{outline:'none'}} onChange={(e) => setStatusFilter(e.target.value)}>
-                <option value="">Select Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-
-                        </button>
-
-                    </div>
-                </div>
-
-         <button
-          id=""
-          className="btn btn-primary"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#AddClient"
-          aria-controls="offcanvasRight"
-          >
-          <CgAddR />  <span>Add Client</span>
-        </button>
-
-    </div>
-    
-        <div
-        className="offcanvas offcanvas-end overflow-y-scroll"
-        tabIndex="-1"
-        id="AddClient"
-        aria-labelledby="offcanvasRightLabel"
-      >
-        <div className="offcanvas-header ">
-          <div id="line1"><h5 className="offcanvas-title" id="offcanvasRightLabel">
-            Add Client
-          </h5>
-          <button
-            id="closebtn"
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-            ></button> 
-          </div>
-        </div>
-            <p style={{marginLeft:'20px'}}>Add information and add new Client</p>
-            
-        <label className="line3" htmlFor="">Client Name</label>
-        <input className="line4" required type="text" placeholder="Bussiness Associate Name"/>
-
-        <label className="line3" htmlFor="">Alternate Name</label>
-        <input className="line4" required type="text" placeholder="Alternate Name"/>
-
-        <label className="line3" htmlFor="">Email</label>
-        <input className="line4" required type="email" placeholder="Email"/> 
-        
-        <label className="line3" htmlFor="">Phone</label>
-        <input className="line4" required type="number" placeholder="Phone"/>    
-        
-        <label className="line3" htmlFor="">Address</label>
-        <input className="line4" required type="text" placeholder="Address"/>
-       
-        <label className="line3" htmlFor="">Contact Person</label>
-        <input className="line4" required type="text" placeholder="Contact Person"/>
-        
-        <label className="line3" htmlFor="">Contact Person Number</label>
-        <input className="line4" required type="text" placeholder="Contact Person Number"/>
-        
-        <label className="line3" htmlFor="">Tax Number</label>
-        <input className="line4" required type="text" placeholder="Tax Number"/> 
-        
-        <label className="line3" htmlFor="">Fax</label>
-        <input className="line4" required type="number" placeholder="Fax"/> 
-        
-        <label className="line3" htmlFor="">Website</label>
-        <input className="line4" required type="text" placeholder="Website"/>
-
-         <div id="line5">
-          <button type="button"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close">&lt; Back</button>
-           <button>Submit</button>
-          </div>
-           </div>
-
-           {/* Employee table */}
-           <div className='table-responsive p-4 container1'>
-                <table className='table shadow'>
-                    <thead>
-                        <tr>
-                            <th>Sr.no.</th>
-                            <th>Client Name</th>
-                            <th>Email Address</th>
-                            <th>Contact Number</th>
-                            <th>Address</th>
-                            <th>Added On</th>
-                            <th>Status</th>
-                            <th>Actions </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderRows()}
-                    </tbody>
-                </table>
-            </div>
-
-            <div className="pagination">
-
-<div className="pagination " style={{margin:'0 30px'}} >
-    <div className='mr-5'>
-        <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-    </div>
-    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-        <button className='btn rounded-circle'> {currentPage} </button>
-    </div>
-    <div>
-        <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-
-    </div>
-
-</div>
-
-<button className="btn btn-next" style={{margin:'0 30px'}}  onClick={nextToLastPage}> Next <FaArrowRight /></button>
-</div>
-
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {removeModal && <DeleteModal visible={removeModal}  closeModal={() => setRemoveModal(false)} handleDelete={handleDelete} />}
 
     </>
   )
