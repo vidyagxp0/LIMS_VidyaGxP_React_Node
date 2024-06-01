@@ -163,54 +163,16 @@ function Approval() {
             </CCol>
           </CRow>
         </div>
-        <div
-          className=" rounded bg-white"
-          style={{ border: "2px solid gray" }}
-        >
-          <CTable
-          id="tabless"
-            align="middle"
-            responsive
-            className="mb-0 rounded-5 table-striped table-responsive custom-table"
-          >
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell
-                  style={{ background: "#3C496A", color: "white" }}
-                  scope="col"
-                >
-                  S No.
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#3C496A", color: "white" }}
-                  scope="col"
-                >
-                  Name
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#3C496A", color: "white" }}
-                  scope="col"
-                >
-                  Code
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#3C496A", color: "white" }}
-                  scope="col"
-                >
-                  User
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#3C496A", color: "white" }}
-                  scope="col"
-                >
-                  Status
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#3C496A", color: "white" }}
-                  scope="col"
-                >
-                  Action
-                </CTableHeaderCell>
+        <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
+          <CTable align="middle" responsive className="mb-0 rounded-lg table-striped table-responsive">
+            <CTableHead  >
+              <CTableRow > 
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Name</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Code</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">User</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
+                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Action</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>

@@ -89,41 +89,37 @@ function Header() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "space-evenly",
+              justifyContent: "center",
               text: "center",
-              top: "155px",
-              left: "248px",
-              width: "750px",
-              height: "550px",
+              top: "175px",
+              left: "158px",
+              width: "950px",
+              height: "500px",
               borderRadius: "25px",
               backgroundColor: "#245A71",
               color: "white",
               fontWeight: "800",
               gap: "20px",
               boxShadow: "0px 0px 15px #245A71",
-              
             }}
           >
             <div
               style={{
-
                 backgroundImage:
                   "url('https://vidyagxp.com/vidyaGxp_logo.png')",
-                  backgroundSize:"contain",
-                  backgroundRepeat:"no-repeat",
-                  width:"400px",
-                  height:"100px",
-                  
-
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "contain",
+                width: "550px",
+                height: "150px",
               }}
             ></div>
-            <div>
+            <div className="mb-2">
               <p className="mb-3" style={{ fontSize: "15px" }}>
                 E-Mail: admin@vidyagxp.com
               </p>
-              <center>
-                <p style={{ fontSize: "15px" }}>Mobile: +91-7354654474</p>
-              </center>
+              <p className="m-0" style={{ fontSize: "15px" }}>
+                Mobile: +91-7354654474
+              </p>
             </div>
           </div>
         )}
