@@ -70,7 +70,7 @@ export default function CalibrationType() {
           <CModalTitle>Delete User</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this material?</p>
+          <p>Are you sure you want to delete this Calibration type?</p>
         </CModalBody>
         <CModalFooter>
           <CButton

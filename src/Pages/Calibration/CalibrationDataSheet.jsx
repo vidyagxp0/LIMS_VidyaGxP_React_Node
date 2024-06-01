@@ -14,7 +14,10 @@ const CalibrationDataSheet = () => {
   const [showAdditionalFields, setShowAdditionalFields] = useState(false);
   const [showAdditionalFields2, setShowAdditionalFields2] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [statusFilter, setStatusFilter] = useState('1');
+
 
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("All");
@@ -91,6 +94,43 @@ const CalibrationDataSheet = () => {
       </CModal>
     )
   }
+
+  
+  const DeleteModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this Data sheet name?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
  
   const filterData = () => {
     if (selectedStatus === "All") {
@@ -114,16 +154,16 @@ const CalibrationDataSheet = () => {
   };
   
   const [employees, setEmployees] = useState([
-    { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
-    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'REINITIATED' },
-    { fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
-    { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'REJECTED' },
-    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'DROPPED' },
+    {id:1, fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
+    {id:2, fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
+    {id:3, fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'REINITIATED' },
+    {id:4, fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    {id:5, fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    {id:6, fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
+    {id:7,fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'REJECTED' },
+    {id:8,fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    {id:9, fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    {id:10, fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'DROPPED' },
   ]);
   
   const deleteEmployee = (index) => {
@@ -132,12 +172,24 @@ const CalibrationDataSheet = () => {
     setEmployees(updatedEmployees);
   };
 
-  const filteredEmployees = employees.filter((employee) => {
-    return (
-      employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filterStatus === "" || employee.status === filterStatus)
-    );
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+  
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+    setDeleteModal(false);
+  };
+
+  const filteredEmployees = employees.filter(employee => {
+    return (employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.fieldType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.registeredBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.registeredOn.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (statusFilter === '1' || employee.status === statusFilter);
   });
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
 
@@ -175,7 +227,7 @@ const CalibrationDataSheet = () => {
           <Link to="/calibration/calibration-datasheet-details"><FontAwesomeIcon icon={faEye} className="mx-1" /></Link>
           <FontAwesomeIcon  
                   onClick={() => setAddModal(true)} icon={faPenToSquare} className="mx-2" />
-          <Link to="#" onClick={() => deleteEmployee(index)}>
+          <Link to="#"  onClick={() => handleDeleteClick(employee.id)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </Link>
         </td>
@@ -217,7 +269,7 @@ const CalibrationDataSheet = () => {
 
                     textAlign: "left",
                   }}
-                  onClick={() => setSelectedStatus("DROPPED")}
+                  onClick={() => setStatusFilter("DROPPED")}
                 >
                   <div className="text-light font-bold fs-5">DROPPED</div>
                   <div
@@ -237,7 +289,7 @@ const CalibrationDataSheet = () => {
                       "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
                     textAlign: "left",
                   }}
-                  onClick={() => setSelectedStatus("INITIATED")}
+                  onClick={() => setStatusFilter("INITIATED")}
                 >
                   <div className="text-light font-bold fs-5">INITIATED</div>
                   <div
@@ -259,7 +311,7 @@ const CalibrationDataSheet = () => {
                     textAlign: "left",
                     boxShadow: "0px 10px 20px  black !important",
                   }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
+                  onClick={() => setStatusFilter("REINITIATED")}
                 >
                   <div className="text-light font-bold fs-5">REINITIATED</div>
 
@@ -281,7 +333,7 @@ const CalibrationDataSheet = () => {
                       "linear-gradient(27deg, green , #0fd850  )",
                     textAlign: "left",
                   }}
-                  onClick={() => setSelectedStatus("APPROVED")}
+                  onClick={() => setStatusFilter("APPROVED")}
                 >
                   <butto className="text-light font-bold fs-5">APPROVED</butto>
                   <div
@@ -302,7 +354,8 @@ const CalibrationDataSheet = () => {
                       "linear-gradient(27deg ,red, #FF719A)",
                     textAlign: "left",
                   }}
-                  onClick={() => setSelectedStatus("REJECTED")}
+                  onClick={() => setStatusFilter("REJECTED")}
+                  
                 >
                   <div className="text-light font-bold fs-5">REJECTED</div>
                   <div className="count fs-1 text-light fw-bolder">
@@ -315,13 +368,14 @@ const CalibrationDataSheet = () => {
               </div>
 
         <div>
-          <CRow className="mb-3">
+          <CRow className="mt-3">
             <CCol sm={4}>
-              <CFormInput type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
+              <CFormInput  style={{ border: "2px solid gray" }} type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
             </CCol>
             <CCol sm={3}>
-              <CFormSelect value={filterStatus} onChange={handleStatusChange}>
-                                <option value="">All</option>
+              <CFormSelect  style={{ border: "2px solid gray" }}  value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}>
+                                <option value="1">All</option>
                                 <option value="INITIATED">Initiated</option>
                                 <option value="APPROVED">Approved</option>
                                 <option value="REJECTED">Rejected</option>
@@ -344,18 +398,18 @@ const CalibrationDataSheet = () => {
       </div>
 
       {/* Employee table */}
-      <div className='table-responsive rounded bg-white p-4 container1' style={{border:" 2px solid gray"}}>
+      <div className='table-responsive rounded bg-white  container1' style={{border:" 2px solid gray"}}>
         <table className='table ' style={{ fontSize: '0.8rem',  width: '100%' }}>
           <thead>
             <tr>
-              <th><input type="checkbox" /></th>
-              <th>S.No.</th>
-              <th>Unique code</th>
-              <th>Data Sheet Name</th>
-              <th>Quantitative Parameters</th>
-              <th>Qualitative Parameters</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
+              <th style={{background:"#3C496A", color:"white"}}>S.No.</th>
+              <th style={{background:"#3C496A", color:"white"}}>Unique code</th>
+              <th style={{background:"#3C496A", color:"white"}}>Data Sheet Name</th>
+              <th style={{background:"#3C496A", color:"white"}}>Quantitative Parameters</th>
+              <th style={{background:"#3C496A", color:"white"}}>Qualitative Parameters</th>
+              <th style={{background:"#3C496A", color:"white"}}>Status</th>
+              <th style={{background:"#3C496A", color:"white"}}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -383,6 +437,14 @@ const CalibrationDataSheet = () => {
 
 
 {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+
+{deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
 
 </div>
   );

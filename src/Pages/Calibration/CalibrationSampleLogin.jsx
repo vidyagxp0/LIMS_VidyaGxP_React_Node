@@ -11,7 +11,11 @@ import { Link } from 'react-router-dom';
 import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 const CalibrationSampleLogin = () => {
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
 
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,27 +103,72 @@ const CalibrationSampleLogin = () => {
     )
   }
 
+   
+  const DeleteModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this sample type?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
   const  [employees, setEmployees] = useState([
-    { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
-    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
-    { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    {id:1, fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
+    {id:2, fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'DROPPED' },
+    {id:3, fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    {id:4, fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    {id:5, fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    {id:6, fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    {id:7, fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'REINITIATED' },
+    {id:8, fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
+    {id:9, fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    {id:10, fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
   ]);
 
-  const deleteEmployee = (index) => {
-    const updatedEmployees = [...employees];
-    updatedEmployees.splice(startIndex + index, 1);
-    setEmployees(updatedEmployees);
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+  
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+    setDeleteModal(false);
   };
 
+  const filterData = () => {
+    if (selectedStatus === "All") {
+      return employees;
+    }
 
-
+    return employees.filter((employees) => employees.status === selectedStatus.toUpperCase());
+  };
 
   const filteredEmployees = employees.filter(employee => {
     return (employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -164,7 +213,7 @@ const CalibrationSampleLogin = () => {
         <td>
           <div className="d-flex gap-3">
             <Link to="/viewDetails"><FontAwesomeIcon icon={faEye} /></Link>
-            <Link to="#" onClick={() => deleteEmployee(index)}>
+            <Link to="#"  onClick={() => handleDeleteClick(employee.id)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </Link>
           </div>
@@ -186,37 +235,125 @@ const CalibrationSampleLogin = () => {
   };
 
   return (
+    <>
     <div className="mx-5">
       <div className="row my-5">
         <div className="main-head">
           <div className="title fw-bold fs-5">Calibration Sample Login</div>
         </div>
-        <div className="chart-widgets w-100">
-          <div className="row">
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
-              <div className="text-light fs-5">INITIATED</div>
-              <div className="count fs-1 text-light fw-bolder">4</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
-              <div className="text-light fs-5">REINITIATED</div>
-              <div className="count fs-1 text-light fw-bolder">0</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
-              <div className="text-light fs-5">APPROVED</div>
-              <div className="count fs-1 text-light fw-bolder">6</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
-              <div className="text-light fs-5">REJECTED</div>
-              <div className="count fs-1 text-light fw-bolder">0</div>
-            </div>
-          </div>
-        </div>
+        <div className="row" style={{ cursor: "pointer" }}>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
+
+                    textAlign: "left",
+                  }}
+                  onClick={() => setStatusFilter("DROPPED")}
+                >
+                  <div className="text-light font-bold fs-5">DROPPED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "DROPPED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setStatusFilter("INITIATED")}
+                >
+                  <div className="text-light font-bold fs-5">INITIATED</div>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "INITIATED")
+                        .length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(25deg, orange , #f7e05f )",
+
+                    textAlign: "left",
+                    boxShadow: "0px 10px 20px  black !important",
+                  }}
+                  onClick={() => setStatusFilter("REINITIATED")}
+                >
+                  <div className="text-light font-bold fs-5">REINITIATED</div>
+
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white" }}
+                  >
+                    {
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }
+                  </div>
+                </button>
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(27deg, green , #0fd850  )",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setStatusFilter("APPROVED")}
+                >
+                  <butto className="text-light font-bold fs-5">APPROVED</butto>
+                  <div
+                    className="count fs-1 text-light fw-bolder"
+                    style={{ color: "white", textAlign: "left" }}
+                  >
+                    {
+                      filterData().filter((item) => item.status === "APPROVED")
+                        .length
+                    }
+                  </div>
+                </button>
+
+                <button
+                  className="col shadow p-3 m-3 rounded"
+                  style={{
+                    background:
+                      "linear-gradient(27deg ,red, #FF719A)",
+                    textAlign: "left",
+                  }}
+                  onClick={() => setStatusFilter("REJECTED")}
+                >
+                  <div className="text-light font-bold fs-5">REJECTED</div>
+                  <div className="count fs-1 text-light fw-bolder">
+                    {
+                      filterData().filter((item) => item.status === "REJECTED")
+                        .length
+                    }
+                  </div>
+                </button>
+              </div>
+
 
         <div>
-          <CRow className="mb-3">
+          <CRow className="d-flex mt-3 justify-content-around">
             <CCol sm={4}>
               <CFormInput
                 type="text"
+                style={{ border: "2px solid gray" }}
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -225,7 +362,6 @@ const CalibrationSampleLogin = () => {
             <CCol sm={3}>
               <CFormSelect
                 options={[
-                  'Select Status',
                   { label: 'All', value: '1' },
                   { label: 'Initiated', value: 'INITIATED' },
                   { label: 'Approved', value: 'APPROVED' },
@@ -233,6 +369,7 @@ const CalibrationSampleLogin = () => {
                   { label: 'Reinitiated', value: 'REINITIATED' },
                   { label: 'Dropped', value: 'DROPPED' }
                 ]}
+                style={{ border: "2px solid gray" }}
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               />
@@ -248,76 +385,21 @@ const CalibrationSampleLogin = () => {
             </CCol>
           </CRow>
         </div>
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
-          tabIndex="-1"
-          id="offcanvasRight"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">Add Sample Login</h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-          <div className="offcanvas-body">
-            <label className="line3" htmlFor="">Sample Login Template/ Revision No.</label>
-            <input className="line4" required type="text" placeholder=" " />
-
-            <label className="line3" htmlFor="">Test Plan / Revision No.</label>
-            <input className="line4" required type="text" placeholder="prefix" />
-
-            <label className="line3" htmlFor="">Product / Material</label>
-            <input className="line4" required type="text" placeholder="prefix" />
-
-            <label className="line3" htmlFor="">Product / Material Code</label>
-            <input className="line4" required type="text" placeholder="" />
-
-            <label className="line3" htmlFor="">Generic Name</label>
-            <input className="line4" required type="text" placeholder="" />
-
-            <label className="line3" htmlFor="">Specification ID</label>
-            <input className="line4" required type="text" placeholder="" />
-
-            <label className="line3" htmlFor="">Sample Type</label>
-            <input className="line4" required type="text" placeholder="" />
-
-            <FormLabel style={{ margin: '15px 20px' }} id="demo-row-radio-buttons-group-label">Auto Sample Allotted</FormLabel>
-            <RadioGroup style={{ margin: '15px 20px' }}
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-            >
-              <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-              <FormControlLabel value="No" control={<Radio />} label="No" />
-            </RadioGroup>
-
-            <div id="line5">
-              <button type="button" data-bs-dismiss="offcanvas" aria-label="Close">&lt; Back</button>
-              <button>Submit</button>
-            </div>
-          </div>
         </div>
-      </div>
-
-      <div className='table-responsive shadow p-4 container1'>
-        <table className='table' style={{ fontSize: '0.8rem', margin: '0px auto', width: '98%' }}>
+        </div>
+        
+      <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
+        <table className='table table-responsive table-striped text-xs' >
           <thead>
             <tr>
-              <th><input type="checkbox" /></th>
-              <th>S.No.</th>
-              <th>Sample Type</th>
-              <th>Product / Material</th>
-              <th>Generic Name</th>
-              <th>Specification Code</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th  style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
+              <th  style={{background:"#3C496A", color:"white"}}>S.No.</th>
+              <th  style={{background:"#3C496A", color:"white"}}>Sample Type</th>
+              <th  style={{background:"#3C496A", color:"white"}}>Product / Material</th>
+              <th  style={{background:"#3C496A", color:"white"}}>Generic Name</th>
+              <th  style={{background:"#3C496A", color:"white"}}>Specification Code</th>
+              <th  style={{background:"#3C496A", color:"white"}}>Status</th>
+              <th  style={{background:"#3C496A", color:"white"}}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -326,7 +408,7 @@ const CalibrationSampleLogin = () => {
         </table>
       </div>
 
-      <div className="pagination" style={{ margin: '20px 0' }}>
+      <div className="pagination mx-5">
         <div className="pagination">
           <div >
             <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
@@ -342,7 +424,15 @@ const CalibrationSampleLogin = () => {
       </div>
 
 {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-    </div>
+
+{deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
+</>
   );
 };
 
