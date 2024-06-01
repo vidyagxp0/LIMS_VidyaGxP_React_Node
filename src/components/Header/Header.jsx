@@ -68,7 +68,7 @@ function Header() {
           </button>
           {notification && (
             <div className="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-10">
-              <div className="py-2 px-4 bg-gray-800 text-dark rounded-t-md">
+              {/* <div className="py-2 px-4 bg-gray-800 text-dark rounded-t-md">
                 New Notifications
               </div>
               <a
@@ -77,7 +77,7 @@ function Header() {
               >
                 Stock onboarding status updated successfully. <br />
                 <small className="text-light-500">11:31 am</small>
-              </a>
+              </a> */}
             </div>
           )}
         </div>
