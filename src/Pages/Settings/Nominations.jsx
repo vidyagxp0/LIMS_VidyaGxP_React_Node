@@ -29,14 +29,15 @@ import React, { useState } from "react";
 export default function Nominations() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
+	const [deleteId, setDeleteId] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All");
 
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     {
-      sNo: 1,
+      id: 1,
       analyst: "John Doe",
       testTechnique: "Technique A",
       totalExperience: 5,
@@ -46,7 +47,7 @@ export default function Nominations() {
       status: "Active"
     },
     {
-      sNo: 2,
+      id: 2,
       analyst: "Jane Smith",
       testTechnique: "Technique B",
       totalExperience: 7,
@@ -56,7 +57,7 @@ export default function Nominations() {
       status: "Active"
     },
     {
-      sNo: 3,
+      id: 3,
       analyst: "Alice Johnson",
       testTechnique: "Technique C",
       totalExperience: 6,
@@ -66,7 +67,7 @@ export default function Nominations() {
       status: "Inactive"
     },
     {
-      sNo: 4,
+      id: 4,
       analyst: "Bob Brown",
       testTechnique: "Technique D",
       totalExperience: 8,
@@ -76,7 +77,7 @@ export default function Nominations() {
       status: "Active"
     },
     {
-      sNo: 5,
+      id: 5,
       analyst: "Ella Davis",
       testTechnique: "Technique E",
       totalExperience: 4,
@@ -86,7 +87,7 @@ export default function Nominations() {
       status: "Inactive"
     },
     {
-      sNo: 6,
+      id: 6,
       analyst: "Chris Wilson",
       testTechnique: "Technique F",
       totalExperience: 9,
@@ -96,7 +97,7 @@ export default function Nominations() {
       status: "Active"
     },
     {
-      sNo: 7,
+      id: 7,
       analyst: "Emily Martinez",
       testTechnique: "Technique G",
       totalExperience: 3,
@@ -106,7 +107,7 @@ export default function Nominations() {
       status: "Inactive"
     },
     {
-      sNo: 8,
+      id: 8,
       analyst: "David Rodriguez",
       testTechnique: "Technique H",
       totalExperience: 10,
@@ -116,7 +117,7 @@ export default function Nominations() {
       status: "Active"
     },
     {
-      sNo: 9,
+      id: 9,
       analyst: "Grace Garcia",
       testTechnique: "Technique I",
       totalExperience: 5,
@@ -126,7 +127,7 @@ export default function Nominations() {
       status: "Inactive"
     },
     {
-      sNo: 10,
+      id: 10,
       analyst: "Samuel Hernandez",
       testTechnique: "Technique J",
       totalExperience: 7,
@@ -135,7 +136,7 @@ export default function Nominations() {
       addedOn: "2024-05-30",
       status: "Active"
     },
-  ];
+  ]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -147,6 +148,18 @@ export default function Nominations() {
     setFilterStatus(data);
     setCurrentPage(1);
   }
+
+  const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	  }
+	
+	  const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	  }
+
 
   const filteredtableData = tableData
     .filter((data) =>
@@ -166,7 +179,7 @@ export default function Nominations() {
         <td>
           <input type="checkbox" />
         </td>
-        <td>{data.sNo}</td>
+        <td>{index + 1}</td>
         <td>{data.analyst}</td>
         <td>{data.testTechnique}</td>
         <td>{data.totalExperience}</td>
@@ -186,7 +199,7 @@ export default function Nominations() {
             ><FontAwesomeIcon icon={faPenToSquare} /></div>
             <div
               className="cursor-pointer"
-              onClick={() => setRemoveModal(true)}
+              onClick={() => handleDeleteClick(data.id)}
             >
               <FontAwesomeIcon icon={faTrashCan} />
             </div>
@@ -296,7 +309,7 @@ export default function Nominations() {
           <CButton color="light" onClick={_props.closeModal}>
             Back
           </CButton>
-          <CButton className="bg-danger text-white">Delete</CButton>
+          <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
         </CModalFooter>
       </CModal>
     );
@@ -407,7 +420,7 @@ export default function Nominations() {
       {removeModal && (
         <DeleteModel
           visible={removeModal}
-          closeModal={() => setRemoveModal(false)}
+          closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete}
         />
       )}
     </>

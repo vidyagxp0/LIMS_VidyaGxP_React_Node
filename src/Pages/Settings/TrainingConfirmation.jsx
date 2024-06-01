@@ -34,12 +34,13 @@ function TrainingConfirmation() {
 	const [removeModal, setRemoveModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState("");
+	const [deleteId, setDeleteId] = useState(null)
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
 	const badgeStyle = { background: "#cdffca" };
 
-	const tableData = [
+	const [tableData, setTableData] = useState([
 		{ id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "Active" },
 		{ id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "Active" },
 		{ id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "Inactive" },
@@ -48,7 +49,7 @@ function TrainingConfirmation() {
 		{ id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "Inactive" },
 		{ id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "Active" },
 		{ id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "Active" }
-	];
+	]);
 
 
 	const handleStatusChange = (e) => {
@@ -60,6 +61,17 @@ function TrainingConfirmation() {
 		setSearchQuery(e.target.value);
 		setCurrentPage(1);
 	};
+	const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	  }
+	
+	  const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	  }
+
 
 	const filteredData = tableData.filter((data) => {
 		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -140,7 +152,7 @@ function TrainingConfirmation() {
 										<CTableHeaderCell scope="row" className="text-center">
 											<input type="checkbox" />
 										</CTableHeaderCell>
-										<CTableDataCell>{data.id}</CTableDataCell>
+										<CTableDataCell>{index + 1}</CTableDataCell>
 										<CTableDataCell>{data.analyst}</CTableDataCell>
 										<CTableDataCell>{data.testTechnique}</CTableDataCell>
 										<CTableDataCell>{data.trainingDetails}</CTableDataCell>
@@ -157,7 +169,7 @@ function TrainingConfirmation() {
 												<div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
 												<div
 													className="cursor-pointer"
-													onClick={() => setRemoveModal(true)}
+													onClick={() => handleDeleteClick(data.id)}
 												>
 													<FontAwesomeIcon icon={faTrashCan} />
 												</div>
@@ -187,7 +199,7 @@ function TrainingConfirmation() {
 			{removeModal && (
 				<DeleteModel
 					visible={removeModal}
-					closeModal={() => setRemoveModal(false)}
+					closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete}
 				/>
 			)}
 		</>
@@ -289,7 +301,7 @@ const DeleteModel = (_props) => {
 				<CButton color="light" onClick={_props.closeModal}>
 					Back
 				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
+				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
 			</CModalFooter>
 		</CModal>
 	);

@@ -108,24 +108,26 @@ function GroupName() {
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
-              <div className="">
-                <div className="row">
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }} onClick={() => handleChartClick('INITIATED')}>
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'INITIATED').length}</div>
-                  </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }} onClick={() => handleChartClick('REINITIATED')}>
-                    <div className="text-light fs-5">REINITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REINITIATED').length}</div>
-                  </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }} onClick={() => handleChartClick('APPROVED')}>
-                    <div className="text-light fs-5">APPROVED</div>
-                    <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'APPROVED').length}</div>
-                  </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }} onClick={() => handleChartClick('REJECTED')}>
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REJECTED').length}</div>
-                  </div>
+              <div className="row">
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleChartClick('DROPPED')}>
+                  <div className="text-light fs-5">DROPPED</div>
+                  <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'DROPPED').length}</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => handleChartClick('INITIATED')}>
+                  <div className="text-light fs-5">INITIATED</div>
+                  <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'INITIATED').length}</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => handleChartClick('REINITIATED')}>
+                  <div className="text-light fs-5">REINITIATED</div>
+                  <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REINITIATED').length}</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => handleChartClick('APPROVED')}>
+                  <div className="text-light fs-5">APPROVED</div>
+                  <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'APPROVED').length}</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => handleChartClick('REJECTED')}>
+                  <div className="text-light fs-5">REJECTED</div>
+                  <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REJECTED').length}</div>
                 </div>
               </div>
             </div>
@@ -159,12 +161,12 @@ function GroupName() {
             <CTable align="middle" responsive className=" table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Group Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Description</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Group Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Description</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -177,15 +179,15 @@ function GroupName() {
                     <CTableDataCell>
                       <div className=" w-75">
                         <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
-                            : data.status === "APPROVED"
-                              ? 'green-700'
-                              : data.status === "REJECTED"
-                                ? 'red-700'
-                                : data.status === "REINITIATED"
-                                  ? 'yellow-500'
-                                  : data.status === "DROPPED"
-                                    ? 'purple-700'
-                                    : 'white'}`} >{data.status}</div>
+                          : data.status === "APPROVED"
+                            ? 'green-700'
+                            : data.status === "REJECTED"
+                              ? 'red-700'
+                              : data.status === "REINITIATED"
+                                ? 'yellow-500'
+                                : data.status === "DROPPED"
+                                  ? 'purple-700'
+                                  : 'white'}`} >{data.status}</div>
                       </div>
                     </CTableDataCell>
                     <CTableDataCell>
@@ -213,7 +215,7 @@ function GroupName() {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete}/>}
+      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} handleDelete={handleDelete} />}
 
     </>
   );

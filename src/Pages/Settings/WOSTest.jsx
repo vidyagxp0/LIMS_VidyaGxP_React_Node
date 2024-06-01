@@ -150,13 +150,13 @@ function WOSTest() {
       selectedStatus === "All"
         ? data
         : data.filter(
-            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-          );
+          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+        );
     return filteredData.filter((item) =>
       item.ProductName.toLowerCase().includes(search.toLowerCase())
     );
   };
-  
+
   const handleDelete = (id) => {
     setData((prevData) => prevData.filter((item) => item.id !== id));
     setDeleteModal(false);
@@ -172,90 +172,47 @@ function WOSTest() {
           <div className="d-flex gap-4 my-3">
             <div className="chart-widgets w-100">
               <div className="">
-                <div className="row" style={{ cursor: "pointer" }}>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("INITIATED")}
-                  >
+                <div className="row">
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => setSelectedStatus('DROPPED')}>
+                    <div className="text-light fs-5">DROPPED</div>
+                    <div className="count fs-1 text-light fw-bolder">{
+                      filterData().filter(
+                        (item) => item.status === "DROPPED"
+                      ).length
+                    }</div>
+                  </div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => setSelectedStatus("INITIATED")}>
                     <div className="text-light fs-5">INITIATED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "INITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
-                      textAlign: "left",
-                      boxShadow: "0px 10px 20px  black !important",
-                    }}
-                    onClick={() => setSelectedStatus("REINITIATED")}
-                  >
+                    <div className="count fs-1 text-light fw-bolder">{
+                      filterData().filter(
+                        (item) => item.status === "INITIATED"
+                      ).length
+                    }</div>
+                  </div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => setSelectedStatus("REINITIATED")}>
                     <div className="text-light fs-5">REINITIATED</div>
-
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REINITIATED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("APPROVED")}
-                  >
-                    <butto className="text-light fs-5">APPROVED</butto>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white", textAlign: "left" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "APPROVED"
-                        ).length
-                      }
-                    </div>
-                  </button>
-
-                  <button
-                    className="col shadow p-3 m-3 rounded"
-                    style={{
-                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
-                      textAlign: "left",
-                    }}
-                    onClick={() => setSelectedStatus("REJECTED")}
-                  >
+                    <div className="count fs-1 text-light fw-bolder">{
+                      filterData().filter(
+                        (item) => item.status === "REINITIATED"
+                      ).length
+                    }</div>
+                  </div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => setSelectedStatus('APPROVED')}>
+                    <div className="text-light fs-5">APPROVED</div>
+                    <div className="count fs-1 text-light fw-bolder">{
+                      filterData().filter(
+                        (item) => item.status === "APPROVED"
+                      ).length
+                    }</div>
+                  </div>
+                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => setSelectedStatus('REJECTED')}>
                     <div className="text-light fs-5">REJECTED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
-                      {
-                        filterData().filter(
-                          (item) => item.status === "REJECTED"
-                        ).length
-                      }
-                    </div>
-                  </button>
+                    <div className="count fs-1 text-light fw-bolder">{
+                      filterData().filter(
+                        (item) => item.status === "REJECTED"
+                      ).length
+                    }</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -301,41 +258,41 @@ function WOSTest() {
             <CTable className="table table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     SNo.
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Specification Id
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Product Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Test Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Test Code
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Method No.
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Test Category
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Test Technique
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Test Type
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Status
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" >
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >
                     Actions{" "}
                   </CTableHeaderCell>
                 </CTableRow>
@@ -344,11 +301,6 @@ function WOSTest() {
               <CTableBody>
                 {filterData()
                   .slice(startIndex, endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.RefStdLotNo.toLowerCase().includes(search);
-                  })
                   .map((item, index) => (
                     <CTableRow key={index}>
                       <CTableHeaderCell scope="row" className="text-center">
@@ -374,16 +326,16 @@ function WOSTest() {
                             item.status === "INITIATED"
                               ? badgeStyle2
                               : item.status === "APPROVED"
-                              ? badgeStyle3
-                              : item.status === "REJECTED"
-                              ? badgeStyle4
-                              : item.status === "REINITIATED"
-                              ? badgeStyle5
-                              : item.status === "DROPPED"
-                              ? badgeStyle6
-                              : item.status === "ALL"
-                              ? badgeStyle
-                              : badgeStyle
+                                ? badgeStyle3
+                                : item.status === "REJECTED"
+                                  ? badgeStyle4
+                                  : item.status === "REINITIATED"
+                                    ? badgeStyle5
+                                    : item.status === "DROPPED"
+                                      ? badgeStyle6
+                                      : item.status === "ALL"
+                                        ? badgeStyle
+                                        : badgeStyle
                           }
                         >
                           {item.status}
@@ -473,7 +425,7 @@ const StatusModal = (_props) => {
         <CModalHeader>
           <CModalTitle>Add WOS Tests</CModalTitle>
         </CModalHeader>
-        <p style={{marginLeft:"20px", marginTop:"5px"}}>Add information about WOS test</p>
+        <p style={{ marginLeft: "20px", marginTop: "5px" }}>Add information about WOS test</p>
         <CModalBody>
           <CFormSelect type="text" label="Specification ID
 " placeholder="Select " />
@@ -533,7 +485,7 @@ const StatusModal = (_props) => {
             placeholder=""
             className="custom-placeholder"
           />
-         
+
         </CModalBody>
 
         <CModalFooter>
