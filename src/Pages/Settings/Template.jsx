@@ -33,13 +33,14 @@ function Template() {
 	const [addModal, setAddModal] = useState(false);
 	const [removeModal, setRemoveModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [deleteId, setDeleteId] = useState(null)
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
 	const badgeStyle = { background: "#cdffca" };
 
-	const tableData = [
+	const [tableData, setTableData] = useState([
 		{
 			SNo: 1,
 			groupName: "Group A",
@@ -144,7 +145,7 @@ function Template() {
 			initiatedAt: "2024-06-10",
 			status: "Active",
 		},
-	];
+	]);
 
 	const handleStatusChange = (e) => {
 		setSelectedStatus(e.target.value);
@@ -155,6 +156,17 @@ function Template() {
 		setSearchQuery(e.target.value);
 		setCurrentPage(1);
 	};
+
+	const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	}
+
+	const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	}
 
 	const filteredData = tableData.filter((data) => {
 		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -218,20 +230,20 @@ function Template() {
 						<CTable align="middle" responsive className="table-responsive table-striped">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Template Name</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Description</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S No.</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Template Name</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Description</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
 										No. of Check Items
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
 										Updated At
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>

@@ -10,15 +10,16 @@ import { Link } from "react-router-dom";
 function WorkSheet() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null)
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const recordsPerPage = 5;
 
   const badgeStyle = { background: "#cdffca" };
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     {
-      SNo: 1,
+      id: 1,
       sequenceNumber: "WORKSHEET-062023-0000018",
       worksheetName: "Assay(SolifenacinSuccinate)",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -28,7 +29,7 @@ function WorkSheet() {
       status: "APPROVED",
     },
     {
-      SNo: 2,
+      id: 2,
       sequenceNumber: "WORKSHEET-062023-0000017",
       worksheetName: "Assay(Mirabegron)",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -38,7 +39,7 @@ function WorkSheet() {
       status: "INITIATED",
     },
     {
-      SNo: 3,
+      id: 3,
       sequenceNumber: "WORKSHEET-062023-0000016",
       worksheetName: "Residual Solvent (Isopropyl alcohol)",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -48,7 +49,7 @@ function WorkSheet() {
       status: "APPROVED",
     },
     {
-      SNo: 4,
+      id: 4,
       sequenceNumber: "WORKSHEET-062023-0000015",
       worksheetName: "Related substances (Solifenacin Succinate)",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -58,7 +59,7 @@ function WorkSheet() {
       status: "INITIATED",
     },
     {
-      SNo: 5,
+      id: 5,
       sequenceNumber: "WORKSHEET-062023-0000014",
       worksheetName: "Mirabegron",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -68,7 +69,7 @@ function WorkSheet() {
       status: "APPROVED",
     },
     {
-      SNo: 6,
+      id: 6,
       sequenceNumber: "WORKSHEET-062023-0000013",
       worksheetName: "Solifenacin Succinate IP",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -78,7 +79,7 @@ function WorkSheet() {
       status: "INITIATED",
     },
     {
-      SNo: 7,
+      id: 7,
       sequenceNumber: "WORKSHEET-062023-0000012",
       worksheetName: "Dissolution Solifenacin Succinate IP",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -88,7 +89,7 @@ function WorkSheet() {
       status: "APPROVED",
     },
     {
-      SNo: 8,
+      id: 8,
       sequenceNumber: "WORKSHEET-062023-0000011",
       worksheetName: "10th hour Mirabegron",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -98,7 +99,7 @@ function WorkSheet() {
       status: "INITIATED",
     },
     {
-      SNo: 9,
+      id: 9,
       sequenceNumber: "WORKSHEET-062023-0000010",
       worksheetName: "3rd hour Mirabegron",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -108,7 +109,7 @@ function WorkSheet() {
       status: "APPROVED",
     },
     {
-      SNo: 10,
+      id: 10,
       sequenceNumber: "WORKSHEET-062023-0000009",
       worksheetName: "Uniformity of weight",
       productName: "LUPIN MIRA S 25 TABLET",
@@ -117,7 +118,7 @@ function WorkSheet() {
       standardPreparation: "NA",
       status: "INITIATED",
     }
-  ];
+  ]);
 
 
   const handleStatusChange = (e) => {
@@ -129,6 +130,17 @@ function WorkSheet() {
     setSelectedStatus(status);
     setCurrentPage(1);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
 
   const filteredData = selectedStatus === 'All' ? tableData : tableData.filter(data => data.status === selectedStatus);
 
@@ -196,24 +208,24 @@ function WorkSheet() {
             </CRow>
           </div>
           <div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
-            <CTable align="middle" responsive className="table-responsive table-striped" style={{fontSize:'14px'}}>
+            <CTable align="middle" responsive className="table-responsive table-striped" style={{ fontSize: '14px' }}>
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">SNo.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Sequence Number</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Worksheets Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Product Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Gtp Number</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Method Validation No.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Standard Prepration</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">id.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Sequence Number</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Worksheets Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Product Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Gtp Number</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Method Validation No.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Standard Prepration</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {currentRecords.map((data, index) => (
                   <CTableRow key={data.id}>
-                    <CTableDataCell>{data.SNo}</CTableDataCell>
+                    <CTableDataCell>{index + 1}</CTableDataCell>
                     <CTableDataCell>{data.sequenceNumber}</CTableDataCell>
                     <CTableDataCell>{data.worksheetName}</CTableDataCell>
                     <CTableDataCell>{data.productName}</CTableDataCell>
@@ -223,22 +235,22 @@ function WorkSheet() {
                     <CTableDataCell>
                       <div className="w-100">
                         <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
-                            : data.status === "APPROVED"
-                              ? 'green-700'
-                              : data.status === "REJECTED"
-                                ? 'red-700'
-                                : data.status === "REINITIATED"
-                                  ? 'yellow-500'
-                                  : data.status === "DROPPED"
-                                    ? 'purple-700'
-                                    : 'white'}`} >{data.status}</div>
+                          : data.status === "APPROVED"
+                            ? 'green-700'
+                            : data.status === "REJECTED"
+                              ? 'red-700'
+                              : data.status === "REINITIATED"
+                                ? 'yellow-500'
+                                : data.status === "DROPPED"
+                                  ? 'purple-700'
+                                  : 'white'}`} >{data.status}</div>
                       </div>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-2">
                         <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
                         <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                        <div className="cursor-pointer" onClick={() => setRemoveModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -260,7 +272,7 @@ function WorkSheet() {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} />}
+      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} handleDelete={handleDelete} />}
 
     </>
   );
@@ -469,7 +481,7 @@ const DeleteModel = (_props) => {
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );
