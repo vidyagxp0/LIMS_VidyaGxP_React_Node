@@ -43,90 +43,7 @@ export default function Samplelogin() {
   const badgeStyle4 = { background: "red", color: "white", width: "110px" };
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-  const [employees, setEmployees] = useState([
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "INITIATED",
-    },
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "INITIATED",
-    },
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "APPROVED",
-    },
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "APPROVED",
-    },
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "REJECTED",
-    },
-    {
-      user: "test Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "APPROVED",
-    },
-    {
-      user: "test Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "DROPPED",
-    },
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "APPROVED",
-    },
-    {
-      user: "test Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "DROPPED",
-    },
-    {
-      user: "Initiated Product",
-      role: "Sacubitril",
-      departments: "ARIP0000095",
-      joiningDate: "N/A",
-      addedBy: "RPS-TSLV-00",
-      status: "APPROVED",
-    },
-  ]);
-
+  
   const DeleteModal = (_props) => {
     return (
       <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
@@ -161,13 +78,91 @@ export default function Samplelogin() {
       </CModal>
     );
   };
+  
+    const [employee, setEmployees] = useState([
+      {
+        id:1,  user: "Initiated Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "INITIATED",
+      },
+      {
+       id:2, user: "Initiated Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "INITIATED",
+      },
+      {
+        id:3, user: "Initiated Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "APPROVED",
+      },
+      {
+        id:4,user: "Initiated Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "APPROVED",
+      },
+      {
+        id:5, user: "Initiated Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "REJECTED",
+      },
+      {
+        id:6, user: "test Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "APPROVED",
+      },
+      {
+        id:7, user: "test Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "DROPPED",
+      },
+      {
+        id:8,user: "Initiated Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "APPROVED",
+      },
+      {
+        id:8, user: "test Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "DROPPED",
+      },
+      {
+        id:9, user: "Initiated Product",
+        role: "Sacubitril",
+        departments: "ARIP0000095",
+        joiningDate: "N/A",
+        addedBy: "RPS-TSLV-00",
+        status: "APPROVED",
+      },
+    ]);
 
-  const  [employee, setemployees] = useState([
-    {id:1, sno: "1", testName: "Ph test", groupName: "", selection: false },
-    {id:2, sno: "2", testName: "FG Assay Test", groupName: "", selection: true },
-    {id:3, sno: "3", testName: "Water Ph test", groupName: "", selection: false },
-  ]);
-
+ 
   
   const handleDeleteClick = (id) => {
     setDeleteId(id);
@@ -178,7 +173,7 @@ export default function Samplelogin() {
     setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
     setDeleteModal(false);
   };
-  const filteredEmployees = employees.filter(
+  const filteredEmployees = employee.filter(
     (employee) =>
       (employee.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
         employee.role.toLowerCase().includes(searchTerm.toLowerCase())) &&
@@ -234,7 +229,7 @@ export default function Samplelogin() {
               </div>
               <div
                 className="cursor-pointer"
-                 onClick={() => handleDeleteClick(startIndex + index)}
+                 onClick={() => handleDeleteClick(employee.id)}
               >
                 <FontAwesomeIcon icon={faTrashCan} />
               </div>
