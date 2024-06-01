@@ -1,4 +1,4 @@
-    import {
+import {
   CButton,
   CCol,
   CFormCheck,
@@ -236,111 +236,111 @@ function StabilityProtocol() {
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100">
               <div className="">
-              <div className="row" style={{ cursor: "pointer" }}>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
+                <div className="row" style={{ cursor: "pointer" }}>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background:
+                        "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
 
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("DROPPED")}
-                >
-                  <div className="text-light font-bold fs-5">DROPPED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("DROPPED")}
                   >
-                    {
-                      filterData().filter((item) => item.status === "DROPPED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("INITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">INITIATED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
+                    <div className="text-light font-bold fs-5">DROPPED</div>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter((item) => item.status === "DROPPED")
+                          .length
+                      }
+                    </div>
+                  </button>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background:
+                        "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("INITIATED")}
                   >
-                    {
-                      filterData().filter((item) => item.status === "INITIATED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, orange , #f7e05f )",
+                    <div className="text-light font-bold fs-5">INITIATED</div>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter((item) => item.status === "INITIATED")
+                          .length
+                      }
+                    </div>
+                  </button>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background:
+                        "linear-gradient(25deg, orange , #f7e05f )",
 
-                    textAlign: "left",
-                    boxShadow: "0px 10px 20px  black !important",
-                  }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">REINITIATED</div>
-
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
+                      textAlign: "left",
+                      boxShadow: "0px 10px 20px  black !important",
+                    }}
+                    onClick={() => setSelectedStatus("REINITIATED")}
                   >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg, green , #0fd850  )",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("APPROVED")}
-                >
-                  <butto className="text-light font-bold fs-5">APPROVED</butto>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white", textAlign: "left" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "APPROVED")
-                        .length
-                    }
-                  </div>
-                </button>
+                    <div className="text-light font-bold fs-5">REINITIATED</div>
 
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg ,red, #FF719A)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("REJECTED")}
-                >
-                  <div className="text-light font-bold fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">
-                    {
-                      filterData().filter((item) => item.status === "REJECTED")
-                        .length
-                    }
-                  </div>
-                </button>
-              </div>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter(
+                          (item) => item.status === "REINITIATED"
+                        ).length
+                      }
+                    </div>
+                  </button>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background:
+                        "linear-gradient(27deg, green , #0fd850  )",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("APPROVED")}
+                  >
+                    <butto className="text-light font-bold fs-5">APPROVED</butto>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white", textAlign: "left" }}
+                    >
+                      {
+                        filterData().filter((item) => item.status === "APPROVED")
+                          .length
+                      }
+                    </div>
+                  </button>
+
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background:
+                        "linear-gradient(27deg ,red, #FF719A)",
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("REJECTED")}
+                  >
+                    <div className="text-light font-bold fs-5">REJECTED</div>
+                    <div className="count fs-1 text-light fw-bolder">
+                      {
+                        filterData().filter((item) => item.status === "REJECTED")
+                          .length
+                      }
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -381,28 +381,28 @@ function StabilityProtocol() {
               </CCol>
             </CRow>
           </div>
-          <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <div className=" rounded   bg-white" style={{ border: "2px solid gray" }}>
+            <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
                     Product/Material
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
                     Specification ID
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Generic Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Sample Type</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Protocol Type</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Protocol Id</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Generic Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Sample Type</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Protocol Type</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Protocol Id</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Added On</CTableHeaderCell>
 
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
 
@@ -484,7 +484,20 @@ function StabilityProtocol() {
   );
 }
 
+
 const StatusModal = (_props) => {
+  const [conditions, setConditions] = useState([]);
+
+  const handleAddConditions = () => {
+    const numberOfConditions = parseInt(document.getElementById('numberOfConditions').value);
+    if (!isNaN(numberOfConditions) && numberOfConditions > 0) {
+      const newConditions = Array.from({ length: numberOfConditions }, (_, index) => ({
+        id: index + 1,
+      }));
+      setConditions(newConditions);
+    }
+  };
+
   return (
     <>
       <CModal
@@ -497,6 +510,7 @@ const StatusModal = (_props) => {
         </CModalHeader>
         <CModalBody>
           <CFormSelect
+          className="mb-3"
             type="text"
             label="Specification ID"
             placeholder="Select..."
@@ -509,18 +523,21 @@ const StatusModal = (_props) => {
             ]}
           />
           <CFormInput
-            type="text "
+          className="mb-3"
+            type="text"
             label="Product"
-            placeholder=" testamine"
+            placeholder="testamine"
             disabled
           />
           <CFormInput
+          className="mb-3"
             type="text"
             label="Generic Name"
-            placeholder="Testamine "
+            placeholder="Testamine"
             disabled
           />
           <CFormSelect
+          className="mb-3"
             type="text"
             label="Sample Type"
             placeholder="Select Sample Type"
@@ -532,8 +549,9 @@ const StatusModal = (_props) => {
               { label: "Initiated Product" },
             ]}
           />
-          <label>Protocol Type</label>
+          <label className="mb-3">Protocol Type</label>
           <CFormCheck
+          className="mb-3"
             type="radio"
             id="protocolTypeNew"
             name="protocolType"
@@ -546,13 +564,14 @@ const StatusModal = (_props) => {
             label="Existing"
           />
           <CFormInput
+          className="mb-3"
             type="text"
             label="Protocol Id"
-            placeholder="Protocol Id "
+            placeholder="Protocol Id"
           />
           <CFormInput
             type="text"
-            label="Sample Login Tempalte"
+            label="Sample Login Template"
             placeholder="Select..."
             options={[
               "Select Sample Type",
@@ -560,7 +579,7 @@ const StatusModal = (_props) => {
               { label: "AAT" },
             ]}
           />
-          <CFormInput type="date" label="MAnufacturing Date" placeholder=" " />
+          <CFormInput type="date" label="Manufacturing Date" placeholder=" " />
 
           <label>DateFormat</label>
           <CFormCheck
@@ -576,11 +595,11 @@ const StatusModal = (_props) => {
             label="Long Date"
           />
 
-          <CFormInput type="text" label="Sample By" placeholder="Sample By " />
+          <CFormInput type="text" label="Sample By" placeholder="Sample By" />
           <CFormInput
             type="text"
             label="Storage Condition UOM"
-            placeholder="Storage Condition UOM "
+            placeholder="Storage Condition UOM"
           />
           <label>Define Charging Start Date</label>
           <CFormCheck
@@ -612,19 +631,29 @@ const StatusModal = (_props) => {
             label="No"
           />
 
-          <CFormInput type="file" label="Certificates If Any" placeholder=" " />
-          <div>
-            <CFormInput
-              type="text"
-              label="Number Of Storage Conditions"
-              placeholder="Number Of Storage Conditions "
-            />
-            <CButton className="bg-info text-white">Add</CButton>
-          </div>
+          <CFormInput className="mb-3" type="file" label="Certificates If Any" placeholder=" " />
+
+          <CRow>
+            <CCol sm={10}>
+              <CFormInput 
+              className="mb-3"
+                type="text"
+                id="numberOfConditions"
+                label="Number Of Storage Conditions"
+                placeholder="Number Of Storage Conditions"
+              />
+            </CCol>
+
+            <CCol sm={2}>
+              <CButton className="bg-info text-white mt-4" onClick={handleAddConditions}>Add</CButton>
+            </CCol>
+
+          </CRow>
           <CFormSelect
+            className="mb-3"
             type="text"
             label="Test Plan / Revision No."
-            placeholder="Select... "
+            placeholder="Select..."
             options={[
               "Select Sample Type",
               { label: "Hydraulic Oil" },
@@ -634,15 +663,70 @@ const StatusModal = (_props) => {
             ]}
           />
 
+          {conditions.map((condition, index) => (
+            <div className="each-condition-data mt-4" key={condition.id}>
+              <h6>Stability Storage Condition-{condition.id}</h6>
+              <div className="form-group">
+                <label className="form-label" htmlFor={`conditions_data.${index}.storage_condition`}>Storage Condition</label>
+                <div className="form-control-wrap">
+                  <select className="form-control form-select" id={`conditions_data.${index}.storage_condition`} name={`conditions_data.${index}.storage_condition`} placeholder="Storage condition Uom">
+                    <option value="">Select</option>
+                    <option value="6651c0dfa9d2755d7705ce05">10 to 25</option>
+                    <option value="664f1373a9d2755d770568b4">-20 ± 5°c</option>
+                    <option value="664f06cea9d2755d77055787">25 ± 2°c 60 ± 5% rh</option>
+                    <option value="664f06aaa9d2755d77055748">30 ± 2°c  65 ± 5% rh</option>
+                    <option value="664f02f0a9d2755d77055627">40 ± 2°c and 75 ± 5% rh</option>
+                    <option value="664f02c3a9d2755d7705561b">40 ± 2°c</option>
+                    <option value="664c24cdc105e11a716a938a">15℃</option>
+                    <option value="65cb1132de5392629a1b59b6">℉</option>
+                    <option value="6527cb451d0d0c3cb2ddceac">30℃</option>
+                    <option value="65262853842e2542b312a465">42℉</option>
+                    <option value="652580fc842e2542b3129c77">32℃</option>
+                    <option value="651fd1c204e9976b7c625a57">24℉</option>
+                    <option value="64eb669f4b131677f6614266">25℃ ± 2</option>
+                    <option value="64e9fbba4b131677f66140d1">25℃</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor={`conditions_data.${index}.no_of_pulls`}>No of Pulls</label>
+                <div className="form-control-wrap">
+                  <div className="d-flex">
+                    <input type="number" className="form-control" id={`conditions_data.${index}.no_of_pulls`} name={`conditions_data.${index}.no_of_pulls`} placeholder="No" value="1" />
+                    <button className="btn btn-primary" style={{ height: "36px", marginLeft: "8px" }}>Add</button>
+                  </div>
+                </div>
+              </div>
+              <div className="form-group">
+                <div className="row d-flex flex-nowrap">
+                  <div style={{ width: "400px" }}>
+                    <label className="form-label mt-3" htmlFor={`conditions_data.${index}.station`}>Station</label>
+                  </div>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor={`conditions_data.${index}.additional_quantity`}>Additional Quantity</label>
+                <div className="form-control-wrap">
+                  <input type="number" className="form-control" id={`conditions_data.${index}.additional_quantity`} name={`conditions_data.${index}.additional_quantity`} placeholder="Additional Quantity" value="0" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor={`conditions_data.${index}.comments`}>Comments</label>
+                <div className="form-control-wrap">
+                  <input type="text" className="form-control" id={`conditions_data.${index}.comments`} name={`conditions_data.${index}.comments`} placeholder="comments" value="" />
+                </div>
+              </div>
+            </div>
+          ))}
           <CFormInput
             type="text"
             label="Instructions"
-            placeholder="Instructions "
+            placeholder="Instructions"
           />
           <CFormInput
             type="text"
             label="Package Configuration"
-            placeholder="Package Configuration "
+            placeholder="Package Configuration"
           />
         </CModalBody>
         <CModalFooter>
@@ -655,6 +739,11 @@ const StatusModal = (_props) => {
     </>
   );
 };
+
+
+
+
+
 
 const DeleteModal = (_props) => {
   return (
