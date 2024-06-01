@@ -94,7 +94,7 @@ function ChamberTransfer() {
                                         <CTableHeaderCell scope="row" className="text-center">
                                             <input type="checkbox" />
                                         </CTableHeaderCell>
-                                        <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
+                                        <CTableDataCell>{item.id}</CTableDataCell>
                                         <CTableDataCell>{item.condition}</CTableDataCell>
                                         <CTableDataCell>{item.description}</CTableDataCell>
                                         <CTableDataCell className="d-flex">

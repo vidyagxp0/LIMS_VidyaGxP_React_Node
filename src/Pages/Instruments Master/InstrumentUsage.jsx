@@ -93,7 +93,7 @@ function InstrumentUsage() {
                             <CTableBody>
                                 {filteredData.slice(startIndex, endIndex).map((item) => (
                                     <CTableRow key={item.id}>
-                                        <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
+                                        <CTableDataCell>{item.id}</CTableDataCell>
                                         <CTableDataCell>{item.instrumentId}</CTableDataCell>
                                         <CTableDataCell>{item.category}</CTableDataCell>
                                         <CTableDataCell>{item.usageCode}</CTableDataCell>

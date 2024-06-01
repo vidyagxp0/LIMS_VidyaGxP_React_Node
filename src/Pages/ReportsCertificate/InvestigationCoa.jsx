@@ -144,9 +144,9 @@ function InvestigationCoa() {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {filteredData.slice(startIndex, endIndex).map((item, index) => (
-                  <CTableRow key={item.id}>
-                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
+                {filteredData.slice(startIndex, endIndex).map((item) => (
+                  <CTableRow key={item.id} >
+                    <CTableDataCell>{item.id}</CTableDataCell>
                     <CTableDataCell>{item.sampleType}</CTableDataCell>
                     <CTableDataCell>{item.productMaterial}</CTableDataCell>
                     <CTableDataCell>{item.arNo}</CTableDataCell>
