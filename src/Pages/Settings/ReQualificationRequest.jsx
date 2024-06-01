@@ -31,13 +31,14 @@ import React, { useState } from "react";
 export default function ReQualificationRequest() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All");
 
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const tableData = [
-    { 
+  const [tableData, setTableData] = useState([
+    {
       id: 1,
       analyst: 'John Doe',
       qualificationId: 'Q123',
@@ -47,7 +48,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Active'
     },
-    { 
+    {
       id: 2,
       analyst: 'Jane Smith',
       qualificationId: 'Q124',
@@ -57,7 +58,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Active'
     },
-    { 
+    {
       id: 3,
       analyst: 'Alice Johnson',
       qualificationId: 'Q125',
@@ -67,7 +68,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Active'
     },
-    { 
+    {
       id: 4,
       analyst: 'Bob Brown',
       qualificationId: 'Q126',
@@ -77,7 +78,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Active'
     },
-    { 
+    {
       id: 5,
       analyst: 'Ella Davis',
       qualificationId: 'Q127',
@@ -87,7 +88,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Active'
     },
-    { 
+    {
       id: 6,
       analyst: 'Chris Wilson',
       qualificationId: 'Q128',
@@ -97,7 +98,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Active'
     },
-    { 
+    {
       id: 7,
       analyst: 'Emily Martinez',
       qualificationId: 'Q129',
@@ -107,7 +108,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Inactive'
     },
-    { 
+    {
       id: 8,
       analyst: 'David Rodriguez',
       qualificationId: 'Q130',
@@ -117,7 +118,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Inactive'
     },
-    { 
+    {
       id: 9,
       analyst: 'Grace Garcia',
       qualificationId: 'Q131',
@@ -127,7 +128,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Inactive'
     },
-    { 
+    {
       id: 10,
       analyst: 'Samuel Hernandez',
       qualificationId: 'Q132',
@@ -137,7 +138,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Inactive'
     },
-    { 
+    {
       id: 11,
       analyst: 'Olivia Lopez',
       qualificationId: 'Q133',
@@ -147,7 +148,7 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Inactive'
     },
-    { 
+    {
       id: 12,
       analyst: 'Andrew King',
       qualificationId: 'Q134',
@@ -157,10 +158,10 @@ export default function ReQualificationRequest() {
       initiatedOn: '2024-05-30',
       status: 'Inactive'
     }
-  ];
-  
-  
-  
+  ]);
+
+
+
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -171,6 +172,17 @@ export default function ReQualificationRequest() {
   const handleSelect = (data) => {
     setFilterStatus(data);
     setCurrentPage(1);
+  }
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
   }
 
   const filteredtableData = tableData
@@ -191,7 +203,7 @@ export default function ReQualificationRequest() {
         <td>
           <input type="checkbox" />
         </td>
-        <td>{data.id}</td>
+        <td>{index + 1}</td>
         <td>{data.analyst}</td>
         <td>{data.qualificationId}</td>
         <td>{data.qualificationType}</td>
@@ -207,11 +219,11 @@ export default function ReQualificationRequest() {
         <td>
           <div className="d-flex gap-3">
             <div className="cursor-pointer"
-             onClick={() => setAddModal(true)}
+              onClick={() => setAddModal(true)}
             ><FontAwesomeIcon icon={faPenToSquare} /></div>
             <div
               className="cursor-pointer"
-            onClick={() => setRemoveModal(true)}
+              onClick={() => handleDeleteClick(data.id)}
             >
               <FontAwesomeIcon icon={faTrashCan} />
             </div>
@@ -249,11 +261,11 @@ export default function ReQualificationRequest() {
           <CFormSelect
             className="mb-3"
             label="Name"
-						options={[
-							{ value: "Analyst", label: "Analyst" },
-							{ value: "Analyst Two", label: "Analyst Two" },
-						]}
-					/>
+            options={[
+              { value: "Analyst", label: "Analyst" },
+              { value: "Analyst Two", label: "Analyst Two" },
+            ]}
+          />
           <CFormInput
             type="text"
             className="mb-3"
@@ -269,10 +281,10 @@ export default function ReQualificationRequest() {
           <CFormSelect
             label="Test Technique"
             className="mb-3"
-						options={[
-							{ value: "Description", label: "Description" },
-						]}
-					/>
+            options={[
+              { value: "Description", label: "Description" },
+            ]}
+          />
           <CFormInput
             type="text"
             className="mb-3"
@@ -301,13 +313,13 @@ export default function ReQualificationRequest() {
           <CModalTitle>Delete Re-Qualification Request</CModalTitle>
         </CModalHeader>
         <CModalBody>
-        Do you want to delete this Re-Qualification Request <code>Q126</code>?
+          Do you want to delete this Re-Qualification Request <code>Q126</code>?
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
             Back
           </CButton>
-          <CButton className="bg-danger text-white">Delete</CButton>
+          <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
         </CModalFooter>
       </CModal>
     );
@@ -359,18 +371,18 @@ export default function ReQualificationRequest() {
           <table className="table table-responsive table-striped">
             <thead>
               <tr>
-                <th style={{background:"#3C496A", color:"white"}}>
+                <th style={{ background: "#3C496A", color: "white" }}>
                   <input type="checkbox" />
                 </th>
-                <th style={{background:"#3C496A", color:"white"}}>Id</th>
-                <th style={{background:"#3C496A", color:"white"}}>Analyst</th>
-                <th style={{background:"#3C496A", color:"white"}}>Qualification ID</th>
-                <th style={{background:"#3C496A", color:"white"}}>Qualification Type</th>
-                <th style={{background:"#3C496A", color:"white"}}>Employee ID </th>
-                <th style={{background:"#3C496A", color:"white"}}>Test Technique</th>
-                <th style={{background:"#3C496A", color:"white"}}>Initiated On</th>
-                <th style={{background:"#3C496A", color:"white"}}>Status</th>
-                <th style={{background:"#3C496A", color:"white"}}>Action</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Id</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Analyst</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Qualification ID</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Qualification Type</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Employee ID </th>
+                <th style={{ background: "#3C496A", color: "white" }}>Test Technique</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Initiated On</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Action</th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>
@@ -418,7 +430,7 @@ export default function ReQualificationRequest() {
       {removeModal && (
         <DeleteModel
           visible={removeModal}
-          closeModal={() => setRemoveModal(false)}
+          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
         />
       )}
     </>

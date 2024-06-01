@@ -33,15 +33,16 @@ function Template() {
 	const [addModal, setAddModal] = useState(false);
 	const [removeModal, setRemoveModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [deleteId, setDeleteId] = useState(null)
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
 	const badgeStyle = { background: "#cdffca" };
 
-	const tableData = [
+	const [tableData, setTableData] = useState([
 		{
-			SNo: 1,
+			id: 1,
 			groupName: "Group A",
 			groupDescription: "Description of Group A",
 			testTechniques: "Technique A",
@@ -49,7 +50,7 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 2,
+			id: 2,
 			groupName: "Group B",
 			groupDescription: "Description of Group B",
 			testTechniques: "Technique B",
@@ -57,7 +58,7 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 3,
+			id: 3,
 			groupName: "Group C",
 			groupDescription: "Description of Group C",
 			testTechniques: "Technique C",
@@ -65,7 +66,7 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 4,
+			id: 4,
 			groupName: "Group D",
 			groupDescription: "Description of Group D",
 			testTechniques: "Technique D",
@@ -73,7 +74,7 @@ function Template() {
 			status: "Inactive",
 		},
 		{
-			SNo: 5,
+			id: 5,
 			groupName: "Group E",
 			groupDescription: "Description of Group E",
 			testTechniques: "Technique E",
@@ -81,7 +82,7 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 6,
+			id: 6,
 			groupName: "Group F",
 			groupDescription: "Description of Group F",
 			testTechniques: "Technique F",
@@ -89,7 +90,7 @@ function Template() {
 			status: "Inactive",
 		},
 		{
-			SNo: 7,
+			id: 7,
 			groupName: "Group G",
 			groupDescription: "Description of Group G",
 			testTechniques: "Technique G",
@@ -97,7 +98,7 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 8,
+			id: 8,
 			groupName: "Group H",
 			groupDescription: "Description of Group H",
 			testTechniques: "Technique H",
@@ -105,7 +106,7 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 9,
+			id: 9,
 			groupName: "Group I",
 			groupDescription: "Description of Group I",
 			testTechniques: "Technique I",
@@ -113,7 +114,7 @@ function Template() {
 			status: "Inactive",
 		},
 		{
-			SNo: 10,
+			id: 10,
 			groupName: "Group J",
 			groupDescription: "Description of Group J",
 			testTechniques: "Technique J",
@@ -121,7 +122,7 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 11,
+			id: 11,
 			groupName: "Group K",
 			groupDescription: "Description of Group K",
 			testTechniques: "Technique K",
@@ -129,7 +130,7 @@ function Template() {
 			status: "Inactive",
 		},
 		{
-			SNo: 12,
+			id: 12,
 			groupName: "Group L",
 			groupDescription: "Description of Group L",
 			testTechniques: "Technique L",
@@ -137,14 +138,14 @@ function Template() {
 			status: "Active",
 		},
 		{
-			SNo: 13,
+			id: 13,
 			groupName: "Group M",
 			groupDescription: "Description of Group M",
 			testTechniques: "Technique M",
 			initiatedAt: "2024-06-10",
 			status: "Active",
 		},
-	];
+	]);
 
 	const handleStatusChange = (e) => {
 		setSelectedStatus(e.target.value);
@@ -155,6 +156,17 @@ function Template() {
 		setSearchQuery(e.target.value);
 		setCurrentPage(1);
 	};
+
+	const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	}
+
+	const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	}
 
 	const filteredData = tableData.filter((data) => {
 		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -218,20 +230,20 @@ function Template() {
 						<CTable align="middle" responsive className="table-responsive table-striped">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Template Name</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Description</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S No.</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Template Name</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Description</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
 										No. of Check Items
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
 										Updated At
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
@@ -240,7 +252,7 @@ function Template() {
 										<CTableHeaderCell scope="row" className="text-center">
 											<input type="checkbox" />
 										</CTableHeaderCell>
-										<CTableDataCell>{data.SNo}</CTableDataCell>
+										<CTableDataCell>{index + 1}</CTableDataCell>
 										<CTableDataCell>{data.groupName}</CTableDataCell>
 										<CTableDataCell>{data.groupDescription}</CTableDataCell>
 										<CTableDataCell>{data.testTechniques}</CTableDataCell>
@@ -256,7 +268,7 @@ function Template() {
 												<div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
 												<div
 													className="cursor-pointer"
-													onClick={() => setRemoveModal(true)}
+													onClick={() => handleDeleteClick(data.id)}
 												>
 													<FontAwesomeIcon icon={faTrashCan} />
 												</div>
@@ -286,7 +298,7 @@ function Template() {
 			{removeModal && (
 				<DeleteModel
 					visible={removeModal}
-					closeModal={() => setRemoveModal(false)}
+					closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
 				/>
 			)}
 		</>
@@ -366,7 +378,7 @@ const DeleteModel = (_props) => {
 				<CButton color="light" onClick={_props.closeModal}>
 					Back
 				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
+				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
 			</CModalFooter>
 		</CModal>
 	);

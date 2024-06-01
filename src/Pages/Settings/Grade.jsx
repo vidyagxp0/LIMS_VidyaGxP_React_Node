@@ -26,20 +26,21 @@ function Grade() {
 	const [addModal, setAddModal] = useState(false);
 	const [removeModal, setRemoveModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [deleteId, setDeleteId] = useState(null)
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
-	const tableData = [
-		{ code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
-		{ code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
-		{ code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
-		{ code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
-		{ code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
-		{ code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
-		{ code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
-		{ code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" },
-	];
+	const [tableData, setTableData] = useState([
+		{ id: 1, code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
+		{ id: 2, code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
+		{ id: 3, code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
+		{ id: 4, code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
+		{ id: 5, code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
+		{ id: 6, code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
+		{ id: 7, code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
+		{ id: 8, code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" },
+	]);
 
 	const handleStatusChange = (e) => {
 		setSelectedStatus(e.target.value);
@@ -50,6 +51,17 @@ function Grade() {
 		setSearchQuery(e.target.value);
 		setCurrentPage(1);
 	};
+
+	const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	  }
+	
+	  const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	  }
 
 	const filteredData = tableData.filter((data) => {
 		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -146,7 +158,7 @@ function Grade() {
 												<div className="cursor-pointer" onClick={() => setAddModal(true)}>
 													<FontAwesomeIcon icon={faPenToSquare} />
 												</div>
-												<div className="cursor-pointer" onClick={() => setRemoveModal(true)}>
+												<div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}>
 													<FontAwesomeIcon icon={faTrashCan} />
 												</div>
 											</div>
@@ -163,7 +175,7 @@ function Grade() {
 							<CButton onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;&gt;</CButton>
 						</div>
 						<div>
-							<CButton onClick={handleNextPage} className='d-flex gap-2 border' disabled={currentPage === totalPages}>
+							<CButton onClick={handleNextPage} className='d-flex gap-2 border-dark' disabled={currentPage === totalPages}>
 								Next <FaArrowRight className="mt-1" />
 							</CButton>
 						</div>
@@ -177,7 +189,7 @@ function Grade() {
 			{removeModal && (
 				<DeleteModel
 					visible={removeModal}
-					closeModal={() => setRemoveModal(false)}
+					closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete}
 				/>
 			)}
 		</>
@@ -232,7 +244,7 @@ const DeleteModel = (_props) => {
 				<CButton color="light" onClick={_props.closeModal}>
 					Back
 				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
+				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
 			</CModalFooter>
 		</CModal>
 	);

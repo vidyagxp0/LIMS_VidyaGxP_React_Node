@@ -1,7 +1,10 @@
 import {
   CButton,
   CCol,
+  CContainer,
   CFormInput,
+  CFormLabel,
+  // CFormGroup,
   CFormSelect,
   CFormTextarea,
   CModal,
@@ -24,6 +27,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { Button } from "react-bootstrap";
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -192,12 +196,34 @@ function StorageChamber() {
                   <button
                     className="col shadow p-3 m-3 rounded"
                     style={{
-                      background: "linear-gradient(45deg,#0d6efd, #9ec5fe )",
+                      background:
+                        "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
+
+                      textAlign: "left",
+                    }}
+                    onClick={() => setSelectedStatus("DROPPED")}
+                  >
+                    <div className="text-light font-bold fs-5">DROPPED</div>
+                    <div
+                      className="count fs-1 text-light fw-bolder"
+                      style={{ color: "white" }}
+                    >
+                      {
+                        filterData().filter((item) => item.status === "DROPPED")
+                          .length
+                      }
+                    </div>
+                  </button>
+                  <button
+                    className="col shadow p-3 m-3 rounded"
+                    style={{
+                      background:
+                        "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
                       textAlign: "left",
                     }}
                     onClick={() => setSelectedStatus("INITIATED")}
                   >
-                    <div className="text-light fs-5">INITIATED</div>
+                    <div className="text-light font-bold fs-5">INITIATED</div>
                     <div
                       className="count fs-1 text-light fw-bolder"
                       style={{ color: "white" }}
@@ -212,13 +238,14 @@ function StorageChamber() {
                   <button
                     className="col shadow p-3 m-3 rounded"
                     style={{
-                      background: "linear-gradient(45deg, #d63384, #9ec5fe)",
+                      background: "linear-gradient(25deg, orange , #f7e05f )",
+
                       textAlign: "left",
                       boxShadow: "0px 10px 20px  black !important",
                     }}
                     onClick={() => setSelectedStatus("REINITIATED")}
                   >
-                    <div className="text-light fs-5">REINITIATED</div>
+                    <div className="text-light font-bold fs-5">REINITIATED</div>
 
                     <div
                       className="count fs-1 text-light fw-bolder"
@@ -234,12 +261,14 @@ function StorageChamber() {
                   <button
                     className="col shadow p-3 m-3 rounded"
                     style={{
-                      background: "linear-gradient(45deg, #ffc107, #9ec5fe)",
+                      background: "linear-gradient(27deg, green , #0fd850  )",
                       textAlign: "left",
                     }}
                     onClick={() => setSelectedStatus("APPROVED")}
                   >
-                    <butto className="text-light fs-5">APPROVED</butto>
+                    <butto className="text-light font-bold fs-5">
+                      APPROVED
+                    </butto>
                     <div
                       className="count fs-1 text-light fw-bolder"
                       style={{ color: "white", textAlign: "left" }}
@@ -255,16 +284,13 @@ function StorageChamber() {
                   <button
                     className="col shadow p-3 m-3 rounded"
                     style={{
-                      background: "linear-gradient(45deg, #dc3545, #9ec5fe)",
+                      background: "linear-gradient(27deg ,red, #FF719A)",
                       textAlign: "left",
                     }}
                     onClick={() => setSelectedStatus("REJECTED")}
                   >
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div
-                      className="count fs-1 text-light fw-bolder"
-                      style={{ color: "white" }}
-                    >
+                    <div className="text-light font-bold fs-5">REJECTED</div>
+                    <div className="count fs-1 text-light fw-bolder">
                       {
                         filterData().filter(
                           (item) => item.status === "REJECTED"
@@ -321,17 +347,61 @@ function StorageChamber() {
             >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                    className="text-center"
+                  >
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Chamber ID</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Description</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Make/Model</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Serial.No.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Location</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    S NO.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Chamber ID
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Description
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Make/Model
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Serial.No.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Location
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Status
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Actions
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -442,6 +512,33 @@ function StorageChamber() {
 }
 
 const StatusModal = (_props) => {
+  const [numRows, setNumRows] = useState(0);
+  const [inputValue, setInputValue] = useState(0);
+
+  const handleInputChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value >= 0) {
+      setInputValue(value);
+    }
+  };
+
+  const addRows = () => {
+    setNumRows(inputValue);
+  };
+
+  const renderRows = () => {
+    const rows = [];
+    for (let i = 0; i < numRows; i++) {
+      rows.push(
+        <CTableRow key={i}>
+          <CTableHeaderCell scope="row">{i + 1}</CTableHeaderCell>
+          <CTableDataCell>Rack {i+1}: <input type="text" /> </CTableDataCell>
+        </CTableRow>
+      );
+    }
+    return rows;
+  };
+
   return (
     <>
       <CModal
@@ -481,11 +578,35 @@ const StatusModal = (_props) => {
             label="Stability Storage Condition"
             placeholder="Select... "
           />
-          <CFormInput
-            type="text"
-            label="Number Of Racks"
-            placeholder="Number Of Racks "
-          />
+
+          <CContainer>
+            <CFormLabel htmlFor="numRowsInput">Number of Racks</CFormLabel>
+            <CFormInput
+              type="number"
+              id="numRowsInput"
+              value={inputValue}
+              onChange={handleInputChange}
+              min="0"
+              placeholder="Number of Racks"
+            />
+            <div className="py-4">
+              <Button variant="info" onClick={addRows}>
+                Add Rows
+              </Button>
+              <CTable striped>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell>Sno.</CTableHeaderCell>
+                    <CTableHeaderCell>
+                      Number of Shelfs Per Rack
+                    </CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>{renderRows()}</CTableBody>
+              </CTable>
+            </div>
+          </CContainer>
+
           <CFormInput
             type="text"
             label="Number Of Shelfs"

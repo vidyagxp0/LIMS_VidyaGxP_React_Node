@@ -30,6 +30,7 @@ import { Link } from "react-router-dom";
 function ChemicalCategory() {
 	const [addModal, setAddModal] = useState(false);
 	const [removeModal, setRemoveModal] = useState(false);
+	const [deleteId, setDeleteId] = useState(null)
 	const [currentPage, setCurrentPage] = useState(1);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All");
@@ -37,16 +38,16 @@ function ChemicalCategory() {
 
 	const badgeStyle = { background: "#cdffca" };
 
-	const tableData = [
-		{ code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
-		{ code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
-		{ code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
-		{ code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
-		{ code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
-		{ code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
-		{ code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
-		{ code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" }
-	];
+	const [tableData, setTableData] = useState([
+		{ id: 1, code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
+		{ id: 2, code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
+		{ id: 3, code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
+		{ id: 4, code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
+		{ id: 5, code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
+		{ id: 6, code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
+		{ id: 7, code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
+		{ id: 8, code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" }
+	]);
 
 
 	const handleStatusChange = (e) => {
@@ -58,6 +59,17 @@ function ChemicalCategory() {
 		setSearchQuery(e.target.value);
 		setCurrentPage(1);
 	};
+
+	const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	}
+
+	const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	}
 
 	const filteredData = tableData.filter((data) => {
 		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -122,15 +134,15 @@ function ChemicalCategory() {
 						<CTable align="middle" responsive className="table-responsive table-striped">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Category Code</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Category Code</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
 										Category Name
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
@@ -162,7 +174,7 @@ function ChemicalCategory() {
 												</div>
 												<div
 													className="cursor-pointer"
-													onClick={() => setRemoveModal(true)}
+													onClick={() => handleDeleteClick(data.id)}
 												>
 													<FontAwesomeIcon icon={faTrashCan} />
 												</div>
@@ -192,7 +204,7 @@ function ChemicalCategory() {
 			{removeModal && (
 				<DeleteModel
 					visible={removeModal}
-					closeModal={() => setRemoveModal(false)}
+					closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete}
 				/>
 			)}
 		</>
@@ -248,7 +260,7 @@ const DeleteModel = (_props) => {
 				<CButton color="light" onClick={_props.closeModal}>
 					Back
 				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
+				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
 			</CModalFooter>
 		</CModal>
 	);

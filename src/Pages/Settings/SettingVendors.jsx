@@ -13,10 +13,12 @@ const SettingVendors = () => {
   const [addModal, setAddModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [removeModal, setRemoveModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null)
   const [selectedStatus, setSelectedStatus] = useState("All");
   const recordsPerPage = 5;
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     { id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "INITIATED" },
     { id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "APPROVED" },
     { id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "REJECTED" },
@@ -25,7 +27,7 @@ const SettingVendors = () => {
     { id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "APPROVED" },
     { id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "REJECTED" },
     { id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "REINITIATED" }
-  ];
+  ]);
 
   const handleStatusChange = (e) => {
     setSelectedStatus(e.target.value);
@@ -36,6 +38,18 @@ const SettingVendors = () => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
+
 
   const filteredData = tableData.filter((data) => {
     const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -79,19 +93,23 @@ const SettingVendors = () => {
 
         <div className="chart-widgets w-100">
           <div className="row">
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }} onClick={() => handleWidgetClick('INITIATED')}>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background:  "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleWidgetClick('DROPPED')}>
+              <div className="text-light fs-5">DROPPED</div>
+              <div className="count fs-1 text-light fw-bolder">{statusCounts.DROPPED}</div>
+            </div>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => handleWidgetClick('INITIATED')}>
               <div className="text-light fs-5">INITIATED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.INITIATED}</div>
             </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }} onClick={() => handleWidgetClick('REINITIATED')}>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => handleWidgetClick('REINITIATED')}>
               <div className="text-light fs-5">REINITIATED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.REINITIATED}</div>
             </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }} onClick={() => handleWidgetClick('APPROVED')}>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )"}} onClick={() => handleWidgetClick('APPROVED')}>
               <div className="text-light fs-5">APPROVED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.APPROVED}</div>
             </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }} onClick={() => handleWidgetClick('REJECTED')}>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)"}} onClick={() => handleWidgetClick('REJECTED')}>
               <div className="text-light fs-5">REJECTED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.REJECTED}</div>
             </div>
@@ -136,20 +154,20 @@ const SettingVendors = () => {
           </CRow>
         </div>
 
-        {filteredData.length === 0 ? <center className='my-5'><h5>No Vendors Found</h5></center> :<div className="notFound">
+        {filteredData.length === 0 ? <center className='my-5'><h5>No Vendors Found</h5></center> : <div className="notFound">
           <div className="bg-light mt-4 border-dark-subtle border-2 rounded shadow">
             <CTable align="middle" responsive className="table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Id</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Vendor</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Test Technique</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Training Details</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Remarks</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Id</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Vendor</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Test Technique</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Training Details</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Remarks</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -158,7 +176,7 @@ const SettingVendors = () => {
                     <CTableHeaderCell scope="row" className="text-center">
                       <input type="checkbox" />
                     </CTableHeaderCell>
-                    <CTableDataCell>{data.id}</CTableDataCell>
+                    <CTableDataCell>{index + 1}</CTableDataCell>
                     <CTableDataCell>{data.analyst}</CTableDataCell>
                     <CTableDataCell>{data.testTechnique}</CTableDataCell>
                     <CTableDataCell>{data.trainingDetails}</CTableDataCell>
@@ -181,7 +199,7 @@ const SettingVendors = () => {
                     <CTableDataCell>
                       <div className="d-flex gap-3">
                         <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                        <div className="cursor-pointer"><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -205,6 +223,12 @@ const SettingVendors = () => {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {removeModal && (
+        <DeleteModel
+          visible={removeModal}
+          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
+        />
+      )}
     </div>
   );
 };
@@ -229,6 +253,29 @@ const StatusModal = (_props) => {
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
         <CButton color="primary">Add</CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
+
+const DeleteModel = (_props) => {
+  return (
+    <CModal
+      alignment="center"
+      visible={_props.visible}
+      onClose={_props.closeModal}
+    >
+      <CModalHeader>
+        <CModalTitle>Delete Analyst Template</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        Do you want to delete this Analyst Template <code>ARZ ENT</code>?
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={_props.closeModal}>
+          Back
+        </CButton>
+        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );
