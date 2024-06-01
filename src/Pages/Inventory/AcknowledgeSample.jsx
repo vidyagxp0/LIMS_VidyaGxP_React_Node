@@ -137,18 +137,49 @@ function AcknowledgeSample() {
               </CCol>
             </CRow>
           </div>
-          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <div
+            className=" rounded  m-1 bg-white"
+            style={{ border: "2px solid gray" }}
+          >
+            <CTable
+              align="middle"
+              responsive
+              className="mb-0 table-striped table-responsive"
+            >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                    className="text-center"
+                  >
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Batch Sample </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    S NO.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Batch Sample{" "}
+                  </CTableHeaderCell>
 
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Status
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Actions
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -248,6 +279,7 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="xl"
       >
         <CModalHeader className="p-3">
           <CModalTitle>
@@ -261,17 +293,17 @@ const StatusModal = (_props) => {
         <div className="modal-body p-4">
           <CForm>
             <div className="mb-3">
-              <CFormInput
+              <CFormSelect
                 type="text"
                 label="Batch Sample
 
 
                 "
-                placeholder=""
+                placeholder="Select..."
                 className="custom-placeholder"
               />
             </div>
-            <h5 style={{ fontWeight: "700" }}>
+            <h5 style={{ fontWeight: "700" }} className="mb-4">
               EM Monitoring Details(Sampling Schedule ,Batch Sample)
             </h5>
             <div className="mb-3">
@@ -288,7 +320,7 @@ const StatusModal = (_props) => {
             </div>
 
             <div className="mb-3">
-              <CFormSelect
+              <CFormInput
                 type="text"
                 label="Monitored / Sampled By
 
@@ -335,7 +367,7 @@ const StatusModal = (_props) => {
 
             <div className="mb-3">
               <CFormInput
-                type="time"
+                type="text"
                 label="Report No.
 
 

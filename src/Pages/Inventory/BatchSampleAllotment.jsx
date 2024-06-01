@@ -224,16 +224,17 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="xl"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Batch Sample Allotment Registration</CModalTitle>
         </CModalHeader>
 
-        <p>Add information and register new Batch Sample Allotment</p>
+        <p className="ml-4">Add information and register new Batch Sample Allotment</p>
         <div className="modal-body p-4">
           <CForm>
             <div className="mb-3">
-              <CFormInput
+              <CFormSelect
                 type="text"
                 label="Search By"
                 placeholder=""
@@ -243,7 +244,7 @@ const StatusModal = (_props) => {
 
             <div className="mb-3">
               <CFormInput
-                type="date"
+                type="text"
                 label="Batch Sample ID"
                 placeholder=""
                 className="custom-placeholder"
@@ -251,7 +252,7 @@ const StatusModal = (_props) => {
             </div>
 
             <div className="mb-3">
-              <CFormSelect
+              <CFormInput
                 type="text"
                 label="Registered On"
                 placeholder=""
@@ -260,7 +261,7 @@ const StatusModal = (_props) => {
             </div>
 
             <div className="mb-3">
-              <CFormInput
+              <CFormSelect
                 type="text"
                 label="Sample In-Charge"
                 placeholder=""

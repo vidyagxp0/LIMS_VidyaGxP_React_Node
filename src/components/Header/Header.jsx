@@ -7,18 +7,18 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import AuditTrail from "../../Pages/AuditTrail/AuditTrail";
 // import { Button } from "react-bootstrap";
 
 function Header() {
   const [notification, setNotification] = useState(false);
   const [drop, setDrop] = useState(false);
   const dropdownRef = useRef(null);
-  const [contact , setContact] = useState(false)
+  const [contact, setContact] = useState(false);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      toggleDrop(),
-      setContact(false)
+      toggleDrop(), setContact(false);
     }
   };
 
@@ -29,12 +29,12 @@ function Header() {
     };
   }, []);
 
-  
   const toggleDrop = () => {
     setTimeout(() => {
       setDrop(false); // Set drop to false after 2 seconds
     }, 500);
   };
+
   return (
     <header
       className=" text-dark py-4"
@@ -81,42 +81,53 @@ function Header() {
             </div>
           )}
         </div>
-        {contact&&(
- <div
- id="About"
- style={{
-   position: "absolute",
-   display: "flex",
-   flexDirection: "column",
-   alignItems: "center",
-   justifyContent: "center",
-   text: "center",
-   top: "75px",
-   left: "928px",
-   width: "250px",
-   height: "100px",
-   borderRadius: "25px",
-   backgroundColor: "#245A71",
-   color: "white",
-   fontWeight: "800",
-   gap: "20px",
-   boxShadow:"0px 0px 15px #245A71"
- }}
->
- <p className="m-0" style={{ fontSize: "15px" }}>
-   E-Mail: admin@vidyagxp.com
- </p>
- <p className="m-0" style={{ fontSize: "15px" }}>
-   Mobile: +91-7354654474
- </p>
-</div>
+        {contact && (
+          <div
+            id="About"
+            style={{
+              position: "absolute",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              text: "center",
+              top: "175px",
+              left: "158px",
+              width: "950px",
+              height: "500px",
+              borderRadius: "25px",
+              backgroundColor: "#245A71",
+              color: "white",
+              fontWeight: "800",
+              gap: "20px",
+              boxShadow: "0px 0px 15px #245A71",
+            }}
+          >
+            <div
+              style={{
+                backgroundImage:
+                  "url('https://vidyagxp.com/vidyaGxp_logo.png')",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "contain",
+                width: "550px",
+                height: "150px",
+              }}
+            ></div>
+            <div className="mb-2">
+              <p className="mb-3" style={{ fontSize: "15px" }}>
+                E-Mail: admin@vidyagxp.com
+              </p>
+              <p className="m-0" style={{ fontSize: "15px" }}>
+                Mobile: +91-7354654474
+              </p>
+            </div>
+          </div>
         )}
-       
 
         <div className="relative">
           <div ref={dropdownRef}>
             <button
-              onClick={()=>setDrop(!drop)}
+              onClick={() => setDrop(!drop)}
               className="flex items-center text-light hover:text-gray-300"
             >
               Amit Patel <FontAwesomeIcon icon={faAngleDown} />
@@ -136,22 +147,25 @@ function Header() {
                 />
                 <span className="font-bold">Amit Patel</span>
               </div>
-              <Link to="#" className="block py-2 px-4 hover:bg-gray-100">
+
+              <Link
+                to="/AuditTrail"
+                className="block py-2 px-4 hover:bg-gray-100"
+              >
                 <FontAwesomeIcon icon={faAudible} className="mr-2" />
                 Audit Trail
               </Link>
               <div
                 onClick={() => {
-                  setContact(!contact)
-
+                  setContact(!contact);
                 }}
                 className="block py-2 px-4 hover:bg-gray-100"
               >
-              {/* <Link to="#" className="block py-2 px-4 hover:bg-gray-100" > */}
-                <button id="" >
+                {/* <Link to="#" className="block py-2 px-4 hover:bg-gray-100" > */}
+                <button id="">
                   <span className="mr-3">♣</span> Contact
                 </button>
-              {/* </Link> */}
+                {/* </Link> */}
               </div>
 
               <Link to="/" className="block py-2 px-4 hover:bg-gray-100">

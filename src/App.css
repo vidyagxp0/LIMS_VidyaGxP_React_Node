@@ -1,0 +1,12 @@
+.blur-background {
+  filter: blur(5px);
+  transition: filter 0.3s ease-in-out;
+}
+
+.app-container {
+  position: relative;
+}
+
+#About {
+  z-index: 20; /* Ensure the contact modal is above the blurred content */
+}

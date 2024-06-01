@@ -269,6 +269,7 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="xl"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add OOA Template</CModalTitle>
@@ -311,25 +312,25 @@ const StatusModal = (_props) => {
                 className="custom-placeholder"
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 d-flex gap-4"  >
               <CFormInput
                 type="text"
                 label="Analyst Check List
                 "
-                placeholder=""
+                placeholder="No. of Check Items"
                 className="custom-placeholder"
               />
               <CButton color="info">Add</CButton>
             </div>
 
             <div className="mb-3">
-              <CFormSelect
+              <CFormInput
                 type="text"
                 label="Supervisor Check List
 
 
                 "
-                placeholder=""
+                placeholder="No. of Check Items"
                 className="custom-placeholder"
               />
               <CButton color="info">Add</CButton>
