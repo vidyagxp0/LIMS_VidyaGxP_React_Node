@@ -130,7 +130,7 @@ function ReleasedCoa() {
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>
-                            {filteredData.slice(startIndex, endIndex).map((item) => (
+                            {filteredData.slice(startIndex, endIndex).map((item, index) => (
                                     <CTableRow key={item.id}>
                                         <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                                         <CTableDataCell>{item.sampleType}</CTableDataCell>

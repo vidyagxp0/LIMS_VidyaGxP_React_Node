@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 
 function GroupName() {
   const [addModal, setAddModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null)
+
   const [removeModal, setRemoveModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState('All');
@@ -14,57 +16,57 @@ function GroupName() {
 
   const badgeStyle = { background: "#cdffca" };
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     {
-      SNo: 1,
+      id: 1,
       groupName: "Dissolution",
       description: "dissolution",
       addedOn: "Jun 17th 23 14:45",
       status: "APPROVED",
     },
     {
-      SNo: 2,
+      id: 2,
       groupName: "Uniformity of dosage units (By Content uniformity)",
       description: "uniformity",
       addedOn: "Jun 17th 23 14:45",
       status: "APPROVED",
     },
     {
-      SNo: 3,
+      id: 3,
       groupName: "Related substances",
       description: "rs",
       addedOn: "Jun 17th 23 14:46",
       status: "APPROVED",
     },
     {
-      SNo: 4,
+      id: 4,
       groupName: "Each film coated bilayered tablet contains",
       description: "tablets",
       addedOn: "Jun 17th 23 14:50",
       status: "APPROVED",
     },
     {
-      SNo: 5,
+      id: 5,
       groupName: "Microbial Limit Test",
       description: "mct",
       addedOn: "Jun 17th 23 14:50",
       status: "APPROVED",
     },
     {
-      SNo: 6,
+      id: 6,
       groupName: "Assay",
       description: "Assay",
       addedOn: "Aug 16th 23 13:16",
       status: "APPROVED",
     },
     {
-      SNo: 7,
+      id: 7,
       groupName: "Specific Gravity",
       description: "sg",
       addedOn: "Mar 16th 24 16:29",
       status: "APPROVED",
     }
-  ];
+  ]);
 
 
   const handleStatusChange = (e) => {
@@ -76,6 +78,17 @@ function GroupName() {
     setSelectedStatus(status);
     setCurrentPage(1);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
 
   const filteredData = selectedStatus === 'All' ? tableData : tableData.filter(data => data.status === selectedStatus);
 
@@ -178,7 +191,7 @@ function GroupName() {
                     <CTableDataCell>
                       <div className="d-flex gap-3">
                         <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer" onClick={() => setRemoveModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -200,7 +213,7 @@ function GroupName() {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} />}
+      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete}/>}
 
     </>
   );
@@ -264,7 +277,7 @@ const DeleteModel = (_props) => {
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );

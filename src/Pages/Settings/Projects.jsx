@@ -9,13 +9,15 @@ function Projects() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [deleteId, setDeleteId] = useState(null)
+
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const recordsPerPage = 5;
 
   const badgeStyle = { background: "#cdffca" };
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     { id: 1, name: "sample1", code: "test1", description: "testing1", addedOn: "May 22nd 24 15:00", status: "INITIATED" },
     { id: 2, name: "sample2", code: "test2", description: "testing2", addedOn: "May 23rd 24 14:00", status: "APPROVED" },
     { id: 3, name: "sample3", code: "test3", description: "testing3", addedOn: "May 24th 24 13:00", status: "REJECTED" },
@@ -24,7 +26,7 @@ function Projects() {
     { id: 6, name: "sample6", code: "test6", description: "testing6", addedOn: "May 27th 24 10:00", status: "APPROVED" },
     { id: 7, name: "sample7", code: "test7", description: "testing7", addedOn: "May 28th 24 09:00", status: "REJECTED" },
     { id: 8, name: "sample8", code: "test8", description: "testing8", addedOn: "May 29th 24 08:00", status: "REINITIATED" }
-  ];
+  ]);
 
   const handleStatusChange = (e) => {
     setSelectedStatus(e.target.value);
@@ -40,6 +42,17 @@ function Projects() {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
 
   const filteredData = tableData.filter((data) => {
     const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -122,14 +135,14 @@ function Projects() {
             <CTable align="middle" responsive className="table-responsive table-striped">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Projects Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Unique Code</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Description</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Projects Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Unique Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Description</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Added On</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -161,7 +174,7 @@ function Projects() {
                       <div className="d-flex gap-3">
                         <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
                         <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                        <div className="cursor-pointer" onClick={() => setRemoveModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer"onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -183,7 +196,7 @@ function Projects() {
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} />}
+      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}/>}
 
     </>
   );
@@ -249,7 +262,7 @@ const DeleteModel = (_props) => {
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );

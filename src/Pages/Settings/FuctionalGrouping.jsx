@@ -208,7 +208,6 @@ function FuctionalGrouping() {
 									onChange={handleStatusChange}
 									className="border-dark-subtle border-2"
 									options={[
-										"Select Status",
 										{ value: "All", label: "All" },
 										{ value: "Active", label: "Active" },
 										{ value: "Inactive", label: "Inactive" },

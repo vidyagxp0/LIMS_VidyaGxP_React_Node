@@ -9,13 +9,15 @@ function InvestigationTamplate() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [deleteId, setDeleteId] = useState(null)
+
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const recordsPerPage = 5;
 
   const badgeStyle = { background: "#cdffca" };
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     { id: 1, name: "Template1", code: "temp1", noOfAnalystSection: 1, noOfSupervisorSection: 1, updatedAt: "Sep 29th 23 16:19", status: "APPROVED" },
     { id: 2, name: "Template2", code: "temp2", noOfAnalystSection: 2, noOfSupervisorSection: 1, updatedAt: "Oct 1st 23 10:15", status: "INITIATED" },
     { id: 3, name: "Template3", code: "temp3", noOfAnalystSection: 3, noOfSupervisorSection: 2, updatedAt: "Oct 5th 23 09:45", status: "REJECTED" },
@@ -26,7 +28,7 @@ function InvestigationTamplate() {
     { id: 8, name: "Template8", code: "temp8", noOfAnalystSection: 2, noOfSupervisorSection: 1, updatedAt: "Dec 1st 23 10:10", status: "APPROVED" },
     { id: 9, name: "Template9", code: "temp9", noOfAnalystSection: 1, noOfSupervisorSection: 2, updatedAt: "Dec 3rd 23 14:00", status: "REJECTED" },
     { id: 10, name: "Template10", code: "temp10", noOfAnalystSection: 3, noOfSupervisorSection: 1, updatedAt: "Dec 5th 23 09:20", status: "REINITIATED" },
-  ];
+  ]);
 
 
   const handleStatusChange = (e) => {
@@ -43,6 +45,17 @@ function InvestigationTamplate() {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
 
   const filteredData = tableData.filter((data) => {
     const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -161,7 +174,7 @@ function InvestigationTamplate() {
                     <CTableDataCell>
                       <div className="d-flex gap-3">
                         <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div className="cursor-pointer" onClick={() => setRemoveModal(true)}><FontAwesomeIcon icon={faTrashCan} /></div>
+                        <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
                       </div>
                     </CTableDataCell>
                   </CTableRow>
@@ -182,7 +195,7 @@ function InvestigationTamplate() {
         </div>
       </div>
 
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} />}
+      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete} />}
 
     </>
   );
@@ -199,7 +212,7 @@ const DeleteModel = (_props) => {
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );
