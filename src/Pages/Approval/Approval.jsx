@@ -130,7 +130,7 @@ function Approval() {
                     </div>
                   </CTableDataCell>
                   <CTableDataCell className="text-start">
-                    <Link to={`/approval/${item.id}`}><FontAwesomeIcon icon={faEye} /></Link>
+                    <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
                   </CTableDataCell>
                 </CTableRow>
               ))}

@@ -33,8 +33,34 @@ function StorageLocation() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const pageSize = 5;
+
+  const StatusModal = (_props) => {
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>New Storage Condition</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput type="text" label="Name" placeholder="Storage Name" />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary">Add</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   const [storageConditions, setStorageConditions] = useState([
     {
       code: "na-001",
@@ -108,6 +134,51 @@ function StorageLocation() {
     },
   ]);
 
+  const DeleteModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Delete User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Are you sure you want to delete this storage?</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={_props.closeModal}
+            style={{
+              marginRight: "0.5rem",
+              fontWeight: "500",
+            }}
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="danger"
+            onClick={_props.confirmDelete}
+            style={{
+              fontWeight: "500",
+              color: "white",
+            }}
+          >
+            Delete
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setStorageConditions((prevConditions) => prevConditions.filter((condition) => condition.id !== deleteId));
+    setDeleteModal(false);
+  };
+
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1); // Reset to the first page when searching
@@ -116,10 +187,6 @@ function StorageLocation() {
   const handleFilter = (event) => {
     setFilterStatus(event.target.value);
     setCurrentPage(1); // Reset to the first page when filtering
-  };
-
-  const handleDelete = (id) => {
-    setStorageConditions(storageConditions.filter((item) => item.id !== id));
   };
 
   const filteredConditions = storageConditions.filter((item) => {
@@ -167,7 +234,7 @@ function StorageLocation() {
                 <CFormInput
                   type="text"
                   placeholder="Search..."
-                  style={{border:"2px solid gray"}}
+                  style={{ border: "2px solid gray" }}
                   className="border-2"
                   value={searchQuery}
                   onChange={handleSearch}
@@ -178,7 +245,7 @@ function StorageLocation() {
                   value={filterStatus}
                   onChange={handleFilter}
                   className="border-2"
-                  style={{border:"2px solid gray"}}
+                  style={{ border: "2px solid gray" }}
                   options={[
                     { disabled: true, label: "Select Status", value: "" },
                     { label: "All", value: "" },
@@ -198,7 +265,7 @@ function StorageLocation() {
             </CRow>
           </div>
           <div
-            className=" rounded   bg-white"
+            className="rounded bg-white"
             style={{ border: "2px solid gray" }}
           >
             <CTable
@@ -289,7 +356,7 @@ function StorageLocation() {
                         </div>
                         <div
                           className="cursor-pointer"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handleDeleteClick(item.id)}
                         >
                           <FontAwesomeIcon icon={faTrashCan} />
                         </div>
@@ -335,55 +402,16 @@ function StorageLocation() {
       {delModal && (
         <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} />
       )}
+
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
     </>
   );
 }
-
-const StatusModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>New Storage Condition</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput type="text" label="Name" placeholder="Storage Name" />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Cancel
-        </CButton>
-        <CButton color="primary">Add</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
-const RemoveModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>Delete Storage Condition</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        Do you want to delete this Storage Condition{" "}
-        <code>below 25°c (77°f) in a flammable cabinet</code>?
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Cancel
-        </CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 
 export default StorageLocation;

@@ -29,6 +29,8 @@ export default function Samplelogin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = {
@@ -124,12 +126,57 @@ export default function Samplelogin() {
     },
   ]);
 
-  const testData = [
-    { sno: "1", testName: "Ph test", groupName: "", selection: false },
-    { sno: "2", testName: "FG Assay Test", groupName: "", selection: true },
-    { sno: "3", testName: "Water Ph test", groupName: "", selection: false },
-  ];
+  const DeleteModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Delete User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Are you sure you want to delete this storage?</p>
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            color="secondary"
+            onClick={_props.closeModal}
+            style={{
+              marginRight: "0.5rem",
+              fontWeight: "500",
+            }}
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="danger"
+            onClick={_props.confirmDelete}
+            style={{
+              fontWeight: "500",
+              color: "white",
+            }}
+          >
+            Delete
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
+  const  [employee, setemployees] = useState([
+    {id:1, sno: "1", testName: "Ph test", groupName: "", selection: false },
+    {id:2, sno: "2", testName: "FG Assay Test", groupName: "", selection: true },
+    {id:3, sno: "3", testName: "Water Ph test", groupName: "", selection: false },
+  ]);
+
+  
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+    setDeleteModal(false);
+  };
   const filteredEmployees = employees.filter(
     (employee) =>
       (employee.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -186,7 +233,7 @@ export default function Samplelogin() {
               </div>
               <div
                 className="cursor-pointer"
-                onClick={() => deleteEmployee(startIndex + index)}
+                 onClick={() => handleDeleteClick(startIndex + index)}
               >
                 <FontAwesomeIcon icon={faTrashCan} />
               </div>
@@ -207,11 +254,10 @@ export default function Samplelogin() {
   const nextToLastPage = () => {
     setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
   };
-
   const deleteEmployee = (index) => {
-    const newEmployees = [...employees];
+    const newEmployees = [...employee];
     newEmployees.splice(index, 1);
-    setEmployees(newEmployees);
+    setemployees(newEmployees);
   };
 
   return (
@@ -455,7 +501,7 @@ export default function Samplelogin() {
                 </tr>
               </thead>
               <tbody>
-                {testData.map((row, index) => (
+                {employee.map((row, index) => (
                   <tr key={index}>
                     <td>{row.sno}</td>
                     <td>{row.testName}</td>
@@ -573,6 +619,11 @@ export default function Samplelogin() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
+
+<DeleteModal
+        visible={deleteModal}
+        closeModal={() => setDeleteModal(false)}
+        confirmDelete={handleDeleteConfirm}/>
     </>
   );
 }
