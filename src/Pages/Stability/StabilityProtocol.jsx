@@ -420,9 +420,9 @@ function StabilityProtocol() {
                     <CTableDataCell>{item.protocolType}</CTableDataCell>
                     <CTableDataCell>{item.protocolId}</CTableDataCell>
                     <CTableDataCell>{item.addedOn}</CTableDataCell>
-                    <CTableDataCell className="d-flex">
-                      <div
-                        className="py-2 px-3 small rounded fw-bold"
+                    <CTableDataCell className="">
+                      <button
+                        className=" btn py-2 px-3 small rounded fw-bold"
                         style={
                           item.status === "INITIATED"
                             ? badgeStyle2
@@ -440,7 +440,7 @@ function StabilityProtocol() {
                         }
                       >
                         {item.status}
-                      </div>
+                      </button>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
