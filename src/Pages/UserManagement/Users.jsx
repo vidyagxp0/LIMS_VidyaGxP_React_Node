@@ -32,7 +32,7 @@ const Users = () => {
   const badgeStyle = { background: "green", color: "white", width: "110px" };
   const badgeStyle2 = { background: " red", color: "white", width: "110px" };
 
-  const employees = [
+  const [employees, setEmployees] = useState([
     {
       id: "USER-022024-000001",
       user: "John Doe",
@@ -123,12 +123,10 @@ const Users = () => {
       addedBy: "admin",
       status: "Inactive",
     },
-  ];
+  ]);
 
-  const filteredEmployees = employees.filter((employee) =>
-    selectedStatus === "All"
-      ? true
-      : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+  const filteredEmployees = employees.filter(employee =>
+    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
   );
 
   const startIndex = (currentPage - 1) * pageSize;
@@ -167,10 +165,7 @@ const Users = () => {
               <div className="cursor-pointer" onClick={() => setAddModal(true)}>
                 <FontAwesomeIcon icon={faPenToSquare} />
               </div>
-              <div
-                className="cursor-pointer"
-                onClick={() => handleDeleteClick(employee.id)}
-              >
+              <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
                 <FontAwesomeIcon icon={faTrashCan} />
               </div>
             </div>
@@ -192,19 +187,16 @@ const Users = () => {
     setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting employee: ${selectedEmployee.name}`);
-    setSelectedEmployee(null);
-  };
   const handleDeleteClick = (id) => {
     setDeleteId(id);
     setDeleteModal(true);
   };
 
   const handleDeleteConfirm = () => {
-    setData(employees.filter((employee) => employee.id !== deleteId));
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
     setDeleteModal(false);
   };
+
 
   return (
     <div className=" mx-5 ">
@@ -212,41 +204,30 @@ const Users = () => {
         <div className="main-head">
           <div className="title fw-bold fs-5 py-4">User Management/Users</div>
         </div>
-        <div className="d-flex justify-content-between my-3">
-          <div className="dropdown">
-            <button
-              className="btn border btn-block"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-             
-              <select
-                style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }}
-                id="selectOption"
-                onChange={(e) => {
-                  setSelectedStatus(e.target.value);
-                  setCurrentPage(1);
-                }}
-              >
-                <option value="All">All</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </button>
-          </div>
-          <div className="">
-            <CButton color="primary" onClick={() => setAddModal(true)}>
-              Add User
-            </CButton>
-          </div>
-        </div>
+        <div className="d-flex justify-content-between my-4">
+                    <div className="dropdown">
+                        <CFormSelect
+                            onChange={(e) => {
+                                setSelectedStatus(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            value={selectedStatus}
+                            style={{ border: "2px solid gray", width: "220px" }}
+                        >
+
+                            <option value="All">All</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </CFormSelect>
+                    </div>
+                    <div className="">
+                        <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
+                    </div>
+                </div>
       </div>
 
       {/* Employee table */}
-      <div className=" rounded    bg-white" style={{ border: "2px solid gray" }}>
+      <div className=" rounded bg-white" style={{ border: "2px solid gray" }}>
         {" "}
         <table className="table table-striped">
           <thead>
@@ -304,13 +285,8 @@ const Users = () => {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal}
-          closeModal={() => setDeleteModal(false)}
-          confirmDelete={handleDeleteConfirm}
-        />
-      )}
+      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
+
     </div>
   );
 };
@@ -399,7 +375,7 @@ const DeleteModal = (_props) => {
           <CModalTitle>Delete User</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this user {} ?</p>
+          <p>Are you sure you want to delete this user { } ?</p>
         </CModalBody>
         <CModalFooter>
           <CButton
@@ -414,7 +390,7 @@ const DeleteModal = (_props) => {
           </CButton>
           <CButton
             color="danger"
-            onClick={_props.handleDelete}
+            onClick={_props.confirmDelete}
             style={{
               fontWeight: "500",
               color: "white",
