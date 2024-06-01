@@ -539,6 +539,7 @@ const StatusModal = (_props) => {
           <CFormSelect
           className="mb-3"
             type="text"
+            
             label="Sample Type"
             placeholder="Select Sample Type"
             options={[
