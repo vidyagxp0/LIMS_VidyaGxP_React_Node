@@ -3,11 +3,11 @@ import { CForm, CFormInput, CButton, CFormCheck } from '@coreui/react';
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import './Login.css'
+import '../../Pages/Login/Login.css'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Login(props) {
+function AdminPanel(props) {
 	const [email, setEmail] = useState('');
 	const [passwd, setPasswd] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +19,7 @@ function Login(props) {
 	
 	const handleLogin = () => {
 		if (email === "Amit" && passwd === "Amit@121") {
-			navigate('/dashboard');
+			navigate('/userMgnt');
 			props.show(true);
 		} else if (email === "" || passwd === "") {
 			toast.warning("Enter required credentials");
@@ -48,6 +48,8 @@ function Login(props) {
 				<img src="/login.png" width={"300px"} />
 				</div>
 			  <h2 className="text-3xl font-bold text-center  text-white">Welcome To Laboratory Information Management System.</h2>
+			  <h2 className="text-3xl font-bold text-center  text-black">Admin Panel</h2>
+
 			 {/* <div className="text-center text-lg text-gray-200 mb-6"> <p>Enter your credencials to access the LIMS Software.</p></div> */}
 				</div>
 			  <CForm>
@@ -87,7 +89,6 @@ function Login(props) {
 				  </CButton>
 				</div>
 			  </CForm>
-			  {/* <p className="text-sm text-white text-center">Don’t have an account? <a href="#" className="underline">Register here</a></p> */}
 			</div>
 		  </div>
 		</div>
@@ -96,4 +97,4 @@ function Login(props) {
 	)
 }
 
-export default Login
+export default AdminPanel

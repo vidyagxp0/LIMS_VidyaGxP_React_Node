@@ -206,6 +206,8 @@ import SettingStability from "./Pages/Settings/SettingStability.jsx"
 import TestHistory from "./Pages/Settings/TestHistory.jsx"
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx"
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx"
+import AdminPanel from "./components/AdminPanel/AdminPanel.jsx"
+import UserMgnt from "./components/AdminPanel/UserMgnt.jsx"
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -223,6 +225,10 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login show={checkLoggedIn}/>} />
+          <Route path="/adminPanel" element={<AdminPanel show={checkLoggedIn}/>} />
+          <Route path="/userMgnt" element={<UserMgnt />}/>
+
+
           <Route path="" element={<MainPanel />}>
             <Route path="/dashboard" element={<Dashboard setToast={checkLoggedIn} show={isLoggedIn}/>} />
             <Route path="/approval" element={<Approval />} />
