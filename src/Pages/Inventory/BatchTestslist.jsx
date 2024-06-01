@@ -15,6 +15,8 @@ import {
   CTableHeaderCell,
   CTableRow,
   CFormSelect,
+  CFormLabel,
+  CFormCheck,
 } from "@coreui/react";
 import {
   faEye,
@@ -127,7 +129,7 @@ function BatchTestslist() {
               <CCol sm={3}>
                 <CFormInput
                   type="text"
-                  style={{border:"2px solid gray"}}
+                  style={{ border: "2px solid gray" }}
                   placeholder="Search by Batch Sample ID"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -142,20 +144,54 @@ function BatchTestslist() {
               </CCol>
             </CRow>
           </div>
-          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <div
+            className=" rounded  m-1 bg-white"
+            style={{ border: "2px solid gray" }}
+          >
+            <CTable
+              align="middle"
+              responsive
+              className="mb-0 table-striped table-responsive"
+            >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                    className="text-center"
+                  >
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    S NO.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
                     Batch Sample ID
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Registered On</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Registered On
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Status
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#3C496A", color: "white" }}
+                    scope="col"
+                  >
+                    Actions
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -251,17 +287,20 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="xl"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Batch Tests List Registration</CModalTitle>
         </CModalHeader>
 
-        <p>Add information and register new Batch Tests List</p>
+        <p className="ml-4">
+          Add information and register new Batch Tests List
+        </p>
         <div className="modal-body p-4">
           <CForm>
             <div className="mb-3">
               <CFormInput
-                type="date"
+                type="text"
                 label="Batch Sample ID
                 "
                 placeholder=""
@@ -270,7 +309,7 @@ const StatusModal = (_props) => {
             </div>
             <div className="mb-3">
               <CFormInput
-                type="date"
+                type="text"
                 label="Test Name
                 "
                 placeholder=""
@@ -279,30 +318,37 @@ const StatusModal = (_props) => {
             </div>
 
             <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Test Type
-
-
-
-
-               "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Submission Type
-                "
+                label="Test Type"
                 placeholder=""
                 className="custom-placeholder"
               />
             </div>
+
+            <CForm className="mb-3">
+              <CFormLabel>Submission Type</CFormLabel>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <CFormCheck
+                  type="radio"
+                  name="sampleRadio"
+                  id="acceptRadio"
+                  label="Auto Evaluation Only
+                  "
+                  value="accept"
+                />
+                <CFormCheck
+                  type="radio"
+                  name="sampleRadio"
+                  id="rejectRadio"
+                  label="Auto Evaluation & Submission
+                  "
+                  value="reject"
+                />
+              </div>
+            </CForm>
             <div>
-              <table>
+              <CTable size="xl">
                 <thead
                   style={{ background: "lightblue", border: "2px solid black" }}
                 >
@@ -382,7 +428,7 @@ const StatusModal = (_props) => {
                     <td></td>
                   </tr>
                 </tbody>
-              </table>
+              </CTable>
             </div>
           </CForm>
         </div>
