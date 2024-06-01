@@ -93,7 +93,7 @@ function Approval() {
           </CRow>
         </div>
         <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <CTable align="middle" responsive className="mb-0 rounded-lg table-striped table-responsive">
             <CTableHead  >
               <CTableRow > 
                 <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
