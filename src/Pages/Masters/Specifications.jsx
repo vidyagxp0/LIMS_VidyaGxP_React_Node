@@ -1,34 +1,30 @@
 import React, { useState } from "react";
 // import "./StorageCondition.css";
-import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
 import "react-toastify/dist/ReactToastify.css";
-import { HiDotsHorizontal } from "react-icons/hi";
 import { FaArrowRight } from "react-icons/fa";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
-
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CTable } from "@coreui/react";
 
 export default function Specifications() {
-  const top100Films = [
-    { label: "The Shawshank Redemption", year: 1994 },
-    { label: "The Godfather", year: 1972 },
-    { label: "The Godfather: Part II", year: 1974 },
-    { label: "The Dark Knight", year: 2008 },
-    { label: "12 Angry Men", year: 1957 },
-  ];
+
+  const [addModal, setAddModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState('All');
+
+  const pageSize = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState('');
 
   const [storageName, setStorageName] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
@@ -36,10 +32,9 @@ export default function Specifications() {
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
   const [employees, setEmployees] = useState([
     {
+      id: 1,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -49,6 +44,7 @@ export default function Specifications() {
       status: "APPROVED",
     },
     {
+      id: 2,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -58,6 +54,7 @@ export default function Specifications() {
       status: "INITIATED",
     },
     {
+      id: 3,
       user: "CHPOIL",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -67,6 +64,7 @@ export default function Specifications() {
       status: "INITIATED",
     },
     {
+      id: 4,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -76,6 +74,7 @@ export default function Specifications() {
       status: "APPROVED",
     },
     {
+      id: 5,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -85,6 +84,7 @@ export default function Specifications() {
       status: "APPROVED",
     },
     {
+      id: 6,
       user: "PM-001",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -94,6 +94,7 @@ export default function Specifications() {
       status: "REJECTED",
     },
     {
+      id: 7,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -103,6 +104,7 @@ export default function Specifications() {
       status: "REINITIATED",
     },
     {
+      id: 8,
       user: "TSTvl",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -112,6 +114,7 @@ export default function Specifications() {
       status: "APPROVED",
     },
     {
+      id: 9,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -121,6 +124,7 @@ export default function Specifications() {
       status: "APPROVED",
     },
     {
+      id: 10,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -131,11 +135,11 @@ export default function Specifications() {
     },
   ]);
 
-  const filteredEmployees = employees.filter(
-    (employee) =>
-      statusFilter === "" ||
-      employee.status.toLowerCase() === statusFilter.toLowerCase()
+  const filteredEmployees = employees.filter(employee =>
+    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
   );
+
+
   const deleteEmployee = (index) => {
     const updatedEmployees = employees.filter((_, i) => i !== index);
     setEmployees(updatedEmployees);
@@ -157,21 +161,16 @@ export default function Specifications() {
           <td>{employee.EffectFrom}</td>
           <td>{employee.ReviewDate}</td>
           <td>
-            {" "}
+
             <div
               className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
               style={
-                employee.status === "INITIATED"
-                  ? badgeStyle2
-                  : employee.status === "APPROVED"
-                  ? badgeStyle3
-                  : employee.status === "REJECTED"
-                  ? badgeStyle4
-                  : employee.status === "REINITIATED"
-                  ? badgeStyle5
-                  : employee.status === "DROPPED"
-                  ? badgeStyle6
-                  : badgeStyle
+                employee.status === "INITIATED" ? badgeStyle2 :
+                  employee.status === "APPROVED" ? badgeStyle3 :
+                    employee.status === "REJECTED" ? badgeStyle4 :
+                      employee.status === "REINITIATED" ? badgeStyle5 :
+                        employee.status === "DROPPED" ? badgeStyle6 :
+                          employee.status === "ALL" ? badgeStyle : badgeStyle
               }
             >
               {employee.status}
@@ -179,71 +178,67 @@ export default function Specifications() {
           </td>
           <td>
             <div className="d-flex gap-3">
-              <Link to="/approval/1321">
-                <FontAwesomeIcon icon={faEye} />
-              </Link>
-              <div className="cursor-pointer">
-                <FontAwesomeIcon
-                  data-bs-toggle="offcanvas"
-                  data-bs-target="#addSpecification"
-                  aria-controls="offcanvasRight"
-                  icon={faPenToSquare}
-                />
+              <div>
+                <Link to="/approval/1321">
+                  <FontAwesomeIcon icon={faEye} />
+                </Link>
               </div>
-              <Link to="#" onClick={() => deleteEmployee(startIndex + index)}>
+
+              <div
+                className="cursor-pointer"
+                onClick={() => setAddModal(true)}
+              >
+                <FontAwesomeIcon icon={faPenToSquare} />
+              </div>
+              <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
                 <FontAwesomeIcon icon={faTrashCan} />
-              </Link>
+              </div>
+
             </div>
           </td>
         </tr>
       ));
   };
   const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+    if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(employees.length / pageSize));
+    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+  };
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+    setDeleteModal(false);
+
   };
 
   return (
-    <>
-      <div className="mx-5 my-3">
-        <h5  style={{fontWeight:"bolder"}}>Specifications / Specification List</h5>
-      </div>
+    <div className="mx-5">
+      <div className="row my-5">
+        <div className="main-head">
+          <div className="title fw-bold fs-5 py-4">Specifications</div>
+        </div>
+        <div >
 
-      <div
-        id="div2"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "98%",
-          margin: "0 auto",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            columnGap: "9px",
-            marginLeft: "27px",
-          }}
-        >
-          <div className="dropdown" >
-            <button
-              className="btn border"
-              type="button"
-              id="dropdownMenuButton"
-              
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <select id="selectOption" style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }}>
+          <CRow className="mb-3">
+            <CCol sm={3}>
+              <CFormSelect
+                style={{ border: "2px solid gray", width: "220px" }}
+              >
                 <option value="">Select Sample Type</option>
                 <option value="raw-material">Raw Material</option>
                 <option value="hcl">hcl</option>
@@ -265,262 +260,241 @@ export default function Specifications() {
                 <option value="packing-material">Packing Material</option>
                 <option value="raw-material-1">Raw Material-1</option>
                 <option value="finished-product">Finished Product</option>
-              </select>
-            </button>
-          </div>
-
-          <div className="dropdown">
-            <button
-              className="btn border"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              
-              <select
-                id="selectOption"
-                onChange={(e) => setStatusFilter(e.target.value)}
-                style={{border:"2px solid gray", width:"250px", borderRadius:"5px", padding:"4px" }}
+              </CFormSelect>
+            </CCol>
+            <CCol sm={3}>
+              <CFormSelect
+                onChange={(e) => {
+                  setSelectedStatus(e.target.value);
+                  setCurrentPage(1);
+                }}
+                value={selectedStatus}
+                style={{ border: "2px solid gray", width: "220px" }}
               >
-                <option value="">All</option>
-                <option value="initiated">Initiated</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-                <option value="reinitiated">Reinitiated</option>
-                <option value="droped">Droped</option>
-              </select>
-            </button>
-          </div>
+                <option value="All">All</option>
+                <option value="Initiated">Initiated</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Reinitiated">Reinitiated</option>
+                <option value="Dropped">Dropped</option>
+              </CFormSelect>
+            </CCol>
+            <CCol sm={6}>
+              <div className="d-flex justify-content-end">
+                <CButton color="primary" onClick={() => setAddModal(true)}>Add Specifications</CButton>
+              </div>
+            </CCol>
+
+          </CRow>
         </div>
 
-        <button
-          id=""
-          className="btn btn-primary m-5"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#addSpecification"
-          aria-controls="offcanvasRight"
-        >
-          
-          <span
-            style={{ fontSize: "14px", fontWeight: "bold", marginLeft: "5px" }}
-          >
-            Add Specification
-          </span>
-        </button>
-
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
-          tabIndex="-1"
-          id="addSpecification"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Specification
-              </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-
-          <label className="line3" htmlFor="">
-            Product/Material Code
-          </label>
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={top100Films}
-            sx={{ width: 370, margin: 2 }}
-            renderInput={(params) => <TextField {...params} label="" />}
-          />
-
-          <label className="line3" htmlFor="">
-            Product Name
-          </label>
-          <input className="line4" type="text" placeholder="Product Name" />
-
-          <label className="line3" htmlFor="">
-            Specification Name
-          </label>
-          <input
-            className="line4"
-            type="text"
-            placeholder="Specification Name"
-          />
-
-          <label className="line3" htmlFor="">
-            Specification ID
-          </label>
-          <input className="line4" type="text" placeholder="Specification ID" />
-
-          <label className="line3" htmlFor="">
-            Sample Type
-          </label>
-          <select name="Sample Type" className="line4">
-            <option value="">Select Sample Type</option>
-            <option value="raw-material">Raw Material</option>
-            <option value="hcl">hcl</option>
-            <option value="hydrochloric-acid">Hydrochloric Acid</option>
-            <option value="petrochemical">Petrochemical</option>
-            <option value="initiated-product">Initiated Product</option>
-            <option value="semi-finished">Semi Finished</option>
-            <option value="abcd">ABCD</option>
-            <option value="h2so4">H2So4</option>
-            <option value="att108">ATT108</option>
-            <option value="micro-media">Micro Media </option>
-            <option value="fg-templage">FG Templage</option>
-            <option value="water-type">water type</option>
-            <option value="sodium">Sodium</option>
-            <option value="test-sample-type">test sample type</option>
-            <option value="new-product-sample-type">
-              New Product Sample Type
-            </option>
-            <option value="packing-material">Packing Material</option>
-            <option value="raw-material-1">Raw Material-1</option>
-            <option value="finished-product">Finished Product</option>
-          </select>
-
-          <label className="line3" htmlFor="">
-            Specification Type
-          </label>
-          <select name="Specification Type" className="line4">
-            <option value="">Select Specification Type</option>
-            <option value="environment">environment</option>
-            <option value="culture">culture</option>
-            <option value="culture1">culture1</option>
-            <option value="working-standard">working standard</option>
-            <option value="tentative">tentative</option>
-            <option value="release">release</option>
-            <option value="regulatory">regulatory</option>
-            <option value="raw-material">Raw Material</option>
-            <option value="instrument">instrument</option>
-            <option value="shell-life">shell life</option>
-            <option value="lupin-mitra-s-25-tablet">
-              LUPIN MIRA S 25 TABLET
-            </option>
-          </select>
-
-          <label className="line3" htmlFor="">
-            Effective From
-          </label>
-          <input
-            className="line4"
-            style={{ padding: "14px" }}
-            type="date"
-            placeholder=""
-          />
-
-          <label className="line3" htmlFor="">
-            Review Date
-          </label>
-          <input
-            className="line4"
-            style={{ padding: "14px" }}
-            type="date"
-            placeholder=""
-          />
-
-          <label className="line3" htmlFor="">
-            Supersedes
-          </label>
-          <input className="line4" type="text" placeholder="Supersedes" />
-
-          <label className="line3" htmlFor="">
-            Standard Test Procedure No.
-          </label>
-          <input
-            className="line4"
-            type="text"
-            placeholder="Standard Test Procedure No."
-          />
-
-          <label className="line3" for="formFile">
-            Document
-          </label>
-          <input
-            className="line4"
-            style={{ padding: "25px", fontSize: "12px" }}
-            type="file"
-          />
-
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Add Specification</button>
-          </div>
-        </div>
       </div>
 
-      <br />
-      <div className=" rounded  m-3 bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+      <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
+        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
           <thead>
             <tr>
-              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
-              <th style={{background:"#3C496A", color:"white"}}>Product Code</th>
-              <th style={{background:"#3C496A", color:"white"}}>Product Name</th>
-              <th style={{background:"#3C496A", color:"white"}}>Specification ID</th>
-              <th style={{background:"#3C496A", color:"white"}}>Specification Name</th>
-              <th style={{background:"#3C496A", color:"white"}}>Effect From</th>
-              <th style={{background:"#3C496A", color:"white"}}>Review Date</th>
-              <th style={{background:"#3C496A", color:"white"}}>Status</th>
-              <th style={{background:"#3C496A", color:"white"}}>
+              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Product Code</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Product Name</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Specification ID</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Specification Name</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Effect From</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Review Date</th>
+              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+              <th style={{ background: "#3C496A", color: "white" }}>
                 Action
               </th>
             </tr>
           </thead>
-          <tbody>{renderRows()}</tbody>
+          <tbody>
+            {renderRows()}
+          </tbody>
         </CTable>
       </div>
 
-      <div className="pagination">
-        <div className="pagination " style={{ margin: "0 35px" }}>
-          <div className="mr-5">
-            <button
-              className="btn  mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-          </div>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-            <button className="btn rounded-circle"> {currentPage} </button>
-          </div>
-          <div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= employees.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
+      <div className="d-flex justify-content-between align-items-center my-4">
+        <div className="pagination">
+          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+            &lt;&lt;
+          </button>
+          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+            &gt;&gt;
+          </button>
         </div>
-
-        <button
-          className="btn btn-next"
-          style={{ margin: "0 35px" }}
-          onClick={nextToLastPage}
-        >
-          {" "}
-          Next <FaArrowRight />
+        <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
+          Next <FaArrowRight className='ms-2' />
         </button>
       </div>
-    </>
+
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
+
+    </div>
+
   );
 }
+
+const StatusModal = (_props) => {
+  const top100Films = [
+    { label: "The Shawshank Redemption", year: 1994 },
+    { label: "The Godfather", year: 1972 },
+    { label: "The Godfather: Part II", year: 1974 },
+    { label: "The Dark Knight", year: 2008 },
+    { label: "12 Angry Men", year: 1957 },
+  ];
+
+  return (
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModalHeader>
+        <CModalTitle>Add Specification</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+
+        <label className="mb-3" htmlFor="">
+          Product/Material Code
+        </label>
+        <Autocomplete
+          className="mb-3"
+          disablePortal
+          id="combo-box-demo"
+          options={top100Films}
+          renderInput={(params) => <TextField {...params} label="" />}
+        />
+
+        <CFormInput
+          className='mb-3'
+          type="text"
+          label="Product Name"
+          placeholder="Product Name"
+          disabled
+        />
+
+        <CFormInput
+          className='mb-3'
+          type="text"
+          label="Specification Name"
+          placeholder="Specification Name"
+        />
+        <CFormInput
+          className='mb-3'
+          type="text"
+          label="Specification ID"
+          placeholder="Specification ID"
+        />
+
+        <CFormSelect
+          className='mb-3'
+          type="select"
+          label="Sample Type"
+
+          options={[
+            "Select Sample Type",
+            { label: "Raw Material", value: "Raw Material" },
+            { label: "hcl", value: "hcl" },
+            { label: "Hydrochloric Acid", value: "Hydrochloric Acid" },
+            { label: "Petrochemical", value: "Petrochemical" },
+            { label: "Initiated Product", value: "Initiated Product" },
+            { label: "Semi Finished", value: "Semi Finished" },
+            { label: "ABCD", value: "ABCD" },
+            { label: "H2So4", value: "H2So4" },
+            { label: "Micro Media", value: "Micro Media" },
+            { label: "FG Templage", value: "FG Templage" }
+          ]}
+        />
+        <CFormSelect
+          className='mb-3'
+          type="select"
+          label="Specification Type"
+
+          options={[
+            "Select Specification Type",
+            { label: "environment", value: "environment" },
+            { label: "culture", value: "culture" },
+            { label: "culture1", value: "culture1" },
+            { label: "working-standard", value: "working-standard" },
+            { label: "tentative", value: "tentative" },
+            { label: "release", value: "release" },
+            { label: "regulatory", value: "regulatory" },
+            { label: "Raw Material", value: "Raw Material" },
+            { label: "instrument", value: "instrument" },
+            { label: "shell life", value: "shell life" }
+          ]}
+        />
+        <CFormInput
+          className='mb-3'
+          type="date"
+          label="Effective From"
+          placeholder=""
+        />
+        <CFormInput
+          className='mb-3'
+          type="date"
+          label="Review Date"
+          placeholder=""
+        />
+        <CFormInput
+          className='mb-3'
+          type="text"
+          label="Supersedes"
+          placeholder="Supersedes"
+        />
+        <CFormInput
+          className='mb-3'
+          type="text"
+          label="Standard Test Procedure No."
+          placeholder="Standard Test Procedure No."
+        />
+        <CFormInput
+          className='mb-3'
+          type="file"
+          label="Document"
+          placeholder=""
+        />
+
+
+
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+        <CButton color="primary">Add Specifications</CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
+
+const DeleteModal = (_props) => {
+  return (
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+      <CModalHeader>
+        <CModalTitle>Delete Specification</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <p>Are you sure you want to delete this Specification { }?</p>
+      </CModalBody>
+      <CModalFooter>
+        <CButton
+          color="secondary"
+          onClick={_props.closeModal}
+          style={{
+            marginRight: "0.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="danger"
+          onClick={_props.confirmDelete}
+          style={{
+            fontWeight: "500",
+            color: "white",
+          }}
+        >
+          Delete
+        </CButton>
+      </CModalFooter>
+    </CModal>
+  );
+};
