@@ -19,6 +19,9 @@ import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFoote
 
 export default function CalibrationSchedule() {
     const [addModal, setAddModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
 
     const top100Films = [
         { label: 'The Shawshank Redemption', year: 1994 },
@@ -165,14 +168,60 @@ export default function CalibrationSchedule() {
     )
   }
 
+  const DeleteModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this Calibration schedule?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
+
     const [employees, setEmployees] = useState([
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-        { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-        { user: 'hcpl Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-        { user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-        { user: 'hcpl Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        {id:1, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        {id:2, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+        {id:3, user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        {id:4, user: 'hcpl Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        {id:5, user: 'test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+        {id:6, user: 'hcpl Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
     ]);
+
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setDeleteModal(true);
+      };
+      
+      const handleDeleteConfirm = () => {
+        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+        setDeleteModal(false);
+      };
 
     const pageSize = 5;
     const [currentPage, setCurrentPage] = useState(1);
@@ -257,7 +306,7 @@ export default function CalibrationSchedule() {
                         <div onClick={() => setAddModal(true)}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
-                        <Link to="#" onClick={() => handleDelete(index)}>
+                        <Link to="#" onClick={() => handleDeleteClick(employee.id)}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </Link>
                     </div>
@@ -331,16 +380,16 @@ export default function CalibrationSchedule() {
                 <table className='table table-responsive table-striped text-xs' >
                     <thead>
                         <tr>
-                            <th><input type="checkbox" /></th>
-                            <th>SNo.</th>
-                            <th>Unique Code</th>
-                            <th>Calibration Workflow</th>
-                            <th>Schedule Description</th>
-                            <th>Start Date</th>
-                            <th>Frequency</th>
-                            <th>Next Calibration Due</th>
-                            <th>Status</th>
-                            <th>Actions </th>
+                            <th style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
+                            <th style={{background:"#3C496A", color:"white"}}>SNo.</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Unique Code</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Calibration Workflow</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Schedule Description</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Start Date</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Frequency</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Next Calibration Due</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Status</th>
+                            <th style={{background:"#3C496A", color:"white"}}>Actions </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -365,6 +414,15 @@ export default function CalibrationSchedule() {
             </div>
                       
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+
+      
+{deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
         </>
     );
 }

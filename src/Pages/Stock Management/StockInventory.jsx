@@ -103,7 +103,7 @@ export default function StockInventory() {
           <CModalTitle>Delete User</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this material?</p>
+          <p>Are you sure you want to delete this Inventory?</p>
         </CModalBody>
         <CModalFooter>
           <CButton

@@ -30,6 +30,7 @@ function StorageLocation() {
   const pageSize = 5;
   const [addModal, setAddModal] = useState(false);
   const [delModal, setDelModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,8 +57,14 @@ function StorageLocation() {
     setCurrentPage(1);
   };
 
-  const handleDelete = (id) => {
-    setStorageLocations(storageLocations.filter((item) => item.id !== id));
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setDelModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    setStorageLocations(storageLocations.filter((item) => item.id !== deleteId));
+    setDelModal(false);
   };
 
   const filteredLocations = storageLocations.filter((item) => {
@@ -106,7 +113,7 @@ function StorageLocation() {
               <CCol sm={3}>
                 <CFormSelect
                   value={filterStatus}
-                  style={{border:"2px solid gray"}}
+                  style={{ border: "2px solid gray" }}
                   onChange={handleFilter}
                   className="border-2"
                   options={[
@@ -127,17 +134,17 @@ function StorageLocation() {
               </CCol>
             </CRow>
           </div>
-          <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <div className="rounded bg-white" style={{ border: "2px solid gray" }}>
+            <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Storage Code</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Storage Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Storage Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Storage Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -181,7 +188,7 @@ function StorageLocation() {
                         </div>
                         <div
                           className="cursor-pointer"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handleDeleteClick(item.id)}
                         >
                           <FontAwesomeIcon icon={faTrashCan} />
                         </div>
@@ -225,7 +232,11 @@ function StorageLocation() {
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
       {delModal && (
-        <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} />
+        <RemoveModal
+          visible={delModal}
+          closeModal={() => setDelModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
       )}
     </>
   );
@@ -256,24 +267,36 @@ const StatusModal = (_props) => {
 
 const RemoveModal = (_props) => {
   return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>Delete Storage Location</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        Do you want to delete this Storage Location <code>Wooden Box</code>?
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Cancel
-        </CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
+    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this storage?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
   );
 };
 

@@ -65,7 +65,7 @@ export default function CalibrationFrequency() {
           <CModalTitle>Delete User</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this material?</p>
+          <p>Are you sure you want to delete this Calibration Frequency ?</p>
         </CModalBody>
         <CModalFooter>
           <CButton
