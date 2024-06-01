@@ -30,11 +30,12 @@ function Proposal() {
 	const [addModal, setAddModal] = useState(false);
 	const [removeModal, setRemoveModal] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [deleteId, setDeleteId] = useState(null)
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	const recordsPerPage = 5;
 
-	const tableData = [
+	const [tableData, setTableData] = useState([
 		{ id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "Active" },
 		{ id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "Active" },
 		{ id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "Inactive" },
@@ -43,7 +44,7 @@ function Proposal() {
 		{ id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "Inactive" },
 		{ id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "Active" },
 		{ id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "Active" }
-	];
+	]);
 
 
 	const handleStatusChange = (e) => {
@@ -55,6 +56,17 @@ function Proposal() {
 		setSearchQuery(e.target.value);
 		setCurrentPage(1);
 	};
+
+	const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	}
+
+	const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	}
 
 	const filteredData = tableData.filter((data) => {
 		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -119,15 +131,15 @@ function Proposal() {
 						<CTable align="middle" responsive className="table-responsive table-striped">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Id</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Analyst</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Test Technique</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Training Details</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Remarks</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Added On</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Id</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Analyst</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Test Technique</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Training Details</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Remarks</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Added On</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
@@ -136,7 +148,7 @@ function Proposal() {
 										<CTableHeaderCell scope="row" className="text-center">
 											<input type="checkbox" />
 										</CTableHeaderCell>
-										<CTableDataCell>{data.id}</CTableDataCell>
+										<CTableDataCell>{index + 1}</CTableDataCell>
 										<CTableDataCell>{data.analyst}</CTableDataCell>
 										<CTableDataCell>{data.testTechnique}</CTableDataCell>
 										<CTableDataCell>{data.trainingDetails}</CTableDataCell>
@@ -153,7 +165,7 @@ function Proposal() {
 												<div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
 												<div
 													className="cursor-pointer"
-													onClick={() => setRemoveModal(true)}
+													onClick={() => handleDeleteClick(data.id)}
 												>
 													<FontAwesomeIcon icon={faTrashCan} />
 												</div>
@@ -183,7 +195,7 @@ function Proposal() {
 			{removeModal && (
 				<DeleteModel
 					visible={removeModal}
-					closeModal={() => setRemoveModal(false)}
+					closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
 				/>
 			)}
 		</>
@@ -292,7 +304,7 @@ const DeleteModel = (_props) => {
 				<CButton color="light" onClick={_props.closeModal}>
 					Back
 				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
+				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
 			</CModalFooter>
 		</CModal>
 	);

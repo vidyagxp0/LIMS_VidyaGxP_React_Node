@@ -31,14 +31,16 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 export default function TestTechniques() {
   const [addModal, setAddModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false)
+	const [deleteId, setDeleteId] = useState(null)
   const [removeModal, setRemoveModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All");
 
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const tableData = [
+  const [tableData, setTableData] = useState([
     {
+      id: 1,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -48,6 +50,7 @@ export default function TestTechniques() {
       status: "ACTIVE",
     },
     {
+      id: 2,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -57,6 +60,7 @@ export default function TestTechniques() {
       status: "INACTIVE",
     },
     {
+      id: 3,
       user: "CHPOIL",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -66,6 +70,7 @@ export default function TestTechniques() {
       status: "ACTIVE",
     },
     {
+      id: 4,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -75,6 +80,7 @@ export default function TestTechniques() {
       status: "ACTIVE",
     },
     {
+      id: 5,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -84,6 +90,7 @@ export default function TestTechniques() {
       status: "INACTIVE",
     },
     {
+      id: 6,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -93,6 +100,7 @@ export default function TestTechniques() {
       status: "INACTIVE",
     },
     {
+      id: 7,
       user: "HYO",
       ProdName: "Sacubitril",
       SpecificID: "ARIP0000095",
@@ -101,13 +109,25 @@ export default function TestTechniques() {
       ReviewDate: "Aug 18th 24",
       status: "INACTIVE",
     },
-  ];
+  ]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  const handleDelete = () => {
+		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+		setRemoveModal(false);
+		setDeleteId(null)
+	  }
+	
+	  const handleDeleteClick = (id) => {
+		setDeleteId(id);
+		setRemoveModal(true);
+	  }
+
 
   const filteredtableData = tableData
     .filter((data) =>
@@ -142,7 +162,7 @@ export default function TestTechniques() {
           <div className="cursor-pointer" onClick={() => setUpdateModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
           <div
             className="cursor-pointer"
-            onClick={() => setRemoveModal(true)}
+            onClick={() => handleDeleteClick(data.id)}
           >
             <FontAwesomeIcon icon={faTrashCan} />
           </div>
@@ -303,7 +323,7 @@ export default function TestTechniques() {
           <CButton color="light" onClick={_props.closeModal}>
             Back
           </CButton>
-          <CButton className="bg-danger text-white">Delete</CButton>
+          <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
         </CModalFooter>
       </CModal>
     );
@@ -414,7 +434,7 @@ export default function TestTechniques() {
       {removeModal && (
         <DeleteModel
           visible={removeModal}
-          closeModal={() => setRemoveModal(false)}
+          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
         />
       )}
     </>

@@ -31,13 +31,14 @@ import React, { useState } from "react";
 export default function TypeOfSection() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All");
-
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const employees = [
-    {
+  const [tableData, setTableData] = useState([
+    { 
+      id: 1,
       user: "Initiated Product",
       role: "Sacubitril",
       departments: "ARIP0000095",
@@ -45,7 +46,8 @@ export default function TypeOfSection() {
       addedBy: "RPS-TSLV-00",
       status: "INACTIVE",
     },
-    {
+    { 
+      id: 2,
       user: "Initiated Product",
       role: "Sacubitril",
       departments: "ARIP0000095",
@@ -53,7 +55,8 @@ export default function TypeOfSection() {
       addedBy: "RPS-TSLV-00",
       status: "ACTIVE",
     },
-    {
+    { 
+      id: 3,
       user: "Initiated Product",
       role: "Sacubitril",
       departments: "ARIP0000095",
@@ -61,7 +64,8 @@ export default function TypeOfSection() {
       addedBy: "RPS-TSLV-00",
       status: "INACTIVE",
     },
-    {
+    { 
+      id: 4,
       user: "Initiated Product",
       role: "Sacubitril",
       departments: "ARIP0000095",
@@ -69,7 +73,7 @@ export default function TypeOfSection() {
       addedBy: "RPS-TSLV-00",
       status: "ACTIVE",
     },
-  ];
+  ]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -77,42 +81,54 @@ export default function TypeOfSection() {
     setSearchTerm(e.target.value);
   };
 
-  const filteredEmployees = employees
-    .filter((employee) =>
-      employee.user.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
+
+
+  const filteredtableData = tableData
+    .filter((data) =>
+      data.user.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .filter(
-      (employee) =>
-        filterStatus === "All" || employee.status === filterStatus
+      (data) =>
+        filterStatus === "All" || data.status === filterStatus
     );
 
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
+  const endIndex = Math.min(startIndex + pageSize, filteredtableData.length);
 
   const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
+    return filteredtableData.slice(startIndex, endIndex).map((data, index) => (
       <tr key={startIndex + index}>
         <td>
           <input type="checkbox" />
         </td>
         <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.role}</td>
-        <td>{employee.addedBy}</td>
+        <td>{data.user}</td>
+        <td>{data.role}</td>
+        <td>{data.addedBy}</td>
         <td>
           <div className=" w-50">
-            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${employee.status === 'ACTIVE' ? 'green-700'
-              : 'red-700'}`} >{employee.status}</div>
+            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'ACTIVE' ? 'green-700'
+              : 'red-700'}`} >{data.status}</div>
           </div>
         </td>
         <td>
           <div className="d-flex gap-3">
             <div className="cursor-pointer"
-             onClick={() => setAddModal(true)}
+              onClick={() => setAddModal(true)}
             ><FontAwesomeIcon icon={faPenToSquare} /></div>
             <div
               className="cursor-pointer"
-            onClick={() => setRemoveModal(true)}
+              onClick={() => handleDeleteClick(data.id)}
             >
               <FontAwesomeIcon icon={faTrashCan} />
             </div>
@@ -130,7 +146,7 @@ export default function TypeOfSection() {
   };
 
   const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+    setCurrentPage(Math.ceil(filteredtableData.length / pageSize));
   };
 
   const StatusModal = (_props) => {
@@ -181,13 +197,13 @@ export default function TypeOfSection() {
           <CModalTitle>Delete Worksheet Section Type</CModalTitle>
         </CModalHeader>
         <CModalBody>
-        Do you want to delete this worksheet section type <code>Sampling Phase</code>?
+          Do you want to delete this worksheet section type <code>Sampling Phase</code>?
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
             Back
           </CButton>
-          <CButton className="bg-danger text-white">Delete</CButton>
+          <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
         </CModalFooter>
       </CModal>
     );
@@ -239,15 +255,15 @@ export default function TypeOfSection() {
           <table className="table table-responsive table-striped">
             <thead>
               <tr>
-                <th style={{background:"#3C496A", color:"white"}}>
+                <th style={{ background: "#3C496A", color: "white" }}>
                   <input type="checkbox" />
                 </th>
-                <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
-                <th style={{background:"#3C496A", color:"white"}}>Type Of Section</th>
-                <th style={{background:"#3C496A", color:"white"}}>Prefix</th>
-                <th style={{background:"#3C496A", color:"white"}}>Added On</th>
-                <th style={{background:"#3C496A", color:"white"}}>Status</th>
-                <th style={{background:"#3C496A", color:"white"}}>Actions </th>
+                <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Type Of Section</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Prefix</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Actions </th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>
@@ -272,7 +288,7 @@ export default function TypeOfSection() {
               <button
                 className="btn"
                 onClick={nextPage}
-                disabled={endIndex >= filteredEmployees.length}
+                disabled={endIndex >= filteredtableData.length}
               >
                 &gt;&gt;
               </button>
@@ -295,7 +311,7 @@ export default function TypeOfSection() {
       {removeModal && (
         <DeleteModel
           visible={removeModal}
-          closeModal={() => setRemoveModal(false)}
+          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
         />
       )}
     </>

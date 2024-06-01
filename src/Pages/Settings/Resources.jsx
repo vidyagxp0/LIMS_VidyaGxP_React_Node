@@ -32,30 +32,40 @@ export default function Resources() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All");
-
+  const [deleteId, setDeleteId] = useState(null)
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const tableData = [
-    { sNo: 1, resourceName: 'Resource 1', addedOn: '2024-05-30', status: 'ACTIVE' },
-    { sNo: 2, resourceName: 'Resource 2', addedOn: '2024-05-30', status: 'INACTIVE' },
-    { sNo: 3, resourceName: 'Resource 3', addedOn: '2024-05-30', status: 'INACTIVE' },
-    { sNo: 4, resourceName: 'Resource 4', addedOn: '2024-05-30', status: 'ACTIVE' },
-    { sNo: 5, resourceName: 'Resource 5', addedOn: '2024-05-30', status: 'ACTIVE' },
-    { sNo: 6, resourceName: 'Resource 6', addedOn: '2024-05-30', status: 'INACTIVE' },
-    { sNo: 7, resourceName: 'Resource 7', addedOn: '2024-05-30', status: 'ACTIVE' },
-    { sNo: 8, resourceName: 'Resource 8', addedOn: '2024-05-30', status: 'INACTIVE' },
-    { sNo: 9, resourceName: 'Resource 9', addedOn: '2024-05-30', status: 'ACTIVE' },
-    { sNo: 10, resourceName: 'Resource 10', addedOn: '2024-05-30', status: 'INACTIVE' }
-  ];
-  
-  
+  const [tableData, setTableData] = useState([
+    { id: 1, resourceName: 'Resource 1', addedOn: '2024-05-30', status: 'ACTIVE' },
+    { id: 2, resourceName: 'Resource 2', addedOn: '2024-05-30', status: 'INACTIVE' },
+    { id: 3, resourceName: 'Resource 3', addedOn: '2024-05-30', status: 'INACTIVE' },
+    { id: 4, resourceName: 'Resource 4', addedOn: '2024-05-30', status: 'ACTIVE' },
+    { id: 5, resourceName: 'Resource 5', addedOn: '2024-05-30', status: 'ACTIVE' },
+    { id: 6, resourceName: 'Resource 6', addedOn: '2024-05-30', status: 'INACTIVE' },
+    { id: 7, resourceName: 'Resource 7', addedOn: '2024-05-30', status: 'ACTIVE' },
+    { id: 8, resourceName: 'Resource 8', addedOn: '2024-05-30', status: 'INACTIVE' },
+    { id: 9, resourceName: 'Resource 9', addedOn: '2024-05-30', status: 'ACTIVE' },
+    { id: 10, resourceName: 'Resource 10', addedOn: '2024-05-30', status: 'INACTIVE' }
+  ]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  const handleDelete = () => {
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
+
 
   const filteredtableData = tableData
     .filter((data) =>
@@ -87,11 +97,11 @@ export default function Resources() {
         <td>
           <div className="d-flex gap-3">
             <div className="cursor-pointer"
-             onClick={() => setAddModal(true)}
+              onClick={() => setAddModal(true)}
             ><FontAwesomeIcon icon={faPenToSquare} /></div>
             <div
               className="cursor-pointer"
-            onClick={() => setRemoveModal(true)}
+              onClick={() => handleDeleteClick(data.id)}
             >
               <FontAwesomeIcon icon={faTrashCan} />
             </div>
@@ -154,13 +164,13 @@ export default function Resources() {
           <CModalTitle>Delete Worksheet Resources</CModalTitle>
         </CModalHeader>
         <CModalBody>
-        Do you want to delete this Worksheet Resources <code>Resource 5</code>?
+          Do you want to delete this Worksheet Resources <code>Resource 5</code>?
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
             Back
           </CButton>
-          <CButton className="bg-danger text-white">Delete</CButton>
+          <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
         </CModalFooter>
       </CModal>
     );
@@ -212,14 +222,14 @@ export default function Resources() {
           <table className="table table-responsive table-striped">
             <thead>
               <tr>
-                <th style={{background:"#3C496A", color:"white"}}>
+                <th style={{ background: "#3C496A", color: "white" }}>
                   <input type="checkbox" />
                 </th>
-                <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
-                <th style={{background:"#3C496A", color:"white"}}>Resource Name</th>
-                <th style={{background:"#3C496A", color:"white"}}>Added On</th>
-                <th style={{background:"#3C496A", color:"white"}}>Status</th>
-                <th style={{background:"#3C496A", color:"white"}}>Actions </th>
+                <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Resource Name</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
+                <th style={{ background: "#3C496A", color: "white" }}>Actions </th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>
@@ -267,7 +277,7 @@ export default function Resources() {
       {removeModal && (
         <DeleteModel
           visible={removeModal}
-          closeModal={() => setRemoveModal(false)}
+          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
         />
       )}
     </>
