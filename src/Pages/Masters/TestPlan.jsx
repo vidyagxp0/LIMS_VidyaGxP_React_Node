@@ -10,11 +10,15 @@ import { Link } from 'react-router-dom';
 
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CTable } from '@coreui/react';
-
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 
 export default function TestPlan() {
   const [statusFilter, setStatusFilter] = useState('');
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  const [addModal, setAddModal] = useState(false)
+
 
   const badgeStyle = { background: "gray", color: "white", width: "110px" };
   const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
@@ -22,6 +26,94 @@ export default function TestPlan() {
   const badgeStyle4 = { background: "red", color: "white", width: "110px" };
   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+
+  const StatusModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+        <CModalHeader>
+          <CModalTitle>Add Material</CModalTitle>
+        </CModalHeader>
+        <CModalBody >
+        <CFormInput
+          label='Specification ID'
+          className="mb-3"
+          type="text"
+          placeholder=""
+          /> 
+           <CFormInput
+          label='Product/Material Name'
+          className="mb-3"
+          type="text"
+          placeholder="Product/Material Name"
+          /> 
+           <CFormInput
+          label='Test Plan Comments'
+          className="mb-3"
+          type="text"
+          placeholder="Test Plan Comments"
+          />  
+           <CFormSelect 
+           className="mb-3"
+         label="Sampling Quantity UOM"
+         options={[
+        'Select UOM',
+        { label: 'gm', value: 'gm' },
+        { label: 'ml', value: 'ml' },
+         ]}
+            /> 
+
+        <div className="drag-drop">
+          <div className="sub-container">
+            <h5>Available Tests</h5>
+            <div className="list-container">
+              <ul>
+                {leftArray.map((data) =>
+                  <li key={data}><input type="checkbox" value={data} id={data} className="check-left" /><label className="labels" htmlFor={data} onClick={clicked}>{data}</label></li>
+                )}
+              </ul>
+            </div>
+          </div>
+          <div className="mid-container">
+            <button className="arrow-button" onClick={moveRight}><TiArrowRightThick /></button>
+            <button className="arrow-button" onClick={moveLeft}><TiArrowLeftThick /></button>
+          </div>
+          <div className="sub-container">
+            <h5>Selected</h5>
+            <div className="list-container">
+              <ul>
+                {rightArray.map((data) =>
+                  <li key={data}><input type="checkbox" value={data} id={data} className="check-right" /><label className="labels" htmlFor={data} onClick={clicked}>{data}</label></li>
+                )}
+              </ul>
+            </div>
+            <input  type="checkbox" /> <span>Test Grouping Required</span><button style={{ borderRadius: '5px', margin: '17px 20px', padding: '2px 6px', backgroundColor: '#0f93c3', border: '1px solid #0f93c3', color: 'white' }}>Refresh</button>
+          </div>
+        </div>
+
+        <CFormSelect 
+           className="mb-3"
+         label="Coa Template"
+         options={[
+        'Select Coa Template',
+        { label: 'Test Coa', value: 'test-coa' },
+        { label: 'Windlas Template', value: 'windlas-template' },
+         ]}
+            /> 
+
+
+
+        <label className='my-2'  htmlFor="">Remarks</label> <br />
+        <textarea className="line4 w-100 mx-1"  rows="4" cols="50" ></textarea>
+
+        <div className="d-flex gap-3 mt-4">
+            <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
+            <CButton color="primary w-50">Submit</CButton>
+          </div>
+        
+        </CModalBody>
+      </CModal>
+    )
+  }
 
   const [leftArray, setLeftArray] = useState([
     "Viscosity @40C",
@@ -114,17 +206,63 @@ export default function TestPlan() {
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [employees, setEmployees] = useState([
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REJECTED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REINITIATED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    { user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
+    {id:1, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
+    {id:2, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
+    {id:3, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
+    {id:4, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
+    {id:5, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
+    {id:6, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REJECTED' },
+    {id:7, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REINITIATED' },
+    {id:8, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
+    {id:9, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
+    {id:10, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
   ]);
+
+  const DeleteModal = (_props) => {
+    return (
+        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+            <CModalHeader>
+                <CModalTitle>Delete User</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <p>Are you sure you want to delete this material?</p>
+            </CModalBody>
+            <CModalFooter>
+                <CButton
+                    color="secondary"
+                    onClick={_props.closeModal}
+                    style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                    }}
+                >
+                    Cancel
+                </CButton>
+                <CButton
+                    color="danger"
+                    onClick={_props.confirmDelete}
+                    style={{
+                        fontWeight: "500",
+                        color: "white",
+                    }}
+                >
+                    Delete
+                </CButton>
+            </CModalFooter>
+        </CModal>
+    );
+};
+
+const handleDeleteClick = (id) => {
+  setDeleteId(id);
+  setDeleteModal(true);
+};
+
+const handleDeleteConfirm = () => {
+  setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+  setDeleteModal(false);
+};
+
 
   const filteredEmployees = employees.filter(employee =>
     statusFilter === '' || employee.Status.toLowerCase() === statusFilter.toLowerCase()
@@ -146,7 +284,6 @@ export default function TestPlan() {
         <td>{employee.user}</td>
         <td>{employee.DayComplete}</td>
         <td>{employee.Date}</td>
-        {/* <td>{employee.Status}</td> */}
         <td ><div
           className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
           style={
@@ -164,10 +301,9 @@ export default function TestPlan() {
           <div className="d-flex gap-3">
             <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
             <div className="cursor-pointer" >
-              <FontAwesomeIcon data-bs-toggle="offcanvas"
-                data-bs-target="#AddTestPlan" icon={faPenToSquare} />
+              <FontAwesomeIcon onClick={() => setAddModal(true)} icon={faPenToSquare} />
             </div>
-            <Link to="#" onClick={() => deleteEmployee(index)}>
+            <Link to="#"  onClick={() => handleDeleteClick(employee.id)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </Link>
           </div>
@@ -216,9 +352,7 @@ export default function TestPlan() {
         <button
           className="btn btn-primary"
           type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#AddTestPlan"
-          aria-controls="offcanvasRight"
+          onClick={() => setAddModal(true)}
         >
           <span style={{ fontSize: '14px', fontWeight: 'bold', marginLeft: '5px' }}>Add Test Plan</span>
         </button>
@@ -343,6 +477,16 @@ export default function TestPlan() {
         </button>
       </div>
 
+                 
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+    
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
 
     </>
   )
