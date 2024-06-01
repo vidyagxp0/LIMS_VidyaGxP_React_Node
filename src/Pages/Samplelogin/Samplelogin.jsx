@@ -9,6 +9,7 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
+  CTable,
 } from "@coreui/react";
 import React, { useState } from "react";
 import "./Samplelogin.css";
@@ -225,7 +226,7 @@ export default function Samplelogin() {
             <CCol sm={4}>
               <CFormInput
                 type="text"
-                style={{border:"2px solid gray"}}
+                style={{ border: "2px solid gray" }}
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -234,7 +235,7 @@ export default function Samplelogin() {
             <CCol sm={3}>
               <CFormSelect
                 value={statusFilter}
-                style={{border:"2px solid gray"}}   
+                style={{ border: "2px solid gray" }}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 options={[
                   "Select Status",
@@ -444,8 +445,8 @@ export default function Samplelogin() {
             placeholder="Select..."
           />
 
-          <div className="m-4">
-            <table className="table table-bordered table-responsive">
+          <div className="bg-white rounded border-dark-subtle border-2 " >
+            <CTable align="middle" responsive className="table-striped ">
               <thead>
                 <tr>
                   <th className="bg-info text-light">Sno.</th>
@@ -456,7 +457,7 @@ export default function Samplelogin() {
               </thead>
               <tbody>
                 {testData.map((row, index) => (
-                  <tr key={index}>
+                  <tr key={index} >
                     <td>{row.sno}</td>
                     <td>{row.testName}</td>
                     <td>{row.groupName}</td>
@@ -470,7 +471,7 @@ export default function Samplelogin() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </CTable>
           </div>
 
           <div id="line5">
@@ -519,18 +520,35 @@ export default function Samplelogin() {
           </div>
         </div>
 
-        <div className=" rounded    bg-white" style={{ border: "2px solid gray" }}>
-                <table className='table table-striped '>
+        <div
+          className=" rounded    bg-white"
+          style={{ border: "2px solid gray" }}
+        >
+          <table className="table table-striped ">
             <thead>
               <tr>
-                <th style={{background:"#3C496A", color:"white"}}>S.No.</th>
-                <th style={{background:"#3C496A", color:"white"}}>Sample Type</th>
-                <th style={{background:"#3C496A", color:"white"}}>Product / Material</th>
-                <th style={{background:"#3C496A", color:"white"}}>A.R. No.</th>
-                <th style={{background:"#3C496A", color:"white"}}>Generic Name</th>
-                <th style={{background:"#3C496A", color:"white"}}>Specification code</th>
-                <th style={{background:"#3C496A", color:"white"}}>Status</th>
-                <th style={{background:"#3C496A", color:"white"}}>Actions </th>
+                <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
+                <th style={{ background: "#3C496A", color: "white" }}>
+                  Sample Type
+                </th>
+                <th style={{ background: "#3C496A", color: "white" }}>
+                  Product / Material
+                </th>
+                <th style={{ background: "#3C496A", color: "white" }}>
+                  A.R. No.
+                </th>
+                <th style={{ background: "#3C496A", color: "white" }}>
+                  Generic Name
+                </th>
+                <th style={{ background: "#3C496A", color: "white" }}>
+                  Specification code
+                </th>
+                <th style={{ background: "#3C496A", color: "white" }}>
+                  Status
+                </th>
+                <th style={{ background: "#3C496A", color: "white" }}>
+                  Actions{" "}
+                </th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>

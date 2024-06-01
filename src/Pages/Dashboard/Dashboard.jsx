@@ -20,6 +20,9 @@ function Dashboard(props) {
     "Glass",
     "Hydraulic Oil",
     "chpoil",
+    "chpoil",
+    "chpoil",
+    "chpoil",
     "Feliconar",
     "Feliconar",
     "Feliconar",
@@ -27,8 +30,8 @@ function Dashboard(props) {
 
   const ARNumber = [
     "ARPC0000099",
-    "ARPC0000098",
-    // "ARPC0000097",
+    // "ARPC0000098",
+    "ARPC0000097",
     "ARPC0000096",
     "ARIP0000095",
     "ARFFT0000094",
@@ -600,8 +603,8 @@ function Dashboard(props) {
                 'url("https://media.istockphoto.com/id/1410455925/vector/dynamic-blue-particle-wave-abstract-sound-visualization-digital-structure-of-the-wave-flow.jpg?s=612x612&w=0&k=20&c=RL7do3aEvte0cKukjC30eHQ4nujXUIOa2TvQbIN8eKw=")',
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
-              width: "170px",
-              height: "130px",
+              width: "242px",
+              height: "150px",
               borderRadius: "30px",
 
               display: "flex",
@@ -623,8 +626,8 @@ function Dashboard(props) {
                 "url('https://c4.wallpaperflare.com/wallpaper/624/336/42/science-the-big-bang-theory-atoms-wallpaper-preview.jpg')",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
-              width: "170px",
-              height: "130px",
+              width: "242px",
+              height: "150px",
               borderRadius: "30px",
               display: "flex",
               alignItems: "center",
@@ -644,8 +647,8 @@ function Dashboard(props) {
                 "url('https://static.vecteezy.com/system/resources/thumbnails/006/712/955/small/abstract-health-medical-science-consist-doctor-digital-wireframe-concept-modern-medical-technology-treatment-medicine-on-gray-background-for-template-web-design-or-presentation-vector.jpg')",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
-              width: "170px",
-              height: "130px",
+              width: "242px",
+              height: "150px",
               borderRadius: "30px",
               display: "flex",
               alignItems: "center",
@@ -665,8 +668,8 @@ function Dashboard(props) {
                 "url('https://img.freepik.com/premium-photo/high-angle-view-eyeglasses-table-against-black-background_1048944-215100.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1715731200&semt=ais_user')",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
-              width: "170px",
-              height: "130px",
+              width: "242px",
+              height: "150px",
               borderRadius: "30px",
               display: "flex",
               alignItems: "center",
@@ -686,8 +689,8 @@ function Dashboard(props) {
                 "url('https://png.pngtree.com/thumb_back/fh260/background/20210716/pngtree-abstract-geometric-medical-background-of-science-and-technology-style-gene-atom-image_743373.jpg')",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
-              width: "170px",
-              height: "130px",
+              width: "242px",
+              height: "150px",
               borderRadius: "30px",
               display: "flex",
               alignItems: "center",
@@ -705,20 +708,18 @@ function Dashboard(props) {
 
             <div className="d-flex gap-4 my-2">
               <div
-                className="w-100 h-75  rounded px-3"
+                className="w-100 rounded px-3"
                 style={{
                   backgroundColor: "#ffffff",
                   boxShadow: "0px 0px 10px black",
+                  padding: "20px",
                 }}
               >
                 <div className="d-flex justify-content-between py-4">
                   <div className="py-2 fw-bolder" style={{ color: "#343a40" }}>
                     Material
                   </div>
-                  <div
-                    className="mt-0 pt-0 fw-bolder fs-4"
-                    style={{ color: "#495057" }}
-                  >
+                  <div className="fw-bolder fs-4" style={{ color: "#495057" }}>
                     <button>...</button>
                   </div>
                 </div>
@@ -772,15 +773,7 @@ function Dashboard(props) {
                     <span className="text-muted">Dropped</span>
                   </div>
                 </div>
-                <div
-                  className="d-flex justify-content-around py-5"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "20px",
-                  }}
-                >
+                <div className="d-flex justify-content-around py-5">
                   <CircularProgressbar
                     className="p-3"
                     value={2.13}
@@ -900,7 +893,7 @@ function Dashboard(props) {
             </div>
 
             <div
-              className="rounded mt-5"
+              className="rounded mt-4"
               style={{
                 background: "#ffffff",
                 color: "black",
