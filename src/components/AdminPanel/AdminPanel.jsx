@@ -19,7 +19,7 @@ function AdminPanel(props) {
 	
 	const handleLogin = () => {
 		if (email === "Amit" && passwd === "Amit@121") {
-			navigate('/userMgnt');
+			navigate('/admin-panel/userManagement');
 			props.show(true);
 		} else if (email === "" || passwd === "") {
 			toast.warning("Enter required credentials");
@@ -47,8 +47,7 @@ function AdminPanel(props) {
 				<div className="flex justify-center items-center">
 				<img src="/login.png" width={"300px"} />
 				</div>
-			  <h2 className="text-3xl font-bold text-center  text-white">Welcome To Laboratory Information Management System.</h2>
-			  <h2 className="text-3xl font-bold text-center  text-black">Admin Panel</h2>
+			  <h2 className="text-3xl font-bold text-center text-dark">Welcome To Admin Console</h2>
 
 			 {/* <div className="text-center text-lg text-gray-200 mb-6"> <p>Enter your credencials to access the LIMS Software.</p></div> */}
 				</div>

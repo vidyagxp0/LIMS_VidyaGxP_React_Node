@@ -206,11 +206,14 @@ import SettingStability from "./Pages/Settings/SettingStability.jsx"
 import TestHistory from "./Pages/Settings/TestHistory.jsx"
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx"
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx"
+
+
 import AdminPanel from "./components/AdminPanel/AdminPanel.jsx"
 import AdminMainPanel from "./components/AdminPanel/AdminMainPanel.jsx"
 import UserMgnt from "./components/AdminPanel/User Management/UserMgnt.jsx"
-// import SiteManagement from "./components/AdminPanel/SiteManagement.jsx"
-// import ProcessManagement from "./components/AdminPanel/ProcessManagement.jsx"
+import SiteManagement from "./components/AdminPanel/Site-Management/SiteManagement.jsx"
+import ProcessManagement from "./components/AdminPanel/Process-Management/ProcessManagement.jsx"
+
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -226,22 +229,9 @@ function App() {
     <>
 
       <BrowserRouter>
-
-        <Routes>
-          <Route path="/adminPanel" element={<AdminPanel show={checkLoggedIn} />} />
-          <Route path="" element={<AdminMainPanel />}>
-            <Route path="/userMgnt" element={<UserMgnt setToast={checkLoggedIn} show={isLoggedIn} />} />
-            {/* <Route path="/admin-panel/site-management" element={<SiteManagement />} />
-            <Route path="/admin-panel/process-management" element={<ProcessManagement />} /> */}
-
-          </Route>
-
-        </Routes>
+        
         <Routes>
           <Route path="/" element={<Login show={checkLoggedIn} />} />
-
-
-
           <Route path="" element={<MainPanel />}>
             <Route path="/dashboard" element={<Dashboard setToast={checkLoggedIn} show={isLoggedIn} />} />
             <Route path="/approval" element={<Approval />} />
@@ -453,6 +443,16 @@ function App() {
 
           </Route>
         </Routes>
+
+        <Routes>
+          <Route path="/adminPanel" element={<AdminPanel show={checkLoggedIn} />} />
+          <Route path="" element={<AdminMainPanel />}>
+            <Route path="/admin-panel/userManagement" element={<UserMgnt setToast={checkLoggedIn} show={isLoggedIn} />} />
+            <Route path="/admin-panel/site-management" element={<SiteManagement />} />
+            <Route path="/admin-panel/process-management" element={<ProcessManagement />} />
+          </Route>
+        </Routes>
+        
       </BrowserRouter>
 
     </>

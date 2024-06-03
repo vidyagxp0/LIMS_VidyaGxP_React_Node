@@ -28,7 +28,7 @@ const AdminSidebar = () => {
         <CSidebarHeader className="border-bottom ">
           <CSidebarBrand>
             <Link
-              to="/userMgnt"
+              to="/admin-panel/userManagement"
               className="logo d-flex align-items-center"
               style={{}}
             >
@@ -49,7 +49,7 @@ const AdminSidebar = () => {
 
 
           <CNavGroup
-            className={isActive("/userMgnt")}
+            className={isActive("/admin-panel/userManagement")}
             toggler={
               <>
                 <FaUsers />
@@ -57,11 +57,11 @@ const AdminSidebar = () => {
               </>
             }
           >
-            <Link to="/userMgnt">
+            <Link to="/admin-panel/userManagement">
               <CNavItem
                 href="#"
-                className={isActive("/userMgnt")}
-                style={{ ...isActive("/userMgnt") }}
+                className={isActive("/admin-panel/userManagement")}
+                style={{ ...isActive("/admin-panel/userManagement") }}
               >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
@@ -89,82 +89,37 @@ const AdminSidebar = () => {
                 style={{ ...isActive("/admin-panel/site-management") }}
               >
                 <span className="nav-icon">
-                  <span className="nav-icon-bullet">Site Management</span>
+                  <span className="nav-icon-bullet"></span>
                 </span>
+                Sites
 
               </CNavItem>
             </Link>
-            <Link to="/users">
-              <CNavItem
-                href="#"
-                className={isActive("/users")}
-                style={{ ...isActive("/users") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Users
-              </CNavItem>
-            </Link>
-            <Link to="/roles">
-              <CNavItem
-                href="#"
-                className={isActive("/roles")}
-                style={{ ...isActive("/roles") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Roles
-              </CNavItem>
-            </Link>
+            
           </CNavGroup>
 
           <CNavGroup
-            className={isActive("/userMgnt")}
+            className={isActive("/admin-panel/process-management")}
             toggler={
               <>
                 <FaUsers />
-                <span className="ml-5">User Management</span>
+                <span className="ml-5">Process Management</span>
               </>
             }
           >
-            <Link to="/department">
+            <Link to="/admin-panel/process-management">
               <CNavItem
                 href="#"
-                className={isActive("/department")}
-                style={{ ...isActive("/department") }}
+                className={isActive("/admin-panel/process-management")}
+                style={{ ...isActive("/admin-panel/process-management") }}
               >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
-                Department
+                Process
               </CNavItem>
             </Link>
-            <Link to="/users">
-              <CNavItem
-                href="#"
-                className={isActive("/users")}
-                style={{ ...isActive("/users") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Users
-              </CNavItem>
-            </Link>
-            <Link to="/roles">
-              <CNavItem
-                href="#"
-                className={isActive("/roles")}
-                style={{ ...isActive("/roles") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Roles
-              </CNavItem>
-            </Link>
+            
           </CNavGroup>
 
         </CSidebarNav>

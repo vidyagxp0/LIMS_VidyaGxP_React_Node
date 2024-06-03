@@ -1,0 +1,76 @@
+/* SiteManagement.css */
+
+/* body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+  } */
+  
+  .site-management {
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 50px;
+  }
+  
+  .header {
+    background: #3C496A;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .content {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    width: 45%;
+  }
+  
+  .card-header {
+    background: #3C496A;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.2em;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .card-body {
+    padding: 10px;
+  }
+  
+  .item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: left; /* Align text to the left for radio/checkbox labels */
+    width: 100%; /* Ensure full width background */
+    display: flex;
+    align-items: center; /* Center the radio/checkbox and label vertically */
+    
+  }
+  
+  .item:hover {
+      background: #0c1e6cc1;
+      color: whitesmoke;
+}
+
+  .selected {
+      background: #f0f0f0;
+  }
+  
