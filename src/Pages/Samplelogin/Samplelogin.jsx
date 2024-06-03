@@ -1,16 +1,4 @@
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-} from "@coreui/react";
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import React, { useState } from "react";
 import "./Samplelogin.css";
 
@@ -30,6 +18,7 @@ export default function Samplelogin() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [addModal, setAddModal] = useState(false);
+  const [addModal2, setAddModal2] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
@@ -78,6 +67,130 @@ export default function Samplelogin() {
       </CModal>
     );
   };
+  
+  const StatusModal2 = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal2}>
+        <CModalHeader>
+          <CModalTitle>Update Sample login</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+        <CFormInput
+            type="text"
+            className="mb-3"
+            label="Client"
+            placeholder="Select..."
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Test Plan / Revision No."
+            placeholder="Select..."
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Product / Material"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Product / Material Code"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Generic Name"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Specification ID"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Copy Sample from"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Sample Type"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Certificates (If any)"
+            placeholder=""
+          />
+  
+  <div className="bg-white rounded border-dark-subtle border-2 " >
+              <CTable align="middle" responsive className="table-striped ">
+                <thead>
+                  <tr>
+                    <th className="bg-info text-light">Sno.</th>
+                    <th className="bg-info text-light">Test Name</th>
+                    <th className="bg-info text-light">Group Name</th>
+                    <th className="bg-info text-light">Selection</th>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                    <tr >
+                      <td>1.</td>
+                      <td>Viscosity @40C</td>
+                      <td></td>
+                      <td>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                        />
+                      </td>
+                    </tr>
+                 <tr >
+                      <td>2.</td>
+                      <td>Total Acid Number (TAN)</td>
+                      <td></td>
+                      <td>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                        />
+                      </td>
+                    </tr>
+                <tr >
+                      <td>3.</td>
+                      <td>
+Water Content PPM</td>
+                      <td></td>
+                      <td>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                        />
+                      </td>
+                    </tr>
+                
+                </tbody>
+              </CTable>
+            </div>
+  
+  
+          <div className="d-flex gap-3 mt-4">
+            <CButton color="light w-50" onClick={_props.closeModal2}>&lt; Back</CButton>
+            <CButton color="primary w-50">Update Sample</CButton>
+          </div>
+        
+        </CModalBody>
+      </CModal>
+    )
+  }
   
     const [employee, setEmployees] = useState([
       {
@@ -221,9 +334,7 @@ export default function Samplelogin() {
               </Link>
               <div
                 className="cursor-pointer"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#updateSampleLogin"
-                aria-controls="offcanvasRight"
+                onClick={() => setAddModal2(true)}
               >
                 <FontAwesomeIcon icon={faPenToSquare} />
               </div>
@@ -632,6 +743,9 @@ export default function Samplelogin() {
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
+       {addModal2 && (
+        <StatusModal2 visible={addModal2} closeModal2={() => setAddModal2(false)} />
+      )}
 
 <DeleteModal
         visible={deleteModal}
@@ -650,7 +764,7 @@ const StatusModal = (_props) => {
       onClose={_props.closeModal}
     >
       <CModalHeader>
-        <CModalTitle>New Storage Condition</CModalTitle>
+        <CModalTitle>New Sample login</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CFormInput
@@ -717,3 +831,4 @@ const StatusModal = (_props) => {
     </CModal>
   );
 };
+

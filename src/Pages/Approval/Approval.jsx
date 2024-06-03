@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { FaCircleArrowLeft } from "react-icons/fa6";
+
 import {
   CButton,
   CCol,
@@ -16,7 +18,7 @@ import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
-import  "./Approval.css";
+import "./Approval.css";
 
 function Approval() {
   const pageSize = 5;
@@ -94,6 +96,27 @@ function Approval() {
       code: "na-002",
       description: "NA",
       status: "DROPPED",
+    }, 
+    {
+      id: 11,
+      name: "Jacob",
+      code: "Thornton",
+      description: "@fat",
+      status: "REINITIATED",
+    },
+    {
+      id: 12,
+      name: "Larry",
+      code: "Bird",
+      description: "@twitter",
+      status: "INITIATED",
+    },
+    {
+      id: 13,
+      name: "Product Material",
+      code: "na-002",
+      description: "NA",
+      status: "DROPPED",
     },
   ];
 
@@ -119,19 +142,19 @@ function Approval() {
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-  
+
   return (
     <>
-      <div className="m-4 p-4">
+      <div className="m-5 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold mb-5 mt-3">Approvals</h4>
+          <h4 className="fw-bold">Approvals</h4>
         </div>
         <div>
-          <CRow className="mb-3">
-            <CCol sm={3}>
+          <CRow className="mt-4 mb-3">
+            <CCol sm={4}>
               <CFormInput
                 className="mb-3 "
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
@@ -144,14 +167,13 @@ function Approval() {
             <CCol sm={3}>
               <CFormSelect
                 className="border-2"
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
                 value={statusFilter}
                 onChange={(e) => {
                   setStatusFilter(e.target.value);
                   setCurrentPage(1); // Reset to first page on filter change
                 }}
                 options={[
-                  { disabled: true, label: "Select Status", value: "" },
                   { value: "", label: "All" },
                   { value: "INITIATED", label: "Initiated" },
                   { value: "APPROVED", label: "Approved" },
@@ -163,16 +185,53 @@ function Approval() {
             </CCol>
           </CRow>
         </div>
-        <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 rounded-lg table-striped table-responsive">
-            <CTableHead  >
-              <CTableRow > 
-                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
-                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Name</CTableHeaderCell>
-                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Code</CTableHeaderCell>
-                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">User</CTableHeaderCell>
-                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Action</CTableHeaderCell>
+        <div
+          className=" rounded   bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+          <CTable
+            align="middle"
+            responsive
+            className="mb-0 rounded-lg table-responsive "
+          >
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white",}}
+                  scope="col"
+                >
+                  S No.
+                </CTableHeaderCell>
+                <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white" }}
+                  scope="col"
+                >
+                  Name
+                </CTableHeaderCell>
+                <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white" }}
+                  scope="col"
+                >
+                  Code
+                </CTableHeaderCell>
+                <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white" }}
+                  scope="col"
+                >
+                  User
+                </CTableHeaderCell>
+                <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white" }}
+                  scope="col"
+                >
+                  Status
+                </CTableHeaderCell>
+                <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white" }}
+                  scope="col"
+                >
+                  Action
+                </CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -187,7 +246,7 @@ function Approval() {
                   <CTableDataCell className="d-flex justify-content-start">
                     <div className="w-50">
                       <div
-                        className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${
+                        className={`p-1 small rounded text-light d-flex justify-content-center align-items-center bg-${
                           item.status === "INITIATED"
                             ? "blue-700"
                             : item.status === "APPROVED"
@@ -199,7 +258,7 @@ function Approval() {
                             : item.status === "DROPPED"
                             ? "purple-700"
                             : "white"
-                        }`}
+                        }`} style={{fontSize:'10px'}}
                       >
                         {item.status}
                       </div>
@@ -215,29 +274,25 @@ function Approval() {
             </CTableBody>
           </CTable>
         </div>
-        <div className="d-flex justify-content-between my-4">
-          <div className="d-flex gap-3">
-            <CButton onClick={handlePrevPage} disabled={currentPage === 1}>
-              &lt; &lt;
-            </CButton>
-            <button className="btn border">{currentPage}</button>
-            <CButton
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-            >
-              &gt; &gt;
-            </CButton>
-          </div>
-          <div>
-            <CButton
-              onClick={handleNextPage}
-              className="d-flex gap-2"
-              disabled={currentPage === totalPages}
-            >
-              Next <FaArrowRight className="mt-1" />
-            </CButton>
-          </div>
-        </div>
+        <div className="d-flex justify-content-end my-4">
+          <nav aria-label="...">
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <span className="page-link" onClick={handlePrevPage}>Previous</span>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+              <a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
+                {index + 1}
+              </a>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+            <a className="page-link" href="#" onClick={handleNextPage}>Next</a>
+          </li>
+        </ul>
+      </nav>
+      </div>
       </div>
     </>
   );

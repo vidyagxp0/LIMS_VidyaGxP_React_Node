@@ -66,7 +66,7 @@ import {
   
     return (
       <>
-        <div className="m-4 p-4">
+        <div className="m-5">
           <div className="main-head">
             <h4 className="fw-bold mb-4 mt-3">Test Results QA</h4>
           </div>
