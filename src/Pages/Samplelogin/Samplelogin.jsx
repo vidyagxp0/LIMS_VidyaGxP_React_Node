@@ -258,7 +258,7 @@ export default function Samplelogin() {
 
   return (
     <>
-      <div className="mx-5">
+      <div className="m-5">
         <div className="main-head">
           <h4 className="fw-bold mb-4">Sample Login</h4>
         </div>
