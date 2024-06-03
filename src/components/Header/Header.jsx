@@ -1,4 +1,5 @@
 import { faAudible } from "@fortawesome/free-brands-svg-icons";
+import "./Header.css";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import {
   faAngleDown,
@@ -7,8 +8,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AuditTrail from "../../Pages/AuditTrail/AuditTrail";
-// import { Button } from "react-bootstrap";
 
 function Header() {
   const [notification, setNotification] = useState(false);
@@ -18,7 +17,8 @@ function Header() {
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      toggleDrop(), setContact(false);
+      toggleDrop();
+      setContact(false);
     }
   };
 
@@ -27,97 +27,65 @@ function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleDrop = () => {
     setTimeout(() => {
-      setDrop(false); // Set drop to false after 2 seconds
+      setDrop(false);
     }, 500);
   };
 
   return (
     <header
-      className=" text-dark py-4"
-      style={{
-        background: "linear-gradient(45deg, #091C3F,#3b8d99, #091C3F )",
-        height: "72px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
-      }}
+      id="head"
+      className="text-gray-900 w-[100%] mobile:flex-col  desktop:flex-col laptop:flex-col tablet:flex-col py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[72px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8"
     >
-      <div className="container mx-auto text-center flex items-center justify-around">
+      <div className="flex items-center  w-[75%]  justify-center ">
         <div className="text-center">
-          <h3 style={{ fontFamily: "serif" }} className="text-light">
+          <h3 className="text-gray-100 font-serif  text-2xl mobile:text-lg tablet:text-xl">
             Welcome to Laboratory Information Management System
           </h3>
         </div>
       </div>
 
-      <div className="flex " style={{ marginRight: "50px" }}>
-        <div className="relative mt-3 mr-2">
+      <div className="flex items-end  justify-center w-[15%]">
+        <div className="relative  mr-3">
           <button
             onClick={() => setNotification(!notification)}
-            className="text-light hover:text-gray-300"
+            className="text-gray-100 hover:text-gray-300"
           >
-            <FontAwesomeIcon icon={faBell} className="text-2xl" />
+            <FontAwesomeIcon
+              icon={faBell}
+              className="text-xl mobile:text-2xl"
+            />
             <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
               12
             </span>
           </button>
           {notification && (
-            <div className="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-10">
-              {/* <div className="py-2 px-4 bg-gray-800 text-dark rounded-t-md">
-                New Notifications
-              </div>
-              <a
-                href="#"
-                className="block py-2 px-4 text-light hover:bg-gray-100"
-              >
-                Stock onboarding status updated successfully. <br />
-                <small className="text-light-500">11:31 am</small>
-              </a> */}
+            <div className="absolute right-0 mt-2 w-64 mobile:w-72 bg-white rounded-md shadow-lg z-10">
+              {/* Notification content */}
             </div>
           )}
         </div>
         {contact && (
           <div
             id="About"
-            style={{
-              position: "absolute",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              text: "center",
-              top: "175px",
-              left: "158px",
-              width: "950px",
-              height: "500px",
-              borderRadius: "25px",
-              backgroundColor: "#245A71",
-              color: "white",
-              fontWeight: "800",
-              gap: "20px",
-              boxShadow: "0px 0px 15px #245A71",
-            }}
+            className="absolute flex flex-col items-center justify-center text-center top-[175px] left-[180px] tablet:left-[50px] laptop:left-[100px] desktop:left-[158px] w-[60%] tablet:w-[70%] laptop:w-[50%] desktop:w-[850px]  h-[450px] rounded-[25px] bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
           >
             <div
+              className="bg-no-repeat bg-contain w-[300px] tablet:w-[400px] laptop:w-[500px] h-[100px] tablet:h-[125px] laptop:h-[150px]"
               style={{
                 backgroundImage:
                   "url('https://vidyagxp.com/vidyaGxp_logo.png')",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "contain",
-                width: "550px",
-                height: "150px",
               }}
             ></div>
             <div className="mb-2">
-              <p className="mb-3" style={{ fontSize: "15px" }}>
+              <p className="mb-3 text-sm tablet:text-base laptop:text-lg">
                 E-Mail: admin@vidyagxp.com
               </p>
-              <p className="m-0" style={{ fontSize: "15px" }}>
+              <p className="m-0 text-sm tablet:text-base laptop:text-lg">
                 Mobile: +91-7354654474
               </p>
             </div>
@@ -128,21 +96,23 @@ function Header() {
           <div ref={dropdownRef}>
             <button
               onClick={() => setDrop(!drop)}
-              className="flex items-center text-light hover:text-gray-300"
+              className="flex items-center text-gray-100 hover:text-gray-300"
             >
-              Amit Patel <FontAwesomeIcon icon={faAngleDown} />
+              Amit Patel <FontAwesomeIcon icon={faAngleDown} className="ml-2" />
             </button>
             {drop && (
-              <div className="dropdown-menu">{/* Dropdown menu items */}</div>
+              <div className="absolute left-0 z-50 py-2 mt-1 text-base bg-white border border-gray-300 rounded">
+                {/* Dropdown menu items */}
+              </div>
             )}
           </div>
 
           {drop && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-              <div className="py-2 px-4 bg-gray-800 text-dark rounded-t-md flex items-center">
+              <div className="py-2 px-4 bg-gray-800 text-gray-900 rounded-t-md flex items-center">
                 <img
                   src="/images/logo.png"
-                  alt="..."
+                  alt="Profile"
                   className="w-8 h-8 rounded-full mr-2"
                 />
                 <span className="font-bold">Amit Patel</span>
@@ -159,13 +129,9 @@ function Header() {
                 onClick={() => {
                   setContact(!contact);
                 }}
-                className="block py-2 px-4 hover:bg-gray-100"
+                className="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
               >
-                {/* <Link to="#" className="block py-2 px-4 hover:bg-gray-100" > */}
-                <button id="">
-                  <span className="mr-3">♣</span> Contact
-                </button>
-                {/* </Link> */}
+                <span className="mr-3">♣</span> About
               </div>
 
               <Link to="/" className="block py-2 px-4 hover:bg-gray-100">
