@@ -1,11 +1,16 @@
-import { CChart, CChartBar, CChartLine } from "@coreui/react-chartjs";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
+import "../Dashboard/Dashboard.css";
+// import { CChart, CChartBar, CChartLine } from "@coreui/react-chartjs";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import LineChart from "echarts-for-react";
-import GaugeChart from "echarts-for-react";
+import { Gauge } from "@mui/x-charts/Gauge";
+
 
 function Dashboard(props) {
   useEffect(() => {
@@ -24,19 +29,16 @@ function Dashboard(props) {
     "chpoil",
     "chpoil",
     "Feliconar",
-    "Feliconar",
-    "Feliconar",
   ];
 
   const ARNumber = [
     "ARPC0000099",
-    // "ARPC0000098",
+    "ARPC0000098",
     "ARPC0000097",
     "ARPC0000096",
-    "ARIP0000095",
     "ARFFT0000094",
     "ARRW0000093",
-    "ARRW0000092",
+    "ARRW0000093",
     "ARFFT0000091",
   ];
 
@@ -64,7 +66,7 @@ function Dashboard(props) {
           itemStyle: {
             shadowBlur: 10,
             shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.5)",
+            shadowColor: "rgba(0, 0, 0, 0.8)",
           },
         },
       },
@@ -542,7 +544,7 @@ function Dashboard(props) {
     series: [
       {
         name: "Test Planned",
-        type: "bar",
+        type: "line",
         data: [
           6, 3, 1, 3, 4, 4, 3, 1, 9, 1, 8, 4, 6, 3, 7, 6, 4, 2, 2, 3, 6, 1, 9,
           3, 2, 7, 3, 5, 9, 1, 4, 6, 2, 1, 4, 5, 8, 2, 3, 7, 4, 9, 6, 3, 2, 8,
@@ -588,388 +590,298 @@ function Dashboard(props) {
 
   return (
     <>
-      <div id="dashboard" className="mx-5">
-        <div className="sub-head mt-5 mb-4">
-          <div className="title  fs-6" style={{ fontWeight: "800" }}>
-            Dashboard
-          </div>
+      <div id="dashboard" className="m-3 ">
+        <div className="sub-head mb-4">
+          <div className="title fs-5 fw-bolder">Dashboard</div>
         </div>
-        <div className="d-flex flex-wrap gap-4 my-4">
+
+        <div className="flex flex-wrap justify-around " id="Material">
           <div
-            className="-lg m-1 p-4 text-center"
+            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
             style={{
-              // background: "linear-gradient(45deg, #6a11cb, #2575fc)", // purple to blue
               backgroundImage:
                 'url("https://media.istockphoto.com/id/1410455925/vector/dynamic-blue-particle-wave-abstract-sound-visualization-digital-structure-of-the-wave-flow.jpg?s=612x612&w=0&k=20&c=RL7do3aEvte0cKukjC30eHQ4nujXUIOa2TvQbIN8eKw=")',
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              width: "242px",
-              height: "150px",
-              borderRadius: "30px",
-
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              // boxShadow: "0 0 10px #6a11cb",
             }}
           >
-            <div className="text-light fs-6">On Going Test</div>
-            <div className="count fs-2 text-light fw-bolder">277</div>
+            <div className="text-white text-sm">On Going Test</div>
+            <div className="text-2xl text-white font-bold">277</div>
           </div>
 
           <div
-            className="shadow-lg m-1 p-4 text-center"
+            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
             style={{
-              // background: "linear-gradient(45deg, #00bcd4, #ff4b2b)", // orange to red
               backgroundImage:
                 "url('https://c4.wallpaperflare.com/wallpaper/624/336/42/science-the-big-bang-theory-atoms-wallpaper-preview.jpg')",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              width: "242px",
-              height: "150px",
-              borderRadius: "30px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
             }}
           >
-            <div className="text-light fs-6">Completed Test</div>
-            <div className="count fs-2 text-light fw-bolder">48</div>
+            <div className="text-white text-sm">Completed Test</div>
+            <div className="text-2xl text-white font-bold">48</div>
           </div>
 
           <div
-            className="shadow-lg m-1 p-4 text-center"
+            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
             style={{
-              // background: "linear-gradient(45deg, #42e695, #3bb2b8)", // green to blue
               backgroundImage:
                 "url('https://static.vecteezy.com/system/resources/thumbnails/006/712/955/small/abstract-health-medical-science-consist-doctor-digital-wireframe-concept-modern-medical-technology-treatment-medicine-on-gray-background-for-template-web-design-or-presentation-vector.jpg')",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              width: "242px",
-              height: "150px",
-              borderRadius: "30px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
             }}
           >
-            <div className="text-light fs-6">Pending Test</div>
-            <div className="count fs-2 text-light fw-bolder">221</div>
+            <div className="text-white text-sm">Pending Test</div>
+            <div className="text-2xl text-white font-bold">221</div>
           </div>
 
           <div
-            className="shadow-lg m-1 p-4 text-center"
+            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
             style={{
-              // background: "linear-gradient(45deg, #ff416c, #ff4b2b)",
               backgroundImage:
                 "url('https://img.freepik.com/premium-photo/high-angle-view-eyeglasses-table-against-black-background_1048944-215100.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1715731200&semt=ais_user')",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              width: "242px",
-              height: "150px",
-              borderRadius: "30px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
             }}
           >
-            <div className="text-light fs-6">Instruments</div>
-            <div className="count fs-2 text-light fw-bolder">9</div>
+            <div className="text-white text-sm">Instruments</div>
+            <div className="text-2xl text-white font-bold">9</div>
           </div>
 
           <div
-            className="shadow-lg m-1 p-4 text-center"
+            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
             style={{
-              // background: "linear-gradient(45deg, #3b8d99, #6b6b83)",
               backgroundImage:
                 "url('https://png.pngtree.com/thumb_back/fh260/background/20210716/pngtree-abstract-geometric-medical-background-of-science-and-technology-style-gene-atom-image_743373.jpg')",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              width: "242px",
-              height: "150px",
-              borderRadius: "30px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
             }}
           >
-            <div className="text-light fs-6">Instrument Under Calibration</div>
-            <div className="count fs-2 text-light fw-bolder">5</div>
-          </div>
-        </div>
-        <div className="d-flex gap-4">
-          <div className="chart-widgets w-75">
-            <div className=""></div>
-
-            <div className="d-flex gap-4 my-2">
-              <div
-                className="w-100 rounded px-3"
-                style={{
-                  backgroundColor: "#ffffff",
-                  boxShadow: "0px 0px 10px black",
-                  padding: "20px",
-                }}
-              >
-                <div className="d-flex justify-content-between py-4">
-                  <div className="py-2 fw-bolder" style={{ color: "#343a40" }}>
-                    Material
-                  </div>
-                  <div className="fw-bolder fs-4" style={{ color: "#495057" }}>
-                    <button>...</button>
-                  </div>
-                </div>
-                <div className="d-flex gap-3">
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle"
-                      style={{
-                        backgroundColor: "#ffc107",
-                        width: "12px",
-                        height: "12px",
-                        marginRight: "8px",
-                      }}
-                    ></div>
-                    <span className="text-muted">Pending</span>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle"
-                      style={{
-                        backgroundColor: "#0d6efd",
-                        width: "12px",
-                        height: "12px",
-                        marginRight: "8px",
-                      }}
-                    ></div>
-                    <span className="text-muted">In-progress</span>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle"
-                      style={{
-                        backgroundColor: "#28a745",
-                        width: "12px",
-                        height: "12px",
-                        marginRight: "8px",
-                      }}
-                    ></div>
-                    <span className="text-muted">Approved</span>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle"
-                      style={{
-                        backgroundColor: "#dc3545",
-                        width: "12px",
-                        height: "12px",
-                        marginRight: "8px",
-                      }}
-                    ></div>
-                    <span className="text-muted">Dropped</span>
-                  </div>
-                </div>
-                <div className="d-flex justify-content-around py-5">
-                  <CircularProgressbar
-                    className="p-3"
-                    value={2.13}
-                    text={`${2.13}%`}
-                    strokeWidth={12}
-                    styles={buildStyles({
-                      pathColor: "#FF6347",
-                      textColor: "#333333",
-                      trailColor: "#F0F0F0",
-                      backgroundColor: "#FFFFFF",
-                    })}
-                  />
-                  <CircularProgressbar
-                    className="p-3"
-                    background
-                    backgroundPadding={6}
-                    value={21.3}
-                    text={"21.3%"}
-                    strokeWidth={8}
-                    styles={buildStyles({
-                      backgroundColor: "#e3e1fd",
-                      textColor: "#212529",
-                      pathColor: "#0d6efd",
-                      trailColor: "transparent",
-                    })}
-                  />
-                  <CircularProgressbar
-                    className="p-3"
-                    background
-                    backgroundPadding={6}
-                    value={93.87}
-                    text={"93.87%"}
-                    strokeWidth={8}
-                    styles={buildStyles({
-                      backgroundColor: "#e1f4e2",
-                      textColor: "#212529",
-                      pathColor: "#28a745",
-                      trailColor: "transparent",
-                    })}
-                  />
-                  <CircularProgressbar
-                    className="p-3"
-                    background
-                    backgroundPadding={6}
-                    value={1}
-                    text={"1%"}
-                    strokeWidth={8}
-                    styles={buildStyles({
-                      backgroundColor: "pink",
-                      textColor: "#212529",
-                      pathColor: "#dc3545",
-                      trailColor: "transparent",
-                    })}
-                  />
-                </div>
-              </div>
+            <div className="text-white text-sm">
+              Instrument Under Calibration
             </div>
-
-            <div className="d-flex gap-4">
-              <div
-                className="w-50 my-4 rounded p-4"
-                style={{
-                  background: "#ffffff",
-                  boxShadow: "0px 0px 10px black",
-                }}
-              >
-                <div className="d-flex   justify-content-between">
-                  <div className="py-2 fw-bolder" style={{ color: "#343a40" }}>
-                    Analysis
-                  </div>
-                  <div
-                    className="mt-0 pt-0 fw-bolder fs-4"
-                    style={{ color: "#495057" }}
-                  >
-                    ...
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <LineChart option={pieChartOptions} />
-                </div>
-              </div>
-
-              <div
-                className="my-4  w-50  rounded"
-                style={{
-                  boxShadow: "0px 0px 10px black",
-                  background: "#ffffff",
-                }}
-              >
-                <div className="py-4 mx-3 fw-bolder">Material Status</div>
-                <div className="pt-4 mx-4">
-                  <LineChart option={funnelOption} />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="d-flex flex-column gap-4 w-25 mt-2">
-            <div
-              className="rounded "
-              style={{
-                background: "#ffffff",
-                color: "black",
-                boxShadow: "  0 0px 5px black",
-              }}
-            >
-              <div className="h5 m-4 fw-bold"> Latest Products</div>
-              <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
-                {latestProducts.map((product, idx) => {
-                  return (
-                    <li style={{ color: "black" }} key={idx}>
-                      ○ {product}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-
-            <div
-              className="rounded mt-"
-              style={{
-                background: "#ffffff",
-                color: "black",
-                boxShadow: "  0 0px 5px black",
-              }}
-            >
-              <div className="h5 m-4 fw-bold text-dark">AR Number</div>
-              <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
-                {ARNumber.map((number, idx) => {
-                  return (
-                    <li style={{ color: "black" }} key={idx}>
-                      ○ {number}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+            <div className="text-2xl text-white font-bold">5</div>
           </div>
         </div>
 
-        <div
-          className="gap-4"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-          }}
-        >
-          <div
-            className="my-4 w-50 rounded"
-            style={{
-              boxShadow: "0px 0px 10px black",
-              background: "#ffffff",
-            }}
-          >
-            <div className="py-4 mx-3 fw-bolder text-center">
-              Category wise Instruments
+        <div className="cardContainter d-flex gap-4 mb-4 mt-4">
+          <div className="rounded px-5 w-[100%] bg-white shadow-lg cardItem">
+            <div className="d-flex justify-content-between py-3">
+              <div className="py-2 fw-bolder" style={{ color: "#343a40" }}>
+                Material
+              </div>
+              <div className="fw-bolder fs-4" style={{ color: "#495057" }}>
+                <button>...</button>
+              </div>
             </div>
-            <div className="pt-4">
-              <LineChart option={analysisOptions} />
+            <div className="d-flex gap-3 circularDot">
+              <div className="d-flex align-items-center">
+                <div
+                  className="rounded-circle"
+                  style={{
+                    backgroundColor: "#ffc107",
+                    width: "12px",
+                    height: "12px",
+                    marginRight: "8px",
+                  }}
+                ></div>
+                <span className="text-muted">Pending</span>
+              </div>
+              <div className="d-flex align-items-center ">
+                <div
+                  className="rounded-circle "
+                  style={{
+                    backgroundColor: "#0d6efd",
+                    width: "12px",
+                    height: "12px",
+                    marginRight: "8px",
+                  }}
+                ></div>
+                <span className="text-muted">In-progress</span>
+              </div>
+              <div className="d-flex align-items-center">
+                <div
+                  className="rounded-circle"
+                  style={{
+                    backgroundColor: "#28a745",
+                    width: "12px",
+                    height: "12px",
+                    marginRight: "8px",
+                  }}
+                ></div>
+                <span className="text-muted">Approved</span>
+              </div>
+              <div className="d-flex align-items-center">
+                <div
+                  className="rounded-circle mt-5"
+                  style={{
+                    backgroundColor: "#dc3545",
+                    width: "12px",
+                    height: "12px",
+                    marginRight: "8px",
+                  }}
+                ></div>
+                <span className="text-muted">Dropped</span>
+              </div>
+            </div>
+            <div className="circularBar d-flex items-center  justify-around pt-4">
+              <div className="p-3 circularItem">
+                <CircularProgressbar
+                  background
+                  backgroundPadding={6}
+                  value={65}
+                  text={"65%"}
+                  strokeWidth={8}
+                  styles={buildStyles({
+                    backgroundColor: "#e3e1fd",
+                    textColor: "#212529",
+                    pathColor: "#FF5733",
+                    trailColor: "transparent",
+                  })}
+                />
+              </div>
+              <div className="p-3 circularItem">
+                <CircularProgressbar
+                  background
+                  backgroundPadding={6}
+                  value={21.3}
+                  text={"21.3%"}
+                  strokeWidth={8}
+                  styles={buildStyles({
+                    backgroundColor: "#e3e1fd",
+                    textColor: "#212529",
+                    pathColor: "#3498DB",
+                    trailColor: "transparent",
+                  })}
+                />
+              </div>
+              <div className="p-3 circularItem">
+                <CircularProgressbar
+                  background
+                  backgroundPadding={6}
+                  value={39.87}
+                  text={"39.87%"}
+                  strokeWidth={8}
+                  styles={buildStyles({
+                    backgroundColor: "#e3e1fd",
+                    textColor: "#212529",
+                    pathColor: "#2ECC71",
+                    trailColor: "transparent",
+                  })}
+                />
+              </div>
+              <div className="p-3 circularItem">
+                <CircularProgressbar
+                  background
+                  backgroundPadding={6}
+                  value={65}
+                  text={"65%"}
+                  strokeWidth={8}
+                  styles={buildStyles({
+                    backgroundColor: "#e3e1fd",
+                    textColor: "#212529",
+                    pathColor: "#9B59B6",
+                    trailColor: "transparent",
+                  })}
+                />
+              </div>
+              <div className="p-3 circularItem">
+                <CircularProgressbar
+                  background
+                  backgroundPadding={6}
+                  value={65}
+                  text={"65%"}
+                  strokeWidth={8}
+                  styles={buildStyles({
+                    backgroundColor: "#e3e1fd",
+                    textColor: "#212529",
+                    pathColor: "red",
+                    trailColor: "transparent",
+                  })}
+                />
+              </div>
+              <div className="p-3 circularItem">
+                <CircularProgressbar
+                  background
+                  backgroundPadding={6}
+                  value={39.87}
+                  text={"39.87%"}
+                  strokeWidth={8}
+                  styles={buildStyles({
+                    backgroundColor: "#e3e1fd",
+                    textColor: "#212529",
+                    pathColor: "yellow",
+                    trailColor: "transparent",
+                  })}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded w-25 listItem shadow-lg cardItem bg-white">
+            <div className="h5 m-4 fw-bold"> Latest Products</div>
+            <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
+              {latestProducts.map((product, idx) => {
+                return (
+                  <li style={{ color: "black" }} key={idx}>
+                    ◆ {product}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+        <div className="cardContainter d-flex gap-4 mb-4">
+          <div
+            className="shadow-lg cardItem bg-white rounded p-4"
+            style={{ width: "50%" }}
+          >
+            <div className="d-flex justify-content-between">
+              <div className="py-2 fw-bolder">Analysis</div>
+              <div className="fw-bolder  fs-4">...</div>
+            </div>
+            <div className="mt-4">
+              <LineChart option={pieChartOptions} />
             </div>
           </div>
           <div
-            className="my-4 w-50 rounded"
-            style={{
-              boxShadow: "0px 0px 10px black",
-              background: "#ffffff",
-            }}
+            className="rounded shadow-lg cardItem bg-white z-10"
+            style={{ width: "50%" }}
           >
-            <div className="py-4 mx-3 fw-bolder text-center">Test Stats</div>
+            <div className="py-4  fw-bolder text-center">Test Stats</div>
             <div className="pt-4">
               <LineChart option={materialOption} />
             </div>
           </div>
+          <div className="rounded shadow-lg cardItem bg-white w-25">
+            <div className="h5 m-4 fw-bold text-dark">AR Number</div>
+            <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
+              {ARNumber.map((number, idx) => {
+                return (
+                  <li style={{ color: "black" }} key={idx}>
+                    ◆ {number}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
-
-        <div className="gap-4" style={{ display: "flex" }}>
-          <div
-            className="mb-4 w-50 rounded"
-            style={{
-              boxShadow: "0px 0px 10px black",
-              background: "#ffffff",
-            }}
-          >
+        <div className="cardContainter d-flex gap-4 mb-4">
+          <div className="rounded shadow-lg cardItem bg-white w-50">
+            <div className="py-4 fw-bolder text-center">
+              Category wise Instruments
+            </div>
+            <div className="">
+              <LineChart option={analysisOptions} className="p-4" />
+            </div>
+          </div>
+          <div className="rounded shadow-lg cardItem bg-white w-50">
+            <div className="py-4 mx-3 fw-bolder text-center">
+              Material Status
+            </div>
+            <div className="pt-4 mx-4">
+              <LineChart option={funnelOption} />
+            </div>
+          </div>
+        </div>
+        <div className="cardContainter d-flex gap-4 mb-4">
+          <div className="w-50 rounded shadow-lg cardItem bg-white">
             <div className="py-4 mx-3 fw-bolder">Product Wise Test stats</div>
             <div className="pt-4 mx-4">
               <LineChart option={productWiseTestStatsOption} />
             </div>
           </div>
-          <div
-            className="mb-4 w-50 rounded"
-            style={{
-              boxShadow: "0px 0px 10px black",
-              background: "#ffffff",
-            }}
-          >
+          <div className="w-50 rounded shadow-lg cardItem bg-white">
             <div className="py-4 mx-3 fw-bolder">Test Wise stats</div>
             <div className="pt-4 mx-5">
               <LineChart option={testWiseStatsOption} />
