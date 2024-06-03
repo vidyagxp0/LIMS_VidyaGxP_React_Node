@@ -141,11 +141,11 @@ export default function InvestigationL2() {
 
   return (
     <>
-      <div id="div1" className="mx-4 mb-5 mt-5">
+      <div  className="m-5">
         <h4 className="fw-bold">Test Results QA</h4>
-      </div>
-      <div className="my-2" style={{ marginLeft: "24px" }}>
-        <CRow className="my-0">
+      
+      <div className="my-5" >
+        <CRow className="">
           <CCol sm={4}>
             <CFormInput
               type="text"
@@ -170,7 +170,7 @@ export default function InvestigationL2() {
           </CCol>
         </CRow>
       </div>
-      <div className="m-4  rounded bg-white" style={{ border: "2px solid gray" }}>
+      <div className=" rounded bg-white" style={{ border: "2px solid gray" }}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -194,7 +194,7 @@ export default function InvestigationL2() {
             className="btn btn-outline-secondary mr-2"
             onClick={prevPage}
             disabled={currentPage === 1}
-          >
+            >
             &lt;&lt;
           </button>
           <span className="current-page-number bg-dark-subtle page-item rounded-circle p-2">
@@ -204,7 +204,7 @@ export default function InvestigationL2() {
             className="btn btn-outline-secondary ml-2"
             onClick={nextPage}
             disabled={currentPage === totalPages}
-          >
+            >
             &gt;&gt;
           </button>
         </div>
@@ -212,10 +212,11 @@ export default function InvestigationL2() {
           className="btn  d-flex align-items-center"
           onClick={nextPage}
           disabled={currentPage === totalPages}
-        >
+          >
           Next <FaArrowRight className="ms-2" />
         </button>
       </div>
+            </div>
     </>
   );
 }

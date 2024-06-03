@@ -223,19 +223,18 @@ function StorageLocation() {
 
   return (
     <>
-      <div className="m-4 p-4">
-        <div className="container-fluid">
+      <div className="m-5 mt-3"  >
           <div className="main-head">
-            <h4 className="fw-bold mb-4 mt-3">Storage Conditions</h4>
+            <h4 className="fw-bold ">Storage Conditions</h4>
           </div>
           <div>
-            <CRow className="my-5">
+            <CRow className="mt-4 mb-3">
               <CCol sm={4}>
                 <CFormInput
                   type="text"
                   placeholder="Search..."
-                  style={{ border: "2px solid gray" }}
-                  className="border-2"
+                  style={{fontSize:'0.9rem'}}
+                  className="mb-3"
                   value={searchQuery}
                   onChange={handleSearch}
                 />
@@ -245,9 +244,8 @@ function StorageLocation() {
                   value={filterStatus}
                   onChange={handleFilter}
                   className="border-2"
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                   options={[
-                    { disabled: true, label: "Select Status", value: "" },
                     { label: "All", value: "" },
                     { label: "Active", value: "1" },
                     { label: "Inactive", value: "0" },
@@ -266,48 +264,48 @@ function StorageLocation() {
           </div>
           <div
             className="rounded bg-white"
-            style={{ border: "2px solid gray" }}
+            style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
           >
             <CTable
               align="middle"
               responsive
-              className="mb-0 table-striped table-responsive"
+              className="mb-0 table-responsive"
             >
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell
-                    style={{ background: "#3C496A", color: "white" }}
+                    style={{ background: "#5D76A9", color: "white" }}
                     scope="col"
                     className="text-center"
                   >
                     <input type="checkbox" />
                   </CTableHeaderCell>
                   <CTableHeaderCell
-                    style={{ background: "#3C496A", color: "white" }}
+                    style={{ background: "#5D76A9", color: "white" }}
                     scope="col"
                   >
                     Condition Code
                   </CTableHeaderCell>
                   <CTableHeaderCell
-                    style={{ background: "#3C496A", color: "white" }}
+                    style={{ background: "#5D76A9", color: "white" }}
                     scope="col"
                   >
                     Stability Storage Condition
                   </CTableHeaderCell>
                   <CTableHeaderCell
-                    style={{ background: "#3C496A", color: "white" }}
+                    style={{ background: "#5D76A9", color: "white" }}
                     scope="col"
                   >
                     Created At
                   </CTableHeaderCell>
                   <CTableHeaderCell
-                    style={{ background: "#3C496A", color: "white" }}
+                    style={{ background: "#5D76A9", color: "white" }}
                     scope="col"
                   >
                     Status
                   </CTableHeaderCell>
                   <CTableHeaderCell
-                    style={{ background: "#3C496A", color: "white" }}
+                    style={{ background: "#5D76A9", color: "white" }}
                     scope="col"
                   >
                     Actions
@@ -323,26 +321,18 @@ function StorageLocation() {
                     <CTableDataCell>{item.code}</CTableDataCell>
                     <CTableDataCell>{item.condition}</CTableDataCell>
                     <CTableDataCell>{item.date}</CTableDataCell>
-                    <CTableDataCell className="d-flex">
-                      <div
-                        className="py-2 px-3 small rounded fw-bold"
-                        style={
-                          item.status === "ACTIVE"
-                            ? {
-                                background: "green",
-                                color: "white",
-                                width: "110px",
-                              }
-                            : {
-                                background: "red",
-                                color: "white",
-                                width: "110px",
-                              }
-                        }
-                      >
-                        {item.status}
-                      </div>
-                    </CTableDataCell>
+                    <CTableDataCell className="d-flex justify-content-start">
+      <div className="w-75">
+        <div
+          className={`p-1 small rounded text-light d-flex justify-content-center align-items-center ${
+            item.status === 'ACTIVE' ? 'bg-green-700' : 'bg-red-700'
+          }`}
+          style={{ fontSize: '10px' }}
+        >
+          {item.status}
+        </div>
+      </div>
+    </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
                         <Link to={`/approval/1321`}>
@@ -393,7 +383,7 @@ function StorageLocation() {
               </CButton>
             </div>
           </div>
-        </div>
+       
       </div>
 
       {addModal && (
