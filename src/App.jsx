@@ -442,9 +442,7 @@ function App() {
             <Route path="/stability/sample_LoginDetails" element={< Sample_LoginDetails />} />
 
           </Route>
-        </Routes>
-
-        <Routes>
+       
           <Route path="/adminPanel" element={<AdminPanel show={checkLoggedIn} />} />
           <Route path="" element={<AdminMainPanel />}>
             <Route path="/admin-panel/userManagement" element={<UserMgnt setToast={checkLoggedIn} show={isLoggedIn} />} />
