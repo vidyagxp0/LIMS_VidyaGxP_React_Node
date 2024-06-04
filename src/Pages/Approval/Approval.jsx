@@ -150,10 +150,9 @@ function Approval() {
           <h4 className="fw-bold">Approvals</h4>
         </div>
         <div>
-          <CRow className="mt-4 mb-3">
+          <CRow className="mt-5 mb-3">
             <CCol sm={4}>
-              <CFormInput
-                className="mb-3 "
+              <CFormInput                
                 style={{fontSize:'0.9rem'}}
                 type="text"
                 placeholder="Search..."
@@ -244,9 +243,9 @@ function Approval() {
                   <CTableDataCell>{item.code}</CTableDataCell>
                   <CTableDataCell>{item.description}</CTableDataCell>
                   <CTableDataCell className="d-flex justify-content-start">
-                    <div className="w-50">
-                      <div
-                        className={`p-1 small rounded text-light d-flex justify-content-center align-items-center bg-${
+                    
+                      <button
+                        className={`p-1 w-50 small rounded text-light d-flex justify-content-center align-items-center bg-${
                           item.status === "INITIATED"
                             ? "blue-700"
                             : item.status === "APPROVED"
@@ -261,8 +260,8 @@ function Approval() {
                         }`} style={{fontSize:'10px'}}
                       >
                         {item.status}
-                      </div>
-                    </div>
+                      </button>
+                    
                   </CTableDataCell>
                   <CTableDataCell className="text-start">
                     <Link to="/approval/1321">

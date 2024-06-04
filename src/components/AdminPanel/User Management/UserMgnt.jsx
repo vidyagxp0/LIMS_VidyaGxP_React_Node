@@ -11,16 +11,16 @@ const UserMgnt = () => {
   const [editData, setEditData] = useState(null);
 
   const [data, setData] = useState([
-    { id: 'na-001', name: 'Admin', designation:'Admin',  email: 'Admin@gamil.com' },
-    { id: 'na-002', name: 'Super Admin', designation:'Super Admin', email: 'SuperAdmin@gamil.com' },
-    { id: 'na-003', name: 'User1', designation:'Manager', email: 'user1@gamil.com' },
-    { id: 'na-004', name: 'User2', designation:'Quality Manager', email: 'user2@gamil.com' },
-    { id: 'na-005', name: 'User3', designation:'Quality Analyst', email: 'user3@gamil.com' },
-    { id: 'na-006', name: 'User4', designation:'User4', email: 'user4@gamil.com' },
-    { id: 'na-007', name: 'User5', designation:'Quality Manager', email: 'user5@gamil.com' },
-    { id: 'na-008', name: 'User6', designation:'User6', email: 'user6@gamil.com' },
-    { id: 'na-009', name: 'User7', designation:'Quality Manager', email: 'user7@gamil.com' },
-    { id: 'na-010', name: 'User8', designation:'User10', email: 'user8@gamil.com' }
+    { id: 'na-001', name: 'Admin', designation: 'Admin', email: 'Admin@gamil.com' },
+    { id: 'na-002', name: 'Super Admin', designation: 'Super Admin', email: 'SuperAdmin@gamil.com' },
+    { id: 'na-003', name: 'User1', designation: 'Manager', email: 'user1@gamil.com' },
+    { id: 'na-004', name: 'User2', designation: 'Quality Manager', email: 'user2@gamil.com' },
+    { id: 'na-005', name: 'User3', designation: 'Quality Analyst', email: 'user3@gamil.com' },
+    { id: 'na-006', name: 'User4', designation: 'User4', email: 'user4@gamil.com' },
+    { id: 'na-007', name: 'User5', designation: 'Quality Manager', email: 'user5@gamil.com' },
+    { id: 'na-008', name: 'User6', designation: 'User6', email: 'user6@gamil.com' },
+    { id: 'na-009', name: 'User7', designation: 'Quality Manager', email: 'user7@gamil.com' },
+    { id: 'na-010', name: 'User8', designation: 'User10', email: 'user8@gamil.com' }
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,9 +28,32 @@ const UserMgnt = () => {
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
-  const nextPage = () => setCurrentPage(currentPage + 1);
-  const prevPage = () => setCurrentPage(currentPage - 1);
-  const nextToLastPage = () => setCurrentPage(Math.ceil(data.length / pageSize));
+  // const nextPage = () => setCurrentPage(currentPage + 1);
+  // const prevPage = () => setCurrentPage(currentPage - 1);
+  // const nextToLastPage = () => setCurrentPage(Math.ceil(data.length / pageSize));
+
+  // const filteredData = data.filter((item) => {
+  //   const searchFilter =
+  //     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     item.code.toLowerCase().includes(searchTerm.toLowerCase());
+  //   const statusFilterCheck =
+  //     statusFilter === "" || item.status === statusFilter;
+  //   return searchFilter && statusFilterCheck;
+  // });
+
+  const totalPages = Math.ceil(data.length / pageSize);
+  const paginatedData = data.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
 
   const handleDeleteClick = (id) => {
     setDeleteId(id);
@@ -68,21 +91,21 @@ const UserMgnt = () => {
         <div className="main-head d-flex justify-content-between">
           <div className="title fw-bold fs-5 py-4">User management</div>
           <div className=" fs-5 py-4">
-            <CButton color="primary" onClick={() => setAddModal(true)} style={{ border: "2px solid gray ", width: "150px" }} >Add User</CButton>
+            <CButton color="primary" onClick={() => setAddModal(true)} style={{ fontSize: '0.9rem' }} >Add User</CButton>
           </div>
         </div>
       </div>
 
-      <div className="rounded bg-white" style={{ border: "2px solid gray" }}>
-        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+      <div className="rounded bg-white" style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}>
+        <CTable align="middle" responsive className="mb-0 table-responsive">
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >S.No</CTableHeaderCell>
-              <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >ID</CTableHeaderCell>
-              <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Name</CTableHeaderCell>
-              <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Designation</CTableHeaderCell>
-              <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Email</CTableHeaderCell>
-              <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >S.No</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >ID</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Name</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Designation</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Email</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -106,7 +129,7 @@ const UserMgnt = () => {
         </CTable>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center my-4">
+      {/* <div className="d-flex justify-content-between align-items-center my-4">
         <div className="pagination">
           <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
             &lt;&lt;
@@ -119,6 +142,26 @@ const UserMgnt = () => {
         <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
           Next <FaArrowRight className='ms-2' />
         </button>
+      </div> */}
+
+      <div className="d-flex justify-content-end my-4">
+        <nav aria-label="...">
+          <ul className="pagination">
+            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+              <span className="page-link" onClick={handlePrevPage}>Previous</span>
+            </li>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                <a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
+                  {index + 1}
+                </a>
+              </li>
+            ))}
+            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+              <a className="page-link" href="#" onClick={handleNextPage}>Next</a>
+            </li>
+          </ul>
+        </nav>
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} addUser={handleAddUser} />}
@@ -167,9 +210,9 @@ const StatusModal = (_props) => {
           type="text"
           label={
             <>
-            Full Name <span style={{ color: 'red' }}>*</span> 
+              Full Name <span style={{ color: 'red' }}>*</span>
             </>
-             }
+          }
           name="name"
           value={formData.name}
           onChange={handleChange}
@@ -179,9 +222,9 @@ const StatusModal = (_props) => {
           type="email"
           label={
             <>
-            Email <span style={{ color: 'red' }}>*</span> 
+              Email <span style={{ color: 'red' }}>*</span>
             </>
-             }
+          }
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -212,9 +255,9 @@ const StatusModal = (_props) => {
           type="password"
           label={
             <>
-            Password <span style={{ color: 'red' }}>*</span> 
+              Password <span style={{ color: 'red' }}>*</span>
             </>
-             }
+          }
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -267,9 +310,9 @@ const EditModal = (_props) => {
           type="text"
           label={
             <>
-            Full Name <span style={{ color: 'red' }}>*</span> 
+              Full Name <span style={{ color: 'red' }}>*</span>
             </>
-             }
+          }
           name="name"
           value={formData.name}
           onChange={handleChange}
@@ -279,9 +322,9 @@ const EditModal = (_props) => {
           type="email"
           label={
             <>
-            Email <span style={{ color: 'red' }}>*</span> 
+              Email <span style={{ color: 'red' }}>*</span>
             </>
-             }
+          }
           name="email"
           value={formData.email}
           onChange={handleChange}
@@ -311,10 +354,10 @@ const EditModal = (_props) => {
           className='mb-3'
           type="password"
           label={
-          <>
-          Password <span style={{ color: 'red' }}>*</span> 
-          </>
-           }
+            <>
+              Password <span style={{ color: 'red' }}>*</span>
+            </>
+          }
           name="password"
           value={formData.password}
           onChange={handleChange}
@@ -348,7 +391,7 @@ const ViewPermissionModal = (_props) => {
         <CModalTitle>View Permission</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <p>Permissions for { _props.data.name }</p>
+        <p>Permissions for {_props.data.name}</p>
         {/* Display user permissions here */}
       </CModalBody>
       <CModalFooter>
