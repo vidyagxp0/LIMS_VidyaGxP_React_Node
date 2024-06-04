@@ -63,9 +63,11 @@ function Sidebar() {
   return (
     <>
       <CSidebar
-        className="border-end app-sidebar h-100"
+        className="border-end app-sidebar h-100 "
         colorScheme="dark"
         id="sideBar"
+        responsive={false}
+        unfoldable={false}
       >
         <CSidebarHeader className="border-bottom ">
           <CSidebarBrand>
@@ -1303,7 +1305,7 @@ function Sidebar() {
               }
             >
               <Link to="/Inventory/MediaOnboarding">
-              <CNavItem
+                <CNavItem
                   href="#"
                   className={isActive("/Inventory/MediaOnboarding")}
                   style={{
@@ -1335,9 +1337,7 @@ function Sidebar() {
               <Link to="/Inventory/MediaTemplateConfiguration">
                 <CNavItem
                   href="#"
-                  className={isActive(
-                    "/Inventory/MediaTemplateConfiguration"
-                  )}
+                  className={isActive("/Inventory/MediaTemplateConfiguration")}
                   style={{
                     ...isActive("/Inventory/MediaTemplateConfiguration"),
                     fontSize: "14px",

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { faAudible } from "@fortawesome/free-brands-svg-icons";
 import "./Header.css";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
@@ -8,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { TfiMenu } from "react-icons/tfi";
 
 function Header() {
   const [notification, setNotification] = useState(false);
@@ -39,11 +41,17 @@ function Header() {
   return (
     <header
       id="head"
-      className="text-gray-900 w-[100%]  py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[72px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8"
+      className="headerContainer text-gray-900 w-[100%]  py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[72px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8"
     >
+      <div className="menuIconContainer block  text-white font-extrabold text-xl  p-1.5 rounded-full">
+        <button>
+          <TfiMenu />
+        </button>
+      </div>
+
       <div className="flex items-center  w-[75%]  justify-center ">
-        <div className="text-center">
-          <h3 className="text-gray-100 font-serif  text-2xl mobile:text-lg tablet:text-xl">
+        <div className="headerContent text-center">
+          <h3 className="headerTitle text-gray-100 font-serif  text-xl mobile:text-lg tablet:text-xl">
             Welcome to Laboratory Information Management System
           </h3>
         </div>
@@ -65,27 +73,26 @@ function Header() {
           </button>
           {notification && (
             <div className="absolute right-0 mt-2 w-64 mobile:w-72 bg-white rounded-md shadow-lg z-10">
-              {/* Notification content */}
             </div>
           )}
         </div>
         {contact && (
           <div
             id="About"
-            className="absolute flex flex-col items-center justify-center text-center top-[175px] left-[180px]  w-[60%]  h-[450px] rounded-[25px] bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
+            className="absolute backdrop-blur flex flex-col items-center justify-center text-center top-[175px] left-[180px]  w-[60%]  h-[450px] rounded-[25px] bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
           >
             <div
-              className="bg-no-repeat bg-contain w-[300px] tablet:w-[400px] laptop:w-[500px] h-[100px] tablet:h-[125px] laptop:h-[150px]"
+              className="bg-no-repeat bg-contain w-[450px] tablet:w-[400px] laptop:w-[500px] h-[100px] tablet:h-[125px] laptop:h-[150px]"
               style={{
                 backgroundImage:
                   "url('https://vidyagxp.com/vidyaGxp_logo.png')",
               }}
             ></div>
             <div className="mb-2">
-              <p className="mb-3 text-sm tablet:text-base laptop:text-lg">
+              <p className="mb-3 text-base tablet:text-base laptop:text-lg">
                 E-Mail: admin@vidyagxp.com
               </p>
-              <p className="m-0 text-sm tablet:text-base laptop:text-lg">
+              <p className="m-0 text-base tablet:text-base laptop:text-lg">
                 Mobile: +91-7354654474
               </p>
             </div>

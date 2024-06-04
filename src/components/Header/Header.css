@@ -1,43 +1,6 @@
-/* Mobile styles (up to 600px) */
-@media (max-width: 600px) {
-  #Header {
-    font-size: 18px !important  ;
-    padding: 15px !important  ;
-    color: red;
-    font-weight: 800;
-    
+@media (min-width: 992px) {
+    .menuIconContainer {
+      display: none;
+    }
   }
-}
-
-/* Tablet styles (601px to 900px) */
-@media (min-width: 601px) and (max-width: 900px) {
-  #Header {
-    font-size: 22px !important  ;
-    padding: 18px !important  ;
-    color: red;
-    font-weight: 800;
-    
-  }
-}
-
-/* Laptop styles (901px to 1200px) */
-@media (min-width: 901px) and (max-width: 1200px) {
-  #Header {
-    font-size: 24px !important  ;
-    padding: 20px !important  ;
-    color: red;
-    font-weight: 800;
-    
-  }
-}
-
-/* Desktop styles (above 1200px) */
-@media (min-width: 1201px) {
-  #Header {
-    font-size: 26px !important ;
-    padding: 25px !important  ;
-    color: red;
-    font-weight: 800;
-    
-  }
-}
+  
