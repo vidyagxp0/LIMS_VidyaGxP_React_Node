@@ -885,8 +885,16 @@ function Dashboard(props) {
                   <span className="text-gray-700">Approved</span>
                 </div>
                 <div className="flex items-center">
-                  <div className="bg-red-500 rounded-full w-3 h-3 mr-2"></div>
+                  <div className="bg-purple-700 rounded-full w-3 h-3 mr-2"></div>
                   <span className="text-gray-700">Dropped</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="bg-red-600 rounded-full w-3 h-3 mr-2"></div>
+                  <span className="text-gray-700">Under-Review</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="bg-yellow-400 rounded-full w-3 h-3 mr-2"></div>
+                  <span className="text-gray-700">Completed</span>
                 </div>
               </div>
               <div className="flex flex-wrap justify-center pt-4 xs:flex-col xs:items-center sm:flex-col sm:items-center md:flex-row md:justify-center lg:flex-row lg:justify-center xl:flex-row xl:justify-center 2xl:flex-row 2xl:justify-center">

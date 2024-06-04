@@ -1,29 +1,28 @@
 .custom-table{
   border-radius: 15px !important;
 }
-/*
+
 @media screen and (max-width: 900px) {
   .m-5  {
-    /* background-color: red; */
-    /* width:95%; */
-    /* height: 100%; */
-    /* margin: 0 auto !important; */
-    /* border:2px solid red; */
+     background-color: red; 
+     width:95%; 
+     height: 100%; 
+     margin: 0 auto !important; 
+     border:2px solid red; 
   }
  
 }
-/* @media screen and (max-width: 620px) { */
-  /* .m-5 { */
-    /* background-color: red; */
-    /* width: 96%; */
-    /* margin: 0 auto !important; */
-    /* font-size: 0.3rem !important; */
-    /* border:2px solid rgb(95, 197, 37); */
+ @media screen and (max-width: 620px) { 
+   .m-5 { 
+     background-color: red; 
+     width: 96%; 
+     margin: 0 auto !important; 
+     font-size: 0.3rem !important; 
+     border:2px solid rgb(95, 197, 37); 
 
   }
-  /* .pagination{
+   .pagination{
     border:2px solid red;
-  } */
+  } 
 
 }
-/*

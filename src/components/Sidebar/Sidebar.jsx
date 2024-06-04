@@ -63,7 +63,7 @@ function Sidebar() {
   return (
     <>
       <CSidebar
-        className="border-end app-sidebar h-100 "
+        className="border-end app-sidebar h-100"
         colorScheme="dark"
         id="sideBar"
         responsive={false}
