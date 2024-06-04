@@ -156,18 +156,18 @@ function FuctionalGrouping() {
 		setSearchQuery(e.target.value);
 		setCurrentPage(1);
 	};
-	
+
 	const handleDelete = () => {
 		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
 		setRemoveModal(false);
 		setDeleteId(null)
-	  }
-	
-	  const handleDeleteClick = (id) => {
+	}
+
+	const handleDeleteClick = (id) => {
 		setDeleteId(id);
 		setRemoveModal(true);
-	  }
-	
+	}
+
 
 	const filteredData = tableData.filter((data) => {
 		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
@@ -185,113 +185,134 @@ function FuctionalGrouping() {
 	const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
 	const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+	
+	const handleNextPage = () => {
+		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+	  };
+	
+	  const handlePrevPage = () => {
+		if (currentPage > 1) setCurrentPage(currentPage - 1);
+	  };
+	
 	return (
 		<>
-			<div id="approval-page" className="h-100 mx-5">
-				<div className="container-fluid my-5">
-					<div className="main-head mb-4">
-						<div className="title fw-bold fs-5">Functional Groupings</div>
-					</div>
-					<div>
-						<CRow className="mb-3">
-							<CCol sm={3}><CFormInput
-								className="mb-3 border-dark-subtle border-2"
+			<div className="m-5 mt-3">
+				<div className="main-head ">
+					<h4 className=" fw-bold ">Functional Groupings</h4>
+				</div>
+				<div>
+					<CRow className="mt-5 mb-3">
+						<CCol sm={4}>
+							<CFormInput
+								style={{ fontSize: '0.9rem' }}
 								type="text"
 								placeholder="Search..."
 								value={searchQuery}
 								onChange={handleSearchChange}
-							/></CCol>
-							<CCol sm={3}>
-								<CFormSelect
-									value={selectedStatus}
-									onChange={handleStatusChange}
-									className="border-dark-subtle border-2"
-									options={[
-										{ value: "All", label: "All" },
-										{ value: "Active", label: "Active" },
-										{ value: "Inactive", label: "Inactive" },
-									]}
-								/>
-							</CCol>
-							<CCol sm={3}></CCol>
-							<CCol sm={3}>
-								<div className="d-flex justify-content-end">
-									<CButton
-										className="bg-info text-white"
-										onClick={() => setAddModal(true)}
-									>
-										Add Grouping
-									</CButton>
-								</div>
-							</CCol>
-						</CRow>
-					</div>
-					<div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
-						<CTable align="middle" responsive className="table-responsive table-striped">
-							<CTableHead>
-								<CTableRow>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+							/>
+						</CCol>
+						<CCol sm={3}>
+							<CFormSelect
+								style={{ fontSize: '0.9rem' }}
+								value={selectedStatus}
+								onChange={handleStatusChange}
+								options={[
+									{ value: "All", label: "All" },
+									{ value: "Active", label: "Active" },
+									{ value: "Inactive", label: "Inactive" },
+								]}
+							/>
+						</CCol>
+
+						<CCol sm={5}>
+							<div className="d-flex justify-content-end">
+								<CButton
+									style={{ fontSize: '0.9rem' }}
+									className="bg-primary text-white"
+									onClick={() => setAddModal(true)}
+								>
+									Add Grouping
+								</CButton>
+							</div>
+						</CCol>
+					</CRow>
+				</div>
+				<div
+					className=" rounded   bg-white"
+					style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+				>
+					<CTable align="middle" responsive className="mb-0 rounded-lg table-responsive ">
+						<CTableHead>
+							<CTableRow>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center">
+									<input type="checkbox" />
+								</CTableHeaderCell>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">S No.</CTableHeaderCell>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Group Name</CTableHeaderCell>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+									Group Description
+								</CTableHeaderCell>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+									Test Techniques
+								</CTableHeaderCell>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Initiated At </CTableHeaderCell>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Status</CTableHeaderCell>
+								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
+							</CTableRow>
+						</CTableHead>
+						<CTableBody>
+							{currentRecords.map((data, index) => (
+								<CTableRow key={index}>
+									<CTableHeaderCell scope="row" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S No.</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Group Name</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
-										Group Description
-									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">
-										Test Techniques
-									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Initiated At </CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+									<CTableDataCell>{index + 1}</CTableDataCell>
+									<CTableDataCell>{data.groupName}</CTableDataCell>
+									<CTableDataCell>{data.groupDescription}</CTableDataCell>
+									<CTableDataCell>{data.testTechniques}</CTableDataCell>
+									<CTableDataCell>{data.initiatedAt}</CTableDataCell>
+									<CTableDataCell className="d-flex justify-content-start">
+										<button
+											className={`p-1 w-75 small rounded text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
+												: 'red-700'}`} style={{ fontSize: '10px' }} > {data.status.toUpperCase()}
+										</button>
+									</CTableDataCell>
+									<CTableDataCell>
+										<div className="d-flex gap-3">
+											<Link to="/settings/bussinessAssociateDetails">
+												<FontAwesomeIcon icon={faEye} />
+											</Link>
+											<div
+												className="cursor-pointer"
+												onClick={() => handleDeleteClick(data.id)}
+											>
+												<FontAwesomeIcon icon={faTrashCan} />
+											</div>
+										</div>
+									</CTableDataCell>
 								</CTableRow>
-							</CTableHead>
-							<CTableBody>
-								{currentRecords.map((data, index) => (
-									<CTableRow key={index}>
-										<CTableHeaderCell scope="row" className="text-center">
-											<input type="checkbox" />
-										</CTableHeaderCell>
-										<CTableDataCell>{index + 1}</CTableDataCell>
-										<CTableDataCell>{data.groupName}</CTableDataCell>
-										<CTableDataCell>{data.groupDescription}</CTableDataCell>
-										<CTableDataCell>{data.testTechniques}</CTableDataCell>
-										<CTableDataCell>{data.initiatedAt}</CTableDataCell>
-										<CTableDataCell>
-											<div className=" w-75">
-												<div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
-													: 'red-700'}`} >{data.status.toUpperCase()}</div>
-											</div>
-										</CTableDataCell>
-										<CTableDataCell>
-											<div className="d-flex gap-3">
-												<Link to="/settings/bussinessAssociateDetails">
-													<FontAwesomeIcon icon={faEye} />
-												</Link>
-												<div
-													className="cursor-pointer"
-													onClick={() => handleDeleteClick(data.id)}
-												>
-													<FontAwesomeIcon icon={faTrashCan} />
-												</div>
-											</div>
-										</CTableDataCell>
-									</CTableRow>
-								))}
-							</CTableBody>
-						</CTable>
-					</div>
-					<div className="pagination my-3 d-flex justify-content-between">
-						<div className="d-flex gap-2">
-							<button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
-							<button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
-							<button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
-						</div>
-						<div className="">
-							<button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
-						</div>
-					</div>
+							))}
+						</CTableBody>
+					</CTable>
+				</div>
+				<div className="d-flex justify-content-end my-4">
+					<nav aria-label="...">
+						<ul className="pagination">
+							<li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+								<span className="page-link" onClick={handlePrevPage}>Previous</span>
+							</li>
+							{Array.from({ length: totalPages }, (_, index) => (
+								<li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+									<a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
+										{index + 1}
+									</a>
+								</li>
+							))}
+							<li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+								<a className="page-link" href="#" onClick={handleNextPage}>Next</a>
+							</li>
+						</ul>
+					</nav>
 				</div>
 			</div>
 
@@ -493,7 +514,7 @@ const DeleteModel = (_props) => {
 				<CButton color="light" onClick={_props.closeModal}>
 					Back
 				</CButton>
-				<CButton className="bg-danger text-white"  onClick={_props.handleDelete}>Delete</CButton>
+				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
 			</CModalFooter>
 		</CModal>
 	);

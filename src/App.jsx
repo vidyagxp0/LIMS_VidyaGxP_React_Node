@@ -773,13 +773,8 @@ function App() {
               element={<Sample_LoginDetails />}
             />
           </Route>
-        </Routes>
-
-        <Routes>
-          <Route
-            path="/adminPanel"
-            element={<AdminPanel show={checkLoggedIn} />}
-          />
+       
+          <Route path="/adminPanel" element={<AdminPanel show={checkLoggedIn} />} />
           <Route path="" element={<AdminMainPanel />}>
             <Route
               path="/admin-panel/userManagement"

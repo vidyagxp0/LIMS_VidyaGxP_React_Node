@@ -131,6 +131,33 @@ function StorageLocation() {
       date: "24/04/2024",
       status: "INACTIVE",
       id: 1330,
+    },{
+      code: "na-007",
+      condition: "Product Material",
+      date: "27/04/2024",
+      status: "ACTIVE",
+      id: 1327,
+    },
+    {
+      code: "na-008",
+      condition: "Product Material",
+      date: "26/04/2024",
+      status: "INACTIVE",
+      id: 1328,
+    },
+    {
+      code: "na-009",
+      condition: "Product Material",
+      date: "25/04/2024",
+      status: "ACTIVE",
+      id: 1329,
+    },
+    {
+      code: "na-010",
+      condition: "Product Material",
+      date: "24/04/2024",
+      status: "INACTIVE",
+      id: 1330,
     },
   ]);
 
@@ -228,13 +255,12 @@ function StorageLocation() {
             <h4 className="fw-bold ">Storage Conditions</h4>
           </div>
           <div>
-            <CRow className="mt-4 mb-3">
+            <CRow className="mt-5 mb-3">
               <CCol sm={4}>
                 <CFormInput
+                  style={{fontSize:'0.9rem'}}
                   type="text"
                   placeholder="Search..."
-                  style={{fontSize:'0.9rem'}}
-                  className="mb-3"
                   value={searchQuery}
                   onChange={handleSearch}
                 />
@@ -243,7 +269,6 @@ function StorageLocation() {
                 <CFormSelect
                   value={filterStatus}
                   onChange={handleFilter}
-                  className="border-2"
                   style={{fontSize:'0.9rem'}}
                   options={[
                     { label: "All", value: "" },
@@ -255,7 +280,8 @@ function StorageLocation() {
               <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                  <CButton color="primary" 
+                   style={{fontSize:'0.9rem'}} onClick={() => setAddModal(true)}>
                     Add Storage Condition
                   </CButton>
                 </div>
@@ -357,31 +383,24 @@ function StorageLocation() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="d-flex justify-content-between my-4">
-            <div className="d-flex gap-3">
-              <CButton
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-              >
-                &lt; &lt;
-              </CButton>
-              <button className="btn border">{currentPage}</button>
-              <CButton
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                &gt; &gt;
-              </CButton>
-            </div>
-            <div>
-              <CButton
-                onClick={handleNextPage}
-                className="d-flex gap-2 border"
-                disabled={currentPage === totalPages}
-              >
-                Next <FaArrowRight className="mt-1" />
-              </CButton>
-            </div>
+          <div className="d-flex justify-content-end my-4">
+          <nav aria-label="...">
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <span className="page-link" onClick={handlePreviousPage}>Previous</span>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+              <a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
+                {index + 1}
+              </a>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+            <a className="page-link" href="#" onClick={handleNextPage}>Next</a>
+          </li>
+        </ul>
+      </nav>
           </div>
        
       </div>

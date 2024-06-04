@@ -21,9 +21,23 @@ export default function ProcessManagement() {
   const pageSize = 5;
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
-  const nextPage = () => setCurrentPage(currentPage + 1);
-  const prevPage = () => setCurrentPage(currentPage - 1);
-  const nextToLastPage = () => setCurrentPage(Math.ceil(data.length / pageSize));
+  // const nextPage = () => setCurrentPage(currentPage + 1);
+  // const prevPage = () => setCurrentPage(currentPage - 1);
+  // const nextToLastPage = () => setCurrentPage(Math.ceil(data.length / pageSize));
+
+  const totalPages = Math.ceil(data.length / pageSize);
+  const paginatedData = data.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
 
   return (
     <div className="mx-5">
@@ -32,13 +46,13 @@ export default function ProcessManagement() {
           <div className="title fw-bold fs-5 py-4">Process</div>
         </div>
         <div className='w-75 h-96'>
-          <div className="rounded bg-white pb-5" style={{ border: "2px solid gray" }}>
-            <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <div className="rounded bg-white" style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}>
+            <CTable align="middle" responsive className="mb-0 table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >S.No</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" >Process Number</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Process Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >S.No</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >Process Number</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Process Name</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -54,7 +68,7 @@ export default function ProcessManagement() {
             </CTable>
 
           </div>
-          <div className="d-flex justify-content-between align-items-center my-4">
+          {/* <div className="d-flex justify-content-between align-items-center my-4">
             <div className="pagination">
               <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
                 &lt;&lt;
@@ -67,6 +81,26 @@ export default function ProcessManagement() {
             <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
               Next <FaArrowRight className='ms-2' />
             </button>
+          </div> */}
+
+          <div className="d-flex justify-content-end my-4">
+            <nav aria-label="...">
+              <ul className="pagination">
+                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                  <span className="page-link" onClick={handlePrevPage}>Previous</span>
+                </li>
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+                    <a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
+                      {index + 1}
+                    </a>
+                  </li>
+                ))}
+                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                  <a className="page-link" href="#" onClick={handleNextPage}>Next</a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
