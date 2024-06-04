@@ -237,7 +237,7 @@ export default function Specifications() {
           <CRow className="mb-3">
             <CCol sm={3}>
               <CFormSelect
-                style={{ border: "2px solid gray", width: "220px" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="">Select Sample Type</option>
                 <option value="raw-material">Raw Material</option>
@@ -269,7 +269,7 @@ export default function Specifications() {
                   setCurrentPage(1);
                 }}
                 value={selectedStatus}
-                style={{ border: "2px solid gray", width: "220px" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="All">All</option>
                 <option value="Initiated">Initiated</option>
@@ -290,19 +290,22 @@ export default function Specifications() {
 
       </div>
 
-      <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <CTable align="middle" responsive className="mb-0    table-responsive">
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Product Code</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Product Name</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Specification ID</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Specification Name</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Effect From</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Review Date</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-              <th style={{ background: "#3C496A", color: "white" }}>
+              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Product Code</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Specification ID</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Specification Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Effect From</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Review Date</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>
                 Action
               </th>
             </tr>

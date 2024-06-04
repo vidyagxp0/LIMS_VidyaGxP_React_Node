@@ -73,12 +73,12 @@ function ChamberConditionMapping() {
           <div>
             <CRow className="mb-3">
               <CCol sm={4}>
-                <CFormInput style={{ border: "2px solid gray" }} type="email" placeholder="Search..." />
+                <CFormInput style={{fontSize:'0.9rem'}} type="email" placeholder="Search..." />
               </CCol>
               <CCol sm={3}>
                 <CFormSelect
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus} style={{ border: "2px solid gray" }}
+                  value={selectedStatus} style={{fontSize:'0.9rem'}}
                   options={[
                     "All",
                     { label: "Initiated", value: "INITIATED" },
@@ -92,19 +92,21 @@ function ChamberConditionMapping() {
               <CCol sm={2}></CCol>
             </CRow>
           </div>
-          <div className=" rounded   bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+  <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >          <CTable align="middle" responsive className="mb-0    table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Chamber ID</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Description</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Current Storage Conditions</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Initiated On</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Chamber ID</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Description</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Current Storage Conditions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Initiated On</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

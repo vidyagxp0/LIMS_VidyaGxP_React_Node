@@ -99,7 +99,7 @@ function BussinessAssociate() {
               <CCol sm={3}>
                 <CFormSelect
                   value={selectedStatus}
-                  className="border-dark-subtle border-2"
+                  style={{fontSize:'0.9rem'}}
                   onChange={handleStatusChange}
                   options={[
                     { value: 'All', label: 'All' },
@@ -120,19 +120,46 @@ function BussinessAssociate() {
             </CRow>
           </div>
           <div className="bg-white border-dark-subtle border-2 rounded shadow mt-5">
-            <CTable align="middle" responsive className="table-responsive table-striped" >
+            <CTable align="middle" responsive className="table-responsive   " >
               <CTableHead className="">
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Business Associate Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Unique Code</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">City</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">State</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Country</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">ZIP code</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >S NO.</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Business Associate Name</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Unique Code</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >City</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >State</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Country</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >ZIP code</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

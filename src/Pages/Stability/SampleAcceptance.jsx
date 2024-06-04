@@ -156,7 +156,7 @@ function SampleAcceptance() {
                               <CRow className="mb-3 py-4">
                                    <CCol sm={4}>
                                         <CFormInput
-                                             style={{ border: "2px solid gray" }}
+                                             style={{fontSize:'0.9rem'}}
                                              type="email"
                                              placeholder="Search..."
                                              onChange={(e) => setSearch(e.target.value)}
@@ -166,7 +166,7 @@ function SampleAcceptance() {
                                         <CFormSelect
                                              onChange={(e) => setSelectedStatus(e.target.value)}
                                              value={selectedStatus}
-                                             style={{ border: "2px solid gray" }}
+                                             style={{fontSize:'0.9rem'}}
                                         >
                                              <option value="All">All</option>
                                              <option value="Initiated">Initiated</option>
@@ -190,7 +190,10 @@ function SampleAcceptance() {
                               </CRow>
                          </div>
 
-                         <div className="bg-white mt-5" >
+                           <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
                               <CTable align="middle" responsive >
                                    <CTableHead>
                                         <CTableRow align="middle">

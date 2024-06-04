@@ -272,7 +272,7 @@ const handleDeleteClick = (id) => {
           <CFormInput
             type="text"
             placeholder="Search..."
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             className="border-2"
             onChange={handleSearchChange}
           />
@@ -282,7 +282,7 @@ const handleDeleteClick = (id) => {
           <CFormSelect
             onChange={handleStatusChange}
             className="border-2"
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             options={[
               { label: "All", value: "" },
               { label: "Initiated", value: "INITIATED" },
@@ -304,16 +304,19 @@ const handleDeleteClick = (id) => {
       </div>
 
           
-            <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
-                <table className='table table-responsive table-striped text-xs' >
+              <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+                <table className='table table-responsive    text-xs' >
                     <thead>
                         <tr>
-                            <th  style={{ background: "#3C496A", color: "white" }}><input type="checkbox" /></th>
-                            <th  style={{ background: "#3C496A", color: "white" }}>Sample Login Template</th>
-                            <th  style={{ background: "#3C496A", color: "white" }}>Test Plan</th>
-                            <th  style={{ background: "#3C496A", color: "white" }}>Auto Sample Allotment Required</th>
-                            <th  style={{ background: "#3C496A", color: "white" }}>Status</th>
-                            <th  style={{ background: "#3C496A", color: "white" }}>Actions</th>
+                            <th  style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
+                            <th  style={{ background: "#5D76A9", color: "white"}}>Sample Login Template</th>
+                            <th  style={{ background: "#5D76A9", color: "white"}}>Test Plan</th>
+                            <th  style={{ background: "#5D76A9", color: "white"}}>Auto Sample Allotment Required</th>
+                            <th  style={{ background: "#5D76A9", color: "white"}}>Status</th>
+                            <th  style={{ background: "#5D76A9", color: "white"}}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>

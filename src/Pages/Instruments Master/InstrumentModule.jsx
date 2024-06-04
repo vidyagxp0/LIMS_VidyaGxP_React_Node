@@ -59,7 +59,7 @@ function InstrumentModule() {
                                 <CFormSelect
                                     options={[ { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
                                     onChange={(e) => setSelectedStatus(e.target.value)}
-                                    value={selectedStatus} style={{ border: "2px solid gray" }}
+                                    value={selectedStatus} style={{fontSize:'0.9rem'}}
                                 />
                             </CCol>
                             <CCol sm={6}></CCol>
@@ -70,22 +70,61 @@ function InstrumentModule() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-                        <CTable className="mb-0 table-striped table table-responsive" >
+                          <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+                        <CTable className="mb-0    table table-responsive" >
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Category</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Module</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Module Id</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Make</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Model</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Manufacturer No.</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Supplied By</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Install On</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Expires On</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Category</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Module</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Module Id</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Make</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Model</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Manufacturer No.</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Supplied By</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Install On</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Expires On</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>

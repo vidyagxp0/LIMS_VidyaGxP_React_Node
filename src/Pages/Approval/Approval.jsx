@@ -194,7 +194,7 @@ function Approval() {
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white",}}
+                  style={{ background: "#5D76A9", color: "white"}}
                   scope="col"
                 >
                   S No.

@@ -353,7 +353,7 @@ const CalibrationSampleLogin = () => {
             <CCol sm={4}>
               <CFormInput
                 type="text"
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -369,7 +369,7 @@ const CalibrationSampleLogin = () => {
                   { label: 'Reinitiated', value: 'REINITIATED' },
                   { label: 'Dropped', value: 'DROPPED' }
                 ]}
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               />
@@ -388,18 +388,21 @@ const CalibrationSampleLogin = () => {
         </div>
         </div>
         
-      <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
-        <table className='table table-responsive table-striped text-xs' >
+        <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <table className='table table-responsive    text-xs' >
           <thead>
             <tr>
-              <th  style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
-              <th  style={{background:"#3C496A", color:"white"}}>S.No.</th>
-              <th  style={{background:"#3C496A", color:"white"}}>Sample Type</th>
-              <th  style={{background:"#3C496A", color:"white"}}>Product / Material</th>
-              <th  style={{background:"#3C496A", color:"white"}}>Generic Name</th>
-              <th  style={{background:"#3C496A", color:"white"}}>Specification Code</th>
-              <th  style={{background:"#3C496A", color:"white"}}>Status</th>
-              <th  style={{background:"#3C496A", color:"white"}}>Action</th>
+              <th  style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
+              <th  style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
+              <th  style={{ background: "#5D76A9", color: "white"}}>Sample Type</th>
+              <th  style={{ background: "#5D76A9", color: "white"}}>Product / Material</th>
+              <th  style={{ background: "#5D76A9", color: "white"}}>Generic Name</th>
+              <th  style={{ background: "#5D76A9", color: "white"}}>Specification Code</th>
+              <th  style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th  style={{ background: "#5D76A9", color: "white"}}>Action</th>
             </tr>
           </thead>
           <tbody>

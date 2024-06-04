@@ -135,7 +135,7 @@ function StandardProtocol() {
             <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                   type="email"
                   placeholder="Search..."
                 />
@@ -143,7 +143,7 @@ function StandardProtocol() {
               <CCol sm={3}>
                 <CFormSelect
                   value={selectedStatus}
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   options={[
                     { label: "All", value: "All" },

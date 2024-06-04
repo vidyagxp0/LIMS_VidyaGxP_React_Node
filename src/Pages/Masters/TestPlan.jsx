@@ -335,7 +335,7 @@ const handleDeleteConfirm = () => {
           <div>
             <button className="btn border" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-              <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{ border: "2px solid gray", width: "150px", borderRadius: "5px", padding: "4px" }}>
+              <select id='selectOption' onChange={(e) => setStatusFilter(e.target.value)} style={{fontSize:'0.9rem'}}>
                 <option value="">All</option>
                 <option value="initiated">Initiated</option>
                 <option value="approved">Approved</option>
@@ -443,17 +443,20 @@ const handleDeleteConfirm = () => {
         </div>
       </div>
 
-      <div className=' bg-white rounded mx-5' style={{ border: "2px solid gray" }} >
-        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+        <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <CTable align="middle" responsive className="mb-0    table-responsive">
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Specification Id</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Product Name</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Tests</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Initiated At</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Action</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Specification Id</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Tests</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Initiated At</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
             </tr>
           </thead>
           <tbody>

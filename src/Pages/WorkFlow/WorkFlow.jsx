@@ -87,14 +87,14 @@ function WorkFlow() {
                 <CFormInput
                   type="text"
                   placeholder="Search by plant name"
-                  className='border-dark-subtle border-2'
+                  style={{fontSize:'0.9rem'}}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </CCol>
               <CCol sm={3}>
                 <CFormSelect
-                  className='border-dark-subtle border-2'
+                  style={{fontSize:'0.9rem'}}
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   value={selectedStatus}
                 >
@@ -113,17 +113,20 @@ function WorkFlow() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5 border-dark-subtle border-2 rounded">
-            <CTable align="middle" responsive className="table-responsive table-striped">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+            <CTable align="middle" responsive className="table-responsive   ">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Plant Code</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Plant Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Address</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Comments</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Workflow</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Plant Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Plant Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Address</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Comments</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Workflow</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

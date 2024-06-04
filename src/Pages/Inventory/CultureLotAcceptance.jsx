@@ -168,7 +168,7 @@ function CultureLotAcceptance() {
             <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                   type="email"
                   placeholder="Search..."
                   onChange={(e) => setSearch(e.target.value)}
@@ -179,7 +179,7 @@ function CultureLotAcceptance() {
                 <CFormSelect
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   value={selectedStatus}
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                 >
                   <option value="All">All</option>
                   <option value="Initiated">Initiated</option>
@@ -199,25 +199,28 @@ function CultureLotAcceptance() {
               </CCol>
             </CRow>
           </div>
-          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+  <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+          <CTable align="middle" responsive className="mb-0    table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
+                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">
                     Reference Culture Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">
+                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">
                     Reference Culture Code
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Comments</CTableHeaderCell>
+                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Comments</CTableHeaderCell>
 
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell  style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

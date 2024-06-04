@@ -267,7 +267,7 @@ export default function Vendors() {
             <CCol sm={3}>
               <CFormSelect
                 value={statusFilter}
-                className="border-dark-subtle border-2"
+                style={{fontSize:'0.9rem'}}
                 onChange={(e) => {
                   setStatusFilter(e.target.value);
                   setCurrentPage(1);
@@ -294,17 +294,17 @@ export default function Vendors() {
         </div>
 
         <div className='shadow rounded border-2 bg-light border-dark-subtle'>
-          <table className='table table-responsive table-striped'>
+          <table className='table table-responsive   '>
             <thead>
               <tr>
-                <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Product Name</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Unique Code</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Vendor Name</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Qualification Criteria</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Comments</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Actions</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Unique Code</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Vendor Name</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Qualification Criteria</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Comments</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
               </tr>
             </thead>
             <tbody>

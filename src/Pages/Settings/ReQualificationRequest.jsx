@@ -337,7 +337,7 @@ export default function ReQualificationRequest() {
           <CRow className="my-5">
             <CCol sm={4}>
               <CFormInput
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
@@ -349,7 +349,7 @@ export default function ReQualificationRequest() {
               <CFormSelect
                 value={filterStatus}
                 onChange={(e) => handleSelect(e.target.value)}
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="All">All</option>
                 <option value="Active">Active</option>
@@ -367,22 +367,25 @@ export default function ReQualificationRequest() {
           </CRow>
         </div>
 
-        <div className="bg-light shadow rounded border-dark-subtle border-2 my-4">
-          <table className="table table-responsive table-striped">
+          <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+          <table className="table table-responsive   ">
             <thead>
               <tr>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   <input type="checkbox" />
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>Id</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Analyst</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Qualification ID</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Qualification Type</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Employee ID </th>
-                <th style={{ background: "#3C496A", color: "white" }}>Test Technique</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Initiated On</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Action</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Id</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Analyst</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Qualification ID</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Qualification Type</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Employee ID </th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Test Technique</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Initiated On</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>

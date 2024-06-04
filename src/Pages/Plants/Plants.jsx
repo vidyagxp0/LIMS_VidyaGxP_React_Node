@@ -88,7 +88,7 @@ function Plants() {
                   onChange={(e) => setSearch(e.target.value)}
                   value={search}
                   placeholder="Search..."
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                 >
                 </CFormInput>
               </CCol>
@@ -96,7 +96,7 @@ function Plants() {
                 <CFormSelect
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   value={selectedStatus}
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                 >
                   <option value="All">All</option>
                   <option value="Active">Active</option>
@@ -113,16 +113,16 @@ function Plants() {
             </CRow>
           </div>
           <div className="bg-white mt-5 shadow rounded border-2 border-dark-subtle">
-            <CTable align="middle" responsive className="table-responsive table-striped" >
+            <CTable align="middle" responsive className="table-responsive   " >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Plant Code</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Plant Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Address</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Register On</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Plant Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Plant Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Address</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Register On</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

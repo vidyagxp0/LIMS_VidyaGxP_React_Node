@@ -149,7 +149,7 @@ export default function InvestigationL2() {
           <CCol sm={4}>
             <CFormInput
               type="text"
-              style={{ border: "2px solid gray" }}
+              style={{fontSize:'0.9rem'}}
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -158,7 +158,7 @@ export default function InvestigationL2() {
           <CCol sm={3}>
             <CFormSelect
               value={statusFilter}
-              style={{ border: "2px solid gray" }}
+              style={{fontSize:'0.9rem'}}
               onChange={(e) => setStatusFilter(e.target.value)}
               options={[
                 'Select Status',
@@ -170,19 +170,22 @@ export default function InvestigationL2() {
           </CCol>
         </CRow>
       </div>
-      <div className=" rounded bg-white" style={{ border: "2px solid gray" }}>
-        <table className="table table-striped">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <table className="table   ">
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }} scope="col">
+              <th style={{ background: "#5D76A9", color: "white"}} scope="col">
                 <input type="checkbox" />
               </th>
-              <th style={{ background: "#3C496A", color: "white" }} scope="col">Sr.No</th>
-              <th style={{ background: "#3C496A", color: "white" }} scope="col">Test Name</th>
-              <th style={{ background: "#3C496A", color: "white" }} scope="col">Test Code</th>
-              <th style={{ background: "#3C496A", color: "white" }} scope="col">Test Type</th>
-              <th style={{ background: "#3C496A", color: "white" }} scope="col">Added On</th>
-              <th style={{ background: "#3C496A", color: "white" }} scope="col">Actions</th>
+              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Sr.No</th>
+              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Test Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Test Code</th>
+              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Test Type</th>
+              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Added On</th>
+              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>{renderRows()}</tbody>

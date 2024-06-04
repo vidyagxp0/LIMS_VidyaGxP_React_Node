@@ -189,7 +189,7 @@ export default function Clients() {
               <CFormSelect
                 onChange={(e) => setStatusFilter(e.target.value)}
                 value={statusFilter}
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="All">All</option>
                 <option value="Active">Active</option>
@@ -207,17 +207,17 @@ export default function Clients() {
         </div>
 
         <div className='shadow rounded border-2 bg-light border-dark-subtle'>
-          <table className='table table-responsive table-striped'>
+          <table className='table table-responsive   '>
             <thead>
               <tr>
-                <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Client Name</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Email Address</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Contact Number</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Address</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Actions </th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Client Name</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Email Address</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Contact Number</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Address</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Actions </th>
               </tr>
             </thead>
             <tbody>

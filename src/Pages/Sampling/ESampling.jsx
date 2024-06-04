@@ -128,7 +128,7 @@ const ESampling = () => {
                         <CFormSelect
                             onChange={(e) => setSelectedStatus(e.target.value)}
                             value={selectedStatus}
-                            style={{ border: "2px solid gray",width:"220px" }}
+                            style={{fontSize:'0.9rem'}}
                         >
                             <option value="All">All</option>
                             <option value="Initiated">Initiated</option>
@@ -146,18 +146,21 @@ const ESampling = () => {
 
             </div>
 
-            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-                <table className="mb-0 table-striped table table-responsive">
+                  <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+                <table className="mb-0    table table-responsive">
                     <thead>
                         <tr>
-                            <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Product/Material Name</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Containers Sampled</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Number Of Containers</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sampling Conclusion</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Action</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Product/Material Name</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Containers Sampled</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Number Of Containers</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sampling Conclusion</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
                         </tr>
                     </thead>
                     <tbody>

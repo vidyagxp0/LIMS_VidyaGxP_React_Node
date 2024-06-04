@@ -121,7 +121,7 @@ const SettingVendors = () => {
             <CCol sm={4}>
               <CFormInput
                 type="text"
-                className='border-dark-subtle border-2'
+                style={{fontSize:'0.9rem'}}
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchChange}
@@ -130,7 +130,7 @@ const SettingVendors = () => {
             <CCol sm={3}>
               <CFormSelect
                 value={selectedStatus}
-                className='border-dark-subtle border-2'
+                style={{fontSize:'0.9rem'}}
                 onChange={handleStatusChange}
                 options={[
                   { value: 'All', label: 'All' },
@@ -155,19 +155,46 @@ const SettingVendors = () => {
         </div>
 
         {filteredData.length === 0 ? <center className='my-5'><h5>No Vendors Found</h5></center> : <div className="notFound">
-          <div className="bg-light mt-4 border-dark-subtle border-2 rounded shadow">
-            <CTable align="middle" responsive className="table-responsive table-striped">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+            <CTable align="middle" responsive className="table-responsive   ">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Id</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Vendor</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Test Technique</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Training Details</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Remarks</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Added On</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Id</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Vendor</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Test Technique</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Training Details</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Remarks</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Added On</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

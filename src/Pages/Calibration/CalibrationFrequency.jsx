@@ -233,7 +233,7 @@ export default function CalibrationFrequency() {
           <CFormInput
             type="text"
             placeholder="Search..."
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             className="border-2"
             value={searchTerm} onChange={handleSearchChange}
           />
@@ -243,7 +243,7 @@ export default function CalibrationFrequency() {
           <CFormSelect
            value={filterStatus} onChange={handleFilterChange}
             className="border-2"
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             options={[
               { label: "All", value: "" },
               { label: "Active", value: "ACTIVE" },
@@ -261,17 +261,20 @@ export default function CalibrationFrequency() {
         </CCol>
       </div>
 
-      <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
-        <table className='table table-responsive table-striped text-xs' >
+        <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <table className='table table-responsive    text-xs' >
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }}><input type="checkbox" /></th>
-              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Calibration Type</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Calibration Prefix</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Actions</th>
+              <th style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Calibration Type</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Calibration Prefix</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
             </tr>
           </thead>
           <tbody>

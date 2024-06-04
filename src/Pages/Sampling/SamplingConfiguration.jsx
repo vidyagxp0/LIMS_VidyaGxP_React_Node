@@ -105,7 +105,7 @@ const SamplingConfiguration = () => {
                     <CFormSelect
                             // onChange={(e) => setSelectedStatus(e.target.value)}
                             value={selectedStatus}
-                            style={{ border: "2px solid gray",width:"220px" }}
+                            style={{fontSize:'0.9rem'}}
                         >
                             <option value="All">All</option>
                             <option value="ACTIVE">Active</option>
@@ -119,19 +119,22 @@ const SamplingConfiguration = () => {
 
             </div>
 
-            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-                <table className="mb-0 table-striped table table-responsive">
+                  <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+                <table className="mb-0    table table-responsive">
                     <thead>
                         <tr>
-                            <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sampling ID</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Specification ID</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sample Type</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Product Name</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Test Plan</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sample Template</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sample Rule</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Action</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sampling ID</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Specification ID</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Type</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Test Plan</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Template</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Rule</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
                         </tr>
                     </thead>
                     <tbody>

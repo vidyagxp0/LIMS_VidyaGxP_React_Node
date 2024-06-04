@@ -340,7 +340,7 @@ export default function CalibrationSchedule() {
           <CFormInput
             type="text"
             placeholder="Search..."
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             className="border-2"
             onChange={handleSearchChange}
           />
@@ -350,7 +350,7 @@ export default function CalibrationSchedule() {
           <CFormSelect
            onChange={handleStatusChange}
             className="border-2"
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             options={[
               { label: "All", value: "" },
               { label: "Active", value: "ACTIVE" },
@@ -377,19 +377,19 @@ export default function CalibrationSchedule() {
           
             <br />
             <div className='border-dark-subtle border-2 bg-light mx-5 mt-2 mb-4 rounded'>
-                <table className='table table-responsive table-striped text-xs' >
+                <table className='table table-responsive    text-xs' >
                     <thead>
                         <tr>
-                            <th style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
-                            <th style={{background:"#3C496A", color:"white"}}>SNo.</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Unique Code</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Calibration Workflow</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Schedule Description</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Start Date</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Frequency</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Next Calibration Due</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Status</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Actions </th>
+                            <th style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>SNo.</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Unique Code</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Calibration Workflow</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Schedule Description</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Start Date</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Frequency</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Next Calibration Due</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Actions </th>
                         </tr>
                     </thead>
                     <tbody>

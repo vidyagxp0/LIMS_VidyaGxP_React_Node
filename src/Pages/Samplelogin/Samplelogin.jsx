@@ -131,7 +131,7 @@ export default function Samplelogin() {
           />
   
   <div className="bg-white rounded border-dark-subtle border-2 " >
-              <CTable align="middle" responsive className="table-striped ">
+              <CTable align="middle" responsive className="   ">
                 <thead>
                   <tr>
                     <th className="bg-info text-light">Sno.</th>
@@ -378,7 +378,7 @@ Water Content PPM</td>
             <CCol sm={4}>
               <CFormInput
                 type="text"
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -387,7 +387,7 @@ Water Content PPM</td>
             <CCol sm={3}>
               <CFormSelect
                 value={statusFilter}
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 options={[
                   "Select Status",
@@ -598,7 +598,7 @@ Water Content PPM</td>
           />
 
           <div className="bg-white rounded border-dark-subtle border-2 " >
-            <CTable align="middle" responsive className="table-striped ">
+            <CTable align="middle" responsive className="   ">
               <thead>
                 <tr>
                   <th className="bg-info text-light">Sno.</th>
@@ -674,31 +674,31 @@ Water Content PPM</td>
 
         <div
           className=" rounded    bg-white"
-          style={{ border: "2px solid gray" }}
+          style={{fontSize:'0.9rem'}}
         >
-          <table className="table table-striped ">
+          <table className="table    ">
             <thead>
               <tr>
-                <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   Sample Type
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   Product / Material
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   A.R. No.
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   Generic Name
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   Specification code
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   Status
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   Actions{" "}
                 </th>
               </tr>

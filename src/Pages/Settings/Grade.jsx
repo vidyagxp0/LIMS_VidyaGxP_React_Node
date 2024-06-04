@@ -105,7 +105,7 @@ function Grade() {
 								<CFormSelect
 									value={selectedStatus}
 									onChange={handleStatusChange}
-									className="border-dark-subtle border-2"
+									style={{fontSize:'0.9rem'}}
 									options={[
 										{ value: "All", label: "All" },
 										{ value: "ACTIVE", label: "Active" },
@@ -127,16 +127,16 @@ function Grade() {
 						</CRow>
 					</div>
 					<div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
-						<CTable align="middle" responsive className="table-responsive table-striped">
+						<CTable align="middle" responsive className="table-responsive   ">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col" className="text-center">
+									<CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Grade Code</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Grade Name</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Grade Code</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Grade Name</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Status</CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>

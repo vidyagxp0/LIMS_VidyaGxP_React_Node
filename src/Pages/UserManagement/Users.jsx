@@ -212,7 +212,7 @@ const Users = () => {
                                 setCurrentPage(1);
                             }}
                             value={selectedStatus}
-                            style={{ border: "2px solid gray", width: "220px" }}
+                            style={{fontSize:'0.9rem'}}
                         >
 
                             <option value="All">All</option>
@@ -227,26 +227,29 @@ const Users = () => {
       </div>
 
       {/* Employee table */}
-      <div className=" rounded bg-white" style={{ border: "2px solid gray" }}>
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
         {" "}
-        <table className="table table-striped">
+        <table className="table   ">
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>User ID</th>
-              <th style={{ background: "#3C496A", color: "white" }}>User</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Role</th>
-              <th style={{ background: "#3C496A", color: "white" }}>
+              <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>User ID</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>User</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Role</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>
                 Departments
               </th>
-              <th style={{ background: "#3C496A", color: "white" }}>
+              <th style={{ background: "#5D76A9", color: "white"}}>
                 Joining Date
               </th>
-              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-              <th style={{ background: "#3C496A", color: "white" }}>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>
                 Added By
               </th>
-              <th style={{ background: "#3C496A", color: "white" }}>Action</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
             </tr>
           </thead>
           <tbody>{renderRows()}</tbody>

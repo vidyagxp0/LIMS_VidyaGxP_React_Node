@@ -60,17 +60,20 @@ export default function MyTests() {
                 </div>
             </div>
 
-            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+                  <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <CTable align="middle" responsive className="mb-0    table-responsive">
           <thead>
                         <tr>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>A.R. No.</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Product Name</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sample Incharge</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Assigned On</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Sample Type</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Actions</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>A.R. No.</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Incharge</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Assigned On</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Type</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>

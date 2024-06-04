@@ -107,7 +107,7 @@ function ChemicalCategory() {
 							<CCol sm={3}>
 								<CFormSelect
 									value={selectedStatus}
-									className="border-dark-subtle border-2"
+									style={{fontSize:'0.9rem'}}
 									onChange={handleStatusChange}
 									options={[
 										"Select Status",
@@ -131,18 +131,30 @@ function ChemicalCategory() {
 						</CRow>
 					</div>
 					<div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
-						<CTable align="middle" responsive className="table-responsive table-striped">
+						<CTable align="middle" responsive className="table-responsive   ">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
+									<CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Category Code</CTableHeaderCell>
-									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+									<CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Category Code</CTableHeaderCell>
+									<CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
 										Category Name
 									</CTableHeaderCell>
-									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-									<CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+									<CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+									<CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>

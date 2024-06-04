@@ -110,13 +110,13 @@ function InvestigationCoa() {
                     { label: "ARPC0000002" },
                     { label: "ARPC0000003" },
                   ]}
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                 />
               </CCol>
               <CCol sm={3}>
                 <CFormSelect
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus} style={{ border: "2px solid gray" }}
+                  value={selectedStatus} style={{fontSize:'0.9rem'}}
                   options={[
                     "All",
                     { label: "Initiated", value: "INITIATED" },
@@ -129,18 +129,45 @@ function InvestigationCoa() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white rounded border-dark-subtle border-2 mt-5">
-            <CTable align="middle" responsive className="table-striped">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+            <CTable align="middle" responsive className="  ">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Sample Type</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Product / Material</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">A.R No.</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Generic Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Specification Code</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >S NO.</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Sample Type</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Product / Material</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >A.R No.</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Generic Name</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Specification Code</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

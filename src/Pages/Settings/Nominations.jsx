@@ -357,22 +357,25 @@ export default function Nominations() {
           </CRow>
         </div>
 
-        <div className="bg-light shadow rounded border-dark-subtle border-2 my-4">
-          <table className="table table-responsive table-striped">
+          <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+          <table className="table table-responsive   ">
             <thead>
               <tr>
-                <th style={{ background: "#3C496A", color: "white" }}>
+                <th style={{ background: "#5D76A9", color: "white"}}>
                   <input type="checkbox" />
                 </th>
-                <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Analyst</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Test Technique</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Total Experience	</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Past Experience</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Justification for Direct Nomination	</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-                <th style={{ background: "#3C496A", color: "white" }}>Action</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Analyst</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Test Technique</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Total Experience	</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Past Experience</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Justification for Direct Nomination	</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+                <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>

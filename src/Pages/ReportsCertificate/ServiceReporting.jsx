@@ -133,7 +133,7 @@ function ServiceReporting() {
                 <CFormSelect
                   options={["Select Status", { label: "All", value: "All" }, { label: "Active", value: "Active" }, { label: "Inactive", value: "Inactive" }]}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus} style={{ border: "2px solid gray" }}
+                  value={selectedStatus} style={{fontSize:'0.9rem'}}
                 />
               </CCol>
               <CCol sm={6}></CCol>
@@ -146,20 +146,53 @@ function ServiceReporting() {
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white rounded mt-5 border-2 border-dark-subtle" >
-            <CTable align="middle" responsive className="table-striped" >
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+            <CTable align="middle" responsive className="  " >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem ID</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument ID</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Module ID</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem In Brief</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Problem In Details</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Expected Closure Date</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Job Details</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >S NO.</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Problem ID</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Instrument ID</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Module ID</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Problem In Brief</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Problem In Details</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Expected Closure Date</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Job Details</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

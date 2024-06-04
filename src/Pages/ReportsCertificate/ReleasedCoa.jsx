@@ -92,7 +92,7 @@ function ReleasedCoa() {
                     <div>
                         <CRow className="mb-3">
                             <CCol sm={2}>
-                                <CFormSelect style={{ border: "2px solid gray" }}>
+                                <CFormSelect style={{fontSize:'0.9rem'}}>
                                     <option value="Ar No.">Ar No.</option>
                                     <option value="ARPC0000001">ARPC0000001</option>
                                     <option value="ARPC0000002">ARPC0000002</option>
@@ -102,7 +102,7 @@ function ReleasedCoa() {
                             <CCol sm={3}>
                             <CFormSelect
                                     onChange={(e) => setSelectedStatus(e.target.value)}
-                                    value={selectedStatus} style={{ border: "2px solid gray" }}
+                                    value={selectedStatus} style={{fontSize:'0.9rem'}}
                                 options={[
                                     "All",                                
                                 { label: "Initiated" ,value: "INITIATED"},
@@ -115,18 +115,45 @@ function ReleasedCoa() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white rounded mt-5 border-2 border-dark-subtle" >
-                        <CTable align="middle" responsive className="table-striped">
+                      <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+                        <CTable align="middle" responsive className="  ">
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Sample Type</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Product / Material</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">A.R No.</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Generic Name</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Specification Code</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Sample Type</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Product / Material</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >A.R No.</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Generic Name</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Specification Code</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>

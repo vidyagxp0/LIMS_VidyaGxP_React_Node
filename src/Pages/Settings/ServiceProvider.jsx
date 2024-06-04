@@ -216,7 +216,7 @@ function ServiceProvider() {
             <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                   type="email"
                   placeholder="Search..."
                   onChange={(e) => setSearch(e.target.value)}
@@ -227,7 +227,7 @@ function ServiceProvider() {
                 <CFormSelect
                   onChange={(e) => handleSelect(e.target.value)}
                   value={selectedStatus}
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                 >
                   <option value="All">All</option>
                   <option value="Initiated">Initiated</option>
@@ -247,45 +247,75 @@ function ServiceProvider() {
               </CCol>
             </CRow>
           </div>
-          <div
-            className="bg-white mt-5 rounded border-2 border-dark-subtle"
-            style={{ boxShadow: "0px 0px 3px black" }}
-          >
-            <CTable className="table table-responsive table-striped">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+            <CTable className="table table-responsive   ">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     SNo.
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     Service Provider Name
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     Unique Code
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     City
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     State
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     Country
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     Pin Code
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     Valid Upto
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     Status
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >
                     Actions{" "}
                   </CTableHeaderCell>
                 </CTableRow>

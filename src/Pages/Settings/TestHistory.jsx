@@ -79,14 +79,14 @@ export default function TestHistory() {
             </div>
 
             <div className='bg-light shadow rounded m-5 border-dark-subtle border-2'>
-                <table className='table table-responsive table-striped'>
+                <table className='table table-responsive   '>
                     <thead>
                         <tr>
-                            <th style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
-                            <th style={{background:"#3C496A", color:"white"}}>SNo.</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Test Name</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Tests Planned</th>
-                            <th style={{background:"#3C496A", color:"white"}}>Tests Executed</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>SNo.</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Test Name</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Tests Planned</th>
+                            <th style={{ background: "#5D76A9", color: "white"}}>Tests Executed</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -539,22 +539,25 @@ export default function StocksVerification() {
         <h5>Stocks</h5>
       </div>
 
-      <div className="border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded">
+        <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
         <table
-          className="table table-responsive table-striped text-xs"
+          className="table table-responsive text-xs"
           
         >
           <thead>
             <tr>
-              <th style={{background:"#3C496A", color:"white"}}>Sr.no.</th>
-              <th style={{background:"#3C496A", color:"white"}}>Material Type</th>
-              <th style={{background:"#3C496A", color:"white"}}>Invoice Number</th>
-              <th style={{background:"#3C496A", color:"white"}}>Supplier Name</th>
-              <th style={{background:"#3C496A", color:"white"}}>Supplier approved by QA</th>
-              <th style={{background:"#3C496A", color:"white"}}>Verification Status</th>
-              <th style={{background:"#3C496A", color:"white"}}>Stock Type</th>
-              <th style={{background:"#3C496A", color:"white"}}>Status</th>
-              <th style={{background:"#3C496A", color:"white"}}>Actions</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Material Type</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Invoice Number</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Supplier Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Supplier approved by QA</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Verification Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Stock Type</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
             </tr>
           </thead>
           <tbody>{renderRows()}</tbody>

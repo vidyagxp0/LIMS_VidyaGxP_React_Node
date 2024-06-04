@@ -237,7 +237,7 @@ export default function StockInventory() {
           <CFormInput
             type="text"
             placeholder="Search..."
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             className="border-2"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -248,7 +248,7 @@ export default function StockInventory() {
           <CFormSelect
             onChange={handleFilterChange}
             className="border-2"
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             options={[
               { label: "All", value: "" },
               { label: "Initiated", value: "initiated" },
@@ -269,20 +269,23 @@ export default function StockInventory() {
         </CCol>
       </div>
 
-      <div className='border-dark-subtle border-2 bg-light mx-5 mt-5 mb-4 rounded'>
-        <table className='table table-responsive table-striped text-xs'>
+        <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <table className='table table-responsive    text-xs'>
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }}><input type="checkbox" /></th>
-              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Material Name</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Supplier Name</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Truck No.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>CH No.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Invoice No.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Quantity In Mt</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Actions</th>
+              <th style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Material Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Supplier Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Truck No.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>CH No.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Invoice No.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Quantity In Mt</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
             </tr>
           </thead>
           <tbody>

@@ -68,13 +68,16 @@ const Roles = () => {
             </div>
 
             {/* Employee table */}
-            <div className=" rounded    bg-white" style={{ border: "2px solid gray" }}>
-                <table className='table table-striped '>
+                  <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+                <table className='table    '>
                     <thead>
                         <tr>
-                            <th style={{background:"#3C496A", color:"white"}} className='w-25'>S.No.</th>
-                            <th style={{background:"#3C496A", color:"white"}} className='w-25'>Role</th>
-                            <th style={{background:"#3C496A", color:"white"}} className='w-25'>Status</th>
+                            <th style={{ background: "#5D76A9", color: "white"}} className='w-25'>S.No.</th>
+                            <th style={{ background: "#5D76A9", color: "white"}} className='w-25'>Role</th>
+                            <th style={{ background: "#5D76A9", color: "white"}} className='w-25'>Status</th>
                         </tr>
                     </thead>
                     <tbody>

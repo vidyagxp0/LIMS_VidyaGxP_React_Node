@@ -251,7 +251,7 @@ function WorkingStandardUsage() {
             <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                   type="email"
                   placeholder="Search..."
                   onChange={(e) => setSearch(e.target.value)}
@@ -262,7 +262,7 @@ function WorkingStandardUsage() {
                 <CFormSelect
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   value={selectedStatus}
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                 >
                   <option value="All">All</option>
                   <option value="Initiated">Initiated</option>
@@ -282,33 +282,36 @@ function WorkingStandardUsage() {
               </CCol>
             </CRow>
           </div>
-          <div className=" rounded  m-1 bg-white" style={{border:"2px solid gray"}}>
-          <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+  <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+          <CTable align="middle" responsive className="mb-0    table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell scope="col" style={{background:"#3C496A", color:"white"}} className="text-center">
+                  <CTableHeaderCell scope="col" style={{ background: "#5D76A9", color: "white"}} className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
+                  <CTableHeaderCell   scope="col" style={{ background: "#5D76A9", color: "white"}}>
                     SNo.
                   </CTableHeaderCell>
-                  <CTableHeaderCell   scope="col"style={{background:"#3C496A", color:"white"}}>
+                  <CTableHeaderCell   scope="col"style={{ background: "#5D76A9", color: "white"}}>
                     Ref. Std. Lot. No
                   </CTableHeaderCell>
-                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
+                  <CTableHeaderCell   scope="col" style={{ background: "#5D76A9", color: "white"}}>
                     Quantity used
                   </CTableHeaderCell>
-                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
+                  <CTableHeaderCell   scope="col" style={{ background: "#5D76A9", color: "white"}}>
                     Used On
                   </CTableHeaderCell>
-                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
+                  <CTableHeaderCell   scope="col" style={{ background: "#5D76A9", color: "white"}}>
                     Used By
                   </CTableHeaderCell>
 
-                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
+                  <CTableHeaderCell   scope="col" style={{ background: "#5D76A9", color: "white"}}>
                     Status
                   </CTableHeaderCell>
-                  <CTableHeaderCell   scope="col" style={{background:"#3C496A", color:"white"}}>
+                  <CTableHeaderCell   scope="col" style={{ background: "#5D76A9", color: "white"}}>
                     Actions{" "}
                   </CTableHeaderCell>
                 </CTableRow>

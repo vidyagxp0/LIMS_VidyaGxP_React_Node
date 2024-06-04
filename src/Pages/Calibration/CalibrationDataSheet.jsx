@@ -370,10 +370,10 @@ const CalibrationDataSheet = () => {
         <div>
           <CRow className="mt-3">
             <CCol sm={4}>
-              <CFormInput  style={{ border: "2px solid gray" }} type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
+              <CFormInput  style={{fontSize:'0.9rem'}} type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
             </CCol>
             <CCol sm={3}>
-              <CFormSelect  style={{ border: "2px solid gray" }}  value={statusFilter}
+              <CFormSelect  style={{fontSize:'0.9rem'}}  value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}>
                                 <option value="1">All</option>
                                 <option value="INITIATED">Initiated</option>
@@ -398,18 +398,21 @@ const CalibrationDataSheet = () => {
       </div>
 
       {/* Employee table */}
-      <div className='table-responsive rounded bg-white  container1' style={{border:" 2px solid gray"}}>
-        <table className='table ' style={{ fontSize: '0.8rem',  width: '100%' }}>
+        <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <table className='table table-responsive text-xs' >
           <thead>
             <tr>
-              <th style={{background:"#3C496A", color:"white"}}><input type="checkbox" /></th>
-              <th style={{background:"#3C496A", color:"white"}}>S.No.</th>
-              <th style={{background:"#3C496A", color:"white"}}>Unique code</th>
-              <th style={{background:"#3C496A", color:"white"}}>Data Sheet Name</th>
-              <th style={{background:"#3C496A", color:"white"}}>Quantitative Parameters</th>
-              <th style={{background:"#3C496A", color:"white"}}>Qualitative Parameters</th>
-              <th style={{background:"#3C496A", color:"white"}}>Status</th>
-              <th style={{background:"#3C496A", color:"white"}}>Action</th>
+              <th style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
+              <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Unique code</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Data Sheet Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Quantitative Parameters</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Qualitative Parameters</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
             </tr>
           </thead>
           <tbody>

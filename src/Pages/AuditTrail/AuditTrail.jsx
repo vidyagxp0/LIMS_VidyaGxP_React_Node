@@ -66,7 +66,7 @@ function AuditTrail() {
                         <CRow className="mb-3">
                             <CCol sm={3}>
                                 <CFormSelect
-                                    className='border-dark-subtle border-2'
+                                    style={{fontSize:'0.9rem'}}
                                     value={selectedProduct}
                                     onChange={(e) => setSelectedProduct(e.target.value)}
                                     options={[
@@ -82,7 +82,7 @@ function AuditTrail() {
                             </CCol>
                             <CCol sm={3}>
                                 <CFormSelect
-                                    className='border-dark-subtle border-2'
+                                    style={{fontSize:'0.9rem'}}
                                     value={selectedOperation}
                                     onChange={(e) => setSelectedOperation(e.target.value)}
                                     options={[
@@ -98,7 +98,7 @@ function AuditTrail() {
                             </CCol>
                             <CCol sm={3}>
                                 <CFormSelect
-                                    className='border-dark-subtle border-2'
+                                    style={{fontSize:'0.9rem'}}
                                     value={selectedUser}
                                     onChange={(e) => setSelectedUser(e.target.value)}
                                     options={[
@@ -129,16 +129,16 @@ function AuditTrail() {
                         </CRow>
                     </div>
                     <div className="bg-white border-dark-subtle border-2 mt-5 rounded">
-                        <CTable align="middle" responsive className="table-striped">
+                        <CTable align="middle" responsive className="  ">
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Date Time</CTableHeaderCell>
-                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Form Name</CTableHeaderCell>
-                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Action Row Name</CTableHeaderCell>
-                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Old Action</CTableHeaderCell>
-                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">New Action</CTableHeaderCell>
-                                    <CTableHeaderCell style={{background:"#3C496A", color:"white"}} scope="col">Employee Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Date Time</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Form Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Action Row Name</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Old Action</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">New Action</CTableHeaderCell>
+                                    <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">Employee Name</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>

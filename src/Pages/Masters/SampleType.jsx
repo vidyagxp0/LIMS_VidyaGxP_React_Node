@@ -140,7 +140,7 @@ export default function SampleType() {
                 setCurrentPage(1);
               }}
               value={selectedStatus}
-              style={{ border: "2px solid gray", width: "220px" }}
+              style={{fontSize:'0.9rem'}}
             >
 
               <option value="All">All</option>
@@ -158,16 +158,19 @@ export default function SampleType() {
 
       </div>
 
-      <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <CTable align="middle" responsive className="mb-0    table-responsive">
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }}>Sr.no.</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Sample Type Name</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Add Date</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Days to Complete</th>
-              <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-              <th style={{ background: "#3C496A", color: "white" }}><HiDotsHorizontal /></th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Sample Type Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Add Date</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Days to Complete</th>
+              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}}><HiDotsHorizontal /></th>
             </tr>
           </thead>
           <tbody>

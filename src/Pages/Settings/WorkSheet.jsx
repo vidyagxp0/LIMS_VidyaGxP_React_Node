@@ -189,7 +189,7 @@ function WorkSheet() {
               <CCol sm={3}>
                 <CFormSelect
                   value={selectedStatus}
-                  className="border-dark-subtle border-2"
+                  style={{fontSize:'0.9rem'}}
                   onChange={handleStatusChange}
                   options={[
                     { value: 'All', label: 'All' },
@@ -210,18 +210,45 @@ function WorkSheet() {
             </CRow>
           </div>
           <div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
-            <CTable align="middle" responsive className="table-responsive table-striped" style={{ fontSize: '14px' }}>
+            <CTable align="middle" responsive className="table-responsive   " style={{ fontSize: '14px' }}>
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">id.</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Sequence Number</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Worksheets Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Product Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Gtp Number</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Method Validation No.</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Standard Prepration</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >id.</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Sequence Number</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Worksheets Name</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Product Name</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Gtp Number</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Method Validation No.</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Standard Prepration</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                  <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>

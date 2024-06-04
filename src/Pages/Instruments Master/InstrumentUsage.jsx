@@ -61,7 +61,7 @@ function InstrumentUsage() {
                                 <CFormSelect
                                     options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
                                     onChange={(e) => setSelectedStatus(e.target.value)}
-                                    value={selectedStatus} style={{ border: "2px solid gray" }}
+                                    value={selectedStatus} style={{fontSize:'0.9rem'}}
                                 />
                             </CCol>
 
@@ -74,20 +74,53 @@ function InstrumentUsage() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-                        <CTable className="mb-0 table-striped table table-responsive" >
+                          <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+                        <CTable className="mb-0    table table-responsive" >
                             <CTableHead>
                                 <CTableRow>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument ID</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Instrument Category</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Usage Code</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Product Name</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Ar.No</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Used For</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Used By</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                                    <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >S NO.</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Instrument ID</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Instrument Category</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Usage Code</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Product Name</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Ar.No</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Used For</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Used By</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Status</CTableHeaderCell>
+                                    <CTableHeaderCell
+                  style={{ background: "#5D76A9", color: "white"}}
+                  scope="col"
+                >Actions</CTableHeaderCell>
                                 </CTableRow>
                             </CTableHead>
                             <CTableBody>

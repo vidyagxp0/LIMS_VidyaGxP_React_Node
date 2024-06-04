@@ -140,7 +140,7 @@ export default function TestRegistrations() {
           <CRow className="mb-3">
             <CCol sm={2}>
               <CFormSelect
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="">Select Type</option>
                 <option value="raw-material">Raw Material</option><option value="hcl">hcl</option>
@@ -150,7 +150,7 @@ export default function TestRegistrations() {
             </CCol>
             <CCol sm={2}>
               <CFormSelect
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="">Select Client</option>
                 <option value="mit-power">MIT Power</option>
@@ -161,7 +161,7 @@ export default function TestRegistrations() {
             </CCol>
             <CCol sm={4}>
               <CFormSelect
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="">Select Specs</option>
                 <option value="RMS-TDL-01 - Tadalfil Raw material testing specification">RMS-TDL-01 - Tadalfil Raw material testing specification</option>
@@ -198,7 +198,7 @@ export default function TestRegistrations() {
                   setCurrentPage(1);
                 }}
                 value={selectedStatus}
-                style={{ border: "2px solid gray" }}
+                style={{fontSize:'0.9rem'}}
               >
                 <option value="All">All</option>
                 <option value="Initiated">Initiated</option>
@@ -219,20 +219,23 @@ export default function TestRegistrations() {
 
       </div>
 
-      <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-        <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+            <div
+          className=" rounded bg-white"
+          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        >
+        <CTable align="middle" responsive className="mb-0    table-responsive">
           <thead>
             <tr>
-              <th style={{ background: "#3C496A", color: "white" }} >Sr.no.</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Specification ID</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Product Name</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Test Name</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Test Code</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Method</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Category</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Test type</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Status</th>
-              <th style={{ background: "#3C496A", color: "white" }} >Actions</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Sr.no.</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Specification ID</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Product Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Test Name</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Test Code</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Method</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Category</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Test type</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Status</th>
+              <th style={{ background: "#5D76A9", color: "white"}} >Actions</th>
 
             </tr>
           </thead>
