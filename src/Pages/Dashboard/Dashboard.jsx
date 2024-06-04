@@ -11,7 +11,6 @@ import "react-circular-progressbar/dist/styles.css";
 import LineChart from "echarts-for-react";
 import { Gauge } from "@mui/x-charts/Gauge";
 
-
 function Dashboard(props) {
   useEffect(() => {
     if (props.show) {
@@ -95,10 +94,10 @@ function Dashboard(props) {
       {
         name: "Material Status",
         type: "funnel",
-        left: "10%",
+        left: "16%",
         top: 60,
         bottom: 60,
-        width: "80%",
+        width: "70%",
         min: 0,
         max: 100,
         minSize: "0%",
@@ -552,7 +551,7 @@ function Dashboard(props) {
           6, 3,
         ],
         itemStyle: {
-          color: "#0089c8",
+          color: "blue",
           borderRadius: [5, 5, 0, 0],
         },
       },
@@ -566,7 +565,7 @@ function Dashboard(props) {
           2, 2, 9, 6, 1, 7, 5, 4, 8, 0, 3,
         ],
         itemStyle: {
-          color: "#ffada4",
+          color: "#CE2029",
           borderRadius: [5, 5, 0, 0],
         },
       },
@@ -590,21 +589,21 @@ function Dashboard(props) {
 
   return (
     <>
-      <div id="dashboard" className="m-3 ">
+      <div id="dashboard" className="m-5">
         <div className="sub-head mb-4">
           <div className="title fs-5 fw-bolder">Dashboard</div>
         </div>
 
-        <div className="flex flex-wrap justify-around " id="Material">
-          <div
+        <div className="d-flex justify-content-between mb-5 dashboardStatus">
+        <div
             className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
             style={{
               backgroundImage:
                 'url("https://media.istockphoto.com/id/1410455925/vector/dynamic-blue-particle-wave-abstract-sound-visualization-digital-structure-of-the-wave-flow.jpg?s=612x612&w=0&k=20&c=RL7do3aEvte0cKukjC30eHQ4nujXUIOa2TvQbIN8eKw=")',
             }}
           >
-            <div className="text-white text-sm">On Going Test</div>
-            <div className="text-2xl text-white font-bold">277</div>
+            <div className="text-white text-2xl">On Going Test</div>
+            <div className="text-3xl text-white font-bold">277</div>
           </div>
 
           <div
@@ -614,8 +613,8 @@ function Dashboard(props) {
                 "url('https://c4.wallpaperflare.com/wallpaper/624/336/42/science-the-big-bang-theory-atoms-wallpaper-preview.jpg')",
             }}
           >
-            <div className="text-white text-sm">Completed Test</div>
-            <div className="text-2xl text-white font-bold">48</div>
+            <div className="text-white text-2xl">Completed Test</div>
+            <div className="text-3xl text-white font-bold">48</div>
           </div>
 
           <div
@@ -625,8 +624,8 @@ function Dashboard(props) {
                 "url('https://static.vecteezy.com/system/resources/thumbnails/006/712/955/small/abstract-health-medical-science-consist-doctor-digital-wireframe-concept-modern-medical-technology-treatment-medicine-on-gray-background-for-template-web-design-or-presentation-vector.jpg')",
             }}
           >
-            <div className="text-white text-sm">Pending Test</div>
-            <div className="text-2xl text-white font-bold">221</div>
+            <div className="text-white text-2xl">Pending Test</div>
+            <div className="text-3xl text-white font-bold">221</div>
           </div>
 
           <div
@@ -636,8 +635,8 @@ function Dashboard(props) {
                 "url('https://img.freepik.com/premium-photo/high-angle-view-eyeglasses-table-against-black-background_1048944-215100.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1715731200&semt=ais_user')",
             }}
           >
-            <div className="text-white text-sm">Instruments</div>
-            <div className="text-2xl text-white font-bold">9</div>
+            <div className="text-white text-2xl">Instruments</div>
+            <div className="text-3xl text-white font-bold">9</div>
           </div>
 
           <div
@@ -647,15 +646,15 @@ function Dashboard(props) {
                 "url('https://png.pngtree.com/thumb_back/fh260/background/20210716/pngtree-abstract-geometric-medical-background-of-science-and-technology-style-gene-atom-image_743373.jpg')",
             }}
           >
-            <div className="text-white text-sm">
+            <div className="text-white text-2xl">
               Instrument Under Calibration
             </div>
-            <div className="text-2xl text-white font-bold">5</div>
+            <div className="text-3xl text-white font-bold">5</div>
           </div>
         </div>
 
-        <div className="cardContainter d-flex gap-4 mb-4 mt-4">
-          <div className="rounded px-5 w-[100%] bg-white shadow-lg cardItem">
+        <div className="cardContainter d-flex w-[100%] justify-between shadow-lg gap-3 mb-4">
+          <div className="rounded px-3  w-[79.1%] bg-white shadow-lg cardItem">
             <div className="d-flex justify-content-between py-3">
               <div className="py-2 fw-bolder" style={{ color: "#343a40" }}>
                 Material
@@ -703,7 +702,7 @@ function Dashboard(props) {
               </div>
               <div className="d-flex align-items-center">
                 <div
-                  className="rounded-circle mt-5"
+                  className="rounded-circle "
                   style={{
                     backgroundColor: "#dc3545",
                     width: "12px",
@@ -808,7 +807,7 @@ function Dashboard(props) {
             </div>
           </div>
 
-          <div className="rounded w-25 listItem shadow-lg cardItem bg-white">
+          <div className="rounded w-[19.3%] listItem  shadow-lg cardItem bg-white">
             <div className="h5 m-4 fw-bold"> Latest Products</div>
             <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
               {latestProducts.map((product, idx) => {

@@ -3,61 +3,31 @@
   height: 200px;
 }
 
-@media screen and  (max-width: 991px) {
-  .title {
-    text-align: center;
-    font-weight: 800 !important;
-    font-size: x-large !important;
-    text-decoration: underline;
+
+@media screen and (max-width:991px) {
+  .dashboardStatus {
+      flex-direction: column;
+      row-gap: 15px;
+      justify-content: center;
+      align-items: center;
+      width: 100% !important;
   }
-  
- #Material{
- display: flex !important;
- flex-wrap: wrap !important;
-}
-
-
 
   .cardContainter {
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    /* border: 1px solid #000 !important; */
-  }
-
-  .boxes {
-    /* border: 2px solid red; */
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .dashboardStatus > div {
-    width: 55% !important;
-    height: 180px !important;
+      flex-direction: column !important;
+      justify-content: center;
+      align-items: center;
   }
 
   .cardItem {
-    width: 80% !important;
-    height: 400px !important;
+      width: 100% !important;
 
-    /* border: 2px solid red; */
-  }
-  .cardItem1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 90% !important;
-    height: 400px !important;
-  }
-  .cardItem1 .h5{
-    margin-bottom: 20px;
   }
 
   .circularBar {
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-    flex-direction: row !important;
+      flex-direction: column !important;
+      justify-content: center;
+      align-items: center;
   }
+
 }

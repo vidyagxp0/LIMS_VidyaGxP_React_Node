@@ -39,7 +39,7 @@ function Header() {
   return (
     <header
       id="head"
-      className="text-gray-900 w-[100%] mobile:flex-col  desktop:flex-col laptop:flex-col tablet:flex-col py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[72px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8"
+      className="text-gray-900 w-[100%]  py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[72px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8"
     >
       <div className="flex items-center  w-[75%]  justify-center ">
         <div className="text-center">
@@ -72,7 +72,7 @@ function Header() {
         {contact && (
           <div
             id="About"
-            className="absolute flex flex-col items-center justify-center text-center top-[175px] left-[180px] tablet:left-[50px] laptop:left-[100px] desktop:left-[158px] w-[60%] tablet:w-[70%] laptop:w-[50%] desktop:w-[850px]  h-[450px] rounded-[25px] bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
+            className="absolute flex flex-col items-center justify-center text-center top-[175px] left-[180px]  w-[60%]  h-[450px] rounded-[25px] bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
           >
             <div
               className="bg-no-repeat bg-contain w-[300px] tablet:w-[400px] laptop:w-[500px] h-[100px] tablet:h-[125px] laptop:h-[150px]"
