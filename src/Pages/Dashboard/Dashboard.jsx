@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import "../Dashboard/Dashboard.css";
-// import { CChart, CChartBar, CChartLine } from "@coreui/react-chartjs";
-import { useEffect } from "react";
+// import "../Dashboard/Dashboard.css";
+import { useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import LineChart from "echarts-for-react";
-import { Gauge } from "@mui/x-charts/Gauge";
+import ReactEcharts from "echarts-for-react";
+import * as echarts from "echarts";
 
 function Dashboard(props) {
   useEffect(() => {
@@ -63,9 +63,9 @@ function Dashboard(props) {
         ],
         emphasis: {
           itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.8)",
+            Blur: 10,
+            OffsetX: 0,
+            Color: "rgba(0, 0, 0, 0.8)",
           },
         },
       },
@@ -350,15 +350,15 @@ function Dashboard(props) {
     tooltip: {
       trigger: "axis",
       axisPointer: {
-        type: "shadow",
+        type: "",
       },
     },
     legend: {},
     grid: {
       left: "1%",
       right: "5%",
-      top: "10%",
-      bottom: "20%",
+      top: "0%",
+      bottom: "0%",
       containLabel: true,
     },
     xAxis: {
@@ -377,17 +377,7 @@ function Dashboard(props) {
         "Stability Testing",
         "Bioavailability Assessment",
         "Microbiological Testing",
-        "Extractable and Leachable Studies",
-        "Process Validation",
-        "Method Development and Validation",
-        "Particle Size Analysis",
-        "Container Closure Integrity Testing",
-        "Water Content Determination",
-        "Residual Solvents Analysis",
-        "Toxicological Studies",
-        "Excipient Compatibility Testing",
-        "Pharmacokinetic Analysis",
-        "Pharmacodynamic Evaluation",
+
         "Biowaivers Assessment",
         "Container Material Compatibility",
         "Photostability Testing",
@@ -438,8 +428,8 @@ function Dashboard(props) {
         show: true,
         xAxisIndex: 0,
         start: 0,
-        end: 10,
-        bottom: "5%",
+        end: 40,
+        bottom: "0%",
       },
     ],
   };
@@ -448,15 +438,15 @@ function Dashboard(props) {
     tooltip: {
       trigger: "axis",
       axisPointer: {
-        type: "shadow",
+        type: "",
       },
     },
     legend: {},
     grid: {
       left: "1%",
       right: "5%",
-      top: "10%",
-      bottom: "20%",
+      top: "0%",
+      bottom: "0%",
       containLabel: true,
     },
     xAxis: {
@@ -587,284 +577,473 @@ function Dashboard(props) {
     ],
   };
 
+  const getOption = () => {
+    return {
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "line",
+        },
+      },
+      legend: {},
+      grid: {
+        left: "1%",
+        right: "5%",
+        top: "0%",
+        bottom: "0%",
+        containLabel: true,
+      },
+      xAxis: {
+        name: "Month",
+        type: "category",
+        boundaryGap: [0, 0.01],
+        axisLabel: {
+          rotate: 45,
+          interval: 0,
+        },
+        data: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+      },
+      yAxis: {
+        type: "value",
+        name: "Rainfall (mm)",
+      },
+      series: [
+        {
+          name: "Rainfall",
+          type: "bar",
+          data: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160],
+          itemStyle: {
+            color: "#0089c8",
+            borderRadius: [5, 5, 0, 0],
+          },
+        },
+      ],
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
+      },
+      dataZoom: [
+        {
+          type: "slider",
+          show: true,
+          xAxisIndex: 0,
+          start: 0,
+          end: 100,
+          bottom: "0%",
+        },
+      ],
+    };
+  };
+
+  const radarOption = {
+    radar: {
+      indicator: [
+        { name: "Formulation Analysis", max: 10 },
+        { name: "In Silico Modeling and Simulation", max: 10 },
+        { name: "Pharmacodynamic Evaluation", max: 10 },
+        { name: "In Silico Modeling and Simulation", max: 10 },
+      ],
+    },
+    series: [
+      {
+        type: "radar",
+        data: [
+          {
+            value: [6, 3, 1, 5, 8, 5, 7, 1, 7],
+            name: "Test Planned",
+          },
+          {
+            value: [2, 7, 4, 5, 8, 7, 4, 5, 9, 5, 8],
+            name: "Test Executed",
+          },
+          {
+            value: [1, 2, 3, 4, 5, 6, 8, 7, 9, 5, 5, 5, 8, 4, 5],
+            name: "Test Executed",
+          },
+          {
+            value: [1, 55, 88, 77, 44, 55, 99, 66, 22, 5, 5],
+            name: "Test Executed",
+          },
+          {
+            value: [2, 7, 4, 5, 8, 7, 4, 5, 9, 5, 0],
+            name: "Test Executed",
+          },
+        ],
+      },
+    ],
+  };
+
+  const chartRef = useRef(null);
+  useEffect(() => {
+    const option = {
+      tooltip: {
+        trigger: "item",
+        formatter: "{a} <br/>{b}: {c} ({d}%)",
+      },
+      legend: {
+        data: [
+          "Direct",
+          "Marketing",
+          "Search Engine",
+          "Email",
+          "Union Ads",
+          "Video Ads",
+        ],
+      },
+      series: [
+        {
+          name: "Access From",
+          type: "pie",
+          selectedMode: "single",
+          radius: [0, "30%"],
+          label: {
+            position: "inner",
+            fontSize: 14,
+          },
+          labelLine: {
+            show: false,
+          },
+          data: [
+            { value: 1548, name: "Search Engine" },
+            { value: 775, name: "Direct" },
+            { value: 679, name: "Marketing", selected: true },
+          ],
+        },
+        {
+          name: "Access From",
+          type: "pie",
+          radius: ["45%", "60%"],
+          labelLine: {
+            length: 30,
+          },
+          label: {
+            formatter: "{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ",
+            backgroundColor: "#F6F8FC",
+            borderColor: "#8C8D8E",
+            borderWidth: 1,
+            borderRadius: 4,
+            rich: {
+              a: {
+                color: "#6E7079",
+                lineHeight: 22,
+                align: "center",
+              },
+              hr: {
+                borderColor: "#8C8D8E",
+                width: "100%",
+                borderWidth: 1,
+                height: 0,
+              },
+              b: {
+                color: "#4C5058",
+                fontSize: 14,
+                fontWeight: "bold",
+                lineHeight: 33,
+              },
+              per: {
+                color: "#fff",
+                backgroundColor: "#4C5058",
+                padding: [3, 4],
+                borderRadius: 4,
+              },
+            },
+          },
+          data: [
+            { value: 1048, name: "Baidu" },
+            { value: 335, name: "Direct" },
+            { value: 310, name: "Email" },
+            { value: 251, name: "Google" },
+            { value: 234, name: "Union Ads" },
+          ],
+        },
+      ],
+    };
+
+    const chartInstance = echarts.init(chartRef.current);
+    chartInstance.setOption(option);
+
+    return () => {
+      chartInstance.dispose();
+    };
+  }, []);
+
+  function genData(len, offset) {
+    let arr = new Float32Array(len * 2);
+    let off = 0;
+    for (let i = 0; i < len; i++) {
+      let x = +Math.random() * 10;
+      let y =
+        +Math.sin(x) -
+        x * (len % 2 ? 0.1 : -0.1) * Math.random() +
+        (offset || 0) / 10;
+      arr[off++] = x;
+      arr[off++] = y;
+    }
+    return arr;
+  }
+
   return (
     <>
-      <div id="dashboard" className="m-5">
-        <div className="sub-head mb-4">
-          <div className="title fs-5 fw-bolder">Dashboard</div>
-        </div>
-
-        <div className="d-flex justify-content-between mb-5 dashboardStatus">
-        <div
-            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
-            style={{
-              backgroundImage:
-                'url("https://media.istockphoto.com/id/1410455925/vector/dynamic-blue-particle-wave-abstract-sound-visualization-digital-structure-of-the-wave-flow.jpg?s=612x612&w=0&k=20&c=RL7do3aEvte0cKukjC30eHQ4nujXUIOa2TvQbIN8eKw=")',
-            }}
-          >
-            <div className="text-white text-2xl">On Going Test</div>
-            <div className="text-3xl text-white font-bold">277</div>
+      <div className=" w-full ">
+        <div className=" p-4 m-3 rounded-xl">
+          <div>
+            <h2 className="font-extrabold  text-3xl mb-4">Dashboard</h2>
           </div>
-
-          <div
-            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
-            style={{
-              backgroundImage:
-                "url('https://c4.wallpaperflare.com/wallpaper/624/336/42/science-the-big-bang-theory-atoms-wallpaper-preview.jpg')",
-            }}
-          >
-            <div className="text-white text-2xl">Completed Test</div>
-            <div className="text-3xl text-white font-bold">48</div>
-          </div>
-
-          <div
-            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
-            style={{
-              backgroundImage:
-                "url('https://static.vecteezy.com/system/resources/thumbnails/006/712/955/small/abstract-health-medical-science-consist-doctor-digital-wireframe-concept-modern-medical-technology-treatment-medicine-on-gray-background-for-template-web-design-or-presentation-vector.jpg')",
-            }}
-          >
-            <div className="text-white text-2xl">Pending Test</div>
-            <div className="text-3xl text-white font-bold">221</div>
-          </div>
-
-          <div
-            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
-            style={{
-              backgroundImage:
-                "url('https://img.freepik.com/premium-photo/high-angle-view-eyeglasses-table-against-black-background_1048944-215100.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1715731200&semt=ais_user')",
-            }}
-          >
-            <div className="text-white text-2xl">Instruments</div>
-            <div className="text-3xl text-white font-bold">9</div>
-          </div>
-
-          <div
-            className="shadow-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-[280px] h-[160px]"
-            style={{
-              backgroundImage:
-                "url('https://png.pngtree.com/thumb_back/fh260/background/20210716/pngtree-abstract-geometric-medical-background-of-science-and-technology-style-gene-atom-image_743373.jpg')",
-            }}
-          >
-            <div className="text-white text-2xl">
-              Instrument Under Calibration
+          <div className="flex flex-wrap items-center justify-between h-auto">
+            <div
+              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px] xs:w-full "
+              style={{
+                backgroundImage:
+                  'url("https://media.istockphoto.com/id/1410455925/vector/dynamic-blue-particle-wave-abstract-sound-visualization-digital-structure-of-the-wave-flow.jpg?s=612x612&w=0&k=20&c=RL7do3aEvte0cKukjC30eHQ4nujXUIOa2TvQbIN8eKw=")',
+              }}
+            >
+              <div className="text-white text-2xl">On Going Test</div>
+              <div className="text-3xl text-white font-bold">277</div>
             </div>
-            <div className="text-3xl text-white font-bold">5</div>
+            <div
+              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              style={{
+                backgroundImage:
+                  "url('https://c4.wallpaperflare.com/wallpaper/624/336/42/science-the-big-bang-theory-atoms-wallpaper-preview.jpg')",
+              }}
+            >
+              <div className="text-white text-2xl">Completed Test</div>
+              <div className="text-3xl text-white font-bold">48</div>
+            </div>
+
+            <div
+              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              style={{
+                backgroundImage:
+                  "url('https://static.vecteezy.com/system/resources/thumbnails/006/712/955/small/abstract-health-medical-science-consist-doctor-digital-wireframe-concept-modern-medical-technology-treatment-medicine-on-gray-background-for-template-web-design-or-presentation-vector.jpg')",
+              }}
+            >
+              <div className="text-white text-2xl">Pending Test</div>
+              <div className="text-3xl text-white font-bold">221</div>
+            </div>
+
+            <div
+              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              style={{
+                backgroundImage:
+                  "url('https://img.freepik.com/premium-photo/high-angle-view-eyeglasses-table-against-black-background_1048944-215100.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1715731200&semt=ais_user')",
+              }}
+            >
+              <div className="text-white text-2xl">Instruments</div>
+              <div className="text-3xl text-white font-bold">9</div>
+            </div>
+
+            <div
+              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              style={{
+                backgroundImage:
+                  "url('https://png.pngtree.com/thumb_back/fh260/background/20210716/pngtree-abstract-geometric-medical-background-of-science-and-technology-style-gene-atom-image_743373.jpg')",
+              }}
+            >
+              <div className="text-white text-2xl">
+                Instrument Under Calibration
+              </div>
+              <div className="text-3xl text-white font-bold">5</div>
+            </div>
           </div>
         </div>
 
-        <div className="cardContainter d-flex w-[100%] justify-between shadow-lg gap-3 mb-4">
-          <div className="rounded px-3  w-[79.1%] bg-white shadow-lg cardItem">
-            <div className="d-flex justify-content-between py-3">
-              <div className="py-2 fw-bolder" style={{ color: "#343a40" }}>
-                Material
-              </div>
-              <div className="fw-bolder fs-4" style={{ color: "#495057" }}>
+        <div className=" p-2 gap-4   flex flex-col  lg:flex-row justify-between rounded-xl m-3 ">
+          <div className="w-full lg:w-10/12 shadow flex flex-col bg-white rounded-xl">
+            <div className="flex p-2 justify-between">
+              <div className="py-2 font-bold text-black">Material</div>
+              <div className="text-black font-bold text-2xl">
                 <button>...</button>
               </div>
             </div>
-            <div className="d-flex gap-3 circularDot">
-              <div className="d-flex align-items-center">
-                <div
-                  className="rounded-circle"
-                  style={{
-                    backgroundColor: "#ffc107",
-                    width: "12px",
-                    height: "12px",
-                    marginRight: "8px",
-                  }}
-                ></div>
-                <span className="text-muted">Pending</span>
+            <div className="flex flex-col p-3 ">
+              <div className="flex gap-3 mb-4 ">
+                <div className="flex items-center ">
+                  <div className="bg-yellow-500 rounded-full w-3 h-3 mr-2"></div>
+                  <span className="text-gray-700">Pending</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="bg-blue-500 rounded-full w-3 h-3 mr-2"></div>
+                  <span className="text-gray-700">In-progress</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="bg-green-500 rounded-full w-3 h-3 mr-2"></div>
+                  <span className="text-gray-700">Approved</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="bg-red-500 rounded-full w-3 h-3 mr-2"></div>
+                  <span className="text-gray-700">Dropped</span>
+                </div>
               </div>
-              <div className="d-flex align-items-center ">
-                <div
-                  className="rounded-circle "
-                  style={{
-                    backgroundColor: "#0d6efd",
-                    width: "12px",
-                    height: "12px",
-                    marginRight: "8px",
-                  }}
-                ></div>
-                <span className="text-muted">In-progress</span>
-              </div>
-              <div className="d-flex align-items-center">
-                <div
-                  className="rounded-circle"
-                  style={{
-                    backgroundColor: "#28a745",
-                    width: "12px",
-                    height: "12px",
-                    marginRight: "8px",
-                  }}
-                ></div>
-                <span className="text-muted">Approved</span>
-              </div>
-              <div className="d-flex align-items-center">
-                <div
-                  className="rounded-circle "
-                  style={{
-                    backgroundColor: "#dc3545",
-                    width: "12px",
-                    height: "12px",
-                    marginRight: "8px",
-                  }}
-                ></div>
-                <span className="text-muted">Dropped</span>
-              </div>
-            </div>
-            <div className="circularBar d-flex items-center  justify-around pt-4">
-              <div className="p-3 circularItem">
-                <CircularProgressbar
-                  background
-                  backgroundPadding={6}
-                  value={65}
-                  text={"65%"}
-                  strokeWidth={8}
-                  styles={buildStyles({
-                    backgroundColor: "#e3e1fd",
-                    textColor: "#212529",
-                    pathColor: "#FF5733",
-                    trailColor: "transparent",
-                  })}
-                />
-              </div>
-              <div className="p-3 circularItem">
-                <CircularProgressbar
-                  background
-                  backgroundPadding={6}
-                  value={21.3}
-                  text={"21.3%"}
-                  strokeWidth={8}
-                  styles={buildStyles({
-                    backgroundColor: "#e3e1fd",
-                    textColor: "#212529",
-                    pathColor: "#3498DB",
-                    trailColor: "transparent",
-                  })}
-                />
-              </div>
-              <div className="p-3 circularItem">
-                <CircularProgressbar
-                  background
-                  backgroundPadding={6}
-                  value={39.87}
-                  text={"39.87%"}
-                  strokeWidth={8}
-                  styles={buildStyles({
-                    backgroundColor: "#e3e1fd",
-                    textColor: "#212529",
-                    pathColor: "#2ECC71",
-                    trailColor: "transparent",
-                  })}
-                />
-              </div>
-              <div className="p-3 circularItem">
-                <CircularProgressbar
-                  background
-                  backgroundPadding={6}
-                  value={65}
-                  text={"65%"}
-                  strokeWidth={8}
-                  styles={buildStyles({
-                    backgroundColor: "#e3e1fd",
-                    textColor: "#212529",
-                    pathColor: "#9B59B6",
-                    trailColor: "transparent",
-                  })}
-                />
-              </div>
-              <div className="p-3 circularItem">
-                <CircularProgressbar
-                  background
-                  backgroundPadding={6}
-                  value={65}
-                  text={"65%"}
-                  strokeWidth={8}
-                  styles={buildStyles({
-                    backgroundColor: "#e3e1fd",
-                    textColor: "#212529",
-                    pathColor: "red",
-                    trailColor: "transparent",
-                  })}
-                />
-              </div>
-              <div className="p-3 circularItem">
-                <CircularProgressbar
-                  background
-                  backgroundPadding={6}
-                  value={39.87}
-                  text={"39.87%"}
-                  strokeWidth={8}
-                  styles={buildStyles({
-                    backgroundColor: "#e3e1fd",
-                    textColor: "#212529",
-                    pathColor: "yellow",
-                    trailColor: "transparent",
-                  })}
-                />
+              <div className="flex flex-wrap justify-center pt-4 xs:flex-col xs:items-center sm:flex-col sm:items-center md:flex-row md:justify-center lg:flex-row lg:justify-center xl:flex-row xl:justify-center 2xl:flex-row 2xl:justify-center">
+                <div className="p-3 w-48 h-48 flex items-center justify-center">
+                  <CircularProgressbar
+                    background
+                    backgroundPadding={6}
+                    value={15}
+                    text={"15%"}
+                    strokeWidth={8}
+                    styles={buildStyles({
+                      backgroundColor: "#e3e1fd",
+                      textColor: "#212529",
+                      pathColor: "orange",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+                <div className="p-3 w-48 h-48 flex items-center justify-center">
+                  <CircularProgressbar
+                    background
+                    backgroundPadding={6}
+                    value={30.1}
+                    text={"30.1%"}
+                    strokeWidth={8}
+                    styles={buildStyles({
+                      backgroundColor: "#e3e1fd",
+                      textColor: "#212529",
+                      pathColor: "blue",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+                <div className="p-3 w-48 h-48 flex items-center justify-center">
+                  <CircularProgressbar
+                    background
+                    backgroundPadding={6}
+                    value={45.87}
+                    text={"45.87%"}
+                    strokeWidth={8}
+                    styles={buildStyles({
+                      backgroundColor: "#e3e1fd",
+                      textColor: "#212529",
+                      pathColor: "green",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+                <div className="p-3 w-48 h-48 flex items-center justify-center">
+                  <CircularProgressbar
+                    background
+                    backgroundPadding={6}
+                    value={60}
+                    text={"60%"}
+                    strokeWidth={8}
+                    styles={buildStyles({
+                      backgroundColor: "#e3e1fd",
+                      textColor: "#212529",
+                      pathColor: "purple",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+                <div className="p-3 w-48 h-48 flex items-center justify-center">
+                  <CircularProgressbar
+                    background
+                    backgroundPadding={6}
+                    value={75}
+                    text={"75%"}
+                    strokeWidth={8}
+                    styles={buildStyles({
+                      backgroundColor: "#e3e1fd",
+                      textColor: "#212529",
+                      pathColor: "red",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
+                <div className="p-3 w-48 h-48 flex items-center justify-center">
+                  <CircularProgressbar
+                    background
+                    backgroundPadding={6}
+                    value={90.87}
+                    text={"90.87%"}
+                    strokeWidth={8}
+                    styles={buildStyles({
+                      backgroundColor: "#e3e1fd",
+                      textColor: "#212529",
+                      pathColor: "yellow",
+                      trailColor: "transparent",
+                    })}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="rounded w-[19.3%] listItem  shadow-lg cardItem bg-white">
-            <div className="h5 m-4 fw-bold"> Latest Products</div>
-            <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
-              {latestProducts.map((product, idx) => {
-                return (
-                  <li style={{ color: "black" }} key={idx}>
-                    ◆ {product}
-                  </li>
-                );
-              })}
+          <div className="w-full shadow lg:w-2/12 bg-white rounded-xl">
+            <div className="text-lg font-bold m-4">Latest Products</div>
+            <ul className="list-none font-serif grid gap-3 p-3 text-gray-800 mx-4">
+              {latestProducts.map((product, idx) => (
+                <li className="text-black" key={idx}>
+                  ◆ {product}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
-        <div className="cardContainter d-flex gap-4 mb-4">
-          <div
-            className="shadow-lg cardItem bg-white rounded p-4"
-            style={{ width: "50%" }}
-          >
-            <div className="d-flex justify-content-between">
-              <div className="py-2 fw-bolder">Analysis</div>
-              <div className="fw-bolder  fs-4">...</div>
-            </div>
-            <div className="mt-4">
-              <LineChart option={pieChartOptions} />
-            </div>
-          </div>
-          <div
-            className="rounded shadow-lg cardItem bg-white z-10"
-            style={{ width: "50%" }}
-          >
-            <div className="py-4  fw-bolder text-center">Test Stats</div>
-            <div className="pt-4">
-              <LineChart option={materialOption} />
+
+        <div className="p-2 gap-4  flex flex-col lg:flex-row  rounded-xl m-3 ">
+          <div className="w-full shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
+            <div className="-lg cardItem bg-white rounded p-4">
+              <div className="flex justify-between">
+                <div className="py-2 font-semibold">Analysis</div>
+                <div className="font-semibold text-lg">...</div>
+              </div>
+              <div className="mt-4">
+                <LineChart option={pieChartOptions} />
+              </div>
             </div>
           </div>
-          <div className="rounded shadow-lg cardItem bg-white w-25">
-            <div className="h5 m-4 fw-bold text-dark">AR Number</div>
-            <ul className="list-unstyled d-grid gap-3 text-muted mx-4">
-              {ARNumber.map((number, idx) => {
-                return (
-                  <li style={{ color: "black" }} key={idx}>
-                    ◆ {number}
-                  </li>
-                );
-              })}
+
+          <div className="w-full shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
+            <div className="-lg cardItem bg-white rounded p-4">
+              <div className="flex justify-between">
+                <div className="py-2 font-semibold">Test Stats</div>
+                <div className="font-semibold text-lg">...</div>
+              </div>
+              <div className="mt-4">
+                <LineChart option={materialOption} />
+              </div>
+            </div>
+          </div>
+          <div className="w-full shadow lg:w-2/12 bg-white rounded-xl">
+            <div className="text-lg font-bold m-4">AR Number</div>
+            <ul className="list-none grid gap-3 text-gray-700 mx-4">
+              {ARNumber.map((product, idx) => (
+                <li className="text-black" key={idx}>
+                  ◆ {product}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
-        <div className="cardContainter d-flex gap-4 mb-4">
-          <div className="rounded shadow-lg cardItem bg-white w-50">
-            <div className="py-4 fw-bolder text-center">
-              Category wise Instruments
-            </div>
-            <div className="">
-              <LineChart option={analysisOptions} className="p-4" />
+
+        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 fw-bolder">Product Wise Test stats</div>
+            <div className="pt-4 mx-5">
+              <div
+                ref={chartRef}
+                style={{ width: "100%", height: "400px" }}
+              ></div>
             </div>
           </div>
-          <div className="rounded shadow-lg cardItem bg-white w-50">
+
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 mx-3 fw-bolder text-center">
               Material Status
             </div>
@@ -873,22 +1052,60 @@ function Dashboard(props) {
             </div>
           </div>
         </div>
-        <div className="cardContainter d-flex gap-4 mb-4">
-          <div className="w-50 rounded shadow-lg cardItem bg-white">
+
+        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 mx-3 fw-bolder">Product Wise Test stats</div>
             <div className="pt-4 mx-4">
               <LineChart option={productWiseTestStatsOption} />
             </div>
           </div>
-          <div className="w-50 rounded shadow-lg cardItem bg-white">
+
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 mx-3 fw-bolder">Test Wise stats</div>
             <div className="pt-4 mx-5">
               <LineChart option={testWiseStatsOption} />
             </div>
           </div>
         </div>
-      </div>
 
+        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 fw-bolder">Product</div>
+            <div className="pt-4 mx-5">
+              <ReactEcharts option={radarOption} />
+            </div>
+          </div>
+
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 fw-bolder">Test </div>
+            <div className="pt-4 mx-5">
+              <ReactEcharts option={getOption()} />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
+          <div className="w-full p-2 shadow  lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 fw-bolder text-center">
+              Category wise Instruments
+            </div>
+            <div className="">
+              <LineChart option={analysisOptions} className="p-4" />
+            </div>
+          </div>
+
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 fw-bolder text-center">
+              Material Status
+            </div>
+            <div className="pt-4 mx-4">
+              <LineChart option={funnelOption} />
+            </div>
+          </div>
+        </div>
+        
+      </div>
       <div>
         <ToastContainer />
       </div>
