@@ -53,23 +53,24 @@ const Roles = () => {
         <tr key={startIndex + index}>
             <td>{startIndex + index + 1}</td>
                 <td>{employee.role}</td>
-                <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button></td>
+                <td> 
+                    <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: "white",
+                width:'4rem',
+                fontSize:'12px',
+                padding:'2px 7px',
+                borderRadius:'7px' }}> {employee.status}</button></td>
             </tr>
         ));
     };
 
     return (
-        <div className=" mx-5 ">
-            <div className="row  ">
+        <div className="m-5 mt-3">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5 my-4">Roles</div>
+                    <h4 className="fw-bold">Roles</h4>
                 </div>
 
-            </div>
-
-            {/* Employee table */}
                   <div
-          className=" rounded bg-white"
+          className=" rounded bg-white mt-8"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
                 <table className='table    '>

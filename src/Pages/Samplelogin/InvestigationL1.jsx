@@ -66,16 +66,16 @@ import {
   
     return (
       <>
-        <div className="m-5">
+        <div className="m-5 mt-3">
           <div className="main-head">
-            <h4 className="fw-bold mb-4 mt-3">Test Results QA</h4>
+            <h4 className="fw-bold">Test Results QA</h4>
           </div>
           <div>
-            <CRow className="my-5">
+            <CRow className="mt-5 mb-3">
               <CCol sm={4}>
                 <CFormInput
                   type="text"
-                  style={{border:"2px solid gray"}}
+                  style={{fontSize:'0.9rem'}}
                   placeholder="Search..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -84,10 +84,9 @@ import {
               <CCol sm={3}>
                 <CFormSelect
                   value={statusFilter}
-                  style={{border:"2px solid gray"}}
+                  style={{fontSize:'0.9rem'}}
                   onChange={(e) => setStatusFilter(e.target.value)}
                   options={[
-                    'Select Status',
                     { label: 'All', value: '' },
                     { label: 'Pending', value: 'PENDING' },
                     { label: 'Approved', value: 'APPROVED' },

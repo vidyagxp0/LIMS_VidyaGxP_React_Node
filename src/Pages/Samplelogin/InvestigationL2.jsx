@@ -141,11 +141,10 @@ export default function InvestigationL2() {
 
   return (
     <>
-      <div  className="m-5">
+      <div  className="m-5 mt-3">
         <h4 className="fw-bold">Test Results QA</h4>
-      
-      <div className="my-5" >
-        <CRow className="">
+      <div  >
+        <CRow className="mt-5 mb-3">
           <CCol sm={4}>
             <CFormInput
               type="text"
