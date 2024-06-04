@@ -1,7 +1,7 @@
 import React from "react";
 import "./Department.css";
 import { Link } from "react-router-dom";
-import { CCol, CFormSelect } from "@coreui/react";
+import { CCol, CFormSelect,CRow } from "@coreui/react";
 
 const Department = () => {
   const [filterStatus, setFilterStatus] = React.useState("");
@@ -10,29 +10,28 @@ const Department = () => {
     setFilterStatus(event.target.value);
   };
   return (
-    <div className="mx-5">
-      <div className="">
-        <div className="main-head py-5">
-          <div className="title fw-bold fs-5">Department</div>
-        </div>
-
+    <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold">Department</h4>
+          </div>
+    
+          <CRow className="mt-5 mb-3">
         <CCol sm={3}>
           <CFormSelect
             value={filterStatus}
-            style={{ border: "2px solid gray" }}
+            style={{fontSize:'0.9rem'}}
             onChange={handleFilter}
-            className="border-2"
             options={[
-              { disabled: true, label: "Select Status", value: "" },
               { label: "All", value: "" },
               { label: "Active", value: "1" },
               { label: "Inactive", value: "0" },
             ]}
           />
         </CCol>
+        </CRow>
 
         <div className="">
-          <div className="card-container py-5">
+          <div className="card-container">
             <div className="card shadow border-secondary">
               <div className="card-body">
                 <h5 className="card-title">Admin</h5>
@@ -85,7 +84,6 @@ const Department = () => {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 };

@@ -47,10 +47,20 @@ const Store = () => {
                 <td>{employee.analyst}</td>
                 <td>{employee.role}</td>
                 <td>{employee.email}
-                    <button className='btn btn-right p-1 m-2'>Resend Email</button>
+                <button style={{backgroundColor:'#577B8D',borderRadius:'3px', fontSize:'0.6rem',padding:'2px',marginLeft:'2px'}}>Resend Email</button>
                 </td>
                 <td>{employee.addedOn}</td>
-                <td> <button style={{ background: employee.status === 'Active' ? 'green' : 'red', color: 'white', width: '110px' }} className=" btn d-flex py-2 px-3  small rounded fw-bold"> {employee.status}</button></td>
+                <td>  <button
+              className={`p-1 small w-100 rounded text-light d-flex justify-content-center align-items-center bg-${
+                employee.status === "Active"
+                  ? "green-700"
+                  : employee.status === "Inactive"
+                  ? "red-700"
+                  : "white"
+              }`}  style={{fontSize:'10px'}}
+            >
+              {employee.status}
+            </button></td>
                 <td>
                     <div className="d-flex gap-3">
                         <div
@@ -93,72 +103,110 @@ const Store = () => {
     };
 
     return (
-        <div className="mx-5">
-            <div className="row my-5">
-                <div className="main-head">
-                    <div className="title fw-bold fs-5 py-4">Store/Employee</div>
-                </div>
-                <div className="d-flex justify-content-between my-4">
-                    <div className="dropdown">
-                    <CFormSelect
-                            onChange={(e) => {
-                                setSelectedStatus(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            value={selectedStatus}
-                            style={{ border: "2px solid gray", width: "220px" }}
-                        >
+        <div className="m-5 mt-3">
+      <div className="main-head">
+        <h4 className=" fw-bold">Store / Employees</h4>
+      </div>
+      <CRow className="mt-5 mb-3 d-flex justify-content-between">
+        <CCol sm={3}>
+          <CFormSelect
+            style={{ fontSize: "0.9rem" }}
+            onChange={(e) => {
+              setSelectedStatus(e.target.value);
+              setCurrentPage(1);
+            }}
+            value={selectedStatus}
+          >
+            <option value="All">All</option>
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+          </CFormSelect>
+        </CCol>
 
-                            <option value="All">All</option>
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
-                        </CFormSelect>
-                    </div>
-                    <div className="">
-                        <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
-                    </div>
-                </div>
-            </div>
+        <CCol sm={3}>
+          <div className="d-flex justify-content-end">
+            <CButton
+              color="primary"
+              style={{ fontSize: "0.9rem" }}
+              onClick={() => setAddModal(true)}
+            >
+              Add User
+            </CButton>
+          </div>
+        </CCol>
+      </CRow>
 
-            <div className=' bg-white rounded' style={{ border: "2px solid gray" }} >
-                <table className="mb-0 table-striped table table-responsive">
-                    <thead>
-                        <tr>
-                            <th style={{ background: "#3C496A", color: "white" }}>S.No.</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Employee ID</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Analyst Name</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Role</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Email verified</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Added On</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Status</th>
-                            <th style={{ background: "#3C496A", color: "white" }}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderRows()}
-                    </tbody>
-                </table>
-            </div>
+      <div
+        className=" bg-white rounded"
+        style={{
+          fontFamily: "sans-serif",
+          fontSize: "0.9rem",
+          boxShadow: "5px 5px 20px #5D76A9",
+        }}
+      >
+        <table className="mb-0 table table-responsive">
+          <thead>
+            <tr>
+              <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
+              <th style={{ background: "#5D76A9", color: "white" }}>
+                Employee ID
+              </th>
+              <th style={{ background: "#5D76A9", color: "white" }}>
+                Analyst Name
+              </th>
+              <th style={{ background: "#5D76A9", color: "white" }}>Role</th>
+              <th style={{ background: "#5D76A9", color: "white" }}>Email</th>
+              <th style={{ background: "#5D76A9", color: "white" }}>
+                Added On
+              </th>
+              <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
+              <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
+            </tr>
+          </thead>
+          <tbody>{renderRows()}</tbody>
+        </table>
+      </div>
 
-            <div className="d-flex justify-content-between align-items-center my-5">
-                <div className="pagination">
-                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                        &lt;&lt;
-                    </button>
-                    <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                        &gt;&gt;
-                    </button>
-                </div>
-                <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
-                    Next <FaArrowRight className='ms-2' />
-                </button>
-            </div>
-
-            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
+      <div className="d-flex justify-content-between align-items-center my-4">
+        <div className="pagination">
+          <button
+            className="btn mr-2"
+            onClick={prevPage}
+            disabled={currentPage === 1}
+          >
+            &lt;&lt;
+          </button>
+          <button className="btn mr-2 bg-dark-subtle rounded-circle">
+            {currentPage}
+          </button>
+          <button
+            className="btn mr-2"
+            onClick={nextPage}
+            disabled={endIndex >= employees.length}
+          >
+            &gt;&gt;
+          </button>
         </div>
+        <button
+          className="btn d-flex align-items-center border"
+          onClick={nextToLastPage}
+        >
+          Next <FaArrowRight className="ms-2" />
+        </button>
+      </div>
+      
+
+      {addModal && (
+        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      )}
+      {deleteModal && (
+        <DeleteModal
+          visible={deleteModal}
+          closeModal={() => setDeleteModal(false)}
+          confirmDelete={handleDeleteConfirm}
+        />
+      )}
+    </div>
     );
 };
 const StatusModal = (_props) => {

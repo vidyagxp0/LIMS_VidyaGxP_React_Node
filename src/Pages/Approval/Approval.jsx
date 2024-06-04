@@ -145,14 +145,14 @@ function Approval() {
 
   return (
     <>
-      <div className="m-5 mt-3">
+      <div className="m-5 mt-3" >
         <div className="main-head">
           <h4 className="fw-bold">Approvals</h4>
         </div>
         <div>
           <CRow className="mt-5 mb-3">
             <CCol sm={4}>
-              <CFormInput                
+              <CFormInput
                 style={{fontSize:'0.9rem'}}
                 type="text"
                 placeholder="Search..."
@@ -165,12 +165,10 @@ function Approval() {
             </CCol>
             <CCol sm={3}>
               <CFormSelect
-                className="border-2"
                 style={{fontSize:'0.9rem'}}
                 value={statusFilter}
                 onChange={(e) => {
                   setStatusFilter(e.target.value);
-                  setCurrentPage(1); // Reset to first page on filter change
                 }}
                 options={[
                   { value: "", label: "All" },
@@ -242,10 +240,9 @@ function Approval() {
                   <CTableDataCell>{item.name}</CTableDataCell>
                   <CTableDataCell>{item.code}</CTableDataCell>
                   <CTableDataCell>{item.description}</CTableDataCell>
-                  <CTableDataCell className="d-flex justify-content-start">
-                    
-                      <button
-                        className={`p-1 w-50 small rounded text-light d-flex justify-content-center align-items-center bg-${
+                  <CTableDataCell className="d-flex justify-content-">
+                      <button  
+                        className={`p-1 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${
                           item.status === "INITIATED"
                             ? "blue-700"
                             : item.status === "APPROVED"
@@ -261,7 +258,7 @@ function Approval() {
                       >
                         {item.status}
                       </button>
-                    
+                  
                   </CTableDataCell>
                   <CTableDataCell className="text-start">
                     <Link to="/approval/1321">

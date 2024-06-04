@@ -93,19 +93,17 @@ function StorageLocation() {
 
   return (
     <>
-      <div className="m-4 p-4">
-        <div className="container-fluid">
+      <div className="m-5 mt-3">
           <div className="main-head">
-            <h4 className="fw-bold mb-4 mt-3">Storage Location</h4>
+            <h4 className="fw-bold ">Storage Location</h4>
           </div>
           <div>
-            <CRow className="my-5">
+            <CRow className="mt-5 mb-3">
               <CCol sm={4}>
                 <CFormInput
                   type="text"
-                  className="border-2"
                   placeholder="Search..."
-                  style={{ border: "2px solid gray" }}
+                  style={{fontSize:'0.9rem'}}
                   value={searchQuery}
                   onChange={handleSearch}
                 />
@@ -113,9 +111,8 @@ function StorageLocation() {
               <CCol sm={3}>
                 <CFormSelect
                   value={filterStatus}
-                  style={{ border: "2px solid gray" }}
+                  style={{ fontSize:'0.9rem'}}
                   onChange={handleFilter}
-                  className="border-2"
                   options={[
                     { disabled: true, label: "Select Status", value: "" },
                     { label: "All", value: "" },
@@ -127,24 +124,24 @@ function StorageLocation() {
               <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                  <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
                     Add Storage Location
                   </CButton>
                 </div>
               </CCol>
             </CRow>
           </div>
-          <div className="rounded bg-white" style={{ border: "2px solid gray" }}>
-            <CTable align="middle" responsive className="mb-0 table-striped table-responsive">
+          <div className="rounded bg-white" style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}>
+            <CTable align="middle" responsive className="mb-0 table-responsive">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col" className="text-center">
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center">
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Storage Code</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Storage Name</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#3C496A", color: "white" }} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Storage Code</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Storage Name</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Status</CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -155,25 +152,15 @@ function StorageLocation() {
                     </CTableHeaderCell>
                     <CTableDataCell>{item.code}</CTableDataCell>
                     <CTableDataCell>{item.name}</CTableDataCell>
-                    <CTableDataCell className="d-flex">
-                      <div
-                        className="py-2 px-3 small rounded fw-bold"
-                        style={
-                          item.status === "ACTIVE"
-                            ? {
-                                background: "green",
-                                color: "white",
-                                width: "110px",
-                              }
-                            : {
-                                background: "red",
-                                color: "white",
-                                width: "110px",
-                              }
-                        }
-                      >
-                        {item.status}
-                      </div>
+                    <CTableDataCell className="d-flex ">
+                    <button
+          className={`p-1 small rounded w-50 text-light d-flex justify-content-center align-items-center ${
+            item.status === 'ACTIVE' ? 'bg-green-700' : 'bg-red-700'
+          }`}
+          style={{ fontSize: '10px' }}
+        >
+          {item.status}
+        </button>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -199,33 +186,26 @@ function StorageLocation() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="d-flex justify-content-between my-4">
-            <div className="d-flex gap-3">
-              <CButton
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-              >
-                &lt; &lt;
-              </CButton>
-              <span className="btn border">{currentPage}</span>
-              <CButton
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                &gt; &gt;
-              </CButton>
-            </div>
-            <div>
-              <CButton
-                onClick={handleNextPage}
-                className="d-flex gap-2 border"
-                disabled={currentPage === totalPages}
-              >
-                Next <FaArrowRight className="mt-1" />
-              </CButton>
-            </div>
+          <div className="d-flex justify-content-end my-4">
+          <nav aria-label="...">
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <span className="page-link" onClick={handlePreviousPage}>Previous</span>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
+              <a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
+                {index + 1}
+              </a>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+            <a className="page-link" href="#" onClick={handleNextPage}>Next</a>
+          </li>
+        </ul>
+      </nav>
           </div>
-        </div>
+       
       </div>
 
       {addModal && (
