@@ -32,6 +32,7 @@ import { TfiLayoutMediaOverlay } from "react-icons/tfi";
 import { FaWater } from "react-icons/fa6";
 import { VscServerEnvironment } from "react-icons/vsc";
 import { FaNetworkWired } from "react-icons/fa";
+import { AiOutlineClose } from "react-icons/ai";
 
 import "./Sidebar.css";
 
@@ -47,7 +48,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "../../components/Sidebar/Sidebar.css";
 
-function Sidebar() {
+function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
   const location = useLocation();
   const currentPath = location.pathname;
   const isActive = (path) => {
@@ -63,7 +64,7 @@ function Sidebar() {
   return (
     <>
       <CSidebar
-        className="border-end app-sidebar h-100"
+        className={`border-end app-sidebar w-[250px] h-100 ${sidebarClass}`}
         colorScheme="dark"
         id="sideBar"
         responsive={false}
@@ -73,19 +74,23 @@ function Sidebar() {
           <CSidebarBrand>
             <Link
               to="/dashboard"
-              className="logo d-flex align-items-center"
-              style={{}}
+              className="logo w-[200px] d-flex align-items-center"
             >
               <img
                 src="/images/vidhyaGxp.png"
                 alt="..."
                 style={{
-                  width: "300px",
-                  marginRight: "90px",
-                  paddingRight: "70px",
                   filter: "drop-shadow(0 0 0 white)",
                 }}
               />
+              <button
+                className={`close-button ${
+                  isSidebarVisible ? "block" : "hidden"
+                }`}
+                onClick={toggleSidebarClass}
+              >
+                <AiOutlineClose className="text-orange-400 text-2xl absolute left-[210px] top-[25px]" />
+              </button>
             </Link>
           </CSidebarBrand>
         </CSidebarHeader>

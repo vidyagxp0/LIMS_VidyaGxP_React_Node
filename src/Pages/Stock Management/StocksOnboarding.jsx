@@ -275,24 +275,23 @@ export default function StocksOnboarding() {
           <td>{employee.EffectFrom}</td>
           <td>{employee.ReviewDate}</td>
           <td>
-            <div
-              className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-              style={
-                employee.status === "INITIATED"
-                  ? badgeStyle2
-                  : employee.status === "APPROVED"
-                  ? badgeStyle3
-                  : employee.status === "REJECTED"
-                  ? badgeStyle4
-                  : employee.status === "REINITIATED"
-                  ? badgeStyle5
-                  : employee.status === "DROPPED"
-                  ? badgeStyle6
-                  : badgeStyle
-              }
-            >
-              {employee.status}
-            </div>
+          <button  
+                        className={`py-1 px-2 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          employee.status === "INITIATED"
+                            ? "blue-700"
+                            : employee.status === "APPROVED"
+                            ? "green-700"
+                            : employee.status === "REJECTED"
+                            ? "red-700"
+                            : employee.status === "REINITIATED"
+                            ? "yellow-500"
+                            : employee.status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {employee.status}
+                      </button>
           </td>
           <td>{employee.EffectFrom}</td>
           <td>
@@ -326,17 +325,15 @@ export default function StocksOnboarding() {
 
   return (
     <>
-      <div id="div1">
-        <h5>Stock Registration</h5>
-      </div>
+         <div className="m-5 mt-3">
+         <h4 className="fw-bold">Stock Registration</h4>
 
-      <div className="d-flex m-4 mt-5 justify-content-around">
+         <CRow className="mt-5 mb-3">
         <CCol sm={4}>
           <CFormInput
             type="text"
             placeholder="Search..."
             style={{fontSize:'0.9rem'}}
-            className="border-2"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -345,7 +342,6 @@ export default function StocksOnboarding() {
         <CCol sm={3}>
           <CFormSelect
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="border-2"
             style={{fontSize:'0.9rem'}}
             options={[
               { label: "All", value: "" },
@@ -358,19 +354,21 @@ export default function StocksOnboarding() {
           />
         </CCol>
 
-        <CCol sm={3}>
+        <CCol sm={3}> </CCol>
+        <CCol sm={2}>
           <div className="d-flex justify-content-end">
-            <CButton color="primary" onClick={() => setAddModal(true)}>
+            <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
               Add Stock
             </CButton>
           </div>
         </CCol>
-      </div>
+        </CRow>
+
 
         <div
           className=" rounded bg-white"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
+          >
         <table className="table table-responsive text-xs">
           <thead>
             <tr>
@@ -406,40 +404,20 @@ export default function StocksOnboarding() {
           <tbody>{renderRows()}</tbody>
         </table>
       </div>
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
 
-      <div className="pagination mx-5">
-        <div className="pagination">
-          <div>
-            <button
-              className="btn  mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-          </div>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-            <button className="btn rounded-circle"> {currentPage} </button>
-          </div>
-          <div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredEmployees.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
-        <button
-          className="btn btn-next d-flex align-items-center"
-          onClick={nextToLastPage}
-        >
-          {" "}
-          Next <FaArrowRight className="ms-2" />
-        </button>
-      </div>
-
+                    </div>
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}

@@ -52,15 +52,19 @@ export default function SpecificationType() {
         <td>{startIndex + index + 1}</td>
         <td>{employee.user}</td>
         <td>{employee.Date}</td>
-        <td className="d-flex">
-          <div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.Status === "ACTIVE" ? badgeStyle3 : badgeStyle4
-            }
+        <td>
+        <button
+            style={{
+              background: employee.Status === "ACTIVE" ? "#15803d" : "#b91c1c",
+              color: "white",
+              width: "4rem",
+              fontSize: "0.6rem",
+              padding: "2px 7px",
+              borderRadius: "7px",
+            }}
           >
             {employee.Status}
-          </div>
+          </button>
         </td>
         <td>
           <div className="d-flex gap-3">
@@ -109,13 +113,12 @@ export default function SpecificationType() {
 
   
   return (
-    <div className="mx-5">
-            <div className="row my-5">
+    <div className="m-5 mt-3"  >
         <div className="main-head">
-          <div className="title fw-bold fs-5 py-4">Specifications Type</div>
+           <h4 className="fw-bold ">Specifications Type</h4>
         </div>
-        <div className="d-flex justify-content-between my-4">
-          <div className="dropdown">
+        <div className="d-flex justify-content-between mt-5 mb-3">
+          <div className="w-25">
             <CFormSelect
               onChange={(e) => {
                 setSelectedStatus(e.target.value);
@@ -124,16 +127,12 @@ export default function SpecificationType() {
               value={selectedStatus}
               style={{fontSize:'0.9rem'}}
             >
-
               <option value="All">All</option>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </CFormSelect>
           </div>
-          
         </div>
-
-      </div>
 
             <div
           className=" rounded bg-white"
@@ -155,20 +154,18 @@ export default function SpecificationType() {
         </CTable>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center my-4">
-        <div className="pagination">
-          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-            &lt;&lt;
-          </button>
-          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-            &gt;&gt;
-          </button>
-        </div>
-        <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
-          Next <FaArrowRight className='ms-2' />
-        </button>
-      </div>
+     <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
       {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}

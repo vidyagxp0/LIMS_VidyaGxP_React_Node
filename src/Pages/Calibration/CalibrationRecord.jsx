@@ -324,39 +324,18 @@ export default function CalibrationRecord() {
           </table>
         </div>
 
-        <div className="pagination">
-          <div className="pagination">
-            <div>
-              <button
-                className="btn  mr-2"
-                onClick={prevPage}
-                disabled={currentPage === 1}
-              >
-                &lt;&lt;
-              </button>
-            </div>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle"> {currentPage} </button>
-            </div>
-            <div>
-              <button
-                className="btn mr-2"
-                onClick={nextPage}
-                disabled={endIndex >= employees.length}
-              >
-                &gt;&gt;
-              </button>
-            </div>
-          </div>
-
-          <button
-            className="btn btn-next d-flex align-items-center"
-            onClick={nextPage}
-          >
-            {" "}
-            Next <FaArrowRight className="ms-2" />
-          </button>
-        </div>
+        <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
 
         {addModal && (
           <StatusModal

@@ -170,24 +170,23 @@ function Coa_Template() {
                                         <CTableDataCell>{item.coaType}</CTableDataCell>
                                         <CTableDataCell>{item.updatedAt}</CTableDataCell>
                                         <CTableDataCell >
-                                            <div
-                                                className="py-2 px-3 small rounded fw-bold"
-                                                style={
-                                                    item.status === "INITIATED"
-                                                        ? badgeStyle2
-                                                        : item.status === "APPROVED"
-                                                            ? badgeStyle3
-                                                            : item.status === "REJECTED"
-                                                                ? badgeStyle4
-                                                                : item.status === "REINITIATED"
-                                                                    ? badgeStyle5
-                                                                    : item.status === "DROPPED"
-                                                                        ? badgeStyle6
-                                                                        : badgeStyle
-                                                }
-                                            >
-                                                {item.status}
-                                            </div>
+                                        <button  
+                        className={`py-1 px-3 w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          item.status === "INITIATED"
+                            ? "blue-700"
+                            : item.status === "APPROVED"
+                            ? "green-700"
+                            : item.status === "REJECTED"
+                            ? "red-700"
+                            : item.status === "REINITIATED"
+                            ? "yellow-500"
+                            : item.status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {item.status}
+                      </button>
                                         </CTableDataCell>
                                         <CTableDataCell>
                                             <div className="d-flex gap-3">
@@ -210,19 +209,17 @@ function Coa_Template() {
                             </CTableBody>
                         </CTable>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center mt-4">
+                      <div className="d-flex justify-content-end align-items-center mt-4">
                         <div className="pagination">
-                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
                                 &lt;&lt;
                             </button>
                             <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn border-dark d-flex gap-2" onClick={nextToLastPage}>
-                            Next <FaArrowRight className="mt-1"/>
-                        </button>
+                       
                     </div>
 
                 </div>

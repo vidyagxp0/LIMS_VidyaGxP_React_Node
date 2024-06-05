@@ -203,26 +203,23 @@ const CalibrationDataSheet = () => {
         <td>{employee.fieldType}</td>
         <td>{employee.registeredBy}</td>
         <td>{employee.registeredOn}</td>
-        <td  > <div
-                          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-                          style={
-                            employee.status === "INITIATED"
-                              ? badgeStyle2
-                              : employee.status === "APPROVED"
-                              ? badgeStyle3
-                              : employee.status === "REJECTED"
-                              ? badgeStyle4
-                              : employee.status === "REINITIATED"
-                              ? badgeStyle5
-                              : employee.status === "DROPPED"
-                              ? badgeStyle6
-                              : employee.status === "ALL"
-                              ? badgeStyle
-                              : badgeStyle
-                          }
-                        >
-                          {employee.status}
-                        </div></td>
+        <td  > <button  
+                        className={`py-1 px-2 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          employee.status === "INITIATED"
+                            ? "blue-700"
+                            : employee.status === "APPROVED"
+                            ? "green-700"
+                            : employee.status === "REJECTED"
+                            ? "red-700"
+                            : employee.status === "REINITIATED"
+                            ? "yellow-500"
+                            : employee.status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {employee.status}
+                      </button></td>
         <td>
           <Link to="/calibration/calibration-datasheet-details"><FontAwesomeIcon icon={faEye} className="mx-1" /></Link>
           <FontAwesomeIcon  
@@ -254,13 +251,12 @@ const CalibrationDataSheet = () => {
   };
 
   return (
-    <div className="mx-5">
-      <div className="row my-5">
+    <div className="m-5 mt-3"  >
         <div className="main-head">
-          <div className="title fw-bold fs-5">Calibration Data Sheets</div>
+        <h4 className="fw-bold ">Calibration Data Sheets</h4>
         </div>
 
-        <div className="row" style={{ cursor: "pointer" }}>
+        <div className="row mt-3" style={{ cursor: "pointer" }}>
                 <button
                   className="col shadow p-3 m-3 rounded"
                   style={{
@@ -368,7 +364,7 @@ const CalibrationDataSheet = () => {
               </div>
 
         <div>
-          <CRow className="mt-3">
+          <CRow className="mt-2">
             <CCol sm={4}>
               <CFormInput  style={{fontSize:'0.9rem'}} type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
             </CCol>
@@ -389,17 +385,18 @@ const CalibrationDataSheet = () => {
                 <CButton id=""
                   className="btn btn-primary"
                   type="button"
+                  style={{fontSize:'0.9rem'}}
                   onClick={() => setAddModal(true)}> <span  >Add Datasheet</span></CButton>
               </div>
             </CCol>
           </CRow>
         </div>
 
-      </div>
+      
 
       {/* Employee table */}
         <div
-          className=" rounded bg-white"
+          className=" rounded bg-white mt-3"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
         <table className='table table-responsive text-xs' >
@@ -422,20 +419,18 @@ const CalibrationDataSheet = () => {
       </div>
 
       {/* Pagination */}
-      <div className="d-flex justify-content-between my-4">
-        <div className="pagination">
-          <div >
-            <button className="btn  mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-          </div>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-            <button className='btn rounded-circle'> {currentPage} </button>
-          </div>
-          <div>
-            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-          </div>
-        </div>
-        <button className="btn btn-next d-flex align-items-center" onClick={nextPage}> Next <FaArrowRight className="ms-2" /></button>
-      </div>
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
 
 
 

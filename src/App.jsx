@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@coreui/coreui/dist/css/coreui.min.css";
-import Dashboard from "./Pages/Dashboard/Dashboard";
+import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
 import MainPanel from "./components/MainPanel/MainPanel";
 import Approval from "./Pages/Approval/Approval";
 import Details from "./Pages/Approval/Details";

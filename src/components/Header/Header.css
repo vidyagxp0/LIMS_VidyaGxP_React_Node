@@ -1,6 +1,12 @@
-@media (min-width: 992px) {
-    .menuIconContainer {
+@media screen and (max-width: 990px) {
+    .hidden {
+      display: block;
+      margin-left: 10px;
+      
+    }
+    .md\\:block {
       display: none;
     }
+
   }
   

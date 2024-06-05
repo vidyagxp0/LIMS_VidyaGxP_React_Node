@@ -240,9 +240,9 @@ function Approval() {
                   <CTableDataCell>{item.name}</CTableDataCell>
                   <CTableDataCell>{item.code}</CTableDataCell>
                   <CTableDataCell>{item.description}</CTableDataCell>
-                  <CTableDataCell className="d-flex justify-content-">
+                  <CTableDataCell>
                       <button  
-                        className={`p-1 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${
+                        className={`p-1 w-50 rounded text-light d-flex justify-content-center align-items-center bg-${
                           item.status === "INITIATED"
                             ? "blue-700"
                             : item.status === "APPROVED"
@@ -254,7 +254,7 @@ function Approval() {
                             : item.status === "DROPPED"
                             ? "purple-700"
                             : "white"
-                        }`} style={{fontSize:'10px'}}
+                        }`} style={{fontSize:'0.6rem'}}
                       >
                         {item.status}
                       </button>

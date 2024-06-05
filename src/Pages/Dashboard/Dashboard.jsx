@@ -687,6 +687,7 @@ function Dashboard(props) {
     ],
   };
 
+  
   const chartRef = useRef(null);
   useEffect(() => {
     const option = {
@@ -709,10 +710,10 @@ function Dashboard(props) {
           name: "Access From",
           type: "pie",
           selectedMode: "single",
-          radius: [0, "30%"],
+          radius: [0, "50%"],
           label: {
             position: "inner",
-            fontSize: 14,
+            fontSize: 8,
           },
           labelLine: {
             show: false,
@@ -726,9 +727,9 @@ function Dashboard(props) {
         {
           name: "Access From",
           type: "pie",
-          radius: ["45%", "60%"],
+          radius: ["40%", "40%"],
           labelLine: {
-            length: 30,
+            length: 20,
           },
           label: {
             formatter: "{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ",
@@ -739,12 +740,12 @@ function Dashboard(props) {
             rich: {
               a: {
                 color: "#6E7079",
-                lineHeight: 22,
+                lineHeight: 44,
                 align: "center",
               },
               hr: {
                 borderColor: "#8C8D8E",
-                width: "100%",
+                width: "50%",
                 borderWidth: 1,
                 height: 0,
               },
@@ -758,7 +759,7 @@ function Dashboard(props) {
                 color: "#fff",
                 backgroundColor: "#4C5058",
                 padding: [3, 4],
-                borderRadius: 4,
+                borderRadius: 10,
               },
             },
           },
@@ -767,7 +768,6 @@ function Dashboard(props) {
             { value: 335, name: "Direct" },
             { value: 310, name: "Email" },
             { value: 251, name: "Google" },
-            { value: 234, name: "Union Ads" },
           ],
         },
       ],
@@ -776,8 +776,15 @@ function Dashboard(props) {
     const chartInstance = echarts.init(chartRef.current);
     chartInstance.setOption(option);
 
+    const handleResize = () => {
+      chartInstance.resize();
+    };
+
+    window.addEventListener("resize", handleResize);
+
     return () => {
       chartInstance.dispose();
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -798,12 +805,12 @@ function Dashboard(props) {
 
   return (
     <>
-      <div className=" w-full ">
+      <div className=" w-full h-full ">
         <div className=" p-4 m-3 rounded-xl">
           <div>
             <h2 className="font-extrabold  text-3xl mb-4">Dashboard</h2>
           </div>
-          <div className="flex flex-wrap items-center justify-between h-auto">
+          <div className="flex flex-wrap items-center justify-around gap-4 h-auto">
             <div
               className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px] xs:w-full "
               style={{
@@ -871,8 +878,8 @@ function Dashboard(props) {
               </div>
             </div>
             <div className="flex flex-col p-3 ">
-              <div className="flex gap-3 mb-4 ">
-                <div className="flex items-center ">
+              <div className="flex gap-3  items-center flex-wrap">
+                <div className="flex items-center  ">
                   <div className="bg-yellow-500 rounded-full w-3 h-3 mr-2"></div>
                   <span className="text-gray-700">Pending</span>
                 </div>
@@ -897,7 +904,7 @@ function Dashboard(props) {
                   <span className="text-gray-700">Completed</span>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-center pt-4 xs:flex-col xs:items-center sm:flex-col sm:items-center md:flex-row md:justify-center lg:flex-row lg:justify-center xl:flex-row xl:justify-center 2xl:flex-row 2xl:justify-center">
+              <div className="flex flex-wrap justify-center pt-4 xm:flex-col xm:items-center xs:flex-col xs:items-center sm:flex-col sm:items-center md:flex-row md:justify-center lg:flex-row lg:justify-center xl:flex-row xl:justify-center 2xl:flex-row 2xl:justify-center">
                 <div className="p-3 w-48 h-48 flex items-center justify-center">
                   <CircularProgressbar
                     background
@@ -1030,7 +1037,7 @@ function Dashboard(props) {
           </div>
           <div className="w-full shadow lg:w-2/12 bg-white rounded-xl">
             <div className="text-lg font-bold m-4">AR Number</div>
-            <ul className="list-none grid gap-3 text-gray-700 mx-4">
+            <ul className="list-none font-serif grid gap-3 p-3 text-gray-800 mx-4">
               {ARNumber.map((product, idx) => (
                 <li className="text-black" key={idx}>
                   ◆ {product}
@@ -1042,11 +1049,11 @@ function Dashboard(props) {
 
         <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
           <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder">Product Wise Test stats</div>
+            <div className="py-4 mx-3 font-bold">Product Wise Test stats</div>
             <div className="pt-4 mx-5">
               <div
                 ref={chartRef}
-                style={{ width: "100%", height: "400px" }}
+                className="w-full h-[400px] iphone:w-[90%] iphone:h-[350px] sm:w-[85%] sm:h-[300px] md:w-[80%] md:h-[250px] lg:w-[75%] lg:h-[200px] xl:w-[70%] xl:h-[150px] 2xl:w-full 2xl:h-[350px]"
               ></div>
             </div>
           </div>
@@ -1112,7 +1119,6 @@ function Dashboard(props) {
             </div>
           </div>
         </div>
-        
       </div>
       <div>
         <ToastContainer />
