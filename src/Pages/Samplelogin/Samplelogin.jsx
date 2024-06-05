@@ -1,6 +1,7 @@
 import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
 import React, { useState } from "react";
 import "./Samplelogin.css";
+import { GrLinkNext } from "react-icons/gr";
 
 import { FaArrowRight } from "react-icons/fa";
 
@@ -307,25 +308,27 @@ Water Content PPM</td>
           <td>{employee.departments}</td>
           <td>{employee.joiningDate}</td>
           <td>{employee.addedBy}</td>
-          <td
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
+          <td>
+            <button
+            className={`px-3 py-1 w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
               employee.status === "INITIATED"
-                ? badgeStyle2
+                ? "blue-700"
                 : employee.status === "APPROVED"
-                ? badgeStyle3
+                ? "green-700"
                 : employee.status === "REJECTED"
-                ? badgeStyle4
+                ? "red-700"
                 : employee.status === "REINITIATED"
-                ? badgeStyle5
+                ? "yellow-500"
                 : employee.status === "DROPPED"
-                ? badgeStyle6
+                ? "purple-700"
                 : employee.status === "ALL"
                 ? badgeStyle
                 : badgeStyle
-            }
+              }`} style={{fontSize:'10px'}}
           >
             {employee.status}
+            </button>
+
           </td>
           <td>
             <div className="d-flex gap-3">
@@ -369,12 +372,12 @@ Water Content PPM</td>
 
   return (
     <>
-      <div className="m-5">
+      <div className="m-5 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold mb-4">Sample Login</h4>
+          <h4 className="fw-bold">Sample Login</h4>
         </div>
         <div>
-          <CRow className="my-5">
+          <CRow className="mt-5 mb-3">
             <CCol sm={4}>
               <CFormInput
                 type="text"
@@ -390,7 +393,6 @@ Water Content PPM</td>
                 style={{fontSize:'0.9rem'}}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 options={[
-                  "Select Status",
                   { label: "All", value: "" },
                   { label: "Initiated", value: "INITIATED" },
                   { label: "Approved", value: "APPROVED" },
@@ -403,8 +405,7 @@ Water Content PPM</td>
             <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton color="primary" onClick={() => setAddModal(true)}>
-                  {" "}
+                <CButton color="primary" style={{fontSize:'0.9rem'}} onClick={() => setAddModal(true)}>
                   Add Sample Login
                 </CButton>
               </div>
@@ -708,36 +709,29 @@ Water Content PPM</td>
         </div>
 
         <div className="pagination my-4">
-          <div className="pagination">
+          <div className="pagination d-flex justify-content-between ">
             <div>
               <button
-                className="btn  mr-2"
+                style={{border:'2px solid', width:'36px',height:'30px',backgroundColor:'green',color:'white'}}
                 onClick={prevPage}
                 disabled={currentPage === 1}
               >
-                &lt;&lt;
+                &#8592;
               </button>
             </div>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle"> {currentPage} </button>
+
+            <div style={{border:'2px solid', width:'36px',height:'30px',backgroundColor:'red',color:'white'}}>
+              <button > {currentPage} </button>
             </div>
-            <div>
-              <button
-                className="btn mr-2"
-                onClick={nextPage}
-                disabled={endIndex >= filteredEmployees.length}
-              >
-                &gt;&gt;
-              </button>
-            </div>
+           
           </div>
           <button
-            className="btn btn-next d-flex align-items-center "
+           style={{border:'2px solid',fontSize:'13px', width:'60px',height:'30px',backgroundColor:'green',color:'white'}}
             onClick={nextToLastPage}
           >
-            {" "}
-            Next <FaArrowRight className="ms-2" />
+           Next &nbsp;&rarr;
           </button>
+
         </div>
       </div>
       {addModal && (

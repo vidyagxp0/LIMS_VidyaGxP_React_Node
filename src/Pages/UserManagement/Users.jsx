@@ -145,16 +145,17 @@ const Users = () => {
           <td>{employee.departments}</td>
           <td>{employee.joiningDate}</td>
           <td>
-            {" "}
             <button
               style={{
                 background: employee.status === "Active" ? "green" : "red",
                 color: "white",
-                width: "110px",
+                width:'85%',
+                fontSize:'0.8rem',
+                padding:'2px 7px',
+                borderRadius:'7px'
               }}
-              className=" btn d-flex py-2 px-3  small rounded fw-bold"
+              
             >
-              {" "}
               {employee.status}
             </button>
           </td>
@@ -199,13 +200,12 @@ const Users = () => {
 
 
   return (
-    <div className=" mx-5 ">
-      <div className="row my-5 ">
+    <div className="m-5 mt-3">
         <div className="main-head">
-          <div className="title fw-bold fs-5 py-4">User Management/Users</div>
+          <h4 className="fw-bold">User Management/Users</h4>
         </div>
-        <div className="d-flex justify-content-between my-4">
-                    <div className="dropdown">
+        <CRow className="mt-5 mb-3">
+                         <CCol sm={3}>
                         <CFormSelect
                             onChange={(e) => {
                                 setSelectedStatus(e.target.value);
@@ -214,24 +214,25 @@ const Users = () => {
                             value={selectedStatus}
                             style={{fontSize:'0.9rem'}}
                         >
-
                             <option value="All">All</option>
                             <option value="ACTIVE">Active</option>
                             <option value="INACTIVE">Inactive</option>
                         </CFormSelect>
+                      </CCol>
+                      <CCol sm={9}>
+                    <div className="d-flex justify-content-end">
+                        <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
                     </div>
-                    <div className="">
-                        <CButton color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
-                    </div>
-                </div>
-      </div>
+                    </CCol>
+                    </CRow>
+    
 
       {/* Employee table */}
             <div
           className=" rounded bg-white"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
-        {" "}
+       
         <table className="table   ">
           <thead>
             <tr>
