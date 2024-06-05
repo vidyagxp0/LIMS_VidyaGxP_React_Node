@@ -53,15 +53,13 @@ export default function MyTests() {
     };
     return (
 
-        <div className="mx-5">
-            <div className="row my-5">
+        <div className="m-5 mt-3">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5 py-4">My Tests</div>
+                    <h4 className="fw-bold">My Tests</h4>
                 </div>
-            </div>
 
                   <div
-          className=" rounded bg-white"
+          className=" rounded bg-white mt-5"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
         <CTable align="middle" responsive className="mb-0    table-responsive">
@@ -81,20 +79,18 @@ export default function MyTests() {
                     </tbody>
                 </CTable>
             </div>
-            <div className="d-flex justify-content-between align-items-center my-4">
-                <div className="pagination">
-                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                        &lt;&lt;
-                    </button>
-                    <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                        &gt;&gt;
-                    </button>
-                </div>
-                <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
-                    Next <FaArrowRight className='ms-2' />
-                </button>
-            </div>
+            <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
         </div>
     )
 }

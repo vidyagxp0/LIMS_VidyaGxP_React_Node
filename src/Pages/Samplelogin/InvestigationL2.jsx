@@ -190,34 +190,18 @@ export default function InvestigationL2() {
           <tbody>{renderRows()}</tbody>
         </table>
       </div>
-      <div className="pagination my-4 d-flex justify-content-between align-items-center">
-        <div className="pagination-buttons d-flex align-items-center">
-          <button
-            className="btn btn-outline-secondary mr-2"
-            onClick={prevPage}
-            disabled={currentPage === 1}
-            >
-            &lt;&lt;
-          </button>
-          <span className="current-page-number bg-dark-subtle page-item rounded-circle p-2">
-            {currentPage}
-          </span>
-          <button
-            className="btn btn-outline-secondary ml-2"
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-            >
-            &gt;&gt;
-          </button>
-        </div>
-        <button
-          className="btn  d-flex align-items-center"
-          onClick={nextPage}
-          disabled={currentPage === totalPages}
-          >
-          Next <FaArrowRight className="ms-2" />
-        </button>
-      </div>
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
             </div>
     </>
   );

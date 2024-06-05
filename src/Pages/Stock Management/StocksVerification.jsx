@@ -498,31 +498,38 @@ export default function StocksVerification() {
                 <td>{employee.invoiceNumber}</td>
                 <td>{employee.DayComplete}</td>
                 <td>{employee.DayComplete}</td>
-                <td  ><div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.veriStatus === "VERIFIED" ? badgeStyle3 :
-              employee.veriStatus === "PENDING" ? badgeStyle4 :
-              badgeStyle
-            }
+                <td  ><button
+            
+            style={{
+              background: employee.veriStatus === "VERIFIED" ? "#15803d" : "#b91c1c",
+              color: "white",
+              width: "4rem",
+              fontSize: "0.6rem",
+              padding: "2px 7px",
+              borderRadius: "7px",
+            }}
           >
             {employee.veriStatus}
-          </div></td>
+          </button></td>
                 <td>{employee.DayComplete}</td>
                
-                <td  ><div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.Status === "INITIATED" ? badgeStyle2 :
-              employee.Status === "APPROVED" ? badgeStyle3 :
-              employee.Status === "REJECTED" ? badgeStyle4 :
-              employee.Status === "REINITIATED" ? badgeStyle5 :
-              employee.Status === "DROPPED" ? badgeStyle6 :
-              badgeStyle
-            }
-          >
-            {employee.Status}
-          </div></td>
+                <td  ><button  
+                        className={`py-1 px-2 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          employee.Status === "INITIATED"
+                            ? "blue-700"
+                            : employee.Status === "APPROVED"
+                            ? "green-700"
+                            : employee.Status === "REJECTED"
+                            ? "red-700"
+                            : employee.Status === "REINITIATED"
+                            ? "yellow-500"
+                            : employee.Status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {employee.Status}
+                      </button></td>
                 <td>
                     <div className="d-flex gap-3">
                         <Link to="/stock-management/stock-onboarding-details"><FontAwesomeIcon icon={faEye} /></Link>
@@ -535,12 +542,11 @@ export default function StocksVerification() {
 
   return (
     <>
-      <div id="div1">
-        <h5>Stocks</h5>
-      </div>
+          <div className="m-5 mt-3">
+            <h4 className="fw-bold">Stocks</h4>
 
         <div
-          className=" rounded bg-white"
+          className=" rounded bg-white mt-5"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
         <table
@@ -564,18 +570,19 @@ export default function StocksVerification() {
         </table>
         </div>
 
-      <div className="pagination mx-5" >
-        <div className="pagination">
-          <button onClick={prevPage} disabled={currentPage === 1}  className="btn  mr-2" >&lt;&lt;</button>
-          <div className="current-page-number mr-2 bg-dark-subtle page-item">
-         <button className='btn rounded-circle'> {currentPage}  </button></div>
-          
-          <button onClick={nextPage} disabled={currentPage === Math.ceil(employees.length / itemsPerPage)} className="btn mr-2">&gt;&gt;</button>
-          
-        </div>
-
-          <button onClick={nextPage} disabled={currentPage === Math.ceil(employees.length / itemsPerPage)} className="btn btn-next d-flex align-items-center" >Next <FaArrowRight className="ms-2" /></button>
-        </div>
+        <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
+      </div>
         
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </>

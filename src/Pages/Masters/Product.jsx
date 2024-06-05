@@ -57,19 +57,23 @@ export default function Product() {
         <td>{employee.joiningDate}</td>
         <td>{employee.addedBy}</td>
         <td >
-          <div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.status === "INITIATED" ? badgeStyle2 :
-                employee.status === "APPROVED" ? badgeStyle3 :
-                  employee.status === "REJECTED" ? badgeStyle4 :
-                    employee.status === "REINITIATED" ? badgeStyle5 :
-                      employee.status === "DROPPED" ? badgeStyle6 :
-                        employee.status === "ALL" ? badgeStyle : badgeStyle
-            }
-          >
-            {employee.status}
-          </div>
+        <button  
+                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          employee.status === "INITIATED"
+                            ? "blue-700"
+                            : employee.status === "APPROVED"
+                            ? "green-700"
+                            : employee.status === "REJECTED"
+                            ? "red-700"
+                            : employee.status === "REINITIATED"
+                            ? "yellow-500"
+                            : employee.status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {employee.status}
+                      </button>
         </td>
         <td>
           <div className="d-flex gap-3">
@@ -123,13 +127,12 @@ export default function Product() {
 
   };
   return (
-    <div className="mx-5">
-      <div className="row my-5">
+    <div className="m-5 mt-3">
         <div className="main-head">
-          <div className="title fw-bold fs-5 py-4">Products/Materials</div>
+          <h4 className="fw-bold">Products/Materials</h4>
         </div>
-        <div className="d-flex justify-content-between my-4">
-          <div className="dropdown">
+        <CRow className="mt-5 mb-3">
+        <CCol sm={3}>
             <CFormSelect
               onChange={(e) => {
                 setSelectedStatus(e.target.value);
@@ -146,13 +149,17 @@ export default function Product() {
               <option value="Reinitiated">Reinitiated</option>
               <option value="Dropped">Dropped</option>
             </CFormSelect>
-          </div>
-          <div className="">
-            <CButton color="primary" onClick={() => setAddModal(true)}>Add Product/Material</CButton>
-          </div>
-        </div>
+            </CCol>
 
-      </div>
+            <CCol sm={6}></CCol>
+            <CCol sm={3}>
+          <div className="d-flex justify-content-end">
+            <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Product/Material</CButton>
+          </div>
+          </CCol>
+        </CRow>
+
+    
 
             <div
           className=" rounded bg-white"
@@ -177,20 +184,18 @@ export default function Product() {
         </CTable>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center my-4">
-        <div className="pagination">
-          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-            &lt;&lt;
-          </button>
-          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-            &gt;&gt;
-          </button>
-        </div>
-        <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
-          Next <FaArrowRight className='ms-2' />
-        </button>
-      </div>
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
       {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}

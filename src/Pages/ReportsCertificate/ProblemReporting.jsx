@@ -173,19 +173,17 @@ function ProblemReporting() {
                             </CTableBody>
                         </CTable>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center mt-4">
+                    <div className="d-flex justify-content-end align-items-center mt-4">
                         <div className="pagination">
-                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
                                 &lt;&lt;
                             </button>
                             <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn border-dark d-flex gap-2" onClick={nextToLastPage}>
-                            Next <FaArrowRight className="mt-1"/>
-                        </button>
+                       
                     </div>
                 </div>
             </div>
