@@ -11,7 +11,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TfiMenu } from "react-icons/tfi";
 
-function Header() {
+function Header({ toggleSidebarClass }) {
   const [notification, setNotification] = useState(false);
   const [drop, setDrop] = useState(false);
   const dropdownRef = useRef(null);
@@ -41,39 +41,33 @@ function Header() {
   return (
     <header
       id="head"
-      className="headerContainer text-gray-900 w-[100%]  py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[72px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8"
+      className=" text-gray-900 w-[100%] text-[16px] gap-10 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[86px] flex items-center  justify-center "
     >
-      <div className="menuIconContainer block  text-white font-extrabold text-xl  p-1.5 rounded-full">
-        <button>
-          <TfiMenu />
+      <div className="menuIconContainer  w-[10%] text-center text-blue font-extrabold text-xl  rounded-full">
+        <button className="hidden xm:block" onClick={toggleSidebarClass}>
+          <TfiMenu className="Menu text-3xl p-1 text-white active:text-2xl border-white" />
         </button>
       </div>
 
-      <div className="flex items-center  w-[75%]  justify-center ">
-        <div className="headerContent text-center">
-          <h3 className="headerTitle text-gray-100 font-serif  text-xl mobile:text-lg tablet:text-xl">
-            Welcome to Laboratory Information Management System
-          </h3>
-        </div>
+      <div className="flex items-center  w-[80%] text-[14px] justify-center">
+        <p className="text-gray-100 mt-4 font-serif text-center xsm:text-[0.5em] text-[0.8em] sm:text-[1em] md:text-[1.1em] lg:text-[1.2em] xl:text-[1.4em]">
+          Welcome to Laboratory Information Management System
+        </p>
       </div>
 
-      <div className="flex items-end  justify-center w-[15%]">
+      <div className="flex items-center    w-[20%]">
         <div className="relative  mr-3">
           <button
             onClick={() => setNotification(!notification)}
             className="text-gray-100 hover:text-gray-300"
           >
-            <FontAwesomeIcon
-              icon={faBell}
-              className="text-xl mobile:text-2xl"
-            />
+            <FontAwesomeIcon icon={faBell} className="text-xl " />
             <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
               12
             </span>
           </button>
           {notification && (
-            <div className="absolute right-0 mt-2 w-64 mobile:w-72 bg-white rounded-md shadow-lg z-10">
-            </div>
+            <div className="absolute right-0 mt-2 w-64  bg-white rounded-md shadow-lg z-10"></div>
           )}
         </div>
         {contact && (
@@ -82,19 +76,15 @@ function Header() {
             className="absolute backdrop-blur flex flex-col items-center justify-center text-center top-[175px] left-[180px]  w-[60%]  h-[450px] rounded-[25px] bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
           >
             <div
-              className="bg-no-repeat bg-contain w-[450px] tablet:w-[400px] laptop:w-[500px] h-[100px] tablet:h-[125px] laptop:h-[150px]"
+              className="bg-no-repeat bg-contain w-[450px]  h-[100px] "
               style={{
                 backgroundImage:
                   "url('https://vidyagxp.com/vidyaGxp_logo.png')",
               }}
             ></div>
             <div className="mb-2">
-              <p className="mb-3 text-base tablet:text-base laptop:text-lg">
-                E-Mail: admin@vidyagxp.com
-              </p>
-              <p className="m-0 text-base tablet:text-base laptop:text-lg">
-                Mobile: +91-7354654474
-              </p>
+              <p className="mb-3 text-base ">E-Mail: admin@vidyagxp.com</p>
+              <p className="m-0 text-base ">Mobile: +91-7354654474</p>
             </div>
           </div>
         )}
@@ -103,7 +93,7 @@ function Header() {
           <div ref={dropdownRef}>
             <button
               onClick={() => setDrop(!drop)}
-              className="flex items-center text-gray-100 hover:text-gray-300"
+              className="text-center xsm:text-[0.5em] text-[0.6em] sm:text-[0.6em] md:text-[0.8em] lg:text-[0.8em] xl:text-[1em] text-white mr-4"
             >
               Amit Patel <FontAwesomeIcon icon={faAngleDown} className="ml-2" />
             </button>
