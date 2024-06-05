@@ -207,12 +207,18 @@ function ServiceReporting() {
                     <CTableDataCell>{item.closureDate}</CTableDataCell>
                     <CTableDataCell>{item.jobDetails}</CTableDataCell>
                     <CTableDataCell >
-                      <div
-                        className="py-2 px-3 small rounded fw-bold"
-                        style={item.status === "Active" ? badgeStyle : badgeStyle2}
-                      >
-                        {item.status}
-                      </div>
+                    <button
+            style={{
+              background: item.status === "Active" ? "#15803d" : "#b91c1c",
+              color: "white",
+              width: "4rem",
+              fontSize: "0.6rem",
+              padding: "2px 7px",
+              borderRadius: "7px",
+            }}
+          >
+            {item.status}
+          </button>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -232,20 +238,18 @@ function ServiceReporting() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="d-flex justify-content-between align-items-center mt-4">
-            <div className="pagination">
-              <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                &lt;&lt;
-              </button>
-              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-              <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                &gt;&gt;
-              </button>
-            </div>
-            <button className="btn d-flex gap-2 border-dark" onClick={nextToLastPage}>
-              Next <FaArrowRight className="mt-1" />
-            </button>
-          </div>
+          <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
         </div>
       </div>
 

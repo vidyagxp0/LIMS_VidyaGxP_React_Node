@@ -68,19 +68,23 @@ export default function TestRegistrations() {
         <td>{employee.ProdName}</td>
         <td>{employee.ProdName}</td>
         <td>
-          <div
-            className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-            style={
-              employee.Status === "INITIATED" ? badgeStyle2 :
-                employee.Status === "APPROVED" ? badgeStyle3 :
-                  employee.Status === "REJECTED" ? badgeStyle4 :
-                    employee.Status === "REINITIATED" ? badgeStyle5 :
-                      employee.Status === "DROPPED" ? badgeStyle6 :
-                        employee.Status === "ALL" ? badgeStyle : badgeStyle
-            }
-          >
-            {employee.Status}
-          </div>
+        <button  
+                        className={`py-1 px-2 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          employee.Status === "INITIATED"
+                            ? "blue-700"
+                            : employee.Status === "APPROVED"
+                            ? "green-700"
+                            : employee.Status === "REJECTED"
+                            ? "red-700"
+                            : employee.Status === "REINITIATED"
+                            ? "yellow-500"
+                            : employee.Status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {employee.Status}
+                      </button>
           </td>
         <td>
           <div className="d-flex gap-3">
@@ -130,15 +134,14 @@ export default function TestRegistrations() {
 
 
   return (
-    <div className="mx-5">
-      <div className="row my-5">
+    <div className="m-5 mt-3">
         <div className="main-head">
-          <div className="title fw-bold fs-5 py-4">Test Registration</div>
+        <h4 className="fw-bold">Test Registration</h4>
         </div>
         <div >
 
-          <CRow className="mb-3">
-            <CCol sm={2}>
+          <CRow className="d-flex justify-content-between mt-5 mb-3">
+            <CCol sm={3}>
               <CFormSelect
                 style={{fontSize:'0.9rem'}}
               >
@@ -159,7 +162,7 @@ export default function TestRegistrations() {
 
               </CFormSelect>
             </CCol>
-            <CCol sm={4}>
+            <CCol sm={2}>
               <CFormSelect
                 style={{fontSize:'0.9rem'}}
               >
@@ -210,14 +213,14 @@ export default function TestRegistrations() {
             </CCol>
             <CCol sm={2}>
               <div className="d-flex justify-content-end">
-                <CButton color="primary" onClick={() => setAddModal(true)}>Add Registration</CButton>
+                <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Registration</CButton>
               </div>
             </CCol>
 
           </CRow>
         </div>
 
-      </div>
+     
 
             <div
           className=" rounded bg-white"
@@ -245,20 +248,18 @@ export default function TestRegistrations() {
         </CTable>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center my-4">
-        <div className="pagination">
-          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-            &lt;&lt;
-          </button>
-          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-            &gt;&gt;
-          </button>
-        </div>
-        <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
-          Next <FaArrowRight className='ms-2' />
-        </button>
-      </div>
+     <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
       {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}

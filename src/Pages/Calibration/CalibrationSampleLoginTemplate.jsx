@@ -213,26 +213,23 @@ const handleDeleteClick = (id) => {
                 <td>{employee.user}</td>
                 <td>{employee.role}</td>
                 <td>{employee.addedBy}</td>
-                <td  ><div
-                          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-                          style={
-                            employee.status === "INITIATED"
-                              ? badgeStyle2
-                              : employee.status === "APPROVED"
-                              ? badgeStyle3
-                              : employee.status === "REJECTED"
-                              ? badgeStyle4
-                              : employee.status === "REINITIATED"
-                              ? badgeStyle5
-                              : employee.status === "DROPPED"
-                              ? badgeStyle6
-                              : employee.status === "ALL"
-                              ? badgeStyle
-                              : badgeStyle
-                          }
-                        >
-                          {employee.status}
-                        </div>
+                <td  ><button  
+                        className={`py-1 px-2 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          employee.status === "INITIATED"
+                            ? "blue-700"
+                            : employee.status === "APPROVED"
+                            ? "green-700"
+                            : employee.status === "REJECTED"
+                            ? "red-700"
+                            : employee.status === "REINITIATED"
+                            ? "yellow-500"
+                            : employee.status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {employee.status}
+                      </button>
                         </td>
                 <td>
                     <div className="d-flex gap-3">
@@ -263,11 +260,10 @@ const handleDeleteClick = (id) => {
 
     return (
         <>
-            <div id="div1">
-                <h5>Sample Login Template</h5>
-            </div>
+               <div className="m-5 mt-3"  >
+               <h4 className="fw-bold ">Sample Login Template</h4>
 
-            <div className="d-flex m-4 mt-5 justify-content-around">
+               <CRow className="mt-5 mb-3">
         <CCol sm={4}>
           <CFormInput
             type="text"
@@ -293,15 +289,16 @@ const handleDeleteClick = (id) => {
             ]}
           />
         </CCol>
-
+        
+        <CCol sm={2}></CCol>
         <CCol sm={3}>
           <div className="d-flex justify-content-end">
-            <CButton color="primary" onClick={() => setAddModal(true)}>
+            <CButton color="primary" style={{fontSize:'0.9rem'}} onClick={() => setAddModal(true)}>
             Add Login Template
             </CButton>
           </div>
         </CCol>
-      </div>
+      </CRow>
 
           
               <div
@@ -325,19 +322,18 @@ const handleDeleteClick = (id) => {
                 </table>
             </div>
 
-            <div className="pagination mx-5">
-                <div className="pagination" >
-                    <div>
-                        <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
+            <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
                     </div>
-                    <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                        <button className='btn rounded-circle'>{currentPage}</button>
-                    </div>
-                    <div>
-                        <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredEmployees.length}>&gt;&gt;</button>
-                    </div>
-                </div>
-                <button className="btn btn-next d-flex align-items-center"  onClick={nextPage}> Next <FaArrowRight className="ms-2"/></button>
             </div>
 
                        

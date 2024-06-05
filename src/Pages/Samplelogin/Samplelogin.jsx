@@ -361,9 +361,7 @@ Water Content PPM</td>
     setCurrentPage(currentPage - 1);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
-  };
+ 
   const deleteEmployee = (index) => {
     const newEmployees = [...employee];
     newEmployees.splice(index, 1);
@@ -412,266 +410,6 @@ Water Content PPM</td>
             </CCol>
           </CRow>
         </div>
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll"
-          tabIndex="-1"
-          id="addLoginSample"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header ">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Add Sample login
-              </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-          <p className="m-3">Add information and add new sample login</p>
-
-          <label className="line3" htmlFor="">
-            Client
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <label className="line3" htmlFor="">
-            Test Plan / Revision No.
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <label className="line3" htmlFor="">
-            Product / Material
-          </label>
-          <input className="line4" required type="text" placeholder="Prefix" />
-
-          <label className="line3" htmlFor="">
-            Product / Material Code
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Generic Name
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Specification ID
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Copy Sample from
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <label className="line3" htmlFor="">
-            Sample Type
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Certificates (If any)
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Add Sample</button>
-          </div>
-        </div>
-
-        <div
-          className="offcanvas offcanvas-end overflow-y-scroll w-50"
-          tabIndex="-1"
-          id="updateSampleLogin"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header ">
-            <div id="line1">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
-                Update Sample login
-              </h5>
-              <button
-                id="closebtn"
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-          <p className="m-3">Update information and add new sample login</p>
-
-          <label className="line3" htmlFor="">
-            Client
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <label className="line3" htmlFor="">
-            Test Plan / Revision No.
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <label className="line3" htmlFor="">
-            Product / Material
-          </label>
-          <input className="line4" required type="text" placeholder="Prefix" />
-
-          <label className="line3" htmlFor="">
-            Product / Material Code
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Generic Name
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Specification ID
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Copy Sample from
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <label className="line3" htmlFor="">
-            Sample Type
-          </label>
-          <input className="line4" required type="text" placeholder="" />
-
-          <label className="line3" htmlFor="">
-            Certificates (If any)
-          </label>
-          <input
-            className="line4"
-            required
-            type="text"
-            placeholder="Select..."
-          />
-
-          <div className="bg-white rounded border-dark-subtle border-2 " >
-            <CTable align="middle" responsive className="   ">
-              <thead>
-                <tr>
-                  <th className="bg-info text-light">Sno.</th>
-                  <th className="bg-info text-light">Test Name</th>
-                  <th className="bg-info text-light">Group Name</th>
-                  <th className="bg-info text-light">Selection</th>
-                </tr>
-              </thead>
-              <tbody>
-                {employee.map((row, index) => (
-                  <tr key={index}>
-                    <td>{row.sno}</td>
-                    <td>{row.testName}</td>
-                    <td>{row.groupName}</td>
-                    <td>
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={row.selection}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </CTable>
-          </div>
-
-          <div id="line5">
-            <button
-              type="button"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            >
-              &lt; Back
-            </button>
-            <button>Add Sample</button>
-          </div>
-        </div>
-
-        <div
-          className="offcanvas offcanvas-end"
-          tabIndex="-1"
-          id="removeSampleLogin"
-          aria-labelledby="offcanvasRightLabel"
-        >
-          <div className="offcanvas-header border-bottom pb-2 border-2 border-dark mx-3 px-0">
-            <h5 className="offcanvas-title" id="offcanvasRightLabel">
-              Delete Sample Type
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div className="offcanvas-body">
-            <p className="m-3">
-              Do you want to delete this Sample Type <code>Hydraulic Oil</code>?
-            </p>
-            <div className="d-flex gap-4 my-5">
-              <button
-                className="btn btn-secondary w-100"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              >
-                Back
-              </button>
-              <button className="btn btn-primary w-100">Submit</button>
-            </div>
-          </div>
-        </div>
 
         <div
           className=" rounded    bg-white"
@@ -708,32 +446,43 @@ Water Content PPM</td>
           </table>
         </div>
 
-        <div className="pagination my-4">
-          <div className="pagination d-flex justify-content-between ">
-            <div>
+        {/* <div className="pagination d-flex justify-content-end  my-4">
+          <div className="pagination d-flex justify-content-end ">
+            
               <button
-                style={{border:'2px solid', width:'36px',height:'30px',backgroundColor:'green',color:'white'}}
+                style={{border:'2px solid',fontSize:'13px',borderRadius:'4px', width:'78px',height:'30px',color:'white',backgroundColor:'#5D76A9'}}
                 onClick={prevPage}
-                disabled={currentPage === 1}
               >
-                &#8592;
+                &#8592; &nbsp;Previous
               </button>
-            </div>
+              <button  style={{fontSize:'13px',borderRadius:'', width:'24px',height:'30px',color:'white',backgroundColor:'#5D76A9'}}> {currentPage} </button>
+             <button
+             style={{border:'2px solid',fontSize:'13px',borderRadius:'4px', width:'60px',height:'30px',backgroundColor:'#5D76A9',color:'white'}}
+             onClick={nextToLastPage}
+             >
+              Next &nbsp;&rarr;
+             </button>
+           </div>
+        </div> */}
 
-            <div style={{border:'2px solid', width:'36px',height:'30px',backgroundColor:'red',color:'white'}}>
-              <button > {currentPage} </button>
-            </div>
-           
-          </div>
-          <button
-           style={{border:'2px solid',fontSize:'13px', width:'60px',height:'30px',backgroundColor:'green',color:'white'}}
-            onClick={nextToLastPage}
-          >
-           Next &nbsp;&rarr;
-          </button>
+<div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
 
-        </div>
+
+
+
       </div>
+
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}
