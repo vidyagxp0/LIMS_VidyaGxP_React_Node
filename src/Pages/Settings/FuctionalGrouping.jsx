@@ -185,20 +185,20 @@ function FuctionalGrouping() {
 	const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
 	const paginate = (pageNumber) => setCurrentPage(pageNumber);
-	
+
 	const handleNextPage = () => {
 		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-	  };
-	
-	  const handlePrevPage = () => {
+	};
+
+	const handlePrevPage = () => {
 		if (currentPage > 1) setCurrentPage(currentPage - 1);
-	  };
-	
+	};
+
 	return (
 		<>
 			<div className="m-5 mt-3">
 				<div className="main-head ">
-					<h4 className=" fw-bold ">Functional Groupings</h4>
+					<h4 className="fw-bold">Functional Groupings</h4>
 				</div>
 				<div>
 					<CRow className="mt-5 mb-3">
@@ -223,12 +223,13 @@ function FuctionalGrouping() {
 								]}
 							/>
 						</CCol>
+						<CCol sm={2}></CCol>
 
-						<CCol sm={5}>
+						<CCol sm={3}>
 							<div className="d-flex justify-content-end">
 								<CButton
-									style={{ fontSize: '0.9rem' }}
-									className="bg-primary text-white"
+									className=" text-white"
+									style={{ background: "#4B49B6", fontSize: '0.9rem' }}
 									onClick={() => setAddModal(true)}
 								>
 									Add Grouping
@@ -238,10 +239,10 @@ function FuctionalGrouping() {
 					</CRow>
 				</div>
 				<div
-					className=" rounded   bg-white"
+					className="rounded bg-white"
 					style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
 				>
-					<CTable align="middle" responsive className="mb-0 rounded-lg table-responsive ">
+					<CTable className="mb-0 table table-responsive" >
 						<CTableHead>
 							<CTableRow>
 								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center">
@@ -266,7 +267,7 @@ function FuctionalGrouping() {
 									<CTableHeaderCell scope="row" className="text-center">
 										<input type="checkbox" />
 									</CTableHeaderCell>
-									<CTableDataCell>{index + 1}</CTableDataCell>
+									<CTableDataCell>{indexOfFirstRecord + index + 1}</CTableDataCell>
 									<CTableDataCell>{data.groupName}</CTableDataCell>
 									<CTableDataCell>{data.groupDescription}</CTableDataCell>
 									<CTableDataCell>{data.testTechniques}</CTableDataCell>
@@ -274,7 +275,10 @@ function FuctionalGrouping() {
 									<CTableDataCell className="d-flex justify-content-start">
 										<button
 											className={`p-1 w-75 small rounded text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
-												: 'red-700'}`} style={{ fontSize: '10px' }} > {data.status.toUpperCase()}
+												: 'red-700'
+												}`} style={{ fontSize: '10px' }}
+										>
+											{data.status.toUpperCase()}
 										</button>
 									</CTableDataCell>
 									<CTableDataCell>
@@ -295,24 +299,13 @@ function FuctionalGrouping() {
 						</CTableBody>
 					</CTable>
 				</div>
-				<div className="d-flex justify-content-end my-4">
-					<nav aria-label="...">
-						<ul className="pagination">
-							<li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-								<span className="page-link" onClick={handlePrevPage}>Previous</span>
-							</li>
-							{Array.from({ length: totalPages }, (_, index) => (
-								<li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
-									<a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
-										{index + 1}
-									</a>
-								</li>
-							))}
-							<li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-								<a className="page-link" href="#" onClick={handleNextPage}>Next</a>
-							</li>
-						</ul>
-					</nav>
+
+				<div className="d-flex justify-content-end align-items-center mt-4">
+					<div className="pagination">
+						<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+						<button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+						<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
+					</div>
 				</div>
 			</div>
 

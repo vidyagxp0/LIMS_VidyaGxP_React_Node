@@ -6,34 +6,33 @@ import { FaArrowRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 function InstrumentUsage() {
+    const pageSize = 5;
+    const [currentPage, setCurrentPage] = useState(1);
     const [addModal, setAddModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const badgeStyle = { background: "green", color: "white", width: "110px" };
-    const badgeStyle2 = { background: "red", color: "white", width: "110px" };
     const [selectedStatus, setSelectedStatus] = useState("All");
 
-    const pageSize = 5; // Number of items per page
-    const [currentPage, setCurrentPage] = useState(1);
-
     const [data, setData] = useState([
+
         { id: 1, instrumentId: 'arzph001', category: 'Weighing Balance', usageCode: 'wl/wb/m/001', productName: 'CACO', arNo: 'ARFP0000056', usedFor: 'May 31st 23', usedBy: 'John Doe', status: 'Active' },
         { id: 2, instrumentId: 'hplc', category: 'Chromatography', usageCode: 'wl/wb/m/002', productName: 'chr12', arNo: 'ARAUX000033', usedFor: 'Oct 1st 23', usedBy: 'Jane Smith', status: 'Active' },
         { id: 3, instrumentId: 'gauge001', category: 'Pressure Gauge', usageCode: 'pg/pg/m/003', productName: 'pgprod', arNo: 'ARPG000045', usedFor: 'Mar 15th 23', usedBy: 'Alice Johnson', status: 'Inactive' },
-        { id: 4, instrumentId: 'ph001', category: 'pH Meter', usageCode: 'ph/ph/m/004', productName: 'phprod', arNo: 'ARPH000067', usedFor: 'Jan 10th 23', usedBy: 'Bob Brown', status: 'Active' },
+        { id: 4, instrumentId: 'arzph001', category: 'pH Meter', usageCode: 'ph/ph/m/004', productName: 'phprod', arNo: 'ARPH000067', usedFor: 'Jan 10th 23', usedBy: 'Bob Brown', status: 'Active' },
         { id: 5, instrumentId: 'balance001', category: 'Balance', usageCode: 'bl/bl/m/005', productName: 'blprod', arNo: 'ARBL000089', usedFor: 'Feb 20th 23', usedBy: 'Charlie Green', status: 'Inactive' },
         { id: 6, instrumentId: 'scale001', category: 'Scale', usageCode: 'sc/sc/m/006', productName: 'scprod', arNo: 'ARSC000011', usedFor: 'Apr 25th 23', usedBy: 'Dana White', status: 'Active' },
         { id: 7, instrumentId: 'thermo001', category: 'Thermometer', usageCode: 'th/th/m/007', productName: 'thprod', arNo: 'ARTH000012', usedFor: 'May 10th 23', usedBy: 'Eve Black', status: 'Active' },
-        { id: 8, instrumentId: 'hygro001', category: 'Hygrometer', usageCode: 'hy/hy/m/008', productName: 'hyprod', arNo: 'ARHY000013', usedFor: 'Jun 15th 23', usedBy: 'Frank Brown', status: 'Inactive' },
+        { id: 8, instrumentId: 'scale001', category: 'Hygrometer', usageCode: 'hy/hy/m/008', productName: 'hyprod', arNo: 'ARHY000013', usedFor: 'Jun 15th 23', usedBy: 'Frank Brown', status: 'Inactive' },
         { id: 9, instrumentId: 'baro001', category: 'Barometer', usageCode: 'ba/ba/m/009', productName: 'baprod', arNo: 'ARBA000014', usedFor: 'Jul 25th 23', usedBy: 'Grace White', status: 'Active' },
         { id: 10, instrumentId: 'alti001', category: 'Altimeter', usageCode: 'al/al/m/010', productName: 'alprod', arNo: 'ARAL000015', usedFor: 'Aug 30th 23', usedBy: 'Henry Black', status: 'Inactive' }
     ]);
     const startIndex = (currentPage - 1) * pageSize;
     const filteredData = selectedStatus === 'All' ? data : data.filter(item => item.status === selectedStatus);
     const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+
     const nextPage = () => setCurrentPage(currentPage + 1);
     const prevPage = () => setCurrentPage(currentPage - 1);
-    const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
+
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setDeleteModal(true);
@@ -44,135 +43,137 @@ function InstrumentUsage() {
         setDeleteModal(false);
     };
 
-
     return (
         <>
+            <div className="m-5 mt-3">
+                <div className="main-head">
+                    <h4 className="fw-bold">Instrument Usage</h4>
+                </div>
+                <div>
+                    <CRow className="mt-5 mb-3">
+                        <CCol sm={3}>
+                            <CFormSelect
+                                options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
+                                onChange={(e) => setSelectedStatus(e.target.value)}
+                                value={selectedStatus} style={{ fontSize: '0.9rem' }}
+                            />
+                        </CCol>
 
-            <div className="h-100 mx-5">
-                <div className="container-fluid my-5">
+                        <CCol sm={3}></CCol>
+                        <CCol sm={3}></CCol>
 
-                    <div className="main-head">
-                        <div className="title fw-bold fs-5 py-4">Instrument Usage</div>
-                    </div>
-                    <div className="d-flex gap-4"></div>
-                    <div>
-                        <CRow className="mb-3">
-                            <CCol sm={3}>
-                                <CFormSelect
-                                    options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
-                                    onChange={(e) => setSelectedStatus(e.target.value)}
-                                    value={selectedStatus} style={{fontSize:'0.9rem'}}
-                                />
-                            </CCol>
-
-                            <CCol sm={6}></CCol>
-
-                            <CCol sm={3}>
-                                <div className="d-flex justify-content-end">
-                                    <CButton color="primary" onClick={() => setAddModal(true)}>Add Usage</CButton>
-                                </div>
-                            </CCol>
-                        </CRow>
-                    </div>
-                          <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-                        <CTable className="mb-0    table table-responsive" >
-                            <CTableHead>
-                                <CTableRow>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >S NO.</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Instrument ID</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Instrument Category</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Usage Code</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Product Name</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Ar.No</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Used For</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Used By</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Status</CTableHeaderCell>
-                                    <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Actions</CTableHeaderCell>
+                        <CCol sm={3}>
+                            <div className="d-flex justify-content-end">
+                                <CButton
+                                    className=" text-white"
+                                    style={{ background: "#4B49B6", fontSize: '0.9rem' }}
+                                    onClick={() => setAddModal(true)}
+                                >
+                                    Add Usage
+                                </CButton>
+                            </div>
+                        </CCol>
+                    </CRow>
+                </div>
+                <div
+                    className=" rounded bg-white"
+                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+                >
+                    <CTable className="mb-0 table table-responsive" >
+                        <CTableHead>
+                            <CTableRow>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >S NO.</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Instrument ID</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Instrument Category</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Usage Code</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Product Name</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Ar.No</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Used For</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Used By</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Status</CTableHeaderCell>
+                                <CTableHeaderCell
+                                    style={{ background: "#5D76A9", color: "white" }}
+                                    scope="col"
+                                >Actions</CTableHeaderCell>
+                            </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                            {filteredData.slice(startIndex, endIndex).map((item) => (
+                                <CTableRow key={item.id}>
+                                    <CTableDataCell>{item.id}</CTableDataCell>
+                                    <CTableDataCell>{item.instrumentId}</CTableDataCell>
+                                    <CTableDataCell>{item.category}</CTableDataCell>
+                                    <CTableDataCell>{item.usageCode}</CTableDataCell>
+                                    <CTableDataCell>{item.productName}</CTableDataCell>
+                                    <CTableDataCell>{item.arNo}</CTableDataCell>
+                                    <CTableDataCell>{item.usedFor}</CTableDataCell>
+                                    <CTableDataCell>{item.usedBy}</CTableDataCell>
+                                    <CTableDataCell >
+                                        <button
+                                            className={`p-1 small w-100 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "Inactive"
+                                                ? "red-700"
+                                                : item.status === "Active"
+                                                    ? "green-700"
+                                                    : "white"
+                                                }`} style={{ fontSize: '0.6rem' }}
+                                        >
+                                            {item.status}
+                                        </button>
+                                    </CTableDataCell>
+                                    <CTableDataCell>
+                                        <div className="d-flex gap-3">
+                                            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
+                                            <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
+                                            <div className="cursor-pointer" onClick={() => handleDeleteClick(item.id)}>
+                                                <FontAwesomeIcon icon={faTrashCan} />
+                                            </div>
+                                        </div>
+                                    </CTableDataCell>
                                 </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                                {filteredData.slice(startIndex, endIndex).map((item) => (
-                                    <CTableRow key={item.id}>
-                                        <CTableDataCell>{item.id}</CTableDataCell>
-                                        <CTableDataCell>{item.instrumentId}</CTableDataCell>
-                                        <CTableDataCell>{item.category}</CTableDataCell>
-                                        <CTableDataCell>{item.usageCode}</CTableDataCell>
-                                        <CTableDataCell>{item.productName}</CTableDataCell>
-                                        <CTableDataCell>{item.arNo}</CTableDataCell>
-                                        <CTableDataCell>{item.usedFor}</CTableDataCell>
-                                        <CTableDataCell>{item.usedBy}</CTableDataCell>
-                                        <CTableDataCell >
-                                            <div
-                                                className="py-2 px-3 small rounded fw-bold"
-                                                style={item.status === "Active" ? badgeStyle : badgeStyle2}
-                                            >
-                                                {item.status}
-                                            </div>
-                                        </CTableDataCell>
-                                        <CTableDataCell>
-                                            <div className="d-flex gap-3">
-                                                <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                                <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                                <div className="cursor-pointer" onClick={() => handleDeleteClick(item.id)}>
-                                                    <FontAwesomeIcon icon={faTrashCan} />
-                                                </div>
-                                            </div>
-                                        </CTableDataCell>
-                                    </CTableRow>
-                                ))}
-                            </CTableBody>
-                        </CTable>
-                    </div>
+                            ))}
+                        </CTableBody>
+                    </CTable>
+                </div>
 
-                    <div className="d-flex justify-content-between align-items-center mt-4">
-                        <div className="pagination">
-                            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                        <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
-                            Next <FaArrowRight className='ms-2' />
+                <div className="d-flex justify-content-end align-items-center mt-4">
+                    <div className="pagination">
+                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                            &lt;&lt;
+                        </button>
+                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                            &gt;&gt;
                         </button>
                     </div>
-
                 </div>
+
             </div>
 
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
@@ -194,7 +195,7 @@ const StatusModal = (_props) => {
 
                     <CFormSelect
                         className="mb-3"
-                        type="text"
+                        type="select"
                         label="Instrument (Instrument ID)"
                         placeholder="Select... "
                         options={[
@@ -225,7 +226,7 @@ const StatusModal = (_props) => {
 
                     <CFormSelect
                         className="mb-3"
-                        type="text"
+                        type="select"
                         label="Instrument (Instrument ID)"
                         placeholder="Select Product "
                         options={[

@@ -1,43 +1,43 @@
 import React, { useState } from 'react';
-import { FaArrowRight } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
-import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,  } from "@coreui/react";
-
+import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, } from "@coreui/react";
 
 const SamplingConfiguration = () => {
+    const pageSize = 5;
+    const [currentPage, setCurrentPage] = useState(1);
     const [addModal, setAddModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const pageSize = 5; // Number of items per page
-    const [currentPage, setCurrentPage] = useState(1);
-    // const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [selectedStatus, setSelectedStatus] = useState('All');
-    
-    const [employees, setEmployees] = useState([
 
-        { id: "USER-022024-000001", specificationId: 'spsc', sample: 'Micro Media', product: 'tamc', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C2' },
-        { id: "USER-022024-000002", specificationId: 'wbl/fps', sample: 'Raw Sampling', product: 'sodium propyl', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample' },
-        { id: "USER-022024-000003", specificationId: 'spsc011', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C1' },
-        { id: "USER-022024-000004", specificationId: 'wbl/fps/001', sample: 'Finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample' },
-        { id: "USER-022024-000005", specificationId: 'spsc/001', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C3' },
-        { id: "USER-022024-000006", specificationId: 'wbl/fps/002', sample: 'finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample' },
-        { id: "USER-022024-000007", specificationId: 'spsc/00/001', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C5' },
-        { id: "USER-022024-000008", specificationId: 'wbl/fps/0003', sample: 'Finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample' },
-        { id: "USER-022024-000009", specificationId: 'spsc/01/001', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C4' },
-        { id: "USER-022024-0000010", specificationId: 'wbl/fps/004', sample: 'Finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample' },
+    const [employee, setEmployee] = useState([
+
+        { id: "USER-022024-000001", specificationId: 'spsc', sample: 'Micro Media', product: 'tamc', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C2', status: 'Active' },
+        { id: "USER-022024-000002", specificationId: 'wbl/fps', sample: 'Raw Sampling', product: 'sodium propyl', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample', status: 'Active' },
+        { id: "USER-022024-000003", specificationId: 'spsc011', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C1', status: 'Inactive' },
+        { id: "USER-022024-000004", specificationId: 'wbl/fps/001', sample: 'Finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample', status: 'Active' },
+        { id: "USER-022024-000005", specificationId: 'spsc/001', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C3', status: 'Inactive' },
+        { id: "USER-022024-000006", specificationId: 'wbl/fps/002', sample: 'finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample', status: 'Active' },
+        { id: "USER-022024-000007", specificationId: 'spsc/00/001', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C5', status: 'Active' },
+        { id: "USER-022024-000008", specificationId: 'wbl/fps/0003', sample: 'Finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample', status: 'Inactive' },
+        { id: "USER-022024-000009", specificationId: 'spsc/01/001', sample: 'Micro Media', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-tamc_1/Tamc/01/00', sampleTemplate: 'Raw Sampling Template', sampleRule: 'C4', status: 'Active' },
+        { id: "USER-022024-0000010", specificationId: 'wbl/fps/004', sample: 'Finished Product', product: 'LUPIN MIRA S 25 TABLET', testPlan: 'TP-sppip/SPSC-000012', sampleTemplate: 'test temp_1', sampleRule: 'Raw Sample', status: 'Inactive' },
 
 
     ]);
     const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employees.length);
-    const filteredEmployees = employees.filter(employee =>
+    const endIndex = Math.min(startIndex + pageSize, employee.length);
+
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+    const filteredEmployee = employee.filter(employee =>
         selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
     );
 
     const renderRows = () => {
-        return employees.slice(startIndex, endIndex).map((employee, index) => (
+        return filteredEmployee.slice(startIndex, endIndex).map((employee, index) => (
             <tr key={startIndex + index}>
                 <td>{startIndex + index + 1}</td>
                 <td>{employee.id}</td>
@@ -47,7 +47,18 @@ const SamplingConfiguration = () => {
                 <td>{employee.testPlan}</td>
                 <td>{employee.sampleTemplate}</td>
                 <td>{employee.sampleRule}</td>
-
+                <td hidden>
+                    <button
+                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${employee.status === "Inactive"
+                            ? "red-700"
+                            : employee.status === "Active"
+                                ? "green-700"
+                                : "white"
+                            }`} style={{ fontSize: '0.6rem' }}
+                    >
+                        {employee.status}
+                    </button>
+                </td>
                 <td >
                     <div className="d-flex gap-3">
                         <div>
@@ -64,24 +75,10 @@ const SamplingConfiguration = () => {
                             <FontAwesomeIcon icon={faTrashCan} />
                         </div>
                     </div>
-
                 </td>
             </tr>
 
         ));
-    };
-
-    // Function to handle pagination
-    const nextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
-
-    const prevPage = () => {
-        setCurrentPage(currentPage - 1);
-    };
-
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
     };
 
     const handleDeleteClick = (id) => {
@@ -90,79 +87,86 @@ const SamplingConfiguration = () => {
     };
 
     const handleDeleteConfirm = () => {
-        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+        setEmployee((prevEmployee) => prevEmployee.filter((employee) => employee.id !== deleteId));
         setDeleteModal(false);
     };
 
     return (
-        <div className=" mx-5 ">
-            <div className="row my-5 ">
+        <>
+            <div className="m-5 mt-3 ">
                 <div className="main-head">
-                    <div className="title fw-bold fs-5 py-4">Sampling Configuration</div>
+                    <h4 className="fw-bold">Sampling Configuration</h4>
                 </div>
-                <div className="d-flex justify-content-between my-3 ">
-                    <div className="dropdown">
-                    <CFormSelect
-                            // onChange={(e) => setSelectedStatus(e.target.value)}
-                            value={selectedStatus}
-                            style={{fontSize:'0.9rem'}}
-                        >
-                            <option value="All">All</option>
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
-                        </CFormSelect>
+                <div>
+                    <CRow className="mt-5 mb-3">
+                        <CCol sm={3}>
+                            <CFormSelect
+                                onChange={(e) => setSelectedStatus(e.target.value)}
+                                value={selectedStatus}
+                                style={{ fontSize: '0.9rem' }}
+                                options={[
+                                    { label: "All", value: "All" },
+                                    { label: "Active", value: "Active" },
+                                    { label: "Inactive", value: "Inactive" },
+                                ]}
+                            />
+                        </CCol>
+                        <CCol sm={3}></CCol>
+                        <CCol sm={3}></CCol>
+                        <CCol sm={3}>
+                            <div className="d-flex justify-content-end">
+                                <CButton
+                                    className=" text-white"
+                                    style={{ background: "#4B49B6", fontSize: '0.9rem' }}
+                                    onClick={() => setAddModal(true)}
+                                >
+                                    Add E-Sampling</CButton>
+                            </div>
+                        </CCol>
+                    </CRow>
+                </div>
+
+                <div
+                    className=" rounded bg-white"
+                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+                >
+                    <table className="mb-0 table table-responsive">
+                        <thead>
+                            <tr>
+                                <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Sampling ID</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Specification ID</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Sample Type</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Product Name</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Test Plan</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Sample Template</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Sample Rule</th>
+                                <th style={{ background: "#5D76A9", color: "white" }} hidden>Status</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {renderRows()}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="d-flex justify-content-end align-items-center mt-4">
+                    <div className="pagination">
+                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                            &lt;&lt;
+                        </button>
+                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
+                            &gt;&gt;
+                        </button>
                     </div>
-                    <div className="">
-                        <CButton color="primary" onClick={() => setAddModal(true)}>Add Configuration</CButton>
-                    </div>
                 </div>
 
+                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+                {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
             </div>
-
-                  <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-                <table className="mb-0    table table-responsive">
-                    <thead>
-                        <tr>
-                            <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Sampling ID</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Specification ID</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Type</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Test Plan</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Template</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Rule</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderRows()}
-                    </tbody>
-                </table>
-
-            </div>
-
-
-            <div className="d-flex justify-content-between align-items-center mt-4">
-                <div className="pagination">
-                    <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                        &lt;&lt;
-                    </button>
-                    <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                    <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                        &gt;&gt;
-                    </button>
-                </div>
-                <button className="btn d-flex align-items-center" onClick={nextToLastPage}>
-                    Next <FaArrowRight className='ms-2' />
-                </button>
-            </div>
-
-            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-        </div>
+        </>
     );
 };
 
@@ -173,10 +177,8 @@ const StatusModal = (_props) => {
                 <CModalTitle>Add Configuration</CModalTitle>
             </CModalHeader>
             <CModalBody>
-
-
                 <CFormSelect
-                className='mb-3'
+                    className='mb-3'
                     type="select"
                     label="Test Plan / Revision No."
 
@@ -189,7 +191,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormInput
-                className='mb-3'
+                    className='mb-3'
                     type="text"
                     label="Specification ID"
                     placeholder="Specification ID"
@@ -197,28 +199,28 @@ const StatusModal = (_props) => {
                 />
 
                 <CFormInput
-                className='mb-3'
+                    className='mb-3'
                     type="text"
                     label="Product/Material Name"
                     placeholder="Product/Material Name"
                     disabled
                 />
                 <CFormInput
-                className='mb-3'
+                    className='mb-3'
                     type="text"
                     label="Product/Material Code"
                     placeholder="Product/Material Code"
                     disabled
                 />
                 <CFormInput
-                className='mb-3'
+                    className='mb-3'
                     type="text"
                     label="Sample Type"
                     placeholder="Sample Type"
                     disabled
                 />
                 <CFormSelect
-                className='mb-3'
+                    className='mb-3'
                     type="select"
                     label="Sampling Template"
                     options={[
@@ -230,7 +232,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormSelect
-                className='mb-3'
+                    className='mb-3'
                     type="select"
                     label="Sampling Rule"
                     options={[
@@ -242,7 +244,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormSelect
-                className='mb-3'
+                    className='mb-3'
                     type="select"
                     label="Sampling Test"
                     options={[
@@ -252,7 +254,7 @@ const StatusModal = (_props) => {
                     ]}
                 />
                 <CFormInput
-                className='mb-3'
+                    className='mb-3'
                     type="text"
                     label="Comment"
                     placeholder="Comment"
@@ -301,6 +303,5 @@ const DeleteModal = (_props) => {
         </CModal>
     );
 };
-
 
 export default SamplingConfiguration

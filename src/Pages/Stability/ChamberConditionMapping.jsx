@@ -17,24 +17,13 @@ import {
   CTableRow,
 } from "@coreui/react";
 import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
 
 function ChamberConditionMapping() {
   const [addModal, setAddModal] = useState(false);
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-  const [selectedStatus, setSelectedStatus] = useState("All");
-
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-
 
   const [data, setData] = useState([
     { id: 1, chamberId: "stmp1", description: "describe", condition: "65°F", status: "INITIATED", date: "05-may-2024 20:50" },
@@ -60,7 +49,6 @@ function ChamberConditionMapping() {
     return searchFilter && statusFilterCheck;
   });
 
-  // const filteredData = selectedStatus === 'All' ? data : data.filter(item => item.status === selectedStatus);
   const endIndex = Math.min(startIndex + pageSize, filteredData.length);
   const nextPage = () => setCurrentPage(currentPage + 1);
   const prevPage = () => setCurrentPage(currentPage - 1);
@@ -83,9 +71,9 @@ function ChamberConditionMapping() {
         </div>
         <div>
           <CRow className="mt-5 mb-3">
-          <CCol sm={4}>
+            <CCol sm={4}>
               <CFormInput
-                style={{fontSize:'0.9rem'}}
+                style={{ fontSize: '0.9rem' }}
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
@@ -100,7 +88,7 @@ function ChamberConditionMapping() {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 value={statusFilter} style={{ fontSize: '0.9rem' }}
                 options={[
-                  
+
                   { label: "All", value: "" },
                   { label: "Initiated", value: "INITIATED" },
                   { label: "Approved", value: "APPROVED" },
@@ -141,24 +129,23 @@ function ChamberConditionMapping() {
                   <CTableDataCell>{item.condition}</CTableDataCell>
                   <CTableDataCell>{item.date}</CTableDataCell>
                   <CTableDataCell hidden>
-                  <button  
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          item.status === "INITIATED"
-                            ? "blue-700"
-                            : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
+                    <button
+                      className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "INITIATED"
+                        ? "blue-700"
+                        : item.status === "APPROVED"
+                          ? "green-700"
+                          : item.status === "REJECTED"
                             ? "red-700"
                             : item.status === "REINITIATED"
-                            ? "yellow-500"
-                            : item.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
+                              ? "yellow-500"
+                              : item.status === "DROPPED"
+                                ? "purple-700"
+                                : "white"
                         }`} style={{ fontSize: '0.6rem' }}
-                      >
-                        {item.status}
-                      </button>
-                  
+                    >
+                      {item.status}
+                    </button>
+
                   </CTableDataCell>
                   <CTableDataCell>
                     <CButton className="text-white" style={{ background: "#4B49B6", fontSize: '0.6rem' }} onClick={() => setAddModal(true)}>

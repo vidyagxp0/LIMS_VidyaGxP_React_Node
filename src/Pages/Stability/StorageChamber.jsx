@@ -183,7 +183,7 @@ function StorageChamber() {
         <div className="main-head">
           <h4 className="fw-bold">Storage Chamber</h4>
         </div>
-        <div className="mt-5 d-flex gap-4">
+        <div className="mt-3 d-flex gap-4">
           <div className="chart-widgets w-100">
             <div className="">
               <div className="row" style={{ cursor: "pointer" }}>
@@ -578,7 +578,7 @@ const StatusModal = (_props) => {
               placeholder="Number of Racks"
             />
             <div className="py-4 mb-3">
-              <Button variant="info" onClick={addRows}>
+              <Button className="bg-primary" onClick={addRows}>
                 Add Rows
               </Button>
               <CTable striped>

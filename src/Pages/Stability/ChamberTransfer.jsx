@@ -127,9 +127,9 @@ function ChamberTransfer() {
                                     <CTableDataCell>
                                         <button
                                             className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                                                item.status === "ACTIVE"
+                                                item.status === "INACTIVE"
                                                 ? "red-700"
-                                                : item.status === "INACTIVE"
+                                                : item.status === "ACTIVE"
                                                     ? "green-700"
                                                     : "white"
                                                 }`} style={{ fontSize: '0.6rem' }}

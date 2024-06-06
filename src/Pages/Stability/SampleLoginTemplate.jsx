@@ -63,13 +63,12 @@ function SampleLoginTemplate() {
 
 
   return (
-    <>
-      <div className="h-100 mx-5">
-        <div className="container-fluid my-5">
+    <>      
+        <div className="m-5 mt-3">
           <div className="main-head">
-            <div className="title fw-bold fs-5 py-4">Sample Login Template</div>
+            <h4 className="fw-bold">Sample Login Template</h4>
           </div>
-          <div className="d-flex gap-4">
+          <div className="mt-3 d-flex gap-4">
             <div className="chart-widgets w-100">
               <div className="">
                 <div className="row" style={{ cursor: "pointer" }}>
@@ -301,7 +300,7 @@ function SampleLoginTemplate() {
             </div>
           </div>
         </div>
-      </div>
+      
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
       {deleteModal && (
         <DeleteModal

@@ -18,10 +18,9 @@ import {
      CTableHeaderCell,
      CTableRow
 } from "@coreui/react";
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function CoaTemplate() {
@@ -33,12 +32,13 @@ function CoaTemplate() {
      const [selectedStatus, setSelectedStatus] = useState("All");
 
      const [data, setData] = useState([
+          
           { id: 1, caption: "testing", title: "Test", type: "With Specification", status: "REINITIATED" },
           { id: 2, caption: "testing001", title: "Test001", type: "Without Specification", status: "REJECTED" },
           { id: 3, caption: "sample", title: "Sample Report", type: "With Specification", status: "APPROVED" },
           { id: 4, caption: "example", title: "Example Report", type: "Without Specification", status: "INITIATED" },
-          { id: 5, caption: "demo", title: "Demo Report", type: "With Specification", status: "REJECTED" },
-          { id: 6, caption: "test2", title: "Test Report 2", type: "ERP", status: "APPROVED" },
+          { id: 5, caption: "demo", title: "Demo Report", type: "With Specification", status: "DROPPED" },
+          { id: 6, caption: "test2", title: "Test Report 2", type: "ERP", status: "DROPPED" },
           { id: 7, caption: "test3", title: "Test Report 3", type: "With Specification", status: "REINITIATED" },
           { id: 8, caption: "sample2", title: "Sample Report 2", type: "Without Specification", status: "INITIATED" },
           { id: 9, caption: "example2", title: "Example Report 2", type: "ERP", status: "REJECTED" },
@@ -77,14 +77,13 @@ function CoaTemplate() {
           setDeleteId(null);
      };
 
-
      return (
           <>
                <div className="m-5 mt-3">
                     <div className="main-head">
                          <h4 className="fw-bold">Certificate Of Analysis</h4>
                     </div>
-                    <div className="mt-5 d-flex gap-4">
+                    <div className="mt-3 d-flex gap-4">
                          <div className="chart-widgets w-100">
                               <div className="">
                                    <div className="row" style={{ cursor: "pointer" }}>
@@ -234,9 +233,9 @@ function CoaTemplate() {
                          </CRow>
                     </div>
                     <div
-                         className=" rounded bg-white"
+                         className="rounded bg-white"
                          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                    >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
+                    >          <CTable align="middle"  hover responsive className="mb-0 rounded-lg table-responsive">
                               <CTableHead>
                                    <CTableRow>
                                         <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
@@ -372,7 +371,7 @@ const StatusModal = (_props) => {
                          label="Format No."
                          placeholder="Format No."
                     />
-                    <CHeader className="bg-light text-dark">Header</CHeader>
+                    <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
                     <CFormInput
                          className="mb-3"
                          type="text"
@@ -391,7 +390,7 @@ const StatusModal = (_props) => {
                               { label: "6" }
                          ]}
                     />
-                    <CFooter className="bg-light text-dark mb-3">Footer</CFooter>
+                    <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
                     <CFormInput
                          className="mb-3"
                          type="text"

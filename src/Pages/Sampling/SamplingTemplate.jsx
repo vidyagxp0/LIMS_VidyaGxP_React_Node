@@ -9,63 +9,54 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
+
 } from "@coreui/react";
 import './SamplingTemplate.css'
 import React, { useState } from 'react';
 import { TiArrowRightThick } from "react-icons/ti";
 import { TiArrowLeftThick } from "react-icons/ti";
-import { FaArrowRight } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
 
-
 const SamplingTemplate = () => {
+  const pageSize = 5;
+  const [currentPage, setCurrentPage] = useState(1);
   const [addModal, setAddModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const pageSize = 5; // Number of items per page
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStatus, setSelectedStatus] = useState('All');
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  const [selectedStatus, setSelectedStatus] = useState("All");
 
-  const [employees, setEmployees] = useState([
-    { fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
-    { fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
-    { fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
-    { fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
-    { fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
-    { fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
-    { fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+  const [employee, setEmployee] = useState([
+    
+    { id: 1, fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
+    { id: 2, fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
+    { id: 3, fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
+    { id: 4, fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
+    { id: 5, fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    { id: 6, fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
+    { id: 7, fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
+    { id: 8, fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
+    { id: 9, fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
+    { id: 10, fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
   ]);
 
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
+  const endIndex = Math.min(startIndex + pageSize, employee.length);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredEmployees = employees.filter((employee) => {
-    const searchFilter = employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.fieldType.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredEmployee = employee.filter((employee) => {
+    const searchFilter =
+      employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.fieldType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.registeredBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.registeredOn.toLowerCase().includes(searchTerm.toLowerCase());
     const selectCheck = selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase();
     return searchFilter && selectCheck
   });
 
   const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
+    return filteredEmployee.slice(startIndex, endIndex).map((employee, index) => (
       <tr key={startIndex + index}>
         <td>{startIndex + index + 1}</td>
         <td>{employee.fieldName}</td>
@@ -74,20 +65,18 @@ const SamplingTemplate = () => {
         <td>{employee.registeredOn}</td>
         <td >
           <button
-            className="py-2 px-3 small rounded fw-bold"
-            style={
-              employee.status === "INITIATED"
-                ? badgeStyle2
-                : employee.status === "APPROVED"
-                  ? badgeStyle3
-                  : employee.status === "REJECTED"
-                    ? badgeStyle4
-                    : employee.status === "REINITIATED"
-                      ? badgeStyle5
-                      : employee.status === "DROPPED"
-                        ? badgeStyle6
-                        : badgeStyle
-            }
+            className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${employee.status === "INITIATED"
+              ? "blue-700"
+              : employee.status === "APPROVED"
+                ? "green-700"
+                : employee.status === "REJECTED"
+                  ? "red-700"
+                  : employee.status === "REINITIATED"
+                    ? "yellow-500"
+                    : employee.status === "DROPPED"
+                      ? "purple-700"
+                      : "white"
+              }`} style={{ fontSize: '0.6rem' }}
           >
             {employee.status}
           </button>
@@ -105,7 +94,7 @@ const SamplingTemplate = () => {
             >
               <FontAwesomeIcon icon={faPenToSquare} />
             </div>
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.fieldName)}>
+            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
               <FontAwesomeIcon icon={faTrashCan} />
             </div>
           </div>
@@ -113,17 +102,9 @@ const SamplingTemplate = () => {
       </tr>
     ));
   };
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
-  };
+  const nextPage = () => setCurrentPage(currentPage + 1);
+  const prevPage = () => setCurrentPage(currentPage - 1);
 
   const handleDeleteClick = (id) => {
     setDeleteId(id);
@@ -131,142 +112,142 @@ const SamplingTemplate = () => {
   };
 
   const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.fieldName !== deleteId));
+    setEmployee((prevEmployee) => prevEmployee.filter((employee) => employee.id !== deleteId));
     setDeleteModal(false);
   };
 
   const filterData = () => {
     if (selectedStatus === "All") {
-      return employees;
+      return employee;
     }
 
-    return employees.filter((item) => item.status === selectedStatus.toUpperCase());
+    return employee.filter((item) => item.status === selectedStatus.toUpperCase());
   };
 
 
   return (
-    <div className=" mx-5 ">
-      <div className="row my-5 ">
+    <>
+      <div className="m-5 mt-3">
         <div className="main-head">
-          <div className="title fw-bold fs-5">Sample Template</div>
+          <h4 className="fw-bold">Sample Template</h4>
         </div>
 
-        <div className="chart-widgets w-100">
+        <div className="mt-3 chart-widgets w-100">
           <div className="">
-          <div className="row" style={{ cursor: "pointer" }}>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
+            <div className="row" style={{ cursor: "pointer" }}>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background:
+                    "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
 
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("DROPPED")}
+                  textAlign: "left",
+                }}
+                onClick={() => setSelectedStatus("DROPPED")}
+              >
+                <div className="text-light font-bold fs-5">DROPPED</div>
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white" }}
                 >
-                  <div className="text-light font-bold fs-5">DROPPED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "DROPPED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("INITIATED")}
+                  {
+                    filterData().filter((item) => item.status === "DROPPED")
+                      .length
+                  }
+                </div>
+              </button>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background:
+                    "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
+                  textAlign: "left",
+                }}
+                onClick={() => setSelectedStatus("INITIATED")}
+              >
+                <div className="text-light font-bold fs-5">INITIATED</div>
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white" }}
                 >
-                  <div className="text-light font-bold fs-5">INITIATED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "INITIATED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, orange , #f7e05f )",
+                  {
+                    filterData().filter((item) => item.status === "INITIATED")
+                      .length
+                  }
+                </div>
+              </button>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background:
+                    "linear-gradient(25deg, orange , #f7e05f )",
 
-                    textAlign: "left",
-                    boxShadow: "0px 10px 20px  black !important",
-                  }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">REINITIATED</div>
+                  textAlign: "left",
+                  boxShadow: "0px 10px 20px  black !important",
+                }}
+                onClick={() => setSelectedStatus("REINITIATED")}
+              >
+                <div className="text-light font-bold fs-5">REINITIATED</div>
 
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg, green , #0fd850  )",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("APPROVED")}
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white" }}
                 >
-                  <butto className="text-light font-bold fs-5">APPROVED</butto>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white", textAlign: "left" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "APPROVED")
-                        .length
-                    }
-                  </div>
-                </button>
+                  {
+                    filterData().filter(
+                      (item) => item.status === "REINITIATED"
+                    ).length
+                  }
+                </div>
+              </button>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background:
+                    "linear-gradient(27deg, green , #0fd850  )",
+                  textAlign: "left",
+                }}
+                onClick={() => setSelectedStatus("APPROVED")}
+              >
+                <div className="text-light font-bold fs-5">APPROVED</div>
+                <div
+                  className="count fs-1 text-light fw-bolder"
+                  style={{ color: "white", textAlign: "left" }}
+                >
+                  {
+                    filterData().filter((item) => item.status === "APPROVED")
+                      .length
+                  }
+                </div>
+              </button>
 
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg ,red, #FF719A)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("REJECTED")}
-                >
-                  <div className="text-light font-bold fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">
-                    {
-                      filterData().filter((item) => item.status === "REJECTED")
-                        .length
-                    }
-                  </div>
-                </button>
-              </div>
+              <button
+                className="col shadow p-3 m-3 rounded"
+                style={{
+                  background:
+                    "linear-gradient(27deg ,red, #FF719A)",
+                  textAlign: "left",
+                }}
+                onClick={() => setSelectedStatus("REJECTED")}
+              >
+                <div className="text-light font-bold fs-5">REJECTED</div>
+                <div className="count fs-1 text-light fw-bolder">
+                  {
+                    filterData().filter((item) => item.status === "REJECTED")
+                      .length
+                  }
+                </div>
+              </button>
+            </div>
           </div>
         </div>
 
         <div>
-          <CRow className="my-3">
-            <CCol sm={3}>
+          <CRow className="mb-3">
+            <CCol sm={4}>
               <CFormInput
-                style={{fontSize:'0.9rem'}}
-                type="email"
+                style={{ fontSize: '0.9rem' }}
+                type="text"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -276,67 +257,71 @@ const SamplingTemplate = () => {
               <CFormSelect
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 value={selectedStatus}
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="All">All</option>
-                <option value="Initiated">Initiated</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Reinitiated">Reinitiated</option>
-                <option value="Dropped">Dropped</option>
-              </CFormSelect>
+                style={{ fontSize: '0.9rem' }}
+                options={[
+                  { value: "All", label: "All" },
+                  { value: "INITIATED", label: "Initiated" },
+                  { value: "APPROVED", label: "Approved" },
+                  { value: "REJECTED", label: "Rejected" },
+                  { value: "REINITIATED", label: "Reinitiated" },
+                  { value: "DROPPED", label: "Dropped" },
+                ]}
+              />
             </CCol>
-            <CCol sm={3}></CCol>
+            <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton color="primary" onClick={() => setAddModal(true)}>Add Template</CButton>
+                <CButton
+                  className=" text-white"
+                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
+                  onClick={() => setAddModal(true)}
+                >
+                  Add Template
+                </CButton>
               </div>
             </CCol>
           </CRow>
         </div>
-      </div>
 
-            <div
+        <div
           className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
         >
-        <table className="mb-0    table table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Field Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Field Type</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Registered By</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Registered On</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </table>
+          <table className="mb-0 table table-responsive">
+            <thead>
+              <tr>
+                <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Field Name</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Field Type</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Registered By</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Registered On</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderRows()}
+            </tbody>
+          </table>
 
-      </div>
-
-      <div className="d-flex justify-content-between align-items-center mt-4">
-        <div className="pagination">
-          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-            &lt;&lt;
-          </button>
-          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-            &gt;&gt;
-          </button>
         </div>
-        <button className="btn d-flex align-items-center border-dark" onClick={nextToLastPage}>
-          Next <FaArrowRight className='ms-2' />
-        </button>
-      </div>
 
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-    </div>
+        <div className="d-flex justify-content-end align-items-center mt-4">
+          <div className="pagination">
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+              &lt;&lt;
+            </button>
+            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
+              &gt;&gt;
+            </button>
+          </div>
+        </div>
+
+        {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+        {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
+      </div>
+    </>
   );
 };
 const StatusModal = (_props) => {

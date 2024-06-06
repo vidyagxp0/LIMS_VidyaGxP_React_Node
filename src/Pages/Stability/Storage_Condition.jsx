@@ -185,9 +185,9 @@ function Storage_Condition() {
                   <CTableDataCell>
                   <button
                       className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                        item.status === "Active"
+                        item.status === "Inactive"
                           ? "red-700"
-                          : item.status === "Inactive"
+                          : item.status === "Active"
                             ? "green-700"
                             : "white"
                         }`} style={{ fontSize: '0.6rem' }}
@@ -260,11 +260,12 @@ const StatusModal = (_props) => {
         </CModalHeader>
         <CModalBody>
           <CFormInput
+          className="mb-3"
             type="text"
             label="Stability Storage Condition"
             placeholder="°C °F "
           />
-          <CFormInput type="text" label="Description" placeholder=" " />
+          <CFormInput className="mb-3" type="text" label="Description" placeholder=" " />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>

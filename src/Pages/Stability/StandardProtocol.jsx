@@ -52,7 +52,7 @@ function StandardProtocol() {
           setDeleteModal(false);
           setDeleteId(null);
      };
-     
+
      return (
           <>
                <div className="m-5 mt-3">
@@ -88,13 +88,13 @@ function StandardProtocol() {
                               <CCol sm={2}></CCol>
                               <CCol sm={3}>
                                    <div className="d-flex justify-content-end">
-                                        <CButton className="text-white" style={{ background: "#4B49B6", fontSize:'0.9rem' }} onClick={() => setAddModal(true)}>Add Condition</CButton>
+                                        <CButton className="text-white" style={{ background: "#4B49B6", fontSize: '0.9rem' }} onClick={() => setAddModal(true)}>Add Condition</CButton>
                                    </div>
                               </CCol>
                          </CRow>
                     </div>
                     <div
-                         className=" rounded bg-white"
+                         className="rounded bg-white"
                          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
                     >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
                               <CTableHead>
@@ -116,13 +116,13 @@ function StandardProtocol() {
                                              <CTableDataCell>{item.name}</CTableDataCell>
                                              <CTableDataCell>{item.protocolId}</CTableDataCell>
                                              <CTableDataCell>{item.description}</CTableDataCell>
-                                             <CTableDataCell className="d-flex">
+                                             <CTableDataCell>
                                                   <button
-                                                       className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "Active"
-                                                            ? "red-700"
-                                                            : item.status === "Inactive"
-                                                                 ? "green-700"
-                                                                 : "white"
+                                                       className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "Inactive"
+                                                                 ? "red-700"
+                                                                 : item.status === "Active"
+                                                                      ? "green-700"
+                                                                      : "white"
                                                             }`} style={{ fontSize: '0.6rem' }}
                                                   >
                                                        {item.status}
@@ -174,16 +174,19 @@ const StatusModal = (_props) => {
                </CModalHeader>
                <CModalBody>
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Standard Protocol Name"
                          placeholder=""
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Standard Protocol Id"
                          placeholder=""
                     />
                     <CFormInput
+                         className="mb-3"
                          type="text"
                          label="Description"
                          placeholder=""
@@ -206,7 +209,7 @@ const DeleteModal = (_props) => {
           >
                <CModalHeader>
                     <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-                    Delete Product
+                         Delete Product
                     </CModalTitle>
                </CModalHeader>
                <div
@@ -246,6 +249,6 @@ const DeleteModal = (_props) => {
                </CModalFooter>
           </CModal>
      );
-   };
+};
 
 export default StandardProtocol;

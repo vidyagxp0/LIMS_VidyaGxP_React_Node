@@ -54,7 +54,7 @@ function WorkSheetHeader() {
         <div className="main-head">
           <h4 className="fw-bold"> Stability WorkSheet Header</h4>
         </div>
-        <div className="mt-5 d-flex gap-4">
+        <div className="mt-3 d-flex gap-4">
           <div className="chart-widgets w-100">
             <div className="">
               <div className="row" style={{ cursor: "pointer" }}>
@@ -342,7 +342,7 @@ const StatusModal = (_props) => {
           label="Format No."
           placeholder="Format No."
         />
-        <CHeader className="bg-light text-dark">Header</CHeader>
+        <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
         <CFormInput
           className="mb-3"
           type="text"
@@ -361,7 +361,7 @@ const StatusModal = (_props) => {
             { label: "6" }
           ]}
         />
-        <CFooter className="bg-light text-dark">Footer</CFooter>
+        <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
         <CFormInput
           className="mb-3"
           type="text"

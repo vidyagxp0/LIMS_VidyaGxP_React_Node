@@ -64,7 +64,7 @@ function SampleStorage() {
                     <div className="main-head">
                          <h4 className="fw-bold">Sample Storage</h4>
                     </div>
-                    <div className="mt-5 d-flex gap-4">
+                    <div className="mt-3 d-flex gap-4">
                          <div className="chart-widgets w-100">
                               <div className="">
                                    <div className="row" style={{ cursor: "pointer" }}>

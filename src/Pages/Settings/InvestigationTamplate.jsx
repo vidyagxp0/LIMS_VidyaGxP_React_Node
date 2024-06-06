@@ -15,8 +15,6 @@ function InvestigationTamplate() {
   const [selectedStatus, setSelectedStatus] = useState('All');
   const recordsPerPage = 5;
 
-  const badgeStyle = { background: "#cdffca" };
-
   const [tableData, setTableData] = useState([
     { id: 1, name: "Template1", code: "temp1", noOfAnalystSection: 1, noOfSupervisorSection: 1, updatedAt: "Sep 29th 23 16:19", status: "APPROVED" },
     { id: 2, name: "Template2", code: "temp2", noOfAnalystSection: 2, noOfSupervisorSection: 1, updatedAt: "Oct 1st 23 10:15", status: "INITIATED" },
@@ -73,12 +71,11 @@ function InvestigationTamplate() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
+        <div className="m-5 mt-3">
           <div className="main-head">
-            <div className="title fw-bold fs-5">Investigation Template</div>
+            <h4 className="fw-bold">Investigation Template</h4>
           </div>
-          <div className="d-flex gap-4">
+          <div className="mt-3 d-flex gap-4">
             <div className="chart-widgets w-100">
               <div className="row">
                 <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleChartClick('DROPPED')}>
@@ -107,7 +104,7 @@ function InvestigationTamplate() {
           <div>
             <CRow className="mb-3">
               <CCol sm={3}><CFormInput
-                className="mb-3 border-dark-subtle border-2"
+                style={{ fontSize: '0.9rem' }}
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
@@ -132,9 +129,12 @@ function InvestigationTamplate() {
               <CCol sm={3}></CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
-            <CTable align="middle" responsive className="table-responsive   ">
-              <CTableHead>
+          <div
+          className="rounded bg-white"
+          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+        >
+          <CTable className="mb-0 table table-responsive" >
+            <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
                   <CTableHeaderCell
@@ -184,18 +184,22 @@ function InvestigationTamplate() {
                     <CTableDataCell>{data.noOfSupervisorSection}</CTableDataCell>
                     <CTableDataCell>{data.updatedAt}</CTableDataCell>
                     <CTableDataCell>
-                      <div className=" w-75">
-                        <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
-                          : data.status === "APPROVED"
-                            ? 'green-700'
-                            : data.status === "REJECTED"
-                              ? 'red-700'
-                              : data.status === "REINITIATED"
-                                ? 'yellow-500'
-                                : data.status === "DROPPED"
-                                  ? 'purple-700'
-                                  : 'white'}`} >{data.status}</div>
-                      </div>
+                    <button
+                      className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "INITIATED"
+                        ? "blue-700"
+                        : data.status === "APPROVED"
+                          ? "green-700"
+                          : data.status === "REJECTED"
+                            ? "red-700"
+                            : data.status === "REINITIATED"
+                              ? "yellow-500"
+                              : data.status === "DROPPED"
+                                ? "purple-700"
+                                : "white"
+                        }`} style={{ fontSize: '0.6rem' }}
+                    >
+                      {data.status}
+                    </button>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -208,18 +212,14 @@ function InvestigationTamplate() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination my-3 d-flex justify-content-between">
-            <div className="d-flex gap-2">
-              <button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
-              <button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
-              <button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
-            </div>
-            <div className="">
-              <button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
-            </div>
+          <div className="d-flex justify-content-end align-items-center mt-4">
+          <div className="pagination">
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
           </div>
         </div>
-      </div>
+        </div>
 
       {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} handleDelete={handleDelete} />}
 

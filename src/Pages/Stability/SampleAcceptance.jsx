@@ -4,44 +4,35 @@ import { FaDownload } from "react-icons/fa"
 
 
 function SampleAcceptance() {
-     const badgeStyle = { background: "gray", color: "white", width: "110px" };
-     const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px", };
-     const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-     const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-     const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-     const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-     const [selectedStatus, setSelectedStatus] = useState("All");
-     const data = [];
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [data, setData] = useState([
 
-     const filterData = () => {
-          const filteredData =
-               selectedStatus === "All"
-                    ? data
-                    : data.filter(
-                         (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-                    );
-          return filteredData.filter((item) =>
-               item.data.toLowerCase().includes(search.toLowerCase())
-          );
-     };
-     const filteredData = filterData();
+  ]);
+
+  const filterData = () => {
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter(
+          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+        );
+    return filteredData.filter((item) =>
+      item.data.toLowerCase().includes(search.toLowerCase())
+    );
+  };
+  const filteredData = filterData();
 
 
-     return (
-          <>
-
-               <div className="h-100 mx-5">
-                    <div className="container-fluid my-5">
-
-                         <div className="main-head">
-                              <div className="title fw-bold fs-5 py-4"> Sample Acceptance</div>
-
-
-                         </div>
-                         <div className="d-flex gap-4">
-                              <div className="chart-widgets w-100">
-                                   <div className="">
-                                   <div className="row" style={{ cursor: "pointer" }}>
+  return (
+    <>
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold"> Sample Acceptance</h4>
+        </div>
+        <div className="mt-3 d-flex gap-4">
+          <div className="chart-widgets w-100">
+            <div className="">
+              <div className="row" style={{ cursor: "pointer" }}>
                 <button
                   className="col shadow p-3 m-3 rounded"
                   style={{
@@ -146,72 +137,65 @@ function SampleAcceptance() {
                   </div>
                 </button>
               </div>
-                                   </div>
+            </div>
+          </div>
 
+        </div>
+        <div>
+          <CRow className="mb-3 py-4">
+            <CCol sm={4}>
+              <CFormInput
+                style={{ fontSize: '0.9rem' }}
+                type="text"
+                placeholder="Search..."
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </CCol>
+            <CCol sm={3}>
+              <CFormSelect
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                value={selectedStatus}
+                style={{ fontSize: '0.9rem' }}
+                options={[
+                  { value: "All", label: "All" },
+                  { value: "INITIATED", label: "Initiated" },
+                  { value: "APPROVED", label: "Approved" },
+                  { value: "REJECTED", label: "Rejected" },
+                  { value: "REINITIATED", label: "Reinitiated" },
+                  { value: "DROPPED", label: "Dropped" },
+                ]}
+              />
+            </CCol>
+            <CCol sm={2}>
 
-                              </div>
+            </CCol>
+            <CCol sm={3}>
+              <div className="d-flex justify-content-end">
+                <div className="pe-4">
+                  <CButton className="bg-danger bg-opacity-75 rounded" >
+                    <FaDownload />
+                  </CButton></div>
+              </div>
+            </CCol>
+          </CRow>
+        </div>
 
-                         </div>
-                         <div>
-                              <CRow className="mb-3 py-4">
-                                   <CCol sm={4}>
-                                        <CFormInput
-                                             style={{fontSize:'0.9rem'}}
-                                             type="email"
-                                             placeholder="Search..."
-                                             onChange={(e) => setSearch(e.target.value)}
-                                        />
-                                   </CCol>
-                                   <CCol sm={3}>
-                                        <CFormSelect
-                                             onChange={(e) => setSelectedStatus(e.target.value)}
-                                             value={selectedStatus}
-                                             style={{fontSize:'0.9rem'}}
-                                        >
-                                             <option value="All">All</option>
-                                             <option value="Initiated">Initiated</option>
-                                             <option value="Approved">Approved</option>
-                                             <option value="Rejected">Rejected</option>
-                                             <option value="Reinitiated">Reinitiated</option>
-                                             <option value="Dropped">Dropped</option>
-                                        </CFormSelect>
-                                   </CCol>
-                                   <CCol sm={2}>
-
-                                   </CCol>
-                                   <CCol sm={3}>
-                                        <div className="d-flex justify-content-end">
-                                             <div className="pe-4">
-                                                  <CButton className="bg-danger bg-opacity-75 rounded" >
-                                                       <FaDownload />
-                                                  </CButton></div>
-                                        </div>
-                                   </CCol>
-                              </CRow>
-                         </div>
-
-                           <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-                              <CTable align="middle" responsive >
-                                   <CTableHead>
-                                        <CTableRow align="middle">
-                                             <center>
-                                                  <h4 >No Sample Acceptance Found</h4>
-                                             </center>
-                                        </CTableRow>
-                                   </CTableHead>
-                              </CTable>
-                         </div>
-
-                    </div>
-               </div>
-
-          </>
-     )
+        <div
+          className="rounded bg-white"
+          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+        >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
+            <CTableHead>
+              <CTableRow align="middle">
+                <center>
+                  <h4 >No Sample Acceptance Found</h4>
+                </center>
+              </CTableRow>
+            </CTableHead>
+          </CTable>
+        </div>
+      </div>
+    </>
+  )
 }
-
-
 
 export default SampleAcceptance
