@@ -293,13 +293,12 @@ export default function CalibrationRecord() {
 
   return (
     <>
-      <div className="m-5">
-        <div className="">
-          <h5>Calibration Records</h5>
-        </div>
+      <div className="m-5 mt-3">
+        <h4 className="fw-bold ">Calibration Records</h4>
+     
 
           <div
-          className=" rounded bg-white"
+          className=" rounded bg-white mt-5"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
           <table className="table table-responsive text-xs">

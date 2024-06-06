@@ -233,12 +233,11 @@ const CalibrationSampleLogin = () => {
 
   return (
     <>
-    <div className="mx-5">
-      <div className="row my-5">
+    <div className="m-5 mt-3">
         <div className="main-head">
-          <div className="title fw-bold fs-5">Calibration Sample Login</div>
+        <h4 className="fw-bold ">Calibration Sample Login</h4>
         </div>
-        <div className="row" style={{ cursor: "pointer" }}>
+        <div className="row mt-3" style={{ cursor: "pointer" }}>
                 <button
                   className="col shadow p-3 m-3 rounded"
                   style={{
@@ -346,7 +345,7 @@ const CalibrationSampleLogin = () => {
 
 
         <div>
-          <CRow className="d-flex mt-3 justify-content-around">
+          <CRow className="d-flex mt-2 mb-2 justify-content-around">
             <CCol sm={4}>
               <CFormInput
                 type="text"
@@ -377,13 +376,13 @@ const CalibrationSampleLogin = () => {
                 <CButton 
                   className="btn btn-primary "
                   type="button"
+                  style={{fontSize:'0.9rem'}}
                   onClick={() => setAddModal(true)}> <span>Add Sample Login</span></CButton>
               </div>
             </CCol>
           </CRow>
         </div>
-        </div>
-        </div>
+       
         
         <div
           className=" rounded bg-white"
@@ -420,6 +419,7 @@ const CalibrationSampleLogin = () => {
                         </div>
                        
                     </div>
+        </div>
 
 {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
 

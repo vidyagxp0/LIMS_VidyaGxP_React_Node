@@ -429,118 +429,132 @@ export default function CalibrationSchedule() {
       <div className="m-5 mt-3">
         <h4 className="fw-bold ">Calibration Schedule</h4>
 
-      <div className="d-flex m-2 mt-5 justify-content-around">
-        <div className="w-50 d-flex ms-3 gap-3">
-          <CCol sm={6}>
-            <CFormInput
-              type="text"
-              placeholder="Search..."
-              style={{ fontSize: "0.9rem" }}
-              className="border-2"
-              onChange={handleSearchChange}
-            />
-          </CCol>
+        <div className="d-flex mt-5 mb-3 justify-content-around">
+          <div className="w-50 d-flex gap-3">
+            <CCol sm={8}>
+              <CFormInput
+                type="text"
+                placeholder="Search..."
+                style={{ fontSize: "0.9rem" }}
+                className="border-2"
+                onChange={handleSearchChange}
+              />
+            </CCol>
 
-          <CCol sm={5}>
-            <CFormSelect
-              onChange={handleStatusChange}
-              className="border-2"
-              style={{ fontSize: "0.9rem" }}
-              options={[
-                { label: "All", value: "" },
-                { label: "Active", value: "ACTIVE" },
-                { label: "Inactive", value: "INACTIVE" },
-              ]}
-            />
-          </CCol>
+            <CCol sm={5}>
+              <CFormSelect
+                onChange={handleStatusChange}
+                className="border-2"
+                style={{ fontSize: "0.9rem" }}
+                options={[
+                  { label: "All", value: "" },
+                  { label: "Active", value: "ACTIVE" },
+                  { label: "Inactive", value: "INACTIVE" },
+                ]}
+              />
+            </CCol>
+          </div>
+
+          <CCol sm={2}></CCol>
+          <div className="w-50 gap-2 d-flex ms-5 justify-content-end">
+            <CCol sm={1}>
+              <div
+                style={{
+                  border: "1px solid #f98d6b",
+                  padding: "7px",
+                  width: "38px",
+                  display: "flex",
+                  justifyContent: "center",
+                  backgroundColor: "#f98d6b",
+                  borderRadius: "5px",
+                }}
+              >
+                <PiDownloadBold />
+              </div>
+            </CCol>
+
+            <CCol sm={5}>
+              <div className="">
+                <CButton
+                  color="primary"
+                  style={{ fontSize: "0.9rem" }}
+                  onClick={() => setAddModal(true)}
+                >
+                  Calibration Schedule
+                </CButton>
+              </div>
+            </CCol>
+          </div>
         </div>
-        <div className="w-50 gap-2 d-flex ms-5 justify-content-end">
-          <CCol sm={1}>
-            <div
-              style={{
-                border: "1px solid #f98d6b",
-                padding: "7px",
-                width: "38px",
-                display: "flex",
-                justifyContent: "center",
-                backgroundColor: "#f98d6b",
-                borderRadius: "5px",
-              }}
+
+        <div className="bg-light rounded">
+          <table
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "0.9rem",
+              boxShadow: "5px 5px 20px #5D76A9",
+            }}
+            className="table table-responsive "
+          >
+            <thead>
+              <tr>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  <input type="checkbox" />
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>SNo.</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Unique Code
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Calibration Workflow
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Schedule Description
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Start Date
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Frequency
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Next Calibration Due
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Status
+                </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>
+                  Actions{" "}
+                </th>
+              </tr>
+            </thead>
+            <tbody>{renderRows()}</tbody>
+          </table>
+        </div>
+
+        <div className="d-flex justify-content-end align-items-center mt-4">
+          <div className="pagination">
+            <button
+              style={{ background: "#21516a", color: "white" }}
+              className="btn mr-2"
+              onClick={prevPage}
+              disabled={currentPage === 1}
             >
-              <PiDownloadBold />
-            </div>
-          </CCol>
-
-          <CCol sm={5}>
-            <div className="">
-              <CButton color="primary" style={{fontSize:'0.9rem'}}  onClick={() => setAddModal(true)}>
-                Calibration Schedule
-              </CButton>
-            </div>
-          </CCol>
+              &lt;&lt;
+            </button>
+            <button className="btn mr-2 bg-dark-subtle rounded-circle">
+              {currentPage}
+            </button>
+            <button
+              style={{ background: "#21516a", color: "white" }}
+              className="btn mr-2"
+              onClick={nextPage}
+              disabled={endIndex >= employees.length}
+            >
+              &gt;&gt;
+            </button>
+          </div>
         </div>
-      </div>
-
-      <br />
-      <div className="bg-light rounded">
-        <table  style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}} className="table table-responsive ">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                <input type="checkbox" />
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>SNo.</th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Unique Code
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Calibration Workflow
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Schedule Description
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Start Date
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Frequency
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Next Calibration Due
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Actions{" "}
-              </th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
-      </div>
-
-      <div className="d-flex justify-content-end align-items-center mt-4">
-        <div className="pagination">
-          <button
-            style={{ background: "#21516a", color: "white" }}
-            className="btn mr-2"
-            onClick={prevPage}
-            disabled={currentPage === 1}
-          >
-            &lt;&lt;
-          </button>
-          <button className="btn mr-2 bg-dark-subtle rounded-circle">
-            {currentPage}
-          </button>
-          <button
-            style={{ background: "#21516a", color: "white" }}
-            className="btn mr-2"
-            onClick={nextPage}
-            disabled={endIndex >= employees.length}
-          >
-            &gt;&gt;
-          </button>
-        </div>
-      </div>
       </div>
 
       {addModal && (
@@ -548,7 +562,7 @@ export default function CalibrationSchedule() {
       )}
 
       {deleteModal && (
-          <DeleteModal
+        <DeleteModal
           visible={deleteModal}
           closeModal={() => setDeleteModal(false)}
           confirmDelete={handleDeleteConfirm}

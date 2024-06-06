@@ -270,7 +270,7 @@ function Approval() {
             </CTableBody>
           </CTable>
         </div>
-        <div className="d-flex justify-content-end my-4">
+        {/* <div className="d-flex justify-content-end my-4">
           <nav aria-label="...">
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -288,7 +288,21 @@ function Approval() {
           </li>
         </ul>
       </nav>
-      </div>
+      </div> */}
+
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handlePrevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handleNextPage} >
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
+
       </div>
     </>
   );
