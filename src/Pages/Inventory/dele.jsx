@@ -126,7 +126,7 @@ function StandardProtocol() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
+      <div id="approval-page" className="m-5 mt-3">
         <div className="container-fluid my-5">
           <div className="main-head">
             <h4 className="fw-bold mb-4 mt-3">Standard Protocol</h4>

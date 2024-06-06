@@ -73,7 +73,7 @@ function BatchSampleAllotment() {
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5  ; 
+  const pageSize = 5;
 
   const badgeStyle2 = { background: "green", color: "white", width: "110px" };
   const badgeStyle3 = { background: "red", color: "white", width: "110px" };
@@ -84,13 +84,21 @@ function BatchSampleAllotment() {
   const endIndex = Math.min(startIndex + pageSize, data.length);
 
   const filterData = () => {
-    const filteredData = selectedStatus === "All" ? data : data.filter((item) => item.status === selectedStatus);
-    return filteredData.filter((item) => item.BatchSampleID.toLowerCase().includes(search.toLowerCase()));
+    const filteredData =
+      selectedStatus === "All"
+        ? data
+        : data.filter((item) => item.status === selectedStatus);
+    return filteredData.filter((item) =>
+      item.BatchSampleID.toLowerCase().includes(search.toLowerCase())
+    );
   };
 
   const filteredData = filterData();
 
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, Math.ceil(filteredData.length / pageSize)));
+  const nextPage = () =>
+    setCurrentPage((prev) =>
+      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
+    );
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   const handleDelete = (id) => {
@@ -100,21 +108,21 @@ function BatchSampleAllotment() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div id="approval-page" className="m-5 mt-3">
+     
           <div className="main-head">
-            <div className="title fw-bold fs-5 mb-5">BatchSample Allotment</div>
+          <h4 className="fw-bold ">BatchSample Allotment</h4>
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100"></div>
           </div>
           <div>
-            <CRow className="mb-3">
+            <CRow className="mb-3 mt-5">
               <CCol sm={3}>
                 <CFormSelect
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
+                  style={{ fontSize: "0.9rem" }}
                 >
                   <option value="All">All</option>
                   <option value="Active">Active</option>
@@ -124,7 +132,7 @@ function BatchSampleAllotment() {
               <CCol sm={3}>
                 <CFormInput
                   type="text"
-                  style={{border:"2px solid gray"}}
+                  style={{fontSize:'0.9rem'}}
                   placeholder="Search by Batch Sample ID"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -132,28 +140,65 @@ function BatchSampleAllotment() {
               </CCol>
               <CCol sm={6}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                  <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
                     Batch Sample Allotment
                   </CButton>
                 </div>
               </CCol>
             </CRow>
           </div>
-  <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-          <CTable align="middle" responsive className="mb-0    table-responsive">
+          <div
+            className=" rounded bg-white"
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "0.9rem",
+              boxShadow: "5px 5px 20px #5D76A9",
+            }}
+          >
+            <CTable
+              align="middle"
+              responsive
+              className="mb-0    table-responsive"
+            >
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
+                  <CTableHeaderCell
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                    className="text-center"
+                  >
                     <input type="checkbox" />
                   </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Batch Sample ID</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Registered On</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >
+                    S NO.
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >
+                    Batch Sample ID
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >
+                    Registered On
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >
+                    Status
+                  </CTableHeaderCell>
+                  <CTableHeaderCell
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >
+                    Actions
+                  </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -165,23 +210,36 @@ function BatchSampleAllotment() {
                     <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                     <CTableDataCell>{item.BatchSampleID}</CTableDataCell>
                     <CTableDataCell>{item.RegisteredOn}</CTableDataCell>
-                    <CTableDataCell className="d-flex">
-                      <div
-                        className="py-2 px-3 small rounded fw-bold"
-                        style={item.status === "Active" ? badgeStyle2 : badgeStyle3}
+                    <CTableDataCell >
+                      <button
+                        style={{
+                          background:
+                            item.status === "Active" ? "#15803d" : "#b91c1c",
+                          color: "white",
+                          width: "4rem",
+                          fontSize: "0.6rem",
+                          padding: "2px 7px",
+                          borderRadius: "7px",
+                        }}
                       >
                         {item.status}
-                      </div>
+                      </button>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
                         <Link to="/approval/1321">
                           <FontAwesomeIcon icon={faEye} />
                         </Link>
-                        <div className="cursor-pointer" onClick={() => setAddModal(true)}>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => setAddModal(true)}
+                        >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
-                        <div className="cursor-pointer" onClick={() => setDeleteModal(item.id)}>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => setDeleteModal(item.id)}
+                        >
                           <FontAwesomeIcon icon={faTrashCan} />
                         </div>
                       </div>
@@ -191,18 +249,20 @@ function BatchSampleAllotment() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination mt-5">
-            <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-              &lt;&lt;
-            </button>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle">{currentPage}</button>
-            </div>
-            <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredData.length}>
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
+     
+          <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
+       
       </div>
 
       {addModal && (
@@ -233,7 +293,9 @@ const StatusModal = (_props) => {
           <CModalTitle>Add Batch Sample Allotment Registration</CModalTitle>
         </CModalHeader>
 
-        <p className="ml-4">Add information and register new Batch Sample Allotment</p>
+        <p className="ml-4">
+          Add information and register new Batch Sample Allotment
+        </p>
         <div className="modal-body p-4">
           <CForm>
             <div className="mb-3">
@@ -338,6 +400,5 @@ const DeleteModal = (_props) => {
     </CModal>
   );
 };
-
 
 export default BatchSampleAllotment;

@@ -76,14 +76,13 @@ function WorkFlow() {
 
   return (
     <>
-      <div className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div className="m-5 mt-3">
           <div className="main-head">
-            <div className="title fw-bold fs-5 py-4">Work Flow</div>
+          <h4 className="fw-bold">Work Flow</h4>
           </div>
           <div>
-            <CRow className="mb-3">
-              <CCol sm={3}>
+            <CRow className="mb-3 mt-5">
+              <CCol sm={4}>
                 <CFormInput
                   type="text"
                   placeholder="Search by plant name"
@@ -105,10 +104,10 @@ function WorkFlow() {
                 </CFormSelect>
 
               </CCol>
-              <CCol sm={3}></CCol>
+              <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>Add Workflow</CButton>
+                  <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Workflow</CButton>
                 </div>
               </CCol>
             </CRow>
@@ -138,12 +137,20 @@ function WorkFlow() {
                     <CTableDataCell>{item.address}</CTableDataCell>
                     <CTableDataCell>{item.comments}</CTableDataCell>
                     <CTableDataCell>
-                      <div
-                        className="py-2 px-3 small rounded fw-bold"
-                        style={badgeStyles[item.workflow]}
+                     
+                      <button  
+                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                         item.workflow === "Approved"
+                            ? "green-700"
+                            : item.workflow === "Rejected"
+                            ? "red-700"
+                            : item.workflow === "Pending"
+                            ? "yellow-500"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
                       >
                         {item.workflow}
-                      </div>
+                      </button>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -157,17 +164,20 @@ function WorkFlow() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="d-flex justify-content-between align-items-center mt-4">
-            <div className="pagination">
-              <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-              <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredData.length}>&gt;&gt;</button>
-            </div>
-            <button className="btn d-flex gap-2 border-dark" onClick={nextToLastPage}>
-              Next <FaArrowRight className="mt-1"/>
-            </button>
-          </div>
-        </div>
+          
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length} >
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
+
       </div>
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
       {deleteModal && (

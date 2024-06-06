@@ -75,15 +75,13 @@ function Plants() {
 
   return (
     <>
-      <div className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div className="m-5 mt-3">
           <div className="main-head">
-            <div className="title fw-bold fs-5 py-4">Plant's</div>
+          <h4 className="fw-bold">Plant's</h4>
           </div>
-          <div className="d-flex gap-4"></div>
           <div>
-            <CRow className="mb-3">
-              <CCol sm={3}>
+            <CRow className="mb-3 mt-5">
+              <CCol sm={4}>
                 <CFormInput
                   onChange={(e) => setSearch(e.target.value)}
                   value={search}
@@ -104,16 +102,17 @@ function Plants() {
 
                 </CFormSelect>
               </CCol>
-              <CCol sm={3}></CCol>
+              <CCol sm={2}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>Add Plant</CButton>
+                  <CButton style={{fontSize:'0.9rem'}}  color="primary" onClick={() => setAddModal(true)}>Add Plant</CButton>
                 </div>
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white mt-5 shadow rounded border-2 border-dark-subtle">
-            <CTable align="middle" responsive className="table-responsive   " >
+          <div className="rounded bg-white"
+             style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}>
+            <CTable align="middle" responsive className="table-responsive " >
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
@@ -139,17 +138,20 @@ function Plants() {
                       <CTableDataCell>{item.plantName}</CTableDataCell>
                       <CTableDataCell>{item.address}</CTableDataCell>
                       <CTableDataCell>{item.registerOn}</CTableDataCell>
-                      <CTableDataCell className="d-flex">
-                        <div
-                          className="py-2 px-3 small rounded fw-bold"
-                          style={
-                            item.status === "Active"
-                              ? badgeStyle
-                              : badgeStyle2
-                          }
-                        >
-                          {item.status}
-                        </div>
+                      <CTableDataCell >
+                      <button
+              style={{
+                background:
+                item.status === "Active" ? "#15803d" : "#b91c1c",
+                color: "white",
+                width: "80%",
+                fontSize: "0.6rem",
+                padding: "2px 7px",
+                borderRadius: "7px",
+              }}
+            >
+              {item.status}
+            </button>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div className="d-flex gap-3">
@@ -169,21 +171,19 @@ function Plants() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="d-flex justify-content-between align-items-center mt-4">
-            <div className="pagination">
-              <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                &lt;&lt;
-              </button>
-              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-              <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                &gt;&gt;
-              </button>
-            </div>
-            <button className="btn border-dark d-flex gap-2" onClick={nextToLastPage}>
-              Next <FaArrowRight className="mt-1"/>
-            </button>
-          </div>
-        </div>
+    
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length} >
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
       </div>
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
       {deleteModal && (

@@ -230,7 +230,7 @@ function ChemicalReagent() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5" style={{zIndex:"2"}}>
+      <div id="approval-page" className="m-5 mt-3" style={{zIndex:"2"}}>
         <div className="container-fluid my-4 ">
           <div className="main-head mx-5">
             <div className="title fw-bold fs-5 ">Chemical / Reagent List</div>

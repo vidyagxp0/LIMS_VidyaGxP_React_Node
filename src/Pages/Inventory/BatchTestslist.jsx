@@ -105,16 +105,16 @@ function BatchTestslist() {
   };
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div id="approval-page" className="m-5 mt-3">
+       
           <div className="main-head">
-            <div className="title fw-bold fs-5 mb-5">Batch Tests list</div>
+          <h4 className="fw-bold ">Batch Tests list</h4>
           </div>
           <div className="d-flex gap-4">
             <div className="chart-widgets w-100"></div>
           </div>
           <div>
-            <CRow className="mb-3">
+            <CRow className="mb-3 mt-5">
               <CCol sm={3}>
                 <CFormSelect
                   onChange={(e) => setSelectedStatus(e.target.value)}
@@ -137,7 +137,7 @@ function BatchTestslist() {
               </CCol>
               <CCol sm={6}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                  <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
                     Batch Test list
                   </CButton>
                 </div>
@@ -210,15 +210,20 @@ function BatchTestslist() {
                       <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                       <CTableDataCell>{item.BatchSampleID}</CTableDataCell>
                       <CTableDataCell>{item.RegisteredOn}</CTableDataCell>
-                      <CTableDataCell className="d-flex">
-                        <div
-                          className="py-2 px-3 small rounded fw-bold"
-                          style={
-                            item.status === "Active" ? badgeStyle2 : badgeStyle3
-                          }
-                        >
-                          {item.status}
-                        </div>
+                      <CTableDataCell>
+                      <button
+                        style={{
+                          background:
+                            item.status === "Active" ? "#15803d" : "#b91c1c",
+                          color: "white",
+                          width: "4rem",
+                          fontSize: "0.6rem",
+                          padding: "2px 7px",
+                          borderRadius: "7px",
+                        }}
+                      >
+                        {item.status}
+                      </button>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div className="d-flex gap-3">
@@ -244,26 +249,20 @@ function BatchTestslist() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination mt-4">
-            <button
-              className="btn mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle">{currentPage}</button>
-            </div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredData.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
+
+          <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
+       
       </div>
 
       {addModal && (

@@ -30,7 +30,7 @@ export default function Vendors() {
       vendorName: "Vendor 1",
       qualificationCriteria: "ISO Certified",
       comments: "High quality",
-      status: "APPROVED"
+      status: "INITIATED"
     },
     {
       id: 2,
@@ -39,7 +39,7 @@ export default function Vendors() {
       vendorName: "Vendor 2",
       qualificationCriteria: "CE Mark",
       comments: "Meets standards",
-      status: "APPROVED"
+      status: "INITIATED"
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ export default function Vendors() {
       vendorName: "Vendor 3",
       qualificationCriteria: "ISO Certified",
       comments: "Reliable vendor",
-      status: "PENDING"
+      status: "REJECTED"
     },
     {
       id: 4,
@@ -84,7 +84,7 @@ export default function Vendors() {
       vendorName: "Vendor 7",
       qualificationCriteria: "RoHS Compliant",
       comments: "Good quality",
-      status: "PENDING"
+      status: "REJECTED"
     },
     {
       id: 8,
@@ -111,7 +111,7 @@ export default function Vendors() {
       vendorName: "Vendor 10",
       qualificationCriteria: "CE Mark",
       comments: "High ratings",
-      status: "PENDING"
+      status: "REJECTED"
     },
     {
       id: 11,
@@ -161,20 +161,23 @@ export default function Vendors() {
         <td>{data.qualificationCriteria}</td>
         <td>{data.comments}</td>
         <td>
-          <div className="w-75">
-            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
-              : data.status === "APPROVED"
-                ? 'green-700'
-                : data.status === "REJECTED"
-                  ? 'red-700'
-                  : data.status === "REINITIATED"
-                    ? 'yellow-500'
-                    : data.status === "PENDING"
-                      ? 'info'
-                      : 'white'}`}>
-              {data.status}
-            </div>
-          </div>
+            <button  
+                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          data.status === "INITIATED"
+                            ? "blue-700"
+                            : data.status === "APPROVED"
+                            ? "green-700"
+                            : data.status === "REJECTED"
+                            ? "red-700"
+                            : data.status === "REINITIATED"
+                            ? "yellow-500"
+                            : data.status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {data.status}
+                      </button>
         </td>
         <td>
           <div className="d-flex gap-3">
@@ -257,13 +260,13 @@ export default function Vendors() {
 
   return (
     <>
-      <div className="m-5 px-2 d-flex flex-column gap-5">
+      <div className="m-5 mt-3">
         <div className="">
-          <h5 className="fw-bold">Approved Vendors</h5>
+          <h4 className="fw-bold">Approved Vendors</h4>
         </div>
 
         <div>
-          <CRow className="">
+          <CRow className="mt-5 mb-3">
             <CCol sm={3}>
               <CFormSelect
                 value={statusFilter}
@@ -278,7 +281,6 @@ export default function Vendors() {
                   { value: 'APPROVED', label: 'Approved' },
                   { value: 'REJECTED', label: 'Rejected' },
                   { value: 'REINITIATED', label: 'Reinitiated' },
-                  { value: 'PENDING', label: 'Pending' },
                   { value: 'DROPPED', label: 'Dropped' }
                 ]}
               />
@@ -287,13 +289,13 @@ export default function Vendors() {
             <CCol sm={3}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton color="primary" onClick={() => setAddModal(true)}>Add Approved Vendor</CButton>
+                <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Approved Vendor</CButton>
               </div>
             </CCol>
           </CRow>
         </div>
 
-        <div className='shadow rounded border-2 bg-light border-dark-subtle'>
+        <div className='rounded bg-white'  style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}>
           <table className='table table-responsive   '>
             <thead>
               <tr>
@@ -313,20 +315,19 @@ export default function Vendors() {
           </table>
         </div>
 
-        <div className="pagination">
-          <div className="pagination d-flex gap-3">
-            <div className=''>
-              <button className="btn" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-            </div>
-            <div className="current-page-number bg-dark-subtle page-item rounded-circle">
-              <button className='btn'> {currentPage} </button>
-            </div>
-            <div>
-              <button className="btn" onClick={nextPage} disabled={endIndex >= filteredTableData.length}>&gt;&gt;</button>
-            </div>
-          </div>
-          <button className="btn btn-next border-dark d-flex gap-2" onClick={nextToLastPage}>Next <FaArrowRight className="mt-1" /></button>
-        </div>
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
+
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}

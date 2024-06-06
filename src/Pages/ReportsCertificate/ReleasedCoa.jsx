@@ -82,15 +82,12 @@ function ReleasedCoa() {
     const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
    
     return (
-        <>
-            <div  className="h-100 mx-5">
-                <div className="container-fluid my-5">
+            <div  className="m-5 mt-3">
                     <div className="main-head">
-                        <div className="title fw-bold fs-5 py-4">Released Coa</div>
+                    <h4 className="fw-bold">Released Coa</h4>
                     </div>
-                    <div className="d-flex gap-4 "></div>
                     <div>
-                        <CRow className="mb-3">
+                        <CRow className="mb-3 mt-5">
                             <CCol sm={2}>
                                 <CFormSelect style={{fontSize:'0.9rem'}}>
                                     <option value="Ar No.">Ar No.</option>
@@ -208,9 +205,7 @@ function ReleasedCoa() {
                        
                     </div>
 
-                </div>
             </div>
-        </>
     );
 }
 

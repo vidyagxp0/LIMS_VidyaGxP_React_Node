@@ -128,12 +128,12 @@ function EMMoniteringDetails() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div id="approval-page" className="m-5 mt-3">
+     
           <div className="main-head">
-            <div className="title fw-bold fs-5 mb-5">Monitering Details</div>
+          <h4 className="fw-bold ">Monitering Details</h4>
           </div>
-          <div className="d-flex gap-4">
+          <div className="d-flex gap-4 mt-5">
             <div className="chart-widgets w-100"></div>
           </div>
           <div>
@@ -152,7 +152,7 @@ function EMMoniteringDetails() {
               {/* <CCol sm={2}></CCol> */}
               <CCol sm={9}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                  <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
                     Add Monitoring Details
                   </CButton>
                 </div>
@@ -202,19 +202,20 @@ function EMMoniteringDetails() {
                       
                       
 
-                      <CTableDataCell className="d-flex">
-                        <div
-                          className="py-2 px-3 small rounded fw-bold"
-                          style={
-                            item.status === "Active"
-                              ? badgeStyle2
-                              : item.status === "Inactive"
-                              ? badgeStyle3
-                              : badgeStyle
-                          }
+                      <CTableDataCell >
+                       <button
+                          style={{
+                            background:
+                              item.status === "Active" ? "#15803d" : "#b91c1c",
+                            color: "white",
+                            width: "4rem",
+                            fontSize: "0.6rem",
+                            padding: "2px 7px",
+                            borderRadius: "7px",
+                          }}
                         >
                           {item.status}
-                        </div>
+                        </button>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div className="d-flex gap-3">
@@ -240,26 +241,20 @@ function EMMoniteringDetails() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination mt-5">
-            <button
-              className="btn mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle">{currentPage}</button>
-            </div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredData.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
+     
+          <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
+      
       </div>
 
       {addModal && (
