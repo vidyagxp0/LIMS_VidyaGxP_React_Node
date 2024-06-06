@@ -83,15 +83,15 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                   filter: "drop-shadow(0 0 0 white)",
                 }}
               />
-              <button
-                className={`close-button ${
-                  isSidebarVisible ? "block" : "hidden"
-                }`}
-                onClick={toggleSidebarClass}
-              >
-                <AiOutlineClose className="text-orange-400 text-2xl absolute left-[210px] top-[25px]" />
-              </button>
             </Link>
+            <button
+              className={`close-button ${
+                isSidebarVisible ? "block" : "hidden"
+              }`}
+              onClick={toggleSidebarClass}
+            >
+              <AiOutlineClose className="text-orange-400 text-2xl absolute left-[210px] top-[25px]" />
+            </button>
           </CSidebarBrand>
         </CSidebarHeader>
         <CSidebarNav>

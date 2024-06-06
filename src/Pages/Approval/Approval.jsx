@@ -6,6 +6,7 @@ import {
   CCol,
   CFormInput,
   CFormSelect,
+  CProgress,
   CRow,
   CTable,
   CTableBody,
@@ -96,7 +97,7 @@ function Approval() {
       code: "na-002",
       description: "NA",
       status: "DROPPED",
-    }, 
+    },
     {
       id: 11,
       name: "Jacob",
@@ -145,15 +146,16 @@ function Approval() {
 
   return (
     <>
-      <div className="m-5 mt-3" >
-        <div className="main-head">
+      <div className="m-5 mt-3   flex flex-col items-center justify-center ">
+        <div className="main-head w-[100%] ">
           <h4 className="fw-bold">Approvals</h4>
         </div>
-        <div>
+        <div className=" w-[100%]  ">
           <CRow className="mt-5 mb-3">
             <CCol sm={4}>
               <CFormInput
-                style={{fontSize:'0.9rem'}}
+                style={{ fontSize: "0.9rem" }}
+                className="w-[20px] "
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
@@ -165,7 +167,7 @@ function Approval() {
             </CCol>
             <CCol sm={3}>
               <CFormSelect
-                style={{fontSize:'0.9rem'}}
+                style={{ fontSize: "0.9rem" }}
                 value={statusFilter}
                 onChange={(e) => {
                   setStatusFilter(e.target.value);
@@ -183,18 +185,24 @@ function Approval() {
           </CRow>
         </div>
         <div
-          className=" rounded   bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+          className="  w-full h-full  bg-white"
+          style={{
+            fontFamily: "sans-serif",
+            fontSize: "0.9rem",
+            boxShadow: "5px 5px 20px #5D76A9",
+          }}
         >
           <CTable
             align="middle"
-            responsive
-            className="mb-0 rounded-lg table-responsive "
+            // color="secondary "
+            hover
+            responsive="xl"
+            className="mb-0 rounded-lg table-responsive flex items-center justify-center "
           >
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
+                  style={{ background: "#5D76A9", color: "white" }}
                   scope="col"
                 >
                   S No.
@@ -241,24 +249,24 @@ function Approval() {
                   <CTableDataCell>{item.code}</CTableDataCell>
                   <CTableDataCell>{item.description}</CTableDataCell>
                   <CTableDataCell>
-                      <button  
-                        className={`p-1 w-50 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          item.status === "INITIATED"
-                            ? "blue-700"
-                            : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
-                            ? "red-700"
-                            : item.status === "REINITIATED"
-                            ? "yellow-500"
-                            : item.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {item.status}
-                      </button>
-                  
+                    <button
+                      className={`p-1 w-50 rounded text-light d-flex justify-content-center align-items-center bg-${
+                        item.status === "INITIATED"
+                          ? "blue-700"
+                          : item.status === "APPROVED"
+                          ? "green-700"
+                          : item.status === "REJECTED"
+                          ? "red-700"
+                          : item.status === "REINITIATED"
+                          ? "yellow-500"
+                          : item.status === "DROPPED"
+                          ? "purple-700"
+                          : "white"
+                      }`}
+                      style={{ fontSize: "0.7rem" }}
+                    >
+                      {item.status}
+                    </button>
                   </CTableDataCell>
                   <CTableDataCell className="text-start">
                     <Link to="/approval/1321">
@@ -270,38 +278,29 @@ function Approval() {
             </CTableBody>
           </CTable>
         </div>
-        {/* <div className="d-flex justify-content-end my-4">
-          <nav aria-label="...">
-        <ul className="pagination">
-          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-            <span className="page-link" onClick={handlePrevPage}>Previous</span>
-          </li>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
-              <a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
-                {index + 1}
-              </a>
-            </li>
-          ))}
-          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-            <a className="page-link" href="#" onClick={handleNextPage}>Next</a>
-          </li>
-        </ul>
-      </nav>
-      </div> */}
 
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handlePrevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handleNextPage} >
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
+        <div className="d-flex justify-end  w-full mt-4">
+          <div className="pagination">
+            <button
+              style={{ background: "#21516a", color: "white" }}
+              className="btn mr-2"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+            >
+              &lt;&lt;
+            </button>
+            <button className="btn mr-2 bg-dark-subtle rounded-circle">
+              {currentPage}
+            </button>
+            <button
+              style={{ background: "#21516a", color: "white" }}
+              className="btn mr-2"
+              onClick={handleNextPage}
+            >
+              &gt;&gt;
+            </button>
+          </div>
+        </div>
 
       </div>
     </>

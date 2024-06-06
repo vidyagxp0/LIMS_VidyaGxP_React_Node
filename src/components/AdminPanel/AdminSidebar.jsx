@@ -4,6 +4,12 @@ import { Link, useLocation } from 'react-router-dom'
 import { TfiUser } from 'react-icons/tfi'
 import '../Sidebar/Sidebar.css'
 import { FaUsers } from 'react-icons/fa6'
+import { GrUserAdmin } from "react-icons/gr";
+import { SiSitecore } from "react-icons/si";
+import { SiProcesswire } from "react-icons/si";
+import Dashboard from '../../Pages/Dashboard/Dashboard'
+
+
 
 const AdminSidebar = () => {
 
@@ -28,7 +34,7 @@ const AdminSidebar = () => {
         <CSidebarHeader className="border-bottom ">
           <CSidebarBrand>
             <Link
-              to="/admin-panel/userManagement"
+              to="/Dashboard"
               className="logo d-flex align-items-center"
               style={{}}
             >
@@ -36,9 +42,6 @@ const AdminSidebar = () => {
                 src="/images/vidhyaGxp.png"
                 alt="..."
                 style={{
-                  width: "300px",
-                  marginRight: "90px",
-                  paddingRight: "70px",
                   filter: "drop-shadow(0 0 0 white)",
                 }}
               />
@@ -52,7 +55,8 @@ const AdminSidebar = () => {
             className={isActive("/admin-panel/userManagement")}
             toggler={
               <>
-                <FaUsers />
+                <GrUserAdmin />
+
                 <span className="ml-5">User Management</span>
               </>
             }
@@ -77,7 +81,8 @@ const AdminSidebar = () => {
             className={isActive("/admin-panel/site-management")}
             toggler={
               <>
-                <FaUsers />
+               <SiSitecore />
+
                 <span className="ml-5">Site Management</span>
               </>
             }
@@ -102,7 +107,8 @@ const AdminSidebar = () => {
             className={isActive("/admin-panel/process-management")}
             toggler={
               <>
-                <FaUsers />
+                <SiProcesswire />
+
                 <span className="ml-5">Process Management</span>
               </>
             }
