@@ -210,7 +210,7 @@ function Registration() {
           className=" rounded bg-white"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
-                              <CTable className="mb-0    table table-responsive" >
+                              <CTable className="mb-0   table table-responsive" >
                                    <CTableHead>
                                         <CTableRow >
                                              <CTableHeaderCell

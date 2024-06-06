@@ -33,7 +33,7 @@ export default function Clients() {
   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
   const badgeStyle4 = { background: "red", color: "white", width: "110px" };
 
-  const pageSize = 8;
+  const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
 
   const [employees, setEmployees] = useState([
@@ -41,6 +41,9 @@ export default function Clients() {
     { id: 2, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
     { id: 3, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
     { id: 4, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 5, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
+    { id: 6, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
+    { id: 7, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
   ]);
 
   const filteredEmployees = employees.filter(employee =>
@@ -59,14 +62,19 @@ export default function Clients() {
         <td>{employee.departments}</td>
         <td>{employee.joiningDate}</td>
         <td>{employee.addedBy}</td>
-        <td>  <div
-          className="d-flex justify-content-center py-2 px-3 small rounded fw-bold"
-          style={
-            employee.status === "ACTIVE" ? badgeStyle3 : badgeStyle4
-          }
-        >
-          {employee.status}
-        </div></td>
+        <td>  <button
+              style={{
+                background:
+                  employee.status === "ACTIVE" ? "#15803d" : "#b91c1c",
+                color: "white",
+                width: "80%",
+                fontSize: "0.6rem",
+                padding: "2px 7px",
+                borderRadius: "7px",
+              }}
+            >
+              {employee.status}
+            </button></td>
         <td>
           <div className="d-flex gap-3">
             <Link to="/clientss/clients-details"><FontAwesomeIcon icon={faEye} /></Link>
@@ -177,36 +185,34 @@ export default function Clients() {
 
   return (
     <>
-      <div className="m-5 px-2 d-flex flex-column gap-5">
-
+      <div className="m-5 mt-3">
         <div className="">
-          <h5 className="fw-bold">Clients</h5>
+          <h4 className="fw-bold">Clients</h4>
         </div>
 
-        <div>
-          <CRow className="">
+          <CRow className="mt-5 mb-3">
             <CCol sm={3}>
               <CFormSelect
                 onChange={(e) => setStatusFilter(e.target.value)}
                 value={statusFilter}
                 style={{fontSize:'0.9rem'}}
               >
-                <option value="All">All</option>
+                <option value="">All</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
               </CFormSelect>
             </CCol>
             <CCol sm={3}></CCol>
-            <CCol sm={3}></CCol>
-            <CCol sm={3}>
+            <CCol sm={2}></CCol>
+            <CCol sm={4}>
               <div className="d-flex justify-content-end">
-                <CButton color="primary" onClick={() => setAddModal(true)}>Add Client</CButton>
+                <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Client</CButton>
               </div>
             </CCol>
           </CRow>
-        </div>
 
-        <div className='shadow rounded border-2 bg-light border-dark-subtle'>
+        <div className='rounded bg-white'
+         style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}>
           <table className='table table-responsive   '>
             <thead>
               <tr>
@@ -226,21 +232,18 @@ export default function Clients() {
           </table>
         </div>
 
-        <div className="pagination">
-          <div className="pagination d-flex gap-3">
-            <div className=''>
-              <button className="btn" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-            </div>
-            <div className="current-page-number bg-dark-subtle page-item rounded-circle">
-              <button className='btn'> {currentPage} </button>
-            </div>
-            <div>
-              <button className="btn" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
-            </div>
-          </div>
-
-          <button className="btn btn-next border-dark d-flex gap-2" onClick={nextToLastPage}> Next <FaArrowRight className="mt-1" /></button>
-        </div>
+        <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}

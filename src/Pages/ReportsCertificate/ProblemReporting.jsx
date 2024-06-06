@@ -80,16 +80,16 @@ function ProblemReporting() {
 
     return (
         <>
-            <div className="h-100 mx-5">
-                <div className="container-fluid my-5">
+            <div className="m-5 mt-3">
+             
                     <div className="main-head">
-                        <div className="title fw-bold fs-5 py-4">Problem Reporting</div>
+                    <h4 className="fw-bold">Problem Reporting</h4>
                     </div>
                     <div>
-                        <CRow className="mb-3">
+                        <CRow className="mb-3 mt-5">
                             <CCol sm={3}>
                                 <CFormSelect
-                                    options={["Select Status", { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
+                                    options={[ { label: "All" }, { label: "Active" }, { label: "Inactive" }]}
                                     onChange={(e) => setSelectedStatus(e.target.value)}
                                     value={selectedStatus}
                                     style={{fontSize:'0.9rem'}}
@@ -98,7 +98,7 @@ function ProblemReporting() {
                             <CCol sm={6}></CCol>
                             <CCol sm={3}>
                                 <div className="d-flex justify-content-end">
-                                    <CButton color="primary" onClick={() => setAddModal(true)}>Add Problem</CButton>
+                                    <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Problem</CButton>
                                 </div>
                             </CCol>
                         </CRow>
@@ -185,7 +185,7 @@ function ProblemReporting() {
                         </div>
                        
                     </div>
-                </div>
+              
             </div>
             {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
             {deleteModal && (

@@ -38,7 +38,7 @@ function ServiceReporting() {
       id: 1,
       problemID: "SHMDZ",
       instrumentID: "hplc",
-      moduleID: "SHMDZ/102145",
+      moduleID: "SHMDZ",
       problemBrief: "test",
       problemDetails: "test",
       closureDate: "Nov 17th 23",
@@ -47,33 +47,33 @@ function ServiceReporting() {
     },
     {
       id: 2,
-      problemID: "SHMDZ115454",
+      problemID: "SHMDZ11",
       instrumentID: "hplc",
       moduleID: "102145",
-      problemBrief: "test012155",
-      problemDetails: "test5454848",
+      problemBrief: "test012",
+      problemDetails: "test545",
       closureDate: "Nov 16th 23",
       jobDetails: "Test84848",
       status: "Inactive",
     },
     {
       id: 3,
-      problemID: "SHMDZ1554545",
+      problemID: "SHMDZ15",
       instrumentID: "hplc",
-      moduleID: "SHMDZ875699/102145",
-      problemBrief: "test978794",
-      problemDetails: "test7849",
+      moduleID: "SHMDZ8756145",
+      problemBrief: "test94",
+      problemDetails: "test9",
       closureDate: "Nov 15th 23",
-      jobDetails: "Test021515",
+      jobDetails: "Test025",
       status: "Inactive",
     },
     {
       id: 4,
       problemID: "SHMDZ154",
       instrumentID: "hplc",
-      moduleID: "SHMDZ9536/102145",
-      problemBrief: "testnnkk65545",
-      problemDetails: "test1449663",
+      moduleID: "SHMDZ9535",
+      problemBrief: "testnn45",
+      problemDetails: "test663",
       closureDate: "Nov 18th 23",
       jobDetails: "Test2155",
       status: "Active",
@@ -82,18 +82,18 @@ function ServiceReporting() {
       id: 5,
       problemID: "SHMDZ",
       instrumentID: "hplc",
-      moduleID: "SHMDZ/102145",
-      problemBrief: "test021512",
-      problemDetails: "test215465",
+      moduleID: "SHMDZ/45",
+      problemBrief: "te1512",
+      problemDetails: "test265",
       closureDate: "Nov 21th 23",
       jobDetails: "Test",
       status: "Active",
     },
     {
       id: 6,
-      problemID: "SHMDZ023",
+      problemID: "SHMDZ0",
       instrumentID: "hplc",
-      moduleID: "SHMDZ/102145",
+      moduleID: "SHMDZ/5",
       problemBrief: "test45",
       problemDetails: "test325",
       closureDate: "Nov 17th 23",
@@ -122,16 +122,15 @@ function ServiceReporting() {
 
   return (
     <>
-      <div className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div className="m-5 mt-3">
           <div className="main-head">
-            <div className="title fw-bold fs-5 py-4">Service Reporting</div>
+          <h4 className="fw-bold">Service Reporting</h4>
           </div>
           <div>
-            <CRow className="mb-3">
+            <CRow className="mb-3 mt-5">
               <CCol sm={3}>
                 <CFormSelect
-                  options={["Select Status", { label: "All", value: "All" }, { label: "Active", value: "Active" }, { label: "Inactive", value: "Inactive" }]}
+                  options={[{ label: "All", value: "All" }, { label: "Active", value: "Active" }, { label: "Inactive", value: "Inactive" }]}
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   value={selectedStatus} style={{fontSize:'0.9rem'}}
                 />
@@ -139,7 +138,7 @@ function ServiceReporting() {
               <CCol sm={6}></CCol>
               <CCol sm={3}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                  <CButton style={{fontSize:'0.9rem'}}  color="primary" onClick={() => setAddModal(true)}>
                     Add Service
                   </CButton>
                 </div>
@@ -150,9 +149,9 @@ function ServiceReporting() {
           className=" rounded bg-white"
           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
         >
-            <CTable align="middle" responsive className="  " >
+            <CTable align="middle" responsive className="mb-0 table-responsive" >
               <CTableHead>
-                <CTableRow>
+                <CTableRow  style={{fontSize:'0.9rem'}}>
                   <CTableHeaderCell
                   style={{ background: "#5D76A9", color: "white"}}
                   scope="col"
@@ -250,7 +249,7 @@ function ServiceReporting() {
                         </div>
                        
                     </div>
-        </div>
+        
       </div>
 
       {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}

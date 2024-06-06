@@ -95,13 +95,12 @@ function InvestigationCoa() {
   
   return (
     <>
-      <div className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div className="m-5 mt-3">
           <div className="main-head">
-            <div className="title fw-bold fs-5 py-4">Investigation Coa</div>
+          <h4 className="fw-bold">Investigation Coa</h4>
           </div>
           <div>
-            <CRow className="mb-3">
+            <CRow className="mb-3 mt-5">
               <CCol sm={2}>
                 <CFormSelect
                   options={[
@@ -223,7 +222,6 @@ function InvestigationCoa() {
                         </div>
                        
                     </div>
-        </div>
       </div>
     </>
   );

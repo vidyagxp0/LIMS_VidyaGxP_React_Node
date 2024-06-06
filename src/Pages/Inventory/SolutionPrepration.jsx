@@ -139,12 +139,11 @@ function SolutionPreparation() {
   };
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
+      <div id="approval-page" className="m-5 mt-3">
           <div className="main-head">
-            <div className="title fw-bold fs-5">Solutions Prepration</div>
+          <h4 className="fw-bold ">Solutions Prepration</h4>
           </div>
-          <div className="d-flex gap-4">
+          <div className="d-flex gap-4 mt-3">
             <div className="chart-widgets w-100">
               <div className="">
               <div className="row" style={{ cursor: "pointer" }}>
@@ -283,7 +282,7 @@ function SolutionPreparation() {
               
               <CCol sm={5}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
+                  <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
                     Add Solution Prepration
                   </CButton>
                 </div>
@@ -338,27 +337,24 @@ function SolutionPreparation() {
                       <CTableDataCell>{item.Type}</CTableDataCell>
                       <CTableDataCell>{item.BatchNo}</CTableDataCell>
                       {/* <CTableDataCell>{item.Comments}</CTableDataCell> */}
-                      <CTableDataCell className="d-flex">
-                        <div
-                          className="py-2 px-3 small rounded fw-bold"
-                          style={
-                            item.status === "INITIATED"
-                              ? badgeStyle2
-                              : item.status === "APPROVED"
-                              ? badgeStyle3
-                              : item.status === "REJECTED"
-                              ? badgeStyle4
-                              : item.status === "REINITIATED"
-                              ? badgeStyle5
-                              : item.status === "DROPPED"
-                              ? badgeStyle6
-                              : item.status === "ALL"
-                              ? badgeStyle
-                              : badgeStyle
-                          }
-                        >
-                          {item.status}
-                        </div>
+                      <CTableDataCell>
+                        <button  
+                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
+                          item.status === "INITIATED"
+                            ? "blue-700"
+                            : item.status === "APPROVED"
+                            ? "green-700"
+                            : item.status === "REJECTED"
+                            ? "red-700"
+                            : item.status === "REINITIATED"
+                            ? "yellow-500"
+                            : item.status === "DROPPED"
+                            ? "purple-700"
+                            : "white"
+                        }`} style={{fontSize:'0.6rem'}}
+                      >
+                        {item.status}
+                      </button>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div className="d-flex gap-3">
@@ -384,26 +380,19 @@ function SolutionPreparation() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination mt-5">
-            <button
-              className="btn mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <div className="current-page-number mr-2 bg-dark-subtle page-item">
-              <button className="btn rounded-circle">{currentPage}</button>
-            </div>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= filteredData.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
+     
+          <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
       </div>
 
       {addModal && (

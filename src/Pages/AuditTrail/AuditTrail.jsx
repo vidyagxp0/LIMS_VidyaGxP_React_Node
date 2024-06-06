@@ -56,14 +56,12 @@ function AuditTrail() {
 
     return (
         <>
-            <div className="h-100 mx-5">
-                <div className="container-fluid my-5">
+            <div className="m-5 mt-3">
                     <div className="main-head">
-                        <div className="title fw-bold fs-5 py-4">Audit Trail</div>
+                    <h4 className="fw-bold">Audit Trail</h4>
                     </div>
-                    <div className="d-flex gap-4"></div>
                     <div>
-                        <CRow className="mb-3">
+                        <CRow className="mb-3 mt-5">
                             <CCol sm={3}>
                                 <CFormSelect
                                     style={{fontSize:'0.9rem'}}
@@ -128,7 +126,7 @@ function AuditTrail() {
                             </CCol>
                         </CRow>
                     </div>
-                    <div className="bg-white border-dark-subtle border-2 mt-5 rounded">
+                    <div className=" rounded bg-white"    style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}>
                         <CTable align="middle" responsive className="  ">
                             <CTableHead>
                                 <CTableRow>
@@ -156,21 +154,19 @@ function AuditTrail() {
                             </CTableBody>
                         </CTable>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center mt-4">
-                        <div className="pagination gap-3">
-                            <button className="btn" onClick={prevPage} disabled={currentPage === 1}>
+                  
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
                                 &lt;&lt;
                             </button>
-                            <button className="btn bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button className="btn" onClick={nextPage} disabled={endIndex >= filteredData.length}>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
                                 &gt;&gt;
                             </button>
                         </div>
-                        <button className="btn d-flex gap-2 border-1 border-dark" onClick={nextToLastPage}>
-                            Next <FaArrowRight className="mt-1"/>
-                        </button>
-                    </div>
-                </div>
+                       
+                    </div> 
             </div>
         </>
     );
