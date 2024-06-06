@@ -114,7 +114,6 @@ function StorageLocation() {
                   style={{ fontSize:'0.9rem'}}
                   onChange={handleFilter}
                   options={[
-                    { disabled: true, label: "Select Status", value: "" },
                     { label: "All", value: "" },
                     { label: "Active", value: "1" },
                     { label: "Inactive", value: "0" },
@@ -186,25 +185,18 @@ function StorageLocation() {
               </CTableBody>
             </CTable>
           </div>
-          <div className="d-flex justify-content-end my-4">
-          <nav aria-label="...">
-        <ul className="pagination">
-          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-            <span className="page-link" onClick={handlePreviousPage}>Previous</span>
-          </li>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
-              <a className="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
-                {index + 1}
-              </a>
-            </li>
-          ))}
-          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-            <a className="page-link" href="#" onClick={handleNextPage}>Next</a>
-          </li>
-        </ul>
-      </nav>
-          </div>
+
+          <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handleNextPage} >
+                                &gt;&gt;
+                            </button>
+                        </div>
+                    </div>
        
       </div>
 
@@ -252,7 +244,7 @@ const RemoveModal = (_props) => {
                 <CModalTitle>Delete User</CModalTitle>
             </CModalHeader>
             <CModalBody>
-                <p>Are you sure you want to delete this storage?</p>
+                <p>Are you sure you want to delete this storage location?</p>
             </CModalBody>
             <CModalFooter>
                 <CButton

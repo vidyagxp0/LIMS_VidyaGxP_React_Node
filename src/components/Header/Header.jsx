@@ -10,6 +10,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TfiMenu } from "react-icons/tfi";
+import { CAvatar } from "@coreui/react";
+import AdminPanel from "../AdminPanel/AdminPanel";
+import UserMgnt from "../AdminPanel/User Management/UserMgnt";
 
 function Header({ toggleSidebarClass }) {
   const [notification, setNotification] = useState(false);
@@ -50,7 +53,7 @@ function Header({ toggleSidebarClass }) {
       </div>
 
       <div className="flex items-center  w-[80%] text-[14px] justify-center">
-        <p className="text-gray-100 mt-4 font-serif text-center xsm:text-[0.5em] text-[0.8em] sm:text-[1em] md:text-[1.1em] lg:text-[1.2em] xl:text-[1.4em]">
+        <p className="text-gray-100 mt-4 font-serif text-center xsm:text-[0.5em] text-[0.8em] sm:text-[1em] md:text-[1.2em] lg:text-[1.2em] xl:text-[1.8em]">
           Welcome to Laboratory Information Management System
         </p>
       </div>
@@ -61,8 +64,8 @@ function Header({ toggleSidebarClass }) {
             onClick={() => setNotification(!notification)}
             className="text-gray-100 hover:text-gray-300"
           >
-            <FontAwesomeIcon icon={faBell} className="text-xl " />
-            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+            <FontAwesomeIcon icon={faBell} className="text-xl mr-4" />
+            <span className="absolute top-0 right-0 inline-flex mr-4 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
               12
             </span>
           </button>
@@ -73,10 +76,10 @@ function Header({ toggleSidebarClass }) {
         {contact && (
           <div
             id="About"
-            className="absolute backdrop-blur flex flex-col items-center justify-center text-center top-[175px] left-[180px]  w-[60%]  h-[450px] rounded-[25px] bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
+            className="absolute flex flex-col items-center justify-center text-center top-[175px] left-[450px]  w-[30%]  rounded-3xl bg-[#245A71] text-white font-extrabold gap-5 shadow-lg"
           >
             <div
-              className="bg-no-repeat bg-contain w-[450px]  h-[100px] "
+              className="bg-no-repeat bg-contain w-full  h-28 "
               style={{
                 backgroundImage:
                   "url('https://vidyagxp.com/vidyaGxp_logo.png')",
@@ -89,17 +92,29 @@ function Header({ toggleSidebarClass }) {
           </div>
         )}
 
-        <div className="relative">
+        <div className="relative mr-2">
           <div ref={dropdownRef}>
             <button
               onClick={() => setDrop(!drop)}
-              className="text-center xsm:text-[0.5em] text-[0.6em] sm:text-[0.6em] md:text-[0.8em] lg:text-[0.8em] xl:text-[1em] text-white mr-4"
+              className="text-center text-[0.5em] xsm:text-[0.6em] sm:text-[0.6em] md:text-[0.8em] lg:text-[0.8em] xl:text-[1em] text-white"
             >
-              Amit Patel <FontAwesomeIcon icon={faAngleDown} className="ml-2" />
+              <CAvatar
+                color="light"
+                size="sm"
+                status="success"
+                className="mr-2"
+              >
+                <img
+                  className="rounded-full "
+                  src="https://cdn-icons-png.freepik.com/512/5003/5003094.png"
+                  alt=""
+                />
+              </CAvatar>
+              Amit Patel <FontAwesomeIcon icon={faAngleDown} />
             </button>
+
             {drop && (
               <div className="absolute left-0 z-50 py-2 mt-1 text-base bg-white border border-gray-300 rounded">
-                {/* Dropdown menu items */}
               </div>
             )}
           </div>
@@ -112,7 +127,7 @@ function Header({ toggleSidebarClass }) {
                   alt="Profile"
                   className="w-8 h-8 rounded-full mr-2"
                 />
-                <span className="font-bold">Amit Patel</span>
+                <span className="font-bold text-white">Amit Patel</span>
               </div>
 
               <Link
@@ -130,6 +145,12 @@ function Header({ toggleSidebarClass }) {
               >
                 <span className="mr-3">♣</span> About
               </div>
+              <Link
+                to="/admin-panel/userManagement"
+                className="block py-2 px-4 hover:bg-gray-100"
+              >
+                <span className="mr-3">◘</span> Admin Panel
+              </Link>
 
               <Link to="/" className="block py-2 px-4 hover:bg-gray-100">
                 <FontAwesomeIcon

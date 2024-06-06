@@ -8,6 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { CAvatar } from "@coreui/react";
 
 function AdminHeader() {
   const [notification, setNotification] = useState(false);
@@ -98,6 +99,13 @@ function AdminHeader() {
               onClick={() => setDrop(!drop)}
               className="flex items-center text-gray-100 hover:text-gray-300"
             >
+               <CAvatar color="light" size="lg" status="success" className="mr-2">
+                <img
+                  className="rounded-full "
+                  src="https://cdn-icons-png.freepik.com/512/5003/5003094.png"
+                  alt=""
+                />
+              </CAvatar>
               Amit Patel <FontAwesomeIcon icon={faAngleDown} className="ml-2" />
             </button>
             {drop && (

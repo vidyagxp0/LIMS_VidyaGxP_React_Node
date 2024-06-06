@@ -259,33 +259,19 @@ const Users = () => {
 
       {/* Pagination */}
 
-      <div className="d-flex justify-content-between align-items-center mt-5">
-        <div className="pagination">
-          <button
-            className="btn mr-2"
-            onClick={prevPage}
-            disabled={currentPage === 1}
-          >
-            &lt;&lt;
-          </button>
-          <button className="btn mr-2 bg-dark-subtle rounded-circle">
-            {currentPage}
-          </button>
-          <button
-            className="btn mr-2"
-            onClick={nextPage}
-            disabled={endIndex >= employees.length}
-          >
-            &gt;&gt;
-          </button>
-        </div>
-        <button
-          className="btn d-flex align-items-center "
-          onClick={nextToLastPage}
-        >
-          Next <FaArrowRight className="ms-2" />
-        </button>
-      </div>
+     
+      <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                       
+                    </div>
       {addModal && (
         <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
       )}

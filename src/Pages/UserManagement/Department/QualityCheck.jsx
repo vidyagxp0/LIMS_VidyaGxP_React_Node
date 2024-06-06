@@ -45,7 +45,7 @@ const QualityCheck = () => {
                 <td>{employee.role}</td>
                 <td>
                     {employee.email}
-                    <button style={{backgroundColor:'#577B8D',borderRadius:'3px', fontSize:'0.6rem',padding:'2px',marginLeft:'2px'}}>Resend Email</button>
+                    <button style={{backgroundColor:'#577B8D',color:'white',borderRadius:'3px', fontSize:'0.7rem',padding:'3px',marginLeft:'2px'}}>Resend Email</button>
                 </td>
                 <td>{employee.addedOn}</td>
                 <td> <button
@@ -164,34 +164,18 @@ const QualityCheck = () => {
             <tbody>{renderRows()}</tbody>
           </table>
         </div>
-  
-        <div className="d-flex justify-content-between align-items-center my-4">
-          <div className="pagination">
-            <button
-              className="btn mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">
-              {currentPage}
-            </button>
-            <button
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= employees.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
-          <button
-            className="btn d-flex align-items-center border"
-            onClick={nextToLastPage}
-          >
-            Next <FaArrowRight className="ms-2" />
-          </button>
-        </div>
+
+        <div className="d-flex justify-content-end align-items-center mt-4">
+                        <div className="pagination">
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                                &lt;&lt;
+                            </button>
+                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                                &gt;&gt;
+                            </button>
+                        </div>
+                    </div>
         
   
         {addModal && (

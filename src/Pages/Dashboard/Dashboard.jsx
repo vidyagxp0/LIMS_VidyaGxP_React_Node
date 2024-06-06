@@ -10,6 +10,7 @@ import "react-circular-progressbar/dist/styles.css";
 import LineChart from "echarts-for-react";
 import ReactEcharts from "echarts-for-react";
 import * as echarts from "echarts";
+import { CSpinner } from "@coreui/react";
 
 function Dashboard(props) {
   useEffect(() => {
@@ -94,10 +95,10 @@ function Dashboard(props) {
       {
         name: "Material Status",
         type: "funnel",
-        left: "16%",
-        top: 60,
-        bottom: 60,
-        width: "70%",
+        left: "22%",
+        top: 25,
+        bottom: 20,
+        width: "60%",
         min: 0,
         max: 100,
         minSize: "0%",
@@ -541,7 +542,7 @@ function Dashboard(props) {
           6, 3,
         ],
         itemStyle: {
-          color: "blue",
+          color: "black",
           borderRadius: [5, 5, 0, 0],
         },
       },
@@ -555,7 +556,7 @@ function Dashboard(props) {
           2, 2, 9, 6, 1, 7, 5, 4, 8, 0, 3,
         ],
         itemStyle: {
-          color: "#CE2029",
+          color: "#0089C8",
           borderRadius: [5, 5, 0, 0],
         },
       },
@@ -624,7 +625,7 @@ function Dashboard(props) {
         {
           name: "Rainfall",
           type: "bar",
-          data: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160],
+          data: [50, 60, 20, 80, 90, 100, 110, 120, 130, 140, 150, 160],
           itemStyle: {
             color: "#0089c8",
             borderRadius: [5, 5, 0, 0],
@@ -652,34 +653,40 @@ function Dashboard(props) {
   const radarOption = {
     radar: {
       indicator: [
-        { name: "Formulation Analysis", max: 10 },
-        { name: "In Silico Modeling and Simulation", max: 10 },
-        { name: "Pharmacodynamic Evaluation", max: 10 },
-        { name: "In Silico Modeling and Simulation", max: 10 },
+        { name: "Formulation Analysis", max: 5 },
+        { name: "In Silico Modeling and Simulation", max: 5 },
+        { name: "Pharmacodynamic Evaluation", max: 5 },
+        { name: "In Silico Modeling and Simulation", max: 5 },
       ],
     },
+    toolbox: {
+      feature: {
+        saveAsImage: {},
+      },
+    },
+
     series: [
       {
         type: "radar",
         data: [
           {
-            value: [6, 3, 1, 5, 8, 5, 7, 1, 7],
+            value: [6, 3, 1, 5, 8],
             name: "Test Planned",
           },
           {
-            value: [2, 7, 4, 5, 8, 7, 4, 5, 9, 5, 8],
+            value: [2, 7, 4, 5, 8, 7, 4],
             name: "Test Executed",
           },
           {
-            value: [1, 2, 3, 4, 5, 6, 8, 7, 9, 5, 5, 5, 8, 4, 5],
+            value: [1, 2, 3, 4, 5, 6, 8, 7, 8, 4, 5],
             name: "Test Executed",
           },
           {
-            value: [1, 55, 88, 77, 44, 55, 99, 66, 22, 5, 5],
+            value: [1, 55, 88, 77, 44, 5, 5],
             name: "Test Executed",
           },
           {
-            value: [2, 7, 4, 5, 8, 7, 4, 5, 9, 5, 0],
+            value: [2, 7, 4, 5, 8, 5, 0],
             name: "Test Executed",
           },
         ],
@@ -687,13 +694,18 @@ function Dashboard(props) {
     ],
   };
 
-  
   const chartRef = useRef(null);
+
   useEffect(() => {
     const option = {
       tooltip: {
         trigger: "item",
         formatter: "{a} <br/>{b}: {c} ({d}%)",
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
       },
       legend: {
         data: [
@@ -710,10 +722,10 @@ function Dashboard(props) {
           name: "Access From",
           type: "pie",
           selectedMode: "single",
-          radius: [0, "50%"],
+          radius: [0, "70%"],
           label: {
             position: "inner",
-            fontSize: 8,
+            fontSize: 10,
           },
           labelLine: {
             show: false,
@@ -727,9 +739,9 @@ function Dashboard(props) {
         {
           name: "Access From",
           type: "pie",
-          radius: ["40%", "40%"],
+          radius: ["40%", "0%"],
           labelLine: {
-            length: 20,
+            length: 0,
           },
           label: {
             formatter: "{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ",
@@ -806,13 +818,13 @@ function Dashboard(props) {
   return (
     <>
       <div className=" w-full h-full ">
-        <div className=" p-4 m-3 rounded-xl">
+        <div className="p-4 rounded-xl">
           <div>
-            <h2 className="font-extrabold  text-3xl mb-4">Dashboard</h2>
+            <h2 className="font-extrabold text-2xl mb-4">Dashboard</h2>
           </div>
           <div className="flex flex-wrap items-center justify-around gap-4 h-auto">
             <div
-              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px] xs:w-full "
+              className="m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px] xs:w-full"
               style={{
                 backgroundImage:
                   'url("https://media.istockphoto.com/id/1410455925/vector/dynamic-blue-particle-wave-abstract-sound-visualization-digital-structure-of-the-wave-flow.jpg?s=612x612&w=0&k=20&c=RL7do3aEvte0cKukjC30eHQ4nujXUIOa2TvQbIN8eKw=")',
@@ -822,7 +834,7 @@ function Dashboard(props) {
               <div className="text-3xl text-white font-bold">277</div>
             </div>
             <div
-              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              className="m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
               style={{
                 backgroundImage:
                   "url('https://c4.wallpaperflare.com/wallpaper/624/336/42/science-the-big-bang-theory-atoms-wallpaper-preview.jpg')",
@@ -833,7 +845,7 @@ function Dashboard(props) {
             </div>
 
             <div
-              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              className="m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
               style={{
                 backgroundImage:
                   "url('https://static.vecteezy.com/system/resources/thumbnails/006/712/955/small/abstract-health-medical-science-consist-doctor-digital-wireframe-concept-modern-medical-technology-treatment-medicine-on-gray-background-for-template-web-design-or-presentation-vector.jpg')",
@@ -844,7 +856,7 @@ function Dashboard(props) {
             </div>
 
             <div
-              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              className="m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
               style={{
                 backgroundImage:
                   "url('https://img.freepik.com/premium-photo/high-angle-view-eyeglasses-table-against-black-background_1048944-215100.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1715731200&semt=ais_user')",
@@ -855,7 +867,7 @@ function Dashboard(props) {
             </div>
 
             <div
-              className="-lg m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
+              className="m-1 p-4 text-center bg-cover bg-no-repeat rounded-2xl flex flex-col items-center justify-center w-full sm:w-[280px] h-[160px]"
               style={{
                 backgroundImage:
                   "url('https://png.pngtree.com/thumb_back/fh260/background/20210716/pngtree-abstract-geometric-medical-background-of-science-and-technology-style-gene-atom-image_743373.jpg')",
@@ -869,7 +881,7 @@ function Dashboard(props) {
           </div>
         </div>
 
-        <div className=" p-2 gap-4   flex flex-col  lg:flex-row justify-between rounded-xl m-3 ">
+        <div className="p-2 gap-4 flex flex-col lg:flex-row justify-between rounded-xl m-3">
           <div className="w-full lg:w-10/12 shadow flex flex-col bg-white rounded-xl">
             <div className="flex p-2 justify-between">
               <div className="py-2 font-bold text-black">Material</div>
@@ -877,9 +889,9 @@ function Dashboard(props) {
                 <button>...</button>
               </div>
             </div>
-            <div className="flex flex-col p-3 ">
-              <div className="flex gap-3  items-center flex-wrap">
-                <div className="flex items-center  ">
+            <div className="flex flex-col p-3">
+              <div className="flex gap-3 items-center flex-wrap">
+                <div className="flex items-center">
                   <div className="bg-yellow-500 rounded-full w-3 h-3 mr-2"></div>
                   <span className="text-gray-700">Pending</span>
                 </div>
@@ -904,7 +916,7 @@ function Dashboard(props) {
                   <span className="text-gray-700">Completed</span>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-center pt-4 xm:flex-col xm:items-center xs:flex-col xs:items-center sm:flex-col sm:items-center md:flex-row md:justify-center lg:flex-row lg:justify-center xl:flex-row xl:justify-center 2xl:flex-row 2xl:justify-center">
+              <div className="flex flex-wrap justify-center pt-4">
                 <div className="p-3 w-48 h-48 flex items-center justify-center">
                   <CircularProgressbar
                     background
@@ -999,9 +1011,11 @@ function Dashboard(props) {
             </div>
           </div>
 
-          <div className="w-full shadow lg:w-2/12 bg-white rounded-xl">
-            <div className="text-lg font-bold m-4">Latest Products</div>
-            <ul className="list-none font-serif grid gap-3 p-3 text-gray-800 mx-4">
+          <div className="w-full lg:w-2/12 shadow bg-white rounded-xl">
+            <div className="text-lg font-bold m-4 text-center lg:text-left">
+              Latest Products
+            </div>
+            <ul className="list-none font-serif grid gap-3 text-gray-800 mx-4">
               {latestProducts.map((product, idx) => (
                 <li className="text-black" key={idx}>
                   ◆ {product}
@@ -1011,9 +1025,9 @@ function Dashboard(props) {
           </div>
         </div>
 
-        <div className="p-2 gap-4  flex flex-col lg:flex-row  rounded-xl m-3 ">
+        <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
           <div className="w-full shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
-            <div className="-lg cardItem bg-white rounded p-4">
+            <div className="bg-white rounded p-4">
               <div className="flex justify-between">
                 <div className="py-2 font-semibold">Analysis</div>
                 <div className="font-semibold text-lg">...</div>
@@ -1025,7 +1039,7 @@ function Dashboard(props) {
           </div>
 
           <div className="w-full shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
-            <div className="-lg cardItem bg-white rounded p-4">
+            <div className="bg-white rounded p-4">
               <div className="flex justify-between">
                 <div className="py-2 font-semibold">Test Stats</div>
                 <div className="font-semibold text-lg">...</div>
@@ -1035,9 +1049,12 @@ function Dashboard(props) {
               </div>
             </div>
           </div>
+
           <div className="w-full shadow lg:w-2/12 bg-white rounded-xl">
-            <div className="text-lg font-bold m-4">AR Number</div>
-            <ul className="list-none font-serif grid gap-3 p-3 text-gray-800 mx-4">
+            <div className="text-lg font-bold m-4 text-center lg:text-left">
+              AR Number
+            </div>
+            <ul className="list-none font-serif grid gap-3  text-gray-800 mx-4">
               {ARNumber.map((product, idx) => (
                 <li className="text-black" key={idx}>
                   ◆ {product}
@@ -1047,10 +1064,12 @@ function Dashboard(props) {
           </div>
         </div>
 
-        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
+        <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
           <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 font-bold">Product Wise Test stats</div>
-            <div className="pt-4 mx-5">
+            <div className="py-4 mx-3 font-bold text-center">
+              Product Wise Test Stats
+            </div>
+            <div className="pt-4 mx-5 flex justify-center">
               <div
                 ref={chartRef}
                 className="w-full h-[400px] iphone:w-[90%] iphone:h-[350px] sm:w-[85%] sm:h-[300px] md:w-[80%] md:h-[250px] lg:w-[75%] lg:h-[200px] xl:w-[70%] xl:h-[150px] 2xl:w-full 2xl:h-[350px]"
@@ -1059,7 +1078,7 @@ function Dashboard(props) {
           </div>
 
           <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder text-center">
+            <div className="py-4 mx-3 font-bold text-center">
               Material Status
             </div>
             <div className="pt-4 mx-4">
@@ -1068,44 +1087,48 @@ function Dashboard(props) {
           </div>
         </div>
 
-        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
+        <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
           <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder">Product Wise Test stats</div>
+            <div className="py-4 mx-3 fw-bolder text-center">
+              Product Wise Test Stats
+            </div>
             <div className="pt-4 mx-4">
               <LineChart option={productWiseTestStatsOption} />
             </div>
           </div>
 
           <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder">Test Wise stats</div>
+            <div className="py-4 mx-3 fw-bolder text-center">
+              Test Wise Stats
+            </div>
             <div className="pt-4 mx-5">
               <LineChart option={testWiseStatsOption} />
             </div>
           </div>
         </div>
 
-        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
+        <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
           <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder">Product</div>
+            <div className="py-4 mx-3 fw-bolder text-center">Product</div>
             <div className="pt-4 mx-5">
               <ReactEcharts option={radarOption} />
             </div>
           </div>
 
           <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder">Test </div>
+            <div className="py-4 mx-3 fw-bolder text-center">Test</div>
             <div className="pt-4 mx-5">
               <ReactEcharts option={getOption()} />
             </div>
           </div>
         </div>
 
-        <div className="p-2 gap-4  flex flex-col lg:flex-row   rounded-xl m-3 ">
-          <div className="w-full p-2 shadow  lg:w-6/12 flex flex-col bg-white rounded-xl">
+        <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
+          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 fw-bolder text-center">
               Category wise Instruments
             </div>
-            <div className="">
+            <div className="p-4">
               <LineChart option={analysisOptions} className="p-4" />
             </div>
           </div>
