@@ -66,51 +66,45 @@ export default function TestHistory() {
         setCurrentPage(currentPage - 1);
     };
 
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(employees.length / pageSize));
-    };
-
-
-
     return (
         <>
-            <div className=" my-5 mx-5">
-                <h5>Test History</h5>
-            </div>
+            <div className="m-5 mt-3">
+                <div className="main-head">
+                    <h4>Test History</h4>
+                </div>
 
-            <div className='bg-light shadow rounded m-5 border-dark-subtle border-2'>
-                <table className='table table-responsive   '>
-                    <thead>
-                        <tr>
-                            <th style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>SNo.</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Test Name</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Tests Planned</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Tests Executed</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderRows()}
-                    </tbody>
-                </table>
-            </div>
-
-            <div className="pagination my-3 mx-5">
-                <div className="d-flex gap-3">
-                    <div className=''>
-                        <button className="btn" onClick={prevPage} disabled={currentPage === 1}>&lt;&lt;</button>
-                    </div>
-                    <div className="current-page-number bg-dark-subtle page-item rounded">
-                        <button className='btn'> {currentPage} </button>
-                    </div>
-                    <div>
-                        <button className="btn" onClick={nextPage} disabled={endIndex >= employees.length}>&gt;&gt;</button>
+                <div
+                    className="mt-5 rounded bg-white"
+                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+                >
+                    <table className="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th style={{ background: "#5D76A9", color: "white" }}><input type="checkbox" /></th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>SNo.</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Test Name</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Tests Planned</th>
+                                <th style={{ background: "#5D76A9", color: "white" }}>Tests Executed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {renderRows()}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="d-flex justify-content-end align-items-center mt-4">
+                    <div className="pagination">
+                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+                            &lt;&lt;
+                        </button>
+                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
+                            &gt;&gt;
+                        </button>
                     </div>
                 </div>
-                <button className="btn btn-next d-flex gap-2" onClick={nextToLastPage}> Next <FaArrowRight className="mt-1"/></button>
+
             </div>
-
-
         </>
     );
 }

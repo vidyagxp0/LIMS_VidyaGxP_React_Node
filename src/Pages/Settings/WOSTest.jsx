@@ -3,7 +3,6 @@ import {
   CCol,
   CFormInput,
   CFormSelect,
-  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
@@ -24,23 +23,11 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function WOSTest() {
   const [addModal, setAddModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
-  };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
   const [selectedStatus, setSelectedStatus] = useState("All");
 
   const handleSelect = (data) => {
@@ -164,240 +151,219 @@ function WOSTest() {
 
   return (
     <>
-      <div id="approval-page" className="h-100 mx-5">
-        <div className="container-fluid my-5">
-          <div className="main-head">
-            <div className="title fw-bold fs-5">Working Standard Lot Usage</div>
-          </div>
-          <div className="d-flex gap-4 my-3">
-            <div className="chart-widgets w-100">
-              <div className="">
-                <div className="row">
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => setSelectedStatus('DROPPED')}>
-                    <div className="text-light fs-5">DROPPED</div>
-                    <div className="count fs-1 text-light fw-bolder">{
-                      filterData().filter(
-                        (item) => item.status === "DROPPED"
-                      ).length
-                    }</div>
-                  </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => setSelectedStatus("INITIATED")}>
-                    <div className="text-light fs-5">INITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">{
-                      filterData().filter(
-                        (item) => item.status === "INITIATED"
-                      ).length
-                    }</div>
-                  </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => setSelectedStatus("REINITIATED")}>
-                    <div className="text-light fs-5">REINITIATED</div>
-                    <div className="count fs-1 text-light fw-bolder">{
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }</div>
-                  </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => setSelectedStatus('APPROVED')}>
-                    <div className="text-light fs-5">APPROVED</div>
-                    <div className="count fs-1 text-light fw-bolder">{
-                      filterData().filter(
-                        (item) => item.status === "APPROVED"
-                      ).length
-                    }</div>
-                  </div>
-                  <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => setSelectedStatus('REJECTED')}>
-                    <div className="text-light fs-5">REJECTED</div>
-                    <div className="count fs-1 text-light fw-bolder">{
-                      filterData().filter(
-                        (item) => item.status === "REJECTED"
-                      ).length
-                    }</div>
-                  </div>
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold">Working Standard Lot Usage</h4>
+        </div>
+        <div className="mt-3 d-flex gap-4 my-3">
+          <div className="chart-widgets w-100">
+            <div className="">
+              <div className="row">
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => setSelectedStatus('DROPPED')}>
+                  <div className="text-light fs-5">DROPPED</div>
+                  <div className="count fs-1 text-light fw-bolder">{
+                    filterData().filter(
+                      (item) => item.status === "DROPPED"
+                    ).length
+                  }</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => setSelectedStatus("INITIATED")}>
+                  <div className="text-light fs-5">INITIATED</div>
+                  <div className="count fs-1 text-light fw-bolder">{
+                    filterData().filter(
+                      (item) => item.status === "INITIATED"
+                    ).length
+                  }</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => setSelectedStatus("REINITIATED")}>
+                  <div className="text-light fs-5">REINITIATED</div>
+                  <div className="count fs-1 text-light fw-bolder">{
+                    filterData().filter(
+                      (item) => item.status === "REINITIATED"
+                    ).length
+                  }</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => setSelectedStatus('APPROVED')}>
+                  <div className="text-light fs-5">APPROVED</div>
+                  <div className="count fs-1 text-light fw-bolder">{
+                    filterData().filter(
+                      (item) => item.status === "APPROVED"
+                    ).length
+                  }</div>
+                </div>
+                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => setSelectedStatus('REJECTED')}>
+                  <div className="text-light fs-5">REJECTED</div>
+                  <div className="count fs-1 text-light fw-bolder">{
+                    filterData().filter(
+                      (item) => item.status === "REJECTED"
+                    ).length
+                  }</div>
                 </div>
               </div>
             </div>
           </div>
-          <div>
-            <CRow className="mb-3">
-              <CCol sm={4}>
-                <CFormInput
-                  style={{fontSize:'0.9rem'}}
-                  type="text"
-                  placeholder="Search..."
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </CCol>
+        </div>
+        <div>
+          <CRow className="mb-3">
+            <CCol sm={4}>
+              <CFormInput
+                style={{ fontSize: '0.9rem' }}
+                type="text"
+                placeholder="Search..."
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </CCol>
 
-              <CCol sm={3}>
-                <CFormSelect
-                  onChange={(e) => handleSelect(e.target.value)}
-                  value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
+            <CCol sm={3}>
+              <CFormSelect
+                onChange={(e) => handleSelect(e.target.value)}
+                value={selectedStatus}
+                style={{ fontSize: '0.9rem' }}
+              >
+                <option value="All">All</option>
+                <option value="Initiated">Initiated</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Reinitiated">Reinitiated</option>
+                <option value="Dropped">Dropped</option>
+              </CFormSelect>
+            </CCol>
+            <CCol sm={2}></CCol>
+            <CCol sm={3}>
+              <div className="d-flex justify-content-end">
+                <CButton
+                  className=" text-white"
+                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
+                  onClick={() => setAddModal(true)}
                 >
-                  <option value="All">All</option>
-                  <option value="Initiated">Initiated</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Reinitiated">Reinitiated</option>
-                  <option value="Dropped">Dropped</option>
-                </CFormSelect>
-              </CCol>
-              <CCol sm={2}></CCol>
-              <CCol sm={3}>
-                <div className="d-flex justify-content-end">
-                  <CButton color="primary" onClick={() => setAddModal(true)}>
-                    Add WOS Test
-                  </CButton>
-                </div>
-              </CCol>
-            </CRow>
-          </div>
-          <div
-            className="bg-light border-2 border-dark-subtle mt-5 rounded"
-          >
-            <CTable className="table table-responsive   ">
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    SNo.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Specification Id
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Product Name
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Test Name
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Test Code
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Method No.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Test Category
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Test Technique
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Test Type
-                  </CTableHeaderCell>
+                  Add WOS Test
+                </CButton>
+              </div>
+            </CCol>
+          </CRow>
+        </div>
+        <div
+          className="rounded bg-white"
+          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+        >
+          <CTable className="mb-0 table table-responsive" >
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center">
+                  <input type="checkbox" />
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  SNo.
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Specification Id
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Product Name
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Test Name
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Test Code
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Method No.
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Test Category
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Test Technique
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Test Type
+                </CTableHeaderCell>
 
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Status
-                  </CTableHeaderCell>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" >
-                    Actions{" "}
-                  </CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Status
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >
+                  Actions{" "}
+                </CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
 
-              <CTableBody>
-                {filterData()
-                  .slice(startIndex, endIndex)
-                  .map((item, index) => (
-                    <CTableRow key={index}>
-                      <CTableHeaderCell scope="row" className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      <CTableDataCell key={item.id}>
-                        {item.SpecificationId}
-                      </CTableDataCell>
+            <CTableBody>
+              {filterData()
+                .slice(startIndex, endIndex)
+                .map((item, index) => (
+                  <CTableRow key={index}>
+                    <CTableHeaderCell scope="row" className="text-center">
+                      <input type="checkbox" />
+                    </CTableHeaderCell>
+                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
+                    <CTableDataCell key={item.id}>
+                      {item.SpecificationId}
+                    </CTableDataCell>
 
-                      <CTableDataCell>{item.ProductName}</CTableDataCell>
-                      <CTableDataCell>{item.TestName}</CTableDataCell>
-                      <CTableDataCell>{item.TestCode}</CTableDataCell>
-                      <CTableDataCell>{item.MethodNo}</CTableDataCell>
-                      <CTableDataCell>{item.TestCategory}</CTableDataCell>
-                      <CTableDataCell>{item.TestTechnique}</CTableDataCell>
-                      <CTableDataCell>{item.TestType}</CTableDataCell>
+                    <CTableDataCell>{item.ProductName}</CTableDataCell>
+                    <CTableDataCell>{item.TestName}</CTableDataCell>
+                    <CTableDataCell>{item.TestCode}</CTableDataCell>
+                    <CTableDataCell>{item.MethodNo}</CTableDataCell>
+                    <CTableDataCell>{item.TestCategory}</CTableDataCell>
+                    <CTableDataCell>{item.TestTechnique}</CTableDataCell>
+                    <CTableDataCell>{item.TestType}</CTableDataCell>
 
-                      <CTableDataCell className="d-flex">
+                    <CTableDataCell>
+                      <button
+                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "INITIATED"
+                            ? "blue-700"
+                            : item.status === "APPROVED"
+                              ? "green-700"
+                              : item.status === "REJECTED"
+                                ? "red-700"
+                                : item.status === "REINITIATED"
+                                  ? "yellow-500"
+                                  : item.status === "DROPPED"
+                                    ? "purple-700"
+                                    : "white"
+                          }`} style={{ fontSize: '0.6rem' }}
+                      >
+                        {item.status}
+                      </button>
+                    </CTableDataCell>
+                    <CTableDataCell>
+                      <div className="d-flex gap-3">
+                        <Link to="/approval/1321">
+                          <FontAwesomeIcon icon={faEye} />
+                        </Link>
                         <div
-                          className="py-2 px-3 small rounded fw-bold"
-                          style={
-                            item.status === "INITIATED"
-                              ? badgeStyle2
-                              : item.status === "APPROVED"
-                                ? badgeStyle3
-                                : item.status === "REJECTED"
-                                  ? badgeStyle4
-                                  : item.status === "REINITIATED"
-                                    ? badgeStyle5
-                                    : item.status === "DROPPED"
-                                      ? badgeStyle6
-                                      : item.status === "ALL"
-                                        ? badgeStyle
-                                        : badgeStyle
-                          }
+                          className="cursor-pointer"
+                          onClick={() => setAddModal(true)}
                         >
-                          {item.status}
+                          <FontAwesomeIcon icon={faPenToSquare} />
                         </div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => setDeleteModal(item.id)}
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} />
                         </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
-          <div className="pagination my-4">
-            <div className="pagination gap-3">
-              <div className="">
-                <button
-                  className="btn"
-                  onClick={prevPage}
-                  disabled={currentPage === 1}
-                >
-                  &lt;&lt;
-                </button>
-              </div>
-              <div className="current-page-number bg-dark-subtle page-item rounded">
-                <button className="btn"> {currentPage} </button>
-              </div>
-              <div>
-                <button
-                  className="btn mr-2"
-                  onClick={nextPage}
-                  disabled={endIndex >= filterData().length}
-                >
-                  &gt;&gt;
-                </button>
-              </div>
-            </div>
-
-            <button
-              className="btn btn-next d-flex gap-2"
-              onClick={nextToLastPage}
-            >
-              Next <FaArrowRight className="mt-1" />
+                      </div>
+                    </CTableDataCell>
+                  </CTableRow>
+                ))}
+            </CTableBody>
+          </CTable>
+        </div>
+        <div className="d-flex justify-content-end align-items-center mt-4">
+          <div className="pagination">
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+              &lt;&lt;
+            </button>
+            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= filterData().length}>
+              &gt;&gt;
             </button>
           </div>
         </div>
+
       </div>
 
       {addModal && (

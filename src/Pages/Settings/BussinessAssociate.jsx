@@ -1,8 +1,7 @@
 import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function BussinessAssociate() {
@@ -12,8 +11,6 @@ function BussinessAssociate() {
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [deleteId, setDeleteId] = useState(null)
   const recordsPerPage = 5;
-
-  const badgeStyle = { background: "#cdffca" };
 
   const [tableData, setTableData] = useState([
     { id: 1, name: "stmp1", code: "stm", city: "ahmedabad", state: "gujarat", country: "India", zip: "54255455", status: "APPROVED" },

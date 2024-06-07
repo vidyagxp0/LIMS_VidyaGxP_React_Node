@@ -3,27 +3,19 @@ import {
   CCol,
   CFormInput,
   CFormSelect,
-  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
+ 
 } from "@coreui/react";
 import {
-  faEye,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaArrowRight } from "react-icons/fa";
 
 import React, { useState } from "react";
 // import "./StorageCondition.css";
@@ -89,10 +81,13 @@ export default function Resources() {
         <td>{data.resourceName}</td>
         <td>{data.addedOn}</td>
         <td>
-          <div className=" w-50">
-            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'ACTIVE' ? 'green-700'
-              : 'red-700'}`} >{data.status}</div>
-          </div>
+        <button
+            className={`p-1 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${
+              data.status === "ACTIVE"
+              ? 'green-700'
+              : 'red-700'
+              }`} >{data.status}
+          </button>
         </td>
         <td>
           <div className="d-flex gap-3">
@@ -117,11 +112,7 @@ export default function Resources() {
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
   };
-
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredtableData.length / pageSize));
-  };
-
+  
   const StatusModal = (_props) => {
 
     return (
@@ -178,17 +169,17 @@ export default function Resources() {
 
   return (
     <>
-      <div className="m-5">
+      <div className="m-5 mt-3">
 
-        <div className="my-4">
-          <h5>Worksheet Resources</h5>
+        <div className="main-head">
+          <h4>Worksheet Resources</h4>
         </div>
 
         <div>
-          <CRow className="my-5">
+          <CRow className="mt-5 mb-3">
             <CCol sm={4}>
               <CFormInput
-                style={{fontSize:'0.9rem'}}
+                style={{ fontSize: '0.9rem' }}
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
@@ -200,7 +191,7 @@ export default function Resources() {
               <CFormSelect
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                style={{fontSize:'0.9rem'}}
+                style={{ fontSize: '0.9rem' }}
               >
                 <option value="All">All</option>
                 <option value="ACTIVE">Active</option>
@@ -210,7 +201,11 @@ export default function Resources() {
             <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton color="primary" onClick={() => setAddModal(true)}>
+              <CButton
+                  className=" text-white"
+                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
+                  onClick={() => setAddModal(true)}
+                >
                   Add Worksheet Resource
                 </CButton>
               </div>
@@ -218,58 +213,37 @@ export default function Resources() {
           </CRow>
         </div>
 
-          <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        <div
+          className="rounded bg-white"
+          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
         >
           <table className="table table-responsive   ">
             <thead>
               <tr>
-                <th style={{ background: "#5D76A9", color: "white"}}>
+                <th style={{ background: "#5D76A9", color: "white" }}>
                   <input type="checkbox" />
                 </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Resource Name</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Actions </th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Sr.no.</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Resource Name</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Added On</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Actions </th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>
           </table>
         </div>
 
-        <div className="pagination">
-          <div className="pagination gap-3">
-            <div className="">
-              <button
-                className="btn"
-                onClick={prevPage}
-                disabled={currentPage === 1}
-              >
-                &lt;&lt;
-              </button>
-            </div>
-            <div className="current-page-number bg-dark-subtle page-item rounded">
-              <button className="btn rounded-circle"> {currentPage} </button>
-            </div>
-            <div>
-              <button
-                className="btn"
-                onClick={nextPage}
-                disabled={endIndex >= filteredtableData.length}
-              >
-                &gt;&gt;
-              </button>
-            </div>
+        <div className="d-flex justify-content-end align-items-center mt-4">
+          <div className="pagination">
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+              &lt;&lt;
+            </button>
+            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredtableData.length}>
+              &gt;&gt;
+            </button>
           </div>
-
-          <button
-            className="btn btn-next d-flex gap-2"
-            onClick={nextToLastPage}
-          >
-            Next <FaArrowRight className="mt-1" />
-          </button>
         </div>
       </div>
 

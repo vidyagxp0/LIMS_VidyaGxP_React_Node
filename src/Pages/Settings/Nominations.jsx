@@ -3,33 +3,23 @@ import {
   CCol,
   CFormInput,
   CFormSelect,
-  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
 } from "@coreui/react";
 import {
-  faEye,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaArrowRight } from "react-icons/fa";
-import React, { useState } from "react";
 
 export default function Nominations() {
   const [addModal, setAddModal] = useState(false);
   const [removeModal, setRemoveModal] = useState(false);
-	const [deleteId, setDeleteId] = useState(null)
+  const [deleteId, setDeleteId] = useState(null)
   const [filterStatus, setFilterStatus] = useState("All");
 
   const pageSize = 5;
@@ -150,15 +140,15 @@ export default function Nominations() {
   }
 
   const handleDelete = () => {
-		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-		setRemoveModal(false);
-		setDeleteId(null)
-	  }
-	
-	  const handleDeleteClick = (id) => {
-		setDeleteId(id);
-		setRemoveModal(true);
-	  }
+    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
+    setRemoveModal(false);
+    setDeleteId(null)
+  }
+
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setRemoveModal(true);
+  }
 
 
   const filteredtableData = tableData
@@ -187,10 +177,12 @@ export default function Nominations() {
         <td>{data.justification}</td>
         <td>{data.addedOn}</td>
         <td>
-          <div className=" w-100">
-            <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
-              : 'red-700'}`} >{data.status}</div>
-          </div>
+          <button
+            className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "Active"
+              ? 'green-700'
+              : 'red-700'
+              }`} >{data.status}
+          </button>
         </td>
         <td>
           <div className="d-flex gap-3">
@@ -214,10 +206,6 @@ export default function Nominations() {
 
   const prevPage = () => {
     setCurrentPage(currentPage - 1);
-  };
-
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredtableData.length / pageSize));
   };
 
   const StatusModal = (_props) => {
@@ -317,17 +305,16 @@ export default function Nominations() {
 
   return (
     <>
-      <div className="m-5">
-
-        <div className="my-4">
-          <h5>Nominations</h5>
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4>Nominations</h4>
         </div>
 
         <div>
-          <CRow className="my-5">
+          <CRow className="mt-5 mb-3">
             <CCol sm={4}>
               <CFormInput
-                className="border-2 border-dark-subtle"
+                style={{ fontSize: '0.9rem' }}
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
@@ -337,7 +324,7 @@ export default function Nominations() {
 
             <CCol sm={3}>
               <CFormSelect
-                className="border-2 border-dark-subtle"
+               style={{ fontSize: '0.9rem' }}
                 value={filterStatus}
                 onChange={(e) => handleSelect(e.target.value)}
               >
@@ -349,7 +336,11 @@ export default function Nominations() {
             <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <CButton color="primary" onClick={() => setAddModal(true)}>
+                <CButton
+                  className=" text-white"
+                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
+                  onClick={() => setAddModal(true)}
+                >
                   Add Nomination
                 </CButton>
               </div>
@@ -357,63 +348,42 @@ export default function Nominations() {
           </CRow>
         </div>
 
-          <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+        <div
+          className="rounded bg-white"
+          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
         >
-          <table className="table table-responsive   ">
+          <table className="table table-responsive">
             <thead>
               <tr>
-                <th style={{ background: "#5D76A9", color: "white"}}>
+                <th style={{ background: "#5D76A9", color: "white" }}>
                   <input type="checkbox" />
                 </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Analyst</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Test Technique</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Total Experience	</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Past Experience</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Justification for Direct Nomination	</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Analyst</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Test Technique</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Total Experience	</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Past Experience</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Justification for Direct Nomination	</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Added On</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
+                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
               </tr>
             </thead>
             <tbody>{renderRows()}</tbody>
           </table>
         </div>
-
-        <div className="pagination">
-          <div className="pagination gap-3">
-            <div className="">
-              <button
-                className="btn"
-                onClick={prevPage}
-                disabled={currentPage === 1}
-              >
-                &lt;&lt;
-              </button>
-            </div>
-            <div className="current-page-number bg-dark-subtle page-item rounded">
-              <button className="btn rounded-circle"> {currentPage} </button>
-            </div>
-            <div>
-              <button
-                className="btn"
-                onClick={nextPage}
-                disabled={endIndex >= filteredtableData.length}
-              >
-                &gt;&gt;
-              </button>
-            </div>
+        <div className="d-flex justify-content-end align-items-center mt-4">
+          <div className="pagination">
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
+              &lt;&lt;
+            </button>
+            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= filteredtableData.length}>
+              &gt;&gt;
+            </button>
           </div>
-
-          <button
-            className="btn btn-next d-flex gap-2"
-            onClick={nextToLastPage}
-          >
-            Next <FaArrowRight className="mt-1" />
-          </button>
         </div>
+
       </div>
 
       {addModal && (
@@ -423,7 +393,7 @@ export default function Nominations() {
       {removeModal && (
         <DeleteModel
           visible={removeModal}
-          closeModal={() => setRemoveModal(false)}  handleDelete={handleDelete}
+          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
         />
       )}
     </>

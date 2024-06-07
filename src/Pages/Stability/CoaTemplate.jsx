@@ -32,7 +32,7 @@ function CoaTemplate() {
      const [selectedStatus, setSelectedStatus] = useState("All");
 
      const [data, setData] = useState([
-          
+
           { id: 1, caption: "testing", title: "Test", type: "With Specification", status: "REINITIATED" },
           { id: 2, caption: "testing001", title: "Test001", type: "Without Specification", status: "REJECTED" },
           { id: 3, caption: "sample", title: "Sample Report", type: "With Specification", status: "APPROVED" },
@@ -235,7 +235,7 @@ function CoaTemplate() {
                     <div
                          className="rounded bg-white"
                          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                    >          <CTable align="middle"  hover responsive className="mb-0 rounded-lg table-responsive">
+                    >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
                               <CTableHead>
                                    <CTableRow>
                                         <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>

@@ -17,14 +17,11 @@ import {
 	CTableRow,
 } from "@coreui/react";
 import {
-	faEye,
 	faPenToSquare,
 	faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
 
 function Proposal() {
 	const [addModal, setAddModal] = useState(false);
@@ -87,15 +84,14 @@ function Proposal() {
 
 	return (
 		<>
-			<div id="approval-page" className="h-100 mx-5">
-				<div className="container-fluid my-5">
+				<div className="m-5 mt-3">
 					<div className="main-head mb-4">
-						<div className="title fw-bold fs-5">Analyst Proposal</div>
+						<h4 className="fw-bold">Analyst Proposal</h4>
 					</div>
 					<div>
-						<CRow className="mb-3">
+						<CRow className="mt-5 mb-3">
 							<CCol sm={3}><CFormInput
-								className="mb-3 border-dark-subtle border-2"
+								 style={{ fontSize: '0.9rem' }}
 								type="text"
 								placeholder="Search..."
 								value={searchQuery}
@@ -103,7 +99,7 @@ function Proposal() {
 							/></CCol>
 							<CCol sm={3}>
 								<CFormSelect
-									style={{fontSize:'0.9rem'}}
+									style={{ fontSize: '0.9rem' }}
 									value={selectedStatus}
 									onChange={handleStatusChange}
 									options={[
@@ -118,7 +114,8 @@ function Proposal() {
 							<CCol sm={3}>
 								<div className="d-flex justify-content-end">
 									<CButton
-										className="bg-info text-white"
+										className=" text-white"
+										style={{ background: "#4B49B6", fontSize: '0.9rem' }}
 										onClick={() => setAddModal(true)}
 									>
 										Add Proposal
@@ -127,43 +124,45 @@ function Proposal() {
 							</CCol>
 						</CRow>
 					</div>
-					<div className="bg-white mt-5 border-dark-subtle border-2 rounded shadow">
-						<CTable align="middle" responsive className="table-responsive   ">
+					<div
+						className="rounded bg-white"
+						style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+					>          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
 							<CTableHead>
 								<CTableRow>
-									<CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+									<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Id</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Id</CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Analyst</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Analyst</CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Test Technique</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Test Technique</CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Training Details</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Training Details</CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Remarks</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Remarks</CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Added On</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Added On</CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Status</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Status</CTableHeaderCell>
 									<CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Actions</CTableHeaderCell>
+										style={{ background: "#5D76A9", color: "white" }}
+										scope="col"
+									>Actions</CTableHeaderCell>
 								</CTableRow>
 							</CTableHead>
 							<CTableBody>
@@ -179,10 +178,12 @@ function Proposal() {
 										<CTableDataCell>{data.remarks}</CTableDataCell>
 										<CTableDataCell>{data.addedOn}</CTableDataCell>
 										<CTableDataCell>
-											<div className=" w-75">
-												<div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'Active' ? 'green-700'
-													: 'red-700'}`} >{data.status.toUpperCase()}</div>
-											</div>
+											<button
+												className={`py-1 px-3 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "Active"
+														? 'green-700'
+														: 'red-700'
+													}`} >{data.status}
+											</button>
 										</CTableDataCell>
 										<CTableDataCell>
 											<div className="d-flex gap-3">
@@ -200,18 +201,14 @@ function Proposal() {
 							</CTableBody>
 						</CTable>
 					</div>
-					<div className="pagination my-3 d-flex justify-content-between">
-						<div className="d-flex gap-2">
-							<button className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
-							<button className="btn mr-2 bg-dark-subtle">{currentPage}</button>
-							<button className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
-						</div>
-						<div className="">
-							<button className="d-flex btn btn-next ml-2 gap-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}> Next <FaArrowRight className="mt-1" /></button>
+					<div className="d-flex justify-content-end align-items-center mt-4">
+						<div className="pagination">
+							<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
+							<button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+							<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
 						</div>
 					</div>
 				</div>
-			</div>
 
 			{addModal && (
 				<StatusModal visible={addModal} closeModal={() => setAddModal(false)} />

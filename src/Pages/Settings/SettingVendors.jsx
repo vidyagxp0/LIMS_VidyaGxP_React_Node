@@ -85,15 +85,16 @@ const SettingVendors = () => {
   };
 
   return (
-    <div className="mx-5">
-      <div className="row my-5">
+    <>
+    
+      <div className="m-5 mt-3">
         <div className="main-head">
-          <div className="title fw-bold fs-5">Vendors</div>
+          <h4 className="fw-bold">Vendors</h4>
         </div>
-
+        <div className="mt-3 d-flex gap-4">
         <div className="chart-widgets w-100">
           <div className="row">
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background:  "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleWidgetClick('DROPPED')}>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleWidgetClick('DROPPED')}>
               <div className="text-light fs-5">DROPPED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.DROPPED}</div>
             </div>
@@ -105,23 +106,24 @@ const SettingVendors = () => {
               <div className="text-light fs-5">REINITIATED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.REINITIATED}</div>
             </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )"}} onClick={() => handleWidgetClick('APPROVED')}>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => handleWidgetClick('APPROVED')}>
               <div className="text-light fs-5">APPROVED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.APPROVED}</div>
             </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)"}} onClick={() => handleWidgetClick('REJECTED')}>
+            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => handleWidgetClick('REJECTED')}>
               <div className="text-light fs-5">REJECTED</div>
               <div className="count fs-1 text-light fw-bolder">{statusCounts.REJECTED}</div>
             </div>
           </div>
         </div>
+        </div>
 
-        <div className='my-3'>
+        <div>
           <CRow className="mb-3">
             <CCol sm={4}>
               <CFormInput
                 type="text"
-                style={{fontSize:'0.9rem'}}
+                style={{ fontSize: '0.9rem' }}
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchChange}
@@ -130,7 +132,7 @@ const SettingVendors = () => {
             <CCol sm={3}>
               <CFormSelect
                 value={selectedStatus}
-                style={{fontSize:'0.9rem'}}
+                style={{ fontSize: '0.9rem' }}
                 onChange={handleStatusChange}
                 options={[
                   { value: 'All', label: 'All' },
@@ -145,56 +147,59 @@ const SettingVendors = () => {
             <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
-                <button
-                  className="d-flex rounded btn-primary btn-right p-2"
-                  type="button"
-                  onClick={() => setAddModal(true)}><span>Add Vendor</span></button>
+                <CButton
+                  className=" text-white"
+                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
+                  onClick={() => setAddModal(true)}
+                >
+                  Add Vendor
+                </CButton>
               </div>
             </CCol>
           </CRow>
         </div>
 
         {filteredData.length === 0 ? <center className='my-5'><h5>No Vendors Found</h5></center> : <div className="notFound">
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
+          <div
+            className=" rounded bg-white"
+            style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
+          >
             <CTable align="middle" responsive className="table-responsive   ">
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
+                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Id</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Id</CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Vendor</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Vendor</CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Test Technique</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Test Technique</CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Training Details</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Training Details</CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Remarks</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Remarks</CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Added On</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Added On</CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Status</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Status</CTableHeaderCell>
                   <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white"}}
-                  scope="col"
-                >Actions</CTableHeaderCell>
+                    style={{ background: "#5D76A9", color: "white" }}
+                    scope="col"
+                  >Actions</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -210,18 +215,22 @@ const SettingVendors = () => {
                     <CTableDataCell>{data.remarks}</CTableDataCell>
                     <CTableDataCell>{data.addedOn}</CTableDataCell>
                     <CTableDataCell>
-                      <div className=" w-75">
-                        <div className={`p-2 small rounded fw-bold text-light d-flex justify-content-center align-items-center bg-${data.status === 'INITIATED' ? 'blue-700'
-                          : data.status === "APPROVED"
-                            ? 'green-700'
-                            : data.status === "REJECTED"
-                              ? 'red-700'
-                              : data.status === "REINITIATED"
-                                ? 'yellow-500'
-                                : data.status === "DROPPED"
-                                  ? 'purple-700'
-                                  : 'white'}`} >{data.status}</div>
-                      </div>
+                      <button
+                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "INITIATED"
+                            ? "blue-700"
+                            : data.status === "APPROVED"
+                              ? "green-700"
+                              : data.status === "REJECTED"
+                                ? "red-700"
+                                : data.status === "REINITIATED"
+                                  ? "yellow-500"
+                                  : data.status === "DROPPED"
+                                    ? "purple-700"
+                                    : "white"
+                          }`} style={{ fontSize: '0.6rem' }}
+                      >
+                        {data.status}
+                      </button>
                     </CTableDataCell>
                     <CTableDataCell>
                       <div className="d-flex gap-3">
@@ -234,17 +243,13 @@ const SettingVendors = () => {
               </CTableBody>
             </CTable>
           </div>
-          <div className="pagination my-4 d-flex justify-content-between">
-            <div className="d-flex gap-2">
-              <button className="btn" onClick={handlePreviousPage} disabled={currentPage === 1}>&lt;&lt;</button>
-              <button className="btn bg-dark-subtle">{currentPage}</button>
-              <button className="btn" onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;&gt;</button>
+          <div className="d-flex justify-content-end align-items-center mt-4">
+            <div className="pagination">
+              <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handlePreviousPage} disabled={currentPage === 1}>&lt;&lt;</button>
+              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
+              <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;&gt;</button>
             </div>
-            <div>
-              <button className="d-flex btn btn-next gap-2" onClick={handleNextPage} disabled={currentPage === totalPages}>
-                Next <FaArrowRight className="mt-1" />
-              </button>
-            </div>
+
           </div>
         </div>}
       </div>
@@ -256,7 +261,7 @@ const SettingVendors = () => {
           closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
         />
       )}
-    </div>
+    </>
   );
 };
 
