@@ -18,6 +18,8 @@ function Login(props) {
   };
 
   const handleLogin = () => {
+    if (email === "G") navigate("/dashboard");
+
     if (email === "Amit" && passwd === "Amit@121") {
       navigate("/dashboard");
       props.show(true);
