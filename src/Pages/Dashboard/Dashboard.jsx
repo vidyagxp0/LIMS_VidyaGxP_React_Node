@@ -882,7 +882,7 @@ function Dashboard(props) {
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row justify-between rounded-xl m-3">
-          <div className="w-full lg:w-10/12 shadow flex flex-col bg-white rounded-xl">
+          <div className=" lg:w-10/12 shadow flex flex-col bg-white rounded-xl">
             <div className="flex p-2 justify-between">
               <div className="py-2 font-bold text-black">Material</div>
               <div className="text-black font-bold text-2xl">
@@ -1026,7 +1026,7 @@ function Dashboard(props) {
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className="w-full shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
+          <div className=" shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
             <div className="bg-white rounded p-4">
               <div className="flex justify-between">
                 <div className="py-2 font-semibold">Analysis</div>
@@ -1072,12 +1072,12 @@ function Dashboard(props) {
             <div className="pt-4 mx-5 flex justify-center">
               <div
                 ref={chartRef}
-                className="w-full h-[400px] iphone:w-[90%] iphone:h-[350px] sm:w-[85%] sm:h-[300px] md:w-[80%] md:h-[250px] lg:w-[75%] lg:h-[200px] xl:w-[70%] xl:h-[150px] 2xl:w-full 2xl:h-[350px]"
+                className=" h-[400px] iphone:w-[90%] iphone:h-[350px] sm:w-[85%] sm:h-[300px] md:w-[80%] md:h-[250px] lg:w-[75%] lg:h-[200px] xl:w-[70%] xl:h-[150px] 2xl:w-full 2xl:h-[350px]"
               ></div>
             </div>
           </div>
 
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 mx-3 font-bold text-center">
               Material Status
             </div>
@@ -1108,14 +1108,14 @@ function Dashboard(props) {
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 mx-3 fw-bolder text-center">Product</div>
             <div className="pt-4 mx-5">
               <ReactEcharts option={radarOption} />
             </div>
           </div>
 
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 mx-3 fw-bolder text-center">Test</div>
             <div className="pt-4 mx-5">
               <ReactEcharts option={getOption()} />
@@ -1124,7 +1124,7 @@ function Dashboard(props) {
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 fw-bolder text-center">
               Category wise Instruments
             </div>
@@ -1133,7 +1133,7 @@ function Dashboard(props) {
             </div>
           </div>
 
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
             <div className="py-4 mx-3 fw-bolder text-center">
               Material Status
             </div>
