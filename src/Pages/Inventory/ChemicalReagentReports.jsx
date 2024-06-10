@@ -328,10 +328,9 @@ function ChemicalReagentReports() {
           <div className="bg-white">
             <div className="container p-4">
               <div className="">
-                <div className="mt-4 border d-flex flex-row justify-content-between">
+                <div className="mt-4 border d-flex flex-row justify-content-center flex-wrap">
                   <div
                     style={{
-                      borderRight: '1px solid gray',
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
@@ -341,10 +340,10 @@ function ChemicalReagentReports() {
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
                       alt="Logo"
                       className="img-fluid"
-                      style={{ height: "200px", width: "300px" }}
+                      style={{ height: "300px", width: "300px" }}
                     />
                   </div>
-                  <div className="d-flex flex-column justify-content-center align-items-center" style={{ marginRight: '300px' }}>
+                  <div className="d-flex flex-column justify-content-center align-items-center">
                     <h3 className="fw-bolder">
                       Chemical / Reagent Index
                     </h3>
@@ -353,116 +352,121 @@ function ChemicalReagentReports() {
                     </p>
                   </div>
                 </div>
-                <CTable className="mt-5 text-center" style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}>
-                  <CTableHead
-                    style={{
-                      backgroundColor: "blue",
-                      color: "white",
-                    }}
-                  >
-                    <CTableRow>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        S.No
-                      </CTableHeaderCell>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        Chemical / Reagent Name
-                      </CTableHeaderCell>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        Chemical / Reagent Unique Code
-                      </CTableHeaderCell>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        CAS CAT No.
-                      </CTableHeaderCell>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        Category
-                      </CTableHeaderCell>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        Minimum Quantity
-                      </CTableHeaderCell>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        Status
-                      </CTableHeaderCell>
-                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
-                        Action
-                      </CTableHeaderCell>
-                    </CTableRow>
-                  </CTableHead>
-                  <CTableBody>
-                    {filterData1()
-                      .filter((item) =>
-                        search.toLowerCase() === ""
-                          ? true
-                          : item.ChemicalReagentName.toLowerCase().includes(
-                            search.toLowerCase()
-                          )
-                      )
-                      .map((item, index) => (
-                        <CTableRow key={index}>
-                          <CTableDataCell>{item.id}</CTableDataCell>
-                          <CTableDataCell>
-                            {item.ChemicalReagentName}
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            {item.ChemicalReagentCode}
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            {item.CAS_CAT_No}
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            {item.Category}
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            {item.Minimum_Quantity}
-                          </CTableDataCell>
-                          <CTableDataCell className="d-flex">
-                            <div
-                              className="py-2 px-3 small rounded fw-bold"
-                              style={
-                                item.status === "INITIATED"
-                                  ? badgeStyle2
-                                  : item.status === "APPROVED"
-                                    ? badgeStyle3
-                                    : item.status === "REJECTED"
-                                      ? badgeStyle4
-                                      : item.status === "REINITIATED"
-                                        ? badgeStyle5
-                                        : item.status === "DROPPED"
-                                          ? badgeStyle6
-                                          : item.status === "ALL"
-                                            ? badgeStyle
-                                            : badgeStyle
-                              }
-                            >
-                              {item.status}
-                            </div>
-                          </CTableDataCell>
-                          <CTableDataCell>
-                            <div className="d-flex gap-3">
-                              <Link to="/approval/1321">
-                                <FontAwesomeIcon icon={faEye} />
-                              </Link>
+                <div
+                  className="rounded mt-5 bg-white"
+                  style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9', overflowX: 'scroll' }}
+                >
+                  <CTable align="middle" className="mb-0 text-center table-responsive">
+                    <CTableHead
+                      style={{
+                        backgroundColor: "blue",
+                        color: "white",
+                      }}
+                    >
+                      <CTableRow>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          S.No
+                        </CTableHeaderCell>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          Chemical / Reagent Name
+                        </CTableHeaderCell>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          Chemical / Reagent Unique Code
+                        </CTableHeaderCell>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          CAS CAT No.
+                        </CTableHeaderCell>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          Category
+                        </CTableHeaderCell>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          Minimum Quantity
+                        </CTableHeaderCell>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          Status
+                        </CTableHeaderCell>
+                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                          Action
+                        </CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                      {filterData1()
+                        .filter((item) =>
+                          search.toLowerCase() === ""
+                            ? true
+                            : item.ChemicalReagentName.toLowerCase().includes(
+                              search.toLowerCase()
+                            )
+                        )
+                        .map((item, index) => (
+                          <CTableRow key={index}>
+                            <CTableDataCell>{item.id}</CTableDataCell>
+                            <CTableDataCell>
+                              {item.ChemicalReagentName}
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              {item.ChemicalReagentCode}
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              {item.CAS_CAT_No}
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              {item.Category}
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              {item.Minimum_Quantity}
+                            </CTableDataCell>
+                            <CTableDataCell className="d-flex">
                               <div
-                                className="cursor-pointer"
-                                onClick={() => setAddModal(true)}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faPenToSquare}
-                                />
-                              </div>
-                              <div
-                                className="cursor-pointer"
-                                onClick={() =>
-                                  setDeleteModal(item.id)
+                                className="py-2 px-3 small rounded fw-bold"
+                                style={
+                                  item.status === "INITIATED"
+                                    ? badgeStyle2
+                                    : item.status === "APPROVED"
+                                      ? badgeStyle3
+                                      : item.status === "REJECTED"
+                                        ? badgeStyle4
+                                        : item.status === "REINITIATED"
+                                          ? badgeStyle5
+                                          : item.status === "DROPPED"
+                                            ? badgeStyle6
+                                            : item.status === "ALL"
+                                              ? badgeStyle
+                                              : badgeStyle
                                 }
                               >
-                                <FontAwesomeIcon icon={faTrashCan} />
+                                {item.status}
                               </div>
-                            </div>
-                          </CTableDataCell>
-                        </CTableRow>
-                      ))}
-                  </CTableBody>
-                </CTable>
+                            </CTableDataCell>
+                            <CTableDataCell>
+                              <div className="d-flex gap-3">
+                                <Link to="/approval/1321">
+                                  <FontAwesomeIcon icon={faEye} />
+                                </Link>
+                                <div
+                                  className="cursor-pointer"
+                                  onClick={() => setAddModal(true)}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faPenToSquare}
+                                  />
+                                </div>
+                                <div
+                                  className="cursor-pointer"
+                                  onClick={() =>
+                                    setDeleteModal(item.id)
+                                  }
+                                >
+                                  <FontAwesomeIcon icon={faTrashCan} />
+                                </div>
+                              </div>
+                            </CTableDataCell>
+                          </CTableRow>
+                        ))}
+                    </CTableBody>
+                  </CTable>
+                </div>
               </div>
             </div>
           </div>
