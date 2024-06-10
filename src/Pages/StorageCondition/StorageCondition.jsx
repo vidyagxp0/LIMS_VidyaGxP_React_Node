@@ -17,6 +17,8 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
+import React from 'react';
+
 import {
   faEye,
   faPenToSquare,

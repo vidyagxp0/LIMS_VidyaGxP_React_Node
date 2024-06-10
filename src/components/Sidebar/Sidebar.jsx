@@ -6,6 +6,7 @@ import {
   cilColumns,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import React from 'react';
 import { TfiDashboard } from "react-icons/tfi";
 import { MdOutlineVerified } from "react-icons/md";
 import { AiOutlineContainer } from "react-icons/ai";
@@ -968,7 +969,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/ColumnApplication">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ ColumnApplication")}
+                  className={isActive("/Inventory/ColumnApplication")}
                   style={{
                     ...isActive("/Inventory/ColumnApplication"),
                     fontSize: "14px",
@@ -1000,7 +1001,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/PerformanceTest">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ PerformanceTest")}
+                  className={isActive("/Inventory/PerformanceTest")}
                   style={{
                     ...isActive("/Inventory/PerformanceTest"),
                     fontSize: "14px",
@@ -1016,7 +1017,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/Assignment">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ Assignment")}
+                  className={isActive("/Inventory/Assignment")}
                   style={{
                     ...isActive("/Inventory/Assignment"),
                     fontSize: "14px",
@@ -1031,7 +1032,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/Qualification">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ Qualification")}
+                  className={isActive("/Inventory/Qualification")}
                   style={{
                     ...isActive("/Inventory/Qualification"),
                     fontSize: "14px",
@@ -1046,7 +1047,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/ColumnUsage">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ ColumnUsage")}
+                  className={isActive("/Inventory/ColumnUsage")}
                   style={{
                     ...isActive("/Inventory/ColumnUsage"),
                     fontSize: "14px",
@@ -1061,7 +1062,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/BatchAssignment">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ BatchAssignment")}
+                  className={isActive("/Inventory/BatchAssignment")}
                   style={{
                     ...isActive("/Inventory/BatchAssignment"),
                     fontSize: "14px",
@@ -1112,7 +1113,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/StandardRegistration">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ StandardRegistration")}
+                  className={isActive("/Inventory/StandardRegistration")}
                   style={{
                     ...isActive("/Inventory/StandardRegistration"),
                     fontSize: "14px",
@@ -1128,7 +1129,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/InvLotRegistration">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/  InvLotRegistration")}
+                  className={isActive("/Inventory/ InvLotRegistration")}
                   style={{
                     ...isActive("/Inventory/InvLotRegistration"),
                     fontSize: "14px",
@@ -1144,7 +1145,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/UsageRegistration">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ UsageRegistration")}
+                  className={isActive("/Inventory/UsageRegistration")}
                   style={{
                     ...isActive("/Inventory/UsageRegistration"),
                     fontSize: "14px",
@@ -1195,7 +1196,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/CultureRegistration">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ CultureRegistration")}
+                  className={isActive("/Inventory/CultureRegistration")}
                   style={{
                     ...isActive("/Inventory/CultureRegistration"),
                     fontSize: "14px",
@@ -1211,7 +1212,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/RefrenceCulture">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ RefrenceCulture")}
+                  className={isActive("/Inventory/RefrenceCulture")}
                   style={{
                     ...isActive("/Inventory/RefrenceCulture"),
                     fontSize: "14px",
@@ -1228,7 +1229,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 <CNavItem
                   href="#"
                   className={isActive(
-                    "/Inventory/ CultureTemplateConfiguration"
+                    "/Inventory/CultureTemplateConfiguration"
                   )}
                   style={{
                     ...isActive("/Inventory/CultureTemplateConfiguration"),
@@ -1245,7 +1246,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/RefrenceCultureLot">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ RefrenceCultureLot")}
+                  className={isActive("/Inventory/RefrenceCultureLot")}
                   style={{
                     ...isActive("/Inventory/RefrenceCultureLot"),
                     fontSize: "14px",
@@ -1261,7 +1262,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/CultureLotAcceptance">
                 <CNavItem
                   href="#"
-                  className={isActive("/Inventory/ CultureLotAcceptance")}
+                  className={isActive("/Inventory/CultureLotAcceptance")}
                   style={{
                     ...isActive("/Inventory/CultureLotAcceptance"),
                     fontSize: "14px",
@@ -1468,7 +1469,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                   href="#"
                   className={isActive("/Inventory/ProcessingSystem")}
                   style={{
-                    ...isActive("/Inventory/ ProcessingSystem"),
+                    ...isActive("/Inventory/ProcessingSystem"),
                     fontSize: "14px",
                   }}
                 >
@@ -1484,7 +1485,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                   href="#"
                   className={isActive("/Inventory/Schedule")}
                   style={{
-                    ...isActive("/Inventory/ Schedule"),
+                    ...isActive("/Inventory/Schedule"),
                     fontSize: "14px",
                   }}
                 >

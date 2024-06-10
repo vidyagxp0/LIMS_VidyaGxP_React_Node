@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaCircleArrowLeft } from "react-icons/fa6";
+import React from 'react';
 
 import {
   CButton,

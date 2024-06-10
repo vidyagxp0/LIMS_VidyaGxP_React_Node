@@ -10,6 +10,7 @@ import {
     CTableHeaderCell,
     CTableRow
 } from "@coreui/react";
+import React from 'react';
 import { useState } from "react";
 import { FaArrowRight, FaDownload } from "react-icons/fa";
 import { PDFDownloadLink } from '@react-pdf/renderer';

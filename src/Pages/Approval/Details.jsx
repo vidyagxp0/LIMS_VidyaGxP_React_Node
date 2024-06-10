@@ -1,6 +1,6 @@
 import { CButton, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableBody, CTableDataCell, CTableRow } from "@coreui/react"
 import { useState } from "react"
-
+import React from 'react';
 
 function Details() {
      const [statusModal, setStatusModal] = useState(false)
