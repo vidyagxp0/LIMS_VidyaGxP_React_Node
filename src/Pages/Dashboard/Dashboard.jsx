@@ -2,15 +2,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 // import "../Dashboard/Dashboard.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import LineChart from "echarts-for-react";
-import ReactEcharts from "echarts-for-react";
-import * as echarts from "echarts";
-import { CSpinner } from "@coreui/react";
+import React from "react";
+import Chart from "react-apexcharts";
 
 function Dashboard(props) {
   useEffect(() => {
@@ -42,764 +40,6 @@ function Dashboard(props) {
     "ARFFT0000091",
   ];
 
-  const pieChartOptions = {
-    tooltip: {
-      trigger: "item",
-    },
-    legend: {
-      orient: "vertical",
-      left: "left",
-      data: ["Initiated", "Completed", "Pending", "Dropped"],
-    },
-    series: [
-      {
-        name: "Status",
-        type: "pie",
-        radius: "50%",
-        data: [
-          { value: 10, name: "Initiated" }, // sum of all "Initiated" data
-          { value: 8, name: "Completed" }, // sum of all "Completed" data
-          { value: 68, name: "Pending" }, // sum of all "Pending" data
-          { value: 0, name: "Dropped" }, // sum of all "Dropped" data
-        ],
-        emphasis: {
-          itemStyle: {
-            Blur: 10,
-            OffsetX: 0,
-            Color: "rgba(0, 0, 0, 0.8)",
-          },
-        },
-      },
-    ],
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-  };
-
-  const funnelOption = {
-    tooltip: {
-      trigger: "item",
-      formatter: "{a} <br/>{b} : {c}%",
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-    legend: {
-      data: ["Material Status"],
-    },
-    series: [
-      {
-        name: "Material Status",
-        type: "funnel",
-        left: "22%",
-        top: 25,
-        bottom: 20,
-        width: "60%",
-        min: 0,
-        max: 100,
-        minSize: "0%",
-        maxSize: "100%",
-        sort: "descending",
-        gap: 2,
-        label: {
-          show: true,
-          position: "inside",
-        },
-        labelLine: {
-          length: 10,
-          lineStyle: {
-            width: 1,
-            type: "solid",
-          },
-        },
-        itemStyle: {
-          borderColor: "#fff",
-          borderWidth: 1,
-        },
-        data: [
-          { value: 60, name: "Visit" },
-          { value: 40, name: "Inquiry" },
-          { value: 20, name: "Order" },
-          { value: 80, name: "Click" },
-          { value: 100, name: "Show" },
-        ],
-      },
-    ],
-  };
-
-  const analysisOptions = {
-    tooltip: {
-      trigger: "axis",
-    },
-    legend: {
-      data: ["Initiated", "Completed", "Pending", "Dropped"],
-    },
-    grid: {
-      show: false,
-      containLabel: true,
-    },
-    xAxis: {
-      type: "category",
-      boundaryGap: false,
-      axisLine: {
-        show: false,
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLabel: {
-        show: false,
-      },
-      data: [
-        "Mon Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Tue Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Wed Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Thu Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Fri Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sat Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sun Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Mon Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Tue Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Wed Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Thu Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Fri Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sat Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sun Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Mon Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Tue Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Wed Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Thu Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Fri Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sat Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sun Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Mon Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Tue Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Wed Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Thu Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Fri Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sat Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-        "Sun Jun 22 2023 00:00:00 GMT+0530 (India Standard Time)",
-      ],
-    },
-    yAxis: {
-      type: "value",
-      axisLine: {
-        show: false,
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLabel: {
-        show: false,
-      },
-      splitLine: {
-        show: false,
-      },
-    },
-    series: [
-      {
-        name: "Initiated",
-        type: "line",
-        symbol: "circle",
-        smooth: true,
-        stack: "Total",
-        data: [
-          0, 0, 5, 0, 0, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0, 0, 1,
-        ],
-      },
-      {
-        name: "Completed",
-        type: "line",
-        symbol: "circle",
-        smooth: true,
-        stack: "Total",
-        data: [
-          0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 1,
-          0, 1, 0, 0, 0,
-        ],
-      },
-      {
-        name: "Pending",
-        type: "line",
-        symbol: "circle",
-        smooth: true,
-        stack: "Total",
-        data: [
-          3, 1, 3, 4, 7, 1, 2, 1, 0, 1, 1, 1, 1, 2, 2, 11, 2, 8, 1, 1, 1, 7, 8,
-          1, 18, 2, 2, 2,
-        ],
-      },
-      {
-        name: "Dropped",
-        type: "line",
-        symbol: "circle",
-        smooth: true,
-        stack: "Total",
-        data: [
-          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-          0, 0, 0, 0, 0,
-        ],
-      },
-    ],
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-  };
-
-  const materialOption = {
-    tooltip: {
-      trigger: "axis",
-    },
-    legend: {
-      data: ["Material"],
-    },
-    grid: {
-      show: false,
-      containLabel: true,
-    },
-    xAxis: {
-      type: "category",
-      boundaryGap: true,
-      axisLine: {
-        show: true,
-      },
-      axisTick: {
-        show: true,
-      },
-      axisLabel: {
-        show: true,
-      },
-      data: [
-        "16 Jun 2023",
-        "24 Jun 2023",
-        "20 Sep 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-        "24 Jun 2023",
-        "20 Sep 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-        "24 Jun 2023",
-        "20 Sep 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-        "24 Jun 2023",
-        "20 Sep 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-        "24 Jun 2023",
-        "20 Sep 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-        "24 Jun 2023",
-        "20 Sep 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-        "24 Jun 2023",
-        "20 Sep 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-        "12 Feb 2023",
-        "22 Mar 2023",
-      ],
-    },
-    yAxis: {
-      type: "value",
-      axisLine: {
-        show: false,
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLabel: {
-        show: false,
-      },
-      splitLine: {
-        show: false,
-      },
-    },
-    series: [
-      {
-        name: "Material",
-        type: "bar",
-        stack: "Total",
-        color: "#0089c8",
-        data: [
-          1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 2, 1, 1, 1, 1, 3, 1, 1, 1, 3,
-          2, 2, 1, 1, 2, 2, 1, 1, 2, 2,
-        ],
-        itemStyle: {
-          borderRadius: [5, 5, 0, 0],
-        },
-      },
-    ],
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-  };
-
-  const productWiseTestStatsOption = {
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "",
-      },
-    },
-    legend: {},
-    grid: {
-      left: "1%",
-      right: "5%",
-      top: "0%",
-      bottom: "0%",
-      containLabel: true,
-    },
-    xAxis: {
-      name: "Product",
-      type: "category",
-      boundaryGap: [0, 0.01],
-      axisLabel: {
-        rotate: 45,
-        interval: 0,
-      },
-      data: [
-        "Formulation Analysis",
-        "Impurity Profiling",
-        "Potency Testing",
-        "Dissolution Testing",
-        "Stability Testing",
-        "Bioavailability Assessment",
-        "Microbiological Testing",
-
-        "Biowaivers Assessment",
-        "Container Material Compatibility",
-        "Photostability Testing",
-        "Forced Degradation Studies",
-        "Reference Standard Qualification",
-        "Sterility Testing",
-        "Endotoxin Testing",
-      ],
-    },
-    yAxis: {
-      type: "value",
-      name: "Tests",
-    },
-    series: [
-      {
-        name: "Test Registered",
-        type: "bar",
-        data: [
-          6, 8, 3, 2, 5, 1, 7, 9, 4, 3, 7, 2, 4, 1, 9, 5, 8, 6, 2, 5, 4, 3, 1,
-          7, 9,
-        ],
-        itemStyle: {
-          color: "#0089c8",
-          borderRadius: [5, 5, 0, 0],
-        },
-      },
-      {
-        name: "Test Executed",
-        type: "bar",
-        data: [
-          0, 0, 1, 2, 2, 0, 0, 1, 7, 0, 5, 0, 3, 2, 4, 2, 0, 2, 2, 0, 4, 6, 8,
-          1, 0,
-        ],
-        itemStyle: {
-          color: "#ffada4",
-          borderRadius: [5, 5, 0, 0],
-        },
-      },
-    ],
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-    dataZoom: [
-      {
-        type: "slider",
-        show: true,
-        xAxisIndex: 0,
-        start: 0,
-        end: 40,
-        bottom: "0%",
-      },
-    ],
-  };
-
-  const testWiseStatsOption = {
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "",
-      },
-    },
-    legend: {},
-    grid: {
-      left: "1%",
-      right: "5%",
-      top: "0%",
-      bottom: "0%",
-      containLabel: true,
-    },
-    xAxis: {
-      type: "category",
-      name: "Products",
-      boundaryGap: [0, 0.01],
-      axisLabel: {
-        rotate: 45,
-        interval: 0,
-      },
-      data: [
-        "Formulation Analysis",
-        "Pharmacodynamic Evaluation",
-        "In Silico Modeling and Simulation",
-        "Process Optimization",
-        "Potency Testing",
-        "Toxicological Studies",
-        "Microbiological Testing",
-        "In Vitro Diagnostics",
-        "Genomic Biomarker Analysis",
-        "Pharmacogenomics Analysis",
-        "Drug Delivery Systems",
-        "Clinical Endpoint Assessment",
-        "Environmental Monitoring",
-        "Sterility Testing",
-        "Bacterial Endotoxin Testing (BET)",
-        "Biological Product Characterization",
-        "Excipient Selection",
-        "Tablet Hardness Testing",
-        "Pharmaceutical Packaging",
-        "Solubility Testing",
-        "Pharmacogenetics Testing",
-        "Genotoxicity Studies",
-        "Pharmacovigilance Monitoring",
-        "Pharmacogenetics Profiling",
-        "Bioavailability Assessment",
-        "Inhalation Toxicology",
-        "Description",
-        "Lyophilization Cycle Optimization",
-        "Method Development and Validation",
-        "Quality Control Measures",
-        "Endotoxin Testing",
-        "Single Maximum unknown impurity Mirabegron",
-        "Special Gravity",
-        "Post-Marketing Surveillance",
-        "Cell Culture Studies",
-        "Sterilization Validation",
-        "Process Validation",
-        "Bioequivalence Studies",
-        "Pharmacoeconomic Evaluation",
-        "Pharmaceutical Marketing",
-        "Quality by Design (QbD) Implementation",
-        "Mirabegron (As Extended Release)...25mg",
-        "Regulatory Compliance",
-        "Pharmacokinetic Analysis",
-        "Extractable and Leachable Studies",
-        "Total Acid Number (TAN)",
-        "Nanoparticle Characterization",
-        "Analytical Method Development",
-        "Impurity Profiling",
-        "In Vitro-In Vivo Correlation",
-        "Pharmaceutical Development",
-        "Total Impurities",
-        "Formulation Development",
-        "Freeze-Thaw Testing",
-        "Drug Product Development",
-        "Pharmacokinetic Modeling",
-        "Immunogenicity Testing",
-        "Biowaivers Assessment",
-        "Assay",
-        "Reference Standard Qualification",
-        "Dissolution Testing",
-        "Pharmaceutical Testing",
-        "Clinical Development",
-        "Color Test",
-        "FG Assya Text",
-        "Pharmacogenomics Analysis",
-      ],
-    },
-    yAxis: {
-      type: "value",
-      name: "Tests",
-    },
-    series: [
-      {
-        name: "Test Planned",
-        type: "line",
-        data: [
-          6, 3, 1, 3, 4, 4, 3, 1, 9, 1, 8, 4, 6, 3, 7, 6, 4, 2, 2, 3, 6, 1, 9,
-          3, 2, 7, 3, 5, 9, 1, 4, 6, 2, 1, 4, 5, 8, 2, 3, 7, 4, 9, 6, 3, 2, 8,
-          6, 1, 14, 9, 3, 2, 7, 3, 5, 9, 1, 4, 6, 2, 1, 4, 5, 8, 2, 3, 7, 4, 9,
-          6, 3,
-        ],
-        itemStyle: {
-          color: "black",
-          borderRadius: [5, 5, 0, 0],
-        },
-      },
-      {
-        name: "Test Executed",
-        type: "bar",
-        data: [
-          2, 7, 4, 1, 8, 3, 6, 5, 9, 0, 4, 8, 1, 6, 2, 3, 7, 9, 5, 0, 3, 9, 4,
-          5, 6, 1, 0, 2, 7, 8, 6, 0, 2, 7, 1, 9, 5, 4, 8, 3, 8, 2, 5, 7, 0, 9,
-          3, 6, 1, 4, 4, 3, 1, 0, 8, 2, 6, 9, 7, 5, 7, 1, 6, 5, 4, 8, 0, 3, 9,
-          2, 2, 9, 6, 1, 7, 5, 4, 8, 0, 3,
-        ],
-        itemStyle: {
-          color: "#0089C8",
-          borderRadius: [5, 5, 0, 0],
-        },
-      },
-    ],
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-    dataZoom: [
-      {
-        type: "slider",
-        show: true,
-        xAxisIndex: 0,
-        start: 0,
-        end: 10,
-        bottom: "5%",
-      },
-    ],
-  };
-
-  const getOption = () => {
-    return {
-      tooltip: {
-        trigger: "axis",
-        axisPointer: {
-          type: "line",
-        },
-      },
-      legend: {},
-      grid: {
-        left: "1%",
-        right: "5%",
-        top: "0%",
-        bottom: "0%",
-        containLabel: true,
-      },
-      xAxis: {
-        name: "Month",
-        type: "category",
-        boundaryGap: [0, 0.01],
-        axisLabel: {
-          rotate: 45,
-          interval: 0,
-        },
-        data: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ],
-      },
-      yAxis: {
-        type: "value",
-        name: "Rainfall (mm)",
-      },
-      series: [
-        {
-          name: "Rainfall",
-          type: "bar",
-          data: [50, 60, 20, 80, 90, 100, 110, 120, 130, 140, 150, 160],
-          itemStyle: {
-            color: "#0089c8",
-            borderRadius: [5, 5, 0, 0],
-          },
-        },
-      ],
-      toolbox: {
-        feature: {
-          saveAsImage: {},
-        },
-      },
-      dataZoom: [
-        {
-          type: "slider",
-          show: true,
-          xAxisIndex: 0,
-          start: 0,
-          end: 100,
-          bottom: "0%",
-        },
-      ],
-    };
-  };
-
-  const radarOption = {
-    radar: {
-      indicator: [
-        { name: "Formulation Analysis", max: 5 },
-        { name: "In Silico Modeling and Simulation", max: 5 },
-        { name: "Pharmacodynamic Evaluation", max: 5 },
-        { name: "In Silico Modeling and Simulation", max: 5 },
-      ],
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-
-    series: [
-      {
-        type: "radar",
-        data: [
-          {
-            value: [6, 3, 1, 5, 8],
-            name: "Test Planned",
-          },
-          {
-            value: [2, 7, 4, 5, 8, 7, 4],
-            name: "Test Executed",
-          },
-          {
-            value: [1, 2, 3, 4, 5, 6, 8, 7, 8, 4, 5],
-            name: "Test Executed",
-          },
-          {
-            value: [1, 55, 88, 77, 44, 5, 5],
-            name: "Test Executed",
-          },
-          {
-            value: [2, 7, 4, 5, 8, 5, 0],
-            name: "Test Executed",
-          },
-        ],
-      },
-    ],
-  };
-
-  const chartRef = useRef(null);
-
-  useEffect(() => {
-    const option = {
-      tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b}: {c} ({d}%)",
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {},
-        },
-      },
-      legend: {
-        data: [
-          "Direct",
-          "Marketing",
-          "Search Engine",
-          "Email",
-          "Union Ads",
-          "Video Ads",
-        ],
-      },
-      series: [
-        {
-          name: "Access From",
-          type: "pie",
-          selectedMode: "single",
-          radius: [0, "70%"],
-          label: {
-            position: "inner",
-            fontSize: 10,
-          },
-          labelLine: {
-            show: false,
-          },
-          data: [
-            { value: 1548, name: "Search Engine" },
-            { value: 775, name: "Direct" },
-            { value: 679, name: "Marketing", selected: true },
-          ],
-        },
-        {
-          name: "Access From",
-          type: "pie",
-          radius: ["40%", "0%"],
-          labelLine: {
-            length: 0,
-          },
-          label: {
-            formatter: "{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ",
-            backgroundColor: "#F6F8FC",
-            borderColor: "#8C8D8E",
-            borderWidth: 1,
-            borderRadius: 4,
-            rich: {
-              a: {
-                color: "#6E7079",
-                lineHeight: 44,
-                align: "center",
-              },
-              hr: {
-                borderColor: "#8C8D8E",
-                width: "50%",
-                borderWidth: 1,
-                height: 0,
-              },
-              b: {
-                color: "#4C5058",
-                fontSize: 14,
-                fontWeight: "bold",
-                lineHeight: 33,
-              },
-              per: {
-                color: "#fff",
-                backgroundColor: "#4C5058",
-                padding: [3, 4],
-                borderRadius: 10,
-              },
-            },
-          },
-          data: [
-            { value: 1048, name: "Baidu" },
-            { value: 335, name: "Direct" },
-            { value: 310, name: "Email" },
-            { value: 251, name: "Google" },
-          ],
-        },
-      ],
-    };
-
-    const chartInstance = echarts.init(chartRef.current);
-    chartInstance.setOption(option);
-
-    const handleResize = () => {
-      chartInstance.resize();
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      chartInstance.dispose();
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   function genData(len, offset) {
     let arr = new Float32Array(len * 2);
     let off = 0;
@@ -814,6 +54,265 @@ function Dashboard(props) {
     }
     return arr;
   }
+
+  const options = {
+    chart: {
+      id: "basic-line",
+    },
+    xaxis: {
+      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+    },
+  };
+  const series = [
+    {
+      name: "series-1",
+      data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+    },
+  ];
+
+  const options2 = {
+    chart: {
+      id: "basic-area",
+    },
+    xaxis: {
+      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+    },
+  };
+  const series2 = [
+    {
+      name: "series-1",
+      data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+    },
+  ];
+
+  const options3 = {
+    chart: {
+      id: "basic-bar",
+    },
+    xaxis: {
+      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+    },
+  };
+  const series3 = [
+    {
+      name: "series-1",
+      data: [30, 40, 35, 50, 49, 60, 70, 91, 125],
+    },
+  ];
+
+  const options4 = {
+    labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+  };
+  const series4 = [44, 55, 13, 43, 22];
+
+  const options5 = {
+    plotOptions: {
+      radialBar: {
+        dataLabels: {
+          name: {
+            fontSize: "22px",
+          },
+          value: {
+            fontSize: "16px",
+          },
+          total: {
+            show: true,
+            label: "Total",
+            formatter: function (w) {
+              return 249;
+            },
+          },
+        },
+      },
+    },
+    labels: ["Apples", "Oranges", "Bananas", "Berries"],
+  };
+  const series5 = [44, 55, 67, 83];
+
+  const options6 = {
+    chart: {
+      type: "candlestick",
+      height: 350,
+    },
+    title: {
+      text: "CandleStick Chart",
+      align: "left",
+    },
+    xaxis: {
+      type: "datetime",
+    },
+    yaxis: {
+      tooltip: {
+        enabled: true,
+      },
+    },
+  };
+
+  const series6 = [
+    {
+      data: [
+        {
+          x: new Date(1538778600000),
+          y: [6629.81, 6650.5, 6623.04, 6633.33],
+        },
+        {
+          x: new Date(1538780400000),
+          y: [6632.01, 6643.59, 6620, 6630.11],
+        },
+        {
+          x: new Date(1538782200000),
+          y: [6630.71, 6648.95, 6623.34, 6635.65],
+        },
+        {
+          x: new Date(1538784000000),
+          y: [6635.65, 6651, 6629.67, 6638.24],
+        },
+        {
+          x: new Date(1538785800000),
+          y: [6638.24, 6640, 6620, 6624.47],
+        },
+        {
+          x: new Date(1538787600000),
+          y: [6624.53, 6636.03, 6621.68, 6624.31],
+        },
+        {
+          x: new Date(1538789400000),
+          y: [6624.61, 6632.2, 6617, 6626.02],
+        },
+        {
+          x: new Date(1538791200000),
+          y: [6627, 6627.62, 6584.22, 6603.02],
+        },
+        {
+          x: new Date(1538793000000),
+          y: [6605, 6608.03, 6598.95, 6604.01],
+        },
+        {
+          x: new Date(1538794800000),
+          y: [6604.5, 6614.4, 6602.26, 6608.02],
+        },
+        {
+          x: new Date(1538796600000),
+          y: [6608.02, 6610.68, 6601.99, 6608.91],
+        },
+        {
+          x: new Date(1538798400000),
+          y: [6608.91, 6618.99, 6608.01, 6612],
+        },
+        {
+          x: new Date(1538800200000),
+          y: [6612, 6615.13, 6605.09, 6612],
+        },
+        {
+          x: new Date(1538802000000),
+          y: [6612, 6624.12, 6608.43, 6622.95],
+        },
+        {
+          x: new Date(1538803800000),
+          y: [6623.91, 6623.91, 6615, 6615.67],
+        },
+      ],
+    },
+  ];
+  const options7 = {
+    chart: {
+      id: "basic-polar-area",
+    },
+    labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+  };
+  const series7 = [44, 55, 13, 43, 22];
+
+  const options8 = {
+    chart: {
+      id: "basic-treemap",
+    },
+    plotOptions: {
+      treemap: {
+        distributed: true,
+        enableShades: true,
+      },
+    },
+  };
+  const series8 = [
+    {
+      data: [
+        { x: "Category A", y: 10 },
+        { x: "Category B", y: 20 },
+        { x: "Category C", y: 30 },
+        { x: "Category D", y: 40 },
+        { x: "Category E", y: 50 },
+      ],
+    },
+  ];
+
+  const options9 = {
+    chart: {
+      id: "basic-heatmap",
+    },
+    plotOptions: {
+      heatmap: {
+        shadeIntensity: 0.5,
+        colorScale: {
+          ranges: [
+            { from: 0, to: 50, color: "#00A100" },
+            { from: 51, to: 100, color: "#128FD9" },
+            { from: 101, to: 150, color: "#FFB200" },
+            { from: 151, to: 200, color: "#FF0000" },
+          ],
+        },
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+  };
+  const series9 = [
+    {
+      name: "Metric1",
+      data: [
+        { x: "Jan", y: 30 },
+        { x: "Feb", y: 20 },
+        { x: "Mar", y: 50 },
+        { x: "Apr", y: 80 },
+        { x: "May", y: 20 },
+        { x: "Jun", y: 30 },
+      ],
+    },
+    {
+      name: "Metric2",
+      data: [
+        { x: "Jan", y: 50 },
+        { x: "Feb", y: 70 },
+        { x: "Mar", y: 40 },
+        { x: "Apr", y: 60 },
+        { x: "May", y: 70 },
+        { x: "Jun", y: 80 },
+      ],
+    },
+  ];
+
+  const options10 = {
+    chart: {
+      id: "basic-radar",
+    },
+    xaxis: {
+      categories: ["January", "February", "March", "April", "May", "June"],
+    },
+  };
+  const series10 = [
+    {
+      name: "Series 1",
+      data: [80, 50, 30, 40, 100, 20],
+    },
+    {
+      name: "Series 2",
+      data: [20, 30, 40, 80, 20, 80],
+    },
+    {
+      name: "Series 3",
+      data: [44, 76, 78, 13, 43, 10],
+    },
+  ];
 
   return (
     <>
@@ -1026,27 +525,31 @@ function Dashboard(props) {
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className=" shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
-            <div className="bg-white rounded p-4">
-              <div className="flex justify-between">
-                <div className="py-2 font-semibold">Analysis</div>
-                <div className="font-semibold text-lg">...</div>
-              </div>
-              <div className="mt-4">
-                <LineChart option={pieChartOptions} />
-              </div>
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">Product</div>
+            <div className="pt-4 mx-3 flex items-center justify-center">
+              <Chart
+                options={options3}
+                series={series3}
+                type="bar"
+                width="100%"
+                className="lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
 
-          <div className="w-full shadow lg:w-5/12 flex flex-col bg-white rounded-xl">
-            <div className="bg-white rounded p-4">
-              <div className="flex justify-between">
-                <div className="py-2 font-semibold">Test Stats</div>
-                <div className="font-semibold text-lg">...</div>
-              </div>
-              <div className="mt-4">
-                <LineChart option={materialOption} />
-              </div>
+          <div className="w-full p-2 shadow lg:w-6/12 md:w-full flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">
+              Test Wise Stats
+            </div>
+            <div className="flex items-center justify-center">
+              <Chart
+                options={options2}
+                series={series2}
+                type="area"
+                width="100%"
+                className="lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
 
@@ -1054,7 +557,7 @@ function Dashboard(props) {
             <div className="text-lg font-bold m-4 text-center lg:text-left">
               AR Number
             </div>
-            <ul className="list-none font-serif grid gap-3  text-gray-800 mx-4">
+            <ul className="list-none font-serif grid gap-3 text-gray-800 mx-4">
               {ARNumber.map((product, idx) => (
                 <li className="text-black" key={idx}>
                   ◆ {product}
@@ -1065,83 +568,124 @@ function Dashboard(props) {
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 font-bold text-center">
-              Product Wise Test Stats
-            </div>
-            <div className="pt-4 mx-5 flex justify-center">
-              <div
-                ref={chartRef}
-                className=" h-[400px] iphone:w-[90%] iphone:h-[350px] sm:w-[85%] sm:h-[300px] md:w-[80%] md:h-[250px] lg:w-[75%] lg:h-[200px] xl:w-[70%] xl:h-[150px] 2xl:w-full 2xl:h-[350px]"
-              ></div>
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">Product</div>
+            <div className="pt-4 mx-3 flex items-center justify-center">
+              <Chart
+                options={options7}
+                series={series7}
+                type="polarArea"
+                width="80%"
+                className="lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
 
-          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 font-bold text-center">
-              Material Status
-            </div>
-            <div className="pt-4 mx-4">
-              <LineChart option={funnelOption} />
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">Product</div>
+            <div className="pt-4 mx-3 flex items-center justify-center">
+              <Chart
+                options={options8}
+                series={series8}
+                type="treemap"
+                width="80%"
+                className="lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder text-center">
-              Product Wise Test Stats
-            </div>
-            <div className="pt-4 mx-4">
-              <LineChart option={productWiseTestStatsOption} />
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">Product</div>
+            <div className="pt-4 mx-3 flex items-center justify-center">
+              <Chart
+                options={options9}
+                series={series9}
+                type="heatmap"
+                width="80%"
+                className="lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
 
-          <div className="w-full p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder text-center">
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">Product</div>
+            <div className="pt-4 mx-3 flex items-center justify-center">
+              <Chart
+                options={options10}
+                series={series10}
+                type="radar"
+                width="85%"
+                className="lg:w-[100%]  lg:h-full "
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
+          <div className="w-full p-2 shadow lg:w-6/12 md:w-full flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">
               Test Wise Stats
             </div>
-            <div className="pt-4 mx-5">
-              <LineChart option={testWiseStatsOption} />
+            <div className="flex items-center justify-center">
+              <Chart
+                options={options5}
+                series={series5}
+                type="radialBar"
+                width="70%"
+                className="lg:w-[100%] lg:h-full "
+              />
+            </div>
+          </div>  
+
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">Test</div>
+            <div className="pt-4 mx-3 flex items-center justify-center">
+              <Chart
+                options={options4}
+                series={series4}
+                type="pie"
+                width="70%"
+                className="lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
         </div>
 
         <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder text-center">Product</div>
-            <div className="pt-4 mx-5">
-              <ReactEcharts option={radarOption} />
-            </div>
-          </div>
-
-          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder text-center">Test</div>
-            <div className="pt-4 mx-5">
-              <ReactEcharts option={getOption()} />
-            </div>
-          </div>
-        </div>
-
-        <div className="p-2 gap-4 flex flex-col lg:flex-row rounded-xl m-3">
-          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 fw-bolder text-center">
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 font-bold text-center">
               Category wise Instruments
             </div>
-            <div className="p-4">
-              <LineChart option={analysisOptions} className="p-4" />
+            <div className="p-4 flex items-center justify-center  ">
+              <Chart
+                options={options}
+                series={series}
+                type="line"
+                width="100%"
+                className="lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
 
-          <div className=" p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
-            <div className="py-4 mx-3 fw-bolder text-center">
+          <div className="p-2 shadow lg:w-6/12 flex flex-col bg-white rounded-xl">
+            <div className="py-4 mx-3 font-bold text-center">
               Material Status
             </div>
-            <div className="pt-4 mx-4">
-              <LineChart option={funnelOption} />
+            <div className="pt-4 mx-4 flex items-center justify-center">
+              <Chart
+                options={options6}
+                series={series6}
+                type="candlestick"
+                width="100%"
+                className="w-[100%] h-full lg:w-[100%] lg:h-full "
+              />
             </div>
           </div>
         </div>
+
+        
       </div>
       <div>
         <ToastContainer />
