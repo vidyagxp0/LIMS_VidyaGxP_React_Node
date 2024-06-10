@@ -1,6 +1,6 @@
-import { pdf } from "@react-pdf/renderer";
 import { useState } from "react";
-import ReactPDF from "@react-pdf/renderer";
+import { Page, Text, Image, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   CButton,
   CCol,
@@ -31,89 +31,6 @@ import {
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-
-const Header = () => (
-  <ReactPDF.View
-    style={{
-      margin: 10,
-      padding: 10,
-      borderBottom: "1px solid #000",
-      textAlign: "center",
-    }}
-  >
-    <ReactPDF.View
-      style={{ flexDirection: "row", justifyContent: "space-between" }}
-    >
-      <ReactPDF.Image
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
-        style={{ width: 100, height: 100 }}
-      />
-      <ReactPDF.Text>Vijay Nagar, Indore, Madhya Pradesh 452010</ReactPDF.Text>
-    </ReactPDF.View>
-    <ReactPDF.Text
-      style={{ color: "blue", fontWeight: "bold", marginBottom: 10 }}
-    >
-      Chemical/Reagent Index
-    </ReactPDF.Text>
-  </ReactPDF.View>
-);
-
-const PDFTable = ({ data }) => (
-  <ReactPDF.View>
-    <ReactPDF.Text style={{ fontWeight: "bold", marginBottom: 10 }}>
-      Chemicals/Reagents List
-    </ReactPDF.Text>
-    <ReactPDF.View
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        borderBottom: "1px solid black",
-        padding: 5,
-      }}
-    >
-      <ReactPDF.Text style={{ width: "10%" }}>S No.</ReactPDF.Text>
-      <ReactPDF.Text style={{ width: "30%" }}>
-        Chemical / Reagent Name
-      </ReactPDF.Text>
-      <ReactPDF.Text style={{ width: "30%" }}>
-        Chemical / Reagent Unique Code
-      </ReactPDF.Text>
-      <ReactPDF.Text style={{ width: "30%" }}>Status</ReactPDF.Text>
-    </ReactPDF.View>
-    {data.map((item, index) => (
-      <ReactPDF.View
-        key={index}
-        style={{ display: "flex", flexDirection: "row", padding: 5 }}
-      >
-        <ReactPDF.Text style={{ width: "10%" }}>{item.id}</ReactPDF.Text>
-        <ReactPDF.Text style={{ width: "30%" }}>
-          {item.ChemicalReagentName}
-        </ReactPDF.Text>
-        <ReactPDF.Text style={{ width: "30%" }}>
-          {item.ChemicalReagentCode}
-        </ReactPDF.Text>
-        <ReactPDF.Text style={{ width: "30%" }}>{item.status}</ReactPDF.Text>
-      </ReactPDF.View>
-    ))}
-  </ReactPDF.View>
-);
-
-const PDFDocument = ({ data }) => (
-  <ReactPDF.Document>
-    <ReactPDF.Page size="A4" style={{ padding: 5 }}>
-      <Header />
-      <ReactPDF.View style={{ marginTop: 10 }}>
-        <PDFTable data={data} style={{ fontSize: "10px" }} />
-        <ReactPDF.Text style={{ marginTop: 20, fontSize: "10px" }}>
-          Printed By: Admin
-        </ReactPDF.Text>
-        <ReactPDF.Text style={{ fontSize: "10px" }}>
-          Printed On: 20/05/2024 10:26
-        </ReactPDF.Text>
-      </ReactPDF.View>
-    </ReactPDF.Page>
-  </ReactPDF.Document>
-);
 
 function ChemicalReagent() {
   const [deleteModal, setDeleteModal] = useState(false);
@@ -152,15 +69,15 @@ function ChemicalReagent() {
       selectedStatus === "All"
         ? data
         : data.filter(
-            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-          );
+          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+        );
     return filteredData.filter((item) =>
       item.ChemicalReagentName.toLowerCase().includes(search.toLowerCase())
     );
   };
 
   const filteredData = filterData();
-  
+
 
   const handleDelete = (id) => {
     setData((prevData) => prevData.filter((item) => item.id !== id));
@@ -214,30 +131,169 @@ function ChemicalReagent() {
     return data.filter((item) => item.status === selectedStatus.toUpperCase());
   };
 
-  const downloadPDF = async () => {
-    const data = filterData1().filter(
-      (item) =>
-        search.toLowerCase() === "" ||
-        item.ChemicalReagentName.toLowerCase().includes(search.toLowerCase())
-    );
-    const blob = await pdf(<PDFDocument data={data} />).toBlob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "chemical-reagent-list.pdf";
-    link.click();
-  };
+  const styles = StyleSheet.create({
+    page: {
+      padding: 30,
+    },
+    head: {
+      margin: '0 auto',
+      alignItems: 'center',
+      borderBottom: '2px solid black',
+      paddingBottom: 5,
+      width: '100%',
+      fontSize: 20
+    },
+    container: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 20,
+      marginBottom: 10,
+    },
+    section: {
+      margin: 10,
+      padding: 10,
+      fontSize: 12,
+    },
+    title: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    subTitle: {
+      fontSize: '12px',
+      fontWeight: '200',
+      color: 'gray'
+    },
+    image: {
+      width: 150,
+      height: 150,
+    },
+    table: {
+      display: "table",
+      width: "auto",
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: '#bfbfbf',
+      borderRightWidth: 0,
+      borderBottomWidth: 0,
+      marginBottom: 20,
+    },
+    tableRow: {
+      margin: "auto",
+      flexDirection: "row"
+    },
+    tableColHeader: {
+      width: "25%",
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: '#bfbfbf',
+      borderLeftWidth: 0,
+      borderTopWidth: 0,
+      backgroundColor: "#5D76A9",
+      color: "white"
+    },
+    tableCol: {
+      width: "25%",
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: '#bfbfbf',
+      borderLeftWidth: 0,
+      borderTopWidth: 0,
+    },
+    tableCellHeader: {
+      margin: 5,
+      fontSize: 10,
+      fontWeight: 'bold',
+    },
+    tableCell: {
+      margin: 5,
+      fontSize: 10,
+    },
+    footer: {
+      position: "absolute",
+      bottom: '0px',
+      display: 'flex',
+      flexDirection: 'row',
+      margin: 'auto 30px 30px',
+      justifyContent: 'space-between',
+      fontSize: '12px',
+      color: 'gray',
+      width: '100%'
+    }
+  });
+
+  const PdfDocument = () => (
+    <Document>
+      <Page style={styles.page}>
+        <View style={styles.head}>
+          <Text>Chemical / Reagent List</Text>
+        </View>
+        <View style={styles.container}>
+          <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s" alt="logo" style={styles.image} />
+          <View style={styles.title}>
+            <Text>Chemical / Reagent Index</Text> <Text style={styles.subTitle}>Vijay Nagar, Indore, Madhya Pradesh 452010</Text>
+          </View>
+        </View>
+
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            <View style={styles.tableColHeader}>
+              <Text style={styles.tableCellHeader}>S.No </Text>
+            </View>
+            <View style={styles.tableColHeader}>
+              <Text style={styles.tableCellHeader}>Chemical / Reagent Name</Text>
+            </View>
+            <View style={styles.tableColHeader}>
+              <Text style={styles.tableCellHeader}>Reagent Unique Code</Text>
+            </View>
+            <View style={styles.tableColHeader}>
+              <Text style={styles.tableCellHeader}>Status</Text>
+            </View>
+          </View>
+          {
+            filteredData.map((data, index) => {
+              return (
+                <View style={styles.tableRow}>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{index + 1}</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{data.ChemicalReagentName}</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{data.ChemicalReagentCode}	</Text>
+                  </View>
+                  <View style={styles.tableCol}>
+                    <Text style={styles.tableCell}>{data.status}</Text>
+                  </View>
+                </View>
+              );
+            })
+          }
+        </View>
+        <View style={styles.footer}>
+          <View>
+            <Text>Printed By: Admin</Text>
+          </View>
+          <View>
+            <Text>Printed On: 10/06/2024 02:12 PM</Text>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
 
   return (
     <>
-      <div id="approval-page" className="m-5 mt-3" style={{zIndex:"2"}}>
+      <div id="approval-page" className="m-5 mt-3" style={{ zIndex: "2" }}>
         <div className="container-fluid my-4 ">
-          <div className="main-head mx-5">
+          <div className="main-head">
             <div className="title fw-bold fs-5 ">Chemical / Reagent List</div>
           </div>
           <div className="d-flex gap-4 py-4 "></div>
           <div>
-            <CRow className="mb-3 mx-4">
+            <CRow className="mb-3">
               <CCol sm={4}>
                 <CFormInput
                   style={{ border: "2px solid gray" }}
@@ -260,207 +316,155 @@ function ChemicalReagent() {
                   <option value="Dropped">Dropped</option>
                 </CFormSelect>
               </CCol>
-              
-              <CCol sm={3}>
+              <CCol sm={5}>
                 <div className="d-flex justify-content-end">
-                  <CButton color="info" onClick={downloadPDF}>
+                  <PDFDownloadLink document={<PdfDocument />} fileName="Chemical / Reagent Index.pdf" className="btn btn-info text-light mx-2">
                     Print
-                  </CButton>
+                  </PDFDownloadLink>
                 </div>
               </CCol>
             </CRow>
           </div>
-          <div className="bg-white ">
-            <CContainer className="pt-4">
-              <CRow>
-                <CCol>
-                  <CCard className="mb-4">
-                    <CRow className="g-0">
-                      <CCol md={12}>
-                        <CCardBody>
-                          <CRow
-                            className="mt-4"
-                            style={{
-                              border: "1px solid black",
-                              padding: "10px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              flexDirection: "row",
-                              position: "relative",
-                            }}
-                          >
-                            <CCol
-                              md={2}
-                              style={{
-                                width: "72vw",
-                                height: "190px",
-                                display: "flex",
-                                justifyContent: "start",
-                                alignItems: "center",
-                                border: "1px solid lightgray",
-                              }}
-                            >
-                              <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
-                                alt="Logo"
-                                className="img-fluid"
-                                style={{ height: "150px", width: "160px" }}
-                              />
-                            </CCol>
-                            <CCol
-                              md={3}
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                position: "absolute",
-                                left: "24%",
-                                bottom: "10%",
-                              }}
-                            >
-                              <h3
-                                style={{
-                                  color: "black",
-                                  fontWeight: "bolder",
-                                  position: "absolute",
-                                  bottom: "290px",
-                                  left: "150px",
-                                  width: "500px",
-                                }}
-                              >
-                                Chemical / Reagent Index
-                              </h3>
-                              <p
-                                style={{
-                                  color: "black",
-                                  fontWeight: "500",
-                                  position: "absolute",
-                                  bottom: "240px",
-                                  left: "150px",
-                                  width: "500px",
-                                }}
-                              >
-                                Vijay Nagar, Indore, Madhya Pradesh 452010
-                              </p>
-                            </CCol>
-                          </CRow>
-                          <CTable className="mt-5 text-center">
-                            <CTableHead
-                              style={{
-                                backgroundColor: "blue",
-                                color: "white",
-                              }}
-                            >
-                              <CTableRow>
-                                <CTableHeaderCell scope="col">
-                                  S.No
-                                </CTableHeaderCell>
-                                <CTableHeaderCell scope="col">
-                                  Chemical / Reagent Name
-                                </CTableHeaderCell>
-                                <CTableHeaderCell scope="col">
-                                  Chemical / Reagent Unique Code
-                                </CTableHeaderCell>
-                                <CTableHeaderCell scope="col">
-                                  CAS CAT No.
-                                </CTableHeaderCell>
-                                <CTableHeaderCell scope="col">
-                                  Category
-                                </CTableHeaderCell>
-                                <CTableHeaderCell scope="col">
-                                  Minimum Quantity
-                                </CTableHeaderCell>
-                                <CTableHeaderCell scope="col">
-                                  Status
-                                </CTableHeaderCell>
-                                <CTableHeaderCell scope="col">
-                                  Action
-                                </CTableHeaderCell>
-                              </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                              {filterData1()
-                                .filter((item) =>
-                                  search.toLowerCase() === ""
-                                    ? true
-                                    : item.ChemicalReagentName.toLowerCase().includes(
-                                        search.toLowerCase()
-                                      )
-                                )
-                                .map((item, index) => (
-                                  <CTableRow key={index}>
-                                    <CTableDataCell>{item.id}</CTableDataCell>
-                                    <CTableDataCell>
-                                      {item.ChemicalReagentName}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                      {item.ChemicalReagentCode}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                      {item.CAS_CAT_No}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                      {item.Category}
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                      {item.Minimum_Quantity}
-                                    </CTableDataCell>
-                                    <CTableDataCell className="d-flex">
-                                      <div
-                                        className="py-2 px-3 small rounded fw-bold"
-                                        style={
-                                          item.status === "INITIATED"
-                                            ? badgeStyle2
-                                            : item.status === "APPROVED"
-                                            ? badgeStyle3
-                                            : item.status === "REJECTED"
-                                            ? badgeStyle4
-                                            : item.status === "REINITIATED"
-                                            ? badgeStyle5
-                                            : item.status === "DROPPED"
-                                            ? badgeStyle6
-                                            : item.status === "ALL"
+          <div className="bg-white">
+            <div className="container p-4">
+              <div className="">
+                <div className="mt-4 border d-flex flex-row justify-content-between">
+                  <div
+                    style={{
+                      borderRight: '1px solid gray',
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
+                      alt="Logo"
+                      className="img-fluid"
+                      style={{ height: "200px", width: "300px" }}
+                    />
+                  </div>
+                  <div className="d-flex flex-column justify-content-center align-items-center" style={{ marginRight: '300px' }}>
+                    <h3 className="fw-bolder">
+                      Chemical / Reagent Index
+                    </h3>
+                    <p>
+                      Vijay Nagar, Indore, Madhya Pradesh 452010
+                    </p>
+                  </div>
+                </div>
+                <CTable className="mt-5 text-center" style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}>
+                  <CTableHead
+                    style={{
+                      backgroundColor: "blue",
+                      color: "white",
+                    }}
+                  >
+                    <CTableRow>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        S.No
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        Chemical / Reagent Name
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        Chemical / Reagent Unique Code
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        CAS CAT No.
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        Category
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        Minimum Quantity
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        Status
+                      </CTableHeaderCell>
+                      <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        Action
+                      </CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
+                  <CTableBody>
+                    {filterData1()
+                      .filter((item) =>
+                        search.toLowerCase() === ""
+                          ? true
+                          : item.ChemicalReagentName.toLowerCase().includes(
+                            search.toLowerCase()
+                          )
+                      )
+                      .map((item, index) => (
+                        <CTableRow key={index}>
+                          <CTableDataCell>{item.id}</CTableDataCell>
+                          <CTableDataCell>
+                            {item.ChemicalReagentName}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {item.ChemicalReagentCode}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {item.CAS_CAT_No}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {item.Category}
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            {item.Minimum_Quantity}
+                          </CTableDataCell>
+                          <CTableDataCell className="d-flex">
+                            <div
+                              className="py-2 px-3 small rounded fw-bold"
+                              style={
+                                item.status === "INITIATED"
+                                  ? badgeStyle2
+                                  : item.status === "APPROVED"
+                                    ? badgeStyle3
+                                    : item.status === "REJECTED"
+                                      ? badgeStyle4
+                                      : item.status === "REINITIATED"
+                                        ? badgeStyle5
+                                        : item.status === "DROPPED"
+                                          ? badgeStyle6
+                                          : item.status === "ALL"
                                             ? badgeStyle
                                             : badgeStyle
-                                        }
-                                      >
-                                        {item.status}
-                                      </div>
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                      <div className="d-flex gap-3">
-                                        <Link to="/approval/1321">
-                                          <FontAwesomeIcon icon={faEye} />
-                                        </Link>
-                                        <div
-                                          className="cursor-pointer"
-                                          onClick={() => setAddModal(true)}
-                                        >
-                                          <FontAwesomeIcon
-                                            icon={faPenToSquare}
-                                          />
-                                        </div>
-                                        <div
-                                          className="cursor-pointer"
-                                          onClick={() =>
-                                            setDeleteModal(item.id)
-                                          }
-                                        >
-                                          <FontAwesomeIcon icon={faTrashCan} />
-                                        </div>
-                                      </div>
-                                    </CTableDataCell>
-                                  </CTableRow>
-                                ))}
-                            </CTableBody>
-                          </CTable>
-                        </CCardBody>
-                      </CCol>
-                    </CRow>
-                  </CCard>
-                </CCol>
-              </CRow>
-            </CContainer>
+                              }
+                            >
+                              {item.status}
+                            </div>
+                          </CTableDataCell>
+                          <CTableDataCell>
+                            <div className="d-flex gap-3">
+                              <Link to="/approval/1321">
+                                <FontAwesomeIcon icon={faEye} />
+                              </Link>
+                              <div
+                                className="cursor-pointer"
+                                onClick={() => setAddModal(true)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPenToSquare}
+                                />
+                              </div>
+                              <div
+                                className="cursor-pointer"
+                                onClick={() =>
+                                  setDeleteModal(item.id)
+                                }
+                              >
+                                <FontAwesomeIcon icon={faTrashCan} />
+                              </div>
+                            </div>
+                          </CTableDataCell>
+                        </CTableRow>
+                      ))}
+                  </CTableBody>
+                </CTable>
+              </div>
+            </div>
           </div>
         </div>
         {deleteModal && (
