@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -215,6 +215,9 @@ import ProcessManagement from "./components/AdminPanel/Process-Management/Proces
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
+
+import ReusableTable from "./components/ATM components/Table/ReusableTable.jsx";
+
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false);
@@ -774,8 +777,11 @@ function App() {
               element={<Sample_LoginDetails />}
             />
           </Route>
-       
-          <Route path="/adminPanel" element={<AdminPanel show={checkLoggedIn} />} />
+
+          <Route
+            path="/adminPanel"
+            element={<AdminPanel show={checkLoggedIn} />}
+          />
           <Route path="" element={<AdminMainPanel />}>
             <Route
               path="/admin-panel/userManagement"
@@ -790,6 +796,13 @@ function App() {
               element={<ProcessManagement />}
             />
           </Route>
+
+          <Route
+              path="/ReusableTable"
+              element={<ReusableTable />}
+            />
+
+
         </Routes>
       </BrowserRouter>
     </>
