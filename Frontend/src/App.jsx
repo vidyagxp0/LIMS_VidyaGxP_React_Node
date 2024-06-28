@@ -216,7 +216,6 @@ import ProcessManagement from "./components/AdminPanel/Process-Management/Proces
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
 
-import ReusableTable from "./components/ATM components/Table/ReusableTable.jsx";
 
 
 function App() {
@@ -796,11 +795,6 @@ function App() {
               element={<ProcessManagement />}
             />
           </Route>
-
-          <Route
-              path="/ReusableTable"
-              element={<ReusableTable />}
-            />
 
 
         </Routes>

@@ -1,719 +1,158 @@
-import React from 'react'
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CFormTextarea,
-  CModal,
-  CModalFooter,
-  CModalBody,
-  CModalTitle,
-  CRow,
-  CFormCheck,
-  CTable,
-  CFormLabel,
-  CForm,
-  CModalHeader,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import Card from '../../components/ATM components/Card/Card';
+import SearchBar from '../../components/ATM components/SearchBar/SearchBar';
+import Dropdown from '../../components/ATM components/Dropdown/Dropdown';
+import Table from '../../components/ATM components/Table/Table';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-function InternalRegistration() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
+const initialData = [
+  { checkbox: false, sno: 1, name: "Product 1", sequence: "Seq 1", additionalInfo: "Info 1", containerStart: "Start 1", sampleReference: "Ref 1", status: "DROPPED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 2, name: "Product 2", sequence: "Seq 2", additionalInfo: "Info 2", containerStart: "Start 2", sampleReference: "Ref 2", status: "DROPPED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 3, name: "Product 3", sequence: "Seq 3", additionalInfo: "Info 3", containerStart: "Start 3", sampleReference: "Ref 3", status: "REINITIATED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 4, name: "Product 4", sequence: "Seq 4", additionalInfo: "Info 4", containerStart: "Start 4", sampleReference: "Ref 4", status: "APPROVED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 5, name: "Product 5", sequence: "Seq 5", additionalInfo: "Info 5", containerStart: "Start 5", sampleReference: "Ref 5", status: "REJECTED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 6, name: "Product 6", sequence: "Seq 6", additionalInfo: "Info 6", containerStart: "Start 6", sampleReference: "Ref 6", status: "DROPPED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 7, name: "Product 7", sequence: "Seq 7", additionalInfo: "Info 7", containerStart: "Start 7", sampleReference: "Ref 7", status: "INITIATED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 8, name: "Product 8", sequence: "Seq 8", additionalInfo: "Info 8", containerStart: "Start 8", sampleReference: "Ref 8", status: "REINITIATED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 9, name: "Product 9", sequence: "Seq 9", additionalInfo: "Info 9", containerStart: "Start 9", sampleReference: "Ref 9", status: "APPROVED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+  { checkbox: false, sno: 10, name: "Product 10", sequence: "Seq 10", additionalInfo: "Info 10", containerStart: "Start 10", sampleReference: "Ref 10", status: "REJECTED", action: [
+    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
+  ] },
+];
+
+
+
+const InternalRegistration = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach(item => {
+      if (item.status === 'DROPPED') counts.DROPPED++;
+      else if (item.status === 'INITIATED') counts.INITIATED++;
+      else if (item.status === 'REINITIATED') counts.REINITIATED++;
+      else if (item.status === 'APPROVED') counts.APPROVED++;
+      else if (item.status === 'REJECTED') counts.REJECTED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      ProductName: "stmp1",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "APPROVED",
-    },
-    {
-      id: 2,
-      ProductName: "stmp1",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "REJECTED",
-    },
-    {
-      id: 3,
-      ProductName: "Alpha",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "REINITIATED",
-    },
-    {
-      id: 4,
-      ProductName: "Infra",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "INITIATED",
-    },
-    {
-      id: 5,
-      ProductName: "Infra",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "DROPPED",
-    },
-    {
-      id: 6,
-      ProductName: "Alpha",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "INITIATED",
-    },
-  ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-  const [search, setSearch] = useState("");
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map(row => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter(
-            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-          );
-    return filteredData.filter((item) =>
-      item.ContainerStartingNo.toLowerCase().includes(search.toLowerCase())
+  const filteredData = data.filter(row => {
+    return (
+      row.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === 'All' || row.status === statusFilter)
     );
-  };
-  const filteredData = filterData();
-  const nextPage = () =>
-    setCurrentPage((prev) =>
-      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-    );
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  });
 
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
-  };
+  
+
+  const columns = [
+    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: 'checkbox' },
+    { header: 'SrNo.', accessor: 'sno' },
+    { header: 'Product Name', accessor: 'name' },
+    { header: 'Sequence No.', accessor: 'sequence' },
+    { header: 'Additional Information', accessor: 'additionalInfo' },
+    { header: 'Container Starting No.', accessor: 'containerStart' },
+    { header: 'Sample Reference No.', accessor: 'sampleReference' },
+    { header: 'Status', accessor: 'status' },
+    { header: 'Actions', accessor: 'action' },
+  ];
 
   return (
-    <>
-      <div id="approval-page" className="m-5 mt-3">
-          <div className="main-head">
-          <h4 className="fw-bold">Working Standard Internal</h4>
-          </div>
-          <div className="d-flex gap-4 mt-3">
-            <div className="chart-widgets w-100">
-              <div className="">
-              <div className="row" style={{ cursor: "pointer" }}>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
-
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("DROPPED")}
-                >
-                  <div className="text-light font-bold fs-5">DROPPED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "DROPPED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("INITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">INITIATED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "INITIATED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, orange , #f7e05f )",
-
-                    textAlign: "left",
-                    boxShadow: "0px 10px 20px  black !important",
-                  }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">REINITIATED</div>
-
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg, green , #0fd850  )",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("APPROVED")}
-                >
-                  <butto className="text-light font-bold fs-5">APPROVED</butto>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white", textAlign: "left" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "APPROVED")
-                        .length
-                    }
-                  </div>
-                </button>
-
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg ,red, #FF719A)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("REJECTED")}
-                >
-                  <div className="text-light font-bold fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">
-                    {
-                      filterData().filter((item) => item.status === "REJECTED")
-                        .length
-                    }
-                  </div>
-                </button>
-              </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <CRow className="mb-3">
-              <CCol sm={4}>
-                <CFormInput
-                  style={{fontSize:'0.9rem'}}
-                  type="email"
-                  placeholder="Search..."
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </CCol>
-
-              <CCol sm={3}>
-                <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
-                >
-                  <option value="All">All</option>
-                  <option value="Initiated">Initiated</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Reinitiated">Reinitiated</option>
-                  <option value="Dropped">Dropped</option>
-                </CFormSelect>
-              </CCol>
-              {/* <CCol sm={2}></CCol> */}
-              <CCol sm={5}>
-                <div className="d-flex justify-content-end">
-                  <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
-                    Add Internal
-                  </CButton>
-                </div>
-              </CCol>
-            </CRow>
-          </div>
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-            <CTable
-              align="middle"
-              responsive
-              className="mb-0    table-responsive"
-            >
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                    className="text-center"
-                  >
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    S NO.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Product Name{" "}
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Sequence No.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Additional Information
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Container Starting No.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Sample Refrence no.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Status
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Actions
-                  </CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-
-              <CTableBody>
-                {filterData()
-                  .slice(startIndex, endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.ProductName.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={index}>
-                      <CTableHeaderCell scope="row" className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      {/* <CTableDataCell></CTableDataCell> */}
-                      <CTableDataCell key={item.id}>
-                        {item.ProductName}
-                      </CTableDataCell>
-
-                      <CTableDataCell>{item.SequenceNo}</CTableDataCell>
-                      <CTableDataCell>
-                        {item.AdditionalInformation}
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        {item.ContainerStartingNo}
-                      </CTableDataCell>
-                      <CTableDataCell>{item.SampleRefrenceNo}</CTableDataCell>
-                      <CTableDataCell className="d-flex">
-                      <button  
-                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          item.status === "INITIATED"
-                            ? "blue-700"
-                            : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
-                            ? "red-700"
-                            : item.status === "REINITIATED"
-                            ? "yellow-500"
-                            : item.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {item.status}
-                      </button>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
-                        </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
-     
-
-          <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Material</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card title="DROPPED" count={cardCounts.DROPPED} color="pink" />
+        <Card title="INITIATED" count={cardCounts.INITIATED} color="blue" />
+        <Card title="REINITIATED" count={cardCounts.REINITIATED} color="yellow" />
+        <Card title="APPROVED" count={cardCounts.APPROVED} color="green" />
+        <Card title="REJECTED" count={cardCounts.REJECTED} color="red" />
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
+      <div className="flex space-x-4 mb-4">
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        <Dropdown
+          options={[
+            { value: 'All', label: 'All' },
+            { value: 'DROPPED', label: 'DROPPED' },
+            { value: 'INITIATED', label: 'INITIATED' },
+            { value: 'REINITIATED', label: 'REINITIATED' },
+            { value: 'APPROVED', label: 'APPROVED' },
+            { value: 'REJECTED', label: 'REJECTED' },
+          ]}
+          value={statusFilter}
+          onChange={setStatusFilter}
         />
-      )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>New Internal</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormSelect
-            type="text"
-            label="Lot Type"
-            placeholder="Select "
-            className="mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Sample Refrence No."
-            placeholder="Sample Refrence No. "
-            className="custom-placeholder mb-3"
-          />
-
-          <CForm className="mb-3">
-            <CFormLabel>Container Type</CFormLabel>
-            <div>
-              <CFormCheck
-                type="radio"
-                name="sampleRadio"
-                id="acceptRadio"
-                label="Bottle"
-                value="accept"
-              />
-              <CFormCheck
-                type="radio"
-                name="sampleRadio"
-                id="rejectRadio"
-                label="Vial"
-                value="reject"
-              />
-            </div>
-          </CForm>
-          <CFormInput
-            type="text"
-            label="Storage Condition"
-            placeholder="Storage Condition "
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="W.s Batch Quantity"
-            placeholder="W.s Batch Quantity "
-            className="custom-placeholder mb-3"
-          />
-          <CFormTextarea
-            type="text"
-            label="Available Quantity for Distribution"
-            placeholder="Available Quantity for Distribution"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Lot Quantity for Distribution"
-            placeholder="Lot Quantity "
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="date"
-            label="W.s Validate On"
-            placeholder=" "
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="date"
-            label="Lot Valid Upto"
-            placeholder=""
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Usage Type"
-            placeholder="Single / Multiple"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Direction of Usage"
-            placeholder="Direction of Usage"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="No. Of Purities"
-            placeholder="1"
-            className="custom-placeholder mb-3"
-          />
-
-          <CFormSelect
-            type="number"
-            label="UOM"
-            placeholder="Select..."
-            className="custom-placeholder mb-3"
-          />
-
-          <div className="container mt-5 mb-3">
-            <table className="table table-bordered">
-              <thead className="thead-light">
-                <tr>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Sno.
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Purity
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Value-UOM
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <select className="form-control">
-                      <option>Acids</option>
-                      <option>Bases</option>
-                      <option>Salts</option>
-                      <option>Solvents</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <CFormInput
-            type="number"
-            label="Additional Purities Information"
-            placeholder="Additional Information"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="Standard Type"
-            placeholder="Standard Type"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="Source"
-            placeholder="Source"
-            className="mb-3"
-          />
-
-          <CFormInput
-            type="number"
-            label="Comments"
-            placeholder="Comments"
-            className="mb-3"
-          />
-
-          <CFormInput
-            type="number"
-            label="Container Validaty Period"
-            placeholder="Container Validaty Period"
-            className="mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="Container Starting No."
-            placeholder="Container No."
-            className="mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="Minimum No. of Containers for Alert"
-            placeholder="1"
-            className="mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="No. of Containers Prepared"
-            placeholder=""
-            className="mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="Total Quantity in containers"
-            placeholder="Total Quantity in containers"
-            className="mb-3"
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
-const DeleteModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Batch Sample Allotment
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
       </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
+      <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} />
+    </div>
   );
 };
 
