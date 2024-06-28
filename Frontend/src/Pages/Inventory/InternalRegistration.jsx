@@ -68,7 +68,7 @@ const InternalRegistration = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [cardCounts, setCardCounts] = useState({
@@ -88,7 +88,7 @@ const InternalRegistration = () => {
       REJECTED: 0,
     };
 
-    data.forEach(item => {
+    data.forEach((item) => {
       if (item.status === 'DROPPED') counts.DROPPED++;
       else if (item.status === 'INITIATED') counts.INITIATED++;
       else if (item.status === 'REINITIATED') counts.REINITIATED++;
@@ -107,22 +107,21 @@ const InternalRegistration = () => {
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    const newData = data.map(row => ({ ...row, checkbox: checked }));
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
 
-  const filteredData = data.filter(row => {
+  const filteredData = data.filter((row) => {
     return (
       row.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === 'All' || row.status === statusFilter)
     );
   });
 
-  const openViewModal = () => {
-    setIsViewModalOpen(false);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData); // Set the data for ViewModal
+    setIsViewModalOpen(true); // Open the ViewModal
   };
-  
-  
 
   const columns = [
     { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: 'checkbox' },
@@ -133,19 +132,18 @@ const InternalRegistration = () => {
     { header: 'Container Starting No.', accessor: 'containerStart' },
     { header: 'Sample Reference No.', accessor: 'sampleReference' },
     { header: 'Status', accessor: 'status' },
-    { header: 'Actions', accessor: 'action',Cell: ({ row }) => (
-      <>
-        <FontAwesomeIcon icon={faEye} onViewDetails={openViewModal} className="mr-2 cursor-pointer" />
-        <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
-        <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
-      </>
-    ) },
+    {
+      header: 'Actions',
+      accessor: 'action',
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
   ];
-
-  // const handleViewDetails = (row) => {
-  //   setViewedRow(row);
-  //   setIsViewModalOpen(true);
-  // };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -159,24 +157,19 @@ const InternalRegistration = () => {
     setIsViewModalOpen(false);
   };
 
-
-
-  // const onViewDetails = (rowData) => {
-  //   setIsViewModalOpen(true);
-  //   setViewModalData(rowData); // Optionally set the data for ViewModal
-  //   // Optionally, you can handle the row data here
-  //   console.log("View details for:", rowData);
-  // };
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  }
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Material</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
-        <Card title="DROPPED" count={cardCounts.DROPPED} color="pink" />
-        <Card title="INITIATED" count={cardCounts.INITIATED} color="blue" />
-        <Card title="REINITIATED" count={cardCounts.REINITIATED} color="yellow" />
-        <Card title="APPROVED" count={cardCounts.APPROVED} color="green" />
-        <Card title="REJECTED" count={cardCounts.REJECTED} color="red" />
+        <Card title="DROPPED" count={cardCounts.DROPPED} color="pink" onClick={() => handleCardClick('DROPPED')} />
+        <Card title="INITIATED" count={cardCounts.INITIATED} color="blue" onClick={() => handleCardClick('INITIATED')}/>
+        <Card title="REINITIATED" count={cardCounts.REINITIATED} color="yellow" onClick={() => handleCardClick('REINITIATED')} />
+        <Card title="APPROVED" count={cardCounts.APPROVED} color="green" onClick={() => handleCardClick('APPROVED')} />
+        <Card title="REJECTED" count={cardCounts.REJECTED} color="red" onClick={() => handleCardClick('REJECTED')}/>
       </div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
@@ -198,16 +191,10 @@ const InternalRegistration = () => {
           <ATMButton text="Add Internal" color="blue" onClick={openModal} />
         </div>
       </div>
-      <Table
-  columns={columns}
-  data={filteredData}
-  onCheckboxChange={handleCheckboxChange}
-/>
+      <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
       <InternalRegistrationModal visible={isModalOpen} closeModal={closeModal} />
- 
-        
-     { isViewModalOpen && <ViewModal visible={isViewModalOpen} closeModal={closeViewModal}/>}
-      
+      {isViewModalOpen && <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} data={viewModalData} />}
+   
     </div>
   );
 };

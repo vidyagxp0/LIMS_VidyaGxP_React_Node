@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Card = ({ title, count, color }) => {
+const Card = ({ title, count, color,onClick  }) => {
   
   let gradientClasses = '';
   switch (color) {
@@ -24,7 +24,7 @@ const Card = ({ title, count, color }) => {
   }
 
   return (
-    <div className={`bg-gradient-to-br ${gradientClasses} p-4 rounded-lg shadow-md text-white`}>
+    <div className={`bg-gradient-to-br ${gradientClasses} p-4 rounded-lg shadow-md text-white`}   onClick={onClick}>
       <h2 className="text-2xl">{title}</h2>
       <p className="text-4xl font-bold">{count}</p>
     </div>

@@ -70,32 +70,22 @@ const Table = ({ columns, data, onCheckboxChange ,onViewDetails }) => {
                                             {row.status}
                                         </span>
                                     ) : column.accessor === 'action' ? (
-                                        <div className="flex space-x-2">
-                                            {row.action.map((action, index) => (
-                                                <React.Fragment key={index}>
-                                                    {action.props.icon === faEye && (
-                                                        <FontAwesomeIcon
-                                                            icon={faEye}
-                                                            className="mr-2 cursor-pointer"
-                                                            onClick={() => onViewDetails(row)}
-                                                        />
-                                                    )}
-                                                    {action.props.icon === faPenToSquare && (
-                                                        <FontAwesomeIcon
-                                                            icon={faPenToSquare}
-                                                            className="mr-2 cursor-pointer"
-                                                        />
-                                                    )}
-                                                    {action.props.icon === faTrashCan && (
-                                                        <FontAwesomeIcon
-                                                            icon={faTrashCan}
-                                                            className="cursor-pointer"
-                                                        />
-                                                    )}
-                                                </React.Fragment>
-                                            ))}
-                                        </div>
-                                    ) : (
+                    <div className="flex space-x-2">
+                      <FontAwesomeIcon
+                        icon={faEye}
+                        className="mr-2 cursor-pointer"
+                        onClick={() => onViewDetails(row)}
+                      />
+                      <FontAwesomeIcon
+                        icon={faPenToSquare}
+                        className="mr-2 cursor-pointer"
+                      />
+                      <FontAwesomeIcon
+                        icon={faTrashCan}
+                        className="cursor-pointer"
+                      />
+                    </div>
+                  ) : (
                                         row[column.accessor]
                                     )}
                                 </td>
