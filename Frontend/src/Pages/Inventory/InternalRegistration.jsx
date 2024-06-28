@@ -5,10 +5,13 @@ import Dropdown from '../../components/ATM components/Dropdown/Dropdown';
 import Table from '../../components/ATM components/Table/Table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import ATMButton from '../../components/ATM components/Button/ATMButton';
+import InternalRegistrationModal from '../Modals/InternalRegistrationModal';
+import ViewModal from '../Modals/ViewModal';
 
 const initialData = [
   { checkbox: false, sno: 1, name: "Product 1", sequence: "Seq 1", additionalInfo: "Info 1", containerStart: "Start 1", sampleReference: "Ref 1", status: "DROPPED", action: [
-    <FontAwesomeIcon icon={faEye} key="view" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faEye}  key="view" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete" className="cursor-pointer" />
   ] },
@@ -65,6 +68,9 @@ const InternalRegistration = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -112,6 +118,10 @@ const InternalRegistration = () => {
     );
   });
 
+  const openViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+  
   
 
   const columns = [
@@ -123,8 +133,40 @@ const InternalRegistration = () => {
     { header: 'Container Starting No.', accessor: 'containerStart' },
     { header: 'Sample Reference No.', accessor: 'sampleReference' },
     { header: 'Status', accessor: 'status' },
-    { header: 'Actions', accessor: 'action' },
+    { header: 'Actions', accessor: 'action',Cell: ({ row }) => (
+      <>
+        <FontAwesomeIcon icon={faEye} onViewDetails={openViewModal} className="mr-2 cursor-pointer" />
+        <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
+        <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+      </>
+    ) },
   ];
+
+  // const handleViewDetails = (row) => {
+  //   setViewedRow(row);
+  //   setIsViewModalOpen(true);
+  // };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+
+
+  // const onViewDetails = (rowData) => {
+  //   setIsViewModalOpen(true);
+  //   setViewModalData(rowData); // Optionally set the data for ViewModal
+  //   // Optionally, you can handle the row data here
+  //   console.log("View details for:", rowData);
+  // };
 
   return (
     <div className="p-4">
@@ -136,22 +178,36 @@ const InternalRegistration = () => {
         <Card title="APPROVED" count={cardCounts.APPROVED} color="green" />
         <Card title="REJECTED" count={cardCounts.REJECTED} color="red" />
       </div>
-      <div className="flex space-x-4 mb-4">
-        <SearchBar value={searchQuery} onChange={setSearchQuery} />
-        <Dropdown
-          options={[
-            { value: 'All', label: 'All' },
-            { value: 'DROPPED', label: 'DROPPED' },
-            { value: 'INITIATED', label: 'INITIATED' },
-            { value: 'REINITIATED', label: 'REINITIATED' },
-            { value: 'APPROVED', label: 'APPROVED' },
-            { value: 'REJECTED', label: 'REJECTED' },
-          ]}
-          value={statusFilter}
-          onChange={setStatusFilter}
-        />
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: 'All', label: 'All' },
+              { value: 'DROPPED', label: 'DROPPED' },
+              { value: 'INITIATED', label: 'INITIATED' },
+              { value: 'REINITIATED', label: 'REINITIATED' },
+              { value: 'APPROVED', label: 'APPROVED' },
+              { value: 'REJECTED', label: 'REJECTED' },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton text="Add Internal" color="blue" onClick={openModal} />
+        </div>
       </div>
-      <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} />
+      <Table
+  columns={columns}
+  data={filteredData}
+  onCheckboxChange={handleCheckboxChange}
+/>
+      <InternalRegistrationModal visible={isModalOpen} closeModal={closeModal} />
+ 
+        
+     { isViewModalOpen && <ViewModal visible={isViewModalOpen} closeModal={closeViewModal}/>}
+      
     </div>
   );
 };
