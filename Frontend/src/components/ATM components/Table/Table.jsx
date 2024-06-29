@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-const Table = ({ columns, data, onCheckboxChange ,onViewDetails }) => {
+const Table = ({ columns, data, onCheckboxChange ,onViewDetails, onDelete }) => {
     const pageSize = 5;
     const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -84,6 +84,7 @@ const Table = ({ columns, data, onCheckboxChange ,onViewDetails }) => {
                       <FontAwesomeIcon
                         icon={faTrashCan}
                         className="cursor-pointer"
+                        onClick={() => onDelete(row)}
                       />
                     </div>
                   ) : (

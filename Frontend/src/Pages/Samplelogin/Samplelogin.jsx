@@ -1,4 +1,21 @@
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
 import React, { useState } from "react";
 import "./Samplelogin.css";
 import { GrLinkNext } from "react-icons/gr";
@@ -12,31 +29,216 @@ import {
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    sampleType: "USR001",
+    storageCondition: "Product 1",
+    createdAt: "2024-01-01",
+    genericName: "Generic 1",
+    specificationCode: "Spec 001",
+    status: "INITIATED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit1"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete1"
+        className="cursor-pointer"
+      />,
+    ],
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    sampleType: "USR002",
+    storageCondition: "Product 2",
+    createdAt: "2024-01-02",
+    genericName: "Generic 2",
+    specificationCode: "Spec 002",
+    status: "APPROVED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit2"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete2"
+        className="cursor-pointer"
+      />,
+    ],
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    sampleType: "USR003",
+    storageCondition: "Product 3",
+    createdAt: "2024-01-03",
+    genericName: "Generic 3",
+    specificationCode: "Spec 003",
+    status: "REJECTED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit3"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete3"
+        className="cursor-pointer"
+      />,
+    ],
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    sampleType: "USR004",
+    storageCondition: "Product 4",
+    createdAt: "2024-01-04",
+    genericName: "Generic 4",
+    specificationCode: "Spec 004",
+    status: "REINITIATED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit4"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete4"
+        className="cursor-pointer"
+      />,
+    ],
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    sampleType: "USR005",
+    storageCondition: "Product 5",
+    createdAt: "2024-01-05",
+    genericName: "Generic 5",
+    specificationCode: "Spec 005",
+    status: "DROPPED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit5"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete5"
+        className="cursor-pointer"
+      />,
+    ],
+  },
+];
 
 export default function Samplelogin() {
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [addModal, setAddModal] = useState(false);
-  const [addModal2, setAddModal2] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [data, setData] = useState(initialData);
   const [deleteId, setDeleteId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
 
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-  
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.sampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+   
+  };
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const openModal2 = () => {
+    setIsModalOpen2(true);
+  };
+
+  const closeModal2 = () => {
+    setIsModalOpen2(false);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Sample Type", accessor: "sampleType" },
+    { header: "Product / Material", accessor: "storageCondition" },
+    { header: "A.R. No.", accessor: "createdAt" },
+    { header: "Generic Name", accessor: "createdAt" },
+    { header: "Specification Code", accessor: "createdAt" },
+    { header: "Status", accessor: "status" },
+    {
+      header: 'Actions',
+      accessor: 'action',
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={openModal2} />
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)}/>
+        </>
+      ),
+    },
+  ];
+
+  const handleDeleteConfirm = () => {
+    setEmployees((prevEmployees) =>
+      prevEmployees.filter((employee) => employee.id !== deleteId)
+    );
+    setDeleteModal(false);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+
+
   const DeleteModal = (_props) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+        size="lg"
+      >
         <CModalHeader>
           <CModalTitle>Delete User</CModalTitle>
         </CModalHeader>
@@ -68,15 +270,19 @@ export default function Samplelogin() {
       </CModal>
     );
   };
-  
+
   const StatusModal2 = (_props) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal2}>
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal2}
+      >
         <CModalHeader>
           <CModalTitle>Update Sample login</CModalTitle>
         </CModalHeader>
         <CModalBody>
-        <CFormInput
+          <CFormInput
             type="text"
             className="mb-3"
             label="Client"
@@ -130,370 +336,101 @@ export default function Samplelogin() {
             label="Certificates (If any)"
             placeholder=""
           />
-  
-  <div className="bg-white rounded border-dark-subtle border-2 " >
-              <CTable align="middle" responsive className="   ">
-                <thead>
-                  <tr>
-                    <th className="bg-info text-light">Sno.</th>
-                    <th className="bg-info text-light">Test Name</th>
-                    <th className="bg-info text-light">Group Name</th>
-                    <th className="bg-info text-light">Selection</th>
-                  </tr>
-                </thead>
-                <tbody>
-                
-                    <tr >
-                      <td>1.</td>
-                      <td>Viscosity @40C</td>
-                      <td></td>
-                      <td>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                        />
-                      </td>
-                    </tr>
-                 <tr >
-                      <td>2.</td>
-                      <td>Total Acid Number (TAN)</td>
-                      <td></td>
-                      <td>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                        />
-                      </td>
-                    </tr>
-                <tr >
-                      <td>3.</td>
-                      <td>
-Water Content PPM</td>
-                      <td></td>
-                      <td>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                        />
-                      </td>
-                    </tr>
-                
-                </tbody>
-              </CTable>
-            </div>
-  
-  
+
+          <div className="bg-white rounded border-dark-subtle border-2 ">
+            <CTable align="middle" responsive className="   ">
+              <thead>
+                <tr>
+                  <th className="bg-info text-light">Sno.</th>
+                  <th className="bg-info text-light">Test Name</th>
+                  <th className="bg-info text-light">Group Name</th>
+                  <th className="bg-info text-light">Selection</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1.</td>
+                  <td>Viscosity @40C</td>
+                  <td></td>
+                  <td>
+                    <input className="form-check-input" type="checkbox" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>2.</td>
+                  <td>Total Acid Number (TAN)</td>
+                  <td></td>
+                  <td>
+                    <input className="form-check-input" type="checkbox" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>3.</td>
+                  <td>Water Content PPM</td>
+                  <td></td>
+                  <td>
+                    <input className="form-check-input" type="checkbox" />
+                  </td>
+                </tr>
+              </tbody>
+            </CTable>
+          </div>
+
           <div className="d-flex gap-3 mt-4">
-            <CButton color="light w-50" onClick={_props.closeModal2}>&lt; Back</CButton>
+            <CButton color="light w-50" onClick={_props.closeModal2}>
+              &lt; Back
+            </CButton>
             <CButton color="primary w-50">Update Sample</CButton>
           </div>
-        
         </CModalBody>
       </CModal>
-    )
-  }
-  
-    const [employee, setEmployees] = useState([
-      {
-        id:1,  user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "INITIATED",
-      },
-      {
-       id:2, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "INITIATED",
-      },
-      {
-        id:3, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:4,user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:5, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "REJECTED",
-      },
-      {
-        id:6, user: "test Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:7, user: "test Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "DROPPED",
-      },
-      {
-        id:8,user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:8, user: "test Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "DROPPED",
-      },
-      {
-        id:9, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-    ]);
-
- 
-  
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+    );
   };
-
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
-  };
-  const filteredEmployees = employee.filter(
-    (employee) =>
-      (employee.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        employee.role.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (statusFilter === "" || employee.status === statusFilter)
-  );
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
-
-  const renderRows = () => {
-    return filteredEmployees
-      .slice(startIndex, endIndex)
-      .map((employee, index) => (
-        <tr key={startIndex + index}>
-          <td>{startIndex + index + 1}</td>
-          <td>{employee.user}</td>
-          <td>{employee.role}</td>
-          <td>{employee.departments}</td>
-          <td>{employee.joiningDate}</td>
-          <td>{employee.addedBy}</td>
-          <td>
-            <button
-            className={`px-3 py-1 w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-              employee.status === "INITIATED"
-                ? "blue-700"
-                : employee.status === "APPROVED"
-                ? "green-700"
-                : employee.status === "REJECTED"
-                ? "red-700"
-                : employee.status === "REINITIATED"
-                ? "yellow-500"
-                : employee.status === "DROPPED"
-                ? "purple-700"
-                : employee.status === "ALL"
-                ? badgeStyle
-                : badgeStyle
-              }`} style={{fontSize:'10px'}}
-          >
-            {employee.status}
-            </button>
-
-          </td>
-          <td>
-            <div className="d-flex gap-3">
-              <Link to="/viewDetails">
-                <FontAwesomeIcon icon={faEye} />
-              </Link>
-              <div
-                className="cursor-pointer"
-                onClick={() => setAddModal2(true)}
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </div>
-              <div
-                className="cursor-pointer"
-                 onClick={() => handleDeleteClick(employee.id)}
-              >
-                <FontAwesomeIcon icon={faTrashCan} />
-              </div>
-            </div>
-          </td>
-        </tr>
-      ));
-  };
-
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
- 
-  const deleteEmployee = (index) => {
-    const newEmployees = [...employee];
-    newEmployees.splice(index, 1);
-    setemployees(newEmployees);
-  };
-
   return (
     <>
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Sample Login</h4>
         </div>
-        <div>
-          <CRow className="mt-5 mb-3">
-            <CCol sm={4}>
-              <CFormInput
-                type="text"
-                style={{fontSize:'0.9rem'}}
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                value={statusFilter}
-                style={{fontSize:'0.9rem'}}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                options={[
-                  { label: "All", value: "" },
-                  { label: "Initiated", value: "INITIATED" },
-                  { label: "Approved", value: "APPROVED" },
-                  { label: "Rejected", value: "REJECTED" },
-                  { label: "Reinitiated", value: "REINITIATED" },
-                  { label: "Dropped", value: "DROPPED" },
-                ]}
-              />
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton color="primary" style={{fontSize:'0.9rem'}} onClick={() => setAddModal(true)}>
-                  Add Sample Login
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
+     
+
+      <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "REJECTED", label: "REJECTED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "DROPPED", label: "DROPPED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right">
+            <ATMButton text="Add Sample Log In" color="blue" onClick={openModal} />
+          </div>
         </div>
-
-        <div
-          className=" rounded    bg-white"
-          style={{fontSize:'0.9rem'}}
-        >
-          <table className="table    ">
-            <thead>
-              <tr>
-                <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Sample Type
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Product / Material
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  A.R. No.
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Generic Name
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Specification code
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Status
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Actions{" "}
-                </th>
-              </tr>
-            </thead>
-            <tbody>{renderRows()}</tbody>
-          </table>
+        <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
         </div>
-
-        {/* <div className="pagination d-flex justify-content-end  my-4">
-          <div className="pagination d-flex justify-content-end ">
-            
-              <button
-                style={{border:'2px solid',fontSize:'13px',borderRadius:'4px', width:'78px',height:'30px',color:'white',backgroundColor:'#5D76A9'}}
-                onClick={prevPage}
-              >
-                &#8592; &nbsp;Previous
-              </button>
-              <button  style={{fontSize:'13px',borderRadius:'', width:'24px',height:'30px',color:'white',backgroundColor:'#5D76A9'}}> {currentPage} </button>
-             <button
-             style={{border:'2px solid',fontSize:'13px',borderRadius:'4px', width:'60px',height:'30px',backgroundColor:'#5D76A9',color:'white'}}
-             onClick={nextToLastPage}
-             >
-              Next &nbsp;&rarr;
-             </button>
-           </div>
-        </div> */}
-
-<div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-
-
-
-      </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
-       {addModal2 && (
-        <StatusModal2 visible={addModal2} closeModal2={() => setAddModal2(false)} />
+      {isModalOpen2 && (
+        <StatusModal2
+          visible={isModalOpen2}
+          closeModal2={closeModal2}
+        />
       )}
 
-<DeleteModal
+      <DeleteModal
         visible={deleteModal}
         closeModal={() => setDeleteModal(false)}
-        confirmDelete={handleDeleteConfirm}/>
+        confirmDelete={handleDeleteConfirm}
+      />
     </>
   );
 }
@@ -574,4 +511,3 @@ const StatusModal = (_props) => {
     </CModal>
   );
 };
-

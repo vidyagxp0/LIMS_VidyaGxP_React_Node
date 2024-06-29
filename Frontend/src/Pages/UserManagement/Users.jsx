@@ -13,189 +13,127 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
 } from "@coreui/react";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+
+const initialData = [
+  { checkbox: false, sno: 1, userId: "USR001", user: "User 1", role: "Role 1", department: "Department 1", joiningDate: "2024-01-01", status: "Active", addedBy: "Admin 1", action: [
+   
+    <FontAwesomeIcon icon={faPenToSquare} key="edit1" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete1" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 2, userId: "USR002", user: "User 2", role: "Role 2", department: "Department 2", joiningDate: "2024-01-02", status: "Inactive", addedBy: "Admin 2", action: [
+   
+    <FontAwesomeIcon icon={faPenToSquare} key="edit2" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete2" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 3, userId: "USR003", user: "User 3", role: "Role 3", department: "Department 3", joiningDate: "2024-01-03", status: "Active", addedBy: "Admin 3", action: [
+   
+    <FontAwesomeIcon icon={faPenToSquare} key="edit3" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete3" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 4, userId: "USR004", user: "User 4", role: "Role 4", department: "Department 4", joiningDate: "2024-01-04", status: "Inactive", addedBy: "Admin 4", action: [
+   
+    <FontAwesomeIcon icon={faPenToSquare} key="edit4" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete4" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 5, userId: "USR005", user: "User 5", role: "Role 5", department: "Department 5", joiningDate: "2024-01-05", status: "Active", addedBy: "Admin 5", action: [
+   
+    <FontAwesomeIcon icon={faPenToSquare} key="edit5" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete5" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 6, userId: "USR006", user: "User 6", role: "Role 6", department: "Department 6", joiningDate: "2024-01-06", status: "Inactive", addedBy: "Admin 6", action: [
+   
+    <FontAwesomeIcon icon={faPenToSquare} key="edit6" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete6" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 7, userId: "USR007", user: "User 7", role: "Role 7", department: "Department 7", joiningDate: "2024-01-07", status: "Active", addedBy: "Admin 7", action: [
+  
+    <FontAwesomeIcon icon={faPenToSquare} key="edit7" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete7" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 8, userId: "USR008", user: "User 8", role: "Role 8", department: "Department 8", joiningDate: "2024-01-08", status: "Inactive", addedBy: "Admin 8", action: [
+  
+    <FontAwesomeIcon icon={faPenToSquare} key="edit8" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete8" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 9, userId: "USR009", user: "User 9", role: "Role 9", department: "Department 9", joiningDate: "2024-01-09", status: "Active", addedBy: "Admin 9", action: [
+    
+    <FontAwesomeIcon icon={faPenToSquare} key="edit9" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete9" className="cursor-pointer" />
+  ]},
+  { checkbox: false, sno: 10, userId: "USR010", user: "User 10", role: "Role 10", department: "Department 10", joiningDate: "2024-01-10", status: "Inactive", addedBy: "Admin 10", action: [
+   
+    <FontAwesomeIcon icon={faPenToSquare} key="edit10" className="mr-2 cursor-pointer" />,
+    <FontAwesomeIcon icon={faTrashCan} key="delete10" className="cursor-pointer" />
+  ]},
+];
 
 const Users = () => {
-  const [addModal, setAddModal] = useState(false);
+  const [data, setData] = useState(initialData);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const pageSize = 5; // Number of items per page
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const badgeStyle = { background: "green", color: "white", width: "110px" };
-  const badgeStyle2 = { background: " red", color: "white", width: "110px" };
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('All');
 
-  const [employees, setEmployees] = useState([
-    {
-      id: "USER-022024-000001",
-      user: "John Doe",
-      role: "admin",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000002",
-      user: "Jane Smith",
-      role: "admin",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000003",
-      user: "John Doe",
-      role: "admin",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000004",
-      user: "Jane Smith",
-      role: "qa",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000005",
-      user: "John Doe",
-      role: "qa",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000006",
-      user: "Jane Smith",
-      role: "qc",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000007",
-      user: "John Doe",
-      role: "analyst",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000008",
-      user: "Jane Smith",
-      role: "mgr",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000009",
-      user: "John Doe",
-      role: "si",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-0000010",
-      user: "Jane Smith",
-      role: "qa",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-  ]);
-
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-  );
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
-
-  // Function to render table rows for current page
-  const renderRows = () => {
-    return filteredEmployees
-      .slice(startIndex, endIndex)
-      .map((employee, index) => (
-        <tr key={startIndex + index}>
-          <td>{startIndex + index + 1}</td>
-          <td>{employee.id}</td>
-          <td>{employee.user}</td>
-          <td>{employee.role}</td>
-          <td>{employee.departments}</td>
-          <td>{employee.joiningDate}</td>
-          <td>
-            <button
-              style={{
-                background: employee.status === "Active" ? "green" : "red",
-                color: "white",
-                width:'85%',
-                fontSize:'0.8rem',
-                padding:'2px 7px',
-                borderRadius:'7px'
-              }}
-              
-            >
-              {employee.status}
-            </button>
-          </td>
-
-          <td>{employee.addedBy}</td>
-          <td>
-            <div className="d-flex gap-3">
-              <div className="cursor-pointer" onClick={() => setAddModal(true)}>
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </div>
-              <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </div>
-            </div>
-          </td>
-        </tr>
-      ));
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  // Function to handle pagination
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
-  };
+  const filteredData = data.filter((row) => {
+    return (
+      row.user.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === 'All' || row.status === statusFilter)
+    );
+  });
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
-  };
+
+
+
+  const columns = [
+    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: 'checkbox' },
+    { header: 'SrNo.', accessor: 'sno' },
+    { header: 'user ID', accessor: 'userId' },
+    { header: 'User', accessor: 'user' },
+    { header: 'Role', accessor: 'role' },
+    { header: 'Department.', accessor: 'department' },
+    { header: 'Joining Date.', accessor: 'joiningDate' },
+    { header: 'Status', accessor: 'status' },
+    { header: 'Added By', accessor: 'addedBy' },
+    {
+      header: 'Actions',
+      accessor: 'action',
+    },
+  ];
 
   const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
+    setEmployees((prevEmployees) =>
+      prevEmployees.filter((employee) => employee.id !== deleteId)
+    );
     setDeleteModal(false);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
 
@@ -204,76 +142,29 @@ const Users = () => {
         <div className="main-head">
           <h4 className="fw-bold">User Management/Users</h4>
         </div>
-        <CRow className="mt-5 mb-3">
-                         <CCol sm={3}>
-                        <CFormSelect
-                            onChange={(e) => {
-                                setSelectedStatus(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            value={selectedStatus}
-                            style={{fontSize:'0.9rem'}}
-                        >
-                            <option value="All">All</option>
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
-                        </CFormSelect>
-                      </CCol>
-                      <CCol sm={9}>
-                    <div className="d-flex justify-content-end">
-                        <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
-                    </div>
-                    </CCol>
-                    </CRow>
-    
-
-      {/* Employee table */}
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-       
-        <table className="table   ">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>User ID</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>User</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Role</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>
-                Departments
-              </th>
-              <th style={{ background: "#5D76A9", color: "white"}}>
-                Joining Date
-              </th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>
-                Added By
-              </th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
+        <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <Dropdown
+            options={[
+              { value: 'All', label: 'All' },
+              { value: 'Active', label: 'Active' },
+              { value: 'Inactive', label: 'Inactive' },
+             
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton text="Add User" color="blue" onClick={openModal} />
+        </div>
       </div>
+      <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
+       
+      
 
-      {/* Pagination */}
-
-     
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
       {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
 
