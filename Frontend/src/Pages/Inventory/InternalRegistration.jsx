@@ -431,7 +431,7 @@ const InternalRegistration = () => {
       </div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <SearchBar value={searchQuery} onChange={setSearchQuery}/>
           <Dropdown
             options={[
               { value: "All", label: "All" },
@@ -471,3 +471,5 @@ const InternalRegistration = () => {
 };
 
 export default InternalRegistration;
+
+

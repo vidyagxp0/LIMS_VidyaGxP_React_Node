@@ -302,6 +302,7 @@ function StorageLocation() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
+   
   };
 
   const handleCheckboxChange = (index) => {
@@ -458,15 +459,9 @@ function StorageLocation() {
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
-      )}
-      {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
-      )}
-      {delModal && (
-        <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
+      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {delModal && <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} />}
       {deleteModal && (
         <DeleteModal
           visible={deleteModal}
