@@ -116,17 +116,8 @@ const Admin = () => {
   // Function to render table rows for current page
 
   // Function to handle pagination
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
-  };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) =>
-      prevEmployees.filter((employee) => employee.id !== deleteId)
-    );
-    setDeleteModal(false);
-  };
+
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -136,7 +127,11 @@ const Admin = () => {
     setIsModalOpen(false);
   };
 
-
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
+  };
 
   return (
     <div>
@@ -161,7 +156,7 @@ const Admin = () => {
           <ATMButton text="Add User" color="blue" onClick={openModal} />
         </div>
       </div>
-      <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
+      <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
        
       </div>
       
@@ -169,13 +164,7 @@ const Admin = () => {
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal}
-          closeModal={() => setDeleteModal(false)}
-          confirmDelete={handleDeleteConfirm}
-        />
-      )}
+    
     </div>
   );
 };
@@ -227,44 +216,6 @@ const StatusModal = (_props) => {
   );
 };
 
-const DeleteModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle>Delete User</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this user?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+
 
 export default Admin;

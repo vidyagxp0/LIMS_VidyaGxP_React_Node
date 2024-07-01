@@ -19,23 +19,7 @@ const initialData = [
     containerStart: "Start 1",
     sampleReference: "Ref 1",
     status: "DROPPED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -46,23 +30,7 @@ const initialData = [
     containerStart: "Start 2",
     sampleReference: "Ref 2",
     status: "DROPPED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -73,23 +41,7 @@ const initialData = [
     containerStart: "Start 3",
     sampleReference: "Ref 3",
     status: "REINITIATED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -100,23 +52,7 @@ const initialData = [
     containerStart: "Start 4",
     sampleReference: "Ref 4",
     status: "APPROVED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -127,23 +63,7 @@ const initialData = [
     containerStart: "Start 5",
     sampleReference: "Ref 5",
     status: "APPROVED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -154,23 +74,7 @@ const initialData = [
     containerStart: "Start 6",
     sampleReference: "Ref 6",
     status: "APPROVED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -181,23 +85,7 @@ const initialData = [
     containerStart: "Start 7",
     sampleReference: "Ref 7",
     status: "INITIATED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -208,23 +96,7 @@ const initialData = [
     containerStart: "Start 8",
     sampleReference: "Ref 8",
     status: "REINITIATED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -235,23 +107,7 @@ const initialData = [
     containerStart: "Start 9",
     sampleReference: "Ref 9",
     status: "APPROVED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -262,23 +118,7 @@ const initialData = [
     containerStart: "Start 10",
     sampleReference: "Ref 10",
     status: "REJECTED",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+   
   },
 ];
 

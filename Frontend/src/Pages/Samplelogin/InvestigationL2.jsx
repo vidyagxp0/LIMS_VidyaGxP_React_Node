@@ -19,11 +19,7 @@ const initialData = [
     testCode: "T001",
     testType: "Type A",
     addedOn: "2024-01-01",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view1" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit1" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete1" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -32,11 +28,7 @@ const initialData = [
     testCode: "T002",
     testType: "Type B",
     addedOn: "2024-01-02",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view2" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit2" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete2" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -45,11 +37,7 @@ const initialData = [
     testCode: "T003",
     testType: "Type A",
     addedOn: "2024-01-03",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view3" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit3" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete3" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -58,11 +46,7 @@ const initialData = [
     testCode: "T004",
     testType: "Type C",
     addedOn: "2024-01-04",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view4" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit4" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete4" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -71,11 +55,7 @@ const initialData = [
     testCode: "T005",
     testType: "Type A",
     addedOn: "2024-01-05",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view5" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit5" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete5" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -84,11 +64,7 @@ const initialData = [
     testCode: "T006",
     testType: "Type B",
     addedOn: "2024-01-06",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view6" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit6" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete6" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -97,11 +73,7 @@ const initialData = [
     testCode: "T007",
     testType: "Type C",
     addedOn: "2024-01-07",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view7" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit7" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete7" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -110,11 +82,7 @@ const initialData = [
     testCode: "T008",
     testType: "Type A",
     addedOn: "2024-01-08",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view8" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit8" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete8" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -123,11 +91,7 @@ const initialData = [
     testCode: "T009",
     testType: "Type B",
     addedOn: "2024-01-09",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view9" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit9" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete9" className="cursor-pointer" />,
-    ],
+   
   },
   {
     checkbox: false,
@@ -136,11 +100,7 @@ const initialData = [
     testCode: "T010",
     testType: "Type C",
     addedOn: "2024-01-10",
-    action: [
-      <FontAwesomeIcon icon={faEye} key="view10" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faPenToSquare} key="edit10" className="mr-2 cursor-pointer" />,
-      <FontAwesomeIcon icon={faTrashCan} key="delete10" className="cursor-pointer" />,
-    ],
+   
   },
 ];
 
@@ -203,6 +163,12 @@ const InvestigationL2 = () => {
     setIsModalOpen(true);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
+  };
+
 
   return (
     <>
@@ -230,7 +196,7 @@ const InvestigationL2 = () => {
             <ATMButton text="Add investigation L2 In" color="blue" onClick={openModal} />
           </div>
         </div>
-        <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
+        <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
         </div>
     </>
   )
