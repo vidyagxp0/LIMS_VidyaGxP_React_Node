@@ -81,7 +81,7 @@ const initialData = [
   },
 ];
 
-const App = () => {
+const Approval = () => {
   const [data, setData] = useState(initialData);
 
   const handleCheckboxChange = (index) => {
@@ -134,4 +134,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Approval;
