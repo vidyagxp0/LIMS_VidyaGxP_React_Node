@@ -1,234 +1,255 @@
-import React, { useState } from 'react';
-import { FaArrowRight } from 'react-icons/fa';
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { useState } from "react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
+
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import "../../Pages/StorageCondition/StorageCondition.css";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ViewModal from "../Modals/ViewModal";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    specificationType: "Type 1",
+    addedOn: "2024-01-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    specificationType: "Type 2",
+    addedOn: "2024-01-02",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    specificationType: "Type 3",
+    addedOn: "2024-01-03",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    specificationType: "Type 4",
+    addedOn: "2024-01-04",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    specificationType: "Type 5",
+    addedOn: "2024-01-05",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    specificationType: "Type 6",
+    addedOn: "2024-01-06",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    specificationType: "Type 7",
+    addedOn: "2024-01-07",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    specificationType: "Type 8",
+    addedOn: "2024-01-08",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 9,
+    specificationType: "Type 9",
+    addedOn: "2024-01-09",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 10,
+    specificationType: "Type 10",
+    addedOn: "2024-01-10",
+    status: "Inactive",
+  },
+];
 
 
-export default function SpecificationType() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState('All');
+function SpecificationType() {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState('');
-
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-  const [employees, setEmployees] = useState([
-    { id: 1, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { id: 2, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { id: 3, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    { id: 4, user: 'culture 1', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { id: 5, user: 'culture', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { id: 6, user: 'environment', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    { id: 7, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'INACTIVE' },
-    { id: 8, user: 'environment', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { id: 9, user: 'working standard', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-    { id: 10, user: 'Initiated Product', Date: 'May 17th 24 14:34', Status: 'ACTIVE' },
-  ]);
+  const filteredData = data.filter((row) => {
+    return (
+      row.specificationType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.Status.toUpperCase() === selectedStatus.toUpperCase()
-  );
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+   
+  };
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const StatusModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Update specification type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Update information and add new specification type</p>
   
-  const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.Date}</td>
-        <td>
-        <button
-            style={{
-              background: employee.Status === "ACTIVE" ? "#15803d" : "#b91c1c",
-              color: "white",
-              width: "4rem",
-              fontSize: "0.6rem",
-              padding: "2px 7px",
-              borderRadius: "7px",
-            }}
-          >
-            {employee.Status}
-          </button>
-        </td>
-        <td>
-          <div className="d-flex gap-3">
-            <div
-              className="cursor-pointer"
-              onClick={() => setAddModal(true)}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </div>
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-          </div>
-        </td>
-      </tr>
-    ));
-  };
-
+          <CFormInput
+            className='mb-3'
+            type="text"
+            label="Specification Type Name"
+            placeholder="Specification Type Name"
+          />
   
-  const nextPage = () => {
-    if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
-      setCurrentPage(currentPage + 1);
-    }
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton color="primary">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Specification Type", accessor: "specificationType" },
+    { header: "Added On", accessor: "addedOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+        
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+  const closeViewModal = () => {
+    setViewModalData(false);
   };
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
-
-  };
-
-  
   return (
-    <div className="m-5 mt-3"  >
+    <>
+      <div className="m-5 mt-3">
         <div className="main-head">
-           <h4 className="fw-bold ">Specifications Type</h4>
-        </div>
-        <div className="d-flex justify-content-between mt-5 mb-3">
-          <div className="w-25">
-            <CFormSelect
-              onChange={(e) => {
-                setSelectedStatus(e.target.value);
-                setCurrentPage(1);
-              }}
-              value={selectedStatus}
-              style={{fontSize:'0.9rem'}}
-            >
-              <option value="All">All</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </CFormSelect>
-          </div>
+          <h4 className="fw-bold">Specifications Type</h4>
         </div>
 
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Specification Type</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </CTable>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+               
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right">
+            <ATMButton
+              text="Add Specifications Type"
+              color="blue"
+              
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+        />
       </div>
 
-     <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-      
-    </div>
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
+      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+    </>
   );
 }
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Update specification type</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Update information and add new specification type</p>
 
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Specification Type Name"
-          placeholder="Specification Type Name"
-        />
-
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
-const DeleteModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete Sample Type</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this Sample Type { }?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+export default SpecificationType;

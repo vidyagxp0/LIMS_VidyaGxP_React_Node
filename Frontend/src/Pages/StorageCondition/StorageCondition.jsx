@@ -33,23 +33,7 @@ const initialData = [
     storageCondition: "SC1",
     createdAt: "2023-01-01",
     status: "Active",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+  
   },
   {
     checkbox: false,
@@ -58,23 +42,7 @@ const initialData = [
     storageCondition: "SC2",
     createdAt: "2023-02-01",
     status: "Active",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -83,23 +51,7 @@ const initialData = [
     storageCondition: "SC3",
     createdAt: "2023-03-01",
     status: "Inactive",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -108,23 +60,7 @@ const initialData = [
     storageCondition: "SC4",
     createdAt: "2023-04-01",
     status: "Active",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -133,23 +69,7 @@ const initialData = [
     storageCondition: "SC5",
     createdAt: "2023-05-01",
     status: "Inactive",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -158,23 +78,7 @@ const initialData = [
     storageCondition: "SC6",
     createdAt: "2023-06-01",
     status: "Active",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -183,23 +87,7 @@ const initialData = [
     storageCondition: "SC7",
     createdAt: "2023-07-01",
     status: "Inactive",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -208,23 +96,7 @@ const initialData = [
     storageCondition: "SC8",
     createdAt: "2023-08-01",
     status: "Active",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -233,23 +105,7 @@ const initialData = [
     storageCondition: "SC9",
     createdAt: "2023-09-01",
     status: "Inactive",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     checkbox: false,
@@ -258,23 +114,7 @@ const initialData = [
     storageCondition: "SC10",
     createdAt: "2023-10-01",
     status: "Active",
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
 ];
 
@@ -282,8 +122,6 @@ function StorageLocation() {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [delModal, setDelModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
 
@@ -376,51 +214,11 @@ function StorageLocation() {
     setViewModalData(false);
   };
 
-  const DeleteModal = (_props) => {
-    return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Delete User</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Are you sure you want to delete this storage?</p>
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={_props.closeModal}
-            style={{
-              marginRight: "0.5rem",
-              fontWeight: "500",
-            }}
-          >
-            Cancel
-          </CButton>
-          <CButton
-            color="danger"
-            onClick={_props.confirmDelete}
-            style={{
-              fontWeight: "500",
-              color: "white",
-            }}
-          >
-            Delete
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
-  };
 
-  const handleDeleteConfirm = () => {
-    setStorageConditions((prevConditions) =>
-      prevConditions.filter((condition) => condition.id !== deleteId)
-    );
-    setDeleteModal(false);
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
   };
 
   return (
@@ -456,19 +254,12 @@ function StorageLocation() {
           data={filteredData}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          onDelete={handleDelete}
         />
       </div>
 
       {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
       {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
-      {delModal && <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} />}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal}
-          closeModal={() => setDeleteModal(false)}
-          confirmDelete={handleDeleteConfirm}
-        />
-      )}
     </>
   );
 }

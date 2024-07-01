@@ -1,280 +1,298 @@
-import React, { useState } from 'react';
-import { HiDotsHorizontal } from "react-icons/hi";
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
-import { FaArrowRight } from 'react-icons/fa';
-import { IoEyeSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { useState } from "react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
+
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { Link } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
+import "../../Pages/StorageCondition/StorageCondition.css";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ViewModal from "../Modals/ViewModal";
 
-export default function Product() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState('All');
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    uniqueCode: "UC001",
+    productName: "Product 1",
+    genericName: "Generic 1",
+    reTestingPeriod: "2024-06-01",
+    addDate: "2024-01-01",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    uniqueCode: "UC002",
+    productName: "Product 2",
+    genericName: "Generic 2",
+    reTestingPeriod: "2024-06-02",
+    addDate: "2024-01-02",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    uniqueCode: "UC003",
+    productName: "Product 3",
+    genericName: "Generic 3",
+    reTestingPeriod: "2024-06-03",
+    addDate: "2024-01-03",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    uniqueCode: "UC004",
+    productName: "Product 4",
+    genericName: "Generic 4",
+    reTestingPeriod: "2024-06-04",
+    addDate: "2024-01-04",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    uniqueCode: "UC005",
+    productName: "Product 5",
+    genericName: "Generic 5",
+    reTestingPeriod: "2024-06-05",
+    addDate: "2024-01-05",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    uniqueCode: "UC006",
+    productName: "Product 6",
+    genericName: "Generic 6",
+    reTestingPeriod: "2024-06-06",
+    addDate: "2024-01-06",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    uniqueCode: "UC007",
+    productName: "Product 7",
+    genericName: "Generic 7",
+    reTestingPeriod: "2024-06-07",
+    addDate: "2024-01-07",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    uniqueCode: "UC008",
+    productName: "Product 8",
+    genericName: "Generic 8",
+    reTestingPeriod: "2024-06-08",
+    addDate: "2024-01-08",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 9,
+    uniqueCode: "UC009",
+    productName: "Product 9",
+    genericName: "Generic 9",
+    reTestingPeriod: "2024-06-09",
+    addDate: "2024-01-09",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 10,
+    uniqueCode: "UC010",
+    productName: "Product 10",
+    genericName: "Generic 10",
+    reTestingPeriod: "2024-06-10",
+    addDate: "2024-01-10",
+    status: "REJECTED",
+  },
+];
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState('');
 
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+function Product() {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
 
-
-  const [employees, setEmployees] = useState([
-    { id: 1, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP5', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-    { id: 2, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-    { id: 3, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INITIATED' },
-    { id: 4, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INITIATED' },
-    { id: 5, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-    { id: 6, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'REINITIATED' },
-    { id: 7, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-    { id: 8, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'REJECTED' },
-    { id: 9, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-    { id: 10, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'DROPPED' },
-    { id: 11, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'DROPPED' },
-  ]);
-
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-  );
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-  const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.role}</td>
-        <td>{employee.departments}</td>
-        <td>{employee.joiningDate}</td>
-        <td>{employee.addedBy}</td>
-        <td >
-        <button  
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          employee.status === "INITIATED"
-                            ? "blue-700"
-                            : employee.status === "APPROVED"
-                            ? "green-700"
-                            : employee.status === "REJECTED"
-                            ? "red-700"
-                            : employee.status === "REINITIATED"
-                            ? "yellow-500"
-                            : employee.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {employee.status}
-                      </button>
-        </td>
-        <td>
-          <div className="d-flex gap-3">
-            <div>
-              <Link to="/masters/product-details"><FontAwesomeIcon icon={faEye} /></Link>
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => setAddModal(true)}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </div>
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-          </div>
-        </td>
-      </tr>
-    ));
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const deleteEmployee = (index) => {
-    const updatedEmployees = employees.filter((_, i) => i !== index);
-    setEmployees(updatedEmployees);
+  const filteredData = data.filter((row) => {
+    return (
+      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+   
   };
 
-  const nextPage = () => {
-    if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
-      setCurrentPage(currentPage + 1);
-    }
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const StatusModal = (_props) => {
+    return (
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Product/Material</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+  
+          <CFormInput
+            className='mb-3'
+            type="text"
+            label="Name"
+            placeholder="Product Name "
+          />
+          <CFormInput
+            className='mb-3'
+            type="text"
+            label="Unique Code"
+            placeholder="Product Code "
+          />
+          <CFormInput
+            className='mb-3'
+            type="text"
+            label="Generic Name"
+            placeholder="Generic Name"
+          />
+          <CFormInput
+            className='mb-3'
+            type="text"
+            label="Re-testing Period"
+            placeholder="Re-testing Period "
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton color="primary">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Unique Code", accessor: "uniqueCode" },
+    { header: "Product Name", accessor: "productName" },
+    { header: "Generic Name", accessor: "genericName" },
+    { header: "Re-Testing Period", accessor: "reTestingPeriod" },
+    { header: "Add Date", accessor: "addDate" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
-
+  const closeViewModal = () => {
+    setViewModalData(false);
   };
+
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
+  };
+
   return (
-    <div className="m-5 mt-3">
+    <>
+      <div className="m-5 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Products/Materials</h4>
+          <h4 className="fw-bold">Master/Product</h4>
         </div>
-        <CRow className="mt-5 mb-3">
-        <CCol sm={3}>
-            <CFormSelect
-              onChange={(e) => {
-                setSelectedStatus(e.target.value);
-                setCurrentPage(1);
-              }}
-              value={selectedStatus}
-              style={{fontSize:'0.9rem'}}
-            >
 
-              <option value="All">All</option>
-              <option value="Initiated">Initiated</option>
-              <option value="Approved">Approved</option>
-              <option value="Rejected">Rejected</option>
-              <option value="Reinitiated">Reinitiated</option>
-              <option value="Dropped">Dropped</option>
-            </CFormSelect>
-            </CCol>
-
-            <CCol sm={6}></CCol>
-            <CCol sm={3}>
-          <div className="d-flex justify-content-end">
-            <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Product/Material</CButton>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
           </div>
-          </CCol>
-        </CRow>
-
-    
-
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Unique Code</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Generic Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Re-Testing Period</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Add Date</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </CTable>
+          <div className="float-right">
+            <ATMButton
+              text="Add Master/Product"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+        />
       </div>
 
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
-    </div>
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
+      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+    </>
   );
-};
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Add Product/Material</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
+}
 
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Name"
-          placeholder="Product Name "
-        />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Unique Code"
-          placeholder="Product Code "
-        />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Generic Name"
-          placeholder="Generic Name"
-        />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Re-testing Period"
-          placeholder="Re-testing Period "
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
-const DeleteModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete User</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this Product { }?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+export default Product;

@@ -112,15 +112,7 @@ function StorageLocation() {
     setIsViewModalOpen(true); 
   };
 
-  const handleDeleteConfirm = () => {
-     const newData = data.filter((item) => !item.checkbox);
-        setData(newData);
-        setOpenDelModal(false);
-  };
 
-  const handleDelete = (item) => {
-    openDelModal(item);
-  };
   const columns = [
     { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: 'checkbox' },
     { header: 'SrNo.', accessor: 'sno' },
@@ -152,6 +144,12 @@ function StorageLocation() {
     setIsViewModalOpen(false);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
+  };
+
 
   return (
     <>
@@ -177,7 +175,7 @@ function StorageLocation() {
           <ATMButton text="Add Storage Location" color="blue" onClick={openModal} />
         </div>
       </div>
-      <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
+      <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
        
       </div>
 
@@ -185,9 +183,7 @@ function StorageLocation() {
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
        {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
-       {delModal && (
-            <RemoveModal visible={delModal} closeModal={() => setDelModal(false)} confirmDelete={handleDeleteConfirm} />
-        )}
+     
     </>
   );
 }

@@ -96,6 +96,7 @@ const Table = ({ columns, data, onCheckboxChange ,onViewDetails, onDelete }) => 
                       <FontAwesomeIcon
                         icon={faPenToSquare}
                         className="mr-2 cursor-pointer"
+                       
                       />
                       <FontAwesomeIcon
                         icon={faTrashCan}

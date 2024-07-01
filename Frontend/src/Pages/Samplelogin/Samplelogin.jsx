@@ -214,13 +214,6 @@ export default function Samplelogin() {
     },
   ];
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) =>
-      prevEmployees.filter((employee) => employee.id !== deleteId)
-    );
-    setDeleteModal(false);
-  };
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -229,47 +222,12 @@ export default function Samplelogin() {
     setIsModalOpen(false);
   };
 
-
-
-  const DeleteModal = (_props) => {
-    return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Delete User</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Are you sure you want to delete this storage?</p>
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={_props.closeModal}
-            style={{
-              marginRight: "0.5rem",
-              fontWeight: "500",
-            }}
-          >
-            Cancel
-          </CButton>
-          <CButton
-            color="danger"
-            onClick={_props.confirmDelete}
-            style={{
-              fontWeight: "500",
-              color: "white",
-            }}
-          >
-            Delete
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
   };
+
 
   const StatusModal2 = (_props) => {
     return (
@@ -414,7 +372,7 @@ export default function Samplelogin() {
             <ATMButton text="Add Sample Log In" color="blue" onClick={openModal} />
           </div>
         </div>
-        <Table columns={columns} data={filteredData} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
+        <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
         </div>
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
@@ -426,11 +384,7 @@ export default function Samplelogin() {
         />
       )}
 
-      <DeleteModal
-        visible={deleteModal}
-        closeModal={() => setDeleteModal(false)}
-        confirmDelete={handleDeleteConfirm}
-      />
+     
     </>
   );
 }
