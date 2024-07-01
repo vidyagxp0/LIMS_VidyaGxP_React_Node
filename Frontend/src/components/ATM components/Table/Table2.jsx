@@ -84,20 +84,12 @@ const Table = ({ columns, data, onCheckboxChange, onViewDetails }) => {
                       </span>
                     ) : column.accessor === "action" ? (
                       <div className="flex space-x-2">
-                        <FontAwesomeIcon
-                          icon={faEye}
-                          className="mr-2 cursor-pointer"
-                          onClick={() => onViewDetails(row)}
+                      
+                        <ATMButton
+                          text="Add"
+                          color="blue"
+                          onClick={() => openModal(row.original)}
                         />
-                        <FontAwesomeIcon
-                          icon={faPenToSquare}
-                          className="mr-2 cursor-pointer"
-                        />
-                        <FontAwesomeIcon
-                          icon={faTrashCan}
-                          className="cursor-pointer"
-                        />
-                       
                       </div>
                     ) : (
                       row[column.accessor]

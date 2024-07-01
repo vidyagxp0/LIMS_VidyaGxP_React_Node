@@ -1,572 +1,308 @@
-import {
-  CButton,
-  CCol,
-  CForm,
-  CFormCheck,
-  CFormInput,
-  CFormLabel,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-function SolutionStandardization() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    StandardizationCode: "code1",
+    PreparationNo: "code1",
+    SolutionName: "material 1",
+    Type: "dummy desc",
+    Comments: "dummy desc",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    StandardizationCode: "code2",
+    PreparationNo: "prep2",
+    SolutionName: "solution 2",
+    Type: "type 2",
+    Comments: "description 2",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    StandardizationCode: "code3",
+    PreparationNo: "prep3",
+    SolutionName: "solution 3",
+    Type: "type 3",
+    Comments: "description 3",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    StandardizationCode: "code4",
+    PreparationNo: "prep4",
+    SolutionName: "solution 4",
+    Type: "type 4",
+    Comments: "description 4",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    StandardizationCode: "code5",
+    PreparationNo: "prep5",
+    SolutionName: "solution 5",
+    Type: "type 5",
+    Comments: "description 5",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    StandardizationCode: "code6",
+    PreparationNo: "prep6",
+    SolutionName: "solution 6",
+    Type: "type 6",
+    Comments: "description 6",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    StandardizationCode: "code7",
+    PreparationNo: "prep7",
+    SolutionName: "solution 7",
+    Type: "type 7",
+    Comments: "description 7",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    StandardizationCode: "code8",
+    PreparationNo: "prep8",
+    SolutionName: "solution 8",
+    Type: "type 8",
+    Comments: "description 8",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 9,
+    StandardizationCode: "code9",
+    PreparationNo: "prep9",
+    SolutionName: "solution 9",
+    Type: "type 9",
+    Comments: "description 9",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 10,
+    StandardizationCode: "code10",
+    PreparationNo: "prep10",
+    SolutionName: "solution 10",
+    Type: "type 10",
+    Comments: "description 10",
+    status: "REJECTED",
+  },
+];
+
+
+const SolutionStandardization = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      StandardizationCode	: "stmp1",
-      PreparationNo: "describe",
-      SolutionName	: "isubus111",
-      Type: "54255455",
-      Comments	: "54255455",
-      
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-      status: "INITIATED",
-    },
-    {
-      id: 2,
-      StandardizationCode	: "stmp1",
-      PreparationNo: "describe",
-      SolutionName	: "isubus111",
-      Type: "54255455",
-      Comments	: "54255455",
-      status: "INITIATED",
-    },
+  const filteredData = data.filter((row) => {
+    return (
+      row.SolutionName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
     {
-      id: 3,
-      StandardizationCode	: "stmp1",
-      PreparationNo: "describe",
-      SolutionName	: "isubus111",
-      Type: "54255455",
-      Comments	: "54255455",
-      status: "REJECTED",
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
     },
-    {
-      id: 4,
-      StandardizationCode	: "stmp1",
-      PreparationNo: "describe",
-      SolutionName	: "isubus111",
-      Type: "54255455",
-      Comments	: "54255455",
-      status: "APPROVED",
-    },
-    {
-      id: 5,
-      StandardizationCode	: "stmp1",
-      PreparationNo: "describe",
-      SolutionName	: "isubus111",
-      Type: "54255455",
-      Comments	: "54255455",
-      status: "APPROVED",
-    },
+    { header: "SrNo.", accessor: "sno" },
+    {header: "Standardization Code",accessor: "StandardizationCode",},
+    { header: "Preparation No.", accessor: "PreparationNo" },
+    { header: "Solution Name", accessor: "SolutionName" },
+    { header: "Type", accessor: "Type" },
+    { header: "Comments", accessor: "Comments" },
+    { header: "Status", accessor: "status" },
 
     {
-      id: 6,
-      StandardizationCode	: "stmp1",
-      PreparationNo: "describe",
-      SolutionName	: "isubus111",
-      Type: "54255455",
-      Comments	: "54255455",
-      status: "APPROVED",
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
     },
-  ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-  const [search, setSearch] = useState("");
-  
-  const filterData = () => {
-  const filteredData =
-    selectedStatus === "All"
-      ? data
-      : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
-  return filteredData.filter((item) =>
-    item.SolutionName.toLowerCase().includes(search.toLowerCase())
-  );
-};
-const filteredData = filterData();
-const nextPage = () =>
-  setCurrentPage((prev) =>
-    Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-  );
-const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  ];
 
-const handleDelete = (id) => {
-  setData((prevData) => prevData.filter((item) => item.id !== id));
-  setDeleteModal(false);
-};
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
   return (
-    <>
-      <div id="approval-page" className="m-5 mt-3">
-          <div className="main-head">
-          <h4 className="fw-bold">Solutions Standardization</h4>
-          </div>
-          <div className="d-flex gap-4 mt-3">
-            <div className="chart-widgets w-100">
-            <div className="row" style={{ cursor: "pointer" }}>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
-
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("DROPPED")}
-                >
-                  <div className="text-light font-bold fs-5">DROPPED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "DROPPED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("INITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">INITIATED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "INITIATED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, orange , #f7e05f )",
-
-                    textAlign: "left",
-                    boxShadow: "0px 10px 20px  black !important",
-                  }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">REINITIATED</div>
-
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg, green , #0fd850  )",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("APPROVED")}
-                >
-                  <butto className="text-light font-bold fs-5">APPROVED</butto>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white", textAlign: "left" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "APPROVED")
-                        .length
-                    }
-                  </div>
-                </button>
-
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg ,red, #FF719A)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("REJECTED")}
-                >
-                  <div className="text-light font-bold fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">
-                    {
-                      filterData().filter((item) => item.status === "REJECTED")
-                        .length
-                    }
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div>
-          <CRow className="mb-3">
-              <CCol sm={4}>
-                <CFormInput
-                  style={{fontSize:'0.9rem'}}
-                  type="email"
-                  placeholder="Search..."
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </CCol>
-
-              <CCol sm={3}>
-                <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
-                >
-                  <option value="All">All</option>
-                  <option value="Initiated">Initiated</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Reinitiated">Reinitiated</option>
-                  <option value="Dropped">Dropped</option>
-                </CFormSelect>
-              </CCol>
-              
-              <CCol sm={5}>
-                <div className="d-flex justify-content-end">
-                  <CButton color="primary"  style={{fontSize:'0.9rem'}} onClick={() => setAddModal(true)}>
-                    Add Standardization
-                  </CButton>
-                </div>
-              </CCol>
-            </CRow>
-          </div>
-  <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-          <CTable align="middle" responsive className="mb-0    table-responsive">
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell   style={{ background: "#5D76A9", color: "white"}}  scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col">
-                  Standardization Code	
-                  </CTableHeaderCell>
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col">Preparation No.	</CTableHeaderCell>
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col">Solution Name	 </CTableHeaderCell>
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col">Type</CTableHeaderCell>
-                  
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col">Comments</CTableHeaderCell>
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell     style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                {filterData().slice(startIndex, endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.StandardizationCode	.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={index}>
-                      <CTableHeaderCell scope="row" className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      <CTableDataCell key={item.id}>
-                        {item.StandardizationCode	}
-                      </CTableDataCell>
-
-                      <CTableDataCell>{item.PreparationNo	}</CTableDataCell>
-                      <CTableDataCell>{item.SolutionName}</CTableDataCell>
-                      <CTableDataCell>{item.Type}</CTableDataCell>
-                      {/* <CTableDataCell>{item.Type}</CTableDataCell> */}
-                      {/* <CTableDataCell>{item.BatchNo}</CTableDataCell> */}
-                      <CTableDataCell>{item.Comments}</CTableDataCell>
-                      <CTableDataCell>
-                        <button  
-                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          item.status === "INITIATED"
-                            ? "blue-700"
-                            : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
-                            ? "red-700"
-                            : item.status === "REINITIATED"
-                            ? "yellow-500"
-                            : item.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {item.status}
-                      </button>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
-                        </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
-     
-          <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Solution Standardizations</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-       {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton
+            text="Add Standardization"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Add Standardization</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormSelect
-            type="text"
-            label="Preparation No."
-            placeholder="Preparation No."
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Solution Name"
-            placeholder="Solution Name"
-            className="custom-placeholder mb-3"
-          />
-
-          <CFormInput
-            type="text"
-            label="Volumetric Solution Name"
-            placeholder="Volumetric Solution Name"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Solution Expiry Period"
-            placeholder="Solution Expiry Period"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Solution Quantity"
-            placeholder="Solution Quantity"
-            className="custom-placeholder mb-3"
-          />
-
-          <CFormInput
-            type="number"
-            label="Standardization Schedule"
-            placeholder="Standardization Schedule"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="Batch No"
-            placeholder="Batch No"
-            className="mb-3"
-          />
-          <CForm className="mb-3">
-            <CFormLabel>Type</CFormLabel>
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <CFormCheck
-                type="radio"
-                name="sampleRadio"
-                id="acceptRadio"
-                label="New"
-                value="accept"
-              />
-              <CFormCheck
-                type="radio"
-                name="sampleRadio"
-                id="rejectRadio"
-                label="Dilution"
-                value="reject"
-              />
-              <CFormCheck
-                type="radio"
-                name="sampleRadio"
-                id="rejectRadio"
-                label="Ready Made"
-                value="reject"
-              />
-            </div>
-          </CForm>
-          <CFormInput
-            type="text"
-            label="Documents if any"
-            placeholder="select"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Average Value"
-            placeholder="select"
-            className="custom-placeholder mb-3"
-          />
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-              marginBottom: "1rem"
-            }}
-          >
-            <label>Comments</label>
-            <textarea name="" id="" className="form-control"></textarea>
-          </div>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add Standardization
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
+    </div>
   );
 };
-const DeleteModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Batch Sample Allotment
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-      </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+
 export default SolutionStandardization;

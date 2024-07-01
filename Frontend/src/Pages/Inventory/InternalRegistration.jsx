@@ -395,7 +395,8 @@ const InternalRegistration = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Material</h1>
+      <h1 className="text-2xl font-bold mb-4">Working Standard Internal
+      </h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
         <Card
           title="DROPPED"

@@ -6,7 +6,7 @@ import {
   cilColumns,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import React from 'react';
+import React from "react";
 import { TfiDashboard } from "react-icons/tfi";
 import { MdOutlineVerified } from "react-icons/md";
 import { AiOutlineContainer } from "react-icons/ai";
