@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-
+import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal"
 const Table = ({ columns, data, onCheckboxChange ,onViewDetails, onDelete }) => {
     const pageSize = 5;
     const [currentPage, setCurrentPage] = React.useState(1);
-
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
     const totalPageCount = Math.ceil(data.length / pageSize);
     const startIndex = (currentPage - 1) * pageSize;
     const currentData = data.slice(startIndex, startIndex + pageSize);
@@ -34,6 +35,21 @@ const Table = ({ columns, data, onCheckboxChange ,onViewDetails, onDelete }) => 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+
+    const openDeleteModal = (item) => {
+        setItemToDelete(item);
+        setIsDeleteModalOpen(true);
+      };
+    
+      const closeDeleteModal = () => {
+        setItemToDelete(null);
+        setIsDeleteModalOpen(false);
+      };
+    
+      const handleDelete = (item) => {
+        onDelete(item);
+        closeDeleteModal();
+      };
 
     return (
         <>
@@ -84,7 +100,7 @@ const Table = ({ columns, data, onCheckboxChange ,onViewDetails, onDelete }) => 
                       <FontAwesomeIcon
                         icon={faTrashCan}
                         className="cursor-pointer"
-                        onClick={() => onDelete(row)}
+                        onClick={() => openDeleteModal(row)}
                       />
                     </div>
                   ) : (
@@ -130,6 +146,12 @@ const Table = ({ columns, data, onCheckboxChange ,onViewDetails, onDelete }) => 
                 </nav>
             </div>
         </div>
+        <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onDelete={handleDelete}
+        item={itemToDelete}
+      />
         </>
     );
 };
