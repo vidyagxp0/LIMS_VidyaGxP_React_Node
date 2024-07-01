@@ -86,8 +86,6 @@ const initialData = [
   },
 ];
 
-
-
 const ChemicalRegitration = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -137,7 +135,9 @@ const ChemicalRegitration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ChemicalRegeantName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.ChemicalRegeantName.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      ) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -154,7 +154,10 @@ const ChemicalRegitration = () => {
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Chemical / Regeant Name		", accessor: "ChemicalRegeantName" },
-    { header: "Chemical / Regeant Unique Code	", accessor: "ChemicalRegeantUniqueCode" },
+    {
+      header: "Chemical / Regeant Unique Code	",
+      accessor: "ChemicalRegeantUniqueCode",
+    },
     { header: "Status", accessor: "status" },
 
     {
@@ -171,7 +174,11 @@ const ChemicalRegitration = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -191,6 +198,12 @@ const ChemicalRegitration = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -253,6 +266,7 @@ const ChemicalRegitration = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

@@ -4819,7 +4819,6 @@ const LocationSamples = () => {
       accessor: "action",
     },
   ];
-  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -4835,6 +4834,12 @@ const LocationSamples = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (

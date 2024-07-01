@@ -95,493 +95,6 @@
 //   );
 // };
 
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Registration</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p style={{ marginLeft: "2px" }}>
-//             Add information and Add registration.
-//           </p>
-//           <CFormInput
-//             type="text"
-//             label="Column Application"
-//             placeholder="Column Application "
-//           />
-//           <CFormSelect
-//             type="text"
-//             label="Column Name"
-//             placeholder=" Column Name "
-//             className="custom-placeholder"
-//           />
-
-//           <CFormInput
-//             type="text"
-//             label="Column Number"
-//             placeholder="Column Number"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Brand Name / Manufacturer Name"
-//             placeholder="Brand Name / Manufacturer Name"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Mfg. Serial No. "
-//             placeholder="Select"
-//             className="custom-placeholder"
-//           />
-
-//           <CFormInput
-//             type="number"
-//             label="Film Thikness / Particle Size"
-//             placeholder="Film Thikness / Particle Size"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput type="number" label="UOM" placeholder="UOM" />
-//           <CFormInput
-//             type="number"
-//             label="Packing Material"
-//             placeholder="Packing Material"
-//           />
-//           <CFormInput type="number" label="Length" placeholder="select" />
-//           <CFormInput type="number" label=" UOM" placeholder="UOM" />
-//           <CFormInput
-//             type="number"
-//             label="Inner Diameter"
-//             placeholder="select"
-//           />
-
-//           <CFormInput
-//             type="number"
-//             label="Outer Diameter"
-//             placeholder="Outer Diameter"
-//           />
-
-//           <CFormInput type="date" label="Recieved On" placeholder="" />
-
-//           <CForm className="mb-3">
-//             <CFormLabel>Certificate Received</CFormLabel>
-//             <div style={{ display: "flex", justifyContent: "space-around" }}>
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="acceptRadio"
-//                 label="YES"
-//                 value="accept"
-//               />
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="rejectRadio"
-//                 label="NO"
-//                 value="reject"
-//               />
-//             </div>
-//           </CForm>
-
-//           <CFormInput type="number" label="Certificate" placeholder="Browse" />
-
-//           <div
-//             style={{
-//               display: "flex",
-//               justifyContent: "space-between",
-//               flexDirection: "column",
-//             }}
-//           >
-//             <label>Remarks if</label>
-//             <textarea name="" id=""></textarea>
-//           </div>
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Add Chemical
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-// const StatusModal = (props) => {
-//   return (
-//     <>
-//       <CModal
-//         size="lg"
-//         alignment=""
-//         visible={props.visible}
-//         onClose={props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>New Application</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p style={{ fontWeight: "bolder" }}>New Application</p>
-
-//           <CFormInput
-//             type="text"
-//             label="Name"
-//             placeholder="Name"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Prefix"
-//             placeholder="Prefix"
-//             className="custom-placeholder"
-//           />
-
-//           <table className="table table-bordered" style={{ marginTop: "5px" }}>
-//             <thead>
-//               <tr>
-//                 <th>
-//                   Selected Standard Fields Displayed At Columns Qualification
-//                   And Usage
-//                 </th>
-//                 <th>Qualification</th>
-//                 <th>Usage</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               <tr>
-//                 <td>Column Pressure</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Flow Rate (Mobile Phase/Carrier Gas)</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>PH of Mobile Phase</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Wave Length</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Injector</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Detector Type</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Injector Volume</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Mobile Phase / Carrier Gas</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Hydrogen Low Rate</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Air Flow Rate</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Column Temperature</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Injector Temperature</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>No. Of Injection</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Split Ratio</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Mode</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Concentration</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Temperature</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Pharmacopoeia</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Detector Temperature</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>A.R.No.</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Load</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//               <tr>
-//                 <td>Batch No.</td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//                 <td>
-//                   <input type="checkbox" />
-//                 </td>
-//               </tr>
-//             </tbody>
-//           </table>
-
-//           <div
-//             style={{
-//               display: "flex",
-//               justifyContent: "space-between",
-//               flexDirection: "column",
-//             }}
-//           >
-//             <CButton color="primary" type="button">
-//               Add Application
-//             </CButton>
-//           </div>
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton color="primary" onClick={props.closeModal}>
-//             Add Application
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
 
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -721,7 +234,11 @@ const PerformanceTest = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -743,10 +260,15 @@ const PerformanceTest = () => {
     setStatusFilter(status);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Column Performance List
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Column Performance List</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
         <Card
           title="DROPPED"
@@ -796,7 +318,11 @@ const PerformanceTest = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Add Performance Test" color="blue" onClick={openModal} />
+          <ATMButton
+            text="Add Performance Test"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -804,6 +330,7 @@ const PerformanceTest = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

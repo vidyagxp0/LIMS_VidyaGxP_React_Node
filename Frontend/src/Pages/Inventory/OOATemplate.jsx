@@ -4548,7 +4548,6 @@ const initialData = [
   },
 ];
 
-
 const OOATemplate = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -4624,7 +4623,11 @@ const OOATemplate = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -4644,6 +4647,12 @@ const OOATemplate = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -4672,6 +4681,7 @@ const OOATemplate = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

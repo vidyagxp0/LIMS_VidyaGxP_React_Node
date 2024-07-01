@@ -1,4 +1,3 @@
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -24,7 +23,6 @@
 //                 type="text"
 //                 label="Batch Sample
 
-
 //                 "
 //                 placeholder="Select..."
 //                 className="custom-placeholder"
@@ -38,7 +36,6 @@
 //                 type="date"
 //                 label="Date of Monitoring
 
-
 // +
 //                 "
 //                 placeholder=""
@@ -51,7 +48,6 @@
 //                 type="text"
 //                 label="Monitored / Sampled By
 
-
 //                "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -62,7 +58,6 @@
 //               <CFormInput
 //                 type="text"
 //                 label="Activity Type
-
 
 //                 "
 //                 placeholder=""
@@ -97,7 +92,6 @@
 //                 type="text"
 //                 label="Report No.
 
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -109,7 +103,6 @@
 //               <CFormInput
 //                 type="date"
 //                 label="Membrane Holder Sterilized On
-
 
 //                 "
 //                 placeholder=""
@@ -131,9 +124,6 @@
 //                 type="date"
 //                 label="Use Before
 
-
-
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -145,8 +135,6 @@
 //                 type="time"
 //                 label="Exposure End Time
 
-
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -156,8 +144,6 @@
 //               <CFormInput
 //                 type="text"
 //                 label="Monitoring Comments
-
-
 
 //                 "
 //                 placeholder=""
@@ -274,9 +260,6 @@
 //   );
 // };
 
-
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -387,7 +370,6 @@
 //                 type="text"
 //                 label="Report No.
 
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -399,8 +381,6 @@
 //                 type="date"
 //                 label="Membrance Holder Sterilized On
 
-
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -411,7 +391,6 @@
 //                 type="text"
 //                 label="Gelatine Membrane Lot No.
 
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -421,8 +400,6 @@
 //               <CFormInput
 //                 type="date"
 //                 label="Use Before
-
-
 
 //                 "
 //                 placeholder=""
@@ -495,9 +472,6 @@
 //     </CModal>
 //   );
 // };
-
-
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -766,7 +740,6 @@
 //     </CModal>
 //   );
 // };
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -5304,7 +5277,6 @@ const initialData = [
   },
 ];
 
-
 const AcknowledgeSample = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -5378,7 +5350,11 @@ const AcknowledgeSample = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -5400,6 +5376,12 @@ const AcknowledgeSample = () => {
     setStatusFilter(status);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Acknowledge Sample</h1>
@@ -5418,7 +5400,11 @@ const AcknowledgeSample = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Acknowledge Sample" color="blue" onClick={openModal} />
+          <ATMButton
+            text="Acknowledge Sample"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -5426,6 +5412,7 @@ const AcknowledgeSample = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

@@ -8,7 +8,7 @@ const Card = ({ title, count, color,onClick  }) => {
       gradientClasses = 'from-green-400 to-green-600';
       break;
     case 'red':
-      gradientClasses = 'from-red-400 to-red-600';
+      gradientClasses = 'from-red-400 to-red-600';  
       break;
     case 'pink':
       gradientClasses = 'from-pink-400 to-pink-600';

@@ -56,7 +56,6 @@ const initialData = [
   },
 ];
 
-
 const LotRegistration = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -106,7 +105,9 @@ const LotRegistration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ChemicalRegeantName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.ChemicalRegeantName.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      ) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -141,7 +142,11 @@ const LotRegistration = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -161,6 +166,12 @@ const LotRegistration = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -215,11 +226,7 @@ const LotRegistration = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton
-            text="Lot Registration"
-            color="blue"
-            onClick={openModal}
-          />
+          <ATMButton text="Lot Registration" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -227,6 +234,7 @@ const LotRegistration = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

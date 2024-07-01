@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -33,42 +29,48 @@ const initialData = [
     materialname: "material 1",
     description: "dummy desc",
     status: "INITIATED",
-  },{
+  },
+  {
     checkbox: false,
     sno: 3,
     uniquecode: "code3",
     materialname: "material 1",
     description: "dummy desc",
     status: "REINITIATED",
-  },{
+  },
+  {
     checkbox: false,
     sno: 4,
     uniquecode: "code4",
     materialname: "material 1",
     description: "dummy desc",
     status: "INITIATED",
-  },{
+  },
+  {
     checkbox: false,
     sno: 5,
     uniquecode: "code5",
     materialname: "material 1",
     description: "dummy desc",
     status: "DROPPED",
-  },{
+  },
+  {
     checkbox: false,
     sno: 6,
     uniquecode: "code6",
     materialname: "material 1",
     description: "dummy desc",
     status: "DROPPED",
-  },{
+  },
+  {
     checkbox: false,
     sno: 7,
     uniquecode: "code7",
     materialname: "material 1",
     description: "dummy desc",
     status: "DROPPED",
-  },{
+  },
+  {
     checkbox: false,
     sno: 8,
     uniquecode: "code8",
@@ -81,6 +83,8 @@ const initialData = [
 const Inventory = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
+  const [addModal, setAddModal] = useState(false);
+
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -133,8 +137,8 @@ const Inventory = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); 
-    setIsViewModalOpen(true); 
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
   const columns = [
@@ -162,7 +166,11 @@ const Inventory = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -184,9 +192,16 @@ const Inventory = () => {
     setStatusFilter(status);
   };
 
+
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Material</h1>
+      <h1 className="text-2xl font-bold mb-4">Materials</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
         <Card
           title="DROPPED"
@@ -244,6 +259,7 @@ const Inventory = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

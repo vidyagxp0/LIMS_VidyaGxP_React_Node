@@ -1,5 +1,3 @@
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -85,7 +83,6 @@
 //               <CButton color="info">Add</CButton>
 //             </div>
 
-
 //         <CModalFooter className="p-3">
 //           <CButton color="light" onClick={_props.closeModal}>
 //             Cancel
@@ -149,9 +146,6 @@
 //     </CModal>
 //   );
 // };
-
-
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -277,7 +271,6 @@
 //     </CModal>
 //   );
 // };
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -3949,8 +3942,6 @@ const initialData = [
   },
 ];
 
-
-
 const Location = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -4029,7 +4020,11 @@ const Location = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -4049,6 +4044,12 @@ const Location = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -4077,6 +4078,7 @@ const Location = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

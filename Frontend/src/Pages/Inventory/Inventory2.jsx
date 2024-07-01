@@ -354,7 +354,11 @@ function StorageLocation() {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -1189,5 +1193,3 @@ import React from "react";
 // };
 
 // export default Inventory;
-
-

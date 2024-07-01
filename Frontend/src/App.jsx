@@ -144,6 +144,7 @@ import StockInventoryDetail from "./Pages/Stock Management/StockInventoryDetail.
 import StockMaterialDetail from "./Pages/Stock Management/StockMaterialDetail.jsx";
 import StockOnboardingDetails from "./Pages/Stock Management/StockOnboardingDetails.jsx";
 
+import Part from "./Pages/Calibration/Part.jsx";
 import CalibrationType from "./Pages/Calibration/CalibrationType.jsx";
 import CalibrationFrequency from "./Pages/Calibration/CalibrationFrequency.jsx";
 import CalibrationDataSheet from "./Pages/Calibration/CalibrationDataSheet.jsx";
@@ -152,6 +153,7 @@ import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx";
 import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx";
 import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx";
 import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx";
+
 import CalibrationDataSheetDetails from "./Pages/Calibration/Calibration Details/CalibrationDataSheetDetails.jsx";
 import CalibrationSampleLoginTemplateDetails from "./Pages/Calibration/Calibration Details/CalibrationSampleLoginTemplateDetails.jsx";
 import CalibrationScheduleDetails from "./Pages/Calibration/Calibration Details/CalibrationScheduleDetails.jsx";
@@ -215,8 +217,6 @@ import ProcessManagement from "./components/AdminPanel/Process-Management/Proces
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
-
-
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false);
@@ -568,6 +568,7 @@ function App() {
               element={<StockOnboardingDetails />}
             />
 
+            <Route path="/calibration/Part" element={<Part />} />
             <Route
               path="/calibration/calibration-type"
               element={<CalibrationType />}
@@ -795,8 +796,6 @@ function App() {
               element={<ProcessManagement />}
             />
           </Route>
-
-
         </Routes>
       </BrowserRouter>
     </>

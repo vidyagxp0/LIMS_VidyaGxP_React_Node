@@ -126,7 +126,6 @@ const initialData = [
   },
 ];
 
-
 const WorkingStandardIssue = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -191,9 +190,12 @@ const WorkingStandardIssue = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Working Container No.	",accessor: "WorkingContainerNo" },
+    { header: "Working Container No.	", accessor: "WorkingContainerNo" },
     { header: "Container Qty	", accessor: "ContainerQty" },
-    { header: "Container Validity Period Day(s)	", accessor: "ContainerValidityPeriodDay"},
+    {
+      header: "Container Validity Period Day(s)	",
+      accessor: "ContainerValidityPeriodDay",
+    },
     { header: "Container Valid Upto	", accessor: "ContainerValidUpto" },
     { header: "Lot Valid Upto	", accessor: "LotValidUpto" },
     { header: "Added On", accessor: "AddedOn" },
@@ -213,7 +215,11 @@ const WorkingStandardIssue = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -233,6 +239,12 @@ const WorkingStandardIssue = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -265,6 +277,7 @@ const WorkingStandardIssue = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

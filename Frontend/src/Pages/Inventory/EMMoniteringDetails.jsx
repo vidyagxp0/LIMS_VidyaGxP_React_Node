@@ -1,5 +1,3 @@
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -49,7 +47,6 @@
 //               <CFormInput
 //                 type="text"
 //                 label="Monitored / Sampled By
-
 
 //                 "
 //                 placeholder=""
@@ -255,10 +252,6 @@
 //   );
 // };
 
-
-
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -344,7 +337,6 @@
 //               <CButton color="info">Add</CButton>
 //             </div>
 
-
 //         <CModalFooter className="p-3">
 //           <CButton color="light" onClick={_props.closeModal}>
 //             Cancel
@@ -408,9 +400,6 @@
 //     </CModal>
 //   );
 // };
-
-
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -536,7 +525,6 @@
 //     </CModal>
 //   );
 // };
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -4187,9 +4175,6 @@ const initialData = [
   },
 ];
 
-
-
-
 const EMMoniteringDetails = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -4265,7 +4250,11 @@ const EMMoniteringDetails = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -4287,6 +4276,12 @@ const EMMoniteringDetails = () => {
     setStatusFilter(status);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Monitoring Details</h1>
@@ -4305,7 +4300,11 @@ const EMMoniteringDetails = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Add Monitoring Details" color="blue" onClick={openModal} />
+          <ATMButton
+            text="Add Monitoring Details"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -4313,6 +4312,7 @@ const EMMoniteringDetails = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

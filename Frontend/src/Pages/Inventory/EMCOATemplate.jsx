@@ -1,4 +1,3 @@
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -19,7 +18,6 @@
 //                 type="text"
 //                 label="Configuration type
 
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -29,7 +27,6 @@
 //               <CFormInput
 //                 type="text"
 //                 label="Unique Code
-
 
 //                 "
 //                 placeholder=""
@@ -42,7 +39,6 @@
 //                 type="text"
 //                 label="Report Title
 
-
 //                 "
 //                 placeholder=""
 //                 className="custom-placeholder"
@@ -52,8 +48,6 @@
 //               <CFormInput
 //                 type="text"
 //                 label="Format No.
-
-
 
 //                 "
 //                 placeholder=""
@@ -242,9 +236,6 @@
 //   );
 // };
 
-
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -294,7 +285,6 @@
 //               <CFormInput
 //                 type="text"
 //                 label="Monitored / Sampled By
-
 
 //                 "
 //                 placeholder=""
@@ -500,10 +490,6 @@
 //   );
 // };
 
-
-
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
@@ -589,7 +575,6 @@
 //               <CButton color="info">Add</CButton>
 //             </div>
 
-
 //         <CModalFooter className="p-3">
 //           <CButton color="light" onClick={_props.closeModal}>
 //             Cancel
@@ -653,9 +638,6 @@
 //     </CModal>
 //   );
 // };
-
-
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -781,7 +763,6 @@
 //     </CModal>
 //   );
 // };
-
 
 // const StatusModal = (_props) => {
 //   return (
@@ -4439,10 +4420,6 @@ const initialData = [
   },
 ];
 
-
-
-
-
 const EMCOATemplate = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -4519,7 +4496,11 @@ const EMCOATemplate = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -4539,6 +4520,12 @@ const EMCOATemplate = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -4567,6 +4554,7 @@ const EMCOATemplate = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

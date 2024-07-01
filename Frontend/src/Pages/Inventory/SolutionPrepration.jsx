@@ -116,7 +116,6 @@ const initialData = [
   },
 ];
 
-
 const SolutionPrepration = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -206,7 +205,11 @@ const SolutionPrepration = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -228,10 +231,15 @@ const SolutionPrepration = () => {
     setStatusFilter(status);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Solution Preparations
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Solution Preparations</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
         <Card
           title="DROPPED"
@@ -281,7 +289,11 @@ const SolutionPrepration = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Add Solution Preparation" color="blue" onClick={openModal} />
+          <ATMButton
+            text="Add Solution Preparation"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -289,6 +301,7 @@ const SolutionPrepration = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

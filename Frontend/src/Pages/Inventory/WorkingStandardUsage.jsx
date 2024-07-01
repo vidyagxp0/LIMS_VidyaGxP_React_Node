@@ -106,7 +106,6 @@ const initialData = [
   },
 ];
 
-
 const WorkingStandardUsage = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -169,7 +168,7 @@ const WorkingStandardUsage = () => {
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox"
+      accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Ref. Std. Lot. No	", accessor: "refStdlotNo" },
@@ -191,7 +190,11 @@ const WorkingStandardUsage = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -211,6 +214,12 @@ const WorkingStandardUsage = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -273,6 +282,7 @@ const WorkingStandardUsage = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

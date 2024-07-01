@@ -126,8 +126,6 @@ const initialData = [
   },
 ];
 
-
-
 const VolumeSolution = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -190,7 +188,7 @@ const VolumeSolution = () => {
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox"
+      accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Name	", accessor: "name" },
@@ -215,7 +213,11 @@ const VolumeSolution = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -235,6 +237,12 @@ const VolumeSolution = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -297,6 +305,7 @@ const VolumeSolution = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

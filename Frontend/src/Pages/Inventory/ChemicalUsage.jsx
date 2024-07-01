@@ -61,8 +61,6 @@ const initialData = [
   },
 ];
 
-
-
 const ChemicalUsage = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -112,7 +110,9 @@ const ChemicalUsage = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ChemicalRegeantName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.ChemicalRegeantName.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      ) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -130,7 +130,10 @@ const ChemicalUsage = () => {
     { header: "SrNo.", accessor: "sno" },
     { header: "Unique code", accessor: "Uniquecode" },
     { header: "Chemical / Regeant Name	", accessor: "ChemicalRegeantName" },
-    { header: "Chemical / Regeant Issue No.	", accessor: "ChemicalRegeantIssueNo" },
+    {
+      header: "Chemical / Regeant Issue No.	",
+      accessor: "ChemicalRegeantIssueNo",
+    },
     { header: "Issued On.", accessor: "IssuedOn" },
     { header: "Status", accessor: "status" },
 
@@ -148,7 +151,11 @@ const ChemicalUsage = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -168,6 +175,12 @@ const ChemicalUsage = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -222,11 +235,7 @@ const ChemicalUsage = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton
-            text="Lot Registration"
-            color="blue"
-            onClick={openModal}
-          />
+          <ATMButton text="Lot Registration" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -234,6 +243,7 @@ const ChemicalUsage = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}

@@ -96,7 +96,6 @@ const initialData = [
   },
 ];
 
-
 const SolutionUsage = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -146,7 +145,9 @@ const SolutionUsage = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.VolumetricSolutionName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.VolumetricSolutionName.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      ) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -181,7 +182,11 @@ const SolutionUsage = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -201,6 +206,12 @@ const SolutionUsage = () => {
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -263,6 +274,7 @@ const SolutionUsage = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}
