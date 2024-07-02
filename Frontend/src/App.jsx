@@ -360,6 +360,9 @@ function App() {
               element={<SolutionStandardization />}
             />
             <Route path="Inventory/SolutionUsage" element={<SolutionUsage />} />
+
+            
+            {/* *******************BLANK******************************** */}
             <Route path="/Inventory/Columns" element={<Columns />} />
             <Route
               path="/Inventory/ReferenceStandards"
@@ -371,11 +374,16 @@ function App() {
               element={<ReferenceStandards />}
             />
             <Route path="/Inventory/Media" element={<Media />} />
+
             <Route
               path="/Inventory/WaterManagement"
               element={<WaterManagement />}
-            />
+              />
+
             <Route path="/Inventory/Environment" element={<Environment />} />
+              {/* *******************BLANK******************************** */}
+
+
             <Route
               path="Inventory/ChemicalRegistration"
               element={<ChemicalRegistration />}

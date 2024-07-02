@@ -1,334 +1,400 @@
-import {
-	CButton,
-	CCol,
-	CFormInput,
-	CFormSelect,
-	CModal,
-	CModalBody,
-	CModalFooter,
-	CModalHeader,
-	CModalTitle,
-	CRow,
-	CTable,
-	CTableBody,
-	CTableDataCell,
-	CTableHead,
-	CTableHeaderCell,
-	CTableRow,
-} from "@coreui/react";
-import {
-	faPenToSquare,
-	faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+// const StatusModal = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//       size="lg"
+//     >
+//       <CModalHeader>
+//         <CModalTitle>Add Analyst Proposal</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         <p className="my-3 fs-5">
+//           Add information and add new Analyst Proposal
+//         </p>
+//         <CFormSelect
+//           type="text"
+//           className="mb-3"
+//           label="Analyst"
+//           placeholder="Training Confirmation ID"
+//           options={["Select", { label: "No Options" }]}
+//         />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Analyst"
+//           placeholder="Analyst"
+//           disabled
+//         />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Employee ID"
+//           placeholder="Employee ID"
+//           disabled
+//         />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Test Technique"
+//           placeholder="Test Technique"
+//           disabled
+//         />
+//         <CFormSelect
+//           type="text"
+//           className="mb-3"
+//           label="Analyst"
+//           placeholder="Test Plan"
+//           options={["Select", { label: "No Options" }]}
+//         />
+//         <CFormInput
+//           type="number"
+//           className="mb-3"
+//           label="AR Number"
+//           placeholder="AR Number"
+//         />
+//         <CFormInput
+//           type="date"
+//           className="mb-3"
+//           label="Due Date"
+//           placeholder="Due Date"
+//         />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Comments"
+//           placeholder="Comments"
+//         />
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>
+//           Back
+//         </CButton>
+//         <CButton className="bg-info text-white">Submit</CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+// const DeleteModel = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//     >
+//       <CModalHeader>
+//         <CModalTitle>Delete Analyst Proposal</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         Do you want to delete this Analyst Proposal <code>ARZ ENT</code>?
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>
+//           Back
+//         </CButton>
+//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>
+//           Delete
+//         </CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-function Proposal() {
-	const [addModal, setAddModal] = useState(false);
-	const [removeModal, setRemoveModal] = useState(false);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [deleteId, setDeleteId] = useState(null)
-	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedStatus, setSelectedStatus] = useState("All");
-	const recordsPerPage = 5;
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    TrainingConfirmationId: "Associate 1",
+    Analyst: "BA-001",
+    EmployeeId: "BA-001",
+    TestTechnique: "BA-001",
+    TestTechniqueType: "BA-001",
+    InitiatedOn: "BA-001",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    TrainingConfirmationId: "Associate 2",
+    Analyst: "BA-002",
+    EmployeeId: "BA-002",
+    TestTechnique: "BA-002",
+    TestTechniqueType: "BA-002",
+    InitiatedOn: "BA-002",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    TrainingConfirmationId: "Associate 3",
+    Analyst: "BA-003",
+    EmployeeId: "BA-003",
+    TestTechnique: "BA-003",
+    TestTechniqueType: "BA-003",
+    InitiatedOn: "BA-003",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    TrainingConfirmationId: "Associate 4",
+    Analyst: "BA-004",
+    EmployeeId: "BA-004",
+    TestTechnique: "BA-004",
+    TestTechniqueType: "BA-004",
+    InitiatedOn: "BA-004",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    TrainingConfirmationId: "Associate 5",
+    Analyst: "BA-005",
+    EmployeeId: "BA-005",
+    TestTechnique: "BA-005",
+    TestTechniqueType: "BA-005",
+    InitiatedOn: "BA-005",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    TrainingConfirmationId: "Associate 6",
+    Analyst: "BA-006",
+    EmployeeId: "BA-006",
+    TestTechnique: "BA-006",
+    TestTechniqueType: "BA-006",
+    InitiatedOn: "BA-006",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    TrainingConfirmationId: "Associate 7",
+    Analyst: "BA-007",
+    EmployeeId: "BA-007",
+    TestTechnique: "BA-007",
+    TestTechniqueType: "BA-007",
+    InitiatedOn: "BA-007",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    TrainingConfirmationId: "Associate 8",
+    Analyst: "BA-008",
+    EmployeeId: "BA-008",
+    TestTechnique: "BA-008",
+    TestTechniqueType: "BA-008",
+    InitiatedOn: "BA-008",
+    status: "Active",
+  },
+];
 
-	const [tableData, setTableData] = useState([
-		{ id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "Active" },
-		{ id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "Active" },
-		{ id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "Inactive" },
-		{ id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "Active" },
-		{ id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "Active" },
-		{ id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "Inactive" },
-		{ id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "Active" },
-		{ id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "Active" }
-	]);
+const Proposal = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
 
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-	const handleStatusChange = (e) => {
-		setSelectedStatus(e.target.value);
-		setCurrentPage(1);
-	};
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
 
-	const handleSearchChange = (e) => {
-		setSearchQuery(e.target.value);
-		setCurrentPage(1);
-	};
+    setCardCounts(counts);
+  }, [data]);
 
-	const handleDelete = () => {
-		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-		setRemoveModal(false);
-		setDeleteId(null)
-	}
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
-	const handleDeleteClick = (id) => {
-		setDeleteId(id);
-		setRemoveModal(true);
-	}
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-	const filteredData = tableData.filter((data) => {
-		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
-		const matchesSearchQuery = data.analyst.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			data.testTechnique.toLowerCase().includes(searchQuery.toLowerCase());
-		return matchesStatus && matchesSearchQuery;
-	});
+  const filteredData = data.filter((row) => {
+    return (
+      row.EmployeeId.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-	const indexOfLastRecord = currentPage * recordsPerPage;
-	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-	const currentRecords = filteredData.slice(
-		indexOfFirstRecord,
-		indexOfLastRecord
-	);
-	const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
 
-	const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Training Confirmation ID", accessor: "TrainingConfirmationId" },
+    { header: "Analyst", accessor: "Analyst" },
+    { header: "Employee ID", accessor: "EmployeeId" },
+    { header: "Test Technique", accessor: "TestTechnique" },
+    { header: "Test Technique Type", accessor: "TestTechniqueType" },
+    { header: "Initiated On", accessor: "InitiatedOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
 
-	return (
-		<>
-				<div className="m-5 mt-3">
-					<div className="main-head mb-4">
-						<h4 className="fw-bold">Analyst Proposal</h4>
-					</div>
-					<div>
-						<CRow className="mt-5 mb-3">
-							<CCol sm={3}><CFormInput
-								 style={{ fontSize: '0.9rem' }}
-								type="text"
-								placeholder="Search..."
-								value={searchQuery}
-								onChange={handleSearchChange}
-							/></CCol>
-							<CCol sm={3}>
-								<CFormSelect
-									style={{ fontSize: '0.9rem' }}
-									value={selectedStatus}
-									onChange={handleStatusChange}
-									options={[
-										"Select Status",
-										{ value: "All", label: "All" },
-										{ value: "Active", label: "Active" },
-										{ value: "Inactive", label: "Inactive" },
-									]}
-								/>
-							</CCol>
-							<CCol sm={3}></CCol>
-							<CCol sm={3}>
-								<div className="d-flex justify-content-end">
-									<CButton
-										className=" text-white"
-										style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-										onClick={() => setAddModal(true)}
-									>
-										Add Proposal
-									</CButton>
-								</div>
-							</CCol>
-						</CRow>
-					</div>
-					<div
-						className="rounded bg-white"
-						style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-					>          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
-							<CTableHead>
-								<CTableRow>
-									<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Id</CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Analyst</CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Test Technique</CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Training Details</CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Remarks</CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Added On</CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Status</CTableHeaderCell>
-									<CTableHeaderCell
-										style={{ background: "#5D76A9", color: "white" }}
-										scope="col"
-									>Actions</CTableHeaderCell>
-								</CTableRow>
-							</CTableHead>
-							<CTableBody>
-								{currentRecords.map((data, index) => (
-									<CTableRow key={index}>
-										<CTableHeaderCell scope="row" className="text-center">
-											<input type="checkbox" />
-										</CTableHeaderCell>
-										<CTableDataCell>{index + 1}</CTableDataCell>
-										<CTableDataCell>{data.analyst}</CTableDataCell>
-										<CTableDataCell>{data.testTechnique}</CTableDataCell>
-										<CTableDataCell>{data.trainingDetails}</CTableDataCell>
-										<CTableDataCell>{data.remarks}</CTableDataCell>
-										<CTableDataCell>{data.addedOn}</CTableDataCell>
-										<CTableDataCell>
-											<button
-												className={`py-1 px-3 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "Active"
-														? 'green-700'
-														: 'red-700'
-													}`} >{data.status}
-											</button>
-										</CTableDataCell>
-										<CTableDataCell>
-											<div className="d-flex gap-3">
-												<div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-												<div
-													className="cursor-pointer"
-													onClick={() => handleDeleteClick(data.id)}
-												>
-													<FontAwesomeIcon icon={faTrashCan} />
-												</div>
-											</div>
-										</CTableDataCell>
-									</CTableRow>
-								))}
-							</CTableBody>
-						</CTable>
-					</div>
-					<div className="d-flex justify-content-end align-items-center mt-4">
-						<div className="pagination">
-							<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
-							<button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-							<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
-						</div>
-					</div>
-				</div>
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-			{addModal && (
-				<StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-			)}
-			{removeModal && (
-				<DeleteModel
-					visible={removeModal}
-					closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
-				/>
-			)}
-		</>
-	);
-}
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-const StatusModal = (_props) => {
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
 
-	return (
-		<CModal
-			alignment="center"
-			visible={_props.visible}
-			onClose={_props.closeModal}
-			size="lg"
-		>
-			<CModalHeader>
-				<CModalTitle>Add Analyst Proposal</CModalTitle>
-			</CModalHeader>
-			<CModalBody>
-				<p className="my-3 fs-5">Add information and add new Analyst Proposal</p>
-				<CFormSelect
-					type="text"
-					className="mb-3"
-					label="Analyst"
-					placeholder="Training Confirmation ID"
-					options={[
-						"Select",
-						{ label: "No Options" }
-					]}
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Analyst"
-					placeholder="Analyst"
-					disabled
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Employee ID"
-					placeholder="Employee ID"
-					disabled
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Test Technique"
-					placeholder="Test Technique"
-					disabled
-				/>
-				<CFormSelect
-					type="text"
-					className="mb-3"
-					label="Analyst"
-					placeholder="Test Plan"
-					options={[
-						"Select",
-						{ label: "No Options" }
-					]}
-				/>
-				<CFormInput
-					type="number"
-					className="mb-3"
-					label="AR Number"
-					placeholder="AR Number"
-				/>
-				<CFormInput
-					type="date"
-					className="mb-3"
-					label="Due Date"
-					placeholder="Due Date"
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Comments"
-					placeholder="Comments"
-				/>
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
 
-			</CModalBody>
-			<CModalFooter>
-				<CButton color="light" onClick={_props.closeModal}>
-					Back
-				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
-			</CModalFooter>
-		</CModal>
-	);
-};
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
-const DeleteModel = (_props) => {
-	return (
-		<CModal
-			alignment="center"
-			visible={_props.visible}
-			onClose={_props.closeModal}
-		>
-			<CModalHeader>
-				<CModalTitle>Delete Analyst Proposal</CModalTitle>
-			</CModalHeader>
-			<CModalBody>
-				Do you want to delete this Analyst Proposal <code>ARZ ENT</code>?
-			</CModalBody>
-			<CModalFooter>
-				<CButton color="light" onClick={_props.closeModal}>
-					Back
-				</CButton>
-				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-			</CModalFooter>
-		</CModal>
-	);
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Analyst Proposal</h1>
+      {/* <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div> */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton text="Add Confirmation" color="blue" onClick={openModal} />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Proposal;

@@ -1,599 +1,513 @@
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
+
+
+// const StatusModal = (_props) => {
+//   return (
+//     <>
+//       <CModal
+//         alignment="center"
+//         visible={_props.visible}
+//         onClose={_props.closeModal}
+//       >
+//         <CModalHeader>
+//           <CModalTitle>Add Service Provider</CModalTitle>
+//         </CModalHeader>
+//         <p style={{ marginLeft: "20px", marginTop: "5px" }}>
+//           Add information and add new service provider
+//         </p>
+//         <CModalBody>
+//           <CFormSelect
+//             type="text"
+//             label="Name
+// "
+//             placeholder=" "
+//           />
+//           <CFormInput
+//             type="text"
+//             label="Unique Code
+
+//             "
+//             placeholder=" "
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text"
+//             label="Refrence Documents
+//             "
+//             placeholder="Product/Material"
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="date"
+//             label="Valid Upto            "
+//             placeholder=" "
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text"
+//             label="Service Type
+//             "
+//             placeholder=" "
+//             className="custom-placeholder"
+//           />
+//           <CFormSelect
+//             type="text"
+//             label="Contact Person
+
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />
+//           <CFormSelect
+//             type="text"
+//             label="Address : Line 1
+
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />{" "}
+//           <CFormSelect
+//             type="text"
+//             label="Address : Line 2
+
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />{" "}
+//           <CFormSelect
+//             type="text"
+//             label="Address : Line 3
+
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />{" "}
+//           <CFormSelect
+//             type="text"
+//             label="City
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text"
+//             label="State
+//             "
+//             placeholder=" "
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text  "
+//             label="Country
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text  "
+//             label="ZIP / PIN
+
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text  "
+//             label="Phone
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text  "
+//             label="Fax
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />
+//           <CFormInput
+//             type="text  "
+//             label="Email
+//             "
+//             placeholder=""
+//             className="custom-placeholder"
+//           />
+//         </CModalBody>
+
+//         <CModalFooter>
+//           <CButton color="light" onClick={_props.closeModal}>
+//             Cancel
+//           </CButton>
+//           <CButton style={{ background: "#0F93C3", color: "white" }}>
+//             Submit
+//           </CButton>
+//         </CModalFooter>
+//       </CModal>
+//     </>
+//   );
+// };
+
+// const DeleteModal = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//       size="lg"
+//     >
+//       <CModalHeader>
+//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+//           Delete Batch Sample Allotment
+//         </CModalTitle>
+//       </CModalHeader>
+//       <div
+//         className="modal-body"
+//         style={{
+//           fontSize: "1.2rem",
+//           fontWeight: "500",
+//           lineHeight: "1.5",
+//           marginBottom: "1rem",
+//           columnGap: "0px",
+//           border: "0px !important",
+//         }}
+//       >
+//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
+//       </div>
+//       <CModalFooter>
+//         <CButton
+//           color="secondary"
+//           onClick={_props.closeModal}
+//           style={{
+//             marginRight: "0.5rem",
+//             fontWeight: "500",
+//           }}
+//         >
+//           Cancel
+//         </CButton>
+//         <CButton
+//           color="danger"
+//           onClick={_props.handleDelete}
+//           style={{
+//             fontWeight: "500",
+//             color: "white",
+//           }}
+//         >
+//           Delete
+//         </CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-function ServiceProvider() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    ServiceProviderName: "SPH-001",
+    UniqueCode: "Product A",
+    City: "Purity Test",
+    State: "PT-001",
+    Country: "M-001",
+    PinCode: "123456",
+    ValidUpto: "2024-12-31",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    ServiceProviderName: "SPH-002",
+    UniqueCode: "Product B",
+    City: "Strength Test",
+    State: "ST-002",
+    Country: "M-002",
+    PinCode: "654321",
+    ValidUpto: "2025-06-30",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    ServiceProviderName: "SPH-003",
+    UniqueCode: "Product C",
+    City: "Microbial Test",
+    State: "MT-003",
+    Country: "M-003",
+    PinCode: "789456",
+    ValidUpto: "2024-09-15",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    ServiceProviderName: "SPH-004",
+    UniqueCode: "Product D",
+    City: "Dissolution Test",
+    State: "DT-004",
+    Country: "M-004",
+    PinCode: "321789",
+    ValidUpto: "2025-01-20",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    ServiceProviderName: "SPH-005",
+    UniqueCode: "Product E",
+    City: "Moisture Content",
+    State: "MC-005",
+    Country: "M-005",
+    PinCode: "456123",
+    ValidUpto: "2024-11-05",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    ServiceProviderName: "SPH-006",
+    UniqueCode: "Product F",
+    City: "Hardness Test",
+    State: "HT-006",
+    Country: "M-006",
+    PinCode: "147258",
+    ValidUpto: "2025-03-12",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    ServiceProviderName: "SPH-007",
+    UniqueCode: "Product G",
+    City: "Viscosity Test",
+    State: "VT-007",
+    Country: "M-007",
+    PinCode: "369852",
+    ValidUpto: "2025-02-28",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    ServiceProviderName: "SPH-008",
+    UniqueCode: "Product H",
+    City: "PH Test",
+    State: "PH-008",
+    Country: "M-008",
+    PinCode: "258963",
+    ValidUpto: "2024-08-19",
+    status: "INITIATED",
+  },
+];
 
-  const [selectedStatus, setSelectedStatus] = useState("All");
 
-  const handleSelect = (data) => {
-    setSelectedStatus(data);
-    setCurrentPage(1);
-  }
+const ServiceProvider = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      ServiceProviderName: "stmp1",
-      UniqueCode: "describe",
-      City: "isubus111",
-      State: "54255455",
-      Country: "54255455",
-      PinCode: "54255455",
-      ValidUpto: "54255455",
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-      status: "APPROVED",
-    },
-    {
-      id: 2,
-      ServiceProviderName: "stmp1",
-      UniqueCode: "describe",
-      City: "isubus111",
-      State: "54255455",
-      Country: "54255455",
-      PinCode: "54255455",
-      ValidUpto: "54255455",
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
 
-      status: "REJECTED",
-    },
-    {
-      id: 3,
-      ServiceProviderName: "stmp1",
-      UniqueCode: "describe",
-      City: "isubus111",
-      State: "54255455",
-      Country: "54255455",
-      PinCode: "54255455",
-      ValidUpto: "54255455",
+    setCardCounts(counts);
+  }, [data]);
 
-      status: "DROPPED",
-    },
-    {
-      id: 4,
-      ServiceProviderName: "stmp1",
-      UniqueCode: "describe",
-      City: "isubus111",
-      State: "54255455",
-      Country: "54255455",
-      PinCode: "54255455",
-      ValidUpto: "54255455",
-      status: "INITIATED",
-    },
-    {
-      id: 5,
-      ServiceProviderName: "stmp1",
-      UniqueCode: "describe",
-      City: "isubus111",
-      State: "54255455",
-      Country: "54255455",
-      PinCode: "54255455",
-      ValidUpto: "54255455",
-
-      status: "APPROVED",
-    },
-    {
-      id: 6,
-      ServiceProviderName: "stmp1",
-      UniqueCode: "describe",
-      City: "isubus111",
-      State: "54255455",
-      Country: "54255455",
-      PinCode: "54255455",
-      ValidUpto: "54255455",
-
-      status: "REINITIATED",
-    },
-  ]);
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const [search, setSearch] = useState("");
-
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
-    return filteredData.filter((item) =>
-      item.ServiceProviderName.toLowerCase().includes(search.toLowerCase())
+  const filteredData = data.filter((row) => {
+    return (
+      row.ServiceProviderName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Service Provider Name", accessor: "ServiceProviderName" },
+    { header: "Unique Code", accessor: "UniqueCode" },
+    { header: "City", accessor: "City" },
+    { header: "State", accessor: "State" },
+    { header: "Country", accessor: "Country" },
+    { header: "Pin Code", accessor: "PinCode" },
+    { header: "Valid Upto", accessor: "ValidUpto" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
 
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Service Provider</h4>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Service Provider</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "    DROPPED" },
+              { value: "INITIATED", label: "  INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "   APPROVED" },
+              { value: "REJECTED", label: "   REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
         </div>
-        <div className="mt-3 d-flex gap-4 my-3">
-          <div className="chart-widgets w-100">
-            <div className="">
-              <div className="row">
-                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => setSelectedStatus('DROPPED')}>
-                  <div className="text-light fs-5">DROPPED</div>
-                  <div className="count fs-1 text-light fw-bolder">{
-                    filterData().filter(
-                      (item) => item.status === "DROPPED"
-                    ).length
-                  }</div>
-                </div>
-                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => setSelectedStatus("INITIATED")}>
-                  <div className="text-light fs-5">INITIATED</div>
-                  <div className="count fs-1 text-light fw-bolder">{
-                    filterData().filter(
-                      (item) => item.status === "INITIATED"
-                    ).length
-                  }</div>
-                </div>
-                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => setSelectedStatus("REINITIATED")}>
-                  <div className="text-light fs-5">REINITIATED</div>
-                  <div className="count fs-1 text-light fw-bolder">{
-                    filterData().filter(
-                      (item) => item.status === "REINITIATED"
-                    ).length
-                  }</div>
-                </div>
-                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => setSelectedStatus('APPROVED')}>
-                  <div className="text-light fs-5">APPROVED</div>
-                  <div className="count fs-1 text-light fw-bolder">{
-                    filterData().filter(
-                      (item) => item.status === "APPROVED"
-                    ).length
-                  }</div>
-                </div>
-                <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => setSelectedStatus('REJECTED')}>
-                  <div className="text-light fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">{
-                    filterData().filter(
-                      (item) => item.status === "REJECTED"
-                    ).length
-                  }</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <CRow className="mb-3">
-            <CCol sm={4}>
-              <CFormInput
-                style={{ fontSize: '0.9rem' }}
-                type="email"
-                placeholder="Search..."
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </CCol>
-
-            <CCol sm={3}>
-              <CFormSelect
-                onChange={(e) => handleSelect(e.target.value)}
-                value={selectedStatus}
-                style={{ fontSize: '0.9rem' }}
-              >
-                <option value="All">All</option>
-                <option value="Initiated">Initiated</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Reinitiated">Reinitiated</option>
-                <option value="Dropped">Dropped</option>
-              </CFormSelect>
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Service Provider
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-        <div
-          className="rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >
-          <CTable className="mb-0 table table-responsive" >
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center">
-                  <input type="checkbox" />
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  SNo.
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Service Provider Name
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Unique Code
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  City
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  State
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Country
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Pin Code
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Valid Upto
-                </CTableHeaderCell>
-
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Status
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Actions{" "}
-                </CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-
-            <CTableBody>
-              {filterData()
-                .slice(startIndex, endIndex)
-                .map((item, index) => (
-                  <CTableRow key={index}>
-                    <CTableHeaderCell scope="row" className="text-center">
-                      <input type="checkbox" />
-                    </CTableHeaderCell>
-                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                    <CTableDataCell key={item.id}>
-                      {item.ServiceProviderName}
-                    </CTableDataCell>
-
-                    <CTableDataCell>{item.UniqueCode}</CTableDataCell>
-                    <CTableDataCell>{item.City}</CTableDataCell>
-                    <CTableDataCell>{item.State}</CTableDataCell>
-                    <CTableDataCell>{item.Country}</CTableDataCell>
-                    <CTableDataCell>{item.PinCode}</CTableDataCell>
-                    <CTableDataCell>{item.ValidUpto}</CTableDataCell>
-
-                    <CTableDataCell>
-                      <button
-                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "INITIATED"
-                          ? "blue-700"
-                          : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
-                              ? "red-700"
-                              : item.status === "REINITIATED"
-                                ? "yellow-500"
-                                : item.status === "DROPPED"
-                                  ? "purple-700"
-                                  : "white"
-                          }`} style={{ fontSize: '0.6rem' }}
-                      >
-                        {item.status}
-                      </button>
-                    </CTableDataCell>
-                    <CTableDataCell>
-                      <div className="d-flex gap-3">
-                        <Link to="/approval/1321">
-                          <FontAwesomeIcon icon={faEye} />
-                        </Link>
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => setAddModal(true)}
-                        >
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </div>
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => setDeleteModal(item.id)}
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} />
-                        </div>
-                      </div>
-                    </CTableDataCell>
-                  </CTableRow>
-                ))}
-            </CTableBody>
-          </CTable>
-        </div>
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-              &lt;&lt;
-            </button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= filterData().length}>
-              &gt;&gt;
-            </button>
-          </div>
+        <div className="float-right">
+          <ATMButton text="Add Service Provider" color="blue" onClick={openModal} />
         </div>
       </div>
-
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Add Service Provider</CModalTitle>
-        </CModalHeader>
-        <p style={{ marginLeft: "20px", marginTop: "5px" }}>
-          Add information and add new service provider
-        </p>
-        <CModalBody>
-          <CFormSelect
-            type="text"
-            label="Name
-"
-            placeholder=" "
-          />
-          <CFormInput
-            type="text"
-            label="Unique Code
-
-            "
-            placeholder=" "
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text"
-            label="Refrence Documents
-            "
-            placeholder="Product/Material"
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="date"
-            label="Valid Upto            "
-            placeholder=" "
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text"
-            label="Service Type
-            "
-            placeholder=" "
-            className="custom-placeholder"
-          />
-          <CFormSelect
-            type="text"
-            label="Contact Person
-
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />
-          <CFormSelect
-            type="text"
-            label="Address : Line 1
-
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />{" "}
-          <CFormSelect
-            type="text"
-            label="Address : Line 2
-
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />{" "}
-          <CFormSelect
-            type="text"
-            label="Address : Line 3
-
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />{" "}
-          <CFormSelect
-            type="text"
-            label="City
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text"
-            label="State
-            "
-            placeholder=" "
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text  "
-            label="Country
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text  "
-            label="ZIP / PIN
-
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text  "
-            label="Phone
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text  "
-            label="Fax
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />
-          <CFormInput
-            type="text  "
-            label="Email
-            "
-            placeholder=""
-            className="custom-placeholder"
-          />
-        </CModalBody>
-
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
+    </div>
   );
 };
 
-const DeleteModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Batch Sample Allotment
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-      </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 export default ServiceProvider;

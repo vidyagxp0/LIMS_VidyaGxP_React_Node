@@ -24,6 +24,8 @@
     "@mui/material": "^5.15.19",
     "@react-pdf/renderer": "^3.4.4",
     "bootstrap": "^5.3.3",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "react": "^18.2.0",
     "react-big-calendar": "^1.12.2",
     "react-bootstrap": "^2.10.2",

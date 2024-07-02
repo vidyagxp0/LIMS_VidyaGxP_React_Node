@@ -24,21 +24,21 @@ const Table = ({
   const getStatusColor = (status) => {
     switch (status) {
       case "Active":
-        return "bg-green-500 text-white";
+        return "bg-green-500 text-white w-20 p-1";
       case "Inactive":
-        return "bg-red-500 text-white";
+        return "bg-red-500 text-white w-20 p-1 ";
       case "DROPPED":
-        return "bg-pink-500 text-white";
+        return "bg-pink-500 text-white w-20 p-1 ";
       case "REJECTED":
-        return "bg-red-500 text-white";
+        return "bg-red-500 text-white w-20 p-1 ";
       case "INITIATED":
-        return "bg-blue-500 text-white";
+        return "bg-blue-500 text-white w-20 p-1 ";
       case "REINITIATED":
-        return "bg-yellow-500 text-white";
+        return "bg-yellow-500 text-white w-20 p-1 ";
       case "APPROVED":
-        return "bg-green-500 text-white";
+        return "bg-green-500 text-white w-20 p-1 ";
       default:
-        return ""; // Default case for any other status
+        return "";
     }
   };
 
@@ -63,9 +63,9 @@ const Table = ({
 
   return (
     <>
-      <div className="overflow-x-auto" style={{ boxShadow: "0 0 10px gray" }}>
+      <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-[#5D76A9] text-white">
+          <thead className="bg-[#6187d4] text-white">
             <tr>
               {columns.map((column) => (
                 <th

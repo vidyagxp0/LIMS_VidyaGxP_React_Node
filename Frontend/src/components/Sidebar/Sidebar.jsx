@@ -2222,6 +2222,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Worksheets
               </CNavItem>
             </Link>
+            <Link to="/settings/worksheetFields">
+              <CNavItem
+                href="#"
+                className={isActive(" /settings/worksheetFields")}
+                style={{ ...isActive("/settings/worksheetFields") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Worksheet Field
+              </CNavItem>
+            </Link>
             <Link to="/settings/groupName">
               <CNavItem
                 href="#"

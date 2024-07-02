@@ -1,10 +1,22 @@
 import { useState } from "react";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React from "react"
-import { FaArrowRight } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { Link } from "react-router-dom";
 
 function ChamberTransfer() {
   const [data, setData] = useState(initialData);
@@ -28,7 +40,6 @@ function ChamberTransfer() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
   };
 
   const handleCheckboxChange = (index) => {
@@ -36,7 +47,6 @@ function ChamberTransfer() {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
-
 
   const columns = [
     {
@@ -80,54 +90,91 @@ function ChamberTransfer() {
     setViewModalData(false);
   };
 
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
   const StatusModal = (_props) => {
     return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-            <CModalHeader>
-                <CModalTitle>Stability Chamber Transfer</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <CModalTitle className="mb-3">From</CModalTitle>
-                <CFormInput className="mb-3" type="text" label="Chamber ID" placeholder="Chamber Id " />
-                <CFormInput className="mb-3" type="text" label="Storage Condition" placeholder=" Storage Condition " />
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>Stability Chamber Transfer</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CModalTitle className="mb-3">From</CModalTitle>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Chamber ID"
+            placeholder="Chamber Id "
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Storage Condition"
+            placeholder=" Storage Condition "
+          />
 
-                <CModalTitle className="mb-3">To</CModalTitle>
-                <CFormInput className="mb-3" type="text" label="Chamber ID" placeholder="Chamber Id " />
-                <CFormInput className="mb-3" type="text" label="Storage Condition" placeholder="Storage Condition " />
+          <CModalTitle className="mb-3">To</CModalTitle>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Chamber ID"
+            placeholder="Chamber Id "
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Storage Condition"
+            placeholder="Storage Condition "
+          />
 
-                <CFormSelect className="mb-3" type="select" label="Product" options={[
-                    "Select...",
-                    { label: "Glass" },
-                    { label: "Hydraulic Oil" },
-                    { label: "chpoil" },
-                    { label: "Feliconar" },
-                    { label: "Sacubitril" },
-                    { label: "Testamine" }
-                ]} placeholder=" " />
-                <CFormSelect className="mb-3" type="select" label="Protocol" options={[
-                    "Select...",
-                    { label: "asd3454" },
-                    { label: "STB2" },
-                    { label: "Btc1P" },
-                    { label: "Stab7654" }
-                ]} placeholder=" " />
-                <div className="d-flex justify-content-end">
-                <CButton className="bg-info text-white mb-3">Display</CButton>
-                </div>
-            </CModalBody>
-            <CModalFooter>
-                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                <CButton className="bg-info text-white">Submit</CButton>
-            </CModalFooter>
-        </CModal>
-    )
-}
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Product"
+            options={[
+              "Select...",
+              { label: "Glass" },
+              { label: "Hydraulic Oil" },
+              { label: "chpoil" },
+              { label: "Feliconar" },
+              { label: "Sacubitril" },
+              { label: "Testamine" },
+            ]}
+            placeholder=" "
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Protocol"
+            options={[
+              "Select...",
+              { label: "asd3454" },
+              { label: "STB2" },
+              { label: "Btc1P" },
+              { label: "Stab7654" },
+            ]}
+            placeholder=" "
+          />
+          <div className="d-flex justify-content-end">
+            <CButton className="bg-info text-white mb-3">Display</CButton>
+          </div>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
   return (
     <>
@@ -166,11 +213,14 @@ function ChamberTransfer() {
         />
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
     </>
   );
- 
 }
 
 export default ChamberTransfer;
