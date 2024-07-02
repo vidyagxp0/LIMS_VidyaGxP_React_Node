@@ -1,6 +1,13 @@
 import { useState } from "react";
-import { Page, Text, Image, View, Document, StyleSheet } from '@react-pdf/renderer';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import {
+  Page,
+  Text,
+  Image,
+  View,
+  Document,
+  StyleSheet,
+} from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import {
   CButton,
   CCol,
@@ -23,6 +30,7 @@ import {
   CTableHead,
   CTableRow,
 } from "@coreui/react";
+import React from "react";
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,15 +77,14 @@ function ChemicalReagent() {
       selectedStatus === "All"
         ? data
         : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
     return filteredData.filter((item) =>
       item.ChemicalReagentName.toLowerCase().includes(search.toLowerCase())
     );
   };
 
   const filteredData = filterData();
-
 
   const handleDelete = (id) => {
     setData((prevData) => prevData.filter((item) => item.id !== id));
@@ -136,18 +143,18 @@ function ChemicalReagent() {
       padding: 30,
     },
     head: {
-      margin: '0 auto',
-      alignItems: 'center',
-      borderBottom: '2px solid black',
+      margin: "0 auto",
+      alignItems: "center",
+      borderBottom: "2px solid black",
       paddingBottom: 5,
-      width: '100%',
-      fontSize: 20
+      width: "100%",
+      fontSize: 20,
     },
     container: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
       marginTop: 20,
       marginBottom: 10,
     },
@@ -157,13 +164,13 @@ function ChemicalReagent() {
       fontSize: 12,
     },
     title: {
-      display: 'flex',
-      flexDirection: 'column',
+      display: "flex",
+      flexDirection: "column",
     },
     subTitle: {
-      fontSize: '12px',
-      fontWeight: '200',
-      color: 'gray'
+      fontSize: "12px",
+      fontWeight: "200",
+      color: "gray",
     },
     image: {
       width: 150,
@@ -174,37 +181,37 @@ function ChemicalReagent() {
       width: "auto",
       borderStyle: "solid",
       borderWidth: 1,
-      borderColor: '#bfbfbf',
+      borderColor: "#bfbfbf",
       borderRightWidth: 0,
       borderBottomWidth: 0,
       marginBottom: 20,
     },
     tableRow: {
       margin: "auto",
-      flexDirection: "row"
+      flexDirection: "row",
     },
     tableColHeader: {
       width: "25%",
       borderStyle: "solid",
       borderWidth: 1,
-      borderColor: '#bfbfbf',
+      borderColor: "#bfbfbf",
       borderLeftWidth: 0,
       borderTopWidth: 0,
       backgroundColor: "#5D76A9",
-      color: "white"
+      color: "white",
     },
     tableCol: {
       width: "25%",
       borderStyle: "solid",
       borderWidth: 1,
-      borderColor: '#bfbfbf',
+      borderColor: "#bfbfbf",
       borderLeftWidth: 0,
       borderTopWidth: 0,
     },
     tableCellHeader: {
       margin: 5,
       fontSize: 10,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
     tableCell: {
       margin: 5,
@@ -212,15 +219,15 @@ function ChemicalReagent() {
     },
     footer: {
       position: "absolute",
-      bottom: '0px',
-      display: 'flex',
-      flexDirection: 'row',
-      margin: 'auto 30px 30px',
-      justifyContent: 'space-between',
-      fontSize: '12px',
-      color: 'gray',
-      width: '100%'
-    }
+      bottom: "0px",
+      display: "flex",
+      flexDirection: "row",
+      margin: "auto 30px 30px",
+      justifyContent: "space-between",
+      fontSize: "12px",
+      color: "gray",
+      width: "100%",
+    },
   });
 
   const PdfDocument = () => (
@@ -230,9 +237,16 @@ function ChemicalReagent() {
           <Text>Chemical / Reagent List</Text>
         </View>
         <View style={styles.container}>
-          <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s" alt="logo" style={styles.image} />
+          <Image
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxZlrJ6FvJeaTZypzsU9l_VKJgt5GFUmHpbheI7L3MA&s"
+            alt="logo"
+            style={styles.image}
+          />
           <View style={styles.title}>
-            <Text>Chemical / Reagent Index</Text> <Text style={styles.subTitle}>Vijay Nagar, Indore, Madhya Pradesh 452010</Text>
+            <Text>Chemical / Reagent Index</Text>{" "}
+            <Text style={styles.subTitle}>
+              Vijay Nagar, Indore, Madhya Pradesh 452010
+            </Text>
           </View>
         </View>
 
@@ -242,7 +256,9 @@ function ChemicalReagent() {
               <Text style={styles.tableCellHeader}>S.No </Text>
             </View>
             <View style={styles.tableColHeader}>
-              <Text style={styles.tableCellHeader}>Chemical / Reagent Name</Text>
+              <Text style={styles.tableCellHeader}>
+                Chemical / Reagent Name
+              </Text>
             </View>
             <View style={styles.tableColHeader}>
               <Text style={styles.tableCellHeader}>Reagent Unique Code</Text>
@@ -251,26 +267,28 @@ function ChemicalReagent() {
               <Text style={styles.tableCellHeader}>Status</Text>
             </View>
           </View>
-          {
-            filteredData.map((data, index) => {
-              return (
-                <View style={styles.tableRow}>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{index + 1}</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{data.ChemicalReagentName}</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{data.ChemicalReagentCode}	</Text>
-                  </View>
-                  <View style={styles.tableCol}>
-                    <Text style={styles.tableCell}>{data.status}</Text>
-                  </View>
+          {filteredData.map((data, index) => {
+            return (
+              <View key={data} style={styles.tableRow}>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>{index + 1}</Text>
                 </View>
-              );
-            })
-          }
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>
+                    {data.ChemicalReagentName}
+                  </Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>
+                    {data.ChemicalReagentCode}{" "}
+                  </Text>
+                </View>
+                <View style={styles.tableCol}>
+                  <Text style={styles.tableCell}>{data.status}</Text>
+                </View>
+              </View>
+            );
+          })}
         </View>
         <View style={styles.footer}>
           <View>
@@ -318,7 +336,11 @@ function ChemicalReagent() {
               </CCol>
               <CCol sm={5}>
                 <div className="d-flex justify-content-end">
-                  <PDFDownloadLink document={<PdfDocument />} fileName="Chemical / Reagent Index.pdf" className="btn btn-info text-light mx-2">
+                  <PDFDownloadLink
+                    document={<PdfDocument />}
+                    fileName="Chemical / Reagent Index.pdf"
+                    className="btn btn-info text-light mx-2"
+                  >
                     Print
                   </PDFDownloadLink>
                 </div>
@@ -344,19 +366,23 @@ function ChemicalReagent() {
                     />
                   </div>
                   <div className="d-flex flex-column justify-content-center align-items-center">
-                    <h3 className="fw-bolder">
-                      Chemical / Reagent Index
-                    </h3>
-                    <p>
-                      Vijay Nagar, Indore, Madhya Pradesh 452010
-                    </p>
+                    <h3 className="fw-bolder">Chemical / Reagent Index</h3>
+                    <p>Vijay Nagar, Indore, Madhya Pradesh 452010</p>
                   </div>
                 </div>
                 <div
                   className="rounded mt-5 bg-white"
-                  style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9', overflowX: 'scroll' }}
+                  style={{
+                    fontFamily: "sans-serif",
+                    fontSize: "0.9rem",
+                    boxShadow: "5px 5px 20px #5D76A9",
+                    overflowX: "scroll",
+                  }}
                 >
-                  <CTable align="middle" className="mb-0 text-center table-responsive">
+                  <CTable
+                    align="middle"
+                    className="mb-0 text-center table-responsive"
+                  >
                     <CTableHead
                       style={{
                         backgroundColor: "blue",
@@ -364,28 +390,52 @@ function ChemicalReagent() {
                       }}
                     >
                       <CTableRow>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           S.No
                         </CTableHeaderCell>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           Chemical / Reagent Name
                         </CTableHeaderCell>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           Chemical / Reagent Unique Code
                         </CTableHeaderCell>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           CAS CAT No.
                         </CTableHeaderCell>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           Category
                         </CTableHeaderCell>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           Minimum Quantity
                         </CTableHeaderCell>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           Status
                         </CTableHeaderCell>
-                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">
+                        <CTableHeaderCell
+                          style={{ background: "#5D76A9", color: "white" }}
+                          scope="col"
+                        >
                           Action
                         </CTableHeaderCell>
                       </CTableRow>
@@ -396,8 +446,8 @@ function ChemicalReagent() {
                           search.toLowerCase() === ""
                             ? true
                             : item.ChemicalReagentName.toLowerCase().includes(
-                              search.toLowerCase()
-                            )
+                                search.toLowerCase()
+                              )
                         )
                         .map((item, index) => (
                           <CTableRow key={index}>
@@ -408,12 +458,8 @@ function ChemicalReagent() {
                             <CTableDataCell>
                               {item.ChemicalReagentCode}
                             </CTableDataCell>
-                            <CTableDataCell>
-                              {item.CAS_CAT_No}
-                            </CTableDataCell>
-                            <CTableDataCell>
-                              {item.Category}
-                            </CTableDataCell>
+                            <CTableDataCell>{item.CAS_CAT_No}</CTableDataCell>
+                            <CTableDataCell>{item.Category}</CTableDataCell>
                             <CTableDataCell>
                               {item.Minimum_Quantity}
                             </CTableDataCell>
@@ -424,16 +470,16 @@ function ChemicalReagent() {
                                   item.status === "INITIATED"
                                     ? badgeStyle2
                                     : item.status === "APPROVED"
-                                      ? badgeStyle3
-                                      : item.status === "REJECTED"
-                                        ? badgeStyle4
-                                        : item.status === "REINITIATED"
-                                          ? badgeStyle5
-                                          : item.status === "DROPPED"
-                                            ? badgeStyle6
-                                            : item.status === "ALL"
-                                              ? badgeStyle
-                                              : badgeStyle
+                                    ? badgeStyle3
+                                    : item.status === "REJECTED"
+                                    ? badgeStyle4
+                                    : item.status === "REINITIATED"
+                                    ? badgeStyle5
+                                    : item.status === "DROPPED"
+                                    ? badgeStyle6
+                                    : item.status === "ALL"
+                                    ? badgeStyle
+                                    : badgeStyle
                                 }
                               >
                                 {item.status}
@@ -448,15 +494,11 @@ function ChemicalReagent() {
                                   className="cursor-pointer"
                                   onClick={() => setAddModal(true)}
                                 >
-                                  <FontAwesomeIcon
-                                    icon={faPenToSquare}
-                                  />
+                                  <FontAwesomeIcon icon={faPenToSquare} />
                                 </div>
                                 <div
                                   className="cursor-pointer"
-                                  onClick={() =>
-                                    setDeleteModal(item.id)
-                                  }
+                                  onClick={() => setDeleteModal(item.id)}
                                 >
                                   <FontAwesomeIcon icon={faTrashCan} />
                                 </div>

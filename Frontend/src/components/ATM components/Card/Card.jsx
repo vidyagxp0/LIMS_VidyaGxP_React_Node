@@ -1,32 +1,35 @@
 import React from 'react';
 
-const Card = ({ title, count, color,onClick  }) => {
-  
-  let gradientClasses = '';
+const Card = ({ title, count, color, onClick }) => {
+  let gradientStyle = {};
   switch (color) {
-    case 'green':
-      gradientClasses = 'from-green-400 to-green-600';
-      break;
-    case 'red':
-      gradientClasses = 'from-red-400 to-red-600';
-      break;
-    case 'pink':
-      gradientClasses = 'from-pink-400 to-pink-600';
+    case 'bluePink':
+      gradientStyle = { background: 'linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)' };
       break;
     case 'blue':
-      gradientClasses = 'from-blue-400 to-blue-600';
+      gradientStyle = { background: 'linear-gradient(25deg, #13517a 6%, #2A5298 50%)' };
       break;
-    case 'yellow':
-      gradientClasses = 'from-yellow-400 to-yellow-600';
+    case 'orangeYellow':
+      gradientStyle = { background: 'linear-gradient(25deg, orange , #f7e05f)' };
+      break;
+    case 'green':
+      gradientStyle = { background: 'linear-gradient(27deg, green , #0fd850)' };
+      break;
+    case 'red':
+      gradientStyle = { background: 'linear-gradient(27deg, red, #FF719A)' };
       break;
     default:
-      gradientClasses = '';
+      gradientStyle = { background: 'linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)' }; // default to one of the gradients
   }
 
   return (
-    <div className={`bg-gradient-to-br ${gradientClasses} p-4 rounded-lg shadow-md text-white`}   onClick={onClick}>
-      <h2 className="text-2xl">{title}</h2>
-      <p className="text-4xl font-bold">{count}</p>
+    <div
+      className="p-2 sm:p-3 md:p-4 rounded-lg shadow-md text-white"
+      style={gradientStyle}
+      onClick={onClick}
+    >
+      <h2 className="text-xl sm:text-2xl">{title}</h2>
+      <p className="text-2xl sm:text-3xl md:text-4xl font-bold">{count}</p>
     </div>
   );
 };

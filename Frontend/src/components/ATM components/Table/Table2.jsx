@@ -1,22 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal";
-const Table = ({
-  columns,
-  data,
-  onCheckboxChange,
-  onViewDetails,
-  onDelete,
-}) => {
+import ATMButton from "../Button/ATMButton";
+
+const Table = ({ columns, data, onCheckboxChange, onViewDetails }) => {
   const pageSize = 5;
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
+
   const totalPageCount = Math.ceil(data.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const currentData = data.slice(startIndex, startIndex + pageSize);
@@ -24,21 +18,21 @@ const Table = ({
   const getStatusColor = (status) => {
     switch (status) {
       case "Active":
-        return "bg-green-500 text-white w-20 p-1";
+        return "bg-green-500 text-white";
       case "Inactive":
-        return "bg-red-500 text-white w-20 p-1 ";
+        return "bg-red-500 text-white";
       case "DROPPED":
-        return "bg-pink-500 text-white w-20 p-1 ";
+        return "bg-pink-500 text-white";
       case "REJECTED":
-        return "bg-red-500 text-white w-20 p-1 ";
+        return "bg-red-500 text-white";
       case "INITIATED":
-        return "bg-blue-500 text-white w-20 p-1 ";
+        return "bg-blue-500 text-white";
       case "REINITIATED":
-        return "bg-yellow-500 text-white w-20 p-1 ";
+        return "bg-yellow-500 text-white";
       case "APPROVED":
-        return "bg-green-500 text-white w-20 p-1 ";
+        return "bg-green-500 text-white";
       default:
-        return "";
+        return ""; // Default case for any other status
     }
   };
 
@@ -46,26 +40,14 @@ const Table = ({
     setCurrentPage(pageNumber);
   };
 
-  const openDeleteModal = (item) => {
-    setItemToDelete(item);
-    setIsDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setItemToDelete(null);
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleDelete = (item) => {
-    onDelete(item);
-    closeDeleteModal();
-  };
-
   return (
     <>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-[#6187d4] text-white">
+        <table
+          className="min-w-full divide-y divide-gray-200"
+          style={{ boxShadow: "0 0 20px black" }}
+        >
+          <thead className="bg-[#5D76A9] text-white">
             <tr>
               {columns.map((column) => (
                 <th
@@ -102,19 +84,11 @@ const Table = ({
                       </span>
                     ) : column.accessor === "action" ? (
                       <div className="flex space-x-2">
-                        <FontAwesomeIcon
-                          icon={faEye}
-                          className="mr-2 cursor-pointer"
-                          onClick={() => onViewDetails(row)}
-                        />
-                        <FontAwesomeIcon
-                          icon={faPenToSquare}
-                          className="mr-2 cursor-pointer"
-                        />
-                        <FontAwesomeIcon
-                          icon={faTrashCan}
-                          className="cursor-pointer"
-                          onClick={() => openDeleteModal(row)}
+                      
+                        <ATMButton
+                          text="Add"
+                          color="blue"
+                          onClick={() => openModal(row.original)}
                         />
                       </div>
                     ) : (
@@ -175,12 +149,6 @@ const Table = ({
           </nav>
         </div>
       </div>
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onClose={closeDeleteModal}
-        onDelete={handleDelete}
-        item={itemToDelete}
-      />
     </>
   );
 };

@@ -1,497 +1,461 @@
-import {
-  CButton,
-  CCol,
-  CModal,
-  CFormInput,
-  CForm,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CFormSelect,
-} from "@coreui/react";
+// const StatusModal = (_props) => {
+//   return (
+//     <>
+//       <CModal
+//         alignment="center"
+//         visible={_props.visible}
+//         onClose={_props.closeModal}
+//       >
+//         <CModalHeader className="p-3">
+//           <CModalTitle>Add Batch Sample Registration</CModalTitle>
+//         </CModalHeader>
+
+//         <p>Add information and register new Batch Sample</p>
+//         <div className="modal-body p-4">
+//           <CForm>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Schedule Code
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Due On
+
+// +
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+
+//             <div className="mb-3">
+//               <CFormSelect
+//                 type="text"
+//                 label="Test Plan
+
+//                "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//             <h5 style={{ fontWeight: "bolder" }}>
+//               EM Monitoring Details(Sampling Schedule)
+//             </h5>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="date"
+//                 label="Date of Monitoring
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Monitored / Sampled By
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//             <h5 style={{ fontWeight: "bolder" }}>EM Monitoring Details</h5>
+
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Activity Type
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="time"
+//                 label="Exposure Start Time
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//             <div></div>
+
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Product Name
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Report No.
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="date"
+//                 label="Membrance Holder Sterilized On
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Gelatine Membrane Lot No.
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="date"
+//                 label="Use Before
+
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//           </CForm>
+//         </div>
+
+//         <CModalFooter className="p-3">
+//           <CButton color="light" onClick={_props.closeModal}>
+//             Cancel
+//           </CButton>
+//           <CButton style={{ background: "#0F93C3", color: "white" }}>
+//             Submit
+//           </CButton>
+//         </CModalFooter>
+//       </CModal>
+//     </>
+//   );
+// };
+// const DeleteModal = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//       size="lg"
+//     >
+//       <CModalHeader>
+//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+//           Delete Batch Sample Allotment
+//         </CModalTitle>
+//       </CModalHeader>
+//       <div
+//         className="modal-body"
+//         style={{
+//           fontSize: "1.2rem",
+//           fontWeight: "500",
+//           lineHeight: "1.5",
+//           marginBottom: "1rem",
+//           columnGap: "0px",
+//           border: "0px !important",
+//         }}
+//       >
+//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
+//       </div>
+//       <CModalFooter>
+//         <CButton
+//           color="secondary"
+//           onClick={_props.closeModal}
+//           style={{
+//             marginRight: "0.5rem",
+//             fontWeight: "500",
+//           }}
+//         >
+//           Cancel
+//         </CButton>
+//         <CButton
+//           color="danger"
+//           onClick={_props.handleDelete}
+//           style={{
+//             fontWeight: "500",
+//             color: "white",
+//           }}
+//         >
+//           Delete
+//         </CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from 'react';
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-function SampleLogin() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " green",
-    color: "white",
-    width: "110px",
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    SampleType: "Plant Configuration",
+    ProductMaterial: "PLA-001",
+    ARNO: "PLA-001",
+    GenericName: "PLA-001",
+    SpecificationCode: "PLA-001",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    SampleType: "Laboratory A",
+    ProductMaterial: "LAB-002",
+    ARNO: "LAB-002",
+    GenericName: "LAB-002",
+    SpecificationCode: "LAB-002",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    SampleType: "Research Center",
+    ProductMaterial: "RC-003",
+    ARNO: "RC-003",
+    GenericName: "RC-003",
+    SpecificationCode: "RC-003",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    SampleType: "Production Site",
+    ProductMaterial: "PS-004",
+    ARNO: "PS-004",
+    GenericName: "PS-004",
+    SpecificationCode: "PS-004",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    SampleType: "Warehouse",
+    ProductMaterial: "WH-005",
+    ARNO: "WH-005",
+    GenericName: "WH-005",
+    SpecificationCode: "WH-005",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    SampleType: "Testing Facility",
+    ProductMaterial: "TF-006",
+    ARNO: "TF-006",
+    GenericName: "TF-006",
+    SpecificationCode: "TF-006",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    SampleType: "Quality Control",
+    ProductMaterial: "QC-007",
+    ARNO: "QC-007",
+    GenericName: "QC-007",
+    SpecificationCode: "QC-007",
+    status: "Active",
+  },
+];
+
+const SampleLogin = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+    DROPPED: 0,
+  });
+
+  useEffect(() => {
+    const counts = {
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+      DROPPED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
-  const badgeStyle3 = { background: "red", color: "white", width: "110px" };
 
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      SampleType: "55",
-      ProductMaterial: "55",
-      ARNo: "55",
-      GenericName: "55",
-      SpecificationCode: "55",
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-      status: "Active",
-    },
-    {
-      id: 2,
-      SampleType: "55",
-      ProductMaterial: "55",
-      ARNo: "55",
-      GenericName: "55",
-      SpecificationCode: "55",
-
-      status: "Active",
-    },
-
-    {
-      id: 3,
-      SampleType: "55",
-      ProductMaterial: "55",
-      ARNo: "55",
-      GenericName: "55",
-      SpecificationCode: "55",
-
-      status: "Active",
-    },
-    {
-      id: 4,
-      SampleType: "55",
-      ProductMaterial: "55",
-      ARNo: "55",
-      GenericName: "55",
-      SpecificationCode: "55",
-
-      status: "Inactive",
-    },
-    {
-      id: 5,
-      SampleType: "55",
-      ProductMaterial: "55",
-      ARNo: "55",
-      GenericName: "55",
-      SpecificationCode: "55",
-
-      status: "Inactive",
-    },
-
-    {
-      id: 6,
-      SampleType: "55",
-      ProductMaterial: "55",
-      ARNo: "55",
-      GenericName: "55",
-      SpecificationCode: "55",
-
-      status: "Inactive",
-    },
-  ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-  const [search, setSearch] = useState("");
-
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter((item) => item.status === selectedStatus);
-    return filteredData.filter((item) =>
-      item.ProductMaterial.toLowerCase().includes(search.toLowerCase())
+  const filteredData = data.filter((row) => {
+    return (
+      row.SampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
-  const filteredData = filterData();
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Sample Type", accessor: "SampleType" },
+    { header: "Product/Material", accessor: "ProductMaterial" },
+    { header: "A.R No.", accessor: "ARNO" },
+    { header: "Generic Name", accessor: "GenericName" },
+    { header: "Specification Code", accessor: "SpecificationCode" },
+    { header: "Status", accessor: "status" },
 
-  const nextPage = () =>
-    setCurrentPage((prev) =>
-      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-    );
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
 
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  
-  console.log(search);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
-    <>
-      <div id="approval-page" className="m-5 mt-3">
-     
-          <div className="main-head">
-          <h4 className="fw-bold ">Sample Login</h4>
-          </div>
-          <div className="d-flex gap-4">
-            <div className="chart-widgets w-100"></div>
-          </div>
-          <div>
-            <CRow className="mb-3 mt-5">
-              <CCol sm={3}>
-                <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
-                >
-                  <option value="All">All</option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </CFormSelect>
-              </CCol>
-              {/* <CCol sm={2}></CCol> */}
-              
-            </CRow>
-          </div>
-  <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-          <CTable align="middle" responsive className="mb-0    table-responsive">
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Sample Type </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">
-                    Product / Material{" "}
-                  </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">A.R No. </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Generic Name </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">
-                    Specification Code
-                  </CTableHeaderCell>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Sample Login</h1>
 
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                {filterData().slice(startIndex,endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.ConfigurationType.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={index}>
-                      <CTableHeaderCell  className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      {/* <CTableDataCell key={item.id}>{item.Name}</CTableDataCell> */}
-
-                      <CTableDataCell>{item.SampleType}</CTableDataCell>
-                      <CTableDataCell>{item.ProductMaterial}</CTableDataCell>
-                      <CTableDataCell>{item.ARNo}</CTableDataCell>
-                      <CTableDataCell>{item.GenericName}</CTableDataCell>
-                      <CTableDataCell>{item.SpecificationCode}</CTableDataCell>
-
-                      <CTableDataCell >
-                       <button
-                          style={{
-                            background:
-                              item.status === "Active" ? "#15803d" : "#b91c1c",
-                            color: "white",
-                            width: "4rem",
-                            fontSize: "0.6rem",
-                            padding: "2px 7px",
-                            borderRadius: "7px",
-                          }}
-                        >
-                          {item.status}
-                        </button>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
-                          </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
-     
-          <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-    
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "REJECTED", label: "REJECTED" },
+              { value: "DROPPED", label: "DROPPED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          {/* <ATMButton text="Add Batch Sample" color="blue" onClick={openModal} /> */}
+        </div>
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-        {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader className="p-3">
-          <CModalTitle>Add Batch Sample Registration</CModalTitle>
-        </CModalHeader>
-
-        <p>Add information and register new Batch Sample</p>
-        <div className="modal-body p-4">
-          <CForm>
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Schedule Code
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Due On
-
-+
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Test Plan
-
-               "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <h5 style={{ fontWeight: "bolder" }}>
-              EM Monitoring Details(Sampling Schedule)
-            </h5>
-            <div className="mb-3">
-              <CFormInput
-                type="date"
-                label="Date of Monitoring
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Monitored / Sampled By
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <h5 style={{ fontWeight: "bolder" }}>EM Monitoring Details</h5>
-
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Activity Type
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CFormInput
-                type="time"
-                label="Exposure Start Time
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div></div>
-
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Product Name
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Report No.
-
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CFormInput
-                type="date"
-                label="Membrance Holder Sterilized On
-
-
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Gelatine Membrane Lot No.
-
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormInput
-                type="date"
-                label="Use Before
-
-
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-          </CForm>
-        </div>
-
-        <CModalFooter className="p-3">
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
+    </div>
   );
 };
-const DeleteModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Batch Sample Allotment
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-      </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
 export default SampleLogin;

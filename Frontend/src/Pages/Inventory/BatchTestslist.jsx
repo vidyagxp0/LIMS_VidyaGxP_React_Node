@@ -1,501 +1,434 @@
-import {
-  CButton,
-  CCol,
-  CModal,
-  CFormInput,
-  CForm,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CFormSelect,
-  CFormLabel,
-  CFormCheck,
-} from "@coreui/react";
+// const StatusModal = (_props) => {
+//   return (
+//     <>
+//       <CModal
+//         alignment="center"
+//         visible={_props.visible}
+//         onClose={_props.closeModal}
+//         size="xl"
+//       >
+//         <CModalHeader className="p-3">
+//           <CModalTitle>Add Batch Tests List Registration</CModalTitle>
+//         </CModalHeader>
+
+//         <p className="ml-4">
+//           Add information and register new Batch Tests List
+//         </p>
+//         <div className="modal-body p-4">
+//           <CForm>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Batch Sample ID
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Test Name
+//                 "
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Test Type"
+//                 placeholder=""
+//                 className="custom-placeholder"
+//               />
+//             </div>
+
+//             <CForm className="mb-3">
+//               <CFormLabel>Submission Type</CFormLabel>
+//               <div style={{ display: "flex", justifyContent: "space-around" }}>
+//                 <CFormCheck
+//                   type="radio"
+//                   name="sampleRadio"
+//                   id="acceptRadio"
+//                   label="Auto Evaluation Only
+//                   "
+//                   value="accept"
+//                 />
+//                 <CFormCheck
+//                   type="radio"
+//                   name="sampleRadio"
+//                   id="rejectRadio"
+//                   label="Auto Evaluation & Submission
+//                   "
+//                   value="reject"
+//                 />
+//               </div>
+//             </CForm>
+//             <div>
+//               <CTable size="xl">
+//                 <thead
+//                   style={{ background: "lightblue", border: "2px solid black" }}
+//                 >
+//                   <tr
+//                     style={{
+//                       background: "lightblue",
+//                       border: "2px solid black",
+//                     }}
+//                   >
+//                     <th
+//                       style={{
+//                         background: "lightblue",
+//                         border: "2px solid black",
+//                       }}
+//                     >
+//                       Sno.
+//                     </th>
+//                     <th
+//                       style={{
+//                         background: "lightblue",
+//                         border: "2px solid black",
+//                       }}
+//                     >
+//                       EM A RN.
+//                     </th>
+//                     <th
+//                       style={{
+//                         background: "lightblue",
+//                         border: "2px solid black",
+//                       }}
+//                     >
+//                       Location
+//                     </th>
+//                     <th
+//                       style={{
+//                         background: "lightblue",
+//                         border: "2px solid black",
+//                       }}
+//                     >
+//                       Location Description
+//                     </th>
+//                     <th
+//                       style={{
+//                         background: "lightblue",
+//                         border: "2px solid black",
+//                       }}
+//                     >
+//                       Alert Limits
+//                     </th>
+//                     <th
+//                       style={{
+//                         background: "lightblue",
+//                         border: "2px solid black",
+//                       }}
+//                     >
+//                       Action Limits
+//                     </th>
+
+//                     <th
+//                       style={{
+//                         background: "lightblue",
+//                         border: "2px solid black",
+//                       }}
+//                     >
+//                       Evaluation
+//                     </th>
+//                   </tr>
+//                 </thead>
+//                 <tbody>
+//                   <tr>
+//                     <td>1.</td>
+//                     <td></td>
+//                     <td></td>
+//                     <td></td>
+//                     <td></td>
+//                     <td></td>
+//                     <td></td>
+//                   </tr>
+//                 </tbody>
+//               </CTable>
+//             </div>
+//           </CForm>
+//         </div>
+
+//         <CModalFooter className="p-3">
+//           <CButton color="light" onClick={_props.closeModal}>
+//             Cancel
+//           </CButton>
+//           <CButton style={{ background: "#0F93C3", color: "white" }}>
+//             Submit
+//           </CButton>
+//         </CModalFooter>
+//       </CModal>
+//     </>
+//   );
+// };
+// const DeleteModal = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//       size="lg"
+//     >
+//       <CModalHeader>
+//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+//           Delete Batch Sample Allotment
+//         </CModalTitle>
+//       </CModalHeader>
+//       <div
+//         className="modal-body"
+//         style={{
+//           fontSize: "1.2rem",
+//           fontWeight: "500",
+//           lineHeight: "1.5",
+//           marginBottom: "1rem",
+//           columnGap: "0px",
+//           border: "0px !important",
+//         }}
+//       >
+//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
+//       </div>
+//       <CModalFooter>
+//         <CButton
+//           color="secondary"
+//           onClick={_props.closeModal}
+//           style={{
+//             marginRight: "0.5rem",
+//             fontWeight: "500",
+//           }}
+//         >
+//           Cancel
+//         </CButton>
+//         <CButton
+//           color="danger"
+//           onClick={_props.handleDelete}
+//           style={{
+//             fontWeight: "500",
+//             color: "white",
+//           }}
+//         >
+//           Delete
+//         </CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import React from 'react';
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    BatchSampleId: "BS-001",
+    RegisteredOn: "2024-06-15",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    BatchSampleId: "BS-002",
+    RegisteredOn: "2024-06-20",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    BatchSampleId: "BS-003",
+    RegisteredOn: "2024-06-25",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    BatchSampleId: "BS-004",
+    RegisteredOn: "2024-06-30",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    BatchSampleId: "BS-005",
+    RegisteredOn: "2024-07-05",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    BatchSampleId: "BS-006",
+    RegisteredOn: "2024-07-10",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    BatchSampleId: "BS-007",
+    RegisteredOn: "2024-07-15",
+    status: "Active",
+  },
+];
 
- function BatchTestslist() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      BatchSampleID: "55",
-      RegisteredOn: "55",
-      status: "Active",
-    },
-    {
-      id: 2,
-      BatchSampleID: "55",
-      RegisteredOn: "55",
-      status: "Active",
-    },
-    {
-      id: 3,
-      BatchSampleID: "55",
-      RegisteredOn: "55",
-      status: "Active",
-    },
-    {
-      id: 4,
-      BatchSampleID: "55",
-      RegisteredOn: "55",
-      status: "Inactive",
-    },
-    {
-      id: 5,
-      BatchSampleID: "55",
-      RegisteredOn: "55",
-      status: "Inactive",
-    },
-    {
-      id: 6,
-      BatchSampleID: "55",
-      RegisteredOn: "55",
-      status: "Inactive",
-    },
-  ]);
+const BatchTestslist = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    Active: 0,
+    Inactive: 0,
+  });
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
+  useEffect(() => {
+    const counts = {
+      Active: 0,
+      Inactive: 0,
+    };
 
-  const badgeStyle2 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "red", color: "white", width: "110px" };
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
 
-  const [search, setSearch] = useState("");
+    setCardCounts(counts);
+  }, [data]);
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter((item) => item.status === selectedStatus);
-    return filteredData.filter((item) =>
-      item.BatchSampleID.toLowerCase().includes(search.toLowerCase())
-    );
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const filteredData = filterData();
-
-  const nextPage = () =>
-    setCurrentPage((prev) =>
-      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-    );
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.BatchSampleId.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Batch Sample ID", accessor: "BatchSampleId" },
+    { header: "Registered On", accessor: "RegisteredOn" },
+    { header: "Status", accessor: "status" },
+
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
-    <>
-      <div id="approval-page" className="m-5 mt-3">
-       
-          <div className="main-head">
-          <h4 className="fw-bold ">Batch Tests list</h4>
-          </div>
-          <div className="d-flex gap-4">
-            <div className="chart-widgets w-100"></div>
-          </div>
-          <div>
-            <CRow className="mb-3 mt-5">
-              <CCol sm={3}>
-                <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
-                >
-                  <option value="All">All</option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </CFormSelect>
-              </CCol>
-              <CCol sm={3}>
-                <CFormInput
-                  type="text"
-                  style={{fontSize:'0.9rem'}}
-                  placeholder="Search by Batch Sample ID"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </CCol>
-              <CCol sm={6}>
-                <div className="d-flex justify-content-end">
-                  <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
-                    Batch Test list
-                  </CButton>
-                </div>
-              </CCol>
-            </CRow>
-          </div>
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-            <CTable
-              align="middle"
-              responsive
-              className="mb-0    table-responsive"
-            >
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                    className="text-center"
-                  >
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    S NO.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Batch Sample ID
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Registered On
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Status
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Actions
-                  </CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                {filteredData
-                  .slice(startIndex, endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.ConfigurationType.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={item.id}>
-                      <CTableHeaderCell className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      <CTableDataCell>{item.BatchSampleID}</CTableDataCell>
-                      <CTableDataCell>{item.RegisteredOn}</CTableDataCell>
-                      <CTableDataCell>
-                      <button
-                        style={{
-                          background:
-                            item.status === "Active" ? "#15803d" : "#b91c1c",
-                          color: "white",
-                          width: "4rem",
-                          fontSize: "0.6rem",
-                          padding: "2px 7px",
-                          borderRadius: "7px",
-                        }}
-                      >
-                        {item.status}
-                      </button>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
-                        </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Batch Test List</h1>
 
-          <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-       
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton text="Batch Test List" color="blue" onClick={openModal} />
+        </div>
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="xl"
-      >
-        <CModalHeader className="p-3">
-          <CModalTitle>Add Batch Tests List Registration</CModalTitle>
-        </CModalHeader>
-
-        <p className="ml-4">
-          Add information and register new Batch Tests List
-        </p>
-        <div className="modal-body p-4">
-          <CForm>
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Batch Sample ID
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Test Name
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <div className="mb-3">
-              <CFormInput
-                type="text"
-                label="Test Type"
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-
-            <CForm className="mb-3">
-              <CFormLabel>Submission Type</CFormLabel>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <CFormCheck
-                  type="radio"
-                  name="sampleRadio"
-                  id="acceptRadio"
-                  label="Auto Evaluation Only
-                  "
-                  value="accept"
-                />
-                <CFormCheck
-                  type="radio"
-                  name="sampleRadio"
-                  id="rejectRadio"
-                  label="Auto Evaluation & Submission
-                  "
-                  value="reject"
-                />
-              </div>
-            </CForm>
-            <div>
-              <CTable size="xl">
-                <thead
-                  style={{ background: "lightblue", border: "2px solid black" }}
-                >
-                  <tr
-                    style={{
-                      background: "lightblue",
-                      border: "2px solid black",
-                    }}
-                  >
-                    <th
-                      style={{
-                        background: "lightblue",
-                        border: "2px solid black",
-                      }}
-                    >
-                      Sno.
-                    </th>
-                    <th
-                      style={{
-                        background: "lightblue",
-                        border: "2px solid black",
-                      }}
-                    >
-                      EM A RN.
-                    </th>
-                    <th
-                      style={{
-                        background: "lightblue",
-                        border: "2px solid black",
-                      }}
-                    >
-                      Location
-                    </th>
-                    <th
-                      style={{
-                        background: "lightblue",
-                        border: "2px solid black",
-                      }}
-                    >
-                      Location Description
-                    </th>
-                    <th
-                      style={{
-                        background: "lightblue",
-                        border: "2px solid black",
-                      }}
-                    >
-                      Alert Limits
-                    </th>
-                    <th
-                      style={{
-                        background: "lightblue",
-                        border: "2px solid black",
-                      }}
-                    >
-                      Action Limits
-                    </th>
-
-                    <th
-                      style={{
-                        background: "lightblue",
-                        border: "2px solid black",
-                      }}
-                    >
-                      Evaluation
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1.</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </CTable>
-            </div>
-          </CForm>
-        </div>
-
-        <CModalFooter className="p-3">
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
+    </div>
   );
 };
-const DeleteModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Batch Sample Allotment
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-      </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
 export default BatchTestslist;

@@ -33,7 +33,6 @@ const initialData = [
     storageCondition: "SC1",
     createdAt: "2023-01-01",
     status: "Active",
-  
   },
   {
     checkbox: false,
@@ -42,7 +41,6 @@ const initialData = [
     storageCondition: "SC2",
     createdAt: "2023-02-01",
     status: "Active",
-    
   },
   {
     checkbox: false,
@@ -51,7 +49,6 @@ const initialData = [
     storageCondition: "SC3",
     createdAt: "2023-03-01",
     status: "Inactive",
-    
   },
   {
     checkbox: false,
@@ -60,7 +57,6 @@ const initialData = [
     storageCondition: "SC4",
     createdAt: "2023-04-01",
     status: "Active",
-    
   },
   {
     checkbox: false,
@@ -69,7 +65,6 @@ const initialData = [
     storageCondition: "SC5",
     createdAt: "2023-05-01",
     status: "Inactive",
-    
   },
   {
     checkbox: false,
@@ -78,7 +73,6 @@ const initialData = [
     storageCondition: "SC6",
     createdAt: "2023-06-01",
     status: "Active",
-    
   },
   {
     checkbox: false,
@@ -87,7 +81,6 @@ const initialData = [
     storageCondition: "SC7",
     createdAt: "2023-07-01",
     status: "Inactive",
-    
   },
   {
     checkbox: false,
@@ -96,7 +89,6 @@ const initialData = [
     storageCondition: "SC8",
     createdAt: "2023-08-01",
     status: "Active",
-    
   },
   {
     checkbox: false,
@@ -105,7 +97,6 @@ const initialData = [
     storageCondition: "SC9",
     createdAt: "2023-09-01",
     status: "Inactive",
-    
   },
   {
     checkbox: false,
@@ -114,7 +105,6 @@ const initialData = [
     storageCondition: "SC10",
     createdAt: "2023-10-01",
     status: "Active",
-    
   },
 ];
 
@@ -140,7 +130,6 @@ function StorageLocation() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
   };
 
   const handleCheckboxChange = (index) => {
@@ -214,11 +203,10 @@ function StorageLocation() {
     setViewModalData(false);
   };
 
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -258,8 +246,12 @@ function StorageLocation() {
         />
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
     </>
   );
 }

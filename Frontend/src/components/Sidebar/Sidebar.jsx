@@ -6,7 +6,7 @@ import {
   cilColumns,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import React from 'react';
+import React from "react";
 import { TfiDashboard } from "react-icons/tfi";
 import { MdOutlineVerified } from "react-icons/md";
 import { AiOutlineContainer } from "react-icons/ai";
@@ -2220,6 +2220,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                   <span className="nav-icon-bullet"></span>
                 </span>
                 Worksheets
+              </CNavItem>
+            </Link>
+            <Link to="/settings/worksheetFields">
+              <CNavItem
+                href="#"
+                className={isActive(" /settings/worksheetFields")}
+                style={{ ...isActive("/settings/worksheetFields") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Worksheet Field
               </CNavItem>
             </Link>
             <Link to="/settings/groupName">

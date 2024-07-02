@@ -1,404 +1,352 @@
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
+
+// const StatusModal = ({ visible, closeModal }) => {
+//   return (
+//     <CModal alignment="center" visible={visible} onClose={closeModal}>
+//       <CModalHeader>
+//         <CModalTitle>New Plant</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Name"
+//           placeholder=" Name"
+//         />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Unique Code"
+//           placeholder="Unique Code"
+//         />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Generic Name"
+//           placeholder="Generic Name "
+//         />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Re-testing Period(Days)"
+//           placeholder="Re-testing Period(Days)"
+//         />
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={closeModal}>
+//           Back
+//         </CButton>
+//         <CButton color="primary">Add New</CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+// const DeleteModal = ({ visible, closeModal, handleDelete }) => {
+//   return (
+//     <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
+//       <CModalHeader>
+//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
+//           Delete Plants Workflow
+//         </CModalTitle>
+//       </CModalHeader>
+//       <CModalBody
+//         style={{
+//           fontSize: "1.2rem",
+//           fontWeight: "500",
+//           lineHeight: "1.5",
+//           marginBottom: "1rem",
+//           columnGap: "0px",
+//           border: "0px !important",
+//         }}
+//       >
+//         <p>Do you want to delete this plants workflow?</p>
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton
+//           color="secondary"
+//           onClick={closeModal}
+//           style={{ marginRight: "0.5rem", fontWeight: "500" }}
+//         >
+//           Cancel
+//         </CButton>
+//         <CButton
+//           color="danger"
+//           onClick={handleDelete}
+//           style={{ fontWeight: "500", color: "white" }}
+//         >
+//           Delete
+//         </CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React,{ useState } from "react";
-import { Link } from "react-router-dom";
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-function WorkFlow() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [data, setData] = useState([
-    {
-      id: 1,
-      plantCode: "#12354",
-      plantName: "Travis",
-      address: "102 humberto square",
-      comments: "Plastic Carolina",
-      workflow: "Approved",
-    },
-    {
-      id: 2,
-      plantCode: "#35623",
-      plantName: "Emmanuelle",
-      address: "66159 Reichert Vista",
-      comments: "Metal",
-      workflow: "Rejected",
-    },
-    {
-      id: 3,
-      plantCode: "#45678",
-      plantName: "Oliver",
-      address: "900 Main St",
-      comments: "Software",
-      workflow: "Pending",
-    },
-    {
-      id: 4,
-      plantCode: "#56789",
-      plantName: "Sophia",
-      address: "850 Market St",
-      comments: "Pharmaceuticals",
-      workflow: "Rejected",
-    },
-    {
-      id: 5,
-      plantCode: "#67890",
-      plantName: "Liam",
-      address: "45 Elm St",
-      comments: "Automotive",
-      workflow: "Approved",
-    },
-    {
-      id: 6,
-      plantCode: "#78901",
-      plantName: "Mason",
-      address: "333 Pine St",
-      comments: "Textiles",
-      workflow: "Pending",
-    },
-    {
-      id: 7,
-      plantCode: "#89012",
-      plantName: "Ethan",
-      address: "77 Oak St",
-      comments: "Chemicals",
-      workflow: "Approved",
-    },
-    {
-      id: 8,
-      plantCode: "#90123",
-      plantName: "Ava",
-      address: "22 Birch St",
-      comments: "Electronics",
-      workflow: "Pending",
-    },
-    {
-      id: 9,
-      plantCode: "#01234",
-      plantName: "Emma",
-      address: "555 Maple St",
-      comments: "Construction",
-      workflow: "Approved",
-    },
-    {
-      id: 10,
-      plantCode: "#12345",
-      plantName: "Noah",
-      address: "88 Cedar St",
-      comments: "Food Processing",
-      workflow: "Rejected",
-    },
-  ]);
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    PlantCode: "Client 1",
+    PlantName: "client1@example.com",
+    Address: "Address 1",
+    Comments: "02-07-2024",
+    Workflow:"dummy workflow",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    PlantCode: "Client 2",
+    PlantName: "client2@example.com",
+    Address: "Address 2",
+    Comments: "03-07-2024",
+    Workflow:"dummy workflow",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    PlantCode: "Client 3",
+    PlantName: "client3@example.com",
+    Address: "Address 3",
+    Comments: "04-07-2024",
+    Workflow:"dummy workflow",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    PlantCode: "Client 4",
+    PlantName: "client4@example.com",
+    Address: "Address 4",
+    Comments: "05-07-2024",
+    Workflow:"dummy workflow",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    PlantCode: "Client 5",
+    PlantName: "client5@example.com",
+    Address: "Address 5",
+    Comments: "06-07-2024",
+    Workflow:"dummy workflow",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    PlantCode: "Client 6",
+    PlantName: "client6@example.com",
+    Address: "Address 6",
+    Comments: "07-07-2024",
+    Workflow:"dummy workflow",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    PlantCode: "Client 7",
+    PlantName: "client7@example.com",
+    Address: "Address 7",
+    Comments: "08-07-2024",
+    Workflow:"dummy workflow",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    PlantCode: "Client 8",
+    PlantName: "client8@example.com",
+    Address: "Address 8",
+    Comments: "09-07-2024",
+    Workflow:"dummy workflow",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 9,
+    PlantCode: "Client 9",
+    PlantName: "client9@example.com",
+    Address: "Address 9",
+    Comments: "10-07-2024",
+    Workflow:"dummy workflow",
+    status: "Active",
+  },
+];
 
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
 
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter(
-            (item) =>
-              item.workflow.toUpperCase() === selectedStatus.toUpperCase()
-          );
-    return filteredData.filter((item) =>
-      item.plantName.toLowerCase().includes(search.toLowerCase())
-    );
+
+
+const WorkFlow = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    Active: 0,
+    Inactive: 0,
+   
+  });
+
+  useEffect(() => {
+    const counts = {
+      APPROVED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      REJECTED: 0,
+      DROPPED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const filteredData = filterData();
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-  const nextPage = () => setCurrentPage(currentPage + 1);
-  const prevPage = () => setCurrentPage(currentPage - 1);
+  const filteredData = data.filter((row) => {
+    return (
+      row.PlantName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Plant Code", accessor: "PlantCode" },
+    { header: "Plant Name", accessor: "PlantName" },
+    { header: "Address", accessor: "Address" },
+    { header: "Comments", accessor: "Comments" },
+    { header: "Workflow", accessor: "Workflow" },
+    { header: "Status", accessor: "status" },
+
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Work Flow</h4>
-        </div>
-        <div>
-          <CRow className="mb-3 mt-5">
-            <CCol sm={4}>
-              <CFormInput
-                type="text"
-                placeholder="Search by plant name"
-                style={{ fontSize: "0.9rem" }}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                style={{ fontSize: "0.9rem" }}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                value={selectedStatus}
-              >
-                <option value="All">All</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Pending">Pending</option>
-              </CFormSelect>
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  style={{ fontSize: "0.9rem" }}
-                  color="primary"
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Workflow
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-        <div className=" rounded bg-white"style={{fontFamily: "sans-serif",fontSize: "0.9rem",boxShadow: "5px 5px 20px #5D76A9",}} >
-          <CTable align="middle" responsive className="table-responsive   ">
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  S NO.
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Plant Code
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Plant Name
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Address
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Comments
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Workflow
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Actions
-                </CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {filteredData.slice(startIndex, endIndex).map((item, index) => (
-                <CTableRow key={index}>
-                  <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                  <CTableDataCell>{item.plantCode}</CTableDataCell>
-                  <CTableDataCell>{item.plantName}</CTableDataCell>
-                  <CTableDataCell>{item.address}</CTableDataCell>
-                  <CTableDataCell>{item.comments}</CTableDataCell>
-                  <CTableDataCell>
-                    <button
-                      className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                        item.workflow === "Approved"
-                          ? "green-700"
-                          : item.workflow === "Rejected"
-                          ? "red-700"
-                          : item.workflow === "Pending"
-                          ? "yellow-500"
-                          : "white"
-                      }`}
-                      style={{ fontSize: "0.6rem" }}
-                    >
-                      {item.workflow}
-                    </button>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/approval/1321">
-                        <FontAwesomeIcon icon={faEye} />
-                      </Link>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setAddModal(true)}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </div>
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => setDeleteModal(item.id)}
-                      >
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </div>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-              ))}
-            </CTableBody>
-          </CTable>
-        </div>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Work Flows</h1>
 
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button
-              style={{ background: "#21516a", color: "white" }}
-              className="btn mr-2"
-              onClick={prevPage}
-              disabled={currentPage === 1}
-            >
-              &lt;&lt;
-            </button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">
-              {currentPage}
-            </button>
-            <button
-              style={{ background: "#21516a", color: "white" }}
-              className="btn mr-2"
-              onClick={nextPage}
-              disabled={endIndex >= data.length}
-            >
-              &gt;&gt;
-            </button>
-          </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton text="Add Plant" color="blue" onClick={openModal} />
         </div>
       </div>
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
-  );
-}
-
-const StatusModal = ({ visible, closeModal }) => {
-  return (
-    <CModal alignment="center" visible={visible} onClose={closeModal}>
-      <CModalHeader>
-        <CModalTitle>New Plant</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Name"
-          placeholder=" Name"
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Unique Code"
-          placeholder="Unique Code"
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Generic Name"
-          placeholder="Generic Name "
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Re-testing Period(Days)"
-          placeholder="Re-testing Period(Days)"
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary">Add New</CButton>
-      </CModalFooter>
-    </CModal>
+    </div>
   );
 };
-
-const DeleteModal = ({ visible, closeModal, handleDelete }) => {
-  return (
-    <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Plants Workflow
-        </CModalTitle>
-      </CModalHeader>
-      <CModalBody
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Do you want to delete this plants workflow?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={closeModal}
-          style={{ marginRight: "0.5rem", fontWeight: "500" }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={handleDelete}
-          style={{ fontWeight: "500", color: "white" }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
 export default WorkFlow;

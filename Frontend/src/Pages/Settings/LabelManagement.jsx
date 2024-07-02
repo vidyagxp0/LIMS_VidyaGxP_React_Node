@@ -1,307 +1,393 @@
-import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
-import { faEye, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+
+// const StatusModal = (_props) => {
+//   return (
+//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+//       <CModalHeader>
+//         <CModalTitle>Add Label</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         <p>Add information and add new Label</p>
+//         <CFormInput
+//           className="mb-3"
+//           type="text"
+//           label={
+//             <>
+//               Label <span style={{ color: 'red' }}>*</span>
+//             </>
+//           }
+//           placeholder="Enter Label"
+//         />
+//         <CFormTextarea
+//           className="mb-3"
+//           type="text"
+//           label={
+//             <>
+//               Address <span style={{ color: 'red' }}>*</span>
+//             </>
+//           }
+//           placeholder="  "
+//         />
+//         <CFormInput
+//           className="mb-3"
+//           type="text"
+//           label={
+//             <>
+//               logo <span style={{ color: 'red' }}>*</span>
+//             </>
+//           }
+//           placeholder="logo"
+//         />
+//         <label className="mb-2">UM <span style={{ color: 'red' }}>*</span></label>
+//         <CFormCheck
+//           className="mb-3"
+//           type="radio"
+//           id="UMCM"
+//           name="UM"
+//           label="CM"
+//         />
+//         <CFormCheck
+//           className="mb-3"
+//           type="radio"
+//           id="UMMM"
+//           name="UM"
+//           label="MM"
+//         />
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+//         <CButton className="bg-info text-white">Submit</CButton>
+//       </CModalFooter>
+//     </CModal>
+
+//   );
+// }
+
+// const DeleteModel = (_props) => {
+//   return (
+//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+//       <CModalHeader>
+//         <CModalTitle>Delete Label</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         Do you want to delete this Label <code>ARZ ENT</code>?
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// }
+
+
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-function LabelManagement() {
-  const [addModal, setAddModal] = useState(false);
-  const [removeModal, setRemoveModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null)
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStatus, setSelectedStatus] = useState('All');
-  const recordsPerPage = 5;
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    LabelName: "Associate 1",
+    UniqueCode: "BA-001",
+    City: "City A",
+    State: "State A",
+    Country: "Country A",
+    ZipCode: "12345",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    LabelName: "Associate 2",
+    UniqueCode: "BA-002",
+    City: "City B",
+    State: "State B",
+    Country: "Country B",
+    ZipCode: "23456",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    LabelName: "Associate 3",
+    UniqueCode: "BA-003",
+    City: "City C",
+    State: "State C",
+    Country: "Country C",
+    ZipCode: "34567",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    LabelName: "Associate 4",
+    UniqueCode: "BA-004",
+    City: "City D",
+    State: "State D",
+    Country: "Country D",
+    ZipCode: "45678",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    LabelName: "Associate 5",
+    UniqueCode: "BA-005",
+    City: "City E",
+    State: "State E",
+    Country: "Country E",
+    ZipCode: "56789",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    LabelName: "Associate 6",
+    UniqueCode: "BA-006",
+    City: "City F",
+    State: "State F",
+    Country: "Country F",
+    ZipCode: "67890",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    LabelName: "Associate 7",
+    UniqueCode: "BA-007",
+    City: "City G",
+    State: "State G",
+    Country: "Country G",
+    ZipCode: "78901",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    LabelName: "Associate 8",
+    UniqueCode: "BA-008",
+    City: "City H",
+    State: "State H",
+    Country: "Country H",
+    ZipCode: "89012",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 9,
+    LabelName: "Associate 9",
+    UniqueCode: "BA-009",
+    City: "City I",
+    State: "State I",
+    Country: "Country I",
+    ZipCode: "90123",
+    status: "APPROVED",
+  },
+];
 
-  const [tableData, setTableData] = useState([
-    { id: 1, name: "stmp1", code: "stm", city: "ahmedabad", state: "gujarat", country: "India", zip: "54255455", status: "APPROVED" },
-    { id: 2, name: "ARZ ENT", code: "ARE", city: "Hyderabad", state: "Telangana", country: "India", zip: "5253654", status: "APPROVED" },
-    { id: 3, name: "test", code: "NA", city: "testing525", state: "Lab1", country: "test", zip: "25255488", status: "APPROVED" },
-    { id: 4, name: "Alpha", code: "ALP", city: "Mumbai", state: "Maharashtra", country: "India", zip: "400001", status: "INITIATED" },
-    { id: 5, name: "Beta", code: "BET", city: "Delhi", state: "Delhi", country: "India", zip: "110001", status: "REINITIATED" },
-    { id: 6, name: "Gamma", code: "GAM", city: "Chennai", state: "Tamil Nadu", country: "India", zip: "600001", status: "REJECTED" },
-    { id: 7, name: "Delta", code: "DEL", city: "Kolkata", state: "West Bengal", country: "India", zip: "700001", status: "APPROVED" },
-    { id: 8, name: "Epsilon", code: "EPS", city: "Bangalore", state: "Karnataka", country: "India", zip: "560001", status: "APPROVED" },
-    { id: 9, name: "Zeta", code: "ZET", city: "Pune", state: "Maharashtra", country: "India", zip: "411001", status: "INITIATED" },
-    { id: 10, name: "Eta", code: "ETA", city: "Jaipur", state: "Rajasthan", country: "India", zip: "302001", status: "APPROVED" },
-    { id: 11, name: "Theta", code: "THE", city: "Lucknow", state: "Uttar Pradesh", country: "India", zip: "226001", status: "REJECTED" },
-    { id: 12, name: "Iota", code: "IOT", city: "Chandigarh", state: "Punjab", country: "India", zip: "160001", status: "APPROVED" },
-    { id: 13, name: "Kappa", code: "KAP", city: "Bhopal", state: "Madhya Pradesh", country: "India", zip: "462001", status: "REINITIATED" },
-  ]);
 
-  const handleStatusChange = (e) => {
-    setSelectedStatus(e.target.value);
-    setCurrentPage(1);
+const LabelManagement = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const handleChartClick = (status) => {
-    setSelectedStatus(status);
-    setCurrentPage(1);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const handleDelete = () => {
-    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-    setRemoveModal(false);
-    setDeleteId(null)
-  }
+  const filteredData = data.filter((row) => {
+    return (
+      row.LabelName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setRemoveModal(true);
-  }
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData); 
+    setIsViewModalOpen(true); 
+  };
 
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Label Name", accessor: "LabelName" },
+    { header: "Unique Code", accessor: "UniqueCode" },
+    { header: "City", accessor: "City" },
+    { header: "State", accessor: "State" },
+    { header: "Country", accessor: "Country" },
+    { header: "Zip Code", accessor: "ZipCode" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
 
-  const filteredData = selectedStatus === 'All' ? tableData : tableData.filter(data => data.status === selectedStatus);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
   return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Label Management</h4>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Label Management</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
         </div>
-        <div className="mt-3 d-flex gap-4">
-          <div className="chart-widgets w-100">
-            <div className="row">
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleChartClick('DROPPED')}>
-                <div className="text-light fs-5">DROPPED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'DROPPED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => handleChartClick('INITIATED')}>
-                <div className="text-light fs-5">INITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'INITIATED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => handleChartClick('REINITIATED')}>
-                <div className="text-light fs-5">REINITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REINITIATED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => handleChartClick('APPROVED')}>
-                <div className="text-light fs-5">APPROVED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'APPROVED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => handleChartClick('REJECTED')}>
-                <div className="text-light fs-5">REJECTED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REJECTED').length}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <CRow className="mb-3">
-            <CCol sm={3}>
-              <CFormSelect
-                value={selectedStatus}
-                style={{ fontSize: '0.9rem' }}
-                onChange={handleStatusChange}
-                options={[
-                  { value: 'All', label: 'All' },
-                  { value: 'INITIATED', label: 'Initiated' },
-                  { value: 'APPROVED', label: 'Approved' },
-                  { value: 'REJECTED', label: 'Rejected' },
-                  { value: 'REINITIATED', label: 'Reinitiated' },
-                  { value: 'DROPPED', label: 'Dropped' }
-                ]}
-              />
-            </CCol>
-            <CCol sm={3}></CCol>
-            <CCol sm={3}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Label
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-        <div
-          className="rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >
-          <CTable className="mb-0 table table-responsive" >
-            <CTableHead>
-              <CTableRow >
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col ">S NO.</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Label Name</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Unique Code</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >City</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >State</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Country</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >ZIP code</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Status</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Actions</CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {currentRecords.map((data, index) => (
-                <CTableRow key={data.id}>
-                  <CTableHeaderCell scope="row" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableDataCell>{indexOfFirstRecord + index + 1}</CTableDataCell>
-                  <CTableDataCell>{data.name}</CTableDataCell>
-                  <CTableDataCell>{data.code}</CTableDataCell>
-                  <CTableDataCell>{data.city}</CTableDataCell>
-                  <CTableDataCell>{data.state}</CTableDataCell>
-                  <CTableDataCell>{data.country}</CTableDataCell>
-                  <CTableDataCell>{data.zip}</CTableDataCell>
-                  <CTableDataCell>
-                    <button
-                      className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "INITIATED"
-                        ? "blue-700"
-                        : data.status === "APPROVED"
-                          ? "green-700"
-                          : data.status === "REJECTED"
-                            ? "red-700"
-                            : data.status === "REINITIATED"
-                              ? "yellow-500"
-                              : data.status === "DROPPED"
-                                ? "purple-700"
-                                : "white"
-                        }`} style={{ fontSize: '0.6rem' }}
-                    >
-                      {data.status}
-                    </button>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                      <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-              ))}
-            </CTableBody>
-          </CTable>
-        </div>
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
-          </div>
+        <div className="float-right">
+          <ATMButton text="Add Label" color="blue" onClick={openModal} />
         </div>
       </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} handleDelete={handleDelete} />}
-
-    </>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+    </div>
   );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Add Label</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Add information and add new Label</p>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label={
-            <>
-              Label <span style={{ color: 'red' }}>*</span>
-            </>
-          }
-          placeholder="Enter Label"
-        />
-        <CFormTextarea
-          className="mb-3"
-          type="text"
-          label={
-            <>
-              Address <span style={{ color: 'red' }}>*</span>
-            </>
-          }
-          placeholder="  "
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label={
-            <>
-              logo <span style={{ color: 'red' }}>*</span>
-            </>
-          }
-          placeholder="logo"
-        />
-        <label className="mb-2">UM <span style={{ color: 'red' }}>*</span></label>
-        <CFormCheck
-          className="mb-3"
-          type="radio"
-          id="UMCM"
-          name="UM"
-          label="CM"
-        />
-        <CFormCheck
-          className="mb-3"
-          type="radio"
-          id="UMMM"
-          name="UM"
-          label="MM"
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-
-  );
-}
-
-const DeleteModel = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Delete Label</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        Do you want to delete this Label <code>ARZ ENT</code>?
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-}
+};
 
 export default LabelManagement;

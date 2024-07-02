@@ -1,251 +1,325 @@
-import {
-	CButton,
-	CCol,
-	CFormInput,
-	CFormSelect,
-	CModal,
-	CModalBody,
-	CModalFooter,
-	CModalHeader,
-	CModalTitle,
-	CRow,
-	CTable,
-	CTableBody,
-	CTableDataCell,
-	CTableHead,
-	CTableHeaderCell,
-	CTableRow,
-} from "@coreui/react";
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+
+// const StatusModal = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//       size="lg"
+//     >
+//       <CModalHeader>
+//         <CModalTitle>Add Grades</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         <p>Add a new Grade.</p>
+//         <CFormInput
+//           className="mb-3"
+//           type="text"
+//           label="Name"
+//           placeholder="Name"
+//           required
+//         />
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>
+//           Back
+//         </CButton>
+//         <CButton className="bg-info text-white">Submit</CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+// const DeleteModel = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//     >
+//       <CModalHeader>
+//         <CModalTitle>Delete Grades</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         Do you want to delete this Grade <code>HPLC Grade</code>?
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>
+//           Back
+//         </CButton>
+//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>
+//           Delete
+//         </CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-function Grade() {
-	const [addModal, setAddModal] = useState(false);
-	const [removeModal, setRemoveModal] = useState(false);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [deleteId, setDeleteId] = useState(null)
-	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedStatus, setSelectedStatus] = useState("All");
-	const recordsPerPage = 5;
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    GradeCode: "BA-001",
+    GradeName: "Associate 1",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    GradeCode: "BA-002",
+    GradeName: "Associate 2",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    GradeCode: "BA-003",
+    GradeName: "Associate 3",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    GradeCode: "BA-004",
+    GradeName: "Associate 4",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    GradeCode: "BA-005",
+    GradeName: "Associate 5",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    GradeCode: "BA-006",
+    GradeName: "Associate 6",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    GradeCode: "BA-007",
+    GradeName: "Associate 7",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    GradeCode: "BA-008",
+    GradeName: "Associate 8",
+    status: "REINITIATED",
+  },
+];
 
-	const [tableData, setTableData] = useState([
-		{ id: 1, code: "CC-052024-0000008", name: "Iron Chelator Standard", status: "ACTIVE" },
-		{ id: 2, code: "CC-052024-0000007", name: "Organic Solvent", status: "ACTIVE" },
-		{ id: 3, code: "CC-052024-0000006", name: "Solvent", status: "ACTIVE" },
-		{ id: 4, code: "CC-052024-0000005", name: "Organic Acid", status: "ACTIVE" },
-		{ id: 5, code: "CC-052024-0000004", name: "Polymers", status: "ACTIVE" },
-		{ id: 6, code: "CC-052024-0000003", name: "Biochemical Compounds", status: "ACTIVE" },
-		{ id: 7, code: "CC-052024-0000002", name: "Inorganic Compounds", status: "ACTIVE" },
-		{ id: 8, code: "CC-052024-0000001", name: "Organic Compounds", status: "ACTIVE" },
-	]);
+const Grade = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
 
-	const handleStatusChange = (e) => {
-		setSelectedStatus(e.target.value);
-		setCurrentPage(1);
-	};
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-	const handleSearchChange = (e) => {
-		setSearchQuery(e.target.value);
-		setCurrentPage(1);
-	};
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
 
-	const handleDelete = () => {
-		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-		setRemoveModal(false);
-		setDeleteId(null)
-	}
+    setCardCounts(counts);
+  }, [data]);
 
-	const handleDeleteClick = (id) => {
-		setDeleteId(id);
-		setRemoveModal(true);
-	}
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
-	const filteredData = tableData.filter((data) => {
-		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
-		const matchesSearchQuery = data.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			data.name.toLowerCase().includes(searchQuery.toLowerCase());
-		return matchesStatus && matchesSearchQuery;
-	});
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-	const indexOfLastRecord = currentPage * recordsPerPage;
-	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-	const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
-	const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const filteredData = data.filter((row) => {
+    return (
+      row.GradeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-	const handleNextPage = () => {
-		if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-	};
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
 
-	const handlePreviousPage = () => {
-		if (currentPage > 1) setCurrentPage(currentPage - 1);
-	};
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Grade Code", accessor: "GradeCode" },
+    { header: "Grade Name", accessor: "GradeName" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
 
-	return (
-		<>
-			<div className="m-5 mt-3">
-				<div className="main-head">
-					<h4 className="fw-bold">Grade</h4>
-				</div>
-				<div>
-					<CRow className="mt-5 mb-3">
-						<CCol sm={3}>
-							<CFormInput
-								style={{ fontSize: '0.9rem' }}
-								type="text"
-								placeholder="Search..."
-								value={searchQuery}
-								onChange={handleSearchChange}
-							/>
-						</CCol>
-						<CCol sm={3}>
-							<CFormSelect
-								value={selectedStatus}
-								onChange={handleStatusChange}
-								style={{ fontSize: '0.9rem' }}
-								options={[
-									{ value: "All", label: "All" },
-									{ value: "ACTIVE", label: "Active" },
-									{ value: "INACTIVE", label: "Inactive" },
-								]}
-							/>
-						</CCol>
-						<CCol sm={3}></CCol>
-						<CCol sm={3}>
-							<div className="d-flex justify-content-end">
-								<CButton
-									className=" text-white"
-									style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-									onClick={() => setAddModal(true)}
-								>
-									Add Grade
-								</CButton>
-							</div>
-						</CCol>
-					</CRow>
-				</div>
-				<div
-					className="rounded bg-white"
-					style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-				>
-					<CTable className="mb-0 table table-responsive" >
-						<CTableHead>
-							<CTableRow>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center">
-									<input type="checkbox" />
-								</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Grade Code</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Grade Name</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Status</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
-							</CTableRow>
-						</CTableHead>
-						<CTableBody>
-							{currentRecords.map((data, index) => (
-								<CTableRow key={index}>
-									<CTableHeaderCell scope="row" className="text-center">
-										<input type="checkbox" />
-									</CTableHeaderCell>
-									<CTableDataCell>{data.code}</CTableDataCell>
-									<CTableDataCell>{data.name}</CTableDataCell>
-									<CTableDataCell>
-										<button
-											className={`py-1 px-3 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "ACTIVE"
-												? 'green-700'
-												: 'red-700'
-												}`} >{data.status}
-										</button>
-									</CTableDataCell>
-									<CTableDataCell>
-										<div className="d-flex gap-3">
-											<div className="cursor-pointer" onClick={() => setAddModal(true)}>
-												<FontAwesomeIcon icon={faPenToSquare} />
-											</div>
-											<div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}>
-												<FontAwesomeIcon icon={faTrashCan} />
-											</div>
-										</div>
-									</CTableDataCell>
-								</CTableRow>
-							))}
-						</CTableBody>
-					</CTable>
-				</div>
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-				<div className="d-flex justify-content-end align-items-center mt-4">
-					<div className="pagination">
-						<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handlePreviousPage} disabled={currentPage === 1}>&lt;&lt;</button>
-						<button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-						<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;&gt;</button>
-					</div>
-				</div>
-			</div>
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-			{addModal && (
-				<StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-			)}
-			{removeModal && (
-				<DeleteModel
-					visible={removeModal}
-					closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
-				/>
-			)}
-		</>
-	);
-}
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
 
-const StatusModal = (_props) => {
-	return (
-		<CModal
-			alignment="center"
-			visible={_props.visible}
-			onClose={_props.closeModal}
-			size="lg"
-		>
-			<CModalHeader>
-				<CModalTitle>Add Grades</CModalTitle>
-			</CModalHeader>
-			<CModalBody>
-				<p>Add a new Grade.</p>
-				<CFormInput
-					className="mb-3"
-					type="text"
-					label="Name"
-					placeholder="Name"
-					required
-				/>
-			</CModalBody>
-			<CModalFooter>
-				<CButton color="light" onClick={_props.closeModal}>
-					Back
-				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
-			</CModalFooter>
-		</CModal>
-	);
-};
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
 
-const DeleteModel = (_props) => {
-	return (
-		<CModal
-			alignment="center"
-			visible={_props.visible}
-			onClose={_props.closeModal}
-		>
-			<CModalHeader>
-				<CModalTitle>Delete Grades</CModalTitle>
-			</CModalHeader>
-			<CModalBody>
-				Do you want to delete this Grade <code>HPLC Grade</code>?
-			</CModalBody>
-			<CModalFooter>
-				<CButton color="light" onClick={_props.closeModal}>
-					Back
-				</CButton>
-				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-			</CModalFooter>
-		</CModal>
-	);
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Grades</h1>
+      {/* <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div> */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton text="Add Grade" color="blue" onClick={openModal} />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Grade;

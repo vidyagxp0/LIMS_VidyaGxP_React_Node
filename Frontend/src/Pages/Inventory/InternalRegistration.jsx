@@ -4,11 +4,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
@@ -181,8 +177,8 @@ const InternalRegistration = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); // Set the data for ViewModal
-    setIsViewModalOpen(true); // Open the ViewModal
+    setViewModalData(rowData); 
+    setIsViewModalOpen(true); 
   };
 
   const columns = [
@@ -211,7 +207,11 @@ const InternalRegistration = () => {
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
         </>
       ),
     },
@@ -233,9 +233,15 @@ const InternalRegistration = () => {
     setStatusFilter(status);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Material</h1>
+      <h1 className="text-2xl font-bold mb-4">Working Standard Internal</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
         <Card
           title="DROPPED"
@@ -270,7 +276,7 @@ const InternalRegistration = () => {
       </div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery}/>
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
           <Dropdown
             options={[
               { value: "All", label: "All" },
@@ -293,6 +299,7 @@ const InternalRegistration = () => {
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        onDelete={handleDelete}
       />
       <InternalRegistrationModal
         visible={isModalOpen}
@@ -310,5 +317,3 @@ const InternalRegistration = () => {
 };
 
 export default InternalRegistration;
-
-

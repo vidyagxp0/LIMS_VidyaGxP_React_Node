@@ -1,420 +1,428 @@
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
- 
-} from "@coreui/react";
-import React, { useState } from "react";
-// import "./StorageCondition.css";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import FormControlLabel from "@mui/material/FormControlLabel";
+// const StatusModal = (_props) => {
+
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//       size="lg"
+//     >
+//       <CModalHeader>
+//         <CModalTitle>Add Test Technique</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Technique Name"
+//           placeholder="Technique Name"
+//         />
+
+//         <FormControl>
+//           <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
+//             Type of technique
+//           </FormLabel>
+//           <RadioGroup
+//             row
+//             aria-labelledby="demo-row-radio-buttons-group-label"
+//             name="row-radio-buttons-group"
+//           >
+//             <FormControlLabel
+//               value="Complex"
+//               control={<Radio />}
+//               label="Complex"
+//             />
+//             <FormControlLabel
+//               value="Non-complex"
+//               control={<Radio />}
+//               label="Non-complex"
+//             />
+//           </RadioGroup>
+//         </FormControl>
+//         <br />
+//         <br />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Technique Description"
+//           placeholder="Technique Description"
+//         />
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>
+//           Back
+//         </CButton>
+//         <CButton className="bg-info text-white">Submit</CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+// const UpdateModal = (_props) => {
+
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//       size="lg"
+//     >
+//       <CModalHeader>
+//         <CModalTitle>Update Test Technique</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Technique Name"
+//           placeholder="Technique Name"
+//         />
+
+//         <FormControl>
+//           <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
+//             Type of technique
+//           </FormLabel>
+//           <RadioGroup
+//             row
+//             aria-labelledby="demo-row-radio-buttons-group-label"
+//             name="row-radio-buttons-group"
+//           >
+//             <FormControlLabel
+//               value="Complex"
+//               control={<Radio />}
+//               label="Complex"
+//             />
+//             <FormControlLabel
+//               value="Non-complex"
+//               control={<Radio />}
+//               label="Non-complex"
+//             />
+//           </RadioGroup>
+//         </FormControl>
+//         <br />
+//         <br />
+//         <CFormInput
+//           type="text"
+//           className="mb-3"
+//           label="Technique Description"
+//           placeholder="Technique Description"
+//         />
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>
+//           Back
+//         </CButton>
+//         <CButton className="bg-info text-white">Submit</CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+// const DeleteModel = (_props) => {
+//   return (
+//     <CModal
+//       alignment="center"
+//       visible={_props.visible}
+//       onClose={_props.closeModal}
+//     >
+//       <CModalHeader>
+//         <CModalTitle>Delete Test Technique</CModalTitle>
+//       </CModalHeader>
+//       <CModalBody>
+//         Do you want to delete this Test Technique <code>Description</code>?
+//       </CModalBody>
+//       <CModalFooter>
+//         <CButton color="light" onClick={_props.closeModal}>
+//           Back
+//         </CButton>
+//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
+//       </CModalFooter>
+//     </CModal>
+//   );
+// };
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
 
-export default function TestTechniques() {
-  const [addModal, setAddModal] = useState(false);
-  const [updateModal, setUpdateModal] = useState(false)
-  const [deleteId, setDeleteId] = useState(null)
-  const [removeModal, setRemoveModal] = useState(false);
-  const [filterStatus, setFilterStatus] = useState("All");
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    TechniqueName: "SPH-001",
+    Type: "Product A",
+    Description: "Purity Test",
+    AddedOn: "2024-06-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    TechniqueName: "SPH-002",
+    Type: "Product B",
+    Description: "Strength Test",
+    AddedOn: "2024-06-02",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    TechniqueName: "SPH-003",
+    Type: "Product C",
+    Description: "Microbial Test",
+    AddedOn: "2024-06-03",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    TechniqueName: "SPH-004",
+    Type: "Product D",
+    Description: "Dissolution Test",
+    AddedOn: "2024-06-04",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    TechniqueName: "SPH-005",
+    Type: "Product E",
+    Description: "Moisture Content",
+    AddedOn: "2024-06-05",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    TechniqueName: "SPH-006",
+    Type: "Product F",
+    Description: "Hardness Test",
+    AddedOn: "2024-06-06",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    TechniqueName: "SPH-007",
+    Type: "Product G",
+    Description: "Viscosity Test",
+    AddedOn: "2024-06-07",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    TechniqueName: "SPH-008",
+    Type: "Product H",
+    Description: "PH Test",
+    AddedOn: "2024-06-08",
+    status: "Active",
+  },
+];
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const [tableData, setTableData] = useState([
-    {
-      id: 1,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "ACTIVE",
-    },
-    {
-      id: 2,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "INACTIVE",
-    },
-    {
-      id: 3,
-      user: "CHPOIL",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "ACTIVE",
-    },
-    {
-      id: 4,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "ACTIVE",
-    },
-    {
-      id: 5,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "INACTIVE",
-    },
-    {
-      id: 6,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "INACTIVE",
-    },
-    {
-      id: 7,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "INACTIVE",
-    },
-  ]);
+const TestTechniques = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
 
-  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const handleDelete = () => {
-    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-    setRemoveModal(false);
-    setDeleteId(null)
-  }
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setRemoveModal(true);
-  }
-
-
-  const filteredtableData = tableData
-    .filter((data) =>
-      data.user.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .filter(
-      (data) =>
-        filterStatus === "All" || data.status === filterStatus
+  const filteredData = data.filter((row) => {
+    return (
+      row.TechniqueName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
+  });
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredtableData.length);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
 
-  const renderRows = () => {
-    return filteredtableData.slice(startIndex, endIndex).map((data, index) => (
-      <tr key={startIndex + index}>
-        <td>
-          <input type="checkbox" />
-        </td>
-        <td>{startIndex + index + 1}</td>
-        <td>{data.user}</td>
-        <td>{data.ProdName}</td>
-        <td>{data.SpecificID}</td>
-        <td>{data.SpecificID}</td>
-        <td>
-        <button
-            className={`p-1 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${
-              data.status === "ACTIVE"
-              ? 'green-700'
-              : 'red-700'
-              }`} >{data.status}
-          </button>
-        </td>
-        <td><div className="d-flex gap-3">
-          <div className="cursor-pointer" onClick={() => setUpdateModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-          <div
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Technique Name", accessor: "TechniqueName" },
+    { header: "Type", accessor: "Type" },
+    { header: "Description", accessor: "Description" },
+    { header: "Added On", accessor: "AddedOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
             className="cursor-pointer"
-            onClick={() => handleDeleteClick(data.id)}
-          >
-            <FontAwesomeIcon icon={faTrashCan} />
-          </div>
-        </div>
-        </td>
-      </tr>
-    ));
-  };
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-
-  const StatusModal = (_props) => {
-
-    return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Test Technique</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Technique Name"
-            placeholder="Technique Name"
           />
+        </>
+      ),
+    },
+  ];
 
-          <FormControl>
-            <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
-              Type of technique
-            </FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-            >
-              <FormControlLabel
-                value="Complex"
-                control={<Radio />}
-                label="Complex"
-              />
-              <FormControlLabel
-                value="Non-complex"
-                control={<Radio />}
-                label="Non-complex"
-              />
-            </RadioGroup>
-          </FormControl>
-          <br />
-          <br />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Technique Description"
-            placeholder="Technique Description"
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    );
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const UpdateModal = (_props) => {
-
-    return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Update Test Technique</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Technique Name"
-            placeholder="Technique Name"
-          />
-
-          <FormControl>
-            <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
-              Type of technique
-            </FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-            >
-              <FormControlLabel
-                value="Complex"
-                control={<Radio />}
-                label="Complex"
-              />
-              <FormControlLabel
-                value="Non-complex"
-                control={<Radio />}
-                label="Non-complex"
-              />
-            </RadioGroup>
-          </FormControl>
-          <br />
-          <br />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Technique Description"
-            placeholder="Technique Description"
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    );
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const DeleteModel = (_props) => {
-    return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Delete Test Technique</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          Do you want to delete this Test Technique <code>Description</code>?
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-        </CModalFooter>
-      </CModal>
-    );
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4>Test Techniques</h4>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Service Provider</h1>
+      {/* <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div> */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "    Active" },
+              { value: "Inactive", label: "  Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
         </div>
-
-        <div>
-          <CRow className="mt-5 mb-3">
-            <CCol sm={3}>
-              <CFormInput
-                style={{ fontSize: '0.9rem' }}
-
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={handleSearchChange}
-              /></CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                style={{ fontSize: '0.9rem' }}
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                options={[
-                  { value: "All", label: "All" },
-                  { value: "ACTIVE", label: "Active" },
-                  { value: "INACTIVE", label: "Inactive" },
-                ]}
-              />
-            </CCol>
-            <CCol sm={3}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Technique
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-
-        <div
-          className="rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >
-          <table className="table table-responsive">
-            <thead>
-              <tr>
-                <th style={{ background: "#5D76A9", color: "white" }}>
-                  <input type="checkbox" />
-                </th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Sr.no.</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Technique Name</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Type</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Description</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Added On</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>{renderRows()}</tbody>
-          </table>
-        </div>
-
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-              &lt;&lt;
-            </button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= tableData.length}>
-              &gt;&gt;
-            </button>
-          </div>
+        <div className="float-right">
+          <ATMButton
+            text="Add Service Provider"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {updateModal && (
-        <UpdateModal visible={updateModal} closeModal={() => setUpdateModal(false)} />
-      )}
-      {removeModal && (
-        <DeleteModel
-          visible={removeModal}
-          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
+    </div>
   );
-}
+};
+
+export default TestTechniques;
