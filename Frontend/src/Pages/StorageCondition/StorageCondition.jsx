@@ -1,3 +1,42 @@
+// const StatusModal = (_props) => {
+//   return (
+//     <>
+//       <CModal
+//         alignment="center"
+//         visible={_props.visible}
+//         onClose={_props.closeModal}
+//         size="xl"
+//       >
+//         <CModalHeader className="p-3">
+//           <CModalTitle>New Storage Condition</CModalTitle>
+//         </CModalHeader>
+
+//         <p className="ml-4">
+//           Add a new storage.
+//         </p>
+//         <div className="modal-body p-4">
+//           <CForm>
+//             <div className="mb-3">
+//               <CFormInput
+//                 type="text"
+//                 label="Name"
+//                 placeholder="Storage Name"
+//                 className="custom-placeholder"
+//               />
+//             </div>
+//         <CModalFooter className="p-3">
+//           <CButton color="light" onClick={_props.closeModal}>
+//             Cancel
+//           </CButton>
+//           <CButton style={{ background: "#0F93C3", color: "white" }}>
+//             Submit
+//           </CButton>
+//         </CModalFooter>
+//       </CModal>
+//     </>
+//   );
+// };
+
 import { useState } from "react";
 import {
   CButton,
