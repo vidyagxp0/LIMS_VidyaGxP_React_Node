@@ -2,87 +2,179 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import SearchBar from '../../components/ATM components/SearchBar/SearchBar';
+import Dropdown from '../../components/ATM components/Dropdown/Dropdown';
+import ATMButton from '../../components/ATM components/Button/ATMButton';
+import Table from '../../components/ATM components/Table/Table';
 
+const initialData = [
+    {
+      checkbox: false,
+      sno: 1,
+      uniqueCode: "UC001",
+      description: "Description for UC001",
+      numberofRanges: 5,
+      updatedAt: "2024-07-01",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 2,
+      uniqueCode: "UC002",
+      description: "Description for UC002",
+      numberofRanges: 10,
+      updatedAt: "2024-06-30",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 3,
+      uniqueCode: "UC003",
+      description: "Description for UC003",
+      numberofRanges: 7,
+      updatedAt: "2024-06-29",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 4,
+      uniqueCode: "UC004",
+      description: "Description for UC004",
+      numberofRanges: 3,
+      updatedAt: "2024-06-28",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 5,
+      uniqueCode: "UC005",
+      description: "Description for UC005",
+      numberofRanges: 8,
+      updatedAt: "2024-06-27",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 6,
+      uniqueCode: "UC006",
+      description: "Description for UC006",
+      numberofRanges: 2,
+      updatedAt: "2024-06-26",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 7,
+      uniqueCode: "UC007",
+      description: "Description for UC007",
+      numberofRanges: 6,
+      updatedAt: "2024-06-25",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 8,
+      uniqueCode: "UC008",
+      description: "Description for UC008",
+      numberofRanges: 9,
+      updatedAt: "2024-06-24",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 9,
+      uniqueCode: "UC009",
+      description: "Description for UC009",
+      numberofRanges: 4,
+      updatedAt: "2024-06-23",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 10,
+      uniqueCode: "UC010",
+      description: "Description for UC010",
+      numberofRanges: 1,
+      updatedAt: "2024-06-22",
+      status: "Inactive",
+    },
+  ];
+  
 
 const SamplingRule = () => {
-    const pageSize = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-    const [addModal, setAddModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [selectedStatus, setSelectedStatus] = useState('All');
+    const [data, setData] = useState(initialData);
+     const [searchQuery, setSearchQuery] = useState("");
+     const [statusFilter, setStatusFilter] = useState("All");
+     const [viewModalData, setViewModalData] = useState(null);
+     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [employee, setEmployee] = useState([
-
-        { id: "1", uniqueCode: "USER-022024-000001", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "2", uniqueCode: "USER-022024-000002", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "3", uniqueCode: "USER-022024-000003", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "4", uniqueCode: "USER-022024-000004", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "5", uniqueCode: "USER-022024-000005", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "6", uniqueCode: "USER-022024-000006", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "7", uniqueCode: "USER-022024-000007", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "8", uniqueCode: "USER-022024-000008", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "9", uniqueCode: "USER-022024-000009", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "10", uniqueCode: "USER-022024-0000010", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-    ]);
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employee.length);
-
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
-    const filteredEmployee = employee.filter(employee =>
-        selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-    );
-
-    const renderRows = () => {
-        return filteredEmployee.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
-                <td>{startIndex + index + 1}</td>
-                <td>{employee.uniqueCode}</td>
-                <td>{employee.description}</td>
-                <td>{employee.numberOfRanges}</td>
-                <td>{employee.updatedAt}</td>
-                <td>
-                    <button
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                            employee.status === "INACTIVE"
-                            ? "red-700"
-                            : employee.status === "ACTIVE"
-                                ? "green-700"
-                                : "white"
-                            }`} style={{ fontSize: '0.6rem' }}
-                    >
-                        {employee.status}
-                    </button>
-                </td>
-                <td>
-                    <div className='d-flex gap-3'>
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                        >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                        </div>
-                        <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </div>
-                    </div>
-
-                </td>
-            </tr>
-        ));
-    };
-
-    const handleDeleteClick = (id) => {
-        setDeleteId(id);
-        setDeleteModal(true);
-    };
-
-    const handleDeleteConfirm = () => {
-        setEmployee((prevEmployee) => prevEmployee.filter((employee) => employee.id !== deleteId));
-        setDeleteModal(false);
-    };
+     const handleSelectAll = (e) => {
+       const checked = e.target.checked;
+       const newData = data.map((row) => ({ ...row, checkbox: checked }));
+       setData(newData);
+     };
+   
+     const filteredData = data.filter((row) => {
+       return (
+         row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+         (statusFilter === "All" || row.status === statusFilter)
+       );
+     });
+   
+     const onViewDetails = (rowData) => {
+       setViewModalData(rowData);
+     };
+   
+     const handleCheckboxChange = (index) => {
+       const newData = [...data];
+       newData[index].checkbox = !newData[index].checkbox;
+       setData(newData);
+     };
+     const columns = [
+       {
+         header: <input type="checkbox" onChange={handleSelectAll} />,
+         accessor: "checkbox",
+       },
+       { header: "SrNo.", accessor: "sno" },
+       { header: "Unique Code", accessor: "uniqueCode" },
+       { header: "Description", accessor: "description" },
+       { header: "Number of Ranges", accessor: "numberofRanges" },
+       { header: "Updated At", accessor: "updatedAt" },
+       { header: "Status", accessor: "status" },
+       {
+         header: "Actions",
+         accessor: "action",
+         Cell: ({ row }) => (
+           <>
+             <FontAwesomeIcon
+               icon={faEye}
+               className="mr-2 cursor-pointer"
+               onClick={() => {
+                 onViewDetails(row), navigate("/testResultsDetails");
+               }}
+             />
+             <FontAwesomeIcon
+               icon={faPenToSquare}
+               className="mr-2 cursor-pointer"
+             />
+             <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+           </>
+         ),
+       },
+     ];
+   
+     const openModal = () => {
+       setIsModalOpen(true);
+     };
+   
+     const handleDelete = (item) => {
+       const newData = data.filter((d) => d !== item);
+       setData(newData);
+       console.log("Deleted item:", item);
+     };
+     const closeModal = () => {
+       setIsModalOpen(false);
+     };
 
 
     return (
@@ -91,73 +183,39 @@ const SamplingRule = () => {
                 <div className="main-head">
                     <h4 className="fw-bold">Sampling Rule</h4>
                 </div>
-                <div>
-                    <CRow className="mt-5 mb-3">
-                        <CCol sm={3}>
-                            <CFormSelect
-                                onChange={(e) => setSelectedStatus(e.target.value)}
-                                value={selectedStatus}
-                                style={{ fontSize: '0.9rem' }}
-                                options={[
-                                    { label: "All", value: "All" },
-                                    { label: "Active", value: "Active" },
-                                    { label: "Inactive", value: "Inactive" },
-                                ]}
-                            />
-                        </CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}>
-                            <div className="d-flex justify-content-end">
-                                <CButton
-                                    className=" text-white"
-                                    style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                                    onClick={() => setAddModal(true)}
-                                >
-                                    Add Sampling Rule</CButton>
-                            </div>
-                        </CCol>
-                    </CRow>
-                </div>
+                <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right">
+            <ATMButton
+              text="Add Sampling Rule"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+        />
+      </div>
 
-                <div
-                    className=" rounded bg-white"
-                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                >
-                    <table className="mb-0 table table-responsive">
-                        <thead>
-                            <tr>
-                                <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Unique Code</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Description</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Number Of Ranges</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Updated At</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderRows()}
-                        </tbody>
-                    </table>
-
-                </div>
-
-                <div className="d-flex justify-content-end align-items-center mt-4">
-                    <div className="pagination">
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                            &lt;&lt;
-                        </button>
-                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
-                            &gt;&gt;
-                        </button>
-                    </div>
-                </div>
-
-                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-                {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-            </div>
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
         </>
     );
 };
@@ -201,39 +259,5 @@ const StatusModal = (_props) => {
     );
 };
 
-const DeleteModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-            <CModalHeader>
-                <CModalTitle>Delete Sampling Rule</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <p>Are you sure you want to delete this Sampling Rule { }?</p>
-            </CModalBody>
-            <CModalFooter>
-                <CButton
-                    color="secondary"
-                    onClick={_props.closeModal}
-                    style={{
-                        marginRight: "0.5rem",
-                        fontWeight: "500",
-                    }}
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="danger"
-                    onClick={_props.confirmDelete}
-                    style={{
-                        fontWeight: "500",
-                        color: "white",
-                    }}
-                >
-                    Delete
-                </CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
 
 export default SamplingRule

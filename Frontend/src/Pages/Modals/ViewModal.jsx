@@ -7,7 +7,8 @@ const ViewModal = ({ visible, closeModal, data }) => {
 
     return (
         <>
-            <div id="approval-page" className="py-3 bg-light h-100">
+        <CModal alignment="center" visible={visible} onClose={closeModal} className='w-full'>
+            <div id="approval-page" className="py-3 bg-light h-100">  
                 <div className="container-fluid">
                     <div className="block mb-3">
                         <div className="main-head d-flex justify-content-between align-items-center">
@@ -98,7 +99,7 @@ const ViewModal = ({ visible, closeModal, data }) => {
                     </div>
                 </div>
             </div>
-
+            </CModal>
             {statusModal && <StatusModal visible={statusModal} closeModal={() => setStatusModal(false)} />}
         </>
     );
