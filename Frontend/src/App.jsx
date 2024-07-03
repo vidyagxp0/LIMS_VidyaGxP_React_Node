@@ -56,6 +56,7 @@ import SamplingTemplate from "./Pages/Sampling/SamplingTemplate";
 import Product from "./Pages/Masters/Product";
 import SampleType from "./Pages/Masters/SampleType";
 import SpecificationType from "./Pages/Masters/SpecificationType";
+import SpecificationsTestProcedure from "./Pages/Masters/SpecificationsTestProcedure.jsx";
 import Specifications from "./Pages/Masters/Specifications";
 import TestCategories from "./Pages/Masters/TestCategories";
 import TestRegistrations from "./Pages/Masters/TestRegistrations";
@@ -298,6 +299,10 @@ function App() {
             <Route
               path="/Masters/Specifications"
               element={<Specifications />}
+            />
+             <Route
+              path="/Masters/SpecificationsTestProcedure"
+              element={<SpecificationsTestProcedure />}
             />
             <Route
               path="/Masters/TestCategories"

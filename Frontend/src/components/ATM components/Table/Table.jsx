@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
@@ -6,6 +6,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal";
+
 const Table = ({
   columns,
   data,
@@ -14,32 +15,37 @@ const Table = ({
   onDelete,
 }) => {
   const pageSize = 5;
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const totalPageCount = Math.ceil(data.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const currentData = data.slice(startIndex, startIndex + pageSize);
+  const attachmentInput = useRef([]);
 
   const getStatusColor = (status) => {
     switch (status) {
       case "Active":
         return "bg-green-500 text-white w-20 p-1";
       case "Inactive":
-        return "bg-red-500 text-white w-20 p-1 ";
+        return "bg-red-500 text-white w-20 p-1";
       case "DROPPED":
-        return "bg-pink-500 text-white w-20 p-1 ";
+        return "bg-pink-500 text-white w-20 p-1";
       case "REJECTED":
-        return "bg-red-500 text-white w-20 p-1 ";
+        return "bg-red-500 text-white w-20 p-1";
       case "INITIATED":
-        return "bg-blue-500 text-white w-20 p-1 ";
+        return "bg-blue-500 text-white w-20 p-1";
       case "REINITIATED":
-        return "bg-yellow-500 text-white w-20 p-1 ";
+        return "bg-yellow-500 text-white w-20 p-1";
       case "APPROVED":
-        return "bg-green-500 text-white w-20 p-1 ";
+        return "bg-green-500 text-white w-20 p-1";
       default:
         return "";
     }
+  };
+
+  const handleAttachmentClick = (rowIndex) => {
+    attachmentInput.current[rowIndex].click();
   };
 
   const handlePageChange = (pageNumber) => {
@@ -115,6 +121,21 @@ const Table = ({
                           icon={faTrashCan}
                           className="cursor-pointer"
                           onClick={() => openDeleteModal(row)}
+                        />
+                      </div>
+                    ) : column.accessor === "attachment" ? (
+                      <div>
+                        <button
+                          className="bg-blue-500 text-white px-2 py-1 rounded"
+                          onClick={() => handleAttachmentClick(rowIndex)}
+                        >
+                          Add Attachment
+                        </button>
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          ref={(el) => (attachmentInput.current[rowIndex] = el)}
+                          onChange={(e) => console.log(e.target.files[0])} // Handle file upload logic here
                         />
                       </div>
                     ) : (
