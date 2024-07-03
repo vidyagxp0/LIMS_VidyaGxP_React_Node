@@ -25,6 +25,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -155,7 +156,15 @@ function SpecificationsTestProcedure() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -358,11 +367,33 @@ function SpecificationsTestProcedure() {
     console.log("Deleted item:", item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      productCode: item["Product Code"] || "",
+      productName: item["Product Name"] || "",
+      specificationID: item["Specification ID"] || "",
+      specificationName: item["Specification Name"] || "",
+      effectFrom: item["Effect From"] || "",
+      reviewDate: item["Review Date"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+  
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+  
+
   return (
     <>
       <div className="m-5 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Specifications Test Procedure</h4>
+          <h4 className="fw-bold">Standard Test Procedure</h4>
         </div>
 
         <div className="flex items-center justify-between mb-4">
@@ -381,7 +412,13 @@ function SpecificationsTestProcedure() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+          <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
             <ATMButton
               text="Add Test Procedure"
               color="blue"
@@ -403,6 +440,9 @@ function SpecificationsTestProcedure() {
       )}
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </>
   );
