@@ -12,118 +12,221 @@ import {
 
 } from "@coreui/react";
 import './SamplingTemplate.css'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TiArrowRightThick } from "react-icons/ti";
 import { TiArrowLeftThick } from "react-icons/ti";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { Link } from 'react-router-dom';
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    templateName: "Template 1",
+    uniqueCode: "UC001",
+    sampleType: "Type A",
+    addedOn: "2024-07-01",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    templateName: "Template 2",
+    uniqueCode: "UC002",
+    sampleType: "Type B",
+    addedOn: "2024-06-30",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    templateName: "Template 3",
+    uniqueCode: "UC003",
+    sampleType: "Type A",
+    addedOn: "2024-06-29",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    templateName: "Template 4",
+    uniqueCode: "UC004",
+    sampleType: "Type C",
+    addedOn: "2024-06-28",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    templateName: "Template 5",
+    uniqueCode: "UC005",
+    sampleType: "Type A",
+    addedOn: "2024-06-27",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    templateName: "Template 6",
+    uniqueCode: "UC006",
+    sampleType: "Type B",
+    addedOn: "2024-06-26",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    templateName: "Template 7",
+    uniqueCode: "UC007",
+    sampleType: "Type C",
+    addedOn: "2024-06-25",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    templateName: "Template 8",
+    uniqueCode: "UC008",
+    sampleType: "Type A",
+    addedOn: "2024-06-24",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 9,
+    templateName: "Template 9",
+    uniqueCode: "UC009",
+    sampleType: "Type B",
+    addedOn: "2024-06-23",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 10,
+    templateName: "Template 10",
+    uniqueCode: "UC010",
+    sampleType: "Type C",
+    addedOn: "2024-06-22",
+    status: "REINITIATED",
+  },
+];
+
 
 const SamplingTemplate = () => {
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState("All");
-
-  const [employee, setEmployee] = useState([
-    
-    { id: 1, fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'INITIATED' },
-    { id: 2, fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REJECTED' },
-    { id: 3, fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
-    { id: 4, fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
-    { id: 5, fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { id: 6, fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-    { id: 7, fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'APPROVED' },
-    { id: 8, fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'REINITIATED' },
-    { id: 9, fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'DROPPED' },
-    { id: 10, fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INITIATED' },
-  ]);
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employee.length);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredEmployee = employee.filter((employee) => {
-    const searchFilter =
-      employee.fieldName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.fieldType.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.registeredBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.registeredOn.toLowerCase().includes(searchTerm.toLowerCase());
-    const selectCheck = selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase();
-    return searchFilter && selectCheck
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
   });
 
-  const renderRows = () => {
-    return filteredEmployee.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.fieldName}</td>
-        <td>{employee.fieldType}</td>
-        <td>{employee.registeredBy}</td>
-        <td>{employee.registeredOn}</td>
-        <td >
-          <button
-            className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${employee.status === "INITIATED"
-              ? "blue-700"
-              : employee.status === "APPROVED"
-                ? "green-700"
-                : employee.status === "REJECTED"
-                  ? "red-700"
-                  : employee.status === "REINITIATED"
-                    ? "yellow-500"
-                    : employee.status === "DROPPED"
-                      ? "purple-700"
-                      : "white"
-              }`} style={{ fontSize: '0.6rem' }}
-          >
-            {employee.status}
-          </button>
-        </td>
-        <td>
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-          <div className='d-flex gap-3'>
-            <div>
-              <Link to="/approval/1321" className=''><FontAwesomeIcon icon={faEye} /></Link>
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
 
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => setAddModal(true)}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </div>
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-          </div>
-        </td>
-      </tr>
-    ));
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const nextPage = () => setCurrentPage(currentPage + 1);
-  const prevPage = () => setCurrentPage(currentPage - 1);
-
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployee((prevEmployee) => prevEmployee.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
+  const filteredData = data.filter((row) => {
+    return (
+      row.templateName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData); // Set the data for ViewModal
+    setIsViewModalOpen(true); // Open the ViewModal
   };
 
-  const filterData = () => {
-    if (selectedStatus === "All") {
-      return employee;
-    }
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Template Name", accessor: "templateName" },
+    { header: "Unique Code", accessor: "uniqueCode" },
+    { header: "Sample Type", accessor: "sampleType" },
+    { header: "Added On", accessor: "addedOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
 
-    return employee.filter((item) => item.status === selectedStatus.toUpperCase());
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+   
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
   return (
     <>
@@ -131,196 +234,74 @@ const SamplingTemplate = () => {
         <div className="main-head">
           <h4 className="fw-bold">Sample Template</h4>
         </div>
-
-        <div className="mt-3 chart-widgets w-100">
-          <div className="">
-            <div className="row" style={{ cursor: "pointer" }}>
-              <button
-                className="col shadow p-3 m-3 rounded"
-                style={{
-                  background:
-                    "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
-
-                  textAlign: "left",
-                }}
-                onClick={() => setSelectedStatus("DROPPED")}
-              >
-                <div className="text-light font-bold fs-5">DROPPED</div>
-                <div
-                  className="count fs-1 text-light fw-bolder"
-                  style={{ color: "white" }}
-                >
-                  {
-                    filterData().filter((item) => item.status === "DROPPED")
-                      .length
-                  }
-                </div>
-              </button>
-              <button
-                className="col shadow p-3 m-3 rounded"
-                style={{
-                  background:
-                    "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                  textAlign: "left",
-                }}
-                onClick={() => setSelectedStatus("INITIATED")}
-              >
-                <div className="text-light font-bold fs-5">INITIATED</div>
-                <div
-                  className="count fs-1 text-light fw-bolder"
-                  style={{ color: "white" }}
-                >
-                  {
-                    filterData().filter((item) => item.status === "INITIATED")
-                      .length
-                  }
-                </div>
-              </button>
-              <button
-                className="col shadow p-3 m-3 rounded"
-                style={{
-                  background:
-                    "linear-gradient(25deg, orange , #f7e05f )",
-
-                  textAlign: "left",
-                  boxShadow: "0px 10px 20px  black !important",
-                }}
-                onClick={() => setSelectedStatus("REINITIATED")}
-              >
-                <div className="text-light font-bold fs-5">REINITIATED</div>
-
-                <div
-                  className="count fs-1 text-light fw-bolder"
-                  style={{ color: "white" }}
-                >
-                  {
-                    filterData().filter(
-                      (item) => item.status === "REINITIATED"
-                    ).length
-                  }
-                </div>
-              </button>
-              <button
-                className="col shadow p-3 m-3 rounded"
-                style={{
-                  background:
-                    "linear-gradient(27deg, green , #0fd850  )",
-                  textAlign: "left",
-                }}
-                onClick={() => setSelectedStatus("APPROVED")}
-              >
-                <div className="text-light font-bold fs-5">APPROVED</div>
-                <div
-                  className="count fs-1 text-light fw-bolder"
-                  style={{ color: "white", textAlign: "left" }}
-                >
-                  {
-                    filterData().filter((item) => item.status === "APPROVED")
-                      .length
-                  }
-                </div>
-              </button>
-
-              <button
-                className="col shadow p-3 m-3 rounded"
-                style={{
-                  background:
-                    "linear-gradient(27deg ,red, #FF719A)",
-                  textAlign: "left",
-                }}
-                onClick={() => setSelectedStatus("REJECTED")}
-              >
-                <div className="text-light font-bold fs-5">REJECTED</div>
-                <div className="count fs-1 text-light fw-bolder">
-                  {
-                    filterData().filter((item) => item.status === "REJECTED")
-                      .length
-                  }
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <CRow className="mb-3">
-            <CCol sm={4}>
-              <CFormInput
-                style={{ fontSize: '0.9rem' }}
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                value={selectedStatus}
-                style={{ fontSize: '0.9rem' }}
-                options={[
-                  { value: "All", label: "All" },
-                  { value: "INITIATED", label: "Initiated" },
-                  { value: "APPROVED", label: "Approved" },
-                  { value: "REJECTED", label: "Rejected" },
-                  { value: "REINITIATED", label: "Reinitiated" },
-                  { value: "DROPPED", label: "Dropped" },
-                ]}
-              />
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Template
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-
-        <div
-          className=" rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >
-          <table className="mb-0 table table-responsive">
-            <thead>
-              <tr>
-                <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Field Name</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Field Type</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Registered By</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Registered On</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
-                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {renderRows()}
-            </tbody>
-          </table>
-
-        </div>
-
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-              &lt;&lt;
-            </button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
-
-        {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-        {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
+        <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
       </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery}/>
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right">
+          <ATMButton text="Add Sample Template" color="blue" onClick={openModal} />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onDelete={handleDelete}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+      />
+    
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+        
+        />
+      )}
+    </div>
     </>
   );
 };
@@ -484,39 +465,6 @@ const StatusModal = (_props) => {
   );
 };
 
-const DeleteModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete Sampling template</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this Sampling Template { }?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+ 
 
 export default SamplingTemplate

@@ -17,10 +17,13 @@ const ATMButton =  ({ color, text, onClick }) => {
         break;
       default:
         bgColor = 'bg-gray-500 hover:bg-gray-600'; // Default to gray if color is not recognized
+        case 'pink':
+          bgColor = 'bg-pink-500 hover:bg-pink-600';
+          break;
     }
   return (
     <button
-    className={`px-4 py-2 rounded-md text-white ${bgColor} focus:outline-none`}
+    className={`px-4 py-2 rounded-md text-white ${bgColor}flex justify-center focus:outline-none`}
     onClick={onClick}
   >
     {text}

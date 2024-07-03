@@ -2,85 +2,178 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import SearchBar from '../../components/ATM components/SearchBar/SearchBar';
+import Dropdown from '../../components/ATM components/Dropdown/Dropdown';
+import ATMButton from '../../components/ATM components/Button/ATMButton';
+import Table from '../../components/ATM components/Table/Table';
 
+const initialData = [
+    {
+      checkbox: false,
+      sno: 1,
+      fieldName: "Field 1",
+      fieldType: "Type A",
+      registeredBy: "User 1",
+      registeredOn: "2024-07-01",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 2,
+      fieldName: "Field 2",
+      fieldType: "Type B",
+      registeredBy: "User 2",
+      registeredOn: "2024-06-30",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 3,
+      fieldName: "Field 3",
+      fieldType: "Type A",
+      registeredBy: "User 3",
+      registeredOn: "2024-06-29",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 4,
+      fieldName: "Field 4",
+      fieldType: "Type C",
+      registeredBy: "User 4",
+      registeredOn: "2024-06-28",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 5,
+      fieldName: "Field 5",
+      fieldType: "Type A",
+      registeredBy: "User 5",
+      registeredOn: "2024-06-27",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 6,
+      fieldName: "Field 6",
+      fieldType: "Type B",
+      registeredBy: "User 6",
+      registeredOn: "2024-06-26",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 7,
+      fieldName: "Field 7",
+      fieldType: "Type C",
+      registeredBy: "User 7",
+      registeredOn: "2024-06-25",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 8,
+      fieldName: "Field 8",
+      fieldType: "Type A",
+      registeredBy: "User 8",
+      registeredOn: "2024-06-24",
+      status: "Inactive",
+    },
+    {
+      checkbox: false,
+      sno: 9,
+      fieldName: "Field 9",
+      fieldType: "Type B",
+      registeredBy: "User 9",
+      registeredOn: "2024-06-23",
+      status: "Active",
+    },
+    {
+      checkbox: false,
+      sno: 10,
+      fieldName: "Field 10",
+      fieldType: "Type C",
+      registeredBy: "User 10",
+      registeredOn: "2024-06-22",
+      status: "Inactive",
+    },
+  ];
+  
 
 const SamplingField = () => {
-    const pageSize = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-    const [addModal, setAddModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [selectedStatus, setSelectedStatus] = useState('All');
+    const [data, setData] = useState(initialData);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("All");
+    const [viewModalData, setViewModalData] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const [employee, setEmployee] = useState([
-
-        { id: "1", fieldName: "Room is clean", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'ACTIVE' },
-        { id: "2", fieldName: "sampling check list", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INACTIVE' },
-        { id: "3", fieldName: "Manufacturing Date", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'ACTIVE' },
-        { id: "4", fieldName: "Cracks Observerd", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INACTIVE' },
-        { id: "5", fieldName: "Batch No", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'ACTIVE' },
-        { id: "6", fieldName: "Container Name", fieldType: 'DataField', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INACTIVE' },
-        { id: "7", fieldName: "Cracks Observerd", fieldType: 'DataField', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'ACTIVE' },
-        { id: "8", fieldName: "Sampling Check List", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INACTIVE' },
-        { id: "9", fieldName: "Manufacturing Date", fieldType: 'RadioButton', registeredBy: 'Manager', registeredOn: '2024-05-15', status: 'ACTIVE' },
-        { id: "10", fieldName: "Manufacturing Date", fieldType: 'Label', registeredBy: 'Admin', registeredOn: '2024-05-16', status: 'INACTIVE' },
-
-    ]);
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employee.length);
-
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
-    const filteredEmployee = employee.filter(employee =>
-        selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-    );
-
-    const renderRows = () => {
-        return filteredEmployee.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
-                <td>{startIndex + index + 1}</td>
-                <td>{employee.fieldName}</td>
-                <td>{employee.fieldType}</td>
-                <td>{employee.registeredBy}</td>
-                <td>{employee.registeredOn}</td>
-                <td>
-                    <button
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${employee.status === "INACTIVE"
-                            ? "red-700"
-                            : employee.status === "ACTIVE"
-                                ? "green-700"
-                                : "white"
-                            }`} style={{ fontSize: '0.6rem' }}
-                    >
-                        {employee.status}
-                    </button>
-                </td>
-                <td>
-                    <div className='d-flex gap-3'>
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                        >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                        </div>
-                        <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        ));
+    const handleSelectAll = (e) => {
+      const checked = e.target.checked;
+      const newData = data.map((row) => ({ ...row, checkbox: checked }));
+      setData(newData);
     };
-
-    const handleDeleteClick = (id) => {
-        setDeleteId(id);
-        setDeleteModal(true);
+  
+    const filteredData = data.filter((row) => {
+      return (
+        row.fieldName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (statusFilter === "All" || row.status === statusFilter)
+      );
+    });
+  
+    const onViewDetails = (rowData) => {
+      setViewModalData(rowData);
     };
-
-    const handleDeleteConfirm = () => {
-        setEmployee((prevEmployee) => prevEmployee.filter((employee) => employee.id !== deleteId));
-        setDeleteModal(false);
+  
+    const handleCheckboxChange = (index) => {
+      const newData = [...data];
+      newData[index].checkbox = !newData[index].checkbox;
+      setData(newData);
+    };
+    const columns = [
+      {
+        header: <input type="checkbox" onChange={handleSelectAll} />,
+        accessor: "checkbox",
+      },
+      { header: "SrNo.", accessor: "sno" },
+      { header: "Field Name", accessor: "fieldName" },
+      { header: "Field Type", accessor: "fieldType" },
+      { header: "Registered By", accessor: "registeredBy" },
+      { header: "Registered On", accessor: "registeredOn" },
+      { header: "Status", accessor: "status" },
+      {
+        header: "Actions",
+        accessor: "action",
+        Cell: ({ row }) => (
+          <>
+            <FontAwesomeIcon
+              icon={faEye}
+              className="mr-2 cursor-pointer"
+              onClick={() => {
+                onViewDetails(row), navigate("/testResultsDetails");
+              }}
+            />
+            <FontAwesomeIcon
+              icon={faPenToSquare}
+              className="mr-2 cursor-pointer"
+            />
+            <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          </>
+        ),
+      },
+    ];
+  
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const handleDelete = (item) => {
+      const newData = data.filter((d) => d !== item);
+      setData(newData);
+      console.log("Deleted item:", item);
+    };
+    const closeModal = () => {
+      setIsModalOpen(false);
     };
 
     return (
@@ -89,73 +182,39 @@ const SamplingField = () => {
                 <div className="main-head">
                     <h4 className="fw-bold">Sampling Field</h4>
                 </div>
-                <div>
-                    <CRow className="mt-5 mb-3">
-                        <CCol sm={3}>
-                            <CFormSelect
-                                onChange={(e) => setSelectedStatus(e.target.value)}
-                                value={selectedStatus}
-                                style={{ fontSize: '0.9rem' }}
-                                options={[
-                                    { label: "All", value: "All" },
-                                    { label: "Active", value: "Active" },
-                                    { label: "Inactive", value: "Inactive" },
-                                ]}
-                            />
-                        </CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}>
-                            <div className="d-flex justify-content-end">
-                                <CButton
-                                    className=" text-white"
-                                    style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                                    onClick={() => setAddModal(true)}
-                                >
-                                    Add Sampling Field</CButton>
-                            </div>
-                        </CCol>
-                    </CRow>
-                </div>
+                <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right">
+            <ATMButton
+              text="Add Sample Field"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+        />
+      </div>
 
-                <div
-                    className=" rounded bg-white"
-                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                >
-                    <table className="mb-0 table table-responsive">
-                        <thead>
-                            <tr>
-                                <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Field Name</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Field Type</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Registered By</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Registered On</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderRows()}
-                        </tbody>
-                    </table>
-
-                </div>
-
-                <div className="d-flex justify-content-end align-items-center mt-4">
-                    <div className="pagination">
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                            &lt;&lt;
-                        </button>
-                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
-                            &gt;&gt;
-                        </button>
-                    </div>
-                </div>
-
-                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-                {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-            </div>
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
         </>
     );
 };
@@ -196,38 +255,4 @@ const StatusModal = (_props) => {
     );
 };
 
-const DeleteModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-            <CModalHeader>
-                <CModalTitle>Delete Sampling Field</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <p>Are you sure you want to delete this SAmpling Field { }?</p>
-            </CModalBody>
-            <CModalFooter>
-                <CButton
-                    color="secondary"
-                    onClick={_props.closeModal}
-                    style={{
-                        marginRight: "0.5rem",
-                        fontWeight: "500",
-                    }}
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="danger"
-                    onClick={_props.confirmDelete}
-                    style={{
-                        fontWeight: "500",
-                        color: "white",
-                    }}
-                >
-                    Delete
-                </CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
 export default SamplingField

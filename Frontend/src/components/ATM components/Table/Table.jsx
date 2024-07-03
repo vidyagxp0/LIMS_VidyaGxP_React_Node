@@ -26,19 +26,19 @@ const Table = ({
   const getStatusColor = (status) => {
     switch (status) {
       case "Active":
-        return "bg-green-500 text-white w-20 p-1";
+        return "bg-green-500 text-white  p-1";
       case "Inactive":
-        return "bg-red-500 text-white w-20 p-1";
+        return "bg-red-500 text-white  p-1 ";
       case "DROPPED":
-        return "bg-pink-500 text-white w-20 p-1";
+        return "bg-pink-500 text-white  p-1 ";
       case "REJECTED":
-        return "bg-red-500 text-white w-20 p-1";
+        return "bg-red-500 text-white  p-1 ";
       case "INITIATED":
-        return "bg-blue-500 text-white w-20 p-1";
+        return "bg-blue-500 text-white  p-1 ";
       case "REINITIATED":
-        return "bg-yellow-500 text-white w-20 p-1";
+        return "bg-yellow-500 text-white  p-1 ";
       case "APPROVED":
-        return "bg-green-500 text-white w-20 p-1";
+        return "bg-green-500 text-white  p-1 ";
       default:
         return "";
     }

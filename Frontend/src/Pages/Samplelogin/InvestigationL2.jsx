@@ -174,7 +174,7 @@ const InvestigationL2 = () => {
     <>
        <div className="m-5 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Test Result QA</h4>
+          <h4 className="fw-bold">Investigation L2</h4>
         </div>
      
 

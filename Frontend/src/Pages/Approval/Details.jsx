@@ -14,10 +14,11 @@ import {
 import { useState } from "react";
 import React from "react";
 
-function Details() {
+function Details({ visible, closeModal, data }) {
   const [statusModal, setStatusModal] = useState(false);
   return (
     <>
+    <CModal visible={visible} onClose={closeModal} size='xl' >
       <div id="approval-page" className="py-3 bg-light h-100">
         <div className="container-fluid">
           <div className="bock mb-3">
@@ -122,6 +123,7 @@ function Details() {
           closeModal={() => setStatusModal(false)}
         />
       )}
+      </CModal>
     </>
   );
 }
