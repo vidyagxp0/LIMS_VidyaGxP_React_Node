@@ -455,7 +455,7 @@ function TestPlan() {
                 { value: "INITIATED", label: "INITIATED" },
                 { value: "REINITIATED", label: "REINITIATED" },
                 { value: "APPROVED", label: "APPROVED" },
-                { value: "REJECTED", label: "REJECTED" }, 
+                { value: "REJECTED", label: "REJECTED" },
               ]}
               value={statusFilter}
               onChange={setStatusFilter}
@@ -486,7 +486,11 @@ function TestPlan() {
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
       {isModalsOpen && (
-        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} />
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+        />
       )}
     </>
   );

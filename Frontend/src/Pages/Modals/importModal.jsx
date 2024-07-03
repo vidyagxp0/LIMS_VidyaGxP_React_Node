@@ -37,6 +37,7 @@ const ImportModal = ({ isOpen, onClose, columns,onDataUpload  }) => {
       onDataUpload(jsonData);
 
       console.log(jsonData); // Process your data here
+      onDataUpload(jsonData); // Pass the data to the parent component
     };
 
     reader.readAsArrayBuffer(file);
