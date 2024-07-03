@@ -355,6 +355,25 @@ function Specifications() {
     setViewModalData(false);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      productCode: item["Product Code"] || "",
+      productName: item["Product Name"] || "",
+      specificationID: item["Specification ID"] || "",
+      specificationName: item["Specification Name"] || "",
+      effectFrom: item["Effect From"] || "",
+      reviewDate: item["Review Date"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    setData(updatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+  
+  
+
 
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
@@ -411,7 +430,9 @@ function Specifications() {
 
       {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
       {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
-      {isModalsOpen&& <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} />}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
     </>
   );
 }

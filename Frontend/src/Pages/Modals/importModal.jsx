@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import * as XLSX from "xlsx";
 
-const ImportModal = ({ isOpen, onClose, columns }) => {
+const ImportModal = ({ isOpen, onClose, columns,onDataUpload  }) => {
   const fileInputRef = useRef(null);
 
   if (!isOpen) return null;
@@ -10,7 +10,7 @@ const ImportModal = ({ isOpen, onClose, columns }) => {
     const wb = XLSX.utils.book_new();
 
     // Extract headers from columns prop
-    const headerRow = columns.map((column) => column.header);
+    const headerRow = columns?.map((column) => column.header);
 
     // Example empty row
     const dataRows = [["", "", ""]]; // Example empty row, adjust as needed
@@ -32,6 +32,9 @@ const ImportModal = ({ isOpen, onClose, columns }) => {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+      // Pass the parsed data to the parent component
+      onDataUpload(jsonData);
 
       console.log(jsonData); // Process your data here
     };
