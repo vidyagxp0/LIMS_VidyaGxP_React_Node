@@ -361,7 +361,6 @@ function App() {
             />
             <Route path="Inventory/SolutionUsage" element={<SolutionUsage />} />
 
-            
             {/* *******************BLANK******************************** */}
             <Route path="/Inventory/Columns" element={<Columns />} />
             <Route
@@ -378,11 +377,10 @@ function App() {
             <Route
               path="/Inventory/WaterManagement"
               element={<WaterManagement />}
-              />
+            />
 
             <Route path="/Inventory/Environment" element={<Environment />} />
-              {/* *******************BLANK******************************** */}
-
+            {/* *******************BLANK******************************** */}
 
             <Route
               path="Inventory/ChemicalRegistration"
