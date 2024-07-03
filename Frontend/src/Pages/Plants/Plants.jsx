@@ -1,20 +1,7 @@
 
 // const StatusModal = (_props) => {
 //   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>Add Plant</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <CFormInput type="text" className="mb-3" label="Name" placeholder="Name" />
-//         <CFormInput type="text" className="mb-3" label="Plant Code" placeholder="Plant Code" />
-//         <CFormInput type="text" className="mb-3" label="Address" placeholder="Address" />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton color="primary">Add</CButton>
-//       </CModalFooter>
-//     </CModal>
+//     
 //   );
 // };
 
@@ -77,7 +64,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import PlantsModal from "../Modals/PlantsModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -307,7 +294,7 @@ const Plants = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <PlantsModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

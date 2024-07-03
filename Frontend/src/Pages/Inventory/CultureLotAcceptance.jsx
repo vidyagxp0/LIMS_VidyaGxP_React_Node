@@ -1,112 +1,4 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Culture Lot Acceptance</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p>Add information and Add Template</p>
-//           <h3>Registration Initiation</h3>
-//           <CFormSelect
-//             type="text"
-//             label="Reference Culture Name"
-//             placeholder=" "
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Reference Culture Lot Code"
-//             placeholder=""
-//           />
-//           <CForm>
-//             <CFormLabel>Sample</CFormLabel>
-//             <div>
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="acceptRadio"
-//                 label="Accept"
-//                 value="accept"
-//               />
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="rejectRadio"
-//                 label="Reject"
-//                 value="reject"
-//               />
-//             </div>
-//           </CForm>
-
-//           <CFormInput type="text" label="Comments" placeholder="" />
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Add Lot Acceptance
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
+;
 
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -121,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import CultureLotAcceptanceModal from "../Modals/CultureLotAcceptanceModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -336,7 +229,7 @@ CultureLotAcceptance = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <CultureLotAcceptanceModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

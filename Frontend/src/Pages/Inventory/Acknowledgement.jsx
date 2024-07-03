@@ -1,93 +1,7 @@
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader className="p-3">
-//           <CModalTitle>Add Acknowledgement</CModalTitle>
-//         </CModalHeader>
-//         <div className="modal-body p-4">
-//           <p>Add information and register new Acknowledgement</p>
-//           <CForm>
-//             <div className="mb-3">
-//               <CFormSelect
-//                 type="text"
-//                 label="Schedule Code
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Schdule Time
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             {/* <CForm>
-//               <CFormLabel>Types of Frequency</CFormLabel>
-//               <div>
-//                 <CFormCheck
-//                   type="radio"
-//                   name="sampleRadio"
-//                   id="acceptRadio"
-//                   label="Daily"
-//                   value="accept"
-//                 />
-//                 <CFormCheck
-//                   type="radio"
-//                   name="sampleRadio"
-//                   id="rejectRadio"
-//                   label="Set Frequency"
-//                   value="reject"
-//                 />
-//               </div>
-//             </CForm> */}
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Schdule Type
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//               <CFormSelect label="Select"></CFormSelect>
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Sample Collected By(System Users)
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Sample Collected By(Other Users)
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//           </CForm>
-//         </div>
-//         <CModalFooter className="p-3">
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Submit
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
+    
 //     </>
 //   );
 // };
@@ -157,7 +71,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import AcknowledgeSampleModal from "../Modals/AcknowledgeSampleModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import AcknowledgementModal from "../Modals/AcknowledgementModal";
 
 const initialData = [
   {
@@ -345,7 +261,7 @@ const Acknowledgement = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <AcknowledgementModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

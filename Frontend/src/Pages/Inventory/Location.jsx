@@ -1,97 +1,7 @@
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader className="p-3">
-//           <CModalTitle>Add Location</CModalTitle>
-//         </CModalHeader>
-//         <p>Add information and add new Location</p>
-//         <div className="modal-body p-4">
-//           <CForm>
-//             <div className="mb-3">
-//               <CFormSelect
-//                 type="text"
-//                 label="Facility
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Plan
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Location
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Plant Prefix/ Facility Prefix / Prefix
-
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <p>Description</p>
-//             <textarea rows="5" name="" id=""></textarea>
-//             <CForm>
-//               <CFormLabel>Location Type Id</CFormLabel>
-//               <div>
-//                 <CFormCheck
-//                   type="radio"
-//                   name="sampleRadio"
-//                   id="acceptRadio"
-//                   label="System"
-//                   value="accept"
-//                 />
-//                 <CFormCheck
-//                   type="radio"
-//                   name="sampleRadio"
-//                   id="rejectRadio"
-//                   label="Undefined"
-//                   value="reject"
-//                 />
-//               </div>
-//             </CForm>
-//           </CForm>
-//         </div>
-//         <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="No. of Sampling Points"
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//               <CButton color="info">Add</CButton>
-//             </div>
-
-//         <CModalFooter className="p-3">
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Add
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
+     
 //     </>
 //   );
 // };
@@ -161,6 +71,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import LocationModal from "../Modals/LocationModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -381,7 +292,7 @@ const Location = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <LocationModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

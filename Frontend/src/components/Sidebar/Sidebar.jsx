@@ -454,6 +454,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Specifications
               </CNavItem>
             </Link>
+            <Link to="/Masters/SpecificationsTestProcedure">
+              <CNavItem
+                href="#"
+                className={isActive("/Masters/SpecificationsTestProcedure")}
+                style={{ ...isActive("/Masters/SpecificationsTestProcedure") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Specifications Test Procedure (STP)
+              </CNavItem>
+            </Link>
             <Link to="/Masters/TestCategories">
               <CNavItem
                 href="#"

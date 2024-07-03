@@ -1,12 +1,46 @@
-import React from "react";
+import React, { useRef } from "react";
 import * as XLSX from "xlsx";
 
-const ImportModal = ({ isOpen, onClose, onDownloadSample }) => {
+const ImportModal = ({ isOpen, onClose, columns }) => {
+  const fileInputRef = useRef(null);
+
   if (!isOpen) return null;
 
-  const handleUpload = () => {
-    // Logic for handling file upload goes here
-    alert("File upload functionality to be implemented.");
+  const handleCreateExcel = () => {
+    const wb = XLSX.utils.book_new();
+
+    // Extract headers from columns prop
+    const headerRow = columns.map((column) => column.header);
+
+    // Example empty row
+    const dataRows = [["", "", ""]]; // Example empty row, adjust as needed
+
+    const ws = XLSX.utils.aoa_to_sheet([headerRow, ...dataRows]);
+
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    XLSX.writeFile(wb, "sample.xlsx");
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+      console.log(jsonData); // Process your data here
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleUploadButtonClick = () => {
+    fileInputRef.current.click();
   };
 
   return (
@@ -14,17 +48,17 @@ const ImportModal = ({ isOpen, onClose, onDownloadSample }) => {
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="bg-white rounded-lg p-8 z-10 max-w-md w-full">
         <h2 className="text-xl font-semibold mb-4">Bulk Upload Data</h2>
-        <p className="mb-4">Upload your data through csv or xls file.</p>
+        <p className="mb-4">Upload your data through CSV or XLS file.</p>
         <div className="mb-4">
           <h3 className="text-lg font-semibold">
             Step 1: Download Sample Template
           </h3>
           <p className="mb-2">
-            Download the sample template by clicking the button below.
+            Download sample template by clicking the button below.
           </p>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mr-2"
-            onClick={onDownloadSample}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            onClick={handleCreateExcel}
           >
             Download Sample
           </button>
@@ -34,20 +68,19 @@ const ImportModal = ({ isOpen, onClose, onDownloadSample }) => {
           <p className="mb-2">
             Upload the edited template by clicking the button below.
           </p>
-          <div className="flex space-x-2">
-            <label
-              htmlFor="file-upload"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer"
-            >
-              Upload File
-            </label>
-            <input
-              type="file"
-              id="file-upload"
-              className="hidden"
-              onChange={handleUpload}
-            />
-          </div>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            onClick={handleUploadButtonClick}
+          >
+            Upload XLSX
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            accept=".csv, .xlsx, .xls"
+            onChange={handleFileUpload}
+          />
         </div>
         <div className="flex justify-end">
           <button

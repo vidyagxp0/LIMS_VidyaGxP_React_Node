@@ -1,136 +1,4 @@
 
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Problem Reporting</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p>Add information and Add Problem Reporting</p>
-//           <CFormSelect
-//             type="text"
-//             label="Instrument (Instrument ID)"
-//             options={[
-//               "Select...",
-//               { label: "eqi/eng/163" },
-//               { label: "arzph001" },
-//               { label: "arz003" },
-//               { label: "qc/bal/0011" },
-//               { label: "hplc" },
-//               { label: "qc/bal/02" },
-//             ]}
-//             placeholder="Select... "
-//           />
-//           <CFormInput
-//             type="text"
-//             className="mb-3"
-//             label="Instrument Category"
-//             placeholder="weighing balance "
-//             disabled
-//           />
-//           <CFormInput
-//             type="text"
-//             className="mb-3"
-//             label="Supplied By"
-//             placeholder="Supplied By "
-//           />
-//           <CFormInput
-//             type="text"
-//             className="mb-3"
-//             label="Problem ID"
-//             placeholder="Problem ID"
-//           />
-//           <label>Problem In</label>
-//           <CFormCheck
-//             type="radio"
-//             id="ProblemInInstrument"
-//             name="ProblemIn"
-//             label="Instrument"
-//           />
-//           <CFormCheck
-//             type="radio"
-//             className="mb-3"
-//             id="ProblemInModule"
-//             name="ProblemIn"
-//             label="Module"
-//           />
-//           <CFormInput
-//             type="text"
-//             className="mb-3"
-//             label="Problem In Brief"
-//             placeholder=" Problem In Brief"
-//           />
-//           <CFormInput
-//             type="file"
-//             className="mb-3"
-//             label="Reference Document"
-//             placeholder=" choose file"
-//           />
-//           <CFormInput type="date" label="Occurred On" placeholder=" " />
-//           <CFormInput
-//             type="date"
-//             className="mb-3"
-//             label="Reported On"
-//             placeholder=" "
-//           />
-//           <CFormInput
-//             type="text"
-//             className="mb-3"
-//             label="Problem In Details"
-//             placeholder=" Problem In Details"
-//           />
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Back
-//           </CButton>
-//           <CButton className="bg-info text-white">Submit</CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//         size="lg"
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Delete Problem Reporting</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p>
-//             Do you want to delete this problem reporting <code>AL001</code>?
-//           </p>
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Back
-//           </CButton>
-//           <CButton
-//             className="bg-danger text-white"
-//             onClick={_props.confirmDelete}
-//           >
-//             Delete
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-
-
-
 
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -144,7 +12,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ProblemReportingModal from "../Modals/ProblemReportingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -372,7 +240,7 @@ const ProblemReporting = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ProblemReportingModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

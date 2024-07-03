@@ -269,6 +269,11 @@ function StorageLocation() {
             />
           </div>
           <div className="float-right">
+          <ATMButton
+              text="Import data"
+              color="Pink"
+              onClick={openModal}
+            />
             <ATMButton
               text="Add Storage Condition"
               color="blue"

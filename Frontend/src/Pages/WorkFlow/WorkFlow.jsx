@@ -1,86 +1,4 @@
 
-// const StatusModal = ({ visible, closeModal }) => {
-//   return (
-//     <CModal alignment="center" visible={visible} onClose={closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>New Plant</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Name"
-//           placeholder=" Name"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Unique Code"
-//           placeholder="Unique Code"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Generic Name"
-//           placeholder="Generic Name "
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Re-testing Period(Days)"
-//           placeholder="Re-testing Period(Days)"
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={closeModal}>
-//           Back
-//         </CButton>
-//         <CButton color="primary">Add New</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-// const DeleteModal = ({ visible, closeModal, handleDelete }) => {
-//   return (
-//     <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Plants Workflow
-//         </CModalTitle>
-//       </CModalHeader>
-//       <CModalBody
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Do you want to delete this plants workflow?</p>
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={closeModal}
-//           style={{ marginRight: "0.5rem", fontWeight: "500" }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={handleDelete}
-//           style={{ fontWeight: "500", color: "white" }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 
 
 import React, { useState, useEffect } from "react";
@@ -95,7 +13,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import WorkFlowModal from "../Modals/WorkFlowModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -325,7 +243,7 @@ const WorkFlow = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Add Plant" color="blue" onClick={openModal} />
+          <ATMButton text="Add WorkFlow" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -335,7 +253,7 @@ const WorkFlow = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <WorkFlowModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

@@ -1,140 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Culture Lot</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p>Add information and Add Template</p>
-//           <h3>Registration Initiation</h3>
-//           <CFormSelect
-//             type="text"
-//             label="Reference Culture Lot Code
-
-//             "
-//             placeholder=" "
-//           />
-//           <CFormInput type="text" label="Reference Culture" placeholder="" />
-//           <CFormInput type="text" label="Received Quantity" placeholder="" />
-//           <CFormInput type="text" label="Received By" placeholder="" />
-//           <CFormInput type="date" label="Received On" placeholder="" />{" "}
-//           <CFormInput
-//             type="date"
-//             label="Valid Upto
-//           "
-//             placeholder=""
-//           />
-//           <CFormInput type="text" label="Delivery Receipt No" placeholder="" />
-//           <CFormInput type="text" label="Supplied By" placeholder="" />
-//           <CFormInput
-//             type="text"
-//             label="Certificate No
-//             "
-//             placeholder=""
-//           />
-//           <CFormInput type="text" label="Certificate" placeholder="" />
-//           <CFormInput
-//             type="text"
-//             label="Batch No. On Catalogue
-//             "
-//             placeholder=""
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Catalogue No.
-//             "
-//             placeholder=""
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Packing Description
-
-//             "
-//             placeholder=""
-//           />
-//           <CFormSelect
-//             type="text"
-//             label="Stored At
-
-//             "
-//             placeholder=""
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Comments
-//             "
-//             placeholder=""
-//           />
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Add Culture Lot
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -149,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import RefrenceCultureLotModal from "../Modals/RefrenceCultureLotModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -231,7 +95,7 @@ const initialData = [
   },
 ];
 
-const CultureTemplateConfiguration = () => {
+const RefrenceCultureLot = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -381,7 +245,7 @@ const CultureTemplateConfiguration = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <RefrenceCultureLotModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -396,4 +260,4 @@ const CultureTemplateConfiguration = () => {
   );
 };
 
-export default CultureTemplateConfiguration;
+export default RefrenceCultureLot;
