@@ -390,6 +390,7 @@ function Specifications() {
             text="Import"
             color='pink'
             onClick={handleOpenModals}
+            
              />
             <ATMButton
               text="Add Specification"
