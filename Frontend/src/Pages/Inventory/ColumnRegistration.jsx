@@ -1,173 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Registration</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p style={{ marginLeft: "2px" }}>
-//             Add information and Add registration.
-//           </p>
-//           <CFormInput
-//             type="text"
-//             label="Column Application"
-//             placeholder="Column Application "
-//           />
-//           <CFormSelect
-//             type="text"
-//             label="Column Name"
-//             placeholder=" Column Name "
-//             className="custom-placeholder"
-//           />
-
-//           <CFormInput
-//             type="text"
-//             label="Column Number"
-//             placeholder="Column Number"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Brand Name / Manufacturer Name"
-//             placeholder="Brand Name / Manufacturer Name"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Mfg. Serial No. "
-//             placeholder="Select"
-//             className="custom-placeholder"
-//           />
-
-//           <CFormInput
-//             type="number"
-//             label="Film Thikness / Particle Size"
-//             placeholder="Film Thikness / Particle Size"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput type="number" label="UOM" placeholder="UOM" />
-//           <CFormInput
-//             type="number"
-//             label="Packing Material"
-//             placeholder="Packing Material"
-//           />
-//           <CFormInput type="number" label="Length" placeholder="select" />
-//           <CFormInput type="number" label=" UOM" placeholder="UOM" />
-//           <CFormInput
-//             type="number"
-//             label="Inner Diameter"
-//             placeholder="select"
-//           />
-
-//           <CFormInput
-//             type="number"
-//             label="Outer Diameter"
-//             placeholder="Outer Diameter"
-//           />
-
-//           <CFormInput type="date" label="Recieved On" placeholder="" />
-
-//           <CForm className="mb-3">
-//             <CFormLabel>Certificate Received</CFormLabel>
-//             <div style={{ display: "flex", justifyContent: "space-around" }}>
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="acceptRadio"
-//                 label="YES"
-//                 value="accept"
-//               />
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="rejectRadio"
-//                 label="NO"
-//                 value="reject"
-//               />
-//             </div>
-//           </CForm>
-
-//           <CFormInput type="number" label="Certificate" placeholder="Browse" />
-
-//           <div
-//             style={{
-//               display: "flex",
-//               justifyContent: "space-between",
-//               flexDirection: "column",
-//             }}
-//           >
-//             <label>Remarks if</label>
-//             <textarea name="" id=""></textarea>
-//           </div>
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Add Chemical
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
 
 
 import React, { useState, useEffect } from "react";
@@ -182,7 +12,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ColumnRegistrationModal from "../Modals/ColumnRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -358,7 +188,7 @@ const ColumnRegistration = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Chemical / Reagent Issue</h1>
+      <h1 className="text-2xl font-bold mb-4">Column Registration</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
         <Card
           title="DROPPED"
@@ -408,7 +238,7 @@ const ColumnRegistration = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Add Application" color="blue" onClick={openModal} />
+          <ATMButton text="Add Registration" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -418,7 +248,7 @@ const ColumnRegistration = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ColumnRegistrationModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

@@ -16,6 +16,7 @@ const QualificationModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size='xl'
       >
         <CModalHeader>
           <CModalTitle>Add Qualification</CModalTitle>

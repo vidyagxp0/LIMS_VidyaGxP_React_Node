@@ -66,7 +66,7 @@ const initialData = [
   },
 ];
 
-const ChemicalUsage = () => {
+const ChemicalIssues = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -267,4 +267,4 @@ const ChemicalUsage = () => {
   );
 };
 
-export default ChemicalUsage;
+export default ChemicalIssues;
