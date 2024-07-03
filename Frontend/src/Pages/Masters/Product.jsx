@@ -24,6 +24,8 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+
 
 const initialData = [
   {
@@ -128,13 +130,22 @@ const initialData = [
   },
 ];
 
-
 function Product() {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -151,7 +162,6 @@ function Product() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
   };
 
   const handleCheckboxChange = (index) => {
@@ -162,39 +172,44 @@ function Product() {
 
   const StatusModal = (_props) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
         <CModalHeader>
           <CModalTitle>Add Product/Material</CModalTitle>
         </CModalHeader>
         <CModalBody>
-  
           <CFormInput
-            className='mb-3'
+            className="mb-3"
             type="text"
             label="Name"
             placeholder="Product Name "
           />
           <CFormInput
-            className='mb-3'
+            className="mb-3"
             type="text"
             label="Unique Code"
             placeholder="Product Code "
           />
           <CFormInput
-            className='mb-3'
+            className="mb-3"
             type="text"
             label="Generic Name"
             placeholder="Generic Name"
           />
           <CFormInput
-            className='mb-3'
+            className="mb-3"
             type="text"
             label="Re-testing Period"
             placeholder="Re-testing Period "
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
           <CButton color="primary">Submit</CButton>
         </CModalFooter>
       </CModal>
@@ -245,11 +260,10 @@ function Product() {
     setViewModalData(false);
   };
 
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -272,7 +286,10 @@ function Product() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
             <ATMButton
               text="Add Master/Product"
               color="blue"
@@ -289,8 +306,15 @@ function Product() {
         />
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} />
+      )}
     </>
   );
 }
