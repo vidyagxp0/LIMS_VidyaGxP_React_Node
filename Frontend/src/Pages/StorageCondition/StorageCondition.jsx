@@ -63,6 +63,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -71,6 +72,7 @@ const initialData = [
     conditionCode: "CC1",
     storageCondition: "SC1",
     createdAt: "2023-01-01",
+    attachment: "attachment",
     status: "Active",
   },
   {
@@ -79,6 +81,7 @@ const initialData = [
     conditionCode: "CC2",
     storageCondition: "SC2",
     createdAt: "2023-02-01",
+    attachment: "attachment",
     status: "Active",
   },
   {
@@ -87,6 +90,7 @@ const initialData = [
     conditionCode: "CC3",
     storageCondition: "SC3",
     createdAt: "2023-03-01",
+    attachment: "attachment",
     status: "Inactive",
   },
   {
@@ -95,6 +99,7 @@ const initialData = [
     conditionCode: "CC4",
     storageCondition: "SC4",
     createdAt: "2023-04-01",
+    attachment: "attachment",
     status: "Active",
   },
   {
@@ -103,6 +108,7 @@ const initialData = [
     conditionCode: "CC5",
     storageCondition: "SC5",
     createdAt: "2023-05-01",
+    attachment: "attachment",
     status: "Inactive",
   },
   {
@@ -111,6 +117,7 @@ const initialData = [
     conditionCode: "CC6",
     storageCondition: "SC6",
     createdAt: "2023-06-01",
+    attachment: "attachment",
     status: "Active",
   },
   {
@@ -119,6 +126,7 @@ const initialData = [
     conditionCode: "CC7",
     storageCondition: "SC7",
     createdAt: "2023-07-01",
+    attachment: "attachment",
     status: "Inactive",
   },
   {
@@ -127,6 +135,7 @@ const initialData = [
     conditionCode: "CC8",
     storageCondition: "SC8",
     createdAt: "2023-08-01",
+    attachment: "attachment",
     status: "Active",
   },
   {
@@ -135,6 +144,7 @@ const initialData = [
     conditionCode: "CC9",
     storageCondition: "SC9",
     createdAt: "2023-09-01",
+    attachment: "attachment",
     status: "Inactive",
   },
   {
@@ -143,6 +153,7 @@ const initialData = [
     conditionCode: "CC10",
     storageCondition: "SC10",
     createdAt: "2023-10-01",
+    attachment: "attachment",
     status: "Active",
   },
 ];
@@ -153,6 +164,16 @@ function StorageLocation() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -175,6 +196,24 @@ function StorageLocation() {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      conditionCode: item["Condition Code"] || "",
+      storageCondition: item["Stability Storage Condition"] || "",
+      createdAt: item["Created At"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      status: item["Status"] || "Active",
+    }));
+  
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+  
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
   const StatusModal = (_props) => {
@@ -209,6 +248,7 @@ function StorageLocation() {
     { header: "Condition Code", accessor: "conditionCode" },
     { header: "Stability Storage Condition", accessor: "storageCondition" },
     { header: "Created At", accessor: "createdAt" },
+    { header: "attachment", accessor: "attachment" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -268,11 +308,11 @@ function StorageLocation() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
           <ATMButton
-              text="Import data"
-              color="Pink"
-              onClick={openModal}
+              text="Import"
+              color="pink"
+              onClick={handleOpenModals}
             />
             <ATMButton
               text="Add Storage Condition"
@@ -295,6 +335,9 @@ function StorageLocation() {
       )}
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </>
   );

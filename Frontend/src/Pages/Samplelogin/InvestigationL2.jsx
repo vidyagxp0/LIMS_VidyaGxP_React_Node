@@ -10,6 +10,7 @@ import Dropdown from '../../components/ATM components/Dropdown/Dropdown';
 import ATMButton from '../../components/ATM components/Button/ATMButton';
 import Table from '../../components/ATM components/Table/Table';
 import { useNavigate } from 'react-router-dom';
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -19,7 +20,8 @@ const initialData = [
     testCode: "T001",
     testType: "Type A",
     addedOn: "2024-01-01",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -28,7 +30,8 @@ const initialData = [
     testCode: "T002",
     testType: "Type B",
     addedOn: "2024-01-02",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -37,7 +40,8 @@ const initialData = [
     testCode: "T003",
     testType: "Type A",
     addedOn: "2024-01-03",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -46,7 +50,8 @@ const initialData = [
     testCode: "T004",
     testType: "Type C",
     addedOn: "2024-01-04",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -55,7 +60,8 @@ const initialData = [
     testCode: "T005",
     testType: "Type A",
     addedOn: "2024-01-05",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -64,7 +70,8 @@ const initialData = [
     testCode: "T006",
     testType: "Type B",
     addedOn: "2024-01-06",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -73,7 +80,8 @@ const initialData = [
     testCode: "T007",
     testType: "Type C",
     addedOn: "2024-01-07",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -82,7 +90,8 @@ const initialData = [
     testCode: "T008",
     testType: "Type A",
     addedOn: "2024-01-08",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -91,7 +100,8 @@ const initialData = [
     testCode: "T009",
     testType: "Type B",
     addedOn: "2024-01-09",
-   
+    attachment: "attachment",
+
   },
   {
     checkbox: false,
@@ -100,7 +110,8 @@ const initialData = [
     testCode: "T010",
     testType: "Type C",
     addedOn: "2024-01-10",
-   
+    attachment: "attachment",
+
   },
 ];
 
@@ -110,6 +121,15 @@ const InvestigationL2 = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const navigate = useNavigate()
 
@@ -148,15 +168,17 @@ const InvestigationL2 = () => {
     { header: "Test Code", accessor: "testCode" },
     { header: "Test Type", accessor: "testType" },
     { header: "Added On", accessor: "addedOn" },
-    { header: "Actions", accessor: "action",
+    { header: "attachment", accessor: "attachment" },
+    {
+      header: "Actions", accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() =>{ onViewDetails(row), navigate("/testResultsDetails")}} />
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => { onViewDetails(row), navigate("/testResultsDetails") }} />
           <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
       ),
-     },
+    },
   ];
 
   const openModal = () => {
@@ -169,35 +191,59 @@ const InvestigationL2 = () => {
     console.log('Deleted item:', item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      testName: item["Test Name"] || "",
+      testCode: item["Test Code"] || "",
+      testType: item["Test Type"] || "",
+      addedOn: item["Added On"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
 
   return (
     <>
-       <div className="m-5 mt-3">
+      <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Investigation L2</h4>
         </div>
-     
 
-      <div className="flex items-center justify-between mb-4">
+
+        <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
-        <Dropdown 
-          options={[
-            { value: 'All', label: 'All' },
-            { value: 'Active', label: 'Active' },
-            { value: 'Inactive', label: 'Inactive' },
-           
-          ]}
-          value={statusFilter}
-          onChange={setStatusFilter}
-        />
+            <Dropdown
+              options={[
+                { value: 'All', label: 'All' },
+                { value: 'Active', label: 'Active' },
+                { value: 'Inactive', label: 'Inactive' },
+
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add investigation L2 In" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
-        </div>
+        {isModalsOpen && (
+          <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        )}
+
+      </div>
     </>
   )
 }

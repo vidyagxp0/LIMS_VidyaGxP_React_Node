@@ -33,6 +33,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -43,6 +44,7 @@ const initialData = [
     createdAt: "2024-01-01",
     genericName: "Generic 1",
     specificationCode: "Spec 001",
+    attachment: "attachment",
     status: "INITIATED",
     action: [
       <FontAwesomeIcon
@@ -65,6 +67,7 @@ const initialData = [
     createdAt: "2024-01-02",
     genericName: "Generic 2",
     specificationCode: "Spec 002",
+    attachment: "attachment",
     status: "APPROVED",
     action: [
       <FontAwesomeIcon
@@ -87,6 +90,7 @@ const initialData = [
     createdAt: "2024-01-03",
     genericName: "Generic 3",
     specificationCode: "Spec 003",
+    attachment: "attachment",
     status: "REJECTED",
     action: [
       <FontAwesomeIcon
@@ -109,6 +113,7 @@ const initialData = [
     createdAt: "2024-01-04",
     genericName: "Generic 4",
     specificationCode: "Spec 004",
+    attachment: "attachment",
     status: "REINITIATED",
     action: [
       <FontAwesomeIcon
@@ -131,6 +136,7 @@ const initialData = [
     createdAt: "2024-01-05",
     genericName: "Generic 5",
     specificationCode: "Spec 005",
+    attachment: "attachment",
     status: "DROPPED",
     action: [
       <FontAwesomeIcon
@@ -156,6 +162,15 @@ export default function Samplelogin() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [deleteModal, setDeleteModal] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -172,7 +187,7 @@ export default function Samplelogin() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
+
   };
 
   const handleCheckboxChange = (index) => {
@@ -200,6 +215,7 @@ export default function Samplelogin() {
     { header: "A.R. No.", accessor: "createdAt" },
     { header: "Generic Name", accessor: "createdAt" },
     { header: "Specification Code", accessor: "createdAt" },
+    { header: "attachment", accessor: "attachment" },
     { header: "Status", accessor: "status" },
     {
       header: 'Actions',
@@ -208,7 +224,7 @@ export default function Samplelogin() {
         <>
           <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={openModal2} />
           <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)}/>
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)} />
         </>
       ),
     },
@@ -228,6 +244,25 @@ export default function Samplelogin() {
     console.log('Deleted item:', item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      sampleType: item["Sample Type"] || "",
+      storageCondition: item["Storage Condition"] || "",
+      createdAt: item["Created At"] || "",
+      genericName: item["Generic Name"] || "",
+      specificationCode: item["Specification Code"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const StatusModal2 = (_props) => {
     return (
@@ -350,9 +385,9 @@ export default function Samplelogin() {
         <div className="main-head">
           <h4 className="fw-bold">Sample Login</h4>
         </div>
-     
 
-      <div className="flex items-center justify-between mb-4">
+
+        <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
             <Dropdown
@@ -368,12 +403,13 @@ export default function Samplelogin() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add Sample Log In" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
-        </div>
+      </div>
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
@@ -383,8 +419,11 @@ export default function Samplelogin() {
           closeModal2={closeModal2}
         />
       )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
 
-     
+
     </>
   );
 }

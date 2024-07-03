@@ -20,40 +20,41 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
-  { checkbox: false, sno: 1, storageCode: "SC001", storageName: "Storage 1", status: "Active", action: [
+  { checkbox: false, sno: 1, storageCode: "SC001", storageName: "Storage 1", attachment: "attachment", status: "Active", action: [
     <FontAwesomeIcon icon={faEye} key="view1" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit1" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete1" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 2, storageCode: "SC002", storageName: "Storage 2", status: "Inactive", action: [
+  { checkbox: false, sno: 2, storageCode: "SC002", storageName: "Storage 2", attachment: "attachment", status: "Inactive", action: [
     <FontAwesomeIcon icon={faEye} key="view2" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit2" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete2" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 3, storageCode: "SC003", storageName: "Storage 3", status: "Active", action: [
+  { checkbox: false, sno: 3, storageCode: "SC003", storageName: "Storage 3", attachment: "attachment", status: "Active", action: [
     <FontAwesomeIcon icon={faEye} key="view3" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit3" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete3" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 4, storageCode: "SC004", storageName: "Storage 4", status: "Inactive", action: [
+  { checkbox: false, sno: 4, storageCode: "SC004", storageName: "Storage 4", attachment: "attachment", status: "Inactive", action: [
     <FontAwesomeIcon icon={faEye} key="view4" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit4" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete4" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 5, storageCode: "SC005", storageName: "Storage 5", status: "Active", action: [
+  { checkbox: false, sno: 5, storageCode: "SC005", storageName: "Storage 5", attachment: "attachment", status: "Active", action: [
     <FontAwesomeIcon icon={faEye} key="view5" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit5" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete5" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 6, storageCode: "SC006", storageName: "Storage 6", status: "Inactive", action: [
+  { checkbox: false, sno: 6, storageCode: "SC006", storageName: "Storage 6", attachment: "attachment", status: "Inactive", action: [
     <FontAwesomeIcon icon={faEye} key="view6" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit6" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete6" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 7, storageCode: "SC007", storageName: "Storage 7", status: "Active", action: [
+  { checkbox: false, sno: 7, storageCode: "SC007", storageName: "Storage 7", attachment: "attachment", status: "Active", action: [
     <FontAwesomeIcon icon={faEye} key="view7" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit7" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete7" className="cursor-pointer" />
@@ -63,12 +64,12 @@ const initialData = [
     <FontAwesomeIcon icon={faPenToSquare} key="edit8" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete8" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 9, storageCode: "SC009", storageName: "Storage 9", status: "Active", action: [
+  { checkbox: false, sno: 9, storageCode: "SC009", storageName: "Storage 9", attachment: "attachment", status: "Active", action: [
     <FontAwesomeIcon icon={faEye} key="view9" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit9" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete9" className="cursor-pointer" />
   ]},
-  { checkbox: false, sno: 10, storageCode: "SC010", storageName: "Storage 10", status: "Inactive", action: [
+  { checkbox: false, sno: 10, storageCode: "SC010", storageName: "Storage 10", attachment: "attachment", status: "Inactive", action: [
     <FontAwesomeIcon icon={faEye} key="view10" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faPenToSquare} key="edit10" className="mr-2 cursor-pointer" />,
     <FontAwesomeIcon icon={faTrashCan} key="delete10" className="cursor-pointer" />
@@ -84,8 +85,16 @@ function StorageLocation() {
   const [viewModalData, setViewModalData] = useState(null);
   const [deleteItem, setDeleteItem] = useState(null);
   const [delModal, setDelModal] = useState(false);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [openDelModal, setOpenDelModal] = useState(false); 
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -117,7 +126,8 @@ function StorageLocation() {
     { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: 'checkbox' },
     { header: 'SrNo.', accessor: 'sno' },
     { header: 'Storage Code', accessor: 'storageCode' },
-    { header: 'Storage Name.', accessor: 'storageName' },
+    { header: 'Storage Name', accessor: 'storageName' },
+    { header: "attachment", accessor: "attachment" },
     { header: 'Status', accessor: 'status' },
     {
       header: 'Actions',
@@ -150,6 +160,22 @@ function StorageLocation() {
     console.log('Deleted item:', item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      storageCode: item["Storage Code"] || "",
+      storageName: item["Storage Name"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+  
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   return (
     <>
@@ -171,7 +197,8 @@ function StorageLocation() {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Storage Location" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -183,7 +210,9 @@ function StorageLocation() {
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
        {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
-     
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
     </>
   );
 }
