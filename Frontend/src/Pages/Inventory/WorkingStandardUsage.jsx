@@ -10,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import WorkingStandardUsageModal from "../Modals/WorkingStandardUsageModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -284,7 +284,7 @@ const WorkingStandardUsage = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <WorkingStandardUsageModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

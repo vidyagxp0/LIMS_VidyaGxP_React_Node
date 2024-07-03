@@ -1,97 +1,4 @@
 
-
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//         <CModalHeader>
-//           <CModalTitle>Add Service Reporting</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p>Add information and Add Service Reporting</p>
-//           <CFormSelect
-//             type="text"
-//             label="Problem ID"
-//             className="mb-3"
-//             options={["Select...", { label: "SHMDZ" }]}
-//             placeholder="Select... "
-//           />
-//           <CFormInput type="text" label="Instrument (Instrument ID)" placeholder="hplc " disabled />
-//           <CFormSelect
-//             type="text"
-//             label="Module ID"
-//             className="mb-3"
-//             options={["Select...", { label: "wl/wb/m/001" }]}
-//             placeholder="Select... "
-//           />
-//           <CFormInput type="text" className="mb-3" label="Problem In Brief" placeholder="Problem In Brief " />
-//           <CFormInput type="text" className="mb-3" label="Problem In Details" placeholder="Problem In Details" />
-//           <CFormInput type="file" className="mb-3" label="Reference Document" placeholder=" choose file" />
-//           <CFormInput type="date" className="mb-3" label="Occurred On" placeholder=" " />
-//           <CFormInput type="date" className="mb-3" label="Reported On" placeholder=" " />
-//           <CFormInput type="date" className="mb-3" label="Attended On" placeholder=" " />
-//           <CFormInput type="date" className="mb-3" label="Expected Closure Date" placeholder=" " />
-//           <CFormInput type="text" className="mb-3" label="Job Details" placeholder=" Job Details" />
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Back
-//           </CButton>
-//           <CButton color="primary">Submit</CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Service Reporting
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div className="modal-body" style={{
-//         fontSize: "1.2rem",
-//         fontWeight: "500",
-//         lineHeight: "1.5",
-//         marginBottom: "1rem",
-//         columnGap: "0px",
-//         border: "0px !important",
-//       }}
-//       >
-//         <p>Do you want to delete this Service reporting <code>test</code>?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.confirmDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -104,7 +11,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ServiceReportingModal from "../Modals/ServiceReportingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -333,7 +240,7 @@ const ServiceReporting = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ServiceReportingModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

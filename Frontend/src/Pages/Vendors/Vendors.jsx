@@ -1,111 +1,4 @@
 
-  // const StatusModal = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Add Approved Vendor</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         <p className="mb-3 fw-bold">
-  //           Add information and add new approved vendor
-  //         </p>
-  //         <CFormSelect
-  //           className="mb-3"
-  //           label="Product/Material Name"
-  //           placeholder="Select product"
-  //           options={[
-  //             { value: "Tadalafil", label: "Tadalafil" },
-  //             { value: "Diclofenac Resinate", label: "Diclofenac Resinate" },
-  //             {
-  //               value: "Diclofenac Sodium (BromineFree)",
-  //               label: "Diclofenac Sodium (BromineFree)",
-  //             },
-  //           ]}
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Unique Code"
-  //           placeholder="Product Code"
-  //         />
-  //         <CFormSelect
-  //           className="mb-3"
-  //           label="Vendor Name"
-  //           placeholder="Select vender"
-  //           options={[
-  //             {
-  //               value: "Aavis Pharmaceuticals",
-  //               label: "Aavis Pharmaceuticals",
-  //             },
-  //             { value: "Diclofenac Resinate", label: "Diclofenac Resinate" },
-  //             {
-  //               value: "Diclofenac Sodium (BromineFree)",
-  //               label: "Diclofenac Sodium (BromineFree)",
-  //             },
-  //           ]}
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Qualification Criteria"
-  //           placeholder="Qualification Criteria"
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Comments If Any"
-  //           placeholder="Comments If Any"
-  //         />
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton color="primary">Add</CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-  // const DeleteModal = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //       size="lg"
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Delete Approved Vendor</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         <p className="fs-5">Do you want to delete this Approved Vendor?</p>
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton
-  //           color="secondary"
-  //           onClick={_props.closeModal}
-  //           style={{ marginRight: "0.5rem", fontWeight: "500" }}
-  //         >
-  //           Cancel
-  //         </CButton>
-  //         <CButton
-  //           color="danger"
-  //           onClick={_props.confirmDelete}
-  //           style={{ fontWeight: "500", color: "white" }}
-  //         >
-  //           Delete
-  //         </CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-
   
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -119,7 +12,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import VendorModal from "../Modals/VendorModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -342,7 +235,7 @@ const Vendors = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <VendorModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
