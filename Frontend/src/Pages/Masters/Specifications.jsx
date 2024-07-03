@@ -25,6 +25,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -147,6 +148,15 @@ function Specifications() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -375,12 +385,18 @@ function Specifications() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
             <ATMButton
               text="Add Specification"
               color="blue"
               onClick={openModal}
             />
+             
           </div>
         </div>
         <Table
@@ -394,6 +410,7 @@ function Specifications() {
 
       {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
       {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isModalsOpen&& <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} />}
     </>
   );
 }

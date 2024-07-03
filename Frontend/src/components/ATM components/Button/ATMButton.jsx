@@ -17,6 +17,9 @@ const ATMButton =  ({ color, text, onClick }) => {
         break;
       default:
         bgColor = 'bg-gray-500 hover:bg-gray-600'; // Default to gray if color is not recognized
+        case 'pink':
+          bgColor = 'bg-pink-500 hover:bg-pink-600';
+          break;
     }
   return (
     <button
