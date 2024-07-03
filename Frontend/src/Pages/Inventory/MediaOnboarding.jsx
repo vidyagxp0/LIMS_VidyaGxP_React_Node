@@ -1,121 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Media Onboarding</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p>Add information and add new mediaOnboarding</p>
-//           {/* <h3>Registration Initiation</h3> */}
-//           <CFormSelect
-//             type="text"
-//             label="Media Name
-//             "
-//             placeholder=" "
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Media Prefix
-//             "
-//             placeholder=""
-//           />
-
-//           <CFormInput type="text" label="Storage Condition" placeholder="" />
-
-//           <CFormInput type="text" label="UOM" placeholder="" />
-//           <CForm>
-//             <CFormLabel>Mode of Prepration</CFormLabel>
-//             <div>
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="acceptRadio"
-//                 label="To be Prepared"
-//                 value="accept"
-//               />
-//               <CFormCheck
-//                 type="radio"
-//                 name="sampleRadio"
-//                 id="rejectRadio"
-//                 label="Ready Mode"
-//                 value="reject"
-//               />
-//             </div>
-//           </CForm>
-//           <CFormInput
-//             type="text"
-//             label="Refrence Document if Any"
-//             placeholder="choose file"
-//           />
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Submit
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
 
 
 import React, { useState, useEffect } from "react";
@@ -131,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import MediaOnboardingModal from "../Modals/MediaOnboardingModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -350,7 +233,7 @@ const MediaOnboarding = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <MediaOnboardingModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

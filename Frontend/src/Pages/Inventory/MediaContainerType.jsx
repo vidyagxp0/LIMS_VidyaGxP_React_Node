@@ -1,92 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Media Container Type</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <p>Add information and add new Media Container Type</p>
-//           {/* <h3>Registration Initiation</h3> */}
-//           <CFormSelect
-//             type="text"
-//             label="Prepared Media Conatiner Type
-
-//             "
-//             placeholder=" Media Conatiner Type Name
-//             "
-//           />
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Submit
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -100,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import MediaContainerTypeModal from "../Modals/MediaContainerTypeModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -297,10 +209,7 @@ const MediaContainerType = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <MediaContainerTypeModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
