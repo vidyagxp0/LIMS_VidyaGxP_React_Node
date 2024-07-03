@@ -7,7 +7,7 @@ const ViewModal = ({ visible, closeModal, data }) => {
 
     return (
         <>
-        <CModal alignment="center" visible={visible} onClose={closeModal} className='w-full'>
+        <CModal alignment="center" visible={visible} onClose={closeModal} size='xl'>
             <div id="approval-page" className="py-3 bg-light h-100">  
                 <div className="container-fluid">
                     <div className="block mb-3">

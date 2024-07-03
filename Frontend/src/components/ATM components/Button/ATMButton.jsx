@@ -20,7 +20,7 @@ const ATMButton =  ({ color, text, onClick }) => {
     }
   return (
     <button
-    className={`px-4 py-2 rounded-md text-white ${bgColor} focus:outline-none`}
+    className={`px-4 py-2 rounded-md text-white ${bgColor}flex justify-center focus:outline-none`}
     onClick={onClick}
   >
     {text}

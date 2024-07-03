@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import Table from '../../components/ATM components/Table/Table';
+import Details from './Details';
 
 const initialData = [
   {
@@ -11,23 +12,7 @@ const initialData = [
     role: "Admin",
     status: "Active",
     checkbox: false,
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     sno: 2,
@@ -36,23 +21,7 @@ const initialData = [
     role: "User",
     status: "Inactive",
     checkbox: false,
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
   {
     sno: 3,
@@ -61,29 +30,13 @@ const initialData = [
     role: "Manager",
     status: "Active",
     checkbox: false,
-    action: [
-      <FontAwesomeIcon
-        icon={faEye}
-        key="view"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete"
-        className="cursor-pointer"
-      />,
-    ],
+    
   },
 ];
 
 const Approval = () => {
   const [data, setData] = useState(initialData);
-
+  const [viewModalData, setViewModalData] = useState(null);
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -112,16 +65,41 @@ const Approval = () => {
     { header: "Email", accessor: "email" },
     { header: "Role", accessor: "role" },
     { header: "Status", accessor: "status" },
-    { header: "Action", accessor: "action" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
   ];
 
+  const closeViewModal = () => {
+    setViewModalData(false);
+  };
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+  };
+
   const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
+    const newData = data.filter((d) => d.sno !== item.sno);
     setData(newData);
     console.log('Deleted item:', item);
   };
 
   return (
+   <>
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">User List</h1>
       <Table
@@ -129,8 +107,13 @@ const Approval = () => {
         data={data}
         onCheckboxChange={handleCheckboxChange}
         onDelete={handleDelete}
+        onViewDetails={onViewDetails}
       />
     </div>
+    {viewModalData && (
+      <Details visible={viewModalData} closeModal={closeViewModal} />
+    )}
+    </>
   );
 };
 
