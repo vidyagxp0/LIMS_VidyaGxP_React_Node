@@ -10,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ChemicalUsageModal from "../Modals/ChemicalUsageModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -235,7 +235,7 @@ const ChemicalUsage = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Lot Registration" color="blue" onClick={openModal} />
+          <ATMButton text="Add Chemical Usage" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -245,7 +245,7 @@ const ChemicalUsage = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ChemicalUsageModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

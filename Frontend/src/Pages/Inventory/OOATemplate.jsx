@@ -1,83 +1,7 @@
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//         size="xl"
-//       >
-//         <CModalHeader className="p-3">
-//           <CModalTitle>Add OOA Template</CModalTitle>
-//         </CModalHeader>
-
-//         {/* <p>Add information and Add Coa Template</p> */}
-//         <div className="modal-body p-4">
-//           <CForm>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Copying From Template
-
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Name
-
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-
-//             <div className="mb-3">
-//               <CFormSelect
-//                 type="text"
-//                 label="Unique Code
-//                "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3 d-flex gap-4"  >
-//               <CFormInput
-//                 type="text"
-//                 label="Analyst Check List
-//                 "
-//                 placeholder="No. of Check Items"
-//                 className="custom-placeholder"
-//               />
-//               <CButton color="info">Add</CButton>
-//             </div>
-
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Supervisor Check List
-
-//                 "
-//                 placeholder="No. of Check Items"
-//                 className="custom-placeholder"
-//               />
-//               <CButton color="info">Add</CButton>
-//             </div>
-//           </CForm>
-//         </div>
-
-//         <CModalFooter className="p-3">
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Add
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
+      
 //     </>
 //   );
 // };
@@ -146,6 +70,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import OOATemplateModal from "../Modals/OOATemplateModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -342,7 +267,7 @@ const OOATemplate = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <OOATemplateModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

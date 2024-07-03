@@ -10,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ChemicalIssueModal from "../Modals/ChemicalIssueModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -66,7 +66,7 @@ const initialData = [
   },
 ];
 
-const ChemicalUsage = () => {
+const ChemicalIssues = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -252,7 +252,7 @@ const ChemicalUsage = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ChemicalIssueModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -267,4 +267,4 @@ const ChemicalUsage = () => {
   );
 };
 
-export default ChemicalUsage;
+export default ChemicalIssues;

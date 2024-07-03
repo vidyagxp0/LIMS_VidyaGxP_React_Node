@@ -1,73 +1,7 @@
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader className="p-3">
-//           <CModalTitle>Add Processing System</CModalTitle>
-//         </CModalHeader>
-//         <div className="modal-body p-4">
-//           <p>Add information and register new Processing System</p>
-//           <CForm>
-//             <div className="mb-3">
-//               <CFormSelect
-//                 type="text"
-//                 label="Category"
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Processing System
-
-//               "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Unique Code
-//               "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Description"
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="No. of Sample Area(s)
-//                 "
-//                 placeholder=""
-//                 className="custom-placeholder"
-//               />
-//               <CButton color="info">Add</CButton>
-//             </div>
-//           </CForm>
-//         </div>
-//         <CModalFooter className="p-3">
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Submit
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
+     
 //     </>
 //   );
 // };
@@ -136,6 +70,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ProcessingSystemModal from "../Modals/ProcessingSystemModal";
 import ViewModal from "../Modals/ViewModal";
 
 const initialData = [
@@ -336,7 +271,7 @@ const ProcessingSystem = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ProcessingSystemModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

@@ -385,7 +385,7 @@ const LocationSamples = () => {
           />
         </div>
         <div className="float-right">
-          <ATMButton text="Add OOA Template" color="blue" onClick={openModal} />
+          {/* <ATMButton text="Add OOA Template" color="blue" onClick={openModal} /> */}
         </div>
       </div>
       <Table2
