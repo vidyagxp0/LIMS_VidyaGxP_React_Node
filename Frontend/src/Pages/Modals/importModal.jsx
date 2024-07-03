@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import * as XLSX from "xlsx";
 
-const ImportModal = ({ isOpen, onClose, columns }) => {
+const ImportModal = ({ isOpen, onClose, columns, onDataUpload }) => {
   const fileInputRef = useRef(null);
 
   if (!isOpen) return null;
@@ -34,6 +34,7 @@ const ImportModal = ({ isOpen, onClose, columns }) => {
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
       console.log(jsonData); // Process your data here
+      onDataUpload(jsonData); // Pass the data to the parent component
     };
 
     reader.readAsArrayBuffer(file);
