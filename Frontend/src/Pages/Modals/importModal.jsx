@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import * as XLSX from "xlsx";
 
-const ImportModal = ({ isOpen, onClose, columns,onDataUpload  }) => {
+const ImportModal = ({ isOpen, onClose,initialData, columns,onDataUpload  }) => {
   const fileInputRef = useRef(null);
 
   if (!isOpen) return null;
@@ -13,7 +13,7 @@ const ImportModal = ({ isOpen, onClose, columns,onDataUpload  }) => {
     const headerRow = columns?.map((column) => column.header);
 
     // Example empty row
-    const dataRows = [["", "", ""]]; // Example empty row, adjust as needed
+    const dataRows = [["", "", ""]];
 
     const ws = XLSX.utils.aoa_to_sheet([headerRow, ...dataRows]);
 

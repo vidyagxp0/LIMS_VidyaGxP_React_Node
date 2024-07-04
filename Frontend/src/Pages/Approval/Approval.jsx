@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import Table from '../../components/ATM components/Table/Table';
 import Details from './Details';
+import ImportModal from '../Modals/importModal';
+import ATMButton from '../../components/ATM components/Button/ATMButton';
 
 const initialData = [
   {
@@ -37,6 +39,14 @@ const initialData = [
 const Approval = () => {
   const [data, setData] = useState(initialData);
   const [viewModalData, setViewModalData] = useState(null);
+  
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -85,6 +95,21 @@ const Approval = () => {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      name: item["Name"] || "",
+      email: item["Email"] || "",
+      role: item["Role"] || "",
+      status: item["Status"] || "",
+    }));
+  
+    const concatenatedData = [...initialData, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   const closeViewModal = () => {
     setViewModalData(false);
   };
@@ -102,6 +127,17 @@ const Approval = () => {
    <>
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">User List</h1>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+        </div>
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
+        </div>
+      </div>
       <Table
         columns={columns}
         data={data}
@@ -113,6 +149,9 @@ const Approval = () => {
     {viewModalData && (
       <Details visible={viewModalData} closeModal={closeViewModal} />
     )}
+     {isModalsOpen && (
+        <ImportModal  initialData={initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
     </>
   );
 };
