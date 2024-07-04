@@ -433,7 +433,7 @@ const Registration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       Category: item["Category"] || "",
       InstrumentId: item["Instrument Id"] || "",
       Instrument: item["Instrument"] || "",

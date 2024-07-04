@@ -277,7 +277,7 @@ const CalibrationSampleLoginTemplate = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:initialData.length+ index + 1,
+      sno: data.length+ index + 1,
       SampleLogintemplate: item["Sample Login template"] || "",
       TestPlan: item["Test Plan"] || "",
       AutoSampleAllotmentRequired: item["Auto Sample Allotment Required"] || "",

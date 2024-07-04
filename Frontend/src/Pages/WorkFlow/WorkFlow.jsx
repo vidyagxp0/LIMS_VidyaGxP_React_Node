@@ -217,7 +217,7 @@ const WorkFlow = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       PlantCode: item["Plant Code"] || "",
       PlantName: item["Plant Name"] || "",
       Address: item["Address"] || "",

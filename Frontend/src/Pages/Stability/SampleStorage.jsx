@@ -264,7 +264,7 @@ function SampleStorage() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       productName: item["Product Name"] || "",
       chamberID: item["Chamber ID"] || "",
       actualQuantity: item["Actual Quantity"] || "",

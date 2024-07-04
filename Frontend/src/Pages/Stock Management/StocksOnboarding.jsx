@@ -282,7 +282,7 @@ const StocksOnboarding = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       MaterialType: item["Material Type"] || "",
       MaterialName: item["Material Name"] || "",
       InvoiceNo: item["Invoice No."] || "",

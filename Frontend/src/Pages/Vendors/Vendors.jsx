@@ -196,7 +196,7 @@ const Vendors = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       ProductName: item["Product Name"] || "",
       UniqueCode: item["Unique Code"] || "",
       VendorName: item["Vendor Name"] || "",
