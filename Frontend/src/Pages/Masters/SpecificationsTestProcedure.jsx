@@ -370,7 +370,7 @@ function SpecificationsTestProcedure() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: index + 1,
+      sno: initialData.length + index + 1,
       productCode: item["Product Code"] || "",
       productName: item["Product Name"] || "",
       specificationID: item["Specification ID"] || "",

@@ -24,6 +24,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
      {
@@ -125,6 +126,15 @@ function SampleAcceptanceTemplate() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -200,7 +210,21 @@ function SampleAcceptanceTemplate() {
       ),
     },
   ];
-
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      name: item["Name"] || "",
+      uniqueCode: item["Unique Code"] || "",
+      noOfCheckItems: item["No. of Check Items"] || 0,
+      updatedAt: item["Updated At"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -240,7 +264,13 @@ function SampleAcceptanceTemplate() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
             <ATMButton
               text="Add Sample Acceptance"
               color="blue"
@@ -256,7 +286,9 @@ function SampleAcceptanceTemplate() {
           onDelete={handleDelete}
         />
       </div>
-
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
       {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
       {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
     </>

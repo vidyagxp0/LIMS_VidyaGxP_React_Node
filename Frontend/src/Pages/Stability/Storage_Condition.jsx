@@ -20,6 +20,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -120,6 +121,16 @@ function Storage_Condition() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -187,6 +198,23 @@ function Storage_Condition() {
     setIsModalOpen(false);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      conditionCode: item["Condition Code"] || "",
+      stabilityCondition: item["Stability Condition"] || "",
+      description: item["Description"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsImportModalOpen(false); // Close the import modal after data upload
+  };
+  
+  
+
   return (
     <>
       <div className="m-5 mt-3">
@@ -206,7 +234,13 @@ function Storage_Condition() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
             <ATMButton
               text="Add Storage Condition"
               color="blue"
@@ -225,6 +259,9 @@ function Storage_Condition() {
 
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </>
   );

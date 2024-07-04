@@ -13,6 +13,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ServiceReportingModal from "../Modals/ServiceReportingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
 
 const initialData = [
   {
@@ -112,6 +113,15 @@ const ServiceReporting = () => {
     Active: 0,
     Inactive: 0,
   });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   useEffect(() => {
     const counts = {
@@ -190,6 +200,25 @@ const ServiceReporting = () => {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      ProblemId: item["Problem ID"] || "",
+      InstrumentId: item["Instrument ID"] || "",
+      ModuleId: item["Module ID"] || "",
+      ProblemInBrief: item["Problem In Brief"] || "",
+      ProblemInDetails: item["Problem In Details"] || "",
+      ExpectedClosureDate: item["Expected Closure Date On"] || "",
+      JobDetails: item["Job Details"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -229,7 +258,13 @@ const ServiceReporting = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
           <ATMButton text="Add Service" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -250,6 +285,9 @@ const ServiceReporting = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

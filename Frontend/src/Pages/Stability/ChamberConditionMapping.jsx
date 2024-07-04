@@ -24,6 +24,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -123,10 +124,17 @@ function ChamberConditionMapping() {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
- 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -224,6 +232,23 @@ function ChamberConditionMapping() {
     console.log('Deleted item:', item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      chamberId: item["Chamber Id"] || "",
+      description: item["Description"] || "",
+      currentStorageCondition: item["Current Storage Condition"] || "",
+      initiatedOn: item["Initiated On"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsImportModalOpen(false); // Close the import modal after data upload
+  };
+  
+
   return (
     <>
       <div className="m-5 mt-3">
@@ -247,7 +272,15 @@ function ChamberConditionMapping() {
               onChange={setStatusFilter}
             />
           </div>
-         
+          <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
+             
+          </div>
         </div>
         <Table
           columns={columns}
@@ -257,6 +290,9 @@ function ChamberConditionMapping() {
           onDelete={handleDelete}
         />
       </div>
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
       {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
     </>
   );

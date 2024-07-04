@@ -35,6 +35,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
 
 
 
@@ -154,6 +155,16 @@ function CoaTemplate() {
        APPROVED: 0,
        REJECTED: 0,
      });
+
+     const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+     const handleOpenModals = () => {
+       setIsModalsOpen(true);
+     };
+   
+     const handleCloseModals = () => {
+       setIsModalsOpen(false);
+     };
    
      useEffect(() => {
        const counts = {
@@ -250,6 +261,23 @@ function CoaTemplate() {
        setData(newData);
        console.log("Deleted item:", item);
      };
+
+     const handleExcelDataUpload = (excelData) => {
+      const updatedData = excelData.map((item, index) => ({
+        checkbox: false,
+        sno: index + 1,
+        productName: item["Product Name"] || "",
+        chamberID: item["Chamber ID"] || "",
+        actualQuantity: item["Actual Quantity"] || "",
+        availableQuantity: item["Available Quantity"] || "",
+        protocolType: item["Protocol Type"] || "",
+        status: item["Status"] || "INITIATED",
+      }));
+    
+      const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
      return (
        <>
        <div className="p-4">
@@ -302,7 +330,13 @@ function CoaTemplate() {
                onChange={setStatusFilter}
              />
            </div>
-           <div className="float-right">
+           <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
              <ATMButton text="Add Coa Chamber" color="blue" onClick={openModal} />
            </div>
          </div>
@@ -321,6 +355,9 @@ function CoaTemplate() {
            
            />
          )}
+          {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
        </div>
        </>
      );

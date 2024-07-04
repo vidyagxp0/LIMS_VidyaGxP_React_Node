@@ -165,6 +165,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -247,6 +248,14 @@ const CalibrationDataSheet = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   useEffect(() => {
     const counts = {
@@ -349,6 +358,23 @@ const CalibrationDataSheet = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      Uniquecode: item["Unique code"] || "",
+      DataSheetName: item["DataSheetName"] || "",
+      QuantitativeParameters: item["Quantitative Parameters"] || "",
+      QualitativeParameters: item["Qualitative Parameters"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+  
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Calibration Data Sheets</h1>
@@ -400,7 +426,13 @@ const CalibrationDataSheet = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
           <ATMButton text="Add DataSheet" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -421,6 +453,9 @@ const CalibrationDataSheet = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

@@ -90,6 +90,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -162,6 +163,13 @@ const CalibrationType = () => {
     Active: 0,
     Inactive: 0,
   });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   useEffect(() => {
     const counts = {
@@ -236,6 +244,21 @@ const CalibrationType = () => {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      CalibrationType: item["Calibration Type"] || "",
+      CalibrationPrefix: item["Calibration Prefix"] || "",
+      AddedOn: item["Added On"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -275,7 +298,13 @@ const CalibrationType = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
           <ATMButton text="Calibration Type" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -296,6 +325,9 @@ const CalibrationType = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

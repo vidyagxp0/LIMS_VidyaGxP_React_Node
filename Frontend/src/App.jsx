@@ -25,7 +25,7 @@ import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2";
 
 import Storage_Condition from "./Pages/Stability/Storage_Condition";
 import ChamberConditionMapping from "./Pages/Stability/ChamberConditionMapping";
-import ChamberTransfer from "./Pages/Stability/ChamberTransfer";
+// import ChamberTransfer from "./Pages/Stability/ChamberTransfer";
 import CoaTemplate from "./Pages/Stability/CoaTemplate";
 import StorageChamber from "./Pages/Stability/StorageChamber";
 import StandardProtocol from "./Pages/Stability/StandardProtocol";
@@ -270,7 +270,7 @@ function App() {
               path="/chamberConditionMapping"
               element={<ChamberConditionMapping />}
             />
-            <Route path="/chamberTransfer" element={<ChamberTransfer />} />
+            {/* <Route path="/chamberTransfer" element={<ChamberTransfer />} /> */}
             <Route path="/stabilityProtocol" element={<StabilityProtocol />} />
             <Route path="/sampleStorage" element={<SampleStorage />} />
             <Route path="/coaTemplate" element={<CoaTemplate />} />

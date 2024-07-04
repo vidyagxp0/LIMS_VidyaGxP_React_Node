@@ -277,7 +277,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Chamber Condition Mapping
               </CNavItem>
             </Link>
-            <Link to="/chamberTransfer">
+            {/* <Link to="/chamberTransfer">
               <CNavItem
                 href="#"
                 className={isActive("/chamberTransfer")}
@@ -288,7 +288,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Chamber Transfer
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/stabilityProtocol">
               <CNavItem
                 href="#"

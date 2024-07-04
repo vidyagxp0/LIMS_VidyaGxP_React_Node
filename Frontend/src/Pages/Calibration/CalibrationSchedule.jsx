@@ -199,6 +199,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import { CCol } from "@coreui/react";
 import { PiDownloadBold } from "react-icons/pi";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -295,6 +296,14 @@ const CalibrationSchedule = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -376,6 +385,25 @@ const CalibrationSchedule = () => {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      UniqueCode: item["Unique Code"] || "",
+      CalibrationWorkflow: item["CalibrationWorkflow"] || "",
+      ScheduleDescription: item["Schedule Description"] || "",
+      StartDate: item["Start Date"] || "",
+      Frequency: item["Frequency"] || "",
+      NextCalibrationDue: item["Next Calibration Due"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+  
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -420,7 +448,10 @@ const CalibrationSchedule = () => {
           />
         </div>
         <CCol sm={1}>
-        <div
+       
+      </CCol>
+      <div className="float-right flex gap-4">
+      <div
           style={{
             border: "1px solid #f98d6b",
             padding: "7px",
@@ -433,8 +464,11 @@ const CalibrationSchedule = () => {
         >
           <PiDownloadBold />
         </div>
-      </CCol>
-        <div className="float-right">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
           <ATMButton
             text="Calibration Schedule"
             color="blue"
@@ -459,6 +493,9 @@ const CalibrationSchedule = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

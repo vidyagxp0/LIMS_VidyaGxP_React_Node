@@ -73,6 +73,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -185,6 +186,14 @@ const CalibrationRecord = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -267,7 +276,26 @@ const CalibrationRecord = () => {
       ),
     },
   ];
-
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      CalibrationId: item["Calibration Id"] || "",
+      InstrumentId: item["Instrument Id"] || "",
+      ModuleModuleId: item["(Module)Module Id"] || "",
+      CalibrationType: item["CalibrationType"] || "",
+      ScheduleDate: item["Schedule Date"] || "",
+      NextDueDate: item["Next Due Date"] || "",
+      ToleranceDay: item["Tolerance (Day(s))"] || "",
+      CalibrationStatus: item["Calibration Status"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+  
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -293,26 +321,16 @@ const CalibrationRecord = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Calibration Records</h1>
-     
       <div className="flex items-center justify-between mb-4">
-        {/* <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
-        </div> */}
-        {/* <div className="float-right">
-          <ATMButton text="Add Login Template" color="blue" onClick={openModal} />
-        </div> */}
+        <div className="flex space-x-4">
+        </div>
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
+        </div>
       </div>
       <Table
         columns={columns}
@@ -331,6 +349,10 @@ const CalibrationRecord = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+
+{isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

@@ -15,6 +15,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import WorkFlowModal from "../Modals/WorkFlowModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
 
 const initialData = [
   {
@@ -125,6 +126,16 @@ const WorkFlow = () => {
    
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       APPROVED: 0,
@@ -203,6 +214,24 @@ const WorkFlow = () => {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      PlantCode: item["Plant Code"] || "",
+      PlantName: item["Plant Name"] || "",
+      Address: item["Address"] || "",
+      Comments: item["Comments"] || "",
+      Workflow: item["Workflow"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -242,7 +271,13 @@ const WorkFlow = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
           <ATMButton text="Add WorkFlow" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -263,6 +298,9 @@ const WorkFlow = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

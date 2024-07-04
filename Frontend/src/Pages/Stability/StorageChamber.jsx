@@ -32,6 +32,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import { Button } from "react-bootstrap";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -152,6 +153,16 @@ const StorageChamber = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -248,6 +259,24 @@ const StorageChamber = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      chamberID: item["Chamber ID"] || "",
+      description: item["Description"] || "",
+      makeModel: item["Make/ Model"] || "",
+      serialNo: item["Serial No."] || "",
+      location: item["Location"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+  
+    const concatenateData = [...data, ...updatedData];
+setData(concatenateData ); // Update data state with parsed Excel data
+    setIsImportModalOpen(false); // Close the import modal after data upload
+  };
+  
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Storage Chamber</h1>
@@ -299,7 +328,13 @@ const StorageChamber = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+            
+             />
           <ATMButton text="Add Storage Chamber" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -317,6 +352,9 @@ const StorageChamber = () => {
           closeModal={closeModal}
         
         />
+      )}
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );
