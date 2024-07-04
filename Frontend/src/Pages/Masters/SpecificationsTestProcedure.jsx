@@ -370,7 +370,7 @@ function SpecificationsTestProcedure() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno: initialData.length + index + 1,
       productCode: item["Product Code"] || "",
       productName: item["Product Name"] || "",
       specificationID: item["Specification ID"] || "",
@@ -382,7 +382,7 @@ function SpecificationsTestProcedure() {
     }));
   
     // Concatenate the updated data with existing data
-    const concatenatedData = [...data, ...updatedData];
+    const concatenatedData = [...initialData, ...updatedData];
     setData(concatenatedData);
 setIsModalsOpen(false);; // Update data state with parsed Excel data
   

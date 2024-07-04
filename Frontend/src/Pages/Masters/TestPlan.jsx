@@ -421,6 +421,22 @@ function TestPlan() {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      specificationId: item["Specification Id"] || "",
+      productName: item["Product Name"] || "",
+      tests: item["Tests"] || "",
+      initiatedAt: item["Initiated At"] || "",
+      status: item["Status"] || "",
+    }));
+  
+    const concatenatedData = [...initialData, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -461,9 +477,13 @@ function TestPlan() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right flex gap-4">
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
+           <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
+              <ATMButton
               text="Add Test Categories"
               color="blue"
               onClick={openModal}
@@ -486,11 +506,7 @@ function TestPlan() {
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
       {isModalsOpen && (
-        <ImportModal
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-        />
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </>
   );

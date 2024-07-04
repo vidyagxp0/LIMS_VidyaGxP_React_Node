@@ -29,6 +29,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -110,7 +111,13 @@ function SpecificationType() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -188,6 +195,19 @@ function SpecificationType() {
       ),
     },
   ];
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      specificationType: item["Specification Type"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
+  
+    const concatenatedData = [...initialData, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -229,7 +249,12 @@ function SpecificationType() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
             <ATMButton
               text="Add Specifications Type"
               color="blue"
@@ -245,7 +270,9 @@ function SpecificationType() {
           onDelete={handleDelete}
         />
       </div>
-
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
       {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
       {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
     </>

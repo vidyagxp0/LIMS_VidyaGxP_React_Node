@@ -247,7 +247,22 @@ function Product() {
       ),
     },
   ];
-
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      uniqueCode: item["Unique Code"] || "",
+      productName: item["Product Name"] || "",
+      genericName: item["Generic Name"] || "",
+      reTestingPeriod: item["Re-Testing Period"] || "",
+      addDate: item["Add Date"] || "",
+      status: item["Status"] || "",
+    }));
+  
+    const concatenatedData = [...initialData, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -288,8 +303,11 @@ function Product() {
           </div>
           <div className="float-right flex gap-4">
 
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-
+          <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
             <ATMButton
               text="Add Master/Product"
               color="blue"
@@ -313,7 +331,7 @@ function Product() {
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
       {isModalsOpen && (
-        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} />
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </>
   );

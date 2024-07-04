@@ -8,6 +8,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from '../Modals/importModal';
 
 
 const initialData = [
@@ -119,7 +120,14 @@ function MyTests() {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("All");
     const [viewModalData, setViewModalData] = useState(null);
-  
+    const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
     const handleSelectAll = (e) => {
       const checked = e.target.checked;
       const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -181,12 +189,42 @@ function MyTests() {
     setData(newData);
     console.log('Deleted item:', item);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      ARNo: item["A.R No."] || "", // Adjusted accessor
+      productName: item["Product Name"] || "", // Adjusted accessor
+      sampleIncharge: item["Sample Incharge"] || "", // Adjusted accessor
+      assignedOn: item["Assigned On"] || "", // Adjusted accessor
+      sampleType: item["Sample Type"] || "", // Adjusted accessor
+      status: item["Status"] || "", // Adjusted accessor
+    }));
+  
+    const concatenatedData = [...initialData, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+  
     return (
         <>
         <div className="m-5 mt-3">
           <div className="main-head">
             <h4 className="fw-bold">My Test</h4>
           </div>
+          <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+         
+        </div>
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
+        </div>
+      </div>
           <Table
             columns={columns}
             data={filteredData}
@@ -194,6 +232,9 @@ function MyTests() {
             onViewDetails={onViewDetails}
             onDelete={handleDelete}
           />
+          {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
         </div>
       </>
     )

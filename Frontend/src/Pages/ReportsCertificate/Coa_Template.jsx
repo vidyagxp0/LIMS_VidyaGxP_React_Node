@@ -217,7 +217,7 @@ const Coa_Template = () => {
       status: item["Status"] || "",
     }));
   
-    const concatenateData = [...data, ...updatedData];
+    const concatenateData = [...initialData, ...updatedData];
 setData(concatenateData ); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };

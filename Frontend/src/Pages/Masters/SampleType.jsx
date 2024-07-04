@@ -29,6 +29,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -119,7 +120,13 @@ function SampleType() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -293,6 +300,21 @@ function SampleType() {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      sampleTypeName: item["Sample Type Name"] || "",
+      addDate: item["Add Date"] || "",
+      daysToComplete: item["Days to Complete"] || "",
+      status: item["Status"] || "",
+    }));
+  
+    const concatenatedData = [...initialData, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -335,7 +357,12 @@ function SampleType() {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
             <ATMButton
               text="Add Sample Type"
               color="blue"
@@ -351,7 +378,9 @@ function SampleType() {
           onDelete={handleDelete}
         />
       </div>
-
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
       {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
       {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
     </>
