@@ -187,7 +187,7 @@ sno:initialData.length+ index + 1,
     
       const concatenateData = [...initialData, ...updatedData];
 setData(concatenateData ); // Update data state with parsed Excel data
-      setIsImportModalOpen(false); // Close the import modal after data upload
+setIsModalsOpen(false); // Close the import modal after data upload
     };
     
 
