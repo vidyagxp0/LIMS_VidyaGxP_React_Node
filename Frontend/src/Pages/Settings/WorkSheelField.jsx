@@ -1,55 +1,10 @@
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Worksheet Fields</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//           <CFormInput
-//             type="text"
-//             label="Name"
-//             placeholder="WorkSheet Field Name "
-//           />
 
-//           <CFormSelect
-//             type="text"
-//             label="Binds To"
-//             placeholder="Select..."
-//             options={[
-//               "Select...",
-//               { label: "HCL" },
-//               { label: "Hydrochrolic Acid" },
-//               { label: "Petrochemical" },
-//               { label: "Initial Product" },
-//             ]}
-//           />
-
-//           <CFormInput
-//             type="text"
-//             label="Description"
-//             placeholder="Description"
-//           />
-//         </CModalBody>
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Back
-//           </CButton>
-//           <CButton className="bg-info text-white">Add Field</CButton>
-//         </CModalFooter>
-//       </CModal>
 //     </>
 //   );
 // };
-
-
-
 
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -57,87 +12,91 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import WorkSheetFieldModal from "../Modals/WorkSheetFieldModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
-     {
-       checkbox: false,
-       sno: 1,
-       WorksheetField: "BA-001",
-       SampleTypeName: "Associate 1",
-       Description: "City A",
-       AddedOn: "State A",
-       status: "DROPPED",
-     },
-     {
-       checkbox: false,
-       sno: 2,
-       WorksheetField: "BA-002",
-       SampleTypeName: "Associate 2",
-       Description: "City B",
-       AddedOn: "State B",
-       status: "INITIATED",
-     },
-     {
-       checkbox: false,
-       sno: 3,
-       WorksheetField: "BA-003",
-       SampleTypeName: "Associate 3",
-       Description: "City C",
-       AddedOn: "State C",
-       status: "REINITIATED",
-     },
-     {
-       checkbox: false,
-       sno: 4,
-       WorksheetField: "BA-004",
-       SampleTypeName: "Associate 4",
-       Description: "City D",
-       AddedOn: "State D",
-       status: "APPROVED",
-     },
-     {
-       checkbox: false,
-       sno: 5,
-       WorksheetField: "BA-005",
-       SampleTypeName: "Associate 5",
-       Description: "City E",
-       AddedOn: "State E",
-       status: "REJECTED",
-     },
-     {
-       checkbox: false,
-       sno: 6,
-       WorksheetField: "BA-006",
-       SampleTypeName: "Associate 6",
-       Description: "City F",
-       AddedOn: "State F",
-       status: "DROPPED",
-     },
-     {
-       checkbox: false,
-       sno: 7,
-       WorksheetField: "BA-007",
-       SampleTypeName: "Associate 7",
-       Description: "City G",
-       AddedOn: "State G",
-       status: "INITIATED",
-     },
-     {
-       checkbox: false,
-       sno: 8,
-       WorksheetField: "BA-008",
-       SampleTypeName: "Associate 8",
-       Description: "City H",
-       AddedOn: "State H",
-       status: "REINITIATED",
-     },
-   ];
-   
-
+  {
+    checkbox: false,
+    sno: 1,
+    WorksheetField: "BA-001",
+    SampleTypeName: "Associate 1",
+    Description: "City A",
+    AddedOn: "State A",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    WorksheetField: "BA-002",
+    SampleTypeName: "Associate 2",
+    Description: "City B",
+    AddedOn: "State B",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    WorksheetField: "BA-003",
+    SampleTypeName: "Associate 3",
+    Description: "City C",
+    AddedOn: "State C",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    WorksheetField: "BA-004",
+    SampleTypeName: "Associate 4",
+    Description: "City D",
+    AddedOn: "State D",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    WorksheetField: "BA-005",
+    SampleTypeName: "Associate 5",
+    Description: "City E",
+    AddedOn: "State E",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    WorksheetField: "BA-006",
+    SampleTypeName: "Associate 6",
+    Description: "City F",
+    AddedOn: "State F",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    WorksheetField: "BA-007",
+    SampleTypeName: "Associate 7",
+    Description: "City G",
+    AddedOn: "State G",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    WorksheetField: "BA-008",
+    SampleTypeName: "Associate 8",
+    Description: "City H",
+    AddedOn: "State H",
+    status: "REINITIATED",
+  },
+];
 
 const WorkSheetField = () => {
   const [data, setData] = useState(initialData);
@@ -153,6 +112,16 @@ const WorkSheetField = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   useEffect(() => {
     const counts = {
@@ -194,9 +163,25 @@ const WorkSheetField = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); 
-    setIsViewModalOpen(true); 
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      WorksheetField: item["Worksheet Field"] || "",
+      SampleTypeName: item["Sample_type Name"] || "",
+      Description: item["Description"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -306,8 +291,14 @@ const WorkSheetField = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
-          <ATMButton text="Add Worksheet Fields" color="blue" onClick={openModal} />
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
+          <ATMButton
+            text="Add Worksheet Fields"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -317,15 +308,20 @@ const WorkSheetField = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <WorkSheetFieldModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

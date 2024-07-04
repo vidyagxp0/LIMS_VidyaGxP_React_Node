@@ -1,24 +1,5 @@
 
 
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>Delete Investigation Template</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         Do you want to delete this Investigation Template <code>Template1</code> ?
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// }
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -29,6 +10,8 @@ import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -131,6 +114,17 @@ const InvestigationTamplate = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -174,6 +168,21 @@ const InvestigationTamplate = () => {
     setViewModalData(rowData); 
     setIsViewModalOpen(true); 
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      NoOfAnalystSection: item["TempNO. Of Analyst Section"] || "",
+      NoOfSupervisorSection: item["No. Of Supervisor Section"] || "",
+      UpdatedAt: item["Updated At"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -282,9 +291,11 @@ const InvestigationTamplate = () => {
             onChange={setStatusFilter}
           />
         </div>
-        {/* <div className="float-right">
-          <ATMButton text="Add Worksheet Fields" color="blue" onClick={openModal} />
-        </div> */}
+        <div className="float-right">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
+          {/* <ATMButton text="Add Worksheet Fields" color="blue" onClick={openModal} /> */}
+        </div>
       </div>
       <Table
         columns={columns}
@@ -302,6 +313,14 @@ const InvestigationTamplate = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

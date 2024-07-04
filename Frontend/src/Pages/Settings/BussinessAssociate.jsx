@@ -1,246 +1,18 @@
-
-
-// const StatusModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Add Business Associate</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Business Associate Name <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Business Associate Name"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Unique Code <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Unique Code"
-//           required
-//         />
-
-//         <label className="mb-2">
-//           Category Of Business Associate <span style={{ color: "red" }}>*</span>
-//         </label>
-
-//         <CFormCheck
-//           className="mb-3"
-//           type="checkbox"
-//           id="checkbox1"
-//           label="Customer"
-//         />
-//         <CFormCheck
-//           className="mb-3"
-//           type="checkbox"
-//           id="checkbox2"
-//           label="Supplier"
-//         />
-//         <CFormCheck
-//           className="mb-3"
-//           type="checkbox"
-//           id="checkbox3"
-//           label="Manufacturer"
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Contact Person <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Contact Person"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Location <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Location"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Address : Line 1 <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Address : Line 1"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={<>Address : Line 2</>}
-//           placeholder="Address : Line 2"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={<>Address : Line 3</>}
-//           placeholder="Address : Line 3"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               City <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="City"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               State <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="State"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Country <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Country"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               ZIP / PIN <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="ZIP / PIN"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Phone <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Phone"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Fax <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Fax"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Email <span style={{ color: "red" }}>*</span>
-//             </>
-//           }
-//           placeholder="Email"
-//           required
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Delete Business Associate</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         Do you want to delete this Business Associate <code>ARZ ENT</code>?
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import BUsinessAssociateModal from "../Modals/BUsinessAssociateModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -344,7 +116,6 @@ const initialData = [
   },
 ];
 
-
 const BussinessAssociate = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -393,15 +164,26 @@ const BussinessAssociate = () => {
   };
 
   const filteredData = data.filter((row) => {
+    const businessAssociateName = row.BusinessAssociateName || ""; // Ensure it's a string
     return (
-      row.BusinessAssociateName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      businessAssociateName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); 
-    setIsViewModalOpen(true); 
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
   };
 
   const columns = [
@@ -440,6 +222,24 @@ const BussinessAssociate = () => {
       ),
     },
   ];
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      BusinessAssociateName: item["Business Associate Name"] || "",
+      UniqueCode: item["Unique Code"] || "",
+      City: item["City"] || "",
+      State: item["state"] || "",
+      Country: item["Country"] || "",
+      ZipCode: item["Zip Code"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...initialData, ...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -514,7 +314,8 @@ const BussinessAssociate = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Associate" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -525,15 +326,20 @@ const BussinessAssociate = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <BUsinessAssociateModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

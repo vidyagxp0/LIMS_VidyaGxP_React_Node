@@ -1,50 +1,7 @@
 
 // const StatusModal = (_props) => {
 //   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-//       <CModalHeader>
-//         <CModalTitle>Add Project List</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <h6 className="my-3 fs-5">Add information and add new project</h6>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Projects Name
-//             </>
-//           }
-//           placeholder="Specification Type Name"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Unique Code
-//             </>
-//           }
-//           placeholder="Unique Code"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="Description"
-//           placeholder="Description"
-//           required
-//         />
-
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
+  
 //   );
 // }
 
@@ -79,8 +36,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ProjectsModal from "../Modals/ProjectsModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -173,6 +132,16 @@ const Projects = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -216,6 +185,22 @@ const Projects = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      ProjectName: item["Project Name"] || "",
+      UniqueCode: item["Unique Code"] || "",
+      Description: item["Description"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -325,7 +310,9 @@ const Projects = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Project" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -336,7 +323,7 @@ const Projects = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ProjectsModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -345,6 +332,14 @@ const Projects = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+        {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>
