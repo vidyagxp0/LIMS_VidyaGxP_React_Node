@@ -14,6 +14,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import MediaLotContainerIssueModal from "../Modals/MediaLotContainerIssueModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -102,6 +103,7 @@ const MediaLotContainersIssue = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     Active: 0,
     Inactive: 0,
@@ -127,6 +129,14 @@ const MediaLotContainersIssue = () => {
     setData(newData);
   };
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -143,6 +153,26 @@ const MediaLotContainersIssue = () => {
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      MediaContainerNo: item["Media Container No."] || "",
+      ContainerQty: item["Container Qty"] || "",
+      ContainerValidityPeriodDays: item["Container Validity Period Days(s)"] || "",
+      ContainerValidUpto: item["Container Valid Upto"] || "",
+      LotValidUpto: item["Lot Valid Upto"] || "",
+      AddedOn: item["Added On"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
   const columns = [
@@ -225,7 +255,8 @@ const MediaLotContainersIssue = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Media Lot Containers Issue"
             color="blue"
@@ -250,6 +281,9 @@ const MediaLotContainersIssue = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );
