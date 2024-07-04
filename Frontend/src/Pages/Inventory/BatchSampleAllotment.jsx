@@ -74,6 +74,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import BatchSampleAllotmentModal from "../Modals/BatchSampleAllotmentModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -133,6 +134,7 @@ const BatchSampleAllotment = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [cardCounts, setCardCounts] = useState({
     Active: 0,
@@ -165,6 +167,14 @@ const BatchSampleAllotment = () => {
     setData(newData);
   };
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   const filteredData = data.filter((row) => {
     return (
       row.BatchSampleId.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -175,6 +185,22 @@ const BatchSampleAllotment = () => {
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      BatchSampleId: item["Batch Sample Id"] || "",
+      RegisteredOn: item["Registered On"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
   const columns = [
@@ -250,7 +276,8 @@ const BatchSampleAllotment = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Batch Sample Allotment"
             color="blue"
@@ -275,6 +302,9 @@ const BatchSampleAllotment = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

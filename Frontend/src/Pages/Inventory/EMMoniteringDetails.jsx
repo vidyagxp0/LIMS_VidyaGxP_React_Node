@@ -1,7 +1,7 @@
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-     
+
 //     </>
 //   );
 // };
@@ -73,6 +73,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import EmMoniteringDetailsModal from "../Modals/EmMoniteringDetailsModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -140,6 +141,7 @@ const EMMoniteringDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     Active: 0,
     Inactive: 0,
@@ -158,6 +160,14 @@ const EMMoniteringDetails = () => {
 
     setCardCounts(counts);
   }, [data]);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -183,13 +193,30 @@ const EMMoniteringDetails = () => {
     setIsViewModalOpen(true);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      ObjectName: item["Object Name"] || "",
+      UniqueCode: item["Unique Code"] || "",
+      DateOfMonitoring: item["Date Of Monitoring"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Object Name	", accessor: "ObjectName" },
+    { header: "Object Name", accessor: "ObjectName" },
     { header: "Unique Code", accessor: "UniqueCode" },
     { header: "Date Of Monitoring", accessor: "DateOfMonitoring" },
     { header: "Status", accessor: "status" },
@@ -257,7 +284,8 @@ const EMMoniteringDetails = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Add Monitoring Details"
             color="blue"
@@ -282,6 +310,9 @@ const EMMoniteringDetails = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

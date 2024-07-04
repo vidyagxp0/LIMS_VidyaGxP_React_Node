@@ -1,7 +1,7 @@
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-    
+
 //     </>
 //   );
 // };
@@ -73,6 +73,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import EMCOATemplateModal from "../Modals/EMCOATemplateModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -147,6 +148,7 @@ const EMCOATemplate = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     Active: 0,
     Inactive: 0,
@@ -165,6 +167,14 @@ const EMCOATemplate = () => {
 
     setCardCounts(counts);
   }, [data]);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -188,6 +198,24 @@ const EMCOATemplate = () => {
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      ConfigurationType: item["Configuration Type"] || "",
+      UniqueCode: item["Unique Code"] || "",
+      ReportTitle: item["Report Title"] || "",
+      UpdatedAt: item["Updated At"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
   const columns = [
@@ -265,7 +293,8 @@ const EMCOATemplate = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add COA Template" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -286,6 +315,9 @@ const EMCOATemplate = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );
