@@ -13,6 +13,8 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ColumnUsageModal from "../Modals/ColumnUsageModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+
 const initialData = [
   {
     checkbox: false,
@@ -68,6 +70,7 @@ const ColumnUsage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -102,6 +105,14 @@ const ColumnUsage = () => {
     setData(newData);
   };
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -120,16 +131,34 @@ const ColumnUsage = () => {
     setIsViewModalOpen(true);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      UsageNo: item["Usage No"] || "",
+      BrandName: item["Brand Name"] || "",
+      ColumnName: item["Column Name"] || "",
+      FinalResult: item["Final Result"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Usage No.		", accessor: "UsageNo" },
-    { header: "Brand Name		", accessor: "BrandName" },
-    { header: "Column Name		", accessor: "ColumnName" },
-    { header: "Final Result		", accessor: "FinalResult" },
+    { header: "Usage No.", accessor: "UsageNo" },
+    { header: "Brand Name", accessor: "BrandName" },
+    { header: "Column Name", accessor: "ColumnName" },
+    { header: "Final Result", accessor: "FinalResult" },
     { header: "Status", accessor: "status" },
 
     {
@@ -229,7 +258,8 @@ const ColumnUsage = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Usage" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -247,6 +277,9 @@ const ColumnUsage = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );
