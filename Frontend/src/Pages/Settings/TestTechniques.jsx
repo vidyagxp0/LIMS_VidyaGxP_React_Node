@@ -1,122 +1,7 @@
 // const StatusModal = (_props) => {
 
 //   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Add Test Technique</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Technique Name"
-//           placeholder="Technique Name"
-//         />
-
-//         <FormControl>
-//           <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
-//             Type of technique
-//           </FormLabel>
-//           <RadioGroup
-//             row
-//             aria-labelledby="demo-row-radio-buttons-group-label"
-//             name="row-radio-buttons-group"
-//           >
-//             <FormControlLabel
-//               value="Complex"
-//               control={<Radio />}
-//               label="Complex"
-//             />
-//             <FormControlLabel
-//               value="Non-complex"
-//               control={<Radio />}
-//               label="Non-complex"
-//             />
-//           </RadioGroup>
-//         </FormControl>
-//         <br />
-//         <br />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Technique Description"
-//           placeholder="Technique Description"
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-// const UpdateModal = (_props) => {
-
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Update Test Technique</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p className="my-3 fs-5"> Add information and add new Test Technique.</p>
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Technique Name"
-//           placeholder="Technique Name"
-//         />
-
-//         <FormControl>
-//           <FormLabel id="demo-row-radio-buttons-group-label" className="fw-medium">
-//             Type of technique
-//           </FormLabel>
-//           <RadioGroup
-//             row
-//             aria-labelledby="demo-row-radio-buttons-group-label"
-//             name="row-radio-buttons-group"
-//           >
-//             <FormControlLabel
-//               value="Complex"
-//               control={<Radio />}
-//               label="Complex"
-//             />
-//             <FormControlLabel
-//               value="Non-complex"
-//               control={<Radio />}
-//               label="Non-complex"
-//             />
-//           </RadioGroup>
-//         </FormControl>
-//         <br />
-//         <br />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Technique Description"
-//           placeholder="Technique Description"
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
+ 
 //   );
 // };
 
@@ -155,8 +40,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import TestTechniqueModal from "../Modals/TestTechniqueModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -248,7 +135,15 @@ const TestTechniques = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -289,6 +184,21 @@ const TestTechniques = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      TechniqueName: item["Technique Name"] || "",
+      Type: item["Type"] || "",
+      Description: item["Description"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -395,7 +305,9 @@ const TestTechniques = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton
             text="Add Service Provider"
             color="blue"
@@ -410,7 +322,7 @@ const TestTechniques = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <TestTechniqueModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -419,6 +331,14 @@ const TestTechniques = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

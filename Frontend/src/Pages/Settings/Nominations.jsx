@@ -2,72 +2,7 @@
   // const StatusModal = (_props) => {
 
   //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //       size="lg"
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle> Add Nominations</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         <p className="my-3 fs-6 fw-bold"> Add information about Nominations.</p>
-  //         <CFormSelect
-  //           className="mb-3"
-  //           label="Analyst"
-  //           options={[
-  //             { value: "Analyst", label: "Analyst" },
-  //             { value: "Analyst Two", label: "Analyst Two" },
-  //           ]}
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Employee ID"
-  //           placeholder="Employee ID"
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Role/Title"
-  //           placeholder="Role/Title"
-  //         />
-  //         <CFormSelect
-  //           label="Test Technique"
-  //           placeholder="Select"
-  //           className="mb-3"
-  //           options={[
-  //             { value: "Description", label: "Description" },
-  //           ]}
-  //         />
-  //         <CFormInput type="file" id="formFile" label="Training Documents" />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Total Experience / Work Area"
-  //           placeholder="Total Experience / Work Area"
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Past Experience / Work Area"
-  //           placeholder="Past Experience / Work Area"
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Justification for Direct Nomination"
-  //           placeholder="Justification for Direct Nomination"
-  //         />
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton className="bg-info text-white">Add</CButton>
-  //       </CModalFooter>
-  //     </CModal>
+    
   //   );
   // };
 
@@ -107,8 +42,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import NominationModal from "../Modals/NominationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -206,6 +143,17 @@ const Nominations = () => {
     REJECTED: 0,
   });
 
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -246,6 +194,25 @@ const Nominations = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      Analyst: item["Analyst"] || "",
+      TestTechnique: item["Test Technique"] || "",
+      TotalExperience: item["Total Experience"] || "",
+      PastExperience: item["Past Experience"] || "",
+      JustificationforDirectNomination: item["Justification for Direct Nomination"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+
 
   const columns = [
     {
@@ -354,7 +321,9 @@ const Nominations = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Nominations" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -365,7 +334,7 @@ const Nominations = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <NominationModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -374,6 +343,14 @@ const Nominations = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

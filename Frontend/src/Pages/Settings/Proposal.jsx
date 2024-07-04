@@ -1,79 +1,6 @@
 // const StatusModal = (_props) => {
 //   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Add Analyst Proposal</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p className="my-3 fs-5">
-//           Add information and add new Analyst Proposal
-//         </p>
-//         <CFormSelect
-//           type="text"
-//           className="mb-3"
-//           label="Analyst"
-//           placeholder="Training Confirmation ID"
-//           options={["Select", { label: "No Options" }]}
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Analyst"
-//           placeholder="Analyst"
-//           disabled
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Employee ID"
-//           placeholder="Employee ID"
-//           disabled
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Test Technique"
-//           placeholder="Test Technique"
-//           disabled
-//         />
-//         <CFormSelect
-//           type="text"
-//           className="mb-3"
-//           label="Analyst"
-//           placeholder="Test Plan"
-//           options={["Select", { label: "No Options" }]}
-//         />
-//         <CFormInput
-//           type="number"
-//           className="mb-3"
-//           label="AR Number"
-//           placeholder="AR Number"
-//         />
-//         <CFormInput
-//           type="date"
-//           className="mb-3"
-//           label="Due Date"
-//           placeholder="Due Date"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Comments"
-//           placeholder="Comments"
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
+  
 //   );
 // };
 
@@ -114,8 +41,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ProposalModal from "../Modals/ProposalModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -223,6 +152,17 @@ const Proposal = () => {
     REJECTED: 0,
   });
 
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -263,6 +203,25 @@ const Proposal = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      TrainingConfirmationId: item["Training Confirmation ID"] || "",
+      Analyst: item["Analyst"] || "",
+      EmployeeId: item["Employee ID"] || "",
+      TestTechnique: item["Test Technique"] || "",
+      TestTechniqueType: item["Test Technique Type"] || "",
+      InitiatedOn: item["Initiated On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+
 
   const columns = [
     {
@@ -371,7 +330,9 @@ const Proposal = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Confirmation" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -382,7 +343,7 @@ const Proposal = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ProposalModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -391,6 +352,14 @@ const Proposal = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

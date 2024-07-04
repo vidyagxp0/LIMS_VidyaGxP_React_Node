@@ -3,58 +3,7 @@
   // const StatusModal = (_props) => {
 
   //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //       size="lg"
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle> Add Re-Qualification Request</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         <p className="my-3 fs-6 fw-bold"> Add information about Re-Qualification Request.</p>
-  //         <CFormSelect
-  //           className="mb-3"
-  //           label="Name"
-  //           options={[
-  //             { value: "Analyst", label: "Analyst" },
-  //             { value: "Analyst Two", label: "Analyst Two" },
-  //           ]}
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Employee ID"
-  //           placeholder="Employee ID"
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Role/Title"
-  //           placeholder="Role/Title"
-  //         />
-  //         <CFormSelect
-  //           label="Test Technique"
-  //           className="mb-3"
-  //           options={[
-  //             { value: "Description", label: "Description" },
-  //           ]}
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Justification For Requalification"
-  //           placeholder="Training Details"
-  //         />
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton className="bg-info text-white">Add</CButton>
-  //       </CModalFooter>
-  //     </CModal>
+     
   //   );
   // };
 
@@ -95,8 +44,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import RequalificationModalModal from "../Modals/RequalificationModalModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -194,6 +145,16 @@ const ReQualifictionRequest = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -234,6 +195,25 @@ const ReQualifictionRequest = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      Analyst: item["Analyst"] || "",
+      QualificationId: item["Qualification ID"] || "",
+      QualificationType: item["Qualification Type"] || "",
+      EmployeeId: item["Employee ID"] || "",
+      TestTechnique: item["Test Technique"] || "",
+      InitiatedOn: item["Initiated On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+
 
   const columns = [
     {
@@ -342,7 +322,9 @@ const ReQualifictionRequest = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Request" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -353,7 +335,7 @@ const ReQualifictionRequest = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <RequalificationModalModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -362,6 +344,14 @@ const ReQualifictionRequest = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+        {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>
