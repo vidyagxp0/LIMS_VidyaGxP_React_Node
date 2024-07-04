@@ -12,6 +12,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import VolumeSolutionModal from "../Modals/VolumeSolutionModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -133,6 +134,7 @@ const VolumeSolution = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -161,6 +163,14 @@ const VolumeSolution = () => {
     setCardCounts(counts);
   }, [data]);
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -184,6 +194,27 @@ const VolumeSolution = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      name: item["Name"] || "",
+      prefix: item["Prefix"] || "",
+      TheoreticalStrength: item["Theoretical Strength"] || "",
+      SolutionExpiryPeriod: item["Solution Expiry Period"] || "",
+      PreparationMethod: item["Preparation Method"] || "",
+      comments: item["Comments"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
 
   const columns = [
     {
@@ -296,7 +327,8 @@ const VolumeSolution = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Solutions" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -317,6 +349,9 @@ const VolumeSolution = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

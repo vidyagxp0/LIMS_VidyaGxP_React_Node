@@ -8,6 +8,7 @@ import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -129,6 +130,7 @@ const InternalRegistration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -162,6 +164,15 @@ const InternalRegistration = () => {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -239,6 +250,25 @@ const InternalRegistration = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      name: item["Name"] || "",
+      sequence: item["Sequence"] || "",
+      additionalInfo: item["Additional Information"] || "",
+      containerStart: item["Container Start"] || "",
+      sampleReference: item["Sample Reference"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Working Standard Internal</h1>
@@ -290,8 +320,9 @@ const InternalRegistration = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
-          <ATMButton text="Add Internal" color="blue" onClick={openModal} />
+        <div className="float-right flex gap-4">
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Internal" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -311,6 +342,9 @@ const InternalRegistration = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );
