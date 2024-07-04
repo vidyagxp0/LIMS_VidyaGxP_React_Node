@@ -281,7 +281,7 @@ const CalibrationSampleLoginTemplate = () => {
       SampleLogintemplate: item["Sample Login template"] || "",
       TestPlan: item["Test Plan"] || "",
       AutoSampleAllotmentRequired: item["Auto Sample Allotment Required"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
     const concatenateData = [...data, ...updatedData]; 
     setData(concatenateData); // Update data state with parsed Excel data

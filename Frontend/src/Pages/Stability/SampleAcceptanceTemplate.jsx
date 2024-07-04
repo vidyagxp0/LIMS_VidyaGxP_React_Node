@@ -218,7 +218,7 @@ function SampleAcceptanceTemplate() {
       uniqueCode: item["Unique Code"] || "",
       noOfCheckItems: item["No. of Check Items"] || 0,
       updatedAt: item["Updated At"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

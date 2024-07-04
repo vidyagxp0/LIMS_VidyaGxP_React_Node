@@ -250,7 +250,7 @@ const Clients = () => {
       ContactNumber: item["Contact Number"] || "",
       Address: item["Address"] || "",
       AddedOn: item["Added On"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

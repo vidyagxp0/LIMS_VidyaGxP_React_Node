@@ -294,7 +294,7 @@ function StabilityProtocol() {
       protocolType: item["Protocol Type"] || "",
       protocolID: item["Protocol ID"] || "",
       addedOn: item["Added on"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

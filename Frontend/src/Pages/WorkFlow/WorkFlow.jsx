@@ -223,7 +223,7 @@ const WorkFlow = () => {
       Address: item["Address"] || "",
       Comments: item["Comments"] || "",
       Workflow: item["Workflow"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

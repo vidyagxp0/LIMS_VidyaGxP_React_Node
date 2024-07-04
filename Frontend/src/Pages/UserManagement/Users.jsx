@@ -177,15 +177,15 @@ const Users = () => {
       joiningDate: item["Joining Date"] || "",
       reviewDate: item["Review Date"] || "",
       attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
-      addedBy: item["Added By"] || "INITIATED",
-      status: item["Status"] || "INITIATED",
+      addedBy: item["Added By"] || "",
+      status: item["Status"] || "",
     }));
 
     // Concatenate the updated data with existing data
     const concatenatedData = [...data, ...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
+    setData(concatenatedData);
+setIsModalsOpen(false);; // Update data state with parsed Excel data
 
-    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
 

@@ -253,12 +253,13 @@ function StabilitySampleLogin() {
      const handleExcelDataUpload = (excelData) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false,
-        sno: index + 1,
+        
+sno:initialData.length+ index + 1,
         sampleType: item["Sample Type"] || "",
         productMaterial: item["Product / Material"] || "",
         genericName: item["Generic Name"] || "",
         specificationCode: item["Specification Code"] || "",
-        status: item["Status"] || "INITIATED",
+        status: item["Status"] || "",
       }));
     
       const concatenateData = [...data, ...updatedData];

@@ -6,6 +6,7 @@ import SearchBar from '../../components/ATM components/SearchBar/SearchBar';
 import Dropdown from '../../components/ATM components/Dropdown/Dropdown';
 import ATMButton from '../../components/ATM components/Button/ATMButton';
 import Table from '../../components/ATM components/Table/Table';
+import ImportModal from '../Modals/importModal';
 
 const initialData = [
     {
@@ -136,7 +137,13 @@ const SamplingConfiguration = () => {
      const [statusFilter, setStatusFilter] = useState("All");
      const [viewModalData, setViewModalData] = useState(null);
      const [isModalOpen, setIsModalOpen] = useState(false);
-
+     const [isModalsOpen, setIsModalsOpen] = useState(false);
+     const handleOpenModals = () => {
+       setIsModalsOpen(true);
+     };
+     const handleCloseModals = () => {
+       setIsModalsOpen(false);
+     };
      const handleSelectAll = (e) => {
        const checked = e.target.checked;
        const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -194,6 +201,26 @@ const SamplingConfiguration = () => {
          ),
        },
      ];
+
+     const handleExcelDataUpload = (excelData) => {
+      const updatedData = excelData.map((item, index) => ({
+        checkbox: false,
+        sno: initialData.length + index + 1,
+        samplingID: item["Sampling ID"] || "",
+        specificationID: item["Specification ID"] || "",
+        sampleType: item["Sample Type"] || "",
+        productName: item["Product Name"] || "",
+        testPlan: item["Test Plan"] || "",
+        sampleTemplate: item["Sample Template"] || "",
+        sampleRule: item["Sample Rule"] || "",
+        status: item["Status"] || "",
+      }));
+    
+      const concatenatedData = [...data, ...updatedData];
+      setData(concatenatedData);
+setIsModalsOpen(false);; // Update data state with parsed Excel data
+    };
+    
    
      const openModal = () => {
        setIsModalOpen(true);
@@ -227,7 +254,12 @@ const SamplingConfiguration = () => {
               onChange={setStatusFilter}
             />
           </div>
-          <div className="float-right">
+          <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
             <ATMButton
               text="Add Sampling Configuration"
               color="blue"
@@ -246,6 +278,10 @@ const SamplingConfiguration = () => {
 
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
+
+{isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
         </>
     );

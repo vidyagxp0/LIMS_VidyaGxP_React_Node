@@ -197,7 +197,7 @@ const ReleasedCoa = () => {
       ArNo: item["AR NO."] || "",
       GenericName: item["Generic Name"] || "",
       SpecificationCode: item["Specification Code"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

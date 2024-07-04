@@ -211,7 +211,7 @@ const ServiceReporting = () => {
       ProblemInDetails: item["Problem In Details"] || "",
       ExpectedClosureDate: item["Expected Closure Date On"] || "",
       JobDetails: item["Job Details"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

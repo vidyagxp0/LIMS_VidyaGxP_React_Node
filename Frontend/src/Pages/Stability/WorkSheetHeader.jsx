@@ -251,12 +251,13 @@ function WorkSheetHeader() {
      const handleExcelDataUpload = (excelData) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false,
-        sno: index + 1,
+        
+sno:initialData.length+ index + 1,
         sampleType: item["Sample Type"] || "",
         worksheetType: item["Worksheet Type"] || "",
         product: item["Product"] || "",
         reportTitle: item["Report Title"] || "",
-        status: item["Status"] || "INITIATED",
+        status: item["Status"] || "",
       }));
     
       const concatenateData = [...data, ...updatedData];

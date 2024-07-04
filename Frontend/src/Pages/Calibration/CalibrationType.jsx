@@ -251,7 +251,7 @@ const CalibrationType = () => {
       CalibrationType: item["Calibration Type"] || "",
       CalibrationPrefix: item["Calibration Prefix"] || "",
       AddedOn: item["Added On"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

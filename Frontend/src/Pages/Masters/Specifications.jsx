@@ -365,7 +365,7 @@ function Specifications() {
       specificationName: item["Specification Name"] || "",
       effectFrom: item["Effect From"] || "",
       reviewDate: item["Review Date"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

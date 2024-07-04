@@ -265,13 +265,14 @@ function CoaTemplate() {
      const handleExcelDataUpload = (excelData) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false,
-        sno: index + 1,
+        
+sno:initialData.length+ index + 1,
         productName: item["Product Name"] || "",
         chamberID: item["Chamber ID"] || "",
         actualQuantity: item["Actual Quantity"] || "",
         availableQuantity: item["Available Quantity"] || "",
         protocolType: item["Protocol Type"] || "",
-        status: item["Status"] || "INITIATED",
+        status: item["Status"] || "",
       }));
     
       const concatenateData = [...data, ...updatedData];

@@ -366,7 +366,7 @@ const CalibrationDataSheet = () => {
       DataSheetName: item["DataSheetName"] || "",
       QuantitativeParameters: item["Quantitative Parameters"] || "",
       QualitativeParameters: item["Qualitative Parameters"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

@@ -23,6 +23,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -133,6 +134,14 @@ const SamplingTemplate = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -208,6 +217,25 @@ const SamplingTemplate = () => {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      
+sno:initialData.length+ index + 1,
+      templateName: item["Template Name"] || "",
+      uniqueCode: item["Unique Code"] || "",
+      sampleType: item["Sample Type"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+      action: null, // Assuming action data is not provided in the Excel data
+    }));
+  
+    // Assuming 'data' and 'setData' are state variables holding your table data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData);
+setIsModalsOpen(false);; // Update data state with parsed Excel data
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -282,7 +310,12 @@ const SamplingTemplate = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
           <ATMButton text="Add Sample Template" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -300,6 +333,10 @@ const SamplingTemplate = () => {
           closeModal={closeModal}
         
         />
+      )}
+
+{isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
     </>

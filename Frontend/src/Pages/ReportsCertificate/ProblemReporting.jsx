@@ -211,7 +211,7 @@ const ProblemReporting = () => {
       problemId: item["Problem ID"] || "",
       problemInDetails: item["Problem In Details"] || "",
       occurredOn: item["Occurred On"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

@@ -270,7 +270,7 @@ function SampleStorage() {
       actualQuantity: item["Actual Quantity"] || "",
       availableQuantity: item["Available Quantity"] || "",
       protocolType: item["Protocol Type"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

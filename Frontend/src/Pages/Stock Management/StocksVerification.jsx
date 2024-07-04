@@ -423,6 +423,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -517,6 +518,14 @@ const StocksVerification = () => {
     Inactive: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       Active: 0,
@@ -563,7 +572,7 @@ const StocksVerification = () => {
     { header: "SrNo.", accessor: "sno" },
     { header: "Material Type", accessor: "MaterialType" },
     { header: "Invoice Number", accessor: "InvoiceNumber" },
-    { header: "Supplier Name", accessor: "status" },
+    { header: "Supplier Name", accessor: "SupplierName" },
     { header: "Supplier approved by QA", accessor: "SupplierApprovedByQa" },
     { header: "Verification Status", accessor: "VerificationStatus" },
     { header: "Stock Type", accessor: "StockType" },
@@ -592,6 +601,24 @@ const StocksVerification = () => {
       ),
     },
   ];
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      MaterialType: item["Material Type"] || "",
+      InvoiceNumber: item["Invoice Number"] || "",
+      SupplierName: item["Supplier Name"] || "",
+      SupplierApprovedByQa: item["Supplier approved by QA"] || "",
+      VerificationStatus: item["Verification Status"] || "",
+      StockType: item["Stock Type"] || "",
+      status: item["Status"] || "",
+    }));
+  
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData);
+setIsModalsOpen(false);; // Update data state with parsed Excel data
+  };
+  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -636,6 +663,17 @@ const StocksVerification = () => {
           <ATMButton text="Add Batch Sample" color="blue" onClick={openModal} />
         </div> */}
       </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+        </div>
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
+        </div>
+      </div>
       <Table
         columns={columns}
         data={filteredData}
@@ -653,6 +691,9 @@ const StocksVerification = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+       {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

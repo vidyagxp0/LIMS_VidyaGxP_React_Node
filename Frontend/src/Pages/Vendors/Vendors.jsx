@@ -202,7 +202,7 @@ const Vendors = () => {
       VendorName: item["Vendor Name"] || "",
       QualificationCriteria: item["Qualification Criteria"] || "",
       Comments: item["Comments"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

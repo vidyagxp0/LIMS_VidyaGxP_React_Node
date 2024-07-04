@@ -268,7 +268,7 @@ const StorageChamber = () => {
       makeModel: item["Make/ Model"] || "",
       serialNo: item["Serial No."] || "",
       location: item["Location"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

@@ -214,7 +214,7 @@ const Coa_Template = () => {
       CoaId: item["Cao ID"] || "",
       CoaType: item["Coa Type"] || "",
       UpdatedAt: item["Updated At"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

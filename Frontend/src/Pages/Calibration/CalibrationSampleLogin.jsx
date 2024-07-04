@@ -295,12 +295,12 @@ const CalibrationSampleLogin = () => {
       ProductMaterial: item["Product / Material"] || "",
       GenericName: item["Generic Name"] || "",
       SpecificationCode: item["Specification Code"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenatedData = [...data, ...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenatedData);
+setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the import modal after data upload
   };
   
   const openModal = () => {

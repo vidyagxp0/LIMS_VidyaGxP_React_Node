@@ -231,10 +231,11 @@ function SampleLoginTemplate() {
      const handleExcelDataUpload = (excelData) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false,
-        sno: index + 1,
+        
+sno:initialData.length+ index + 1,
         templateTitle: item["Template Title"] || "",
         addedOn: item["Added On"] || "",
-        status: item["Status"] || "INITIATED",
+        status: item["Status"] || "",
       }));
     
       const concatenateData = [...data, ...updatedData];

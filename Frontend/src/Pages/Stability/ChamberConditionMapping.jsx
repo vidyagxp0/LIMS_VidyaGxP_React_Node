@@ -240,7 +240,7 @@ function ChamberConditionMapping() {
       description: item["Description"] || "",
       currentStorageCondition: item["Current Storage Condition"] || "",
       initiatedOn: item["Initiated On"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

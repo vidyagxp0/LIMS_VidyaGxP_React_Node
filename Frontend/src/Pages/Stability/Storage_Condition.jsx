@@ -205,7 +205,7 @@ function Storage_Condition() {
       conditionCode: item["Condition Code"] || "",
       stabilityCondition: item["Stability Condition"] || "",
       description: item["Description"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenateData = [...data, ...updatedData];

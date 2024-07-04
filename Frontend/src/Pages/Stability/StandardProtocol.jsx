@@ -177,11 +177,12 @@ function StandardProtocol() {
      const handleExcelDataUpload = (excelData) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false,
-        sno: index + 1,
+        
+sno:initialData.length+ index + 1,
         name: item["Standard Protocol Name"] || "",
         standardProtocolId: item["Standard Protocol Id"] || "",
         standardProtocolDescription: item["Standard Protocol Description"] || "",
-        status: item["Status"] || "INITIATED",
+        status: item["Status"] || "",
       }));
     
       const concatenateData = [...data, ...updatedData];

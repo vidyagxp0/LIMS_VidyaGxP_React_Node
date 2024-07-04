@@ -288,12 +288,12 @@ const CalibrationRecord = () => {
       NextDueDate: item["Next Due Date"] || "",
       ToleranceDay: item["Tolerance (Day(s))"] || "",
       CalibrationStatus: item["Calibration Status"] || "",
-      status: item["Status"] || "INITIATED",
+      status: item["Status"] || "",
     }));
   
     const concatenatedData = [...data, ...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenatedData);
+setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the import modal after data upload
   };
   
   const openModal = () => {

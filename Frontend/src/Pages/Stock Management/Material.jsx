@@ -77,6 +77,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -157,6 +158,14 @@ const Material = () => {
     Inactive: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       Active: 0,
@@ -230,6 +239,22 @@ const Material = () => {
     },
   ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: initialData.length + index + 1,
+      UniqueCode: item["Unique Code"] || "",
+      MaterialName: item["Material Name"] || "",
+      Description: item["Description"] || "",
+      status: item["Status"] || "",
+    }));
+  
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData);
+setIsModalsOpen(false);; // Update data state with parsed Excel data
+  };
+  
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -254,7 +279,7 @@ const Material = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Inventory Labels</h1>
+      <h1 className="text-2xl font-bold mb-4">Material</h1>
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
@@ -269,7 +294,12 @@ const Material = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
           <ATMButton text="Add Material" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -291,6 +321,11 @@ const Material = () => {
           data={viewModalData}
         />
       )}
+
+{isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+
     </div>
   );
 };
