@@ -1,49 +1,6 @@
 // const StatusModal = (_props) => {
 //   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Add Analyst Template</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p className="my-3 fs-5">
-//           Add information and add new Analyst Template
-//         </p>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={<>Analyst Template</>}
-//           placeholder="Analyst Template"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={<>Unique Code</>}
-//           placeholder="Unique Code"
-//           required
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="No. of Check Items"
-//           placeholder="No. of Check Items"
-//           required
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
+ 
 //   );
 // };
 
@@ -84,8 +41,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import TemplateModal from "../Modals/TemplateModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -177,6 +136,17 @@ const Template = () => {
     REJECTED: 0,
   });
 
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -217,6 +187,22 @@ const Template = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      TemplateName: item["Template Name"] || "",
+      UniqueCode: item["Unique Code"] || "",
+      NoOfCheckItems: item["No. Of Check Items"] || "",
+      UpdatedAt: item["Updated At"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -323,7 +309,9 @@ const Template = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton
             text="Add Analyst Template"
             color="blue"
@@ -338,7 +326,7 @@ const Template = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <TemplateModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -347,6 +335,14 @@ const Template = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

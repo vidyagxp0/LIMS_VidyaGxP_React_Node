@@ -3,37 +3,7 @@
   // const StatusModal = (_props) => {
 
   //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //       size="lg"
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Add Type Of Section</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         <p className="my-3 fs-6 fw-bold"> Add information and add new Type Of Section</p>
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Type Of Section"
-  //           placeholder="Type Of Section"
-  //         />
-  //         <CFormInput
-  //           type="text"
-  //           className="mb-3"
-  //           label="Prefix"
-  //           placeholder="Prefix"
-  //         />
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton className="bg-info text-white">Add</CButton>
-  //       </CModalFooter>
-  //     </CModal>
+     
   //   );
   // };
 
@@ -76,8 +46,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import TypeOfSectionModal from "../Modals/TypeOfSectionModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -154,6 +126,15 @@ const TypeOfSection = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   useEffect(() => {
     const counts = {
@@ -196,6 +177,21 @@ const TypeOfSection = () => {
     setIsViewModalOpen(true);
   };
 
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      TypeOfSection: item["Type Of Section"] || "",
+      Prefix: item["Prefix"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -300,7 +296,9 @@ const TypeOfSection = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Section Type" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -311,7 +309,7 @@ const TypeOfSection = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <TypeOfSectionModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -320,6 +318,14 @@ const TypeOfSection = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

@@ -1,72 +1,6 @@
 // const StatusModal = (_props) => {
 //   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Add Vendor</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <h5 className="mb-4">Add information and add new Vendor</h5>
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Material Name"
-//           placeholder="Material Name"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Supplier Name"
-//           placeholder="Supplier Name"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Email"
-//           placeholder="email@xyz.com"
-//         />
-//         <CFormInput
-//           type="number"
-//           className="mb-3"
-//           label="Phone"
-//           placeholder="Phone"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Address"
-//           placeholder="Address"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Comments"
-//           placeholder="Comments"
-//         />
-//         <CFormInput
-//           type="number"
-//           className="mb-3"
-//           label="Contact person number"
-//           placeholder="Contact person"
-//         />
-//         <CFormInput
-//           type="text"
-//           className="mb-3"
-//           label="Website"
-//           placeholder="https://yourweb.com"
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Cancel
-//         </CButton>
-//         <CButton color="primary">Add</CButton>
-//       </CModalFooter>
-//     </CModal>
+   
 //   );
 // };
 
@@ -107,8 +41,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import SettingVendorModal from "../Modals/SettingVendorModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -198,6 +134,16 @@ const SettingVendors = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
 
   useEffect(() => {
     const counts = {
@@ -242,6 +188,22 @@ const SettingVendors = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      Vendor: item["Vendor"] || "",
+      TestTechnique: item["Test Technique"] || "",
+      TrainingDetails: item["Training Details"] || "",
+      Remarks: item["Remarks"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -352,7 +314,9 @@ const SettingVendors = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton
             text="Add Vendors"
             color="blue"
@@ -367,7 +331,7 @@ const SettingVendors = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <SettingVendorModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -376,6 +340,14 @@ const SettingVendors = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

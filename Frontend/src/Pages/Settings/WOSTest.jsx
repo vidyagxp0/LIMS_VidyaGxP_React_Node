@@ -1,86 +1,7 @@
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add WOS Tests</CModalTitle>
-//         </CModalHeader>
-//         <p style={{ marginLeft: "20px", marginTop: "5px" }}>Add information about WOS test</p>
-//         <CModalBody>
-//           <CFormSelect type="text" label="Specification ID
-// " placeholder="Select " />
-//           <CFormInput
-//             type="text"
-//             label="Product/Material Name
-//             "
-//             placeholder="Select.. "
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Test Name
-//             "
-//             placeholder="Product/Material"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Test Code
-//             "
-//             placeholder="Lot Created Date "
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Method No.
-//             "
-//             placeholder=" "
-//             className="custom-placeholder"
-//           />
-//           <CFormSelect
-//             type="text"
-//             label="Copy Test From
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormSelect
-//             type="text"
-//             label="Test Category
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Test Technique
-//             "
-//             placeholder=" "
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text  "
-//             label="Test Type
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-
-//         </CModalBody>
-
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Submit
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
+    
 //     </>
 //   );
 // };
@@ -149,8 +70,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import WosTestModal from "../Modals/WosTestModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -273,6 +196,15 @@ const WOSTest = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   useEffect(() => {
     const counts = {
@@ -317,6 +249,26 @@ const WOSTest = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      SpecificationId: item["Specification ID"] || "",
+      ProductName: item["Product Name"] || "",
+      TestName: item["Test Name"] || "",
+      TestCode: item["Test Code"] || "",
+      MethodNo: item["Method No."] || "",
+      TestCategory: item["TestCategory"] || "",
+      TestTechnique: item["Workflow"] || "",
+      TestType: item["TestType"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -430,7 +382,9 @@ const WOSTest = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add WOS Test" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -441,7 +395,7 @@ const WOSTest = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <WosTestModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -450,6 +404,14 @@ const WOSTest = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+        {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

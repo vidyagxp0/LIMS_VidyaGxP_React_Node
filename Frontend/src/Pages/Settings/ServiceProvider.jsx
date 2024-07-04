@@ -1,147 +1,7 @@
-
-
 // const StatusModal = (_props) => {
 //   return (
 //     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//       >
-//         <CModalHeader>
-//           <CModalTitle>Add Service Provider</CModalTitle>
-//         </CModalHeader>
-//         <p style={{ marginLeft: "20px", marginTop: "5px" }}>
-//           Add information and add new service provider
-//         </p>
-//         <CModalBody>
-//           <CFormSelect
-//             type="text"
-//             label="Name
-// "
-//             placeholder=" "
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Unique Code
 
-//             "
-//             placeholder=" "
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Refrence Documents
-//             "
-//             placeholder="Product/Material"
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="date"
-//             label="Valid Upto            "
-//             placeholder=" "
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="Service Type
-//             "
-//             placeholder=" "
-//             className="custom-placeholder"
-//           />
-//           <CFormSelect
-//             type="text"
-//             label="Contact Person
-
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormSelect
-//             type="text"
-//             label="Address : Line 1
-
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />{" "}
-//           <CFormSelect
-//             type="text"
-//             label="Address : Line 2
-
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />{" "}
-//           <CFormSelect
-//             type="text"
-//             label="Address : Line 3
-
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />{" "}
-//           <CFormSelect
-//             type="text"
-//             label="City
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text"
-//             label="State
-//             "
-//             placeholder=" "
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text  "
-//             label="Country
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text  "
-//             label="ZIP / PIN
-
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text  "
-//             label="Phone
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text  "
-//             label="Fax
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//           <CFormInput
-//             type="text  "
-//             label="Email
-//             "
-//             placeholder=""
-//             className="custom-placeholder"
-//           />
-//         </CModalBody>
-
-//         <CModalFooter>
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Submit
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
 //     </>
 //   );
 // };
@@ -198,7 +58,6 @@
 //   );
 // };
 
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -211,8 +70,9 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ServiceProviderModal from "../Modals/ServiceProviderModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
 
 const initialData = [
   {
@@ -313,7 +173,6 @@ const initialData = [
   },
 ];
 
-
 const ServiceProvider = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -328,6 +187,16 @@ const ServiceProvider = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   useEffect(() => {
     const counts = {
@@ -363,7 +232,9 @@ const ServiceProvider = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ServiceProviderName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.ServiceProviderName.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      ) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -371,6 +242,25 @@ const ServiceProvider = () => {
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      ServiceProviderName: item["Service Provider Name"] || "",
+      UniqueCode: item["Unique Code"] || "",
+      City: item["City"] || "",
+      State: item["State"] || "",
+      Country: item["Country"] || "",
+      PinCode: item["Pin Code"] || "",
+      ValidUpto: item["Valid Upto"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...initialData, ...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
   const columns = [
@@ -484,8 +374,14 @@ const ServiceProvider = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
-          <ATMButton text="Add Service Provider" color="blue" onClick={openModal} />
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
+          <ATMButton
+            text="Add Service Provider"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -495,15 +391,20 @@ const ServiceProvider = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <ServiceProviderModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>
