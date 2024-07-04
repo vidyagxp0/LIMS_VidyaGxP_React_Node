@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -25,7 +22,7 @@ const initialData = [
     PlantName: "client1@example.com",
     Address: "Address 1",
     Comments: "02-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Active",
   },
   {
@@ -35,7 +32,7 @@ const initialData = [
     PlantName: "client2@example.com",
     Address: "Address 2",
     Comments: "03-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Inactive",
   },
   {
@@ -45,7 +42,7 @@ const initialData = [
     PlantName: "client3@example.com",
     Address: "Address 3",
     Comments: "04-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Active",
   },
   {
@@ -55,7 +52,7 @@ const initialData = [
     PlantName: "client4@example.com",
     Address: "Address 4",
     Comments: "05-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Inactive",
   },
   {
@@ -65,7 +62,7 @@ const initialData = [
     PlantName: "client5@example.com",
     Address: "Address 5",
     Comments: "06-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Active",
   },
   {
@@ -75,7 +72,7 @@ const initialData = [
     PlantName: "client6@example.com",
     Address: "Address 6",
     Comments: "07-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Inactive",
   },
   {
@@ -85,7 +82,7 @@ const initialData = [
     PlantName: "client7@example.com",
     Address: "Address 7",
     Comments: "08-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Active",
   },
   {
@@ -95,7 +92,7 @@ const initialData = [
     PlantName: "client8@example.com",
     Address: "Address 8",
     Comments: "09-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Inactive",
   },
   {
@@ -105,13 +102,10 @@ const initialData = [
     PlantName: "client9@example.com",
     Address: "Address 9",
     Comments: "10-07-2024",
-    Workflow:"dummy workflow",
+    Workflow: "dummy workflow",
     status: "Active",
   },
 ];
-
-
-
 
 const WorkFlow = () => {
   const [data, setData] = useState(initialData);
@@ -123,7 +117,6 @@ const WorkFlow = () => {
   const [cardCounts, setCardCounts] = useState({
     Active: 0,
     Inactive: 0,
-   
   });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
@@ -221,17 +214,16 @@ const WorkFlow = () => {
       PlantCode: item["Plant Code"] || "",
       PlantName: item["Plant Name"] || "",
       Address: item["Address"] || "",
-      Comments: item["Comments"] || "",
-      Workflow: item["Workflow"] || "",
-      status: item["Status"] || "",
-    }));
-  
-    const concatenateData = [...initialData, ...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
-  };
+        Comments: item["Comments"] || "",
+        Workflow: item["Workflow"] || "",
+        status: item["Status"] || "",
+      }));
 
-  
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -272,12 +264,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add WorkFlow" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -288,10 +275,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <WorkFlowModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <WorkFlowModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -299,8 +283,13 @@ setData(concatenateData ); // Update data state with parsed Excel data
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
-        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );

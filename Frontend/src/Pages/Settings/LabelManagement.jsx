@@ -1,96 +1,19 @@
-
-// const StatusModal = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>Add Label</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p>Add information and add new Label</p>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Label <span style={{ color: 'red' }}>*</span>
-//             </>
-//           }
-//           placeholder="Enter Label"
-//         />
-//         <CFormTextarea
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               Address <span style={{ color: 'red' }}>*</span>
-//             </>
-//           }
-//           placeholder="  "
-//         />
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label={
-//             <>
-//               logo <span style={{ color: 'red' }}>*</span>
-//             </>
-//           }
-//           placeholder="logo"
-//         />
-//         <label className="mb-2">UM <span style={{ color: 'red' }}>*</span></label>
-//         <CFormCheck
-//           className="mb-3"
-//           type="radio"
-//           id="UMCM"
-//           name="UM"
-//           label="CM"
-//         />
-//         <CFormCheck
-//           className="mb-3"
-//           type="radio"
-//           id="UMMM"
-//           name="UM"
-//           label="MM"
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
-
-//   );
-// }
-
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>Delete Label</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         Do you want to delete this Label <code>ARZ ENT</code>?
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// }
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import LabelManagemantModal from "../Modals/LabelManagemantModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -194,7 +117,6 @@ const initialData = [
   },
 ];
 
-
 const LabelManagement = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -219,6 +141,7 @@ const LabelManagement = () => {
       REJECTED: 0,
     };
 
+
     data.forEach((item) => {
       if (item.status === "DROPPED") counts.DROPPED++;
       else if (item.status === "INITIATED") counts.INITIATED++;
@@ -229,6 +152,16 @@ const LabelManagement = () => {
 
     setCardCounts(counts);
   }, [data]);
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -250,8 +183,25 @@ const LabelManagement = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); 
-    setIsViewModalOpen(true); 
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      LabelName: item["Label Name"] || "",
+      UniqueCode: item["Unique Code"] || "",
+      City: item["City"] || "",
+      State: item["state"] || "",
+      Country: item["Country"] || "",
+      ZipCode: item["Zip Code"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...initialData, ...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
   const columns = [
@@ -290,6 +240,7 @@ const LabelManagement = () => {
       ),
     },
   ];
+  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -364,7 +315,9 @@ const LabelManagement = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Label" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -375,15 +328,20 @@ const LabelManagement = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <LabelManagemantModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

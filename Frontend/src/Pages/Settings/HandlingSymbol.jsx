@@ -1,33 +1,7 @@
 
 // const StatusModal = (_props) => {
 // 	return (
-// 		<CModal
-// 			alignment="center"
-// 			visible={_props.visible}
-// 			onClose={_props.closeModal}
-// 			size="lg"
-// 		>
-// 			<CModalHeader>
-// 				<CModalTitle>Add Symbols</CModalTitle>
-// 			</CModalHeader>
-// 			<CModalBody>
-// 				<p>Add a new Grade.</p>
-// 				<CFormInput
-// 					className="mb-3"
-// 					type="text"
-// 					label="Name"
-// 					placeholder="Name"
-// 					required
-// 				/>
-
-// 			</CModalBody>
-// 			<CModalFooter>
-// 				<CButton color="light" onClick={_props.closeModal}>
-// 					Back
-// 				</CButton>
-// 				<CButton className="bg-info text-white">Submit</CButton>
-// 			</CModalFooter>
-// 		</CModal>
+		
 // 	);
 // };
 
@@ -68,8 +42,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import HandelingSymbolModal from "../Modals/HandelingSymbolModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -145,6 +121,16 @@ const HandlingSymbol = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -188,6 +174,21 @@ const HandlingSymbol = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      SymbolCode: item["Symbol Code"] || "",
+      SymbolName: item["Symbol Name"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+
 
   const columns = [
     {
@@ -295,7 +296,9 @@ const HandlingSymbol = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Symbol" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -306,7 +309,7 @@ const HandlingSymbol = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <HandelingSymbolModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -315,6 +318,14 @@ const HandlingSymbol = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

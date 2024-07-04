@@ -1,215 +1,4 @@
 
-// const StatusModal = (_props) => {
-
-//   const [leftArray, setLeftArray] = useState([
-//     "Description",
-//   ]);
-
-//   const [rightArray, setRightArray] = useState([]);
-
-//   const moveRight = () => {
-//     let leftElement = document.getElementsByClassName("check-left");
-//     for (let index = 0; index < leftElement.length; index++) {
-//       if (leftElement[index].checked) {
-//         let data = leftElement[index].value;
-//         let left = leftArray.filter((value) => value !== data);
-//         setLeftArray(left);
-//         rightArray.push(data);
-//         setRightArray(rightArray);
-//         break; // Important
-//       }
-//     }
-//   };
-
-//   const moveLeft = () => {
-//     let rightElement = document.getElementsByClassName("check-right");
-//     for (let index = 0; index < rightElement.length; index++) {
-//       if (rightElement[index].checked) {
-//         let data = rightElement[index].value;
-//         let right = rightArray.filter((value) => value !== data);
-//         setRightArray(right);
-//         leftArray.push(data);
-//         setLeftArray(leftArray);
-//         break; // Important
-//       }
-//     }
-//   };
-
-//   const clicked = () => {
-//     let checkboxes = document.querySelectorAll(".check-left, .check-right");
-//     checkboxes.forEach((checkbox) => {
-//       checkbox.checked = false;
-//     });
-//     let allLabels = document.querySelectorAll(".labels");
-//     allLabels.forEach((label) => {
-//       label.classList.remove("clicked");
-//     });
-
-//     let label = event.target;
-//     label.classList.add("clicked");
-//     label.checked = true;
-//   };
-
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-//       <CModalHeader>
-//         <CModalTitle>Add Worksheets</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p>Add information about Worksheet</p>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="Type"
-//           placeholder="Worksheet"
-//           readOnly
-//         />
-
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="Name"
-//           placeholder="Name"
-//         />
-//         <label htmlFor="drag-drop" className="">User Defined Woksheet fields</label>
-//         <div className="d-flex" id="drag-drop">
-//           <div className="w-100 m-3">
-//             <h5>Available</h5>
-//             <div
-//               className="shadow p-2 rounded border overflow-y-auto"
-//               style={{ height: "350px" }}
-//             >
-//               <ul className="list-group">
-//                 {leftArray.map((data) => (
-//                   <li
-//                     key={data}
-//                     className="bg-light rounded my-1 px-3 py-1 text-dark"
-//                   >
-//                     <input
-//                       type="checkbox"
-//                       value={data}
-//                       id={data}
-//                       className="check-left d-none"
-//                     />
-//                     <label
-//                       className="labels cursor-pointer bg-light"
-//                       htmlFor={data}
-//                       onClick={clicked}
-//                     >
-//                       {data}
-//                     </label>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </div>
-//           </div>
-//           <div className="m-auto justify-content-center">
-//             <button
-//               className="btn shadow py-1 px-3 mt-5 text-warning fs-4"
-//               onClick={() => moveRight()}
-//             >
-//               <TiArrowRightThick />
-//             </button>
-//             <button
-//               className="btn shadow py-1 px-3 mt-2 text-warning fs-4"
-//               onClick={() => moveLeft()}
-//             >
-//               <TiArrowLeftThick />
-//             </button>
-//           </div>
-//           <div className="w-100 m-3">
-//             <h5>Selected</h5>
-//             <div
-//               className="shadow p-2 rounded border overflow-y-auto"
-//               style={{ height: "350px" }}
-//             >
-//               <ul className="list-group">
-//                 {rightArray.map((data) => (
-//                   <li
-//                     key={data}
-//                     className="bg-light rounded my-1 px-3 py-1 text-dark"
-//                   >
-//                     <input
-//                       type="checkbox"
-//                       value={data}
-//                       id={data}
-//                       className="check-right d-none"
-//                     />
-//                     <label
-//                       className="labels cursor-pointer bg-light"
-//                       htmlFor={data}
-//                       onClick={clicked}
-//                     >
-//                       {data}
-//                     </label>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </div>
-//           </div>
-//         </div>
-//         <h5>Uniformity of Dosage Units:</h5>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="GTP No:"
-//           placeholder="GTP No"
-//         />
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="Method Validation No:"
-//           placeholder="Method Validation No"
-//         />
-//         <CFormTextarea
-//           className="mb-3"
-//           type="text"
-//           label="Description:"
-//           placeholder="Description"
-//         />
-
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// }
-
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>Delete Worksheets</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p>Do you want to delete this Worksheets <code>Assay 1</code>?</p>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="User Id"
-//           placeholder="User Id"
-//           required
-//         />
-//         <CFormInput
-//           className="mb-3"
-//           type="password"
-//           label="Password"
-//           placeholder="password"
-//           required
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// }
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -218,8 +7,10 @@ import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import WorkSheetModal from "../Modals/WorkSheetModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -329,6 +120,16 @@ const WorkSheet = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -372,6 +173,25 @@ const WorkSheet = () => {
     setViewModalData(rowData); 
     setIsViewModalOpen(true); 
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      SequenceNumber: item["Sequence Number"] || "",
+      WorksheetName: item["Worksheet Name"] || "",
+      ProductName: item["Product Name"] || "",
+      GtpNumber: item["Gtp Number"] || "",
+      MethodValidationNo: item["Method Validaion No."] || "",
+      StandardPreparation: item["Standard Preparation"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+
 
   const columns = [
     {
@@ -483,7 +303,9 @@ const WorkSheet = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Worksheet" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -494,7 +316,7 @@ const WorkSheet = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <WorkSheetModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -503,6 +325,14 @@ const WorkSheet = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>

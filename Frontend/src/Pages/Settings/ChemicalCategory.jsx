@@ -1,31 +1,6 @@
 // const StatusModal = (_props) => {
 //   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Add Chemical Category</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p>Add a new category.</p>
-//         <CFormInput
-//           className="mb-3"
-//           type="text"
-//           label="Name"
-//           placeholder="Name"
-//           required
-//         />
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-info text-white">Submit</CButton>
-//       </CModalFooter>
-//     </CModal>
+   
 //   );
 // };
 
@@ -66,8 +41,10 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ChemicalCategoryModal from "../Modals/ChemicalCategoryModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
 
 const initialData = [
   {
@@ -143,6 +120,17 @@ const ChemicalCategory = () => {
     REJECTED: 0,
   });
 
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -186,6 +174,20 @@ const ChemicalCategory = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      CategoryCode: item["Category Code"] || "",
+      CategoryName: item["Category Name"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...initialData, ...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
   const columns = [
     {
@@ -293,7 +295,9 @@ const ChemicalCategory = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Category" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -304,7 +308,7 @@ const ChemicalCategory = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <ChemicalCategoryModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -313,6 +317,14 @@ const ChemicalCategory = () => {
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+        />
+      )}
+       {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
     </div>
