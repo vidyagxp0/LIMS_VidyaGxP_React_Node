@@ -15,6 +15,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import QualificationModal from "../Modals/QualificationModal";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -71,6 +72,7 @@ const Qualification = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -99,6 +101,14 @@ const Qualification = () => {
     setCardCounts(counts);
   }, [data]);
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -122,6 +132,25 @@ const Qualification = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      ColumnNumber: item["Column Number"] || "",
+      QualificationNumber: item["Qualification Number"] || "",
+      AssignmentNumber: item["Assignment Number	"] || "",
+      QualificationType: item["Qualification Type	"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
 
   const columns = [
     {
@@ -232,7 +261,8 @@ const Qualification = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Assignment" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -253,6 +283,9 @@ const Qualification = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

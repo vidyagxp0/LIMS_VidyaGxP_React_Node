@@ -12,6 +12,7 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ChemicalUsageModal from "../Modals/ChemicalUsageModal.jsx";
 import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -68,6 +69,7 @@ const ChemicalUsage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -101,7 +103,13 @@ const ChemicalUsage = () => {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -121,7 +129,23 @@ const ChemicalUsage = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: data.length + index + 1,
+      Uniquecode: item["Unique code"] || "",
+      ChemicalRegeantName: item["Chemical / Regeant Name	"] || "",
+      ChemicalRegeantIssueNo: item["Chemical / Regeant Issue No"] || "",
+      IssuedOn: item["Issued On"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
 
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -234,7 +258,8 @@ const ChemicalUsage = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Chemical Usage" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -255,6 +280,9 @@ const ChemicalUsage = () => {
           closeModal={closeViewModal}
           data={viewModalData}
         />
+      )}
+      {isModalsOpen && (
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );
