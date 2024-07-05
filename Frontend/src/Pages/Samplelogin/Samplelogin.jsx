@@ -258,7 +258,7 @@ export default function Samplelogin() {
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [...data, ...updatedData];
+    const concatenatedData = [ ...updatedData];
     setData(concatenatedData);
 setIsModalsOpen(false);; // Update data state with parsed Excel data
 

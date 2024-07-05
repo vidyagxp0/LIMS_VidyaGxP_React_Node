@@ -264,7 +264,7 @@ const Plants = () => {
       RegisterOn: item["Register On"] || "",
       status: item["Status"] || "Active", // Default status if not provided
     }));
-    const concatenateData = [...initialData, ...updatedData];
+    const concatenateData = [...updatedData];
 setData(concatenateData ); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };

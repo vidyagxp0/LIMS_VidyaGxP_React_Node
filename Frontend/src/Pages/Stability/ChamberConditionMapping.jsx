@@ -243,7 +243,7 @@ function ChamberConditionMapping() {
       status: item["Status"] || "",
     }));
   
-    const concatenateData = [...initialData, ...updatedData];
+    const concatenateData = [...updatedData];
 setData(concatenateData ); // Update data state with parsed Excel data
     setIsImportModalOpen(false); // Close the import modal after data upload
   };
