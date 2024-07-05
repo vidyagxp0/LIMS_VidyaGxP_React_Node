@@ -299,7 +299,7 @@ const BatchTestslist = () => {
       )}
 
       {isModalsOpen && (
-        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} initialData={initialData}/>
       )}
     </div>
   );

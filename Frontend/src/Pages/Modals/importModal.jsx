@@ -10,10 +10,24 @@ const ImportModal = ({ isOpen, onClose,initialData, columns,onDataUpload  }) => 
     const wb = XLSX.utils.book_new();
 
     // Extract headers from columns prop
-    const headerRow = columns?.map((column) => column.header);
+    const headerRow = columns?.map((column, index) => {
+      if (index == 0) {
+        return '';
+      } else {
+        return column.header;
+      }
+    });
+    const accessors = columns.map((column) => column.accessor);
 
-    // Example empty row
-    const dataRows = [["", "", ""]];
+    // Generate initial data rows
+    const dataRows = initialData.map((data) => {
+      return accessors.map(accessor => {
+        if (accessor === "checkbox") {
+          return ''; 
+        }
+        return data[accessor];
+      });
+    });
 
     const ws = XLSX.utils.aoa_to_sheet([headerRow, ...dataRows]);
 
