@@ -336,7 +336,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       )}
 
 {isModalsOpen && (
-        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
     </>

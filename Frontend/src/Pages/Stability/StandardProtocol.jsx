@@ -237,7 +237,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
        {isModalsOpen && (
-        <ImportModal isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
              
           </>
