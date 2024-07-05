@@ -614,7 +614,7 @@ const StocksVerification = () => {
       status: item["Status"] || "",
     }));
   
-    const concatenatedData = [...data, ...updatedData];
+    const concatenatedData = [ ...updatedData];
     setData(concatenatedData);
 setIsModalsOpen(false);; // Update data state with parsed Excel data
   };

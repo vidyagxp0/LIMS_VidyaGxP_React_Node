@@ -208,7 +208,7 @@ function Storage_Condition() {
       status: item["Status"] || "",
     }));
   
-    const concatenateData = [...initialData, ...updatedData];
+    const concatenateData = [...updatedData];
 setData(concatenateData ); // Update data state with parsed Excel data
 setIsModalsOpen(false); // Close the import modal after data upload
   };

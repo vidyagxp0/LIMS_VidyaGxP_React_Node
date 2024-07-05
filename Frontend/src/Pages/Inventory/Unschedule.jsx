@@ -205,7 +205,7 @@ const Unschedule = () => {
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [...data, ...updatedData];
+    const concatenatedData = [ ...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload

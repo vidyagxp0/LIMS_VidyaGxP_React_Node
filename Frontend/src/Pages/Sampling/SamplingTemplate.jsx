@@ -231,7 +231,7 @@ sno:initialData.length+ index + 1,
     }));
   
     // Assuming 'data' and 'setData' are state variables holding your table data
-    const concatenatedData = [...data, ...updatedData];
+    const concatenatedData = [ ...updatedData];
     setData(concatenatedData);
 setIsModalsOpen(false);; // Update data state with parsed Excel data
   };

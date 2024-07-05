@@ -202,7 +202,7 @@ function MyTests() {
       status: item["Status"] || "", // Adjusted accessor
     }));
   
-    const concatenatedData = [...initialData, ...updatedData];
+    const concatenatedData = [ ...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };

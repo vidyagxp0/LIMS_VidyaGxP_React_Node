@@ -182,7 +182,7 @@ const SamplingField = () => {
         status: item["Status"] || "",
       }));
     
-      const concatenatedData = [...initialData, ...updatedData];
+      const concatenatedData = [ ...updatedData];
       setData(concatenatedData);
 setIsModalsOpen(false);; // Update data state with parsed Excel data
     };

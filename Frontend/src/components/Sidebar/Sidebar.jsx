@@ -2300,7 +2300,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Handling Symbol
               </CNavItem>
             </Link>
-            <Link to="/settings/accessRight">
+            {/* <Link to="/settings/accessRight">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/accessRight")}
@@ -2311,7 +2311,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Access Right
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/settings/projects">
               <CNavItem
                 href="#"
@@ -2432,7 +2432,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Service Provider
               </CNavItem>
             </Link>
-            <Link to="/settings/externalRegistration">
+            {/* <Link to="/settings/externalRegistration">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/externalRegistration")}
@@ -2443,7 +2443,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 External Registration
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/settings/testTechniques">
               <CNavItem
                 href="#"
@@ -2456,7 +2456,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Test Techniques
               </CNavItem>
             </Link>
-            <Link to="/settings/instrumentRegistration">
+            {/* <Link to="/settings/instrumentRegistration">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/instrumentRegistration")}
@@ -2467,7 +2467,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Instrument Regitration
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/settings/stability">
               <CNavItem
                 href="#"
@@ -2504,7 +2504,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Vendor
               </CNavItem>
             </Link>
-            <Link to="/settings/appConfiguration">
+            {/* <Link to="/settings/appConfiguration">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/appConfiguration")}
@@ -2515,7 +2515,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 App Configuration
               </CNavItem>
-            </Link>
+            </Link> */}
           </CNavGroup>
         </CSidebarNav>
       </CSidebar>
