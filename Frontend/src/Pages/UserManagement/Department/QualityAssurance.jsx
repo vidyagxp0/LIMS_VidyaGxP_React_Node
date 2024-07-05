@@ -163,7 +163,7 @@ const QualityAssurance = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       employeeId: item["Employee Id"] || "",
       storageName: item["Storage Name"] || "",
       role: item["Role"] || "",

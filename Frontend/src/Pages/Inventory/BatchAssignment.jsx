@@ -160,7 +160,7 @@ const BatchAssignment = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ColumnName: item["Column Name"] || "",
       ColumnNumber: item["Column Number"] || "",
       ColumnApplication: item["Column Application"] || "",

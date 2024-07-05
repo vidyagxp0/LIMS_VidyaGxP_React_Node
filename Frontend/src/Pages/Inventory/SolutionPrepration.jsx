@@ -188,7 +188,7 @@ const SolutionPrepration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       SolutionPreparationCode: item["Solution Preparation Code"] || "",
       SolutionName: item["Solution Name"] || "",
       Methodno: item["Method no."] || "",

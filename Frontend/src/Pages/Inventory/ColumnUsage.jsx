@@ -134,7 +134,7 @@ const ColumnUsage = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       UsageNo: item["Usage No"] || "",
       BrandName: item["Brand Name"] || "",
       ColumnName: item["Column Name"] || "",

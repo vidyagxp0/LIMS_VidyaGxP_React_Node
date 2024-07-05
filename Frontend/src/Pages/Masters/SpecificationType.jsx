@@ -198,7 +198,7 @@ function SpecificationType() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: index + 1,
       specificationType: item["Specification Type"] || "",
       addedOn: item["Added On"] || "",
       status: item["Status"] || "",

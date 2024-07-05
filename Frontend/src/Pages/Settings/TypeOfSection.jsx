@@ -181,7 +181,7 @@ const TypeOfSection = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       TypeOfSection: item["Type Of Section"] || "",
       Prefix: item["Prefix"] || "",
       AddedOn: item["Added On"] || "",

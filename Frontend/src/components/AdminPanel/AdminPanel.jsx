@@ -19,7 +19,7 @@ function AdminPanel(props) {
 
   const handleLogin = () => {
     if (email === "Amit" && passwd === "Amit@121") {
-      navigate("/admin-panel/userManagement");
+      navigate("/admin-login/userManagement");
       props.show(true);
     } else if (email === "" || passwd === "") {
       toast.warning("Enter required credentials");

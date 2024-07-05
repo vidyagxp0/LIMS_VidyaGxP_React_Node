@@ -604,7 +604,7 @@ const StocksVerification = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       MaterialType: item["Material Type"] || "",
       InvoiceNumber: item["Invoice Number"] || "",
       SupplierName: item["Supplier Name"] || "",

@@ -178,7 +178,7 @@ const HandlingSymbol = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       SymbolCode: item["Symbol Code"] || "",
       SymbolName: item["Symbol Name"] || "",
         status: item["Status"] || "",

@@ -188,7 +188,7 @@ const ScheduleTermination = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ScheduleCode: item["Schedule Code"] || "",
       ScheduleDate: item["Schedule Date"] || "",
       status: item["Status"] || "INITIATED",

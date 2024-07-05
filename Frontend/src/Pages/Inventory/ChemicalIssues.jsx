@@ -140,7 +140,7 @@ const ChemicalIssues = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ChemicalRegeantName: item["Chemical / Regeant Name"] || "",
       ChemicalRegeantLotNo: item["Chemical / Regeant Lot No."] || "",
       quantityIssued: item["quantity Issued"] || "",

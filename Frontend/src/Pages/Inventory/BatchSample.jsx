@@ -188,7 +188,7 @@ const BatchSample = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ScheduleCode: item["Schedule Code"] || "",
       DueOn: item["Due On"] || "",
       status: item["Status"] || "INITIATED",

@@ -128,7 +128,7 @@ const PerformanceTest = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       PerformanceTestName: item["Performance Test Name	"] || "",
       UniqueCode: item["Unique Code	"] || "",
       status: item["Status"] || "INITIATED",

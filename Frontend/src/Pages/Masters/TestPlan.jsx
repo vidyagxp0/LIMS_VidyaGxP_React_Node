@@ -424,7 +424,7 @@ function TestPlan() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: index + 1,
       specificationId: item["Specification Id"] || "",
       productName: item["Product Name"] || "",
       tests: item["Tests"] || "",

@@ -190,7 +190,7 @@ const InvestigationL1 = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       testName: item["Test Name"] || "",
       testCode: item["Test Code"] || "",
       testType: item["Test Type"] || "",

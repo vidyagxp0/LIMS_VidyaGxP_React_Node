@@ -250,7 +250,7 @@ function Product() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: index + 1,
       uniqueCode: item["Unique Code"] || "",
       productName: item["Product Name"] || "",
       genericName: item["Generic Name"] || "",

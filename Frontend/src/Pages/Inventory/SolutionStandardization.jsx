@@ -188,7 +188,7 @@ const SolutionStandardization = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       StandardizationCode: item["Standardization Code"] || "",
       PreparationNo: item["Preparation No."] || "",
       SolutionName: item["Solution Name"] || "",

@@ -244,7 +244,7 @@ const Clients = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ClientName: item["Client Name"] || "",
       EmailAddress: item["Email Address"] || "",
       ContactNumber: item["Contact Number"] || "",

@@ -159,7 +159,7 @@ const MediaLotAcceptance = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       MediaLotNo: item["Media Name"] || "",
       MediaLotNo: item["Media Lot No."] || "",
       LotBatchNo: item["Lot Batch No."] || "",

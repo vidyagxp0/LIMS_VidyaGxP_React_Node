@@ -227,7 +227,7 @@ const TestHistory = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       TestName: item["Test Name"] || "",
       TestsPlanned: item["Tests Planned"] || "",
       TestsExecuted: item["Tests Executed"] || "",

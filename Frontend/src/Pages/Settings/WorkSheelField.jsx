@@ -170,7 +170,7 @@ const WorkSheetField = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       WorksheetField: item["Worksheet Field"] || "",
       SampleTypeName: item["Sample_type Name"] || "",
       Description: item["Description"] || "",

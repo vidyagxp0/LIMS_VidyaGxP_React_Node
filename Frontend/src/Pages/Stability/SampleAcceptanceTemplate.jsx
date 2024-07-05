@@ -213,7 +213,7 @@ function SampleAcceptanceTemplate() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       name: item["Name"] || "",
       uniqueCode: item["Unique Code"] || "",
       noOfCheckItems: item["No. of Check Items"] || 0,

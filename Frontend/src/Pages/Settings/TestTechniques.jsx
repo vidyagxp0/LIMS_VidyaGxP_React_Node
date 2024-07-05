@@ -187,7 +187,7 @@ const TestTechniques = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       TechniqueName: item["Technique Name"] || "",
       Type: item["Type"] || "",
       Description: item["Description"] || "",

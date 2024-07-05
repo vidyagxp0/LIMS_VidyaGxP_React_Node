@@ -170,7 +170,7 @@ const SolutionUsage = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       VolumetricSolutionName: item["Volumetric Solution Name"] || "",
       UsedOn: item["Used On"] || "",
       ModeOfUsage: item["Mode of Usage"] || "",

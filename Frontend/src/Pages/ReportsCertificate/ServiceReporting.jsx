@@ -203,7 +203,7 @@ const ServiceReporting = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ProblemId: item["Problem ID"] || "",
       InstrumentId: item["Instrument ID"] || "",
       ModuleId: item["Module ID"] || "",

@@ -154,7 +154,7 @@ const UsageRegistration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       TemplateName: item["Template Name"] || "",
       TemplateDescription: item["Template Description"] || "",
       UniqueCode: item["Unique Code"] || "",

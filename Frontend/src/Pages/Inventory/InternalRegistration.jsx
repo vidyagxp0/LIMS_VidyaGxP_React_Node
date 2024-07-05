@@ -253,7 +253,7 @@ const InternalRegistration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       name: item["Name"] || "",
       sequence: item["Sequence"] || "",
       additionalInfo: item["Additional Information"] || "",

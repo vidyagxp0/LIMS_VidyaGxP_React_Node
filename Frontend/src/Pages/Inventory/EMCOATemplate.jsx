@@ -203,7 +203,7 @@ const EMCOATemplate = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ConfigurationType: item["Configuration Type"] || "",
       UniqueCode: item["Unique Code"] || "",
       ReportTitle: item["Report Title"] || "",

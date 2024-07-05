@@ -296,7 +296,7 @@ const StockInventory = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       MaterialName: item["Material Name"] || "",
       SupplierName: item["Supplier Name"] || "",
       TruckNo: item["Truck No."] || "",

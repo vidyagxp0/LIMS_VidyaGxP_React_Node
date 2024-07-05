@@ -153,7 +153,7 @@ const UsageRegistration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       StandardLotNo: item["Standard Lot No"] || "",
       CollectionType: item["Collection Type"] || "",
       UsedFor: item["Used For"] || "",

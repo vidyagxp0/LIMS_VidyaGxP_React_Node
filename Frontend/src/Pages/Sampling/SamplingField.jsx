@@ -174,7 +174,7 @@ const SamplingField = () => {
     const handleExcelDataUpload = (excelData) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false,
-        sno: data.length + index + 1,
+        sno:  index + 1,
         fieldName: item["Field Name"] || "",
         fieldType: item["Field Type"] || "",
         registeredBy: item["Registered By"] || "",

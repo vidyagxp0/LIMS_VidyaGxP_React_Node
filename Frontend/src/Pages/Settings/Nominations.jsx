@@ -198,7 +198,7 @@ const Nominations = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       Analyst: item["Analyst"] || "",
       TestTechnique: item["Test Technique"] || "",
       TotalExperience: item["Total Experience"] || "",

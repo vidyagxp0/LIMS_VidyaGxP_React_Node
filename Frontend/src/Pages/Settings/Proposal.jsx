@@ -207,7 +207,7 @@ const Proposal = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       TrainingConfirmationId: item["Training Confirmation ID"] || "",
       Analyst: item["Analyst"] || "",
       EmployeeId: item["Employee ID"] || "",

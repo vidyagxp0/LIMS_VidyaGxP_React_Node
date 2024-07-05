@@ -193,7 +193,7 @@ function MyTests() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: initialData.length + index + 1,
+      sno: index + 1,
       ARNo: item["A.R No."] || "", // Adjusted accessor
       productName: item["Product Name"] || "", // Adjusted accessor
       sampleIncharge: item["Sample Incharge"] || "", // Adjusted accessor

@@ -286,7 +286,7 @@ function StabilityProtocol() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       productMaterial: item["Product/Material"] || "",
       specificationID: item["Specification ID"] || "",
       genericName: item["Generic Name"] || "",

@@ -205,7 +205,7 @@ const SamplingConfiguration = () => {
      const handleExcelDataUpload = (excelData) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false,
-        sno: data.length + index + 1,
+        sno:  index + 1,
         samplingID: item["Sampling ID"] || "",
         specificationID: item["Specification ID"] || "",
         sampleType: item["Sample Type"] || "",

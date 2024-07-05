@@ -197,7 +197,7 @@ const WorkingStandardIssue = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       WorkingContainerNo: item["Working Container No"] || "",
       ContainerQty: item["Container Qty"] || "",
       ContainerValidityPeriodDay: item["Container Validity Period Day(s)"] || "",

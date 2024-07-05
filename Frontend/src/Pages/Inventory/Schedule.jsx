@@ -196,7 +196,7 @@ const Schedule = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ScheduleCode: item["Schedule Code"] || "",
       ScheduleDescription: item["Schedule Description"] || "",
       FrequencyType: item["Frequency Type"] || "",

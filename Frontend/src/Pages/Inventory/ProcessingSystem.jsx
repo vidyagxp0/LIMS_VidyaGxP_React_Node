@@ -195,7 +195,7 @@ const ProcessingSystem = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       Category: item["Category"] || "",
       processingSystem: item["processing System"] || "",
       UniqueCode: item["Unique Code"] || "",

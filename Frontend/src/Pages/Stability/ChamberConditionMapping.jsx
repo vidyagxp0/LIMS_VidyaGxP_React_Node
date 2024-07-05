@@ -235,7 +235,7 @@ function ChamberConditionMapping() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       chamberId: item["Chamber Id"] || "",
       description: item["Description"] || "",
       currentStorageCondition: item["Current Storage Condition"] || "",

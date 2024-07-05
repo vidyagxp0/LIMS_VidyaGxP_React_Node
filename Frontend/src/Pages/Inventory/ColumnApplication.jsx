@@ -134,7 +134,7 @@ const ColumnApplication = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ColumnPressure: item["Column Pressure	"] || "",
       FlowRate: item["Flow Rate	"] || "",
       WaveLength: item["Wave Length	"] || "",

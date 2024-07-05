@@ -201,7 +201,7 @@ function Storage_Condition() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       conditionCode: item["Condition Code"] || "",
       stabilityCondition: item["Stability Condition"] || "",
       description: item["Description"] || "",

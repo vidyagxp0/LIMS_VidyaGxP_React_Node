@@ -170,7 +170,7 @@ const Resources = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       ResourceName: item["Resource Name"] || "",
       AddedOn: item["Added On"] || "",
         status: item["Status"] || "",

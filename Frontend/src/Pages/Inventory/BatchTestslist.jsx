@@ -188,7 +188,7 @@ const BatchTestslist = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       BatchSampleId: item["Batch Sample ID"] || "",
       RegisteredOn: item["Registered On"] || "",
       status: item["Status"] || "INITIATED",

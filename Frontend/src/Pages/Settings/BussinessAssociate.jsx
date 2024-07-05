@@ -226,7 +226,7 @@ const BussinessAssociate = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       BusinessAssociateName: item["Business Associate Name"] || "",
       UniqueCode: item["Unique Code"] || "",
       City: item["City"] || "",

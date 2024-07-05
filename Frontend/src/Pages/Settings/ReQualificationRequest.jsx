@@ -199,7 +199,7 @@ const ReQualifictionRequest = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       Analyst: item["Analyst"] || "",
       QualificationId: item["Qualification ID"] || "",
       QualificationType: item["Qualification Type"] || "",

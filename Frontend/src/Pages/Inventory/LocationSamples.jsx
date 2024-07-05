@@ -339,7 +339,7 @@ const LocationSamples = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno:  index + 1,
       PlantName: item["Plant Name"] || "",
       Facility: item["Facility"] || "",
       Location: item["Location"] || "",
