@@ -1,188 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//     >
-//       <CModalHeader>
-//         <CModalTitle> Add Calibration Schedule</CModalTitle>
-//       </CModalHeader>
-
-//       <CModalBody>
-//         <CFormSelect
-//           className="mb-3"
-//           label="Instrument Category"
-//           options={[
-//             "Select Intrument Category",
-//             { label: "chromathograpy", value: "chromathograpy" },
-//             { label: "weighing balance", value: "weighing-balance" },
-//           ]}
-//         />
-//         <CFormSelect
-//           className="mb-3"
-//           label="Calibration Type"
-//           options={[
-//             "Select Calibration Type",
-//             { label: "yearly", value: "yearly" },
-//             { label: "monthly", value: "monthly" },
-//             { label: "daily", value: "daily" },
-//           ]}
-//         />
-//         <CFormSelect
-//           className="mb-3"
-//           label="Calibration Type"
-//           options={[
-//             "Select Calibration Type",
-//             { label: "yearly", value: "yearly" },
-//             { label: "monthly", value: "monthly" },
-//             { label: "daily", value: "daily" },
-//           ]}
-//         />
-//         <CFormSelect
-//           className="mb-3"
-//           label="Instrument (Instrument ID)"
-//           options={["Select Instrument ID"]}
-//         />
-//         <CFormSelect
-//           className="mb-3"
-//           label="Module (Module ID)"
-//           options={["Select Module ID"]}
-//         />
-
-//         <FormControl style={{ margin: "20px" }}>
-//           <FormLabel id="demo-row-radio-buttons-group-label">
-//             Calibration Work Flow
-//           </FormLabel>
-//           <RadioGroup
-//             row
-//             aria-labelledby="demo-row-radio-buttons-group-label"
-//             name="row-radio-buttons-group"
-//           >
-//             <FormControlLabel
-//               value="Calibration Data Sheet"
-//               control={<Radio />}
-//               label="Calibration Data Sheet"
-//             />
-//             <FormControlLabel
-//               value="Sample Login Template"
-//               control={<Radio />}
-//               label="Sample Login Template"
-//             />
-//           </RadioGroup>
-//         </FormControl>
-
-//         <CFormSelect
-//           className="mb-3"
-//           label="Calibration Datasheet"
-//           options={[
-//             "Select",
-//             { label: "CAl data sheet", value: "cal-data-sheet" },
-//             { label: "Data sheet1", value: "data-sheet1" },
-//           ]}
-//         />
-
-//         <CFormInput
-//           label="Schedule Description"
-//           className="mb-3"
-//           type="text"
-//           placeholder="Schedule Description"
-//         />
-
-//         <CFormInput
-//           label="Start Date"
-//           className="mb-3"
-//           type="date"
-//           placeholder=""
-//         />
-
-//         <CFormSelect
-//           className="mb-3"
-//           label="Frequency"
-//           options={[
-//             "Period",
-//             { label: "Daily", value: "daily" },
-//             { label: "Weekly", value: "weekly" },
-//             { label: "Monthly", value: "monthly" },
-//             { label: "Yearly", value: "yearly" },
-//           ]}
-//         />
-
-//         <CFormInput
-//           label="Tolerance Period"
-//           className="mb-3"
-//           type="text"
-//           placeholder="Tolerance Period"
-//         />
-
-//         <span>Day(s)</span>
-
-//         <div className="d-flex gap-3 mt-4">
-//           <CButton color="light w-50" onClick={_props.closeModal}>
-//             &lt; Back
-//           </CButton>
-//           <CButton color="primary w-50">Submit</CButton>
-//         </div>
-//       </CModalBody>
-//     </CModal>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Delete User</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p>Are you sure you want to delete this Calibration schedule?</p>
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.confirmDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-//           <CCol sm={1}>
-//             <div
-//               style={{
-//                 border: "1px solid #f98d6b",
-//                 padding: "7px",
-//                 width: "38px",
-//                 display: "flex",
-//                 justifyContent: "center",
-//                 backgroundColor: "#f98d6b",
-//                 borderRadius: "5px",
-//               }}
-//             >
-//               <PiDownloadBold />
-//             </div>
-//           </CCol>
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -195,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import CalibrationScheduleModal from "../Modals/CalibrationScheduleModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import { CCol } from "@coreui/react";
 import { PiDownloadBold } from "react-icons/pi";
@@ -388,7 +203,7 @@ const CalibrationSchedule = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       UniqueCode: item["Unique Code"] || "",
       CalibrationWorkflow: item["CalibrationWorkflow"] || "",
       ScheduleDescription: item["Schedule Description"] || "",
@@ -397,12 +212,11 @@ const CalibrationSchedule = () => {
       NextCalibrationDue: item["Next Calibration Due"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the import modal after data upload
+    setIsModalsOpen(false); // Update data state with parsed Excel data// Close the import modal after data upload
   };
-  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -428,7 +242,6 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the
 
   return (
     <div className="p-4">
-     
       <h1 className="text-2xl font-bold mb-4">Calibration Schedule</h1>
 
       <div className="flex items-center justify-between mb-4">
@@ -447,28 +260,22 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the
             onChange={setStatusFilter}
           />
         </div>
-        <CCol sm={1}>
-       
-      </CCol>
-      <div className="float-right flex gap-4">
-      <div
-          style={{
-            border: "1px solid #f98d6b",
-            padding: "7px",
-            width: "38px",
-            display: "flex",
-            justifyContent: "center",
-            backgroundColor: "#f98d6b",
-            borderRadius: "5px",
-          }}
-        >
-          <PiDownloadBold />
-        </div>
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+        <CCol sm={1}></CCol>
+        <div className="float-right flex gap-4">
+          <div
+            style={{
+              border: "1px solid #f98d6b",
+              padding: "7px",
+              width: "38px",
+              display: "flex",
+              justifyContent: "center",
+              backgroundColor: "#f98d6b",
+              borderRadius: "5px",
+            }}
+          >
+            <PiDownloadBold />
+          </div>
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Calibration Schedule"
             color="blue"
@@ -483,10 +290,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <CalibrationScheduleModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -495,7 +299,13 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );

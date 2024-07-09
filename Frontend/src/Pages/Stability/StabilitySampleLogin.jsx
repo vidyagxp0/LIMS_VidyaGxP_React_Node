@@ -7,27 +7,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
     CButton,
-    CContainer,
     CFormInput,
-    CFormLabel,
-    CFormTextarea,
     CModal,
     CModalBody,
     CModalFooter,
     CModalHeader,
     CModalTitle,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CRow,
-    CCol,
     CFormSelect,
-    CFormCheck,
-    CHeader,
-    CFooter,
   } from "@coreui/react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -127,9 +113,6 @@ const initialData = [
     status: "REJECTED",
   },
 ];
-
-
-
 
 function StabilitySampleLogin() {
      const [data, setData] = useState(initialData);
@@ -358,6 +341,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
           alignment="center"
           visible={_props.visible}
           onClose={_props.closeModal}
+          size="xl"
         >
           <CModalHeader>
             <CModalTitle>Add Sample login</CModalTitle>

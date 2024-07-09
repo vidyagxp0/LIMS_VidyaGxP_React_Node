@@ -10,20 +10,13 @@ import {
 } from "@coreui/react";
 import React from "react";
 
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
 import "../StorageCondition/StorageCondition.css";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import Table from "../../components/ATM components/Table/Table";
-import ViewModal from "../Modals/ViewModal";
+import Table3 from "../../components/ATM components/Table/Table3.jsx";
+import ChamberConditionMappingModal from "../Modals/ChamberConditionMappingModal.jsx";
 import ImportModal from "../Modals/importModal";
 
 const initialData = [
@@ -119,7 +112,6 @@ const initialData = [
   },
 ];
 
-
 function ChamberConditionMapping() {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -150,7 +142,6 @@ function ChamberConditionMapping() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
   };
 
   const handleCheckboxChange = (index) => {
@@ -190,7 +181,10 @@ function ChamberConditionMapping() {
     { header: "SrNo.", accessor: "sno" },
     { header: "Chamber Id", accessor: "chamberId" },
     { header: "Description", accessor: "description" },
-    { header: "Current Storage Condition", accessor: "currentStorageCondition" },
+    {
+      header: "Current Storage Condition",
+      accessor: "currentStorageCondition",
+    },
     { header: "	Initiated On", accessor: "initiatedOn" },
     { header: "Status", accessor: "status" },
     {
@@ -198,16 +192,7 @@ function ChamberConditionMapping() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-          />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <ATMButton text="Update" color="blue" onClick={row} />
         </>
       ),
     },
@@ -225,29 +210,27 @@ function ChamberConditionMapping() {
     setViewModalData(false);
   };
 
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       chamberId: item["Chamber Id"] || "",
       description: item["Description"] || "",
       currentStorageCondition: item["Current Storage Condition"] || "",
       initiatedOn: item["Initiated On"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsImportModalOpen(false); // Close the import modal after data upload
   };
-  
 
   return (
     <>
@@ -260,7 +243,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
             <Dropdown
-               options={[
+              options={[
                 { value: "All", label: "All" },
                 { value: "DROPPED", label: "DROPPED" },
                 { value: "INITIATED", label: "INITIATED" },
@@ -273,27 +256,34 @@ setData(concatenateData ); // Update data state with parsed Excel data
             />
           </div>
           <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
-             
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            {/* <ATMButton text="Update" color="blue" onClick={openModal} /> */}
           </div>
         </div>
-        <Table
+        <Table3
           columns={columns}
           data={filteredData}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
         />
+        <ChamberConditionMappingModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+        />
       </div>
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {viewModalData && (
+        <ImportModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
     </>
   );
 }

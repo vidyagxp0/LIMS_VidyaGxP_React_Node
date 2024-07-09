@@ -9,15 +9,18 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
-
 } from "@coreui/react";
-import './SamplingTemplate.css'
-import React, { useEffect, useState } from 'react';
+import "./SamplingTemplate.css";
+import React, { useEffect, useState } from "react";
 import { TiArrowRightThick } from "react-icons/ti";
 import { TiArrowLeftThick } from "react-icons/ti";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { Link } from "react-router-dom";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -117,7 +120,6 @@ const initialData = [
     status: "REINITIATED",
   },
 ];
-
 
 const SamplingTemplate = () => {
   const [data, setData] = useState(initialData);
@@ -220,8 +222,8 @@ const SamplingTemplate = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      
-sno:initialData.length+ index + 1,
+
+      sno: initialData.length + index + 1,
       templateName: item["Template Name"] || "",
       uniqueCode: item["Unique Code"] || "",
       sampleType: item["Sample Type"] || "",
@@ -229,11 +231,11 @@ sno:initialData.length+ index + 1,
       status: item["Status"] || "",
       action: null, // Assuming action data is not provided in the Excel data
     }));
-  
+
     // Assuming 'data' and 'setData' are state variables holding your table data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
 
   const openModal = () => {
@@ -244,12 +246,10 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     setIsModalOpen(false);
   };
 
-
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
 
-   
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
@@ -263,86 +263,137 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           <h4 className="fw-bold">Sample Template</h4>
         </div>
         <div className="grid grid-cols-5 gap-4 mb-4">
-        <Card
-          title="DROPPED"
-          count={cardCounts.DROPPED}
-          color="pink"
-          onClick={() => handleCardClick("DROPPED")}
-        />
-        <Card
-          title="INITIATED"
-          count={cardCounts.INITIATED}
-          color="blue"
-          onClick={() => handleCardClick("INITIATED")}
-        />
-        <Card
-          title="REINITIATED"
-          count={cardCounts.REINITIATED}
-          color="yellow"
-          onClick={() => handleCardClick("REINITIATED")}
-        />
-        <Card
-          title="APPROVED"
-          count={cardCounts.APPROVED}
-          color="green"
-          onClick={() => handleCardClick("APPROVED")}
-        />
-        <Card
-          title="REJECTED"
-          count={cardCounts.REJECTED}
-          color="red"
-          onClick={() => handleCardClick("REJECTED")}
-        />
-      </div>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery}/>
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
+          />
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
+            color="blue"
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
           />
         </div>
-        <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-          <ATMButton text="Add Sample Template" color="blue" onClick={openModal} />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Sample Template"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onDelete={handleDelete}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-      />
-    
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-        
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
         />
-      )}
 
-{isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
-      )}
-    </div>
+        {isModalOpen && (
+          <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        )}
+
+        {isModalsOpen && (
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+      </div>
     </>
   );
 };
 const StatusModal = (_props) => {
+  const [headerRows, setHeaderRows] = useState(0);
+  const [footerRows, setFooterRows] = useState(0);
+  const [headerColumns, setHeaderColumns] = useState(1);
+  const [footerColumns, setFooterColumns] = useState(1);
+
+  const handleHeaderRowsChange = (e) => {
+    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+    setHeaderRows(value);
+  };
+
+  const handleHeaderColumnsChange = (e) => {
+    setHeaderColumns(parseInt(e.target.value, 10));
+  };
+
+  const handleFooterRowsChange = (e) => {
+    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+    setFooterRows(value);
+  };
+
+  const handleFooterColumnsChange = (e) => {
+    setFooterColumns(parseInt(e.target.value, 10));
+  };
+
+  const renderTable = (rows, columns) => {
+    const tableRows = [];
+    for (let i = 0; i < rows; i++) {
+      const tableColumns = [];
+      for (let j = 0; j < columns; j++) {
+        tableColumns.push(
+          <td key={j} className="flex gap-4">
+            <CFormInput type="text" placeholder={`Lower Count `} />
+
+            <CFormSelect
+              className="mb-2"
+              options={[
+                {
+                  label: "Select Field",
+                  value: "1",
+                },
+              ]}
+            />
+          </td>
+        );
+      }
+      tableRows.push(<tr key={i}>{tableColumns}</tr>);
+    }
+    return tableRows;
+  };
+
   const [leftArray, setLeftArray] = useState([
     "Change Control",
     "CAPA",
@@ -350,13 +401,12 @@ const StatusModal = (_props) => {
     "External Audit",
     "Initiator",
     "SQM",
-    "CTMS", ,
+    "CTMS",
     "Calendar",
     "EHS",
     "Environment",
     "Documents",
     "Deviation",
-
   ]);
 
   const [rightArray, setRightArray] = useState([
@@ -367,7 +417,7 @@ const StatusModal = (_props) => {
   ]);
 
   const moveRight = () => {
-    let leftElement = document.getElementsByClassName('check-left');
+    let leftElement = document.getElementsByClassName("check-left");
     for (let index = 0; index < leftElement.length; index++) {
       if (leftElement[index].checked) {
         let data = leftElement[index].value;
@@ -375,13 +425,13 @@ const StatusModal = (_props) => {
         setLeftArray(left);
         rightArray.push(data);
         setRightArray(rightArray);
-        break  // Important
+        break; // Important
       }
     }
-  }
+  };
 
   const moveLeft = () => {
-    let rightElement = document.getElementsByClassName('check-right');
+    let rightElement = document.getElementsByClassName("check-right");
     for (let index = 0; index < rightElement.length; index++) {
       if (rightElement[index].checked) {
         let data = rightElement[index].value;
@@ -389,43 +439,64 @@ const StatusModal = (_props) => {
         setRightArray(right);
         leftArray.push(data);
         setLeftArray(leftArray);
-        break         // Important
+        break; // Important
       }
     }
-  }
+  };
 
   const clicked = () => {
-    let checkboxes = document.querySelectorAll('.check-left, .check-right');
+    let checkboxes = document.querySelectorAll(".check-left, .check-right");
     checkboxes.forEach((checkbox) => {
       checkbox.checked = false;
     });
-    let allLabels = document.querySelectorAll('.labels');
+    let allLabels = document.querySelectorAll(".labels");
     allLabels.forEach((label) => {
-      label.classList.remove('clicked');
+      label.classList.remove("clicked");
     });
 
     let label = event.target;
-    label.classList.add('clicked');
+    label.classList.add("clicked");
     label.checked = true;
   };
 
   return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+    <CModal
+      alignment="center"
+      visible={_props.visible}
+      onClose={_props.closeModal}
+      size="lg"
+    >
       <CModalHeader>
         <CModalTitle>Add Sampling template</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <p className="text-muted">Add information of Sampling template</p>
         <div className="mb-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">Template Name</label>
-          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Template Name" />
+          <label htmlFor="exampleFormControlInput1" className="form-label">
+            Template Name
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="exampleFormControlInput1"
+            placeholder="Template Name"
+          />
         </div>
         <div className="mb-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">Unique Code</label>
-          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+          <label htmlFor="exampleFormControlInput1" className="form-label">
+            Unique Code
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="exampleFormControlInput1"
+            placeholder="Unique Code"
+          />
         </div>
         <div className="mb-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">Sample Type</label>
+          <label htmlFor="exampleFormControlInput1" className="form-label">
+            Sample Type
+          </label>
           <select className="form-select" aria-label="Default select example">
             <option selected>Select...</option>
             <option value="1">Raw Material</option>
@@ -434,74 +505,155 @@ const StatusModal = (_props) => {
             <option value="2">Petrochemical</option>
           </select>
         </div>
-        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Header</div>
-        <div className="d-flex flex-row mb-3 gap-4">
-          <div className="w-50">
-            <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
-            <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+          Header
+        </div>
+        <div className="d-flex pb-2">
+          <div className="mb-3">
+            <CFormInput
+              type="number"
+              label="Rows"
+              placeholder="Rows"
+              value={headerRows}
+              onChange={handleHeaderRowsChange}
+            />
           </div>
-          <div className="w-50">
-            <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
-            <select className="form-select" aria-label="Default select example">
-              <option value="2" selected>2</option>
-              <option value="4">4</option>
-              <option value="6">6</option>
-            </select>
+          <div className="ps-3 w-50">
+            <CFormSelect
+              label="Columns"
+              placeholder="Columns"
+              options={[
+                { label: "2", value: "2" },
+                { label: "4", value: "4" },
+                { label: "6", value: "6" },
+              ]}
+              value={headerColumns}
+              onChange={handleHeaderColumnsChange}
+            />
           </div>
         </div>
-        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Body</div>
+        <table className="table mb-3">
+          <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+        </table>
+        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+          Body
+        </div>
         <div className="d-flex">
           <div className="w-100 m-3">
             <h5>Available</h5>
-            <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
-              <ul className='list-group'>
-                {leftArray.map((data) =>
-                  <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark rounded'><input type="checkbox" value={data} id={data} className="check-left d-none" /><label className="labels cursor-pointer bg-dark-subtle" htmlFor={data} onClick={clicked}>{data}</label></li>
-                )}
+            <div
+              className="shadow p-2 rounded border overflow-y-auto"
+              style={{ height: "350px" }}
+            >
+              <ul className="list-group">
+                {leftArray.map((data) => (
+                  <li
+                    key={data}
+                    className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
+                  >
+                    <input
+                      type="checkbox"
+                      value={data}
+                      id={data}
+                      className="check-left d-none"
+                    />
+                    <label
+                      className="labels cursor-pointer bg-dark-subtle"
+                      htmlFor={data}
+                      onClick={clicked}
+                    >
+                      {data}
+                    </label>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
           <div className="m-auto justify-content-center">
-            <button className="btn shadow py-1 px-3 mt-5 text-warning fs-4" onClick={moveRight}><TiArrowRightThick /></button>
-            <button className="btn shadow py-1 px-3 mt-2 text-warning fs-4" onClick={moveLeft}><TiArrowLeftThick /></button>
+            <button
+              className="btn shadow py-1 px-3 mt-5 text-warning fs-4"
+              onClick={moveRight}
+            >
+              <TiArrowRightThick />
+            </button>
+            <button
+              className="btn shadow py-1 px-3 mt-2 text-warning fs-4"
+              onClick={moveLeft}
+            >
+              <TiArrowLeftThick />
+            </button>
           </div>
           <div className="w-100 m-3">
             <h5>Selected</h5>
-            <div className="shadow p-2 rounded border overflow-y-auto" style={{ height: '350px' }}>
-              <ul className='list-group'>
-                {rightArray.map((data) =>
-                  <li key={data} className='bg-secondary-subtle my-1 px-3 py-1 text-dark rounded'><input type="checkbox" value={data} id={data} className="check-right d-none" /><label className="labels cursor-pointer bg-dark-subtle" htmlFor={data} onClick={clicked}>{data}</label></li>
-                )}
+            <div
+              className="shadow p-2 rounded border overflow-y-auto"
+              style={{ height: "350px" }}
+            >
+              <ul className="list-group">
+                {rightArray.map((data) => (
+                  <li
+                    key={data}
+                    className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
+                  >
+                    <input
+                      type="checkbox"
+                      value={data}
+                      id={data}
+                      className="check-right d-none"
+                    />
+                    <label
+                      className="labels cursor-pointer bg-dark-subtle"
+                      htmlFor={data}
+                      onClick={clicked}
+                    >
+                      {data}
+                    </label>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
         </div>
 
-        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">Footer</div>
-        <div className="d-flex flex-row mb-3 gap-4">
-          <div className="w-50">
-            <label htmlFor="exampleFormControlInput1" className="form-label">Row</label>
-            <input type="number" defaultValue={0} className="form-control" id="exampleFormControlInput1" placeholder="Unique Code" />
+        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+          Footer
+        </div>
+        <div className="d-flex pb-2">
+          <div className="mb-3">
+            <CFormInput
+              type="number"
+              label="Rows"
+              placeholder="Rows"
+              value={footerRows}
+              onChange={handleFooterRowsChange}
+            />
           </div>
-          <div className="w-50">
-            <label htmlFor="exampleFormControlInput1" className="form-label">Columns</label>
-            <select className="form-select" aria-label="Default select example">
-              <option value="2" selected>2</option>
-              <option value="4">4</option>
-              <option value="6">6</option>
-            </select>
+          <div className="ps-3 w-50">
+            <CFormSelect
+              label="Columns"
+              placeholder="Columns"
+              options={[
+                { label: "2", value: "2" },
+                { label: "4", value: "4" },
+                { label: "6", value: "6" },
+              ]}
+              value={footerColumns}
+              onChange={handleFooterColumnsChange}
+            />
           </div>
         </div>
-
+        <table className="table mb-3">
+          <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+        </table>
       </CModalBody>
       <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+        <CButton color="light" onClick={_props.closeModal}>
+          Back
+        </CButton>
         <CButton color="primary">Submit</CButton>
       </CModalFooter>
     </CModal>
   );
 };
 
- 
-
-export default SamplingTemplate
+export default SamplingTemplate;

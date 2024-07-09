@@ -1,85 +1,3 @@
-
-  // const StatusModal = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle> Add Calibration Frequency</CModalTitle>
-  //       </CModalHeader>
-  //       <p className="ms-3 m-2">
-  //         Add information and add new calibration frequency
-  //       </p>
-  //       <CModalBody>
-  //         <CFormInput
-  //           label="Calibration Frequency"
-  //           className="mb-3"
-  //           type="text"
-  //           placeholder="Calibration Frequency"
-  //         />
-  //         <CFormInput
-  //           label="Calibration Frequency Prefix"
-  //           className="mb-3"
-  //           type="text"
-  //           placeholder="Type Prefix"
-  //         />
-
-  //         <div className="d-flex gap-3 mt-4">
-  //           <CButton color="light w-50" onClick={_props.closeModal}>
-  //             &lt; Back
-  //           </CButton>
-  //           <CButton color="primary w-50">Submit</CButton>
-  //         </div>
-  //       </CModalBody>
-  //     </CModal>
-  //   );
-  // };
-
-  // const DeleteModal = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //       size="lg"
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Delete User</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         <p>Are you sure you want to delete this Calibration Frequency ?</p>
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton
-  //           color="secondary"
-  //           onClick={_props.closeModal}
-  //           style={{
-  //             marginRight: "0.5rem",
-  //             fontWeight: "500",
-  //           }}
-  //         >
-  //           Cancel
-  //         </CButton>
-  //         <CButton
-  //           color="danger"
-  //           onClick={_props.confirmDelete}
-  //           style={{
-  //             fontWeight: "500",
-  //             color: "white",
-  //           }}
-  //         >
-  //           Delete
-  //         </CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-
-  
-  
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -92,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import CalibrationFrequencyModal from "../Modals/CalibrationFrequencyModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -321,7 +239,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <CalibrationFrequencyModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

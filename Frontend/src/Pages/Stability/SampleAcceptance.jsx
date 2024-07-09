@@ -1,27 +1,40 @@
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import React, { useState } from "react"
-import { FaDownload } from "react-icons/fa"
-
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import React, { useState } from "react";
+import { FaDownload } from "react-icons/fa";
 
 function SampleAcceptance() {
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const [data, setData] = useState([
-
-  ]);
+  const [data, setData] = useState([]);
 
   const filterData = () => {
     const filteredData =
       selectedStatus === "All"
         ? data
         : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
+            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
+          );
     return filteredData.filter((item) =>
       item.data.toLowerCase().includes(search.toLowerCase())
     );
   };
   const filteredData = filterData();
-
 
   return (
     <>
@@ -77,8 +90,7 @@ function SampleAcceptance() {
                 <button
                   className="col shadow p-3 m-3 rounded"
                   style={{
-                    background:
-                      "linear-gradient(25deg, orange , #f7e05f )",
+                    background: "linear-gradient(25deg, orange , #f7e05f )",
 
                     textAlign: "left",
                     boxShadow: "0px 10px 20px  black !important",
@@ -101,8 +113,7 @@ function SampleAcceptance() {
                 <button
                   className="col shadow p-3 m-3 rounded"
                   style={{
-                    background:
-                      "linear-gradient(27deg, green , #0fd850  )",
+                    background: "linear-gradient(27deg, green , #0fd850  )",
                     textAlign: "left",
                   }}
                   onClick={() => setSelectedStatus("APPROVED")}
@@ -122,8 +133,7 @@ function SampleAcceptance() {
                 <button
                   className="col shadow p-3 m-3 rounded"
                   style={{
-                    background:
-                      "linear-gradient(27deg ,red, #FF719A)",
+                    background: "linear-gradient(27deg ,red, #FF719A)",
                     textAlign: "left",
                   }}
                   onClick={() => setSelectedStatus("REJECTED")}
@@ -139,13 +149,12 @@ function SampleAcceptance() {
               </div>
             </div>
           </div>
-
         </div>
         <div>
           <CRow className="mb-3 py-4">
             <CCol sm={4}>
               <CFormInput
-                style={{ fontSize: '0.9rem' }}
+                style={{ fontSize: "0.9rem" }}
                 type="text"
                 placeholder="Search..."
                 onChange={(e) => setSearch(e.target.value)}
@@ -155,7 +164,7 @@ function SampleAcceptance() {
               <CFormSelect
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 value={selectedStatus}
-                style={{ fontSize: '0.9rem' }}
+                style={{ fontSize: "0.9rem" }}
                 options={[
                   { value: "All", label: "All" },
                   { value: "INITIATED", label: "Initiated" },
@@ -166,15 +175,14 @@ function SampleAcceptance() {
                 ]}
               />
             </CCol>
-            <CCol sm={2}>
-
-            </CCol>
+            <CCol sm={2}></CCol>
             <CCol sm={3}>
               <div className="d-flex justify-content-end">
                 <div className="pe-4">
-                  <CButton className="bg-danger bg-opacity-75 rounded" >
+                  <CButton className="bg-danger bg-opacity-75 rounded">
                     <FaDownload />
-                  </CButton></div>
+                  </CButton>
+                </div>
               </div>
             </CCol>
           </CRow>
@@ -182,12 +190,22 @@ function SampleAcceptance() {
 
         <div
           className="rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
+          style={{
+            fontFamily: "sans-serif",
+            fontSize: "0.9rem",
+            boxShadow: "5px 5px 20px #5D76A9",
+          }}
+        >
+          {" "}
+          <CTable
+            align="middle"
+            responsive
+            className="mb-0 rounded-lg table-responsive"
+          >
             <CTableHead>
               <CTableRow align="middle">
                 <center>
-                  <h4 >No Sample Acceptance Found</h4>
+                  <h4>No Sample Acceptance Found</h4>
                 </center>
               </CTableRow>
             </CTableHead>
@@ -195,7 +213,7 @@ function SampleAcceptance() {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default SampleAcceptance
+export default SampleAcceptance;

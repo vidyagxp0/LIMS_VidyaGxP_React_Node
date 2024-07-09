@@ -1,84 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Stock Registration</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <CFormCheck
-//           type="radio"
-//           name="options"
-//           value="rm-stock"
-//           label="RM Stock"
-//         />
-//         <CFormCheck
-//           type="radio"
-//           name="options"
-//           value="pm-stock"
-//           label="PM Stock"
-//         />
-//         <CFormCheck
-//           type="radio"
-//           name="options"
-//           value="chemical-stock"
-//           label=" Chemical Stock"
-//         />
-
-//         <div className="d-flex gap-3 mt-5">
-//           <CButton color="light w-50" onClick={_props.closeModal}>
-//             &lt; Back
-//           </CButton>
-//           <CButton color="primary w-50">Next</CButton>
-//         </div>
-//       </CModalBody>
-//     </CModal>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Delete User</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p>Are you sure you want to delete this material?</p>
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.confirmDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -91,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import StocksOnboardingModal from "../Modals/StocksOnboardingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -181,7 +100,6 @@ const initialData = [
     Location: "Australia",
   },
 ];
-
 
 const StocksOnboarding = () => {
   const [data, setData] = useState(initialData);
@@ -282,7 +200,7 @@ const StocksOnboarding = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       MaterialType: item["Material Type"] || "",
       MaterialName: item["Material Name"] || "",
       InvoiceNo: item["Invoice No."] || "",
@@ -292,12 +210,12 @@ const StocksOnboarding = () => {
       status: item["Status"] || "",
       Location: item["Location"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
-  
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -338,12 +256,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-          <ATMButton text="Add Batch Sample" color="blue" onClick={openModal} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add Stock" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -353,10 +267,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <StocksOnboardingModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -365,8 +276,14 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         />
       )}
 
-{isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );

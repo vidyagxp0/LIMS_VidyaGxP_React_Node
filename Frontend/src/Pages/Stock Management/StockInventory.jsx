@@ -1,105 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>Add Inventory</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <label className="mb-2" htmlFor="">Material Name</label>
-//         <Autocomplete
-//           disablePortal
-//           id="combo-box-demo"
-//           className="mb-3"
-//           options={top100Films}
-//           renderInput={(params) => <TextField {...params} label="" />}
-//         />
-//         <CFormInput
-//           label='Received Date'
-//           className="mb-3"
-//           type="date"
-//           placeholder="Received Date"
-//         />
-//         <label className="mb-2" htmlFor="">Supplier Name</label>
-//         <Autocomplete
-//           disablePortal
-//           id="combo-box-demo"
-//           className="mb-3"
-//           options={top100Films}
-//           renderInput={(params) => <TextField {...params} label="" />}
-//         />
-//         <CFormInput
-//           label='Truck No.'
-//           className="mb-3"
-//           type="number"
-//           placeholder="Truck No."
-//         />
-//         <CFormInput
-//           label='Ch No.'
-//           className="mb-3"
-//           type="number"
-//           placeholder="Ch No."
-//         />
-//         <CFormInput
-//           label='Invoice Number'
-//           className="mb-3"
-//           type="number"
-//           placeholder="Invoice Number"
-//         />
-//         <CFormInput
-//           label='Quantity In MT'
-//           className="mb-3"
-//           type="text"
-//           placeholder="Quantity In MT"
-//         />
-//         <CFormInput
-//           label='Remarks'
-//           className="mb-3"
-//           type="number"
-//           placeholder="Remarks"
-//         />
-//         <div className="d-flex gap-3 mt-">
-//           <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
-//           <CButton color="primary w-50">Submit</CButton>
-//         </div>
-//       </CModalBody>
-//     </CModal>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-//       <CModalHeader>
-//         <CModalTitle>Delete User</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <p>Are you sure you want to delete this Inventory?</p>
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.confirmDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
 
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -113,7 +11,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import StockInventoryModal from "../Modals/StockInventoryModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -122,7 +20,7 @@ const initialData = [
     checkbox: false,
     sno: 1,
     MaterialName: "PLA-001",
-    SupplierName: "PC-001",
+    SupplierName: "PC-00111",
     TruckNo: "TRK-001",
     ChNo: "CH-001",
     InvoiceNo: "1005ch-55",
@@ -367,7 +265,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <StockInventoryModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
