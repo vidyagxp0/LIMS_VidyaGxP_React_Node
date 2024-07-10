@@ -7,13 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal";
 
-const Table = ({
-  columns,
-  data,
-  onCheckboxChange,
-  onViewDetails,
-  onDelete,
-}) => {
+const Table = ({columns,data,onCheckboxChange,onViewDetails,onDelete,}) => {
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

@@ -22,13 +22,6 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import ImportModal from "../Modals/importModal";
 
 const initialData = [
@@ -104,7 +97,6 @@ const initialData = [
   },
 ];
 
-
 function SpecificationType() {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -133,7 +125,6 @@ function SpecificationType() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
   };
 
   const handleCheckboxChange = (index) => {
@@ -144,23 +135,28 @@ function SpecificationType() {
 
   const StatusModal = (_props) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
         <CModalHeader>
           <CModalTitle>Update specification type</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>Update information and add new specification type</p>
-  
+
           <CFormInput
-            className='mb-3'
+            className="mb-3"
             type="text"
             label="Specification Type Name"
             placeholder="Specification Type Name"
           />
-  
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
           <CButton color="primary">Submit</CButton>
         </CModalFooter>
       </CModal>
@@ -188,7 +184,6 @@ function SpecificationType() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
-        
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
@@ -203,8 +198,8 @@ function SpecificationType() {
       addedOn: item["Added On"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
@@ -221,11 +216,10 @@ function SpecificationType() {
     setViewModalData(false);
   };
 
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -243,23 +237,18 @@ function SpecificationType() {
                 { value: "All", label: "All" },
                 { value: "Active", label: "Active" },
                 { value: "Inactive", label: "Inactive" },
-               
               ]}
               value={statusFilter}
               onChange={setStatusFilter}
             />
           </div>
           <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-            <ATMButton
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            {/* <ATMButton
               text="Add Specifications Type"
               color="blue"
               
-            />
+            /> */}
           </div>
         </div>
         <Table
@@ -271,10 +260,20 @@ function SpecificationType() {
         />
       </div>
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
     </>
   );
 }

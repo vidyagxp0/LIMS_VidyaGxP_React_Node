@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import {
   CButton,
@@ -9,19 +8,20 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { FormControl, FormLabel } from "react-bootstrap";
 
 const CalibrationScheduleModal = (props) => {
-  const htmlContent = "<div>This is <strong>bold</strong> text.</div>";
   return (
     <CModal
       alignment="center"
       visible={props.visible}
       onClose={props.closeModal}
+      size="xl"
     >
       <CModalHeader>
-        <CModalTitle> Add Calibration Schedule</CModalTitle>
+        <CModalTitle className="font-bold">
+          Add Calibration Schedule
+        </CModalTitle>
       </CModalHeader>
 
       <CModalBody>
@@ -55,27 +55,33 @@ const CalibrationScheduleModal = (props) => {
           options={["Select Module ID"]}
         />
 
-        <FormControl style={{ margin: "20px" }}>
-          <FormLabel id="demo-row-radio-buttons-group-label">
-            Calibration Work Flow
-          </FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-          >
-            <FormControlLabel
+        <FormLabel className="mt-3">
+          Calibration Work Flow
+        </FormLabel>
+        <div className="d-flex gap-4 mb-3">
+          <div>
+            <input
+              type="radio"
+              id="calibrationDataSheet"
+              name="calibrationWorkFlow"
               value="Calibration Data Sheet"
-              control={<Radio />}
-              label="Calibration Data Sheet"
             />
-            <FormControlLabel
+            <label htmlFor="calibrationDataSheet" className="ms-2">
+              Calibration Data Sheet
+            </label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="sampleLoginTemplate"
+              name="calibrationWorkFlow"
               value="Sample Login Template"
-              control={<Radio />}
-              label="Sample Login Template"
             />
-          </RadioGroup>
-        </FormControl>
+            <label htmlFor="sampleLoginTemplate" className="ms-2">
+              Sample Login Template
+            </label>
+          </div>
+        </div>
 
         <CFormSelect
           className="mb-3"
@@ -87,21 +93,23 @@ const CalibrationScheduleModal = (props) => {
           ]}
         />
 
-        <CFormInput
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-          label="Schedule Description"
-          className="mb-3"
-          type="text"
-          placeholder="Schedule Description"
-        />
+        <div className="mb-3">
+          <label htmlFor="scheduleDescription" className="form-label">
+            Schedule Description
+          </label>
+          <CFormInput
+            id="scheduleDescription"
+            type="text"
+            placeholder="Schedule Description"
+          />
+        </div>
 
-        <CFormInput
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-          label="Start Date"
-          className="mb-3"
-          type="date"
-          placeholder=""
-        />
+        <div className="mb-3">
+          <label htmlFor="startDate" className="form-label">
+            Start Date
+          </label>
+          <CFormInput id="startDate" type="date" placeholder="" />
+        </div>
 
         <CFormSelect
           className="mb-3"
@@ -115,16 +123,17 @@ const CalibrationScheduleModal = (props) => {
           ]}
         />
 
-        <CFormInput
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-          label="Tolerance Period"
-          className="mb-3"
-          type="text"
-          placeholder="Tolerance Period"
-          z
-        />
-
-        <span>Day(s)</span>
+        <div className="mb-3">
+          <label htmlFor="tolerancePeriod" className="form-label">
+            Tolerance Period
+          </label>
+          <CFormInput
+            id="tolerancePeriod"
+            type="text"
+            placeholder="Tolerance Period"
+          />
+          <span className="ms-2">Day(s)</span>
+        </div>
 
         <div className="d-flex gap-3 mt-4">
           <CButton color="light w-50" onClick={props.closeModal}>

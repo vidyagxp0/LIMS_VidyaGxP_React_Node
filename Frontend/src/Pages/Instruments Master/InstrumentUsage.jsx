@@ -1,170 +1,3 @@
-
-
-// const StatusModal = (_props) => {
-//     return (
-//         <>
-
-//             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//                 <CModalHeader>
-//                     <CModalTitle>Add Instrument usage</CModalTitle>
-//                 </CModalHeader>
-//                 <CModalBody>
-//                     <p>Add information and Add Instrument Usage</p>
-
-//                     <CFormSelect
-//                         className="mb-3"
-//                         type="select"
-//                         label="Instrument (Instrument ID)"
-//                         placeholder="Select... "
-//                         options={[
-//                             "Select...",
-//                             { label: "en33/23" },
-//                             { label: "eqi/eng/163" },
-//                             { label: "ARZ001" },
-//                             { label: "Arz003" },
-//                             { label: "qc/bal/011" },
-//                             { label: "hplc" },
-//                         ]}
-//                     />
-
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="text"
-//                         label="Instrument Category"
-//                         placeholder="chromatography "
-//                         disabled
-//                     />
-
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="text"
-//                         label="Usage Code"
-//                         placeholder="Usage Code"
-//                     />
-
-//                     <CFormSelect
-//                         className="mb-3"
-//                         type="select"
-//                         label="Instrument (Instrument ID)"
-//                         placeholder="Select Product "
-//                         options={[
-//                             "Select Product",
-//                             { label: "apb" },
-//                             { label: "chpoil" },
-//                             { label: "fet0012" },
-//                             { label: "fet0011" },
-//                             { label: "samps" },
-//                             { label: "epto" },
-//                         ]}
-//                     />
-
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="text"
-//                         label="A.R.No."
-//                         placeholder="A.R.No."
-//                     />
-
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="text"
-//                         label="Used For"
-//                         placeholder="Used For"
-//                     />
-
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="text"
-//                         label="Used By"
-//                         placeholder="Used By"
-//                     />
-
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="date"
-//                         label="Used From"
-//                         placeholder=""
-//                     />
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="date"
-//                         label="Used To"
-//                         placeholder=""
-//                     />
-//                     <CFormInput
-//                         className="mb-3"
-//                         type="text"
-//                         label="Comment If Any"
-//                         placeholder="Comment"
-//                     />
-
-//                 </CModalBody>
-//                 <CModalFooter>
-//                     <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//                     <CButton color="primary">Submit</CButton>
-//                 </CModalFooter>
-//             </CModal>
-
-//         </>
-//     )
-// }
-
-
-
-// const DeleteModal = (_props) => {
-//     return (
-//         <CModal
-//             alignment="center"
-//             visible={_props.visible}
-//             onClose={_props.closeModal}
-//             size="lg"
-//         >
-//             <CModalHeader>
-//                 <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//                     Delete Instrument Usage
-//                 </CModalTitle>
-//             </CModalHeader>
-//             <div
-//                 className="modal-body"
-//                 style={{
-//                     fontSize: "1.2rem",
-//                     fontWeight: "500",
-//                     lineHeight: "1.5",
-//                     marginBottom: "1rem",
-//                     columnGap: "0px",
-//                     border: "0px !important",
-//                 }}
-//             >
-//                 <p>Are you sure you want to delete this Instrument Usage { }?</p>
-//             </div>
-//             <CModalFooter>
-//                 <CButton
-//                     color="secondary"
-//                     onClick={_props.closeModal}
-//                     style={{
-//                         marginRight: "0.5rem",
-//                         fontWeight: "500",
-//                     }}
-//                 >
-//                     Cancel
-//                 </CButton>
-//                 <CButton
-//                     color="danger"
-//                     onClick={_props.confirmDelete}
-//                     style={{
-//                         fontWeight: "500",
-//                         color: "white",
-//                     }}
-//                 >
-//                     Delete
-//                 </CButton>
-//             </CModalFooter>
-//         </CModal>
-//     );
-// };
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -177,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import InstrumentUsageModal from "../Modals/InstrumentUsageModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -447,7 +280,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <InstrumentUsageModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

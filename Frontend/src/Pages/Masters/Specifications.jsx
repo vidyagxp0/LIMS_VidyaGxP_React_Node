@@ -192,7 +192,7 @@ function Specifications() {
     ];
   
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="xl"> 
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>
         </CModalHeader>
