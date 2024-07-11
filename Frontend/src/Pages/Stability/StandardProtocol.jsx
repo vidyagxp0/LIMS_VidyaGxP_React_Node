@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -37,70 +37,6 @@ const initialData = [
     standardProtocolDescription: "Type B",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    name: "Test Name 3",
-    standardProtocolId: "T003",
-    standardProtocolDescription: "Type A",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    name: "Test Name 4",
-    standardProtocolId: "T004",
-    standardProtocolDescription: "Type C",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    name: "Test Name 5",
-    standardProtocolId: "T005",
-    standardProtocolDescription: "Type A",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    name: "Test Name 6",
-    standardProtocolId: "T006",
-    standardProtocolDescription: "Type B",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    name: "Test Name 7",
-    standardProtocolId: "T007",
-    standardProtocolDescription: "Type C",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    name: "Test Name 8",
-    standardProtocolId: "T008",
-    standardProtocolDescription: "Type A",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    name: "Test Name 9",
-    standardProtocolId: "T009",
-    standardProtocolDescription: "Type B",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    name: "Test Name 10",
-    standardProtocolId: "T010",
-    standardProtocolDescription: "Type C",
-    status: "Inactive",
-  },
 ];
 
 function StandardProtocol() {
@@ -110,6 +46,8 @@ function StandardProtocol() {
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null)
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -168,6 +106,7 @@ function StandardProtocol() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
@@ -203,6 +142,152 @@ function StandardProtocol() {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
+  const addNewStandardProtocol = (newCondition) => {
+    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+    setData((prevData)=>[
+      ...prevData,
+      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+    ])
+    setLastStatus(nextStatus)
+    setIsModalOpen(false);
+  }
+
+  const StatusModal = ({visible , closeModal,onAdd}) => {
+    const [standardProtocolName , setStandardProtocolName] = useState('')
+    const [standardProtocolId, setStandardProtocolId] = useState('')
+    const [description, setDescription] = useState('')
+
+    const handleAdd = ()=>{
+      const newCondition ={
+        name: standardProtocolName,
+        standardProtocolId: standardProtocolId,
+        standardProtocolDescription: description,
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>Standard Protocol</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Standard Protocol Name"
+            value={standardProtocolName}
+            onChange={(e)=>setStandardProtocolName(e.target.value)}
+            placeholder=""
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Standard Protocol Id"
+            placeholder=""
+            value={standardProtocolId}
+            onChange={(e)=>setStandardProtocolId(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            placeholder=""
+            value={description}
+            onChange={(e)=>setDescription(e.target.value)}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleAdd}>Add</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData , setFormData] = useState(data)
+    useEffect(() => {
+      setFormData(data)
+    } , [data])
+    const handleChange = (e)=>{
+      const {name , value} = e.target;
+      setFormData({...formData , [name]:value})
+    }
+const handleSave = ()=>{
+  onSave(formData)
+}
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>Standard Protocol</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Standard Protocol Name"
+            name="name"
+            placeholder=""
+            value={formData?.name || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Standard Protocol Id"
+            placeholder=""
+           name="standardProtocolId"
+           value={formData?.standardProtocolId || ""}
+           onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            placeholder=""
+            name="standardProtocolDescription"
+            value={formData?.standardProtocolDescription || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>Update</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  
+
   return (
     <>
       <div className="m-5 mt-3">
@@ -237,11 +322,12 @@ function StandardProtocol() {
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
         />
       </div>
 
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal onAdd={addNewStandardProtocol} visible={isModalOpen} closeModal={closeModal} />
       )}
       {isModalsOpen && (
         <ImportModal
@@ -252,48 +338,17 @@ function StandardProtocol() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}  
     </>
   );
 }
 
-const StatusModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>Standard Protocol</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Standard Protocol Name"
-          placeholder=""
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Standard Protocol Id"
-          placeholder=""
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Description"
-          placeholder=""
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Cancel
-        </CButton>
-        <CButton className="bg-info text-white">Add</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 
 export default StandardProtocol;

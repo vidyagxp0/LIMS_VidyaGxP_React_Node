@@ -43,86 +43,6 @@ const initialData = [
     protocolType: "Type Y",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    productName: "Product 3",
-    chamberID: "CH003",
-    actualQuantity: 200,
-    availableQuantity: 190,
-    protocolType: "Type Z",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    productName: "Product 4",
-    chamberID: "CH004",
-    actualQuantity: 250,
-    availableQuantity: 240,
-    protocolType: "Type X",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    productName: "Product 5",
-    chamberID: "CH005",
-    actualQuantity: 300,
-    availableQuantity: 290,
-    protocolType: "Type Y",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    productName: "Product 6",
-    chamberID: "CH006",
-    actualQuantity: 350,
-    availableQuantity: 340,
-    protocolType: "Type Z",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    productName: "Product 7",
-    chamberID: "CH007",
-    actualQuantity: 400,
-    availableQuantity: 400,
-    protocolType: "Type X",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    productName: "Product 8",
-    chamberID: "CH008",
-    actualQuantity: 450,
-    availableQuantity: 445,
-    protocolType: "Type Y",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    productName: "Product 9",
-    chamberID: "CH009",
-    actualQuantity: 500,
-    availableQuantity: 480,
-    protocolType: "Type Z",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    productName: "Product 10",
-    chamberID: "CH010",
-    actualQuantity: 550,
-    availableQuantity: 530,
-    protocolType: "Type X",
-    status: "REJECTED",
-  },
 ];
 
 function SampleStorage() {
@@ -139,7 +59,8 @@ function SampleStorage() {
     APPROVED: 0,
     REJECTED: 0,
   });
-
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -219,6 +140,7 @@ function SampleStorage() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
@@ -259,6 +181,594 @@ function SampleStorage() {
     const concatenateData = [...updatedData];
     setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [rows, setRows] = useState([]);
+    const [specificationsID, setSpecificationsID] = useState("");
+    const [protocolID, setProtocolID] = useState("");
+    const [storageCondition, setStorageCondition] = useState("");
+    const [chamberID, setChamberID] = useState("");
+    const [actualStorageQuantity, setActualStorageQuantity] = useState("");
+    const [availableStorageQuantity, setAvailableStorageQuantity] =useState("");
+    const [numberOfStoragePosition, setNumberOfStoragePosition] = useState("");
+    const [chamberDescription, setChamberDescription] = useState("");
+    const [chamberLocation, setChamberLocation] = useState("");
+
+    const handleAddRow = () => {
+      const newRow = {
+        id: rows.length + 1,
+        rackNo: "",
+        shelfNo: "",
+        position: "",
+        quantity: "",
+        remarks: "",
+      };
+      setRows([...rows, newRow]);
+    };
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+    const handleAdd = ()=>{
+      const newCondition = {
+        productName: "Product",
+        chamberID: chamberID,
+        actualQuantity: actualStorageQuantity,
+        availableQuantity: availableStorageQuantity,
+        protocolType: "protocol-X",
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+
+    
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Sample Storage</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Specification ID"
+              placeholder="Select... "
+              options={[
+                "",
+                { label: "HCL10132%" },
+                { label: "HOS 234" },
+                { label: "CHPOIL001" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={specificationsID}
+              onChange={(e) => setSpecificationsID(e.target.value)}
+            />
+            <CFormInput
+              type="text"
+              label="Product/Material Name"
+              placeholder="Testamine "
+              disabled
+            />
+            <CFormSelect
+              type="text"
+              label="Protocol ID"
+              placeholder="select... "
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={protocolID}
+              onChange={(e) => setProtocolID(e.target.value)}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Storage Conditions"
+              placeholder="select... "
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={storageCondition}
+              onChange={(e) => setStorageCondition(e.target.value)}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Chamber ID"
+              placeholder="select... "
+              value={chamberID}
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              onChange={(e) => setChamberID(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label=" Actual Storage Quantity"
+              placeholder="Actual Storage Quantity "
+              value={actualStorageQuantity}
+              onChange={(e) => setActualStorageQuantity(e.target.value)}
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Available Storage Quantity"
+              placeholder="Available Storage Quantity "
+              value={availableStorageQuantity}
+              onChange={(e) => setAvailableStorageQuantity(e.target.value)}
+            />
+
+            <div className="gap-4">
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Number Of Storage Positions"
+                placeholder="Number Of Positions"
+                value={numberOfStoragePosition}
+                onChange={(e) => setNumberOfStoragePosition(e.target.value)}
+              />
+              <CButton
+                className="bg-primary text-white mb-4"
+                onClick={handleAddRow}
+              >
+                Add Rows
+              </CButton>
+            </div>
+            {rows.length > 0 && (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>S No.</th>
+                    <th>Rack No.</th>
+                    <th>Shelf No.</th>
+                    <th>Position</th>
+                    <th>Quantity (kg)</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, index) => (
+                    <tr key={row.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <select
+                          value={row.rackNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].rackNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          {/* Populate options as needed */}
+                          <option value="">Select..</option>
+                          <option value="rack1">Rack 1</option>
+                          <option value="rack2">Rack 2</option>
+                          {/* Add more options */}
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Shelfs</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Positions</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="border-1 border-gray-500"
+                          value={row.quantity}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].quantity = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={row.remarks}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].remarks = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Description"
+              placeholder=" Chamber Description"
+              value={chamberDescription}
+              onChange={(e) => setChamberDescription(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Location"
+              placeholder=" Chamber Location"
+              value={chamberLocation}
+              onChange={(e) => setChamberLocation(e.target.value)}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleAdd}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({visible , closeModal,data, onSave}) => {
+    const [rows, setRows] = useState([]);
+    const [formData, setFormData] = useState(data);
+
+
+    useEffect(() => {
+      if(data){
+        setFormData(data);
+      }
+     
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    const handleAddRow = () => {
+      const newRow = {
+        id: rows.length + 1,
+        rackNo: "",
+        shelfNo: "",
+        position: "",
+        quantity: "",
+        remarks: "",
+      };
+      setRows([...rows, newRow]);
+    };
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Sample Storage</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Specification ID"
+              placeholder="Select... "
+              name="specificationsID"
+              options={[
+                "",
+                { label: "HCL10132%" },
+                { label: "HOS 234" },
+                { label: "CHPOIL001" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={formData?.specificationsID||""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Product/Material Name"
+              placeholder="Testamine "
+              disabled
+            />
+            <CFormSelect
+              type="text"
+              label="Protocol ID"
+              placeholder="select... "
+              name="protocolID"
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={formData?.protocolID||""}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Storage Conditions"
+              placeholder="select... "
+              name="storageCondition"
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={formData?.storageCondition||""}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Chamber ID"
+              placeholder="select... "
+              name="chamberID"
+              value={formData?.chamberID||""}
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              onChange={(e) => setChamberID(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label=" Actual Storage Quantity"
+              placeholder="Actual Storage Quantity "
+              value={formData?.actualQuantity||""}
+              onChange={handleChange}
+              name="actualQuantity"
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Available Storage Quantity"
+              placeholder="Available Storage Quantity "
+              value={formData?.availableQuantity||""}
+              onChange={handleChange}
+              name="availableQuantity"
+            />
+
+            <div className="gap-4">
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Number Of Storage Positions"
+                placeholder="Number Of Positions"
+                value={formData?.numberOfStoragePosition||""}
+                onChange={handleChange}
+                name="numberOfStoragePosition"
+              />
+              <CButton
+                className="bg-primary text-white mb-4"
+                onClick={handleAddRow}
+              >
+                Add Rows
+              </CButton>
+            </div>
+            {rows.length > 0 && (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>S No.</th>
+                    <th>Rack No.</th>
+                    <th>Shelf No.</th>
+                    <th>Position</th>
+                    <th>Quantity (kg)</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, index) => (
+                    <tr key={row.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <select
+                          value={row.rackNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].rackNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          {/* Populate options as needed */}
+                          <option value="">Select..</option>
+                          <option value="rack1">Rack 1</option>
+                          <option value="rack2">Rack 2</option>
+                          {/* Add more options */}
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Shelfs</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Positions</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="border-1 border-gray-500"
+                          value={row.quantity}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].quantity = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={row.remarks}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].remarks = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Description"
+              placeholder=" Chamber Description"
+              value={formData?.chamberDescription||""}
+              onChange={handleChange}
+              name="chamberDescription"
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Location"
+              placeholder=" Chamber Location"
+              value={formData?.chamberLocation||""}
+              onChange={handleChange}
+              name="chamberLocation"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Update
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
   };
 
   return (
@@ -328,10 +838,11 @@ function SampleStorage() {
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal} />
+          <StatusModal visible={isModalOpen} closeModal={closeModal}  onAdd={addNewStorageCondition}/>
         )}
 
         {isModalsOpen && (
@@ -341,234 +852,20 @@ function SampleStorage() {
             onClose={handleCloseModals}
             columns={columns}
             onDataUpload={handleExcelDataUpload}
+
           />
         )}
+        {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
       </div>
     </>
   );
 }
 
-const StatusModal = (_props) => {
-  const [rows, setRows] = useState([]);
-
-  const handleAddRow = () => {
-    const newRow = {
-      id: rows.length + 1,
-      rackNo: "",
-      shelfNo: "",
-      position: "",
-      quantity: "",
-      remarks: "",
-    };
-    setRows([...rows, newRow]);
-  };
-
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="xl"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Sample Storage</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Specification ID"
-            placeholder="Select... "
-            options={[
-              "",
-              { label: "HCL10132%" },
-              { label: "HOS 234" },
-              { label: "CHPOIL001" },
-              { label: "MB-PM-001/01" },
-              { label: "RPS-TSLV-00" },
-              { label: "rest0001" },
-            ]}
-          />
-          <CFormInput
-            type="text"
-            label="Product/Material Name"
-            placeholder="Testamine "
-            disabled
-          />
-          <CFormSelect
-            type="text"
-            label="Protocol ID"
-            placeholder="select... "
-            options={[
-              "select...",
-              { label: "asdf3453" },
-              { label: "001" },
-              { label: "STP132432" },
-              { label: "MB-PM-001/01" },
-              { label: "RPS-TSLV-00" },
-              { label: "rest0001" },
-            ]}
-          />
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Storage Conditions"
-            placeholder="select... "
-            options={[
-              "select...",
-              { label: "asdf3453" },
-              { label: "001" },
-              { label: "STP132432" },
-              { label: "MB-PM-001/01" },
-              { label: "RPS-TSLV-00" },
-              { label: "rest0001" },
-            ]}
-          />
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Chamber ID"
-            placeholder="select... "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label=" Actual Storage Quantity"
-            placeholder="Actual Storage Quantity "
-          />
-
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Available Storage Quantity"
-            placeholder="Available Storage Quantity "
-          />
-
-          <div className="gap-4">
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Number Of Storage Positions"
-              placeholder="Number Of Positions"
-            />
-            <CButton
-              className="bg-primary text-white mb-4"
-              onClick={handleAddRow}
-            >
-              Add Rows
-            </CButton>
-          </div>
-          {rows.length > 0 && (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>S No.</th>
-                  <th>Rack No.</th>
-                  <th>Shelf No.</th>
-                  <th>Position</th>
-                  <th>Quantity (kg)</th>
-                  <th>Remarks</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, index) => (
-                  <tr key={row.id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <select
-                        value={row.rackNo}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].rackNo = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      >
-                        {/* Populate options as needed */}
-                        <option value="">Select..</option>
-                        <option value="rack1">Rack 1</option>
-                        <option value="rack2">Rack 2</option>
-                        {/* Add more options */}
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        value={row.shelfNo}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].shelfNo = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      >
-                        <option value="">Shelfs</option>
-                        <option value="shelf1">Shelf 1</option>
-                        <option value="shelf2">Shelf 2</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        value={row.shelfNo}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].shelfNo = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      >
-                        <option value="">Positions</option>
-                        <option value="shelf1">Shelf 1</option>
-                        <option value="shelf2">Shelf 2</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="border-1 border-gray-500"
-                        value={row.quantity}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].quantity = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={row.remarks}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].remarks = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Chamber Description"
-            placeholder=" Chamber Description"
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Chamber Location"
-            placeholder=" Chamber Location"
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
 export default SampleStorage;

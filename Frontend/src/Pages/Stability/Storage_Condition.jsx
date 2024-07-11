@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   CButton,
@@ -41,78 +41,6 @@ const initialData = [
     status: "Inactive",
     addedOn: "2024-01-02",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    conditionCode: "T003",
-    stabilityCondition: "Type A",
-    description: "Test Name 3",
-    status: "Active",
-    addedOn: "2024-01-03",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    conditionCode: "T004",
-    stabilityCondition: "Type C",
-    description: "Test Name 4",
-    status: "Inactive",
-    addedOn: "2024-01-04",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    conditionCode: "T005",
-    stabilityCondition: "Type A",
-    description: "Test Name 5",
-    status: "Active",
-    addedOn: "2024-01-05",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    conditionCode: "T006",
-    stabilityCondition: "Type B",
-    description: "Test Name 6",
-    status: "Inactive",
-    addedOn: "2024-01-06",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    conditionCode: "T007",
-    stabilityCondition: "Type C",
-    description: "Test Name 7",
-    status: "Active",
-    addedOn: "2024-01-07",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    conditionCode: "T008",
-    stabilityCondition: "Type A",
-    description: "Test Name 8",
-    status: "Inactive",
-    addedOn: "2024-01-08",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    conditionCode: "T009",
-    stabilityCondition: "Type B",
-    description: "Test Name 9",
-    status: "Active",
-    addedOn: "2024-01-09",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    conditionCode: "T010",
-    stabilityCondition: "Type C",
-    description: "Test Name 10",
-    status: "Inactive",
-    addedOn: "2024-01-10",
-  },
 ];
 
 function Storage_Condition() {
@@ -122,13 +50,28 @@ function Storage_Condition() {
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-
+  const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null)
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
+  };
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
   };
 
   const handleSelectAll = (e) => {
@@ -177,6 +120,7 @@ function Storage_Condition() {
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
+            onClick={() => openEditModal(row.original)}
             className="mr-2 cursor-pointer"
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
@@ -213,6 +157,130 @@ function Storage_Condition() {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+    setData((prevData)=>[
+      ...prevData,
+      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+    ])
+    setLastStatus(nextStatus)
+    setIsModalOpen(false);
+  }
+
+
+  const StatusModal = ({visible , closeModal,onAdd}) => {
+    const [stabilityCondition , setStabilityCondition] = useState('')
+    const [description, setDescription] = useState('')
+
+    const handleAdd = ()=>{
+      const newCondition = {
+        conditionCode:"USR00",
+        stabilityCondition:stabilityCondition,
+        description:description,
+        attachment:"attachment",
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+        >
+          <CModalHeader>
+            <CModalTitle>New Condition</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Stability Storage Condition"
+              placeholder="°C °F "
+              value={stabilityCondition}
+              onChange={(e)=> setStabilityCondition(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              placeholder=" "
+              value={description}
+              onChange={(e)=> setDescription(e.target.value)}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleAdd}>Add</CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+          <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+        >
+          <CModalHeader>
+            <CModalTitle>New Condition</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Stability Storage Condition"
+              name="stabilityCondition"
+              placeholder="°C °F "
+              value={formData?.stabilityCondition || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              name="description"
+              placeholder=" "
+              value={formData?.description || ""}
+              onChange={handleChange}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Add</CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+        
+    );
+  };
+  
+
   return (
     <>
       <div className="m-5 mt-3">
@@ -247,11 +315,12 @@ function Storage_Condition() {
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
         />
       </div>
 
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
       )}
       {isModalsOpen && (
         <ImportModal
@@ -262,44 +331,18 @@ function Storage_Condition() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </>
   );
 }
 
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>New Condition</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Stability Storage Condition"
-            placeholder="°C °F "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Description"
-            placeholder=" "
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton className="bg-info text-white">Add</CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
+
 
 export default Storage_Condition;

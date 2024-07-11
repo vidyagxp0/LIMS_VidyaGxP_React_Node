@@ -341,7 +341,6 @@ const [testPlan, setTestPlan] = useState("");
 const [productMaterial, setProductMaterial] = useState("");
 const [productMaterialCode , setProductMaterialCode] = useState("");
 const [genericName, setGenericName]=useState("")
-  const [specificationId , setSpecificationId] = useState("");
   const [copySampleFrom, setCopySampleFrom] = useState("");
   const [sampleType, setSampleType]=useState("")
   const [certificates, setCertificates] = useState("")
