@@ -1,28 +1,15 @@
 import {
   CButton,
-  CCol,
   CFormInput,
-  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow,
   CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Samplelogin.css";
-import { GrLinkNext } from "react-icons/gr";
-
-import { FaArrowRight } from "react-icons/fa";
-
-import { Link } from "react-router-dom";
 import {
   faEye,
   faPenToSquare,
@@ -40,117 +27,27 @@ const initialData = [
     checkbox: false,
     sno: 1,
     sampleType: "USR001",
-    storageCondition: "Product 1",
-    createdAt: "2024-01-01",
+    productMaterial: "Product 1",
+    ARNo: "-01",
     genericName: "Generic 1",
     specificationCode: "Spec 001",
     attachment: "attachment",
     status: "INITIATED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit1"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete1"
-        className="cursor-pointer"
-      />,
-    ],
+  
   },
   {
     checkbox: false,
     sno: 2,
     sampleType: "USR002",
-    storageCondition: "Product 2",
-    createdAt: "2024-01-02",
+    productMaterial: "Product 2",
+    ARNo: "-02",
     genericName: "Generic 2",
     specificationCode: "Spec 002",
     attachment: "attachment",
     status: "APPROVED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit2"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete2"
-        className="cursor-pointer"
-      />,
-    ],
+  
   },
-  {
-    checkbox: false,
-    sno: 3,
-    sampleType: "USR003",
-    storageCondition: "Product 3",
-    createdAt: "2024-01-03",
-    genericName: "Generic 3",
-    specificationCode: "Spec 003",
-    attachment: "attachment",
-    status: "REJECTED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit3"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete3"
-        className="cursor-pointer"
-      />,
-    ],
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    sampleType: "USR004",
-    storageCondition: "Product 4",
-    createdAt: "2024-01-04",
-    genericName: "Generic 4",
-    specificationCode: "Spec 004",
-    attachment: "attachment",
-    status: "REINITIATED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit4"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete4"
-        className="cursor-pointer"
-      />,
-    ],
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    sampleType: "USR005",
-    storageCondition: "Product 5",
-    createdAt: "2024-01-05",
-    genericName: "Generic 5",
-    specificationCode: "Spec 005",
-    attachment: "attachment",
-    status: "DROPPED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit5"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete5"
-        className="cursor-pointer"
-      />,
-    ],
-  },
+ 
 ];
 
 export default function Samplelogin() {
@@ -160,10 +57,10 @@ export default function Samplelogin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpen2, setIsModalOpen2] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
-  const [deleteModal, setDeleteModal] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-
+  const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null)
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -203,6 +100,21 @@ export default function Samplelogin() {
   const closeModal2 = () => {
     setIsModalOpen2(false);
   };
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
 
   const columns = [
     {
@@ -211,10 +123,10 @@ export default function Samplelogin() {
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Sample Type", accessor: "sampleType" },
-    { header: "Product / Material", accessor: "storageCondition" },
-    { header: "A.R. No.", accessor: "createdAt" },
-    { header: "Generic Name", accessor: "createdAt" },
-    { header: "Specification Code", accessor: "createdAt" },
+    { header: "Product / Material", accessor: "productMaterial" },
+    { header: "A.R. No.", accessor: "ARNo" },
+    { header: "Generic Name", accessor: "genericName" },
+    { header: "Specification Code", accessor: "specificationCode" },
     { header: "attachment", accessor: "attachment" },
     { header: "Status", accessor: "status" },
     {
@@ -222,9 +134,9 @@ export default function Samplelogin() {
       accessor: 'action',
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={openModal2} />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)} />
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row.original)} />
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer"  onClick={() => openEditModal(row.original)} />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => setDeleteId(row.original.sno)} />
         </>
       ),
     },
@@ -250,7 +162,7 @@ export default function Samplelogin() {
       sno:  index + 1,
       sampleType: item["Sample Type"] || "",
       storageCondition: item["Storage Condition"] || "",
-      createdAt: item["Created At"] || "",
+      ARNo: item["Created At"] || "",
       genericName: item["Generic Name"] || "",
       specificationCode: item["Specification Code"] || "",
       attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
@@ -379,6 +291,226 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       </CModal>
     );
   };
+
+  
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+    setData((prevData)=>[
+      ...prevData,
+      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+    ])
+    setLastStatus(nextStatus)
+    setIsModalOpen(false);
+  }
+
+  const StatusModal = ({visible , closeModal,onAdd}) => {
+    const [client , setClient] = useState("");
+const [testPlan, setTestPlan] = useState("");
+const [productMaterial, setProductMaterial] = useState("");
+const [productMaterialCode , setProductMaterialCode] = useState("");
+const [genericName, setGenericName]=useState("")
+  const [specificationId , setSpecificationId] = useState("");
+  const [copySampleFrom, setCopySampleFrom] = useState("");
+  const [sampleType, setSampleType]=useState("")
+  const [certificates, setCertificates] = useState("")
+
+    
+    const handleAdd = ()=>{
+      const newCondition = {
+        sampleType:"USR00",
+        productMaterial:"Product",
+        genericName:"generic",
+        ARNo:" 00",
+        specificationCode:"000",
+        addedOn: new Date().toISOString().split('T')[0],
+        attachment:"attachment",
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+    return (
+      <CModal 
+        className="w-5"
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>New Sample login</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Client"
+            placeholder="Select..."
+            value={client}
+            onChange={(e) => setClient(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Test Plan / Revision No."
+            placeholder="Select..."
+            value={testPlan}
+            onChange={(e) => setTestPlan(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Product / Material"
+            placeholder=""
+            value={productMaterial}
+            onChange={(e) => setProductMaterial(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Product / Material Code"
+            placeholder=""
+            value={productMaterialCode}
+            onChange={(e) => setProductMaterialCode(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Generic Name"
+            placeholder=""
+            value={genericName}
+            onChange={(e) => setGenericName(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Specification ID"
+            placeholder=""
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Copy Sample from"
+            placeholder=""
+            value={copySampleFrom}
+            onChange={(e) => setCopySampleFrom(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Sample Type"
+            placeholder=""
+            value={sampleType}
+            onChange={(e) => setSampleType(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Certificates (If any)"
+            placeholder=""
+            value={certificates}
+            onChange={(e) => setCertificates(e.target.value)}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>Add Sample</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Edit Sample Login</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Sample Type"
+            name="sampleType"
+            value={formData?.sampleType || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Product / Material"
+            name="productMaterial"
+            value={formData?.productMaterial || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Generic Name"
+            name="genericName"
+            value={formData?.genericName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="A.R. No."
+            name="ARNo"
+            value={formData?.ARNo || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Specification Code"
+            name="specificationCode"
+            value={formData?.specificationCode || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Attachment"
+            name="attachment"
+            value={formData?.attachment || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Status"
+            name="status"
+            value={formData?.status || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Save
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  
   return (
     <>
       <div className="m-5 mt-3">
@@ -408,10 +540,10 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
             <ATMButton text="Add Sample Log In" color="blue" onClick={openModal} />
           </div>
         </div>
-        <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
+        <Table columns={columns} openEditModal={openEditModal} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
       </div>
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
       )}
       {isModalOpen2 && (
         <StatusModal2
@@ -422,85 +554,17 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       {isModalsOpen && (
         <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-
+ {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
 
     </>
   );
 }
 
-const StatusModal = (_props) => {
-  return (
-    <CModal
-      className="w-5"
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>New Sample login</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Client"
-          placeholder="Select..."
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Test Plan / Revision No."
-          placeholder="Select..."
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Product / Material"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Product / Material Code"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Generic Name"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Specification ID"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Copy Sample from"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Sample Type"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Certificates (If any)"
-          placeholder=""
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary">Add Sample</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+

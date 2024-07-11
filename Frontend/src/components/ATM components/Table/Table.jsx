@@ -13,6 +13,7 @@ const Table = ({
   onCheckboxChange,
   onViewDetails,
   onDelete,
+  openEditModal
 }) => {
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -116,6 +117,7 @@ const Table = ({
                         <FontAwesomeIcon
                           icon={faPenToSquare}
                           className="mr-2 cursor-pointer"
+                          onClick={() => openEditModal(row)}
                         />
                         <FontAwesomeIcon
                           icon={faTrashCan}

@@ -1,42 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       <CModal
-//         alignment="center"
-//         visible={_props.visible}
-//         onClose={_props.closeModal}
-//         size="xl"
-//       >
-//         <CModalHeader className="p-3">
-//           <CModalTitle>New Storage Condition</CModalTitle>
-//         </CModalHeader>
-
-//         <p className="ml-4">
-//           Add a new storage.
-//         </p>
-//         <div className="modal-body p-4">
-//           <CForm>
-//             <div className="mb-3">
-//               <CFormInput
-//                 type="text"
-//                 label="Name"
-//                 placeholder="Storage Name"
-//                 className="custom-placeholder"
-//               />
-//             </div>
-//         <CModalFooter className="p-3">
-//           <CButton color="light" onClick={_props.closeModal}>
-//             Cancel
-//           </CButton>
-//           <CButton style={{ background: "#0F93C3", color: "white" }}>
-//             Submit
-//           </CButton>
-//         </CModalFooter>
-//       </CModal>
-//     </>
-//   );
-// };
-
 import { useState } from "react";
 import {
   CButton,
@@ -55,8 +16,6 @@ import {
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
 import "./StorageCondition.css";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -93,69 +52,7 @@ const initialData = [
     attachment: "attachment",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 4,
-    conditionCode: "CC4",
-    storageCondition: "SC4",
-    createdAt: "2023-04-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    conditionCode: "CC5",
-    storageCondition: "SC5",
-    createdAt: "2023-05-01",
-    attachment: "attachment",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    conditionCode: "CC6",
-    storageCondition: "SC6",
-    createdAt: "2023-06-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    conditionCode: "CC7",
-    storageCondition: "SC7",
-    createdAt: "2023-07-01",
-    attachment: "attachment",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    conditionCode: "CC8",
-    storageCondition: "SC8",
-    createdAt: "2023-08-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    conditionCode: "CC9",
-    storageCondition: "SC9",
-    createdAt: "2023-09-01",
-    attachment: "attachment",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    conditionCode: "CC10",
-    storageCondition: "SC10",
-    createdAt: "2023-10-01",
-    attachment: "attachment",
-    status: "Active",
-  },
+  
 ];
 
 function StorageLocation() {
@@ -217,26 +114,50 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
      // Close the import modal after data upload
   };
 
-  const StatusModal = (_props) => {
+  const addNewStorageCondition = (newCondition) => {
+    setData((prevData) => [
+      ...prevData,
+      { ...newCondition, sno: prevData.length + 1, checkbox: false },
+    ]);
+    setIsModalOpen(false); // Close the modal after adding new condition
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [name, setName] = useState("");
+
+    const handleAdd = () => {
+      const newCondition = {
+        conditionCode: name,
+        storageCondition: "SC", // You can change this to another input value if needed
+        createdAt: new Date().toISOString().split("T")[0], // Current date
+        attachment: "attachment",
+        status: "Active",
+      };
+      onAdd(newCondition);
+    };
     return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>New Storage Condition</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput type="text" label="Name" placeholder="Storage Name" />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton color="primary">Add</CButton>
-        </CModalFooter>
-      </CModal>
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModalHeader>
+        <CModalTitle>New Storage Condition</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CFormInput
+          type="text"
+          label="Name"
+          placeholder="Storage Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={closeModal}>
+          Cancel
+        </CButton>
+        <CButton color="primary" onClick={handleAdd}>
+          Add
+        </CButton>
+      </CModalFooter>
+    </CModal>
     );
   };
 
@@ -332,7 +253,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       </div>
 
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal visible={isModalOpen} closeModal={closeModal}   onAdd={addNewStorageCondition}/>
       )}
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />

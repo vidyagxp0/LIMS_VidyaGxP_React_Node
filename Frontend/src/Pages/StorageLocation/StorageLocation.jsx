@@ -175,6 +175,48 @@ function StorageLocation() {
     setData(concatenatedData);
 setIsModalsOpen(false);; // Update data state with parsed Excel data
   
+   };
+   const addNewStorageCondition = (newCondition) => {
+    setData((prevData) => [
+      ...prevData,
+      { ...newCondition, sno: prevData.length + 1, checkbox: false , storageCode: "CC"+1},
+    ]);
+    setIsModalOpen(false); // Close the modal after adding new condition
+  };
+  
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [name, setName] = useState("");
+    const handleAdd = () => {
+      const newCondition = {
+        storageName:name,
+        createdAt: new Date().toISOString().split("T")[0], // Current date
+        attachment: "attachment",
+        status: "Active",
+      };
+  
+      onAdd(newCondition);
+    }
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>New Storage Location</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput type="text" label="Name" placeholder="Location Name"   value={name}
+            onChange={(e) => setName(e.target.value)}/>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>Add</CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
   return (
@@ -207,7 +249,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       </div>
 
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
       )}
        {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
        {isModalsOpen && (
@@ -217,28 +259,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
   );
 }
 
-const StatusModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>New Storage Location</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput type="text" label="Name" placeholder="Location Name" />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Cancel
-        </CButton>
-        <CButton color="primary">Add</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+
 
 const RemoveModal = (props) => {
   return (
