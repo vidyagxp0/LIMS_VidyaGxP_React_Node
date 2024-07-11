@@ -1,15 +1,11 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
 import ATMButton from "../Button/ATMButton";
+import ChamberConditionMappingModal from "../../../Pages/Modals/ChamberConditionMappingModal";
 
-const Table = ({ columns, data, onCheckboxChange, onViewDetails }) => {
+const Table3 = ({ columns, data, onCheckboxChange }) => {
   const pageSize = 5;
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [modalData, setModalData] = useState(null);
 
   const totalPageCount = Math.ceil(data.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
@@ -38,6 +34,14 @@ const Table = ({ columns, data, onCheckboxChange, onViewDetails }) => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const openModal = (rowData) => {
+    setModalData(rowData);
+  };
+
+  const closeModal = () => {
+    setModalData(null);
   };
 
   return (
@@ -85,9 +89,9 @@ const Table = ({ columns, data, onCheckboxChange, onViewDetails }) => {
                     ) : column.accessor === "action" ? (
                       <div className="flex space-x-2">
                         <ATMButton
-                          text="Add"
+                          text="Update"
                           color="blue"
-                          onClick={() => openModal(row.original)}
+                          onClick={() => openModal(row)}
                         />
                       </div>
                     ) : (
@@ -148,8 +152,16 @@ const Table = ({ columns, data, onCheckboxChange, onViewDetails }) => {
           </nav>
         </div>
       </div>
+
+      {modalData && (
+        <ChamberConditionMappingModal
+          isOpen={!!modalData}
+          onClose={closeModal}
+          data={modalData}
+        />
+      )}
     </>
   );
 };
 
-export default Table;
+export default Table3;

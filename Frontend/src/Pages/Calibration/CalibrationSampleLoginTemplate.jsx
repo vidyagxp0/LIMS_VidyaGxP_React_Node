@@ -1,56 +1,7 @@
 
 //   const StatusModal = (_props) => {
 //     return (
-//         <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//         <CModalHeader>
-//           <CModalTitle>Add Sample Login Template</CModalTitle>
-//         </CModalHeader>
-//         <CModalBody>
-//         <CFormInput
-//           label='Sample Login Template'
-//           className="mb-3"
-//           type="text"
-//           placeholder=""
-//           />  
-//            <label className="" htmlFor="">Test Plan / Revision No.</label>
-//            <Autocomplete
-//                         disablePortal
-//                         className="mb-3"
-//                         id="combo-box-demo"
-//                         options={top100Films}
-//                         renderInput={(params) => <TextField {...params} label="" />}
-//                     />
 
-//           <CFormInput
-//           label='Product / Material'
-//           className="mb-3"
-//           type="text"
-//           placeholder=""
-//           /> 
-//            <CFormInput
-//           label='Product / Material Code'
-//           className="mb-3"
-//           type="text"
-//           placeholder=""
-//           /> 
-//            <CFormInput
-//           label='Generic Name'
-//           className="mb-3"
-//           type="text"
-//           placeholder=""
-//           />  
-//           <CFormInput
-//           label='Specification ID'
-//           className="mb-3"
-//           type="text"
-//           placeholder=""
-//           /> 
-//          <div className="d-flex gap-3 mt-4">
-//         <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
-//         <CButton color="primary w-50">Add</CButton>
-//       </div>
-//         </CModalBody>
-//       </CModal>
 //     )
 //   }
    
@@ -102,7 +53,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import CalibrationSampleLoginTemplateModal from "../Modals/CalibrationSampleLoginTemplateModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -346,7 +297,7 @@ const CalibrationSampleLoginTemplate = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <CalibrationSampleLoginTemplateModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CButton,
   CFormInput,
@@ -27,98 +27,97 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
 const initialData = [
-     {
-       checkbox: false,
-       sno: 1,
-       name: "Name 1",
-       uniqueCode: "UC001",
-       NoOfCheckItems: 10,
-       updatedAt: "2024-01-01",
-       status: "Active",
-     },
-     {
-       checkbox: false,
-       sno: 2,
-       name: "Name 2",
-       uniqueCode: "UC002",
-       NoOfCheckItems: 15,
-       updatedAt: "2024-01-02",
-       status: "Inactive",
-     },
-     {
-       checkbox: false,
-       sno: 3,
-       name: "Name 3",
-       uniqueCode: "UC003",
-       NoOfCheckItems: 8,
-       updatedAt: "2024-01-03",
-       status: "Active",
-     },
-     {
-       checkbox: false,
-       sno: 4,
-       name: "Name 4",
-       uniqueCode: "UC004",
-       NoOfCheckItems: 12,
-       updatedAt: "2024-01-04",
-       status: "Inactive",
-     },
-     {
-       checkbox: false,
-       sno: 5,
-       name: "Name 5",
-       uniqueCode: "UC005",
-       NoOfCheckItems: 20,
-       updatedAt: "2024-01-05",
-       status: "Active",
-     },
-     {
-       checkbox: false,
-       sno: 6,
-       name: "Name 6",
-       uniqueCode: "UC006",
-       NoOfCheckItems: 18,
-       updatedAt: "2024-01-06",
-       status: "Inactive",
-     },
-     {
-       checkbox: false,
-       sno: 7,
-       name: "Name 7",
-       uniqueCode: "UC007",
-       NoOfCheckItems: 5,
-       updatedAt: "2024-01-07",
-       status: "Active",
-     },
-     {
-       checkbox: false,
-       sno: 8,
-       name: "Name 8",
-       uniqueCode: "UC008",
-       NoOfCheckItems: 25,
-       updatedAt: "2024-01-08",
-       status: "Inactive",
-     },
-     {
-       checkbox: false,
-       sno: 9,
-       name: "Name 9",
-       uniqueCode: "UC009",
-       NoOfCheckItems: 9,
-       updatedAt: "2024-01-09",
-       status: "Active",
-     },
-     {
-       checkbox: false,
-       sno: 10,
-       name: "Name 10",
-       uniqueCode: "UC010",
-       NoOfCheckItems: 11,
-       updatedAt: "2024-01-10",
-       status: "Inactive",
-     },
-   ];
-   
+  {
+    checkbox: false,
+    sno: 1,
+    name: "Name 1",
+    uniqueCode: "UC001",
+    NoOfCheckItems: 10,
+    updatedAt: "2024-01-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    name: "Name 2",
+    uniqueCode: "UC002",
+    NoOfCheckItems: 15,
+    updatedAt: "2024-01-02",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    name: "Name 3",
+    uniqueCode: "UC003",
+    NoOfCheckItems: 8,
+    updatedAt: "2024-01-03",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    name: "Name 4",
+    uniqueCode: "UC004",
+    NoOfCheckItems: 12,
+    updatedAt: "2024-01-04",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    name: "Name 5",
+    uniqueCode: "UC005",
+    NoOfCheckItems: 20,
+    updatedAt: "2024-01-05",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    name: "Name 6",
+    uniqueCode: "UC006",
+    NoOfCheckItems: 18,
+    updatedAt: "2024-01-06",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    name: "Name 7",
+    uniqueCode: "UC007",
+    NoOfCheckItems: 5,
+    updatedAt: "2024-01-07",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 8,
+    name: "Name 8",
+    uniqueCode: "UC008",
+    NoOfCheckItems: 25,
+    updatedAt: "2024-01-08",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 9,
+    name: "Name 9",
+    uniqueCode: "UC009",
+    NoOfCheckItems: 9,
+    updatedAt: "2024-01-09",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 10,
+    name: "Name 10",
+    uniqueCode: "UC010",
+    NoOfCheckItems: 11,
+    updatedAt: "2024-01-10",
+    status: "Inactive",
+  },
+];
 
 function SampleAcceptanceTemplate() {
   const [data, setData] = useState(initialData);
@@ -151,7 +150,6 @@ function SampleAcceptanceTemplate() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
   };
 
   const handleCheckboxChange = (index) => {
@@ -161,24 +159,80 @@ function SampleAcceptanceTemplate() {
   };
 
   const StatusModal = (_props) => {
-     return (
-          <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-               <CModalHeader>
-                    <CModalTitle>New Condition</CModalTitle>
-               </CModalHeader>
-               <CModalBody>
-                    <CFormInput className="mb-3" type="text" label="Name" placeholder="Name" />
-                    <CFormInput className="mb-3" type="text" label="Unique Code" placeholder="Unique Code" />
-                    <CFormInput className="mb-3" type="text" label="No. Of Check Items" placeholder="No. of Check Items" />
-                    {/* <CButton className="mb-3" color="primary" className="mt-2">Add</CButton> */}
-               </CModalBody>
-               <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton color="primary">Submit</CButton>
-               </CModalFooter>
-          </CModal>
-     );
-};
+    const [numOfCheckItems, setNumOfCheckItems] = useState(0);
+    const [checkItems, setCheckItems] = useState([]);
+
+    useEffect(() => {
+      const newCheckItems = Array.from(
+        { length: numOfCheckItems },
+        (_, index) => ({
+          label: `Check Item ${index + 1}`,
+          value: "",
+        })
+      );
+      setCheckItems(newCheckItems);
+    }, [numOfCheckItems]);
+
+    const handleNumOfCheckItemsChange = (e) => {
+      setNumOfCheckItems(parseInt(e.target.value, 10) || 0);
+    };
+
+    const handleInputChange = (index, event) => {
+      const newCheckItems = [...checkItems];
+      newCheckItems[index].value = event.target.value;
+      setCheckItems(newCheckItems);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={_props.visible}
+        onClose={_props.closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>New Condition</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Name"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="No. Of Check Items"
+            placeholder="No. of Check Items"
+            onChange={handleNumOfCheckItemsChange}
+          />
+          {checkItems.map((item, index) => (
+            <CFormInput
+              key={index}
+              className="mb-3"
+              type="text"
+              label={item.label}
+              value={item.value}
+              onChange={(e) => handleInputChange(index, e)}
+              placeholder={item.label}
+            />
+          ))}
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={_props.closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary">Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
   const columns = [
     {
@@ -213,16 +267,16 @@ function SampleAcceptanceTemplate() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       name: item["Name"] || "",
       uniqueCode: item["Unique Code"] || "",
       noOfCheckItems: item["No. of Check Items"] || 0,
       updatedAt: item["Updated At"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
   const openModal = () => {
@@ -237,11 +291,10 @@ setData(concatenateData ); // Update data state with parsed Excel data
     setViewModalData(false);
   };
 
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
 
   return (
@@ -265,12 +318,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
             />
           </div>
           <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Sample Acceptance"
               color="blue"
@@ -287,10 +335,20 @@ setData(concatenateData ); // Update data state with parsed Excel data
         />
       </div>
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
     </>
   );
 }

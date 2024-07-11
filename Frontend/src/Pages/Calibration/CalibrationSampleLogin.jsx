@@ -1,108 +1,3 @@
-//   const StatusModal = (_props) => {
-//     return (
-//         <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//         <CModalHeader>
-//           <CModalTitle>Add Sample Login</CModalTitle>
-//         </CModalHeader>
-
-//         <CModalBody>
-//         <CFormInput
-//           label='Sample Login Template/ Revision No.'
-//           className="mb-3"
-//           type="text"
-//           placeholder=""
-//           />
-//           <CFormInput
-//           label='Test Plan / Revision No.'
-//           className="mb-3"
-//           type="text"
-//           placeholder=" Prefix"
-//           />
-//            <CFormInput
-//           label='Product / Material'
-//           className="mb-3"
-//           type="text"
-//           placeholder=" Prefix"
-//           />
-//            <CFormInput
-//           label='Product / Material Code'
-//           className="mb-3"
-//           type="text"
-//           placeholder=" "
-//           />
-//           <CFormInput
-//           label='Generic Name'
-//           className="mb-3"
-//           type="text"
-//           placeholder=" "
-//           />
-//           <CFormInput
-//           label='Specification ID'
-//           className="mb-3"
-//           type="text"
-//           placeholder=" "
-//           />
-//           <CFormInput
-//           label='Sample Type'
-//           className="mb-3"
-//           type="text"
-//           placeholder=" "
-//           />
-//          <FormLabel style={{ margin: '15px 20px' }} id="demo-row-radio-buttons-group-label">Auto Sample Allotted</FormLabel>
-//             <RadioGroup style={{ margin: '15px 20px' }}
-//               row
-//               aria-labelledby="demo-row-radio-buttons-group-label"
-//               name="row-radio-buttons-group"
-//             >
-//               <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-//               <FormControlLabel value="No" control={<Radio />} label="No" />
-//             </RadioGroup>
-
-//          <div className="d-flex gap-3 mt-4">
-//         <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
-//         <CButton color="primary w-50">Submit</CButton>
-//       </div>
-
-//         </CModalBody>
-//       </CModal>
-//     )
-//   }
-
-//   const DeleteModal = (_props) => {
-//     return (
-//         <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-//             <CModalHeader>
-//                 <CModalTitle>Delete User</CModalTitle>
-//             </CModalHeader>
-//             <CModalBody>
-//                 <p>Are you sure you want to delete this sample type?</p>
-//             </CModalBody>
-//             <CModalFooter>
-//                 <CButton
-//                     color="secondary"
-//                     onClick={_props.closeModal}
-//                     style={{
-//                         marginRight: "0.5rem",
-//                         fontWeight: "500",
-//                     }}
-//                 >
-//                     Cancel
-//                 </CButton>
-//                 <CButton
-//                     color="danger"
-//                     onClick={_props.confirmDelete}
-//                     style={{
-//                         fontWeight: "500",
-//                         color: "white",
-//                     }}
-//                 >
-//                     Delete
-//                 </CButton>
-//             </CModalFooter>
-//         </CModal>
-//     );
-// };
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -115,7 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import CalibrationSampleLoginModal from "../Modals/CalibrationSampleLoginModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -392,7 +287,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <CalibrationSampleLoginModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

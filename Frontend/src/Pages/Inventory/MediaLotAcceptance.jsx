@@ -160,7 +160,7 @@ const MediaLotAcceptance = () => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
       sno:  index + 1,
-      MediaLotNo: item["Media Name"] || "",
+      MediaName: item["Media Name"] || "",
       MediaLotNo: item["Media Lot No."] || "",
       LotBatchNo: item["Lot Batch No."] || "",
       ModeOfPreparation: item["Mode Of Preparation"] || "",

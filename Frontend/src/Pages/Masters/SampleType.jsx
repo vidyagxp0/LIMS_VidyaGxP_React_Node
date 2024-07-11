@@ -153,7 +153,7 @@ function SampleType() {
 
   const StatusModal = (_props) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="xl">
         <CModalHeader>
           <CModalTitle>Add Sample Type</CModalTitle>
         </CModalHeader>

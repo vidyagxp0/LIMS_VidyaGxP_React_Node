@@ -201,19 +201,17 @@ function Storage_Condition() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       conditionCode: item["Condition Code"] || "",
       stabilityCondition: item["Stability Condition"] || "",
       description: item["Description"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
-setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
-  
-  
 
   return (
     <>
@@ -235,12 +233,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
             />
           </div>
           <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Storage Condition"
               color="blue"
@@ -260,8 +253,14 @@ setIsModalsOpen(false); // Close the import modal after data upload
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </>
   );

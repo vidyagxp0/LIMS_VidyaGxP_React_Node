@@ -225,7 +225,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             toggler={
               <>
                 <MdManageHistory />
-                <span style={{ marginLeft: "18px" }}>Stability</span>
+                <span style={{ marginLeft: "18px" }}>Stability Management</span>
               </>
             }
           >

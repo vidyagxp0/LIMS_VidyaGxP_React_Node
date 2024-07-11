@@ -1,113 +1,6 @@
 // const StatusModal = (_props) => {
 //   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Add Calibration Data Sheet</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         <CFormInput
-//           label="Name"
-//           className="mb-3"
-//           type="text"
-//           placeholder="Name"
-//         />
-//         <CFormInput
-//           label="Unique code"
-//           className="mb-3"
-//           type="text"
-//           placeholder=""
-//         />
-//         <div style={{ margin: "15px 0px" }}>
-//           <label>
-//             {" "}
-//             Quantitative Parameters &nbsp;
-//             <input type="checkbox" onChange={handleCheckboxChange} />
-//           </label>
-//           {showAdditionalFields && (
-//             <>
-//               <br />
-//               <label>No. of Quantitative Parameters</label>
-//               <input
-//                 style={{ width: "80%" }}
-//                 className="line4"
-//                 type="text"
-//                 placeholder="No. of Quantitative Parameters"
-//               />
-//               <button
-//                 style={{
-//                   backgroundColor: "#0f93c3",
-//                   borderRadius: "4px",
-//                   border: "1px solid #0f93c3",
-//                   color: "white",
-//                   padding: "2px 8px",
-//                 }}
-//               >
-//                 Add
-//               </button>
-
-//               <label>Parameters and No. of Set Points</label>
-//               <input
-//                 style={{ width: "80%" }}
-//                 className="line4"
-//                 type="text"
-//                 placeholder="Parameters and No. of Set Points"
-//               />
-//               <button
-//                 style={{
-//                   backgroundColor: "#0f93c3",
-//                   borderRadius: "4px",
-//                   border: "1px solid #0f93c3",
-//                   color: "white",
-//                   padding: "2px 8px",
-//                 }}
-//               >
-//                 Set
-//               </button>
-//             </>
-//           )}
-//           <br />
-//           <label style={{ padding: "7px 0px", marginTop: "3px" }}>
-//             Qualitative Parameter &nbsp;
-//             <input type="checkbox" onChange={handleCheckboxChange2} />
-//           </label>
-//           {showAdditionalFields2 && (
-//             <>
-//               <br />
-//               <label>No. of Qualitative Parameters</label>
-//               <input
-//                 style={{ width: "240px" }}
-//                 className="line4"
-//                 type="text"
-//                 placeholder="No. of Qualitative Parameters"
-//               />
-//               <button
-//                 style={{
-//                   backgroundColor: "#0f93c3",
-//                   borderRadius: "4px",
-//                   border: "1px solid #0f93c3",
-//                   color: "white",
-//                   padding: "2px 8px",
-//                 }}
-//               >
-//                 Add
-//               </button>
-//             </>
-//           )}
-//           <br />
-//         </div>
-
-//         <div className="d-flex gap-3 mt-4">
-//           <CButton color="light w-50" onClick={_props.closeModal}>
-//             &lt; Back
-//           </CButton>
-//           <CButton color="primary w-50">Submit</CButton>
-//         </div>
-//       </CModalBody>
-//     </CModal>
+   
 //   );
 // };
 
@@ -163,7 +56,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import CalibrationDatasheetModal from "../Modals/CalibrationDatasheetModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -443,7 +336,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InternalRegistrationModal
+      <CalibrationDatasheetModal
         visible={isModalOpen}
         closeModal={closeModal}
       />

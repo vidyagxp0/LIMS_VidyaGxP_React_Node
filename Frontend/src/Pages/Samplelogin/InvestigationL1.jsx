@@ -221,7 +221,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           </div>
           <div className="float-right flex gap-4">
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add investigation L1 In" color="blue" onClick={openModal} />
+            {/* <ATMButton text="Add investigation L1 In" color="blue" onClick={openModal} /> */}
           </div>
         </div>
         <Table columns={columns} data={filteredData}  onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />

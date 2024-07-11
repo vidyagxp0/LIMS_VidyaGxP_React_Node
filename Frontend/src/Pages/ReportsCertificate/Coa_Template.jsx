@@ -1,9 +1,7 @@
-
-
 // const StatusModal = (_props) => {
 //     return (
 //         <>
-           
+
 //         </>
 //     )
 // }
@@ -27,8 +25,6 @@
 //     )
 // }
 
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -46,71 +42,70 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 
 const initialData = [
-    {
-      checkbox: false,
-      sno: 1,
-      SampleType: "ST-001",
-      CoaId: "COA-001",
-      CoaType: "Type 1",
-      UpdatedAt: "2024-06-01",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 2,
-      SampleType: "ST-002",
-      CoaId: "COA-002",
-      CoaType: "Type 2",
-      UpdatedAt: "2024-06-02",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 3,
-      SampleType: "ST-003",
-      CoaId: "COA-003",
-      CoaType: "Type 3",
-      UpdatedAt: "2024-06-03",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 4,
-      SampleType: "ST-004",
-      CoaId: "COA-004",
-      CoaType: "Type 4",
-      UpdatedAt: "2024-06-04",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 5,
-      SampleType: "ST-005",
-      CoaId: "COA-005",
-      CoaType: "Type 5",
-      UpdatedAt: "2024-06-05",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 6,
-      SampleType: "ST-006",
-      CoaId: "COA-006",
-      CoaType: "Type 6",
-      UpdatedAt: "2024-06-06",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 7,
-      SampleType: "ST-007",
-      CoaId: "COA-007",
-      CoaType: "Type 7",
-      UpdatedAt: "2024-06-07",
-      status: "Active",
-    },
-  ];
-  
+  {
+    checkbox: false,
+    sno: 1,
+    SampleType: "ST-001",
+    CoaId: "COA-001",
+    CoaType: "Type 1",
+    UpdatedAt: "2024-06-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    SampleType: "ST-002",
+    CoaId: "COA-002",
+    CoaType: "Type 2",
+    UpdatedAt: "2024-06-02",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    SampleType: "ST-003",
+    CoaId: "COA-003",
+    CoaType: "Type 3",
+    UpdatedAt: "2024-06-03",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    SampleType: "ST-004",
+    CoaId: "COA-004",
+    CoaType: "Type 4",
+    UpdatedAt: "2024-06-04",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    SampleType: "ST-005",
+    CoaId: "COA-005",
+    CoaType: "Type 5",
+    UpdatedAt: "2024-06-05",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    SampleType: "ST-006",
+    CoaId: "COA-006",
+    CoaType: "Type 6",
+    UpdatedAt: "2024-06-06",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    SampleType: "ST-007",
+    CoaId: "COA-007",
+    CoaType: "Type 7",
+    UpdatedAt: "2024-06-07",
+    status: "Active",
+  },
+];
 
 const Coa_Template = () => {
   const [data, setData] = useState(initialData);
@@ -209,16 +204,16 @@ const Coa_Template = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       SampleType: item["Sample Type"] || "",
       CoaId: item["Cao ID"] || "",
       CoaType: item["Coa Type"] || "",
       UpdatedAt: item["Updated At"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
@@ -262,12 +257,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add COA Template" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -278,10 +268,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <CoaTamplateModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <CoaTamplateModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -289,10 +276,16 @@ setData(concatenateData ); // Update data state with parsed Excel data
           data={viewModalData}
         />
       )}
-        {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );
 };
-export default Coa_Template
+export default Coa_Template;

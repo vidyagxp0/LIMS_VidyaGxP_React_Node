@@ -328,7 +328,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
    }  
    const StatusModal = (_props) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="xl">
         <CModalHeader>
           <CModalTitle>Add Sample Login Template</CModalTitle>
         </CModalHeader>

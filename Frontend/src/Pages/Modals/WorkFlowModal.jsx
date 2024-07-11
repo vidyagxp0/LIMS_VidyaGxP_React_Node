@@ -12,32 +12,39 @@ import React from "react";
 const WorkFlowModal = ({ visible, closeModal }) => {
   return (
     <div>
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>New Plant</CModalTitle>
+          <hr />
         </CModalHeader>
+        <p className="ml-4">Add information and add new plant.</p>
         <CModalBody>
           <CFormInput
             type="text"
-            className="mb-3"
+            className="mb-4"
             label="Name"
             placeholder=" Name"
           />
           <CFormInput
             type="text"
-            className="mb-3"
+            className="mb-4"
             label="Unique Code"
             placeholder="Unique Code"
           />
           <CFormInput
             type="text"
-            className="mb-3"
+            className="mb-4"
             label="Generic Name"
             placeholder="Generic Name "
           />
           <CFormInput
             type="text"
-            className="mb-3"
+            className="mb-4"
             label="Re-testing Period(Days)"
             placeholder="Re-testing Period(Days)"
           />

@@ -6,27 +6,27 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-    CButton,
-    CContainer,
-    CFormInput,
-    CFormLabel,
-    CFormTextarea,
-    CModal,
-    CModalBody,
-    CModalFooter,
-    CModalHeader,
-    CModalTitle,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CRow,
-    CCol,
-    CFormSelect,
-    CFormCheck,
-  } from "@coreui/react";
+  CButton,
+  CContainer,
+  CFormInput,
+  CFormLabel,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CRow,
+  CCol,
+  CFormSelect,
+  CFormCheck,
+} from "@coreui/react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -159,7 +159,6 @@ const initialData = [
   },
 ];
 
-
 function StabilityProtocol() {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -183,7 +182,6 @@ function StabilityProtocol() {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-
 
   useEffect(() => {
     const counts = {
@@ -271,12 +269,10 @@ function StabilityProtocol() {
     setIsModalOpen(false);
   };
 
-
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
 
-   
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
@@ -286,7 +282,7 @@ function StabilityProtocol() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       productMaterial: item["Product/Material"] || "",
       specificationID: item["Specification ID"] || "",
       genericName: item["Generic Name"] || "",
@@ -296,107 +292,108 @@ function StabilityProtocol() {
       addedOn: item["Added on"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
-  
+
   return (
     <>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
-      <div className="grid grid-cols-5 gap-4 mb-4">
-        <Card
-          title="DROPPED"
-          count={cardCounts.DROPPED}
-          color="pink"
-          onClick={() => handleCardClick("DROPPED")}
-        />
-        <Card
-          title="INITIATED"
-          count={cardCounts.INITIATED}
-          color="blue"
-          onClick={() => handleCardClick("INITIATED")}
-        />
-        <Card
-          title="REINITIATED"
-          count={cardCounts.REINITIATED}
-          color="yellow"
-          onClick={() => handleCardClick("REINITIATED")}
-        />
-        <Card
-          title="APPROVED"
-          count={cardCounts.APPROVED}
-          color="green"
-          onClick={() => handleCardClick("APPROVED")}
-        />
-        <Card
-          title="REJECTED"
-          count={cardCounts.REJECTED}
-          color="red"
-          onClick={() => handleCardClick("REJECTED")}
-        />
-      </div>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery}/>
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
+          />
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
+            color="blue"
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
           />
         </div>
-        <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
-          <ATMButton text="Add Storage Chamber" color="blue" onClick={openModal} />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Protocol" color="blue" onClick={openModal} />
+          </div>
         </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onDelete={handleDelete}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-      />
-    
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-        
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
         />
-      )}
-      {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
-      )}
-    </div>
+
+        {isModalOpen && (
+          <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+      </div>
     </>
   );
 }
-
 
 const StatusModal = (_props) => {
   const [conditions, setConditions] = useState([]);
 
   const handleAddConditions = () => {
-    const numberOfConditions = parseInt(document.getElementById('numberOfConditions').value);
+    const numberOfConditions = parseInt(
+      document.getElementById("numberOfConditions").value
+    );
     if (!isNaN(numberOfConditions) && numberOfConditions > 0) {
-      const newConditions = Array.from({ length: numberOfConditions }, (_, index) => ({
-        id: index + 1,
-      }));
+      const newConditions = Array.from(
+        { length: numberOfConditions },
+        (_, index) => ({
+          id: index + 1,
+        })
+      );
       setConditions(newConditions);
     }
   };
@@ -407,6 +404,7 @@ const StatusModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Stability Protocol</CModalTitle>
@@ -442,7 +440,6 @@ const StatusModal = (_props) => {
           <CFormSelect
             className="mb-3"
             type="select"
-
             label="Sample Type"
             placeholder="Select Sample Type"
             options={[
@@ -484,7 +481,12 @@ const StatusModal = (_props) => {
               { label: "AAT" },
             ]}
           />
-          <CFormInput className="mb-3" type="date" label="Manufacturing Date" placeholder=" " />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Manufacturing Date"
+            placeholder=" "
+          />
 
           <label>DateFormat</label>
           <CFormCheck
@@ -502,7 +504,12 @@ const StatusModal = (_props) => {
             label="Long Date"
           />
 
-          <CFormInput className="mb-3" type="text" label="Sample By" placeholder="Sample By" />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sample By"
+            placeholder="Sample By"
+          />
           <CFormInput
             className="mb-3"
             type="text"
@@ -525,7 +532,12 @@ const StatusModal = (_props) => {
             label="Later"
           />
 
-          <CFormInput className="mb-3" type="date" label="Starting Date" placeholder="" />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Starting Date"
+            placeholder=""
+          />
 
           <label className="mb-3">Initial Testing Required</label>
           <CFormCheck
@@ -543,7 +555,12 @@ const StatusModal = (_props) => {
             label="No"
           />
 
-          <CFormInput className="mb-3" type="file" label="Certificates If Any" placeholder=" " />
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Certificates If Any"
+            placeholder=" "
+          />
 
           <CRow>
             <CCol sm={10}>
@@ -557,9 +574,13 @@ const StatusModal = (_props) => {
             </CCol>
 
             <CCol sm={2}>
-              <CButton className="bg-info text-white mb-3 mt-4" onClick={handleAddConditions}>Add</CButton>
+              <CButton
+                className="bg-info text-white mb-3 mt-4"
+                onClick={handleAddConditions}
+              >
+                Add
+              </CButton>
             </CCol>
-
           </CRow>
           <CFormSelect
             className="mb-3"
@@ -577,17 +598,35 @@ const StatusModal = (_props) => {
 
           {conditions.map((condition, index) => (
             <div className="each-condition-data mt-4" key={condition.id}>
-              <h6>Stability Storage Condition-{condition.id}</h6>
+              <h6 className="font-extrabold">
+                Stability Storage Condition-{condition.id}
+              </h6>
               <div className="form-group">
-                <label className="form-label" htmlFor={`conditions_data.${index}.storage_condition`}>Storage Condition</label>
+                <label
+                  className="form-label"
+                  htmlFor={`conditions_data.${index}.storage_condition`}
+                >
+                  Storage Condition
+                </label>
                 <div className="form-control-wrap">
-                  <select className="form-control form-select" id={`conditions_data.${index}.storage_condition`} name={`conditions_data.${index}.storage_condition`} placeholder="Storage condition Uom">
+                  <select
+                    className="form-control form-select"
+                    id={`conditions_data.${index}.storage_condition`}
+                    name={`conditions_data.${index}.storage_condition`}
+                    placeholder="Storage condition Uom"
+                  >
                     <option value="">Select</option>
                     <option value="6651c0dfa9d2755d7705ce05">10 to 25</option>
                     <option value="664f1373a9d2755d770568b4">-20 ± 5°c</option>
-                    <option value="664f06cea9d2755d77055787">25 ± 2°c 60 ± 5% rh</option>
-                    <option value="664f06aaa9d2755d77055748">30 ± 2°c  65 ± 5% rh</option>
-                    <option value="664f02f0a9d2755d77055627">40 ± 2°c and 75 ± 5% rh</option>
+                    <option value="664f06cea9d2755d77055787">
+                      25 ± 2°c 60 ± 5% rh
+                    </option>
+                    <option value="664f06aaa9d2755d77055748">
+                      30 ± 2°c 65 ± 5% rh
+                    </option>
+                    <option value="664f02f0a9d2755d77055627">
+                      40 ± 2°c and 75 ± 5% rh
+                    </option>
                     <option value="664f02c3a9d2755d7705561b">40 ± 2°c</option>
                     <option value="664c24cdc105e11a716a938a">15℃</option>
                     <option value="65cb1132de5392629a1b59b6">℉</option>
@@ -601,31 +640,77 @@ const StatusModal = (_props) => {
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor={`conditions_data.${index}.no_of_pulls`}>No of Pulls</label>
+                <label
+                  className="form-label"
+                  htmlFor={`conditions_data.${index}.no_of_pulls`}
+                >
+                  No of Pulls
+                </label>
                 <div className="form-control-wrap">
                   <div className="d-flex">
-                    <input type="number" className="form-control" id={`conditions_data.${index}.no_of_pulls`} name={`conditions_data.${index}.no_of_pulls`} placeholder="No" value="1" />
-                    <button className="btn btn-primary" style={{ height: "36px", marginLeft: "8px" }}>Add</button>
+                    <input
+                      type="number"
+                      className="form-control"
+                      id={`conditions_data.${index}.no_of_pulls`}
+                      name={`conditions_data.${index}.no_of_pulls`}
+                      placeholder="No"
+                      value="1"
+                    />
+                    <button
+                      className="btn btn-primary"
+                      style={{ height: "36px", marginLeft: "8px" }}
+                    >
+                      Add
+                    </button>
                   </div>
                 </div>
               </div>
               <div className="form-group">
                 <div className="row d-flex flex-nowrap">
                   <div style={{ width: "400px" }}>
-                    <label className="form-label mt-3" htmlFor={`conditions_data.${index}.station`}>Station</label>
+                    <label
+                      className="form-label mt-3"
+                      htmlFor={`conditions_data.${index}.station`}
+                    >
+                      Station
+                    </label>
                   </div>
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor={`conditions_data.${index}.additional_quantity`}>Additional Quantity</label>
+                <label
+                  className="form-label"
+                  htmlFor={`conditions_data.${index}.additional_quantity`}
+                >
+                  Additional Quantity
+                </label>
                 <div className="form-control-wrap">
-                  <input type="number" className="form-control" id={`conditions_data.${index}.additional_quantity`} name={`conditions_data.${index}.additional_quantity`} placeholder="Additional Quantity" value="0" />
+                  <input
+                    type="number"
+                    className="form-control"
+                    id={`conditions_data.${index}.additional_quantity`}
+                    name={`conditions_data.${index}.additional_quantity`}
+                    placeholder="Additional Quantity"
+                    value="0"
+                  />
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor={`conditions_data.${index}.comments`}>Comments</label>
+                <label
+                  className="form-label"
+                  htmlFor={`conditions_data.${index}.comments`}
+                >
+                  Comments
+                </label>
                 <div className="form-control-wrap">
-                  <input type="text" className="form-control" id={`conditions_data.${index}.comments`} name={`conditions_data.${index}.comments`} placeholder="comments" value="" />
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={`conditions_data.${index}.comments`}
+                    name={`conditions_data.${index}.comments`}
+                    placeholder="comments"
+                    value=""
+                  />
                 </div>
               </div>
             </div>
