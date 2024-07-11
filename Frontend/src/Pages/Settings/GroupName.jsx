@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -105,7 +107,7 @@ const GroupName = () => {
   });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-
+  
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -285,7 +287,7 @@ const GroupName = () => {
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton
-            text="Add Worksheet Fields"
+            text="Add Group Name"
             color="blue"
             onClick={openModal}
           />

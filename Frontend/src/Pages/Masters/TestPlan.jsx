@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -168,23 +169,82 @@ function TestPlan() {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
+
   const StatusModal = (_props) => {
+    const [selectedSpecId, setSelectedSpecId] = useState("");
+    const [availableTests, setAvailableTests] = useState([]);
+    const [selectedTests, setSelectedTests] = useState([]);
+    const [refreshedTests, setRefreshedTests] = useState([]);
+
+    const specTestsMap = {
+      "ACC-00-QC-01": ["Test 1", "Test 2", "Test 3"],
+      SPC001: ["Test A", "Test B"],
+      "WBL/STPF/FG/0493/02": ["Test X", "Test Y", "Test Z"],
+      "QC-002": ["Test M", "Test N"],
+      "LAB-03-A01": ["Test C", "Test D"],
+      "MFG-PLT-009": ["Test P", "Test Q"],
+      "FG-TEST-123": ["Test L", "Test O"],
+      "BATCH-789": ["Test G", "Test H"],
+    };
+
+    const handleSpecIdChange = (e) => {
+      const specId = e.target.value;
+      setSelectedSpecId(specId);
+      setAvailableTests(specTestsMap[specId] || []);
+      setSelectedTests([]);
+      setRefreshedTests([]);
+    };
+
+    const handleTestSelect = (test) => {
+      setSelectedTests((prevSelectedTests) => {
+        if (prevSelectedTests.includes(test)) {
+          return prevSelectedTests.filter((t) => t !== test);
+        } else {
+          return [...prevSelectedTests, test];
+        }
+      });
+    
+      setAvailableTests((prevAvailableTests) => {
+        if (prevAvailableTests.includes(test)) {
+          return prevAvailableTests.filter((t) => t !== test);
+        } else {
+          return [...prevAvailableTests, test];
+        }
+      });
+    };
+    
+
+    const handleRefresh = () => {
+      setRefreshedTests(selectedTests);
+    };
+
     return (
       <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="lg"
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Add Test Plan</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput
+          <CFormSelect
             label="Specification ID"
             className="mb-3"
             type="text"
             placeholder=""
+            options={[
+              { label: "ACC-00-QC-01", value: "ACC-00-QC-01" },
+              { label: "SPC001", value: "SPC001" },
+              { label: "WBL/STPF/FG/0493/02", value: "WBL/STPF/FG/0493/02" },
+              { label: "QC-002", value: "QC-002" },
+              { label: "LAB-03-A01", value: "LAB-03-A01" },
+              { label: "MFG-PLT-009", value: "MFG-PLT-009" },
+              { label: "FG-TEST-123", value: "FG-TEST-123" },
+              { label: "BATCH-789", value: "BATCH-789" },
+            ]}
+            onChange={handleSpecIdChange}
           />
           <CFormInput
             label="Product/Material Name"
@@ -212,19 +272,17 @@ function TestPlan() {
               <h5>Available Tests</h5>
               <div className="list-container">
                 <ul>
-                  {leftArray.map((data) => (
+                  {availableTests.map((data) => (
                     <li key={data}>
                       <input
                         type="checkbox"
                         value={data}
                         id={data}
                         className="check-left"
+                        onChange={() => handleTestSelect(data)}
+                        checked={selectedTests.includes(data)}
                       />
-                      <label
-                        className="labels"
-                        htmlFor={data}
-                        onClick={clicked}
-                      >
+                      <label className="labels" htmlFor={data}>
                         {data}
                       </label>
                     </li>
@@ -233,10 +291,10 @@ function TestPlan() {
               </div>
             </div>
             <div className="mid-container">
-              <button className="arrow-button" onClick={moveRight}>
+              <button className="arrow-button" onClick={() => {}}>
                 <TiArrowRightThick />
               </button>
-              <button className="arrow-button" onClick={moveLeft}>
+              <button className="arrow-button" onClick={() => {}}>
                 <TiArrowLeftThick />
               </button>
             </div>
@@ -244,19 +302,17 @@ function TestPlan() {
               <h5>Selected</h5>
               <div className="list-container">
                 <ul>
-                  {rightArray.map((data) => (
+                  {selectedTests.map((data) => (
                     <li key={data}>
                       <input
                         type="checkbox"
                         value={data}
                         id={data}
                         className="check-right"
+                        onChange={() => handleTestSelect(data)}
+                        checked={selectedTests.includes(data)}
                       />
-                      <label
-                        className="labels"
-                        htmlFor={data}
-                        onClick={clicked}
-                      >
+                      <label className="labels" htmlFor={data}>
                         {data}
                       </label>
                     </li>
@@ -273,11 +329,110 @@ function TestPlan() {
                   border: "1px solid #0f93c3",
                   color: "white",
                 }}
+                onClick={handleRefresh}
               >
                 Refresh
               </button>
             </div>
           </div>
+          {refreshedTests.length > 0 && (
+            <>
+              <table className="border-1 border-black min-w-full divide-y divide-gray-200">
+                <thead className="border-1 border-black">
+                  <tr>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      S No.
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Tests
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Pass Limit Description
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Revision No.
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Worksheet
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Display in COA
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Re-Testing
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Reduced Testing
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {refreshedTests.map((test, index) => (
+                    <React.Fragment key={index}>
+                      <tr className="border-1 border-black">
+                        <td
+                          colSpan="9"
+                          className=" px-6 py-4 whitespace-nowrap"
+                        >
+                          <CFormSelect
+                            options={[
+                              "Select Group",
+                              { label: "Group 1", value: "group-1" },
+                              { label: "Group 2", value: "group-2" },
+                              { label: "Group 3", value: "group-3" },
+                            ]}
+                            className="w-full"
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-1 border-black">
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          {index + 1}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">{test}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">-</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          0
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <CFormSelect
+                            options={[
+                              "Select Worksheet",
+                              { label: "pH Test", value: "ph-test" },
+                              { label: "Assay1", value: "assay1" },
+                              { label: "E.coli", value: "e-coli" },
+                              { label: "Option 4", value: "option-4" },
+                              { label: "Option 5", value: "option-5" },
+                              { label: "Option 6", value: "option-6" },
+                            ]}
+                            className="w-full"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
           <CFormSelect
             className="mb-3"
             label="Coa Template"
@@ -289,7 +444,7 @@ function TestPlan() {
           />
           <label className="my-2" htmlFor="">
             Remarks
-          </label>{" "}
+          </label>
           <br />
           <textarea className="line4 w-100 mx-1" rows="4" cols="50"></textarea>
           <div className="d-flex gap-3 mt-4">
@@ -431,8 +586,8 @@ function TestPlan() {
       initiatedAt: item["Initiated At"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
@@ -477,13 +632,9 @@ function TestPlan() {
               onChange={setStatusFilter}
             />
           </div>
-           <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-              <ATMButton
+          <div className="float-right flex gap-4">
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
               text="Add Test Categories"
               color="blue"
               onClick={openModal}
@@ -506,7 +657,13 @@ function TestPlan() {
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </>
   );

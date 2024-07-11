@@ -1,35 +1,3 @@
-
-  // const StatusModal = (_props) => {
-
-  //   return (
-    
-  //   );
-  // };
-
-  // const DeleteModel = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Delete Nominations</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         Do you want to delete this Nominations <code>Q126</code>?
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-  
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
