@@ -2112,5 +2112,4 @@ const SampleLogin2Modal = (_props) => {
     </div>
   );
 };
-
 export default SampleLogin2Modal;

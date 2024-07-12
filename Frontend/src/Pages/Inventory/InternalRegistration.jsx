@@ -262,11 +262,10 @@ const InternalRegistration = () => {
       status: item["Status"] || "INITIATED",
     }));
 
-    // Concatenate the updated data with existing data
     const concatenatedData = [ ...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
+    setData(concatenatedData); 
 
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setIsModalsOpen(false);
   };
 
   return (

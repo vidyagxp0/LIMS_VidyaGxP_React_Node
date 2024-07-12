@@ -1,11 +1,11 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
+import {faEye,faPenToSquare,faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import SampleLogin2Modal from "../Modals/SampleLogin2Modal.jsx";
@@ -17,30 +17,120 @@ const initialData = [
     checkbox: false,
     sno: 1,
     sampleType: "USR001",
-    productMaterial: "Product 1",
-    ARNo: "-01",
+    storageCondition: "Product 1",
+    createdAt: "2024-01-01",
     genericName: "Generic 1",
     specificationCode: "Spec 001",
     attachment: "attachment",
     status: "INITIATED",
-  
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit1"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete1"
+        className="cursor-pointer"
+      />,
+    ],
   },
   {
     checkbox: false,
     sno: 2,
     sampleType: "USR002",
-    productMaterial: "Product 2",
-    ARNo: "-02",
+    storageCondition: "Product 2",
+    createdAt: "2024-01-02",
     genericName: "Generic 2",
     specificationCode: "Spec 002",
     attachment: "attachment",
     status: "APPROVED",
-  
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit2"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete2"
+        className="cursor-pointer"
+      />,
+    ],
   },
- 
+  {
+    checkbox: false,
+    sno: 3,
+    sampleType: "USR003",
+    storageCondition: "Product 3",
+    createdAt: "2024-01-03",
+    genericName: "Generic 3",
+    specificationCode: "Spec 003",
+    attachment: "attachment",
+    status: "REJECTED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit3"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete3"
+        className="cursor-pointer"
+      />,
+    ],
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    sampleType: "USR004",
+    storageCondition: "Product 4",
+    createdAt: "2024-01-04",
+    genericName: "Generic 4",
+    specificationCode: "Spec 004",
+    attachment: "attachment",
+    status: "REINITIATED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit4"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete4"
+        className="cursor-pointer"
+      />,
+    ],
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    sampleType: "USR005",
+    storageCondition: "Product 5",
+    createdAt: "2024-01-05",
+    genericName: "Generic 5",
+    specificationCode: "Spec 005",
+    attachment: "attachment",
+    status: "DROPPED",
+    action: [
+      <FontAwesomeIcon
+        icon={faPenToSquare}
+        key="edit5"
+        className="mr-2 cursor-pointer"
+      />,
+      <FontAwesomeIcon
+        icon={faTrashCan}
+        key="delete5"
+        className="cursor-pointer"
+      />,
+    ],
+  },
 ];
 
-const Nominations = () => {
+const SampleLogin = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -56,8 +146,7 @@ const Nominations = () => {
   });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Inactive");
-  const [editModalData, setEditModalData] = useState(null)
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -76,8 +165,11 @@ const Nominations = () => {
     };
 
     data.forEach((item) => {
-      if (item.status === "Active") counts.Active++;
-      else if (item.status === "Inactive") counts.Inactive++;
+      if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+      else if (item.status === "DROPPED") counts.DROPPED++;
     });
 
     setCardCounts(counts);
@@ -107,37 +199,22 @@ const Nominations = () => {
     setIsViewModalOpen(true);
   };
 
-  // const handleExcelDataUpload = (excelData) => {
-  //   const updatedData = excelData.map((item, index) => ({
-  //     checkbox: false,
-  //     sno: index + 1,
-  //     sampleType: item["Sample Type"] || "",
-  //     storageCondition: item["Storage Condition"] || "",
-  //     createdAt: item["Created At"] || "",
-  //     genericName: item["Generic Name"] || "",
-  //     specificationCode: item["Specification Code"] || "",
-  //     attachment: item["Attachment"] || "",
-  //     status: item["Status"] || "",
-  //   }));
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      sampleType: item["Sample Type"] || "",
+      storageCondition: item["Storage Condition"] || "",
+      createdAt: item["Created At"] || "",
+      genericName: item["Generic Name"] || "",
+      specificationCode: item["Specification Code"] || "",
+      attachment: item["Attachment"] || "",
+      status: item["Status"] || "",
+    }));
 
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
     setIsModalsOpen(false);
-  };
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-  };
-
-  const closeEditModal = () => {
-    setEditModalData(null);
-  };
-
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
   };
 
   const columns = [
@@ -147,10 +224,10 @@ const Nominations = () => {
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Sample Type", accessor: "sampleType" },
-    { header: "Product / Material", accessor: "productMaterial" },
-    { header: "A.R. No.", accessor: "ARNo" },
-    { header: "Generic Name", accessor: "genericName" },
-    { header: "Specification Code", accessor: "specificationCode" },
+    { header: "Product / Material", accessor: "storageCondition" },
+    { header: "A.R. No.", accessor: "createdAt" },
+    { header: "Generic Name", accessor: "createdAt" },
+    { header: "Specification Code", accessor: "createdAt" },
     { header: "attachment", accessor: "attachment" },
     { header: "Status", accessor: "status" },
     {
@@ -158,9 +235,20 @@ const Nominations = () => {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row.original)} />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer"  onClick={() => openEditModal(row.original)} />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => setDeleteId(row.original.sno)} />
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={openModal2}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => onDeleteItem(row)}
+          />
         </>
       ),
     },
@@ -178,395 +266,43 @@ const Nominations = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
-  };
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
     console.log("Deleted item:", item);
   };
 
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno:  index + 1,
-      sampleType: item["Sample Type"] || "",
-      storageCondition: item["Storage Condition"] || "",
-      ARNo: item["Created At"] || "",
-      genericName: item["Generic Name"] || "",
-      specificationCode: item["Specification Code"] || "",
-      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
-      status: item["Status"] || "",
-    }));
-
-    // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
-    setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
-
-  };
-
-  const StatusModal2 = (_props) => {
-    return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal2}
-      >
-        <CModalHeader>
-          <CModalTitle>Update Sample login</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Client"
-            placeholder="Select..."
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Test Plan / Revision No."
-            placeholder="Select..."
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product / Material"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product / Material Code"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Generic Name"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Specification ID"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Copy Sample from"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Sample Type"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Certificates (If any)"
-            placeholder=""
-          />
-
-          <div className="bg-white rounded border-dark-subtle border-2 ">
-            <CTable align="middle" responsive className="   ">
-              <thead>
-                <tr>
-                  <th className="bg-info text-light">Sno.</th>
-                  <th className="bg-info text-light">Test Name</th>
-                  <th className="bg-info text-light">Group Name</th>
-                  <th className="bg-info text-light">Selection</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1.</td>
-                  <td>Viscosity @40C</td>
-                  <td></td>
-                  <td>
-                    <input className="form-check-input" type="checkbox" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>2.</td>
-                  <td>Total Acid Number (TAN)</td>
-                  <td></td>
-                  <td>
-                    <input className="form-check-input" type="checkbox" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>3.</td>
-                  <td>Water Content PPM</td>
-                  <td></td>
-                  <td>
-                    <input className="form-check-input" type="checkbox" />
-                  </td>
-                </tr>
-              </tbody>
-            </CTable>
-          </div>
-
-          <div className="d-flex gap-3 mt-4">
-            <CButton color="light w-50" onClick={_props.closeModal2}>
-              &lt; Back
-            </CButton>
-            <CButton color="primary w-50">Update Sample</CButton>
-          </div>
-        </CModalBody>
-      </CModal>
-    );
-  };
-
-  
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
-    setData((prevData)=>[
-      ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
-    setIsModalOpen(false);
-  }
-
-  const StatusModal = ({visible , closeModal,onAdd}) => {
-    const [client , setClient] = useState("");
-const [testPlan, setTestPlan] = useState("");
-const [productMaterial, setProductMaterial] = useState("");
-const [productMaterialCode , setProductMaterialCode] = useState("");
-const [genericName, setGenericName]=useState("")
-  const [copySampleFrom, setCopySampleFrom] = useState("");
-  const [sampleType, setSampleType]=useState("")
-  const [certificates, setCertificates] = useState("")
-
-    
-    const handleAdd = ()=>{
-      const newCondition = {
-        sampleType:"USR00",
-        productMaterial:"Product",
-        genericName:"generic",
-        ARNo:" 00",
-        specificationCode:"000",
-        addedOn: new Date().toISOString().split('T')[0],
-        attachment:"attachment",
-        action:[],
-      }
-      onAdd(newCondition)
-    }
-    return (
-      <CModal 
-        className="w-5"
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>New Sample login</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Client"
-            placeholder="Select..."
-            value={client}
-            onChange={(e) => setClient(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Test Plan / Revision No."
-            placeholder="Select..."
-            value={testPlan}
-            onChange={(e) => setTestPlan(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product / Material"
-            placeholder=""
-            value={productMaterial}
-            onChange={(e) => setProductMaterial(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product / Material Code"
-            placeholder=""
-            value={productMaterialCode}
-            onChange={(e) => setProductMaterialCode(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Generic Name"
-            placeholder=""
-            value={genericName}
-            onChange={(e) => setGenericName(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Specification ID"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Copy Sample from"
-            placeholder=""
-            value={copySampleFrom}
-            onChange={(e) => setCopySampleFrom(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Sample Type"
-            placeholder=""
-            value={sampleType}
-            onChange={(e) => setSampleType(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Certificates (If any)"
-            placeholder=""
-            value={certificates}
-            onChange={(e) => setCertificates(e.target.value)}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary" onClick={handleAdd}>Add Sample</CButton>
-        </CModalFooter>
-      </CModal>
-    );
-  };
-
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [formData, setFormData] = useState(data);
-
-    useEffect(() => {
-      setFormData(data);
-    }, [data]);
-
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSave = () => {
-      onSave(formData);
-    };
-
-    return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
-        <CModalHeader>
-          <CModalTitle>Edit Sample Login</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Sample Type"
-            name="sampleType"
-            value={formData?.sampleType || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product / Material"
-            name="productMaterial"
-            value={formData?.productMaterial || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Generic Name"
-            name="genericName"
-            value={formData?.genericName || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="A.R. No."
-            name="ARNo"
-            value={formData?.ARNo || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Specification Code"
-            name="specificationCode"
-            value={formData?.specificationCode || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Attachment"
-            name="attachment"
-            value={formData?.attachment || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Status"
-            name="status"
-            value={formData?.status || ""}
-            onChange={handleChange}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={closeModal}>
-            Cancel
-          </CButton>
-          <CButton color="primary" onClick={handleSave}>
-            Save
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
-  };
-  
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Sample Login</h1>
-
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
           <Dropdown
             options={[
-              { value: "ARPC0000099", label: "ARPC0000099" },
-              { value: "ARPC0000098", label: "ARPC0000098" },
-              { value: "ARPC0000097", label: "ARPC0000097" },
-              { value: "ARPC0000096", label: "ARPC0000096" },
-              { value: "ARFFT0000094", label: "ARFFT0000094" },
-              { value: "ARRW0000093", label: "ARRW0000093" },
-              { value: "ARFFT0000091", label: "ARFFT0000091" },
+              { value: "Ar No.", label: "Ar No." },
+              { value: "ARAMPHO000126", label: "ARAMPHO000126" },
+              { value: "ARRW0000125", label: "ARRW0000125" },
+              { value: "ARRW0000124", label: "ARRW0000124" },
+              { value: "ARFP0000123", label: "ARFP0000123" },
+              { value: "ARABEP0000122", label: "ARABEP0000122" },
+              { value: "ARAMPHO0000121", label: "ARAMPHO0000121" },
+              { value: "ARAMPHO0000120", label: "ARAMPHO0000120" },
+              { value: "ARAMPHO0000119", label: "ARAMPHO0000119" },
+              { value: "ARPC0000118", label: "ARPC0000118" },
+              { value: "ARFFT0000117", label: "ARFFT0000117" },
+              { value: "ARFP0000116", label: "ARFP0000116" },
             ]}
             value={statusFilter}
             onChange={setStatusFilter}
           />
-
           <Dropdown
             options={[
               { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+              { value: "DROPPED", label: "DROPPED" },
             ]}
             value={statusFilter}
             onChange={setStatusFilter}
@@ -574,17 +310,23 @@ const [genericName, setGenericName]=useState("")
         </div>
         <div className="float-right flex gap-4">
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
           <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />
         </div>
-        <Table columns={columns} openEditModal={openEditModal} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
       </div>
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
-      )}
-      {isModalOpen2 && (
-        <StatusModal2
-          visible={isModalOpen2}
-          closeModal2={closeModal2}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <SampleLogin2Modal visible={isModalOpen} closeModal={closeModal} />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
       {isModalsOpen && (
@@ -599,4 +341,4 @@ const [genericName, setGenericName]=useState("")
   );
 };
 
-export default Nominations;
+export default SampleLogin;
