@@ -1,74 +1,13 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-//       
-//     </>
-//   );
-// };
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEye, faPenToSquare, faTrashCan,
+  faEye,
+  faPenToSquare,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import BatchTestListModal from "../Modals/BatchTestListModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
@@ -133,10 +72,7 @@ const BatchTestslist = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    Active: 0,
-    Inactive: 0,
-  });
+  const [cardCounts, setCardCounts] = useState({ Active: 0, Inactive: 0 });
 
   useEffect(() => {
     const counts = {
@@ -166,7 +102,6 @@ const BatchTestslist = () => {
     setIsModalsOpen(false);
   };
 
-
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -188,17 +123,16 @@ const BatchTestslist = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       BatchSampleId: item["Batch Sample ID"] || "",
       RegisteredOn: item["Registered On"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
-    // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
 
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setIsModalsOpen(false);
   };
 
   const columns = [
@@ -286,10 +220,7 @@ const BatchTestslist = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <BatchTestListModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <BatchTestListModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -299,7 +230,13 @@ const BatchTestslist = () => {
       )}
 
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} initialData={initialData}/>
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );
