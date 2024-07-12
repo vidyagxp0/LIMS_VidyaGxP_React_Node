@@ -39,62 +39,7 @@ const initialData = [
     reportTitle: "Report 2",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    productCaption: "Product Caption 3",
-    reportTitle: "Report 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    productCaption: "Product Caption 4",
-    reportTitle: "Report 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    productCaption: "Product Caption 5",
-    reportTitle: "Report 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    productCaption: "Product Caption 6",
-    reportTitle: "Report 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    productCaption: "Product Caption 7",
-    reportTitle: "Report 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    productCaption: "Product Caption 8",
-    reportTitle: "Report 8",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    productCaption: "Product Caption 9",
-    reportTitle: "Report 9",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    productCaption: "Product Caption 10",
-    reportTitle: "Report 10",
-    status: "REJECTED",
-  },
+ 
 ];
 
 function SummaryReportHeader() {
@@ -111,6 +56,8 @@ function SummaryReportHeader() {
     APPROVED: 0,
     REJECTED: 0,
   });
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null)
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -187,6 +134,7 @@ function SummaryReportHeader() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
@@ -226,6 +174,381 @@ function SummaryReportHeader() {
     setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData)=>[
+      ...prevData,
+      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+    ])
+    setLastStatus(nextStatus)
+    setIsModalOpen(false);
+  }
+
+
+  const StatusModal = ({visible , closeModal,onAdd}) => {
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(1);
+    const [footerColumns, setFooterColumns] = useState(1);
+    const [numRows, setNumRows] = useState(0);
+      const [inputValue, setInputValue] = useState(0);
+    const [productCaption, setProductCaption] = useState("");
+    const [formatNo, setFormatNo] = useState("");
+    const [reportTitle, setReportTitle] = useState("");
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+  
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+  
+    const handleHeaderColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setHeaderColumns(columns);
+      if (headerRows > 0) {
+        setHeaderRows(0);
+      }
+    };
+  
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+  
+    const handleFooterColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setFooterColumns(columns);
+      if (footerRows > 0) {
+        setFooterRows(0);
+      }
+    };
+  
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+
+    
+    const handleAdd = ()=>{
+      const newCondition = {
+        productCaption:productCaption,
+        reportTitle:reportTitle,
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+    
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Summary Report Header</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Report Title"
+            placeholder=" Report Title"
+            value={reportTitle}
+            onChange={(e)=>setReportTitle(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product/Material Caption"
+            placeholder=" Product"
+            value={productCaption}
+            onChange={(e)=>setProductCaption(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Format No."
+            placeholder=" Format No."
+            value={formatNo}
+            onChange={(e)=>setFormatNo(e.target.value)}
+          />
+          <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Rows"
+            placeholder=" Rows"
+            value={headerRows}
+            onChange={handleHeaderRowsChange}
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Columns"
+            placeholder=" Columns"
+            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            value={headerColumns.toString()}
+            onChange={handleHeaderColumnsChange}
+          />
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
+          <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Rows"
+            placeholder=" Rows"
+            value={footerRows}
+            onChange={handleFooterRowsChange}
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Columns"
+            placeholder=" Columns"
+            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            value={footerColumns.toString()}
+            onChange={handleFooterColumnsChange}
+          />
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+  const EditModal = ({visible , closeModal,data, onSave}) => {
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(1);
+    const [footerColumns, setFooterColumns] = useState(1);
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if(data){
+        setFormData(data);
+      }
+     
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+  
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+  
+    const handleHeaderColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setHeaderColumns(columns);
+      if (headerRows > 0) {
+        setHeaderRows(0);
+      }
+    };
+  
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+  
+    const handleFooterColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setFooterColumns(columns);
+      if (footerRows > 0) {
+        setFooterRows(0);
+      }
+    };
+  
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+
+    
+    const handleAdd = ()=>{
+      const newCondition = {
+        productCaption:productCaption,
+        reportTitle:reportTitle,
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+    
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Summary Report Header</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Report Title"
+            placeholder=" Report Title"
+            value={formData?.reportTitle||""}
+            onChange={handleChange}
+            name="reportTitle"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product/Material Caption"
+            placeholder=" Product"
+            value={formData?.productCaption||""}
+            onChange={handleChange}
+            name="productCaption"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Format No."
+            placeholder=" Format No."
+            value={formData?.formatNo||""}
+            onChange={handleChange}
+            name="formatNo"
+          />
+          <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Rows"
+            placeholder=" Rows"
+            value={headerRows}
+            onChange={handleHeaderRowsChange}
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Columns"
+            placeholder=" Columns"
+            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            value={headerColumns.toString()}
+            onChange={handleHeaderColumnsChange}
+          />
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
+          <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Rows"
+            placeholder=" Rows"
+            value={footerRows}
+            onChange={handleFooterRowsChange}
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Columns"
+            placeholder=" Columns"
+            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            value={footerColumns.toString()}
+            onChange={handleFooterColumnsChange}
+          />
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   return (
     <>
       <div className="p-4">
@@ -293,10 +616,11 @@ function SummaryReportHeader() {
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal} />
+          <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
         )}
         {isModalsOpen && (
           <ImportModal
@@ -307,147 +631,18 @@ function SummaryReportHeader() {
             onDataUpload={handleExcelDataUpload}
           />
         )}
+        {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
       </div>
     </>
   );
 }
 
-const StatusModal = (_props) => {
-  const [headerRows, setHeaderRows] = useState(0);
-  const [footerRows, setFooterRows] = useState(0);
-  const [headerColumns, setHeaderColumns] = useState(1);
-  const [footerColumns, setFooterColumns] = useState(1);
-
-  const handleHeaderRowsChange = (e) => {
-    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
-    setHeaderRows(value);
-  };
-
-  const handleHeaderColumnsChange = (e) => {
-    const columns = parseInt(e.target.value, 10);
-    setHeaderColumns(columns);
-    if (headerRows > 0) {
-      setHeaderRows(0);
-    }
-  };
-
-  const handleFooterRowsChange = (e) => {
-    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
-    setFooterRows(value);
-  };
-
-  const handleFooterColumnsChange = (e) => {
-    const columns = parseInt(e.target.value, 10);
-    setFooterColumns(columns);
-    if (footerRows > 0) {
-      setFooterRows(0);
-    }
-  };
-
-  const renderTable = (rows, columns) => {
-    const tableRows = [];
-    for (let i = 0; i < rows; i++) {
-      const tableColumns = [];
-      for (let j = 0; j < columns; j++) {
-        tableColumns.push(
-          <td key={j} className="flex gap-4">
-            <CFormInput type="text" placeholder={`Lower Count `} />
-            <CFormSelect
-              className="mb-2"
-              options={[
-                {
-                  label: "Select Field",
-                  value: "1",
-                },
-              ]}
-            />
-          </td>
-        );
-      }
-      tableRows.push(<tr key={i}>{tableColumns}</tr>);
-    }
-    return tableRows;
-  };
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="xl"
-    >
-      <CModalHeader>
-        <CModalTitle>Add Summary Report Header</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Report Title"
-          placeholder=" Report Title"
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Product/Material Caption"
-          placeholder=" Product"
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Format No."
-          placeholder=" Format No."
-        />
-        <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Rows"
-          placeholder=" Rows"
-          value={headerRows}
-          onChange={handleHeaderRowsChange}
-        />
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Columns"
-          placeholder=" Columns"
-          options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
-          value={headerColumns.toString()}
-          onChange={handleHeaderColumnsChange}
-        />
-        <table className="table mb-3">
-          <tbody>{renderTable(headerRows, headerColumns)}</tbody>
-        </table>
-        <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Rows"
-          placeholder=" Rows"
-          value={footerRows}
-          onChange={handleFooterRowsChange}
-        />
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Columns"
-          placeholder=" Columns"
-          options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
-          value={footerColumns.toString()}
-          onChange={handleFooterColumnsChange}
-        />
-        <table className="table mb-3">
-          <tbody>{renderTable(footerRows, footerColumns)}</tbody>
-        </table>
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 
 export default SummaryReportHeader;
