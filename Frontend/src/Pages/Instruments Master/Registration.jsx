@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -253,7 +255,7 @@ const Registration = () => {
   
     const concatenatedData = [ ...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
+setIsModalsOpen(false); // Update data state with parsed Excel data
   };
   
 
