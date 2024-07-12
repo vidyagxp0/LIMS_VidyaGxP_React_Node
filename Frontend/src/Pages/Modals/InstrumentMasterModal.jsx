@@ -1,10 +1,10 @@
+import React, { useState } from "react";
 import {
   CButton,
   CCol,
   CFormCheck,
   CFormInput,
   CFormSelect,
-  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
@@ -12,14 +12,12 @@ import {
   CModalTitle,
   CRow,
 } from "@coreui/react";
-import React, { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const InstrumentMasterModal = (_props) => {
+const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
   const [fields, setFields] = useState([]);
-  const [description, setDescription] = useState("");
 
   const addFields = () => {
     setFields([...fields, { id: Date.now(), value1: "", value2: "" }]);
@@ -37,12 +35,44 @@ const InstrumentMasterModal = (_props) => {
     );
   };
 
+  const [instrumentData, setInstrumentData] = useState({
+    instrumentCategory: "",
+    instrumentCategoryDescription: "",
+    instrument: "",
+    instrumentId: "",
+    make: "",
+    model: "",
+    fields: [],
+    manufacturerSerialNo: "",
+    capacitySize: "",
+    equipNo: "",
+    installedAt: "",
+    installedOn: "",
+    warrantyExpiresOn: "",
+    suppliedBy: "",
+    containsModule: "",
+    sopNo: "",
+    software: "",
+    description: "",
+  });
+
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...instrumentData, [field]: value };
+    setInstrumentData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...instrumentData, fields });
+    closeModal();
+  };
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="xl"
       >
         <CModalHeader>
@@ -52,39 +82,49 @@ const InstrumentMasterModal = (_props) => {
           <p>Add information and register new Instrument</p>
           <CFormSelect
             className="mb-3"
-            type="text"
             label="Instrument Category"
-            placeholder="Select... "
-            options={[
-              "Select",
-              { label: "chromatography" },
-              { label: "weighing balance" },
-            ]}
-          />
+            value={instrumentData.instrumentCategory}
+            onChange={(e) =>
+              handleInputChange("instrumentCategory", e.target.value)
+            }
+          >
+            <option value="">Select...</option>
+            <option value="chromatography">chromatography</option>
+            <option value="weighing balance">weighing balance</option>
+          </CFormSelect>
           <CFormInput
             className="mb-3"
             type="text"
             label="Instrument Category Description"
-            placeholder="chroma "
-            disabled
+            placeholder="chroma"
+            value={instrumentData.instrumentCategoryDescription}
+            onChange={(e) =>
+              handleInputChange("instrumentCategoryDescription", e.target.value)
+            }
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Instrument"
-            placeholder=" Instrument"
+            placeholder="Instrument"
+            value={instrumentData.instrument}
+            onChange={(e) => handleInputChange("instrument", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Instrument ID"
-            placeholder="Instrument ID "
+            placeholder="Instrument ID"
+            value={instrumentData.instrumentId}
+            onChange={(e) => handleInputChange("instrumentId", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Make"
-            placeholder=" Make"
+            placeholder="Make"
+            value={instrumentData.make}
+            onChange={(e) => handleInputChange("make", e.target.value)}
           />
           <CRow className="d-flex align-items-center justify-content-center">
             <CCol sm={8}>
@@ -92,12 +132,14 @@ const InstrumentMasterModal = (_props) => {
                 className="mb-3"
                 type="text"
                 label="Model"
-                placeholder="Model "
+                placeholder="Model"
+                value={instrumentData.model}
+                onChange={(e) => handleInputChange("model", e.target.value)}
               />
             </CCol>
             <CCol sm={4}>
               <CButton
-                className="bg-info text-white  mt-4 mb-3"
+                className="bg-info text-white mt-4 mb-3"
                 onClick={addFields}
               >
                 Add Fields
@@ -139,46 +181,73 @@ const InstrumentMasterModal = (_props) => {
             className="mb-3"
             type="text"
             label="Manufacturer's Serial No."
-            placeholder=" Manufacturer's Serial No."
+            placeholder="Manufacturer's Serial No."
+            value={instrumentData.manufacturerSerialNo}
+            onChange={(e) =>
+              handleInputChange("manufacturerSerialNo", e.target.value)
+            }
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Capacity Size"
-            placeholder="Capacity Size "
+            placeholder="Capacity Size"
+            value={instrumentData.capacitySize}
+            onChange={(e) => handleInputChange("capacitySize", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Equip No."
-            placeholder=" Equip No."
+            placeholder="Equip No."
+            value={instrumentData.equipNo}
+            onChange={(e) => handleInputChange("equipNo", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Installed At"
             placeholder="Installed At"
+            value={instrumentData.installedAt}
+            onChange={(e) => handleInputChange("installedAt", e.target.value)}
           />
-          <CFormInput type="date" label="Installed On" placeholder=" " />
+          <CFormInput
+            type="date"
+            label="Installed On"
+            placeholder=" "
+            value={instrumentData.installedOn}
+            onChange={(e) => handleInputChange("installedOn", e.target.value)}
+          />
           <CFormInput
             className="mb-3"
             type="date"
             label="Warranty Expires On"
             placeholder=" "
+            value={instrumentData.warrantyExpiresOn}
+            onChange={(e) =>
+              handleInputChange("warrantyExpiresOn", e.target.value)
+            }
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Supplied By"
             placeholder="Supplied By"
+            value={instrumentData.suppliedBy}
+            onChange={(e) => handleInputChange("suppliedBy", e.target.value)}
           />
-          <label className="mb-3">Contains module ?</label>
+          <label className="mb-3">Contains module?</label>
           <CFormCheck
             className="mb-3"
             type="radio"
             id="ContainsModuleYes"
             name="ContainsModule"
             label="Yes"
+            value="Yes"
+            checked={instrumentData.containsModule === "Yes"}
+            onChange={(e) =>
+              handleInputChange("containsModule", e.target.value)
+            }
           />
           <CFormCheck
             className="mb-3"
@@ -186,33 +255,43 @@ const InstrumentMasterModal = (_props) => {
             id="ContainsModuleNo"
             name="ContainsModule"
             label="No"
+            value="No"
+            checked={instrumentData.containsModule === "No"}
+            onChange={(e) =>
+              handleInputChange("containsModule", e.target.value)
+            }
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="SOP No."
             placeholder="SOP Number"
+            value={instrumentData.sopNo}
+            onChange={(e) => handleInputChange("sopNo", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Software"
             placeholder="Software"
+            value={instrumentData.software}
+            onChange={(e) => handleInputChange("software", e.target.value)}
           />
           <div className="mb-3">
             <label>Description</label>
             <ReactQuill
-              theme="snow"
-              value={description}
-              onChange={setDescription}
+              value={instrumentData.description}
+              onChange={(content) => handleInputChange("description", content)}
             />
           </div>
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
+          <CButton color="secondary" onClick={closeModal}>
+            Close
           </CButton>
-          <CButton color="primary">Submit</CButton>
+          <CButton color="primary" onClick={handleFormSubmit}>
+            Save changes
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>
