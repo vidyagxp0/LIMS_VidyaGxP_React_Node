@@ -605,7 +605,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
             onClick={handleOpenModals}
             
              />
-          <ATMButton text="Add Storage Chamber" color="blue" onClick={openModal} />
+          <ATMButton text="Add Storage Chamber" color="blue" onClick={openModal}  />
         </div>
       </div>
       <Table
