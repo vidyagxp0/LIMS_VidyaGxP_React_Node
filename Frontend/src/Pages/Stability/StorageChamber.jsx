@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,26 +8,23 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-    CButton,
-    CCol,
-    CContainer,
-    CFormInput,
-    CFormLabel,
-    CFormSelect,
-    CFormTextarea,
-    CModal,
-    CModalBody,
-    CModalFooter,
-    CModalHeader,
-    CModalTitle,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-  } from "@coreui/react";
+  CButton,
+  CContainer,
+  CFormInput,
+  CFormLabel,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -57,7 +56,6 @@ const initialData = [
   },
 ];
 
-
 const StorageChamber = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -73,7 +71,7 @@ const StorageChamber = () => {
     REJECTED: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -169,12 +167,10 @@ const StorageChamber = () => {
     setIsModalOpen(false);
   };
 
-
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
 
-   
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
@@ -184,7 +180,7 @@ const StorageChamber = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       chamberID: item["Chamber ID"] || "",
       description: item["Description"] || "",
       makeModel: item["Make/ Model"] || "",
@@ -192,70 +188,80 @@ const StorageChamber = () => {
       location: item["Location"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
-setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData)=>[
+    setData((prevData) => [
       ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
-  const StatusModal = ({visible , closeModal,onAdd}) => {
+  };
+  
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
-  const [chamberId, setChamberId] = useState("");
-  const [description, setDescription] = useState("");
-  const [makeModel, setMakeModel] = useState("");
-  const [serialNo, setSerialNo] = useState("");
-  const [location, setLocation] = useState("");
-  const [comments , setComments] = useState("");
-  const [stabilityStorageCondition , setStabilityStorageCondition] = useState("");
-  const [numberOfShelfs, setNumberOfShelfs] = useState("");
-  const [ maximunNumberOfShelfs, setMaximunNumberOfShelfs] = useState("");
+    const [chamberId, setChamberId] = useState("");
+    const [description, setDescription] = useState("");
+    const [makeModel, setMakeModel] = useState("");
+    const [serialNo, setSerialNo] = useState("");
+    const [location, setLocation] = useState("");
+    const [comments, setComments] = useState("");
+    const [stabilityStorageCondition, setStabilityStorageCondition] =
+      useState("");
+    const [numberOfShelfs, setNumberOfShelfs] = useState("");
+    const [maximunNumberOfShelfs, setMaximunNumberOfShelfs] = useState("");
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
         setInputValue(value);
       }
     };
-  
+
     const addRows = () => {
       setNumRows(inputValue);
     };
-  
+
     const renderRows = () => {
       const rows = [];
       for (let i = 0; i < numRows; i++) {
         rows.push(
           <CTableRow key={i}>
-            <CTableHeaderCell className="mb-3" scope="row">{i + 1}</CTableHeaderCell>
-            <CTableDataCell className="mb-3">Rack {i + 1}: <input type="text" /> </CTableDataCell>
+            <CTableHeaderCell className="mb-3" scope="row">
+              {i + 1}
+            </CTableHeaderCell>
+            <CTableDataCell className="mb-3">
+              Rack {i + 1}: <input type="text" />{" "}
+            </CTableDataCell>
           </CTableRow>
         );
       }
       return rows;
     };
 
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
-        chamberID:chamberId,
-        description:description,
-        makeModel:makeModel,
-        serialNo:serialNo,
-        location:location,
-        action:[],
-      }
-      onAdd(newCondition)
-    }
+        chamberID: chamberId,
+        description: description,
+        makeModel: makeModel,
+        serialNo: serialNo,
+        location: location,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
-  
     return (
       <>
         <CModal
@@ -274,7 +280,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
               label="Chamber ID"
               placeholder="Chamber Id "
               value={chamberId}
-              onChange={(e)=> setChamberId(e.target.value)}
+              onChange={(e) => setChamberId(e.target.value)}
             />
             <CFormInput
               className="mb-3"
@@ -282,7 +288,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
               label="Description"
               placeholder="Enter Description "
               value={description}
-              onChange={(e)=> setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <CFormInput
               className="mb-3"
@@ -290,7 +296,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
               label="Make / Model"
               placeholder="Make / Model "
               value={makeModel}
-              onChange={(e)=> setMakeModel(e.target.value)}
+              onChange={(e) => setMakeModel(e.target.value)}
             />
             <CFormInput
               className="mb-3"
@@ -298,20 +304,31 @@ setIsModalsOpen(false); // Close the import modal after data upload
               label="Serial No."
               placeholder="Serial Number "
               value={serialNo}
-              onChange={(e)=> setSerialNo(e.target.value)}
+              onChange={(e) => setSerialNo(e.target.value)}
             />
-            <CFormInput type="text" label="Location" placeholder="Location " value={location} onChange={(e)=> setLocation(e.target.value)}   />
-            <CFormTextarea type="text" label="Comments" placeholder="" value={comments} onChange={(e)=> setComments(e.target.value)}   />
+            <CFormInput
+              type="text"
+              label="Location"
+              placeholder="Location "
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+            <CFormTextarea
+              type="text"
+              label="Comments"
+              placeholder=""
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+            />
             <CFormInput
               className="mb-3"
               type="select"
               label="Stability Storage Condition"
               placeholder="Select... "
               value={stabilityStorageCondition}
-              onChange={(e)=> setStabilityStorageCondition(e.target.value)}
-           
+              onChange={(e) => setStabilityStorageCondition(e.target.value)}
             />
-  
+
             <CContainer>
               <CFormLabel htmlFor="numRowsInput">Number of Racks</CFormLabel>
               <CFormInput
@@ -340,14 +357,14 @@ setIsModalsOpen(false); // Close the import modal after data upload
                 </CTable>
               </div>
             </CContainer>
-  
+
             <CFormInput
               className="mb-3"
               type="text"
               label="Number Of Shelfs"
               placeholder="Number Of Shelfs "
               value={numberOfShelfs}
-              onChange={(e)=> setNumberOfShelfs(e.target.value)}
+              onChange={(e) => setNumberOfShelfs(e.target.value)}
             />
             <CFormInput
               className="mb-3"
@@ -355,14 +372,16 @@ setIsModalsOpen(false); // Close the import modal after data upload
               label="Maximum No. Of Positions For Shelf"
               placeholder="0"
               value={maximunNumberOfShelfs}
-              onChange={(e)=> setMaximunNumberOfShelfs(e.target.value)}
+              onChange={(e) => setMaximunNumberOfShelfs(e.target.value)}
             />
           </CModalBody>
           <CModalFooter>
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleAdd}>Submit</CButton>
+            <CButton className="bg-info text-white" onClick={handleAdd}>
+              Submit
+            </CButton>
           </CModalFooter>
         </CModal>
       </>
@@ -383,17 +402,16 @@ setIsModalsOpen(false); // Close the import modal after data upload
     setData(newData);
     setEditModalData(null);
   };
-  
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
 
     const handleChange = (e) => {
@@ -410,18 +428,22 @@ setIsModalsOpen(false); // Close the import modal after data upload
         setInputValue(value);
       }
     };
-  
+
     const addRows = () => {
       setNumRows(inputValue);
     };
-  
+
     const renderRows = () => {
       const rows = [];
       for (let i = 0; i < numRows; i++) {
         rows.push(
           <CTableRow key={i}>
-            <CTableHeaderCell className="mb-3" scope="row">{i + 1}</CTableHeaderCell>
-            <CTableDataCell className="mb-3">Rack {i + 1}: <input type="text" /> </CTableDataCell>
+            <CTableHeaderCell className="mb-3" scope="row">
+              {i + 1}
+            </CTableHeaderCell>
+            <CTableDataCell className="mb-3">
+              Rack {i + 1}: <input type="text" />{" "}
+            </CTableDataCell>
           </CTableRow>
         );
       }
@@ -475,8 +497,22 @@ setIsModalsOpen(false); // Close the import modal after data upload
               value={formData?.serialNo || ""}
               onChange={handleChange}
             />
-            <CFormInput type="text" label="Location" placeholder="Location " name="location" value={formData?.location || ""} onChange={handleChange}  />
-            <CFormTextarea type="text" label="Comments" placeholder="" name="comments" value={formData?.comments || ""} onChange={handleChange}   />
+            <CFormInput
+              type="text"
+              label="Location"
+              placeholder="Location "
+              name="location"
+              value={formData?.location || ""}
+              onChange={handleChange}
+            />
+            <CFormTextarea
+              type="text"
+              label="Comments"
+              placeholder=""
+              name="comments"
+              value={formData?.comments || ""}
+              onChange={handleChange}
+            />
             <CFormInput
               className="mb-3"
               type="select"
@@ -485,9 +521,8 @@ setIsModalsOpen(false); // Close the import modal after data upload
               name="stabilityStorageCondition"
               value={formData?.stabilityStorageCondition || ""}
               onChange={handleChange}
-           
             />
-  
+
             <CContainer>
               <CFormLabel htmlFor="numRowsInput">Number of Racks</CFormLabel>
               <CFormInput
@@ -516,7 +551,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
                 </CTable>
               </div>
             </CContainer>
-  
+
             <CFormInput
               className="mb-3"
               type="text"
@@ -540,7 +575,9 @@ setIsModalsOpen(false); // Close the import modal after data upload
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleSave}>Update</CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Update
+            </CButton>
           </CModalFooter>
         </CModal>
       </>
@@ -584,7 +621,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
       </div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery}/>
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
           <Dropdown
             options={[
               { value: "All", label: "All" },
@@ -599,13 +636,12 @@ setIsModalsOpen(false); // Close the import modal after data upload
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
-          <ATMButton text="Add Storage Chamber" color="blue" onClick={openModal}  />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Storage Chamber"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -616,16 +652,21 @@ setIsModalsOpen(false); // Close the import modal after data upload
         onViewDetails={onViewDetails}
         openEditModal={openEditModal}
       />
-     
       {isModalOpen && (
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-        onAdd={addNewStorageCondition}
+          onAdd={addNewStorageCondition}
         />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
       {editModalData && (
         <EditModal
@@ -638,9 +679,4 @@ setIsModalsOpen(false); // Close the import modal after data upload
     </div>
   );
 };
-
-
-
 export default StorageChamber;
-
-

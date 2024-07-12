@@ -107,7 +107,7 @@ function Header({ toggleSidebarClass }) {
               >
                 <img
                   className="rounded-full "
-                  src="https://cdn-icons-png.freepik.com/512/5003/5003094.png"
+                  // src="https://cdn-icons-png.freepik.com/512/5003/5003094.png"
                   alt=""
                 />
               </CAvatar>
