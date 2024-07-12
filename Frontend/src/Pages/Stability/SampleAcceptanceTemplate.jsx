@@ -45,78 +45,6 @@ const initialData = [
     updatedAt: "2024-01-02",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    name: "Name 3",
-    uniqueCode: "UC003",
-    NoOfCheckItems: 8,
-    updatedAt: "2024-01-03",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    name: "Name 4",
-    uniqueCode: "UC004",
-    NoOfCheckItems: 12,
-    updatedAt: "2024-01-04",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    name: "Name 5",
-    uniqueCode: "UC005",
-    NoOfCheckItems: 20,
-    updatedAt: "2024-01-05",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    name: "Name 6",
-    uniqueCode: "UC006",
-    NoOfCheckItems: 18,
-    updatedAt: "2024-01-06",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    name: "Name 7",
-    uniqueCode: "UC007",
-    NoOfCheckItems: 5,
-    updatedAt: "2024-01-07",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    name: "Name 8",
-    uniqueCode: "UC008",
-    NoOfCheckItems: 25,
-    updatedAt: "2024-01-08",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    name: "Name 9",
-    uniqueCode: "UC009",
-    NoOfCheckItems: 9,
-    updatedAt: "2024-01-09",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    name: "Name 10",
-    uniqueCode: "UC010",
-    NoOfCheckItems: 11,
-    updatedAt: "2024-01-10",
-    status: "Inactive",
-  },
 ];
 
 function SampleAcceptanceTemplate() {
@@ -126,7 +54,8 @@ function SampleAcceptanceTemplate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-
+  const [lastStatus, setLastStatus] = useState("Active");
+  const [editModalData, setEditModalData] = useState(null)
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -158,9 +87,33 @@ function SampleAcceptanceTemplate() {
     setData(newData);
   };
 
-  const StatusModal = (_props) => {
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+    setData((prevData)=>[
+      ...prevData,
+      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+    ])
+    setLastStatus(nextStatus)
+    setIsModalOpen(false);
+  }
+
+  const StatusModal = ({visible , closeModal,onAdd}) => {
     const [numOfCheckItems, setNumOfCheckItems] = useState(0);
     const [checkItems, setCheckItems] = useState([]);
+    const [name , setName] = useState("");
+    const [uniqueCode , setUniqueCode]=useState("")
+
+    const handleAdd = ()=>{
+      const newCondition = {
+        name:name,
+        uniqueCode:uniqueCode,
+        NoOfCheckItems:numOfCheckItems,
+        updatedAt:"24-08-2020",
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+
 
     useEffect(() => {
       const newCheckItems = Array.from(
@@ -186,8 +139,8 @@ function SampleAcceptanceTemplate() {
     return (
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
       >
         <CModalHeader>
           <CModalTitle>New Condition</CModalTitle>
@@ -198,18 +151,23 @@ function SampleAcceptanceTemplate() {
             type="text"
             label="Name"
             placeholder="Name"
+            value={name}
+            onChange={(e)=>setName(e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Unique Code"
             placeholder="Unique Code"
+            value={uniqueCode}
+            onChange={(e)=>setUniqueCode(e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="number"
             label="No. Of Check Items"
             placeholder="No. of Check Items"
+            value={numOfCheckItems}
             onChange={handleNumOfCheckItemsChange}
           />
           {checkItems.map((item, index) => (
@@ -225,10 +183,10 @@ function SampleAcceptanceTemplate() {
           ))}
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary">Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
         </CModalFooter>
       </CModal>
     );
@@ -258,6 +216,7 @@ function SampleAcceptanceTemplate() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
@@ -297,6 +256,121 @@ function SampleAcceptanceTemplate() {
     console.log("Deleted item:", item);
   };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [numOfCheckItems, setNumOfCheckItems] = useState(0);
+    const [checkItems, setCheckItems] = useState([]);
+    const [formData, setFormData] = useState(data);
+
+
+    useEffect(() => {
+      const newCheckItems = Array.from(
+        { length: numOfCheckItems },
+        (_, index) => ({
+          label: `Check Item ${index + 1}`,
+          value: "",
+        })
+      );
+      setCheckItems(newCheckItems);
+    }, [numOfCheckItems]);
+
+    const handleNumOfCheckItemsChange = (e) => {
+      setNumOfCheckItems(parseInt(e.target.value, 10) || 0);
+    };
+
+    const handleInputChange = (index, event) => {
+      const newCheckItems = [...checkItems];
+      newCheckItems[index].value = event.target.value;
+      setCheckItems(newCheckItems);
+    };
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>New Condition</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Name"
+            name="name"
+            value={formData?.name||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            name="uniqueCode"
+            placeholder="Unique Code"
+            value={formData?.uniqueCode||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="No. Of Check Items"
+            name="NoOfCheckItems"
+            placeholder="No. of Check Items"
+            value={formData?.numOfCheckItems||""}
+            onChange={handleNumOfCheckItemsChange }
+          />
+          {checkItems.map((item, index) => (
+            <CFormInput
+              key={index}
+              className="mb-3"
+              type="text"
+              label={item.label}
+              value={item.value}
+              onChange={(e) => handleInputChange(index, e)}
+              placeholder={item.label}
+            />
+          ))}
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+
   return (
     <>
       <div className="m-5 mt-3">
@@ -332,6 +406,7 @@ function SampleAcceptanceTemplate() {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
       </div>
       {isModalsOpen && (
@@ -344,10 +419,18 @@ function SampleAcceptanceTemplate() {
         />
       )}
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
       )}
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -26,7 +26,6 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
-
 const initialData = [
   {
     checkbox: false,
@@ -48,86 +47,6 @@ const initialData = [
     addDate: "2024-01-02",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    uniqueCode: "UC003",
-    productName: "Product 3",
-    genericName: "Generic 3",
-    reTestingPeriod: "2024-06-03",
-    addDate: "2024-01-03",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    uniqueCode: "UC004",
-    productName: "Product 4",
-    genericName: "Generic 4",
-    reTestingPeriod: "2024-06-04",
-    addDate: "2024-01-04",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    uniqueCode: "UC005",
-    productName: "Product 5",
-    genericName: "Generic 5",
-    reTestingPeriod: "2024-06-05",
-    addDate: "2024-01-05",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    uniqueCode: "UC006",
-    productName: "Product 6",
-    genericName: "Generic 6",
-    reTestingPeriod: "2024-06-06",
-    addDate: "2024-01-06",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    uniqueCode: "UC007",
-    productName: "Product 7",
-    genericName: "Generic 7",
-    reTestingPeriod: "2024-06-07",
-    addDate: "2024-01-07",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    uniqueCode: "UC008",
-    productName: "Product 8",
-    genericName: "Generic 8",
-    reTestingPeriod: "2024-06-08",
-    addDate: "2024-01-08",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    uniqueCode: "UC009",
-    productName: "Product 9",
-    genericName: "Generic 9",
-    reTestingPeriod: "2024-06-09",
-    addDate: "2024-01-09",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    uniqueCode: "UC010",
-    productName: "Product 10",
-    genericName: "Generic 10",
-    reTestingPeriod: "2024-06-10",
-    addDate: "2024-01-10",
-    status: "REJECTED",
-  },
 ];
 
 function Product() {
@@ -137,6 +56,8 @@ function Product() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -144,8 +65,6 @@ function Product() {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-
-
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -168,52 +87,6 @@ function Product() {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
-  };
-
-  const StatusModal = (_props) => {
-    return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Add Product/Material</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Name"
-            placeholder="Product Name "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Unique Code"
-            placeholder="Product Code "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Generic Name"
-            placeholder="Generic Name"
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Re-testing Period"
-            placeholder="Re-testing Period "
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    );
   };
 
   const columns = [
@@ -258,8 +131,8 @@ function Product() {
       addDate: item["Add Date"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
@@ -279,6 +152,194 @@ function Product() {
     const newData = data.filter((d) => d !== item);
     setData(newData);
     console.log("Deleted item:", item);
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [productName, setProductName] = useState("");
+    const [uniqueCode, setUniqueCode] = useState("");
+    const [genericName, setGenericName] = useState("");
+    const [reTestingPeriod, setReTestingPeriod] = useState("");
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const handleAdd = () => {
+      const newCondition = {
+        uniqueCode: uniqueCode,
+        productName: productName,
+        genericName: genericName,
+        reTestingPeriod: reTestingPeriod,
+        addDate: "2020-02-02",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Product/Material</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Product Name"
+            name="productName"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Product Code "
+            name="uniqueCode"
+            value={uniqueCode}
+            onChange={(e) => setUniqueCode(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Generic Name"
+            placeholder="Generic Name"
+            name="genericName"
+            value={genericName}
+            onChange={(e) => setGenericName(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Re-testing Period"
+            placeholder="Re-testing Period "
+            name="reTestingPeriod"
+            value={reTestingPeriod}
+            onChange={(e) => setReTestingPeriod(e.target.value)}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({visible , closeModal,data, onSave}) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Product/Material</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Product Name"
+            name="productName"
+            value={formData?.productName||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Product Code "
+            name="uniqueCode"
+            value={formData?.uniqueCode||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Generic Name"
+            placeholder="Generic Name"
+            name="genericName"
+            value={formData?.genericName||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Re-testing Period"
+            placeholder="Re-testing Period "
+            name="reTestingPeriod"
+            value={formData?.reTestingPeriod||""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
   return (
@@ -302,12 +363,7 @@ function Product() {
             />
           </div>
           <div className="float-right flex gap-4">
-
-          <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Master/Product"
               color="blue"
@@ -321,17 +377,36 @@ function Product() {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
       </div>
 
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
       )}
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </>
   );

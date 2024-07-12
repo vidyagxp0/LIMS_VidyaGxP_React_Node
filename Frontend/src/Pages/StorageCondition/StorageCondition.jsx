@@ -53,6 +53,7 @@ const initialData = [
     status: "Active",
   },
   
+  
 ];
 
 function StorageLocation() {
