@@ -616,7 +616,7 @@ setIsModalsOpen(false); // Close the import modal after data upload
         onViewDetails={onViewDetails}
         openEditModal={openEditModal}
       />
-    
+     
       {isModalOpen && (
         <StatusModal
           visible={isModalOpen}

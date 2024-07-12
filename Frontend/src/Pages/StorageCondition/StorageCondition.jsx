@@ -41,7 +41,7 @@ const initialData = [
     storageCondition: "SC2",
     createdAt: "2023-02-01",
     attachment: "attachment",
-    status: "Active",
+    status: "Inactive",
   },
   {
     checkbox: false,
@@ -50,7 +50,7 @@ const initialData = [
     storageCondition: "SC3",
     createdAt: "2023-03-01",
     attachment: "attachment",
-    status: "Inactive",
+    status: "Active",
   },
   
 ];
