@@ -47,78 +47,6 @@ const initialData = [
     addedOn: "2024-06-30",
     status: "APPROVED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    templateName: "Template 3",
-    uniqueCode: "UC003",
-    sampleType: "Type A",
-    addedOn: "2024-06-29",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    templateName: "Template 4",
-    uniqueCode: "UC004",
-    sampleType: "Type C",
-    addedOn: "2024-06-28",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    templateName: "Template 5",
-    uniqueCode: "UC005",
-    sampleType: "Type A",
-    addedOn: "2024-06-27",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    templateName: "Template 6",
-    uniqueCode: "UC006",
-    sampleType: "Type B",
-    addedOn: "2024-06-26",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    templateName: "Template 7",
-    uniqueCode: "UC007",
-    sampleType: "Type C",
-    addedOn: "2024-06-25",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    templateName: "Template 8",
-    uniqueCode: "UC008",
-    sampleType: "Type A",
-    addedOn: "2024-06-24",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    templateName: "Template 9",
-    uniqueCode: "UC009",
-    sampleType: "Type B",
-    addedOn: "2024-06-23",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    templateName: "Template 10",
-    uniqueCode: "UC010",
-    sampleType: "Type C",
-    addedOn: "2024-06-22",
-    status: "REINITIATED",
-  },
 ];
 
 const SamplingTemplate = () => {
@@ -128,6 +56,8 @@ const SamplingTemplate = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -178,7 +108,7 @@ const SamplingTemplate = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.templateName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -256,6 +186,616 @@ const SamplingTemplate = () => {
     console.log("Deleted item:", item);
   };
 
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "INITIATED" ? "APPROVED" : "INITIATED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+
+  };
+
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+
+    const currentDate = new Date().toISOString().split("T")[0]
+
+    const [SamplingTemplate, setSamplingTemplate] = useState({
+      templateName: "",
+      uniqueCode: "",
+      sampleType: [],
+    })
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(1);
+    const [footerColumns, setFooterColumns] = useState(1);
+
+    const handleAdd = () => {
+      const newCondition = {
+        addedOn: currentDate,
+        templateName: SamplingTemplate.templateName,
+        uniqueCode: SamplingTemplate.uniqueCode,
+        sampleType: SamplingTemplate.sampleType,
+        action: [],
+      }
+      onAdd(newCondition);
+    }
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+
+    const handleHeaderColumnsChange = (e) => {
+      setHeaderColumns(parseInt(e.target.value, 10));
+    };
+
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+
+    const handleFooterColumnsChange = (e) => {
+      setFooterColumns(parseInt(e.target.value, 10));
+    };
+
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+
+    const [leftArray, setLeftArray] = useState([
+      "Change Control",
+      "CAPA",
+      "Internal Audit",
+      "External Audit",
+      "Initiator",
+      "SQM",
+      "CTMS",
+      "Calendar",
+      "EHS",
+      "Environment",
+      "Documents",
+      "Deviation",
+    ]);
+
+    const [rightArray, setRightArray] = useState([
+      "Inspections",
+      "Audit",
+      "Refference",
+      "CCTT",
+    ]);
+
+    const moveRight = () => {
+      let leftElement = document.getElementsByClassName("check-left");
+      for (let index = 0; index < leftElement.length; index++) {
+        if (leftElement[index].checked) {
+          let data = leftElement[index].value;
+          let left = leftArray.filter((value) => value !== data);
+          setLeftArray(left);
+          rightArray.push(data);
+          setRightArray(rightArray);
+          break; // Important
+        }
+      }
+    };
+
+    const moveLeft = () => {
+      let rightElement = document.getElementsByClassName("check-right");
+      for (let index = 0; index < rightElement.length; index++) {
+        if (rightElement[index].checked) {
+          let data = rightElement[index].value;
+          let right = rightArray.filter((value) => value !== data);
+          setRightArray(right);
+          leftArray.push(data);
+          setLeftArray(leftArray);
+          break; // Important
+        }
+      }
+    };
+
+    const clicked = () => {
+      let checkboxes = document.querySelectorAll(".check-left, .check-right");
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      let allLabels = document.querySelectorAll(".labels");
+      allLabels.forEach((label) => {
+        label.classList.remove("clicked");
+      });
+
+      let label = event.target;
+      label.classList.add("clicked");
+      label.checked = true;
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Sampling template</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="text-muted">Add information of Sampling template</p>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Template Name
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="exampleFormControlInput1"
+              placeholder="Template Name"
+              value={SamplingTemplate?.templateName}
+              onChange={(e) => setSamplingTemplate({ ...SamplingTemplate, templateName: e.target.value })}
+
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Unique Code
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="exampleFormControlInput1"
+              placeholder="Unique Code"
+              value={SamplingTemplate?.uniqueCode}
+              onChange={(e) => setSamplingTemplate({ ...SamplingTemplate, uniqueCode: e.target.value })}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Sample Type
+            </label>
+            <select className="form-select" aria-label="Default select example"
+              value={SamplingTemplate?.sampleType}
+              onChange={(e) => setSamplingTemplate({ ...SamplingTemplate, sampleType: e.target.value })}
+            >
+              <option selected>Select...</option>
+              <option value="Raw Material">Raw Material</option>
+              <option value="Hydrochloric Acid">Hydrochloric Acid</option>
+              <option value="Hcl">Hcl</option>
+              <option value="Petrochemical">Petrochemical</option>
+            </select>
+          </div>
+          <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+            Header
+          </div>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={headerRows}
+                onChange={handleHeaderRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={headerColumns}
+                onChange={handleHeaderColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
+          <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+            Body
+          </div>
+          <div className="d-flex">
+            <div className="w-100 m-3">
+              <h5>Available</h5>
+              <div
+                className="shadow p-2 rounded border overflow-y-auto"
+                style={{ height: "350px" }}
+              >
+                <ul className="list-group">
+                  {leftArray.map((data) => (
+                    <li
+                      key={data}
+                      className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
+                    >
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-left d-none"
+                      />
+                      <label
+                        className="labels cursor-pointer bg-dark-subtle"
+                        htmlFor={data}
+                        onClick={clicked}
+                      >
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="m-auto justify-content-center">
+              <button
+                className="btn shadow py-1 px-3 mt-5 text-warning fs-4"
+                onClick={moveRight}
+              >
+                <TiArrowRightThick />
+              </button>
+              <button
+                className="btn shadow py-1 px-3 mt-2 text-warning fs-4"
+                onClick={moveLeft}
+              >
+                <TiArrowLeftThick />
+              </button>
+            </div>
+            <div className="w-100 m-3">
+              <h5>Selected</h5>
+              <div
+                className="shadow p-2 rounded border overflow-y-auto"
+                style={{ height: "350px" }}
+              >
+                <ul className="list-group">
+                  {rightArray.map((data) => (
+                    <li
+                      key={data}
+                      className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
+                    >
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-right d-none"
+                      />
+                      <label
+                        className="labels cursor-pointer bg-dark-subtle"
+                        htmlFor={data}
+                        onClick={clicked}
+                      >
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+            Footer
+          </div>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Sampling template</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="text-muted">Add information of Sampling template</p>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Template Name
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="exampleFormControlInput1"
+              placeholder="Template Name"
+              name="templateName"
+              value={formData?.templateName||""}
+              onChange={handleChange}
+
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Unique Code
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="exampleFormControlInput1"
+              placeholder="Unique Code"
+              name="uniqueCode"
+              value={formData?.uniqueCode ||""}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Sample Type
+            </label>
+            <select className="form-select" aria-label="Default select example"
+              name="sampleType"
+              value={formData?.sampleType||""}
+              onChange={handleChange}
+
+            >
+              <option selected>Select...</option>
+              <option value="Raw Material">Raw Material</option>
+              <option value="Hydrochloric Acid">Hydrochloric Acid</option>
+              <option value="Hcl">Hcl</option>
+              <option value="Petrochemical">Petrochemical</option>
+            </select>
+          </div>
+          <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+            Header
+          </div>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={formData?. rows||""}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={formData?. columns||""}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable( renderTable, headerColumns)}</tbody>
+          </table>
+          <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+            Body
+          </div>
+          <div className="d-flex">
+            <div className="w-100 m-3">
+              <h5>Available</h5>
+              <div
+                className="shadow p-2 rounded border overflow-y-auto"
+                style={{ height: "350px" }}
+              >
+                <ul className="list-group">
+                  {leftArray.map((data) => (
+                    <li
+                      key={data}
+                      className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
+                    >
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-left d-none"
+                      />
+                      <label
+                        className="labels cursor-pointer bg-dark-subtle"
+                        htmlFor={data}
+                        onClick={clicked}
+                      >
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="m-auto justify-content-center">
+              <button
+                className="btn shadow py-1 px-3 mt-5 text-warning fs-4"
+                onClick={moveRight}
+              >
+                <TiArrowRightThick />
+              </button>
+              <button
+                className="btn shadow py-1 px-3 mt-2 text-warning fs-4"
+                onClick={moveLeft}
+              >
+                <TiArrowLeftThick />
+              </button>
+            </div>
+            <div className="w-100 m-3">
+              <h5>Selected</h5>
+              <div
+                className="shadow p-2 rounded border overflow-y-auto"
+                style={{ height: "350px" }}
+              >
+                <ul className="list-group">
+                  {rightArray.map((data) => (
+                    <li
+                      key={data}
+                      className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
+                    >
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-right d-none"
+                      />
+                      <label
+                        className="labels cursor-pointer bg-dark-subtle"
+                        htmlFor={data}
+                        onClick={clicked}
+                      >
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
+            Footer
+          </div>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+
+        </CModalFooter>
+      </CModal>
+    );
+  
+  }
+
+
+
   return (
     <>
       <div className="m-5 mt-3">
@@ -325,10 +865,11 @@ const SamplingTemplate = () => {
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal} />
+          <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
         )}
 
         {isModalsOpen && (
@@ -338,322 +879,20 @@ const SamplingTemplate = () => {
             onClose={handleCloseModals}
             columns={columns}
             onDataUpload={handleExcelDataUpload}
+          />)}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
           />
         )}
       </div>
     </>
   );
 };
-const StatusModal = (_props) => {
-  const [headerRows, setHeaderRows] = useState(0);
-  const [footerRows, setFooterRows] = useState(0);
-  const [headerColumns, setHeaderColumns] = useState(1);
-  const [footerColumns, setFooterColumns] = useState(1);
 
-  const handleHeaderRowsChange = (e) => {
-    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
-    setHeaderRows(value);
-  };
-
-  const handleHeaderColumnsChange = (e) => {
-    setHeaderColumns(parseInt(e.target.value, 10));
-  };
-
-  const handleFooterRowsChange = (e) => {
-    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
-    setFooterRows(value);
-  };
-
-  const handleFooterColumnsChange = (e) => {
-    setFooterColumns(parseInt(e.target.value, 10));
-  };
-
-  const renderTable = (rows, columns) => {
-    const tableRows = [];
-    for (let i = 0; i < rows; i++) {
-      const tableColumns = [];
-      for (let j = 0; j < columns; j++) {
-        tableColumns.push(
-          <td key={j} className="flex gap-4">
-            <CFormInput type="text" placeholder={`Lower Count `} />
-
-            <CFormSelect
-              className="mb-2"
-              options={[
-                {
-                  label: "Select Field",
-                  value: "1",
-                },
-              ]}
-            />
-          </td>
-        );
-      }
-      tableRows.push(<tr key={i}>{tableColumns}</tr>);
-    }
-    return tableRows;
-  };
-
-  const [leftArray, setLeftArray] = useState([
-    "Change Control",
-    "CAPA",
-    "Internal Audit",
-    "External Audit",
-    "Initiator",
-    "SQM",
-    "CTMS",
-    "Calendar",
-    "EHS",
-    "Environment",
-    "Documents",
-    "Deviation",
-  ]);
-
-  const [rightArray, setRightArray] = useState([
-    "Inspections",
-    "Audit",
-    "Refference",
-    "CCTT",
-  ]);
-
-  const moveRight = () => {
-    let leftElement = document.getElementsByClassName("check-left");
-    for (let index = 0; index < leftElement.length; index++) {
-      if (leftElement[index].checked) {
-        let data = leftElement[index].value;
-        let left = leftArray.filter((value) => value !== data);
-        setLeftArray(left);
-        rightArray.push(data);
-        setRightArray(rightArray);
-        break; // Important
-      }
-    }
-  };
-
-  const moveLeft = () => {
-    let rightElement = document.getElementsByClassName("check-right");
-    for (let index = 0; index < rightElement.length; index++) {
-      if (rightElement[index].checked) {
-        let data = rightElement[index].value;
-        let right = rightArray.filter((value) => value !== data);
-        setRightArray(right);
-        leftArray.push(data);
-        setLeftArray(leftArray);
-        break; // Important
-      }
-    }
-  };
-
-  const clicked = () => {
-    let checkboxes = document.querySelectorAll(".check-left, .check-right");
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = false;
-    });
-    let allLabels = document.querySelectorAll(".labels");
-    allLabels.forEach((label) => {
-      label.classList.remove("clicked");
-    });
-
-    let label = event.target;
-    label.classList.add("clicked");
-    label.checked = true;
-  };
-
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle>Add Sampling template</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p className="text-muted">Add information of Sampling template</p>
-        <div className="mb-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">
-            Template Name
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="exampleFormControlInput1"
-            placeholder="Template Name"
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">
-            Unique Code
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="exampleFormControlInput1"
-            placeholder="Unique Code"
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="exampleFormControlInput1" className="form-label">
-            Sample Type
-          </label>
-          <select className="form-select" aria-label="Default select example">
-            <option selected>Select...</option>
-            <option value="1">Raw Material</option>
-            <option value="3">Hydrochloric Acid</option>
-            <option value="2">Hcl</option>
-            <option value="2">Petrochemical</option>
-          </select>
-        </div>
-        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
-          Header
-        </div>
-        <div className="d-flex pb-2">
-          <div className="mb-3">
-            <CFormInput
-              type="number"
-              label="Rows"
-              placeholder="Rows"
-              value={headerRows}
-              onChange={handleHeaderRowsChange}
-            />
-          </div>
-          <div className="ps-3 w-50">
-            <CFormSelect
-              label="Columns"
-              placeholder="Columns"
-              options={[
-                { label: "2", value: "2" },
-                { label: "4", value: "4" },
-                { label: "6", value: "6" },
-              ]}
-              value={headerColumns}
-              onChange={handleHeaderColumnsChange}
-            />
-          </div>
-        </div>
-        <table className="table mb-3">
-          <tbody>{renderTable(headerRows, headerColumns)}</tbody>
-        </table>
-        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
-          Body
-        </div>
-        <div className="d-flex">
-          <div className="w-100 m-3">
-            <h5>Available</h5>
-            <div
-              className="shadow p-2 rounded border overflow-y-auto"
-              style={{ height: "350px" }}
-            >
-              <ul className="list-group">
-                {leftArray.map((data) => (
-                  <li
-                    key={data}
-                    className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
-                  >
-                    <input
-                      type="checkbox"
-                      value={data}
-                      id={data}
-                      className="check-left d-none"
-                    />
-                    <label
-                      className="labels cursor-pointer bg-dark-subtle"
-                      htmlFor={data}
-                      onClick={clicked}
-                    >
-                      {data}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="m-auto justify-content-center">
-            <button
-              className="btn shadow py-1 px-3 mt-5 text-warning fs-4"
-              onClick={moveRight}
-            >
-              <TiArrowRightThick />
-            </button>
-            <button
-              className="btn shadow py-1 px-3 mt-2 text-warning fs-4"
-              onClick={moveLeft}
-            >
-              <TiArrowLeftThick />
-            </button>
-          </div>
-          <div className="w-100 m-3">
-            <h5>Selected</h5>
-            <div
-              className="shadow p-2 rounded border overflow-y-auto"
-              style={{ height: "350px" }}
-            >
-              <ul className="list-group">
-                {rightArray.map((data) => (
-                  <li
-                    key={data}
-                    className="bg-secondary-subtle my-1 px-3 py-1 text-dark rounded"
-                  >
-                    <input
-                      type="checkbox"
-                      value={data}
-                      id={data}
-                      className="check-right d-none"
-                    />
-                    <label
-                      className="labels cursor-pointer bg-dark-subtle"
-                      htmlFor={data}
-                      onClick={clicked}
-                    >
-                      {data}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="header bg-secondary-subtle text-light fw-bolder mb-3">
-          Footer
-        </div>
-        <div className="d-flex pb-2">
-          <div className="mb-3">
-            <CFormInput
-              type="number"
-              label="Rows"
-              placeholder="Rows"
-              value={footerRows}
-              onChange={handleFooterRowsChange}
-            />
-          </div>
-          <div className="ps-3 w-50">
-            <CFormSelect
-              label="Columns"
-              placeholder="Columns"
-              options={[
-                { label: "2", value: "2" },
-                { label: "4", value: "4" },
-                { label: "6", value: "6" },
-              ]}
-              value={footerColumns}
-              onChange={handleFooterColumnsChange}
-            />
-          </div>
-        </div>
-        <table className="table mb-3">
-          <tbody>{renderTable(footerRows, footerColumns)}</tbody>
-        </table>
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 
 export default SamplingTemplate;
+
