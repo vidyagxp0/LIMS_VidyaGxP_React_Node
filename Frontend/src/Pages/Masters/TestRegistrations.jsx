@@ -39,30 +39,6 @@ const initialData = [
     testType: "PENDING",
     status: "INITIATED",
   },
-  {
-    sno: 3,
-    checkbox: "",
-    specId: "LMN",
-    productName: "Levetiracetam",
-    testName: "Another test",
-    testCode: "XYZ789",
-    method: "July 5th 24",
-    category: "Oct 5th 24",
-    testType: "IN REVIEW",
-    status: "DROPPED",
-  },
-  {
-    sno: 4,
-    checkbox: "",
-    specId: "ABC",
-    productName: "Oxcarbazepine",
-    testName: "Final test",
-    testCode: "DEF456",
-    method: "August 10th 24",
-    category: "Nov 10th 24",
-    testType: "REJECTED",
-    status: "REJECTED",
-  },
 ];
 
 const TestRegistration = () => {
@@ -77,7 +53,8 @@ const TestRegistration = () => {
     Active: 0,
     Inactive: 0,
   });
-
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
   useEffect(() => {
     const counts = {
       Active: 0,

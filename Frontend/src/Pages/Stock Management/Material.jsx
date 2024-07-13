@@ -33,51 +33,6 @@ const initialData = [
     Description: "Supplier 2",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    UniqueCode: "PK-003",
-    MaterialName: "PKG-003",
-    InvoiceNo: "INV-003",
-    Description: "Supplier 3",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    UniqueCode: "MT-004",
-    MaterialName: "MNT-004",
-    InvoiceNo: "INV-004",
-    Description: "Supplier 4",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    UniqueCode: "EQ-005",
-    MaterialName: "EQT-005",
-    InvoiceNo: "INV-005",
-    Description: "Supplier 5",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    UniqueCode: "CN-006",
-    MaterialName: "CON-006",
-    InvoiceNo: "INV-006",
-    Description: "Supplier 6",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    UniqueCode: "PC-007",
-    MaterialName: "PLA-007",
-    InvoiceNo: "INV-007",
-    Description: "Supplier 7",
-    status: "Active",
-  },
 ];
 
 
@@ -92,7 +47,8 @@ const Material = () => {
     Active: 0,
     Inactive: 0,
   });
-
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null); 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -100,6 +56,8 @@ const Material = () => {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
+  
+
 
   useEffect(() => {
     const counts = {
@@ -212,6 +170,28 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (newInstrument) => {
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          MaterialName: newInstrument.MaterialName,
+          Description: newInstrument.Description,
+          UniqueCode:"000",
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Material</h1>
@@ -248,6 +228,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       <MaterialModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal

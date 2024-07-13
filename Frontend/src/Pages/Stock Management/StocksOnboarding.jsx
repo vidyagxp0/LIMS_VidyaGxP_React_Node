@@ -39,66 +39,6 @@ const initialData = [
     status: "Inactive",
     Location: "USA",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    MaterialType: "Packaging",
-    MaterialName: "PKG-003",
-    InvoiceNo: "INV-003",
-    SupplierName: "Supplier 3",
-    VendorCode: "VC-003",
-    ApprovedBy: "Manager C",
-    status: "Active",
-    Location: "Germany",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    MaterialType: "Maintenance",
-    MaterialName: "MNT-004",
-    InvoiceNo: "INV-004",
-    SupplierName: "Supplier 4",
-    VendorCode: "VC-004",
-    ApprovedBy: "Manager D",
-    status: "Inactive",
-    Location: "UK",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    MaterialType: "Equipment",
-    MaterialName: "EQT-005",
-    InvoiceNo: "INV-005",
-    SupplierName: "Supplier 5",
-    VendorCode: "VC-005",
-    ApprovedBy: "Manager E",
-    status: "Active",
-    Location: "China",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    MaterialType: "Consumables",
-    MaterialName: "CON-006",
-    InvoiceNo: "INV-006",
-    SupplierName: "Supplier 6",
-    VendorCode: "VC-006",
-    ApprovedBy: "Manager F",
-    status: "Inactive",
-    Location: "Japan",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    MaterialType: "Plant Configuration",
-    MaterialName: "PLA-007",
-    InvoiceNo: "INV-007",
-    SupplierName: "Supplier 7",
-    VendorCode: "VC-007",
-    ApprovedBy: "Manager G",
-    status: "Active",
-    Location: "Australia",
-  },
 ];
 
 const StocksOnboarding = () => {
@@ -112,7 +52,8 @@ const StocksOnboarding = () => {
     Active: 0,
     Inactive: 0,
   });
-
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null); 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -237,6 +178,23 @@ const StocksOnboarding = () => {
     setData(newData);
     console.log("Deleted item:", item);
   };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  
 
   return (
     <div className="p-4">

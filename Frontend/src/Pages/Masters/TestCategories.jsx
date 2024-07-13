@@ -1,14 +1,35 @@
-import React, { useState } from 'react'
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import React, { useEffect, useState } from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
 import "../../Pages/StorageCondition/StorageCondition.css";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
-import ImportModal from '../Modals/importModal';
+import ImportModal from "../Modals/importModal";
 
 const initialData = [
   {
@@ -33,96 +54,7 @@ const initialData = [
     reviewDate: "2024-06-02",
     status: "APPROVED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    categoryName: "Category 3",
-    uniqueCode: "UC003",
-    description: "Description 3",
-    addedOn: "2024-01-03",
-    effectFrom: "2024-01-03",
-    reviewDate: "2024-06-03",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    categoryName: "Category 4",
-    uniqueCode: "UC004",
-    description: "Description 4",
-    addedOn: "2024-01-04",
-    effectFrom: "2024-01-04",
-    reviewDate: "2024-06-04",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    categoryName: "Category 5",
-    uniqueCode: "UC005",
-    description: "Description 5",
-    addedOn: "2024-01-05",
-    effectFrom: "2024-01-05",
-    reviewDate: "2024-06-05",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    categoryName: "Category 6",
-    uniqueCode: "UC006",
-    description: "Description 6",
-    addedOn: "2024-01-06",
-    effectFrom: "2024-01-06",
-    reviewDate: "2024-06-06",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    categoryName: "Category 7",
-    uniqueCode: "UC007",
-    description: "Description 7",
-    addedOn: "2024-01-07",
-    effectFrom: "2024-01-07",
-    reviewDate: "2024-06-07",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    categoryName: "Category 8",
-    uniqueCode: "UC008",
-    description: "Description 8",
-    addedOn: "2024-01-08",
-    effectFrom: "2024-01-08",
-    reviewDate: "2024-06-08",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    categoryName: "Category 9",
-    uniqueCode: "UC009",
-    description: "Description 9",
-    addedOn: "2024-01-09",
-    effectFrom: "2024-01-09",
-    reviewDate: "2024-06-09",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    categoryName: "Category 10",
-    uniqueCode: "UC010",
-    description: "Description 10",
-    addedOn: "2024-01-10",
-    effectFrom: "2024-01-10",
-    reviewDate: "2024-06-10",
-    status: "REINITIATED",
-  },
 ];
-
 
 function Specifications() {
   const [data, setData] = useState(initialData);
@@ -131,6 +63,8 @@ function Specifications() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -153,7 +87,6 @@ function Specifications() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-   
   };
 
   const handleCheckboxChange = (index) => {
@@ -162,44 +95,8 @@ function Specifications() {
     setData(newData);
   };
 
+ 
 
-  const StatusModal = (_props) => {
-    return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-        <CModalHeader>
-          <CModalTitle>Add Test Category</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Add information of Test Category</p>
-  
-          <CFormInput
-            className='mb-3'
-            type="text"
-            label="Name"
-            placeholder="Category Name "
-          />
-          <CFormInput
-            className='mb-3'
-            type="text"
-            label="Unique Code"
-            placeholder="Unique Code "
-          />
-          <CFormInput
-            className='mb-3'
-            type="text"
-            label="Description"
-            placeholder="Description"
-          />
-          
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-          <CButton color="primary">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    );
-  };
-  
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -226,7 +123,6 @@ function Specifications() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
-        
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
@@ -245,8 +141,8 @@ function Specifications() {
       reviewDate: item["Review Date"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
@@ -262,11 +158,194 @@ function Specifications() {
     setViewModalData(false);
   };
 
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [testCategoryData, setTestCategory] = useState({
+      categoryName: "",
+      uniqueCode: "",
+      description: "",
+    });
+
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    const handleAdd = () => {
+      const newCondition = {
+        categoryName: testCategoryData.categoryName,
+        uniqueCode: testCategoryData.uniqueCode,
+        description: testCategoryData.description,
+        addedOn: currentDate,
+        effectFrom: currentDate,
+        reviewDate: currentDate,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Test Category</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information of Test Category</p>
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Category Name"
+            name="categoryName"
+            value={testCategoryData.categoryName}
+            onChange={(e) => {
+              setTestCategory({
+                ...testCategoryData,
+                categoryName: e.target.value,
+              });
+            }}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code "
+            name="uniqueCode"
+            value={testCategoryData.uniqueCode}
+            onChange={(e) => {
+              setTestCategory({
+                ...testCategoryData,
+                uniqueCode: e.target.value,
+              });
+            }}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            placeholder="Description"
+            name="description"
+            value={testCategoryData.description}
+            onChange={(e) => {
+              setTestCategory({
+                ...testCategoryData,
+                description: e.target.value,
+              });
+            }}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const currentDate = new Date().toISOString().split("T")[0];
+
+  
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Test Category</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information of Test Category</p>
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Category Name"
+            name="categoryName"
+            value={formData?.categoryName||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code "
+            name="uniqueCode"
+            value={formData?.uniqueCode||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            placeholder="Description"
+            name="description"
+            value={formData?.description||""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
   return (
@@ -280,24 +359,20 @@ function Specifications() {
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
             <Dropdown
-             options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
               value={statusFilter}
               onChange={setStatusFilter}
             />
           </div>
           <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Test Categories"
               color="blue"
@@ -311,18 +386,39 @@ function Specifications() {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
       </div>
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} />}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+
+{editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </>
   );
 }
 
 export default Specifications;
-
-
-

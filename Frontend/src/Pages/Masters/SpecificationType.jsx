@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -38,63 +38,7 @@ const initialData = [
     specificationType: "Type 2",
     addedOn: "2024-01-02",
     status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    specificationType: "Type 3",
-    addedOn: "2024-01-03",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    specificationType: "Type 4",
-    addedOn: "2024-01-04",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    specificationType: "Type 5",
-    addedOn: "2024-01-05",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    specificationType: "Type 6",
-    addedOn: "2024-01-06",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    specificationType: "Type 7",
-    addedOn: "2024-01-07",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    specificationType: "Type 8",
-    addedOn: "2024-01-08",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    specificationType: "Type 9",
-    addedOn: "2024-01-09",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    specificationType: "Type 10",
-    addedOn: "2024-01-10",
-    status: "Inactive",
-  },
+  }
 ];
 
 function SpecificationType() {
@@ -104,6 +48,8 @@ function SpecificationType() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("Active");
+  const [editModalData, setEditModalData] = useState(null);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -133,12 +79,47 @@ function SpecificationType() {
     setData(newData);
   };
 
-  const StatusModal = (_props) => {
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
     return (
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
       >
         <CModalHeader>
           <CModalTitle>Update specification type</CModalTitle>
@@ -151,13 +132,16 @@ function SpecificationType() {
             type="text"
             label="Specification Type Name"
             placeholder="Specification Type Name"
+            name="specificationType"
+            value={formData.specificationType||""}
+            onChange={handleChange}
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary">Submit</CButton>
+          <CButton color="primary" onClick={handleSave}>Submit</CButton>
         </CModalFooter>
       </CModal>
     );
@@ -257,6 +241,7 @@ function SpecificationType() {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
       </div>
       {isModalsOpen && (
@@ -268,8 +253,13 @@ function SpecificationType() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+{editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
