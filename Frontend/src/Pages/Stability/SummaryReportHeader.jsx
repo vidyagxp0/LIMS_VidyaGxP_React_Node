@@ -449,14 +449,14 @@ function SummaryReportHeader() {
     };
 
     
-    const handleAdd = ()=>{
-      const newCondition = {
-        productCaption:productCaption,
-        reportTitle:reportTitle,
-        action:[],
-      }
-      onAdd(newCondition)
-    }
+    // const handleAdd = ()=>{
+    //   const newCondition = {
+    //     productCaption:productCaption,
+    //     reportTitle:reportTitle,
+    //     action:[],
+    //   }
+    //   onAdd(newCondition)
+    // }
     
     return (
       <CModal
