@@ -110,7 +110,7 @@ function SampleType() {
       prefix: "",
       daysToComplete: 0,
     });
-    console.log(statusData,"hg ")
+    console.log(statusData, "hg ");
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
