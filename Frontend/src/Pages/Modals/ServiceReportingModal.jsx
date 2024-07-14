@@ -8,15 +8,35 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const ServiceReportingModal = (_props) => {
+const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
+
+  const [serviceReporting, setServiceReporting] = useState({
+    problemId: "",
+    instrumentID: "",
+    moduleId: "",
+    problemInBrief: "",
+    problemInDetail: "",
+    jobDetails: ""
+   });
+   const handleInputChange = (field, value) => {
+    const updatedData = { ...serviceReporting, [field]: value };
+    setServiceReporting(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...serviceReporting });
+    closeModal();
+  };
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="xl"
       >
         <CModalHeader>
@@ -29,12 +49,14 @@ const ServiceReportingModal = (_props) => {
             label="Problem ID"
             className="mb-3"
             options={["Select...", { label: "SHMDZ" }]}
-            placeholder="Select... "
+            placeholder="Select..."
+            value={serviceReporting.problemId}
+            onChange={(e) => handleInputChange("problemId", e.target.value)}
           />
           <CFormInput
             type="text"
             label="Instrument (Instrument ID)"
-            placeholder="hplc "
+            placeholder="hplc"
             disabled
           />
           <CFormSelect
@@ -42,19 +64,25 @@ const ServiceReportingModal = (_props) => {
             label="Module ID"
             className="mb-3"
             options={["Select...", { label: "wl/wb/m/001" }]}
-            placeholder="Select... "
+            placeholder="Select..."
+            value={serviceReporting.moduleId}
+            onChange={(e) => handleInputChange("moduleId", e.target.value)}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Problem In Brief"
             placeholder="Problem In Brief "
+            value={serviceReporting.problemInBrief}
+            onChange={(e) => handleInputChange("problemInBrief", e.target.value)}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Problem In Details"
             placeholder="Problem In Details"
+            value={serviceReporting.problemInDetail}
+            onChange={(e) => handleInputChange("problemInDetail", e.target.value)}
           />
           <CFormInput
             type="file"
@@ -91,13 +119,15 @@ const ServiceReportingModal = (_props) => {
             className="mb-3"
             label="Job Details"
             placeholder=" Job Details"
+            value={serviceReporting.jobDetails}
+            onChange={(e) => handleInputChange("jobDetails", e.target.value)}
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary">Submit</CButton>
+          <CButton color="primary" onClick={handleFormSubmit}>Submit</CButton>
         </CModalFooter>
       </CModal>
     </div>
