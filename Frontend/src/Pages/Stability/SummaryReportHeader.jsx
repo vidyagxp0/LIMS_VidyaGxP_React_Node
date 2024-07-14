@@ -192,10 +192,11 @@ function SummaryReportHeader() {
     const [headerColumns, setHeaderColumns] = useState(1);
     const [footerColumns, setFooterColumns] = useState(1);
     const [numRows, setNumRows] = useState(0);
-      const [inputValue, setInputValue] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
     const [productCaption, setProductCaption] = useState("");
     const [formatNo, setFormatNo] = useState("");
     const [reportTitle, setReportTitle] = useState("");
+    
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
