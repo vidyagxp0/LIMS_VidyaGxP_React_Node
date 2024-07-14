@@ -300,7 +300,7 @@ function App() {
               path="/Masters/Specifications"
               element={<Specifications />}
             />
-             <Route
+            <Route
               path="/Masters/SpecificationsTestProcedure"
               element={<SpecificationsTestProcedure />}
             />

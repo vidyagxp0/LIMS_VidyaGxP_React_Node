@@ -208,7 +208,7 @@ const StorageChamber = () => {
     setLastStatus(nextStatus);
     setIsModalOpen(false);
   };
-  
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
@@ -218,8 +218,7 @@ const StorageChamber = () => {
     const [serialNo, setSerialNo] = useState("");
     const [location, setLocation] = useState("");
     const [comments, setComments] = useState("");
-    const [stabilityStorageCondition, setStabilityStorageCondition] =
-      useState("");
+    const [stabilityStorageCondition, setStabilityStorageCondition] = useState("");
     const [numberOfShelfs, setNumberOfShelfs] = useState("");
     const [maximunNumberOfShelfs, setMaximunNumberOfShelfs] = useState("");
     const handleInputChange = (e) => {

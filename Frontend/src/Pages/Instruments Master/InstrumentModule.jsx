@@ -1,66 +1,4 @@
-// const StatusModal = (_props) => {
-//     return (
-//         <>
-      
-//         </>
-//     )
-// }
-
-// const DeleteModal = (_props) => {
-//     return (
-//         <CModal
-//             alignment="center"
-//             visible={_props.visible}
-//             onClose={_props.closeModal}
-//             size="lg"
-//         >
-//             <CModalHeader>
-//                 <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//                     Delete Instrument Module
-//                 </CModalTitle>
-//             </CModalHeader>
-//             <div
-//                 className="modal-body"
-//                 style={{
-//                     fontSize: "1.2rem",
-//                     fontWeight: "500",
-//                     lineHeight: "1.5",
-//                     marginBottom: "1rem",
-//                     columnGap: "0px",
-//                     border: "0px !important",
-//                 }}
-//             >
-//                 <p>Are you sure you want to delete this instrument module { }?</p>
-//             </div>
-//             <CModalFooter>
-//                 <CButton
-//                     color="secondary"
-//                     onClick={_props.closeModal}
-//                     style={{
-//                         marginRight: "0.5rem",
-//                         fontWeight: "500",
-//                     }}
-//                 >
-//                     Cancel
-//                 </CButton>
-//                 <CButton
-//                     color="danger"
-//                     onClick={_props.confirmDelete}
-//                     style={{
-//                         fontWeight: "500",
-//                         color: "white",
-//                     }}
-//                 >
-//                     Delete
-//                 </CButton>
-//             </CModalFooter>
-//         </CModal>
-//     );
-// };
-
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -75,106 +13,35 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
 const initialData = [
-    {
-      checkbox: false,
-      sno: 1,
-      Category: "Product 1",
-      Module: "Description 1",
-      ModuleId: "MOD001",
-      Make: "Brand A",
-      Model: "Model X",
-      ManufacturerNo: "MFG12345",
-      SuppliedBy: "Supplier 1",
-      InstallOn: "2024-06-01",
-      ExpiresOn: "2025-06-01",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 2,
-      Category: "Product 2",
-      Module: "Description 2",
-      ModuleId: "MOD002",
-      Make: "Brand B",
-      Model: "Model Y",
-      ManufacturerNo: "MFG67890",
-      SuppliedBy: "Supplier 2",
-      InstallOn: "2024-06-02",
-      ExpiresOn: "2025-06-02",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 3,
-      Category: "Product 3",
-      Module: "Description 3",
-      ModuleId: "MOD003",
-      Make: "Brand C",
-      Model: "Model Z",
-      ManufacturerNo: "MFG11111",
-      SuppliedBy: "Supplier 3",
-      InstallOn: "2024-06-03",
-      ExpiresOn: "2025-06-03",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 4,
-      Category: "Product 4",
-      Module: "Description 4",
-      ModuleId: "MOD004",
-      Make: "Brand D",
-      Model: "Model W",
-      ManufacturerNo: "MFG22222",
-      SuppliedBy: "Supplier 4",
-      InstallOn: "2024-06-04",
-      ExpiresOn: "2025-06-04",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 5,
-      Category: "Product 5",
-      Module: "Description 5",
-      ModuleId: "MOD005",
-      Make: "Brand E",
-      Model: "Model V",
-      ManufacturerNo: "MFG33333",
-      SuppliedBy: "Supplier 5",
-      InstallOn: "2024-06-05",
-      ExpiresOn: "2025-06-05",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 6,
-      Category: "Product 6",
-      Module: "Description 6",
-      ModuleId: "MOD006",
-      Make: "Brand F",
-      Model: "Model U",
-      ManufacturerNo: "MFG44444",
-      SuppliedBy: "Supplier 6",
-      InstallOn: "2024-06-06",
-      ExpiresOn: "2025-06-06",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 7,
-      Category: "Product 7",
-      Module: "Description 7",
-      ModuleId: "MOD007",
-      Make: "Brand G",
-      Model: "Model T",
-      ManufacturerNo: "MFG55555",
-      SuppliedBy: "Supplier 7",
-      InstallOn: "2024-06-07",
-      ExpiresOn: "2025-06-07",
-      status: "Active",
-    },
-  ];
-  
+  {
+    checkbox: false,
+    sno: 1,
+    Category: "Product 1",
+    Module: "Description 1",
+    ModuleId: "MOD001",
+    Make: "Brand A",
+    Model: "Model X",
+    ManufacturerNo: "MFG12345",
+    SuppliedBy: "Supplier 1",
+    InstallOn: "2024-06-01",
+    ExpiresOn: "2025-06-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    Category: "Product 2",
+    Module: "Description 2",
+    ModuleId: "MOD002",
+    Make: "Brand B",
+    Model: "Model Y",
+    ManufacturerNo: "MFG67890",
+    SuppliedBy: "Supplier 2",
+    InstallOn: "2024-06-02",
+    ExpiresOn: "2025-06-02",
+    status: "Inactive",
+  },
+];
 
 const InstrumentModule = () => {
   const [data, setData] = useState(initialData);
@@ -183,13 +50,6 @@ const InstrumentModule = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
@@ -209,8 +69,6 @@ const InstrumentModule = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -279,7 +137,7 @@ const InstrumentModule = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       Category: item["Category"] || "",
       ModuleId: item["Module"] || "",
       Make: item["Make"] || "",
@@ -290,12 +148,11 @@ const InstrumentModule = () => {
       ExpiresOn: item["Expires On"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
-  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -307,10 +164,6 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -337,11 +190,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Instrument Category"
             color="blue"
@@ -356,10 +205,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <InstrumentModuleModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <InstrumentModuleModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -368,8 +214,14 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         />
       )}
 
-{isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );

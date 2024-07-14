@@ -38,17 +38,17 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
   };
 
   const [instrumentData, setInstrumentData] = useState({
-    instrumentCategory: "",
+    Category: "",
     instrumentCategoryDescription: "",
-    instrument: "",
-    instrumentId: "",
-    make: "",
-    model: "",
+    Instrument: "",
+    InstrumentId: "",
+    Made: "",
+    Model: "",
     fields: [],
     manufacturerSerialNo: "",
     capacitySize: "",
     equipNo: "",
-    installedAt: "",
+    InstalledAt: "",
     installedOn: "",
     warrantyExpiresOn: "",
     suppliedBy: "",
@@ -85,10 +85,8 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormSelect
             className="mb-3"
             label="Instrument Category"
-            value={instrumentData.instrumentCategory}
-            onChange={(e) =>
-              handleInputChange("instrumentCategory", e.target.value)
-            }
+            value={instrumentData.Category}
+            onChange={(e) => handleInputChange("Category", e.target.value)}
           >
             <option value="">Select...</option>
             <option value="chromatography">chromatography</option>
@@ -109,24 +107,24 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             label="Instrument"
             placeholder="Instrument"
-            value={instrumentData.instrument}
-            onChange={(e) => handleInputChange("instrument", e.target.value)}
+            value={instrumentData.Instrument}
+            onChange={(e) => handleInputChange("Instrument", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Instrument ID"
             placeholder="Instrument ID"
-            value={instrumentData.instrumentId}
-            onChange={(e) => handleInputChange("instrumentId", e.target.value)}
+            value={instrumentData.InstrumentId}
+            onChange={(e) => handleInputChange("InstrumentId", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Make"
             placeholder="Make"
-            value={instrumentData.make}
-            onChange={(e) => handleInputChange("make", e.target.value)}
+            value={instrumentData.Made}
+            onChange={(e) => handleInputChange("Made", e.target.value)}
           />
           <CRow className="d-flex align-items-center justify-content-center">
             <CCol sm={8}>
@@ -135,8 +133,8 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
                 type="text"
                 label="Model"
                 placeholder="Model"
-                value={instrumentData.model}
-                onChange={(e) => handleInputChange("model", e.target.value)}
+                value={instrumentData.Model}
+                onChange={(e) => handleInputChange("Model", e.target.value)}
               />
             </CCol>
             <CCol sm={4}>
@@ -210,8 +208,8 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             label="Installed At"
             placeholder="Installed At"
-            value={instrumentData.installedAt}
-            onChange={(e) => handleInputChange("installedAt", e.target.value)}
+            value={instrumentData.InstalledAt}
+            onChange={(e) => handleInputChange("InstalledAt", e.target.value)}
           />
           <CFormInput
             type="date"

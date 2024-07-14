@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +12,16 @@ import {
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InstrumentCategoryModal from "../Modals/InstrumentCategoryModal.jsx";
 import ViewModal from "../Modals/ViewModal";
-import ImportModal from "../Modals/importModal.jsx";
+import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -31,49 +40,9 @@ const initialData = [
     AddedOn: "2024-06-02",
     status: "Active",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    CategoryName: "Product 3",
-    Description: "Description 3",
-    AddedOn: "2024-06-03",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    CategoryName: "Product 4",
-    Description: "Description 4",
-    AddedOn: "2024-06-04",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    CategoryName: "Product 5",
-    Description: "Description 5",
-    AddedOn: "2024-06-05",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    CategoryName: "Product 6",
-    Description: "Description 6",
-    AddedOn: "2024-06-06",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    CategoryName: "Product 7",
-    Description: "Description 7",
-    AddedOn: "2024-06-07",
-    status: "Inactive",
-  },
 ];
 
-const InstrumentCategory = () => {
+const Registration = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -86,7 +55,89 @@ const InstrumentCategory = () => {
     REINITIATED: 0,
     APPROVED: 0,
     REJECTED: 0,
+    Active: 0,
+    Inactive: 0,
   });
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Edit Instrument Details</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            label="CategoryName"
+            placeholder="CategoryName"
+            name="CategoryName"
+            value={formData?.CategoryName || ""}
+            onChange={handleChange}
+          ></CFormInput>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            placeholder="Description"
+            name="Description"
+            value={formData?.Description || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>
+            Save Changes
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
@@ -98,13 +149,18 @@ const InstrumentCategory = () => {
 
   useEffect(() => {
     const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
       Active: 0,
       Inactive: 0,
     };
 
     data.forEach((item) => {
-      if (item.status === "Active") counts.Active++;
-      else if (item.status === "Inactive") counts.Inactive++;
+      if (item.CalibrationStatus === "Active") counts.Active++;
+      else if (item.CalibrationStatus === "Inactive") counts.Inactive++;
     });
 
     setCardCounts(counts);
@@ -121,13 +177,6 @@ const InstrumentCategory = () => {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-
-  const filteredData = data.filter((row) => {
-    return (
-      row.CategoryName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -147,6 +196,7 @@ const InstrumentCategory = () => {
     {
       header: "Actions",
       accessor: "action",
+      // eslint-disable-next-line react/prop-types
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon
@@ -157,11 +207,12 @@ const InstrumentCategory = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
-            key="delete"
             className="cursor-pointer"
+            onClick={() => handleDelete(row)}
           />
         </>
       ),
@@ -180,8 +231,34 @@ const InstrumentCategory = () => {
 
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Update data state with parsed Excel data
+    setIsModalsOpen(false);
   };
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          CategoryName: newInstrument.CategoryName,
+          Description: newInstrument.Description,
+          AddedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -193,10 +270,6 @@ const InstrumentCategory = () => {
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -211,7 +284,6 @@ const InstrumentCategory = () => {
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
           <Dropdown
             options={[
               { value: "All", label: "All" },
@@ -233,20 +305,23 @@ const InstrumentCategory = () => {
       </div>
       <Table
         columns={columns}
-        data={filteredData}
+        data={data}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <InstrumentCategoryModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+          onDataUpload={handleExcelDataUpload}
         />
       )}
       {isModalsOpen && (
@@ -258,7 +333,23 @@ const InstrumentCategory = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </div>
   );
 };
-export default InstrumentCategory;
+
+export default Registration;
