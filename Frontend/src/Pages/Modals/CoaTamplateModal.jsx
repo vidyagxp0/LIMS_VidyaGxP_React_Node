@@ -11,6 +11,15 @@ import {
 } from '@coreui/react';
 
 const CoaTamplateModal = (_props) => {
+  const [CaoData, setCaoData]=useState({
+    SampleType:"",
+    CoaType:"",
+    ReportTitle:"",
+    MaterialCaption:"",
+    SerialNo:"",
+    FormatNo:"",
+  })
+
   const [headerRows, setHeaderRows] = useState(0);
   const [footerRows, setFooterRows] = useState(0);
   const [headerColumns, setHeaderColumns] = useState(2);
@@ -68,6 +77,17 @@ const CoaTamplateModal = (_props) => {
     }
     return tableRows;
   };
+    const handleInputChange = (field, value) => {
+    const updatedData = { ...CaoData, [field]: value };
+    setCaoData(updatedData);
+    console.log(updatedData);
+  };
+
+   const handleFormSubmit = () => { 
+    handleSubmit({ ...CaoData});
+    closeModal(); 
+  };
+
 
   return (
     <div>
@@ -94,6 +114,9 @@ const CoaTamplateModal = (_props) => {
               { label: 'Petrochemical', value: 'Petrochemical' },
               { label: 'Initiated Product', value: 'Initiated Product' },
             ]}
+            value={CaoData.SampleType}
+            onChange={(e) => handleInputChange("SampleType", e.target.value)}
+
           />
 
           <CFormSelect
@@ -109,30 +132,40 @@ const CoaTamplateModal = (_props) => {
               },
               { label: 'ERP', value: 'ERP' },
             ]}
+            value={CaoData.CoaType}
+            onChange={(e) => handleInputChange("CoaType", e.target.value)}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Report Title"
             placeholder="Report Title"
+            value={CaoData. ReportTitle}
+            onChange={(e) => handleInputChange("ReportTitle", e.target.value)}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Product/Material Caption"
             placeholder="Product/Material Caption"
+            value={CaoData.MaterialCaption}
+            onChange={(e) => handleInputChange("MaterialCaption", e.target.value)}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Serial No."
             placeholder="Serial Number"
+            value={CaoData.SerialNo}
+            onChange={(e) => handleInputChange("SerialNo", e.target.value)}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Format No."
             placeholder="Format No."
+            value={CaoData.FormatNo}
+            onChange={(e) => handleInputChange("FormatNo", e.target.value)}
           />
 
           <CModalTitle className="bg-light mb-3">Header</CModalTitle>

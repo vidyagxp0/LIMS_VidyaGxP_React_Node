@@ -1,29 +1,4 @@
-// const StatusModal = (_props) => {
-//     return (
-//         <>
 
-//         </>
-//     )
-// }
-
-// const DeleteModal = (_props) => {
-//     return (
-//         <>
-//             <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-//                 <CModalHeader>
-//                     <CModalTitle>Delete Coa Template</CModalTitle>
-//                 </CModalHeader>
-//                 <CModalBody>
-//                     <p>Do you want to delete this Coa  Template <code>{_props.templateId}</code>?</p>
-//                 </CModalBody>
-//                 <CModalFooter>
-//                     <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//                     <CButton color="danger" onClick={_props.confirmDelete}>Delete</CButton>
-//                 </CModalFooter>
-//             </CModal>
-//         </>
-//     )
-// }
 
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
@@ -59,51 +34,6 @@ const initialData = [
     CoaType: "Type 2",
     UpdatedAt: "2024-06-02",
     status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    SampleType: "ST-003",
-    CoaId: "COA-003",
-    CoaType: "Type 3",
-    UpdatedAt: "2024-06-03",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    SampleType: "ST-004",
-    CoaId: "COA-004",
-    CoaType: "Type 4",
-    UpdatedAt: "2024-06-04",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    SampleType: "ST-005",
-    CoaId: "COA-005",
-    CoaType: "Type 5",
-    UpdatedAt: "2024-06-05",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    SampleType: "ST-006",
-    CoaId: "COA-006",
-    CoaType: "Type 6",
-    UpdatedAt: "2024-06-06",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    SampleType: "ST-007",
-    CoaId: "COA-007",
-    CoaType: "Type 7",
-    UpdatedAt: "2024-06-07",
-    status: "Active",
   },
 ];
 
