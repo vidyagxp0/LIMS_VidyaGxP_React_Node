@@ -14,6 +14,15 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import StockInventoryModal from "../Modals/StockInventoryModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import { Autocomplete, TextField } from "@mui/material";
 
 const initialData = [
   {
@@ -88,7 +97,7 @@ const StockInventory = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.MaterialName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.TruckNo.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -202,6 +211,153 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     closeModal();
   };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const top100Films = [
+    { title: "The Shawshank Redemption", year: 1994 },
+    { title: "The Godfather", year: 1972 },
+    { title: "The Godfather: Part II", year: 1974 },
+    { title: "The Dark Knight", year: 2008 },
+    { title: "12 Angry Men", year: 1957 },
+  ];
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible} 
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Inventory</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <label className="mb-2" htmlFor="material-name">
+              Material Name
+            </label>
+            <Autocomplete
+              disablePortal
+              id="material-name"
+              className="mb-3"
+              name="MaterialName"
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              renderInput={(params) => <TextField {...params} label="" />}
+             value={formData?.MaterialName||""}
+             onChange={handleChange}
+            />
+            <CFormInput
+              label="Received Date"
+              className="mb-3"
+              type="date"
+              name="revisedDate"
+              placeholder="Received Date"
+              value={formData?.revisedDate||""}
+              onChange={handleChange}
+            />
+            <label className="mb-2" htmlFor="supplier-name">
+              Supplier Name
+            </label>
+            <Autocomplete
+              disablePortal
+              id="supplier-name"
+              className="mb-3"
+              name="SupplierName"
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              renderInput={(params) => <TextField {...params} label="" />}
+              value={formData?.SupplierName||""}
+              onChange={ handleChange}
+            />
+            <CFormInput
+              label="Truck No."
+              className="mb-3"
+              name="TruckNo"
+              type="text"
+              placeholder="Truck No."
+              value={formData?.TruckNo||""}
+              onChange={ handleChange}
+            />
+            <CFormInput
+              label="Ch No."
+              className="mb-3"
+              type="text"
+              name="ChNo"
+              placeholder="Ch No."
+              value={formData?.ChNo||""}
+              onChange={ handleChange}
+            />
+            <CFormInput
+              label="Invoice Number"
+              className="mb-3"
+              type="text"
+              name="InvoiceNo"
+              placeholder="Invoice Number"
+              value={formData?.InvoiceNo||""}
+              onChange={ handleChange}
+            />
+            <CFormInput
+              label="Quantity In MT"
+              className="mb-3"
+              type="text"
+              name="QuantityInMt"
+              placeholder="Quantity In MT"
+              value={formData?.QuantityInMt||""}
+              onChange={ handleChange}
+            />
+            <CFormInput
+              label="Remarks"
+              className="mb-3"
+              type="text"
+              name="remarks"
+              placeholder="Remarks"
+              value={formData?.remarks||""}
+              onChange={ handleChange}
+            />
+            <div className="d-flex gap-3 mt-3">
+              <CButton color="light w-50" onClick={closeModal}>
+                &lt; Back
+              </CButton>
+              <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+            </div>
+          </CModalBody>
+        </CModal>
+      </div>
+    );
+  };
+  
+
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Inventory/Inventory Registration</h1>
@@ -234,6 +390,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <StockInventoryModal
         visible={isModalOpen}
@@ -249,6 +406,14 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       )}
        {isModalsOpen && (
         <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,94 +11,43 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InstrumentUsageModal from "../Modals/InstrumentUsageModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
-    {
-      checkbox: false,
-      sno: 1,
-      InstrumentID: "Product 1",
-      InstrumentCategory: "Description 1",
-      UsageCode: "MOD001",
-      ProductName: "Brand A",
-      ARNO: "Model X",
-      UsedFor: "MFG12345",
-      UsedBy: "Supplier 1",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 2,
-      InstrumentID: "Product 2",
-      InstrumentCategory: "Description 2",
-      UsageCode: "MOD002",
-      ProductName: "Brand B",
-      ARNO: "Model Y",
-      UsedFor: "MFG67890",
-      UsedBy: "Supplier 2",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 3,
-      InstrumentID: "Product 3",
-      InstrumentCategory: "Description 3",
-      UsageCode: "MOD003",
-      ProductName: "Brand C",
-      ARNO: "Model Z",
-      UsedFor: "MFG11111",
-      UsedBy: "Supplier 3",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 4,
-      InstrumentID: "Product 4",
-      InstrumentCategory: "Description 4",
-      UsageCode: "MOD004",
-      ProductName: "Brand D",
-      ARNO: "Model W",
-      UsedFor: "MFG22222",
-      UsedBy: "Supplier 4",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 5,
-      InstrumentID: "Product 5",
-      InstrumentCategory: "Description 5",
-      UsageCode: "MOD005",
-      ProductName: "Brand E",
-      ARNO: "Model V",
-      UsedFor: "MFG33333",
-      UsedBy: "Supplier 5",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 6,
-      InstrumentID: "Product 6",
-      InstrumentCategory: "Description 6",
-      UsageCode: "MOD006",
-      ProductName: "Brand F",
-      ARNO: "Model U",
-      UsedFor: "MFG44444",
-      UsedBy: "Supplier 6",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 7,
-      InstrumentID: "Product 7",
-      InstrumentCategory: "Description 7",
-      UsageCode: "MOD007",
-      ProductName: "Brand G",
-      ARNO: "Model T",
-      UsedFor: "MFG55555",
-      UsedBy: "Supplier 7",
-      status: "Active",
-    },
-  ];
-  
+  {
+    checkbox: false,
+    sno: 1,
+    InstrumentID: "Product 1",
+    InstrumentCategory: "Description 1",
+    UsageCode: "MOD001",
+    ProductName: "Brand A",
+    ARNO: "Model X",
+    UsedFor: "MFG12345",
+    UsedBy: "Supplier 1",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    InstrumentID: "Product 2",
+    InstrumentCategory: "Description 2",
+    UsageCode: "MOD002",
+    ProductName: "Brand B",
+    ARNO: "Model Y",
+    UsedFor: "MFG67890",
+    UsedBy: "Supplier 2",
+    status: "Inactive",
+  },
+];
 
 const InstrumentUsage = () => {
   const [data, setData] = useState(initialData);
@@ -109,13 +56,176 @@ const InstrumentUsage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Instrument usage</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information and Add Instrument Usage</p>
+
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Instrument (Instrument ID)"
+            placeholder="Select... "
+            options={[
+              "Select...",
+              { label: "en33/23" },
+              { label: "eqi/eng/163" },
+              { label: "ARZ001" },
+              { label: "Arz003" },
+              { label: "qc/bal/011" },
+              { label: "hplc" },
+            ]}
+            value={formData?.InstrumentID || ""}
+            name="InstrumentID"
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Instrument Category"
+            placeholder="chromatography "
+            name="InstrumentCategory"
+            value={formData?.InstrumentCategory || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Usage Code"
+            name="UsageCode"
+            placeholder="Usage Code"
+            value={formData?.UsageCode || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product Name"
+            name="ProductName"
+            placeholder="Product Name"
+            value={formData?.ProductName || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="A.R.No."
+            name="ARNO"
+            placeholder="A.R.No."
+            value={formData?.ARNO || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Used For"
+            placeholder="Used For"
+            name="UsedFor"
+            value={formData?.UsedFor || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Used By"
+            name="UsedBy"
+            placeholder="Used By"
+            value={formData?.UsedBy || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Used From"
+            placeholder=""
+            name="UsedFor"
+            value={formData?.UsedFrom || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Used To"
+            placeholder=""
+            name="UsedTo"
+            value={formData?.UsedTo || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Comment If Any"
+            placeholder="Comment"
+            name="Comment"
+            value={formData?.Comment || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
@@ -135,8 +245,6 @@ const InstrumentUsage = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -153,7 +261,7 @@ const InstrumentUsage = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ProductName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.ARNO.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -190,11 +298,13 @@ const InstrumentUsage = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
             key="delete"
             className="cursor-pointer"
+            onClick={() => handleDelete(row)}
           />
         </>
       ),
@@ -204,7 +314,7 @@ const InstrumentUsage = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       InstrumentID: item["Instrument ID"] || "",
       InstrumentCategory: item["Instrument Category"] || "",
       UsageCode: item["Usage Code"] || "",
@@ -214,12 +324,43 @@ const InstrumentUsage = () => {
       UsedBy: item["UsedBy"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
+    setIsModalsOpen(false);
   };
-  
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          InstrumentID: newInstrument.InstrumentID,
+          InstrumentCategory: newInstrument.InstrumentCategory,
+          UsageCode: newInstrument.UsageCode,
+          ProductName:newInstrument.ProductName,
+          ARNO: newInstrument.ARNO,
+          UsedFor: newInstrument.UsedFor,
+          UsedBy: newInstrument.UsedBy,
+          UsedFrom: newInstrument.UsedFrom,
+          UsedTo: newInstrument.UsedTo,
+          comment: newInstrument.Comment,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -231,10 +372,6 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -261,16 +398,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-          <ATMButton
-            text="Instrument Usage"
-            color="blue"
-            onClick={openModal}
-          />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Instrument Usage" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -279,10 +408,12 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <InstrumentUsageModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -292,7 +423,28 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

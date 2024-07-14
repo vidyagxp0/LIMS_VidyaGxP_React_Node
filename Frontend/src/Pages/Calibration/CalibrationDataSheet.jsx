@@ -79,51 +79,6 @@ const initialData = [
     QualitativeParameters: "Start 2",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    Uniquecode: "Product 3",
-    DataSheetName: "Seq 3",
-    QuantitativeParameters: "Info 3",
-    QualitativeParameters: "Start 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    Uniquecode: "Product 4",
-    DataSheetName: "Seq 4",
-    QuantitativeParameters: "Info 4",
-    QualitativeParameters: "Start 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    Uniquecode: "Product 5",
-    DataSheetName: "Seq 5",
-    QuantitativeParameters: "Info 5",
-    QualitativeParameters: "Start 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    Uniquecode: "Product 6",
-    DataSheetName: "Seq 6",
-    QuantitativeParameters: "Info 6",
-    QualitativeParameters: "Start 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    Uniquecode: "Product 7",
-    DataSheetName: "Seq 7",
-    QuantitativeParameters: "Info 7",
-    QualitativeParameters: "Start 7",
-    status: "INITIATED",
-  },
 ];
 
 
@@ -141,7 +96,7 @@ const CalibrationDataSheet = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
+  const [editModalData, setEditModalData] = useState(null); 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -267,6 +222,29 @@ setData(concatenateData ); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
   
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Uniquecode: newInstrument.Uniquecode,
+          DataSheetName: newInstrument.DataSheetName,
+          QuantitativeParameters: "QuantitativeParameters",
+          QualitativeParameters: "QualitativeParameters",
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   return (
     <div className="p-4">
@@ -339,6 +317,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
       <CalibrationDatasheetModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
