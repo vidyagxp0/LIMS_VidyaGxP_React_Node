@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
@@ -27,78 +27,7 @@ const initialData = [
       registeredOn: "2024-06-30",
       status: "Inactive",
     },
-    {
-      checkbox: false,
-      sno: 3,
-      fieldName: "Field 3",
-      fieldType: "Type A",
-      registeredBy: "User 3",
-      registeredOn: "2024-06-29",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 4,
-      fieldName: "Field 4",
-      fieldType: "Type C",
-      registeredBy: "User 4",
-      registeredOn: "2024-06-28",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 5,
-      fieldName: "Field 5",
-      fieldType: "Type A",
-      registeredBy: "User 5",
-      registeredOn: "2024-06-27",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 6,
-      fieldName: "Field 6",
-      fieldType: "Type B",
-      registeredBy: "User 6",
-      registeredOn: "2024-06-26",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 7,
-      fieldName: "Field 7",
-      fieldType: "Type C",
-      registeredBy: "User 7",
-      registeredOn: "2024-06-25",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 8,
-      fieldName: "Field 8",
-      fieldType: "Type A",
-      registeredBy: "User 8",
-      registeredOn: "2024-06-24",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 9,
-      fieldName: "Field 9",
-      fieldType: "Type B",
-      registeredBy: "User 9",
-      registeredOn: "2024-06-23",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 10,
-      fieldName: "Field 10",
-      fieldType: "Type C",
-      registeredBy: "User 10",
-      registeredOn: "2024-06-22",
-      status: "Inactive",
-    },
+
   ];
   
 
@@ -109,6 +38,8 @@ const SamplingField = () => {
     const [viewModalData, setViewModalData] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalsOpen, setIsModalsOpen] = useState(false);
+    const [lastStatus, setLastStatus] = useState("Inactive");
+    const [editModalData, setEditModalData] = useState(null)
     const handleOpenModals = () => {
       setIsModalsOpen(true);
     };
@@ -200,9 +131,160 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     const closeModal = () => {
       setIsModalOpen(false);
     };
+    const addNewStorageCondition = (newCondition) => {
+      const nextStatus = lastStatus === "Inactive" ? "Active" : "Inactive";
+      setData((prevData)=>[
+        ...prevData,
+        {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+      ])
+      setLastStatus(nextStatus)
+      setIsModalOpen(false);
+    }
 
+    const StatusModal = ({visible , closeModal,onAdd}) => {
+      const [numRows, setNumRows] = useState(0);
+      const [inputValue, setInputValue] = useState(0);
+      const [samplingField, setSamplingField] = useState({
+        fieldName: "",
+        fieldType: [],
+      });
+      const handleAdd = ()=>{
+        const newCondition = {
+          fieldName:samplingField.fieldName,
+          fieldType:samplingField.fieldType,
+          registeredBy:"USER0!",
+          registeredOn:"2020-20-20",
+          action:[],
+        }
+        onAdd(newCondition)
+      }
+      return (
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+            <CModalHeader>
+                <CModalTitle>Add Fields</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Field Name"
+                    placeholder="Sample Type Name"
+                    value={samplingField.fieldName}
+                    onChange={(e)=>setSamplingField({...samplingField , fieldName:e.target.value})}
+                />
+                <CFormSelect
+                    className="mb-3"
+                    type="select"
+                    label="Field Type"
+                    options={[
+                        "Select",
+                        { label: "Radio Button", value: "Radio Button" },
+                        { label: "Label", value: "Label" },
+                        { label: "Entry Field", value: "Entry Field" },
+                        { label: "Date Field", value: "Date Field" }
+                    ]}
+                    value={samplingField.fieldType}
+                    onChange={(e)=>setSamplingField({...samplingField , fieldType:e.target.value})}
+                />
+
+            </CModalBody>
+            <CModalFooter>
+                <CButton color="light" onClick={closeModal}>Back</CButton>
+                <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+            </CModalFooter>
+        </CModal>
+    );
+  
+}
+const openEditModal = (rowData) => {
+  setEditModalData(rowData);
+};
+
+const closeEditModal = () => {
+  setEditModalData(null);
+};
+const handleEditSave = (updatedData) => {
+  const newData = data.map((item) =>
+    item.sno === updatedData.sno ? updatedData : item
+  );
+  setData(newData);
+  setEditModalData(null);
+};
+
+  const EditModal = ({visible , closeModal,data, onSave}) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+  
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+  
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
     
+    useEffect(() => {
+      if(data){
+        setFormData(data);
+      }
+     
+    }, [data]);
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+  
+    const handleSave = () => {
+      onSave(formData);
+    };
 
+  return (
+    <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+            <CModalTitle>Add Fields</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+
+            <CFormInput
+                className="mb-3"
+                type="text"
+                label="Field Name"
+                placeholder="Sample Type Name"
+                value={formData?.fieldName||""}
+                onChange={handleChange}
+                name="fieldName"
+            />
+            <CFormSelect
+                className="mb-3"
+                type="select"
+                label="Field Type"
+                options={[
+                    "Select",
+                    { label: "Radio Button", value: "Radio Button" },
+                    { label: "Label", value: "Label" },
+                    { label: "Entry Field", value: "Entry Field" },
+                    { label: "Date Field", value: "Date Field" }
+                ]}
+                value={formData?.fieldType}
+                onChange={handleChange}
+                name="fieldType"
+            />
+
+        </CModalBody>
+        <CModalFooter>
+            <CButton color="light" onClick={closeModal}>Back</CButton>
+            <CButton color="primary" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+    </CModal>
+);
+
+}
     return (
         <>
             <div className="m-5 mt-3">
@@ -225,7 +307,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           <div className="float-right flex gap-4">
             <ATMButton 
             text="Import"
-            color='pink'
+            color="pink"
             onClick={handleOpenModals}
              />
             <ATMButton
@@ -241,54 +323,26 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
         />
       </div>
 
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} />
+        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
       )}
 
 {isModalsOpen && (
         <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
+       <EditModal
+        visible={Boolean(editModalData)}
+        closeModal={closeEditModal}
+        data={editModalData}
+        onSave={handleEditSave}
+      />
         </>
     );
 };
 
-const StatusModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-            <CModalHeader>
-                <CModalTitle>Add Fields</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
 
-                <CFormInput
-                    className="mb-3"
-                    type="text"
-                    label="Field Name"
-                    placeholder="Sample Type Name"
-                />
-                <CFormSelect
-                    className="mb-3"
-                    type="select"
-                    label="Field Type"
-                    options={[
-                        "Select",
-                        { label: "Radio Button", value: "Radio Button" },
-                        { label: "Label", value: "Label" },
-                        { label: "Entry Field", value: "Entry Field" },
-                        { label: "Date Field", value: "Date Field" }
-                    ]}
-                />
-
-            </CModalBody>
-            <CModalFooter>
-                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                <CButton color="primary">Submit</CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
-
-export default SamplingField
+export default SamplingField;
