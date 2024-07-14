@@ -208,7 +208,7 @@ const StorageChamber = () => {
     setLastStatus(nextStatus);
     setIsModalOpen(false);
   };
-  
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
