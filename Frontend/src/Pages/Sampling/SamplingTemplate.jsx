@@ -762,6 +762,7 @@ const SamplingTemplate = () => {
                 placeholder="Rows"
                 // value={footerRows}
                 // onChange={handleFooterRowsChange}
+                value={formData?. rows||""}
                 onChange={handleChange}
                 
 
@@ -776,8 +777,8 @@ const SamplingTemplate = () => {
                   { label: "4", value: "4" },
                   { label: "6", value: "6" },
                 ]}
-                value={footerColumns}
-                onChange={handleFooterColumnsChange}
+                value={formData?. Columns||""}
+                onChange={handleChange}
               />
             </div>
           </div>
