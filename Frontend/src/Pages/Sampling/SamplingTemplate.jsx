@@ -650,7 +650,7 @@ const SamplingTemplate = () => {
                 type="number"
                 label="Rows"
                 placeholder="Rows"
-                value={formData?. rows||""}
+                value={formData?. Rows||""}
                 onChange={handleChange}
               />
             </div>
@@ -663,9 +663,9 @@ const SamplingTemplate = () => {
                   { label: "4", value: "4" },
                   { label: "6", value: "6" },
                 ]}
-                value={formData?. columns||""}
+                value={formData?. Columns||""}
                 onChange={handleChange}
-              />
+              />   
             </div>
           </div>
           <table className="table mb-3">
@@ -760,8 +760,11 @@ const SamplingTemplate = () => {
                 type="number"
                 label="Rows"
                 placeholder="Rows"
-                value={footerRows}
-                onChange={handleFooterRowsChange}
+                // value={footerRows}
+                // onChange={handleFooterRowsChange}
+                onChange={handleChange}
+                
+
               />
             </div>
             <div className="ps-3 w-50">
