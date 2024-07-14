@@ -38,61 +38,6 @@ const initialData = [
     QuantityInMt: "30 MT",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    MaterialName: "PKG-003",
-    SupplierName: "PC-003",
-    TruckNo: "TRK-003",
-    ChNo: "CH-003",
-    InvoiceNo: "1007ch-57",
-    QuantityInMt: "15 MT",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    MaterialName: "MNT-004",
-    SupplierName: "PC-004",
-    TruckNo: "TRK-004",
-    ChNo: "CH-004",
-    InvoiceNo: "1008ch-58",
-    QuantityInMt: "40 MT",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    MaterialName: "EQT-005",
-    SupplierName: "PC-005",
-    TruckNo: "TRK-005",
-    ChNo: "CH-005",
-    InvoiceNo: "1009ch-59",
-    QuantityInMt: "50 MT",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    MaterialName: "CON-006",
-    SupplierName: "PC-006",
-    TruckNo: "TRK-006",
-    ChNo: "CH-006",
-    InvoiceNo: "1010ch-60",
-    QuantityInMt: "35 MT",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    MaterialName: "PLA-007",
-    SupplierName: "PC-007",
-    TruckNo: "TRK-007",
-    ChNo: "CH-007",
-    InvoiceNo: "1011ch-61",
-    QuantityInMt: "20 MT",
-    status: "Active",
-  },
 ];
 
 const StockInventory = () => {
@@ -106,7 +51,7 @@ const StockInventory = () => {
     Active: 0,
     Inactive: 0,
   });
-  
+  const [editModalData, setEditModalData] = useState(null); 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -232,6 +177,31 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (newInstrument) => {
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          MaterialName: newInstrument.MaterialName,
+          SupplierName: newInstrument.SupplierName,
+          TruckNo: newInstrument.TruckNo,
+          ChNo: newInstrument.ChNo,
+          InvoiceNo: newInstrument.InvoiceNo,
+          QuantityInMt: newInstrument.QuantityInMt,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Inventory/Inventory Registration</h1>
@@ -268,6 +238,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       <StockInventoryModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal

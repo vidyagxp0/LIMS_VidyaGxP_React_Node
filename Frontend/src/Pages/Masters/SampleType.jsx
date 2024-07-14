@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -110,7 +110,6 @@ function SampleType() {
       prefix: "",
       daysToComplete: 0,
     });
-    console.log(statusData, "hg ");
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
@@ -349,6 +348,264 @@ function SampleType() {
       </CModal>
     );
   };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Sample Type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sample Name"
+            placeholder="Sample Name"
+            name="sampleTypeName"
+            value={formData?.sampleTypeName||""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Prefix"
+            placeholder="Prefix"
+            name="prefix"
+            value={formData?.prefix||""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Days To Complete"
+            placeholder="Days To Complete"
+            name="daysToComplete"
+            value={formData?.daysToComplete||""}
+            onChange={handleChange}
+          />
+
+          <label className="line3" htmlFor="">
+            Selected Standard Fields Displays At Sample Registration
+          </label>
+          <FormGroup style={{ marginLeft: "20px" }}>
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Manufacturing Date"
+            />
+            <FormControlLabel control={<Checkbox />} label="Expiry Date" />
+            <FormControlLabel control={<Checkbox />} label="Batch No." />
+            <FormControlLabel control={<Checkbox />} label="Batch Size" />
+            <FormControlLabel control={<Checkbox />} label="Packing Type" />
+            <FormControlLabel control={<Checkbox />} label="Project" />
+            <FormControlLabel control={<Checkbox />} label="Supplier" />
+            <FormControlLabel control={<Checkbox />} label="Customer" />
+            <FormControlLabel control={<Checkbox />} label="Manufacturer" />
+            <FormControlLabel control={<Checkbox />} label="Priority" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Sampling Quantity"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Sample Reference No"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Recommended Reference Lot"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="W.S. Validity Period"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Storage Condition"
+            />
+            <FormControlLabel control={<Checkbox />} label="Storage Location" />
+            <FormControlLabel control={<Checkbox />} label="Comments" />
+          </FormGroup>
+
+          <FormControl style={{ margin: "20px" }}>
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Reserve Sample Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sampling Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Analyst Level Investigation Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sample Destruction Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sample Acceptance Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              TCI Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              SI Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              MGR Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              QA Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Reduced/Retesting Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+          </FormControl>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Update
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -450,6 +707,7 @@ function SampleType() {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
       </div>
       {isModalsOpen && (
@@ -471,6 +729,13 @@ function SampleType() {
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
+        {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />)}
     </>
   );
 }
