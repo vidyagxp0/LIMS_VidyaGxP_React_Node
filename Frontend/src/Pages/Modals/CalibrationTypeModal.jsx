@@ -6,16 +6,31 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const CalibrationTypeModal = (_props) => {
+const CalibrationTypeModal = ({ visible, closeModal, handleSubmit }) => {
+  const [calibrationType , setCalibrationType ] = useState({
+    CalibrationType : "",
+    CalibrationPrefix:"",
+  })
+
+  const handleChange = (field , value) => {
+    const updatedData = {...calibrationType, [field]:value }
+    setCalibrationType(updatedData)
+  };
+
+  const handleFormSubmit = (e) => {
+    handleSubmit({...calibrationType});
+    closeModal();
+  }
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
+        visible={visible}
+        onClose={closeModal}
+      > 
         <CModalHeader>
           <CModalTitle> Add Calibration Type</CModalTitle>
         </CModalHeader>
@@ -26,19 +41,23 @@ const CalibrationTypeModal = (_props) => {
             className="mb-3"
             type="text"
             placeholder="Calibration Type"
+            value={calibrationType.CalibrationType}
+            onChange={(e)=>handleChange("CalibrationType",e.target.value)}
           />
           <CFormInput
             label="Calibration Type Prefix"
             className="mb-3"
             type="text"
             placeholder="Calibration Type Prefix"
+            value={calibrationType.CalibrationPrefix}
+            onChange={(e)=>handleChange("CalibrationPrefix",e.target.value)}
           />
 
           <div className="d-flex gap-3 mt-4">
-            <CButton color="light w-50" onClick={_props.closeModal}>
+            <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50">Submit</CButton>
+            <CButton color="primary w-50" onClick={handleFormSubmit}>Submit</CButton>
           </div>
         </CModalBody>
       </CModal>

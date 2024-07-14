@@ -9,7 +9,7 @@ import {
 } from "@coreui/react";
 import "./CalibrationDatasheetModal.css";
 
-const CalibrationDatasheetModal = (_props) => {
+const CalibrationDatasheetModal = ({ visible, closeModal, handleSubmits }) => {
   const [showQuantitativeFields, setShowQuantitativeFields] = useState(false);
   const [showQualitativeFields, setShowQualitativeFields] = useState(false);
   const [quantitativeParams, setQuantitativeParams] = useState("");
@@ -76,13 +76,28 @@ const CalibrationDatasheetModal = (_props) => {
     console.log("Submitted!");
   };
 
+  const [calibrationDataSheet , setCalibrationDataSheet ] = useState({
+    DataSheetName : "",
+    Uniquecode:"",
+  })
+
+  const handleChange = (field , value) => {
+    const updatedData = {...calibrationDataSheet, [field]:value }
+    setCalibrationDataSheet(updatedData)
+  };
+
+  const handleFormSubmit = (e) => {
+    handleSubmit({...calibrationDataSheet});
+    closeModal();
+  }
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="xl"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Calibration Data Sheet</CModalTitle>
@@ -93,12 +108,16 @@ const CalibrationDatasheetModal = (_props) => {
             className="mb-3"
             type="text"
             placeholder="Name"
+            value={calibrationDataSheet.DataSheetName}
+            onChange={(e) => handleChange("DataSheetName" , e.target.value)}
           />
           <CFormInput
             label="Unique code"
             className="mb-3"
             type="text"
             placeholder=""
+            value={calibrationDataSheet.Uniquecode}
+            onChange={(e) => handleChange("Uniquecode" , e.target.value)}
           />
           <div className="parameter-section">
             <label className="checkbox-label">
@@ -171,7 +190,7 @@ const CalibrationDatasheetModal = (_props) => {
                   <button
                     className="btn btn-primary"
                     onClick={handleAddQualitative}
-                  >
+                  > 
                     Add
                   </button>
                 </div>
@@ -239,8 +258,8 @@ const CalibrationDatasheetModal = (_props) => {
               </div>
             ))}
           </div>
-          <div className="modal-footer">
-            <CButton color="light w-50" onClick={_props.closeModal}>
+          <div className="d-flex gap-3 mt-3">
+            <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
             <CButton color="primary w-50" onClick={handleSubmit}>

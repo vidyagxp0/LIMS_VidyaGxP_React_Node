@@ -13,6 +13,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import MaterialModal from "../Modals/MaterialModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import { CButton, CFormInput, CModal, CModalBody, CModalHeader, CModalTitle } from "@coreui/react";
 
 const initialData = [
   {
@@ -192,6 +193,82 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     closeModal();
   };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Material</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              label="Material Name"
+              className="mb-3"
+              type="text"
+              placeholder="Material Name"
+              name="MaterialName"
+              value={formData?.MaterialName||""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              label="Description"
+              className="mb-3"
+              type="text"
+              placeholder="Description"
+              name="Description"
+              value={formData?.Description||""}
+              onChange={handleChange}
+            />
+   
+            <div className="d-flex gap-3 mt-">
+              <CButton color="light w-50" onClick={closeModal}>
+                &lt; Back
+              </CButton>
+              <CButton color="primary w-50" onClick={handleSave}>Update Material</CButton>
+            </div>
+          </CModalBody>
+        </CModal>
+      </div>
+    );
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Material</h1>
@@ -224,6 +301,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <MaterialModal
         visible={isModalOpen}
@@ -240,6 +318,15 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
 
 {isModalsOpen && (
         <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+
+{editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
 
     </div>
