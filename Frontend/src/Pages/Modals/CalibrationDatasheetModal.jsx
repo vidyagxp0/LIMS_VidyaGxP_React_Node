@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -70,12 +70,6 @@ const CalibrationDatasheetModal = ({ visible, closeModal, handleSubmits }) => {
     setQualitativeParams(updatedParams);
   };
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    // Include both quantitativeParams and qualitativeParams as needed
-    console.log("Submitted!");
-  };
-
   const [calibrationDataSheet , setCalibrationDataSheet ] = useState({
     DataSheetName : "",
     Uniquecode:"",
@@ -87,18 +81,36 @@ const CalibrationDatasheetModal = ({ visible, closeModal, handleSubmits }) => {
   };
 
   const handleFormSubmit = (e) => {
-    handleSubmit({...calibrationDataSheet});
+    handleSubmits({...calibrationDataSheet});
     closeModal();
   }
 
+  useEffect(() => {
+    if (visible) {
+      setCalibrationDataSheet({
+        DataSheetName: "",
+        Uniquecode: "",
+      });
+      setShowQuantitativeFields(false);
+      setShowQualitativeFields(false);
+      setQuantitativeParams("");
+      setIsSetButtonEnabled(false);
+      setIsSetPointsModalVisible(false);
+      setNumSetPoints("");
+      setSetPoints([]);
+      setNumQualitativeParams("");
+      setQualitativeParams([]);
+    }
+  }, [visible]);
+
   return (
     <div>
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="lg"
-      >
+       <CModal
+         alignment="center"
+         visible={visible}
+         onClose={closeModal}
+         size="lg"
+       >
         <CModalHeader>
           <CModalTitle>Add Calibration Data Sheet</CModalTitle>
         </CModalHeader>
@@ -262,7 +274,7 @@ const CalibrationDatasheetModal = ({ visible, closeModal, handleSubmits }) => {
             <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50" onClick={handleSubmit}>
+            <CButton color="primary w-50" onClick={handleFormSubmit}>
               Submit
             </CButton>
           </div>

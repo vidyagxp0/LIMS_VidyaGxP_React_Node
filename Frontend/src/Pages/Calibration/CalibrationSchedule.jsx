@@ -15,85 +15,42 @@ import ViewModal from "../Modals/ViewModal";
 import { CCol } from "@coreui/react";
 import { PiDownloadBold } from "react-icons/pi";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import { FormControl, FormLabel } from "react-bootstrap";
+
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    UniqueCode: "Product 1",
-    CalibrationWorkflow: "Seq 1",
-    ScheduleDescription: "Info 1",
-    StartDate: "2024-06-01",
-    Frequency: "Monthly",
-    NextCalibrationDue: "2024-07-01",
+    uniqueCode: "Product 1",
+    calibrationWorkflow: "Seq 1",
+    scheduleDescription: "Info 1",
+    startDate: "2024-06-01",
+    frequency: "Monthly",
+    nextCalibrationDue: "2024-07-01",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    UniqueCode: "Product 2",
-    CalibrationWorkflow: "Seq 2",
-    ScheduleDescription: "Info 2",
-    StartDate: "2024-06-02",
-    Frequency: "Quarterly",
-    NextCalibrationDue: "2024-09-01",
+    uniqueCode: "Product 2",
+    calibrationWorkflow: "Seq 2",
+    scheduleDescription: "Info 2",
+    startDate: "2024-06-02",
+    frequency: "Quarterly",
+    nextCalibrationDue: "2024-09-01",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    UniqueCode: "Product 3",
-    CalibrationWorkflow: "Seq 3",
-    ScheduleDescription: "Info 3",
-    StartDate: "2024-06-03",
-    Frequency: "Yearly",
-    NextCalibrationDue: "2025-06-01",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    UniqueCode: "Product 4",
-    CalibrationWorkflow: "Seq 4",
-    ScheduleDescription: "Info 4",
-    StartDate: "2024-06-04",
-    Frequency: "Monthly",
-    NextCalibrationDue: "2024-07-01",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    UniqueCode: "Product 5",
-    CalibrationWorkflow: "Seq 5",
-    ScheduleDescription: "Info 5",
-    StartDate: "2024-06-05",
-    Frequency: "Quarterly",
-    NextCalibrationDue: "2024-09-01",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    UniqueCode: "Product 6",
-    CalibrationWorkflow: "Seq 6",
-    ScheduleDescription: "Info 6",
-    StartDate: "2024-06-06",
-    Frequency: "Yearly",
-    NextCalibrationDue: "2025-06-01",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    UniqueCode: "Product 7",
-    CalibrationWorkflow: "Seq 7",
-    ScheduleDescription: "Info 7",
-    StartDate: "2024-06-07",
-    Frequency: "Monthly",
-    NextCalibrationDue: "2024-07-01",
-    status: "INITIATED",
-  },
+ 
 ];
 
 const CalibrationSchedule = () => {
@@ -110,7 +67,7 @@ const CalibrationSchedule = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
+  const [editModalData, setEditModalData] = useState(null); 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -153,7 +110,7 @@ const CalibrationSchedule = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.UniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -169,12 +126,12 @@ const CalibrationSchedule = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Unique Code", accessor: "UniqueCode" },
-    { header: "CalibrationWorkflow", accessor: "CalibrationWorkflow" },
-    { header: "Schedule Description", accessor: "ScheduleDescription" },
-    { header: "Start Date	", accessor: "StartDate" },
-    { header: "Frequency", accessor: "Frequency" },
-    { header: "Next Calibration Due", accessor: "NextCalibrationDue" },
+    { header: "Unique Code", accessor: "uniqueCode" },
+    { header: "CalibrationWorkflow", accessor: "calibrationWorkflow" },
+    { header: "Schedule Description", accessor: "scheduleDescription" },
+    { header: "Start Date	", accessor: "startDate" },
+    { header: "Frequency", accessor: "frequency" },
+    { header: "Next Calibration Due", accessor: "nextCalibrationDue" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -204,12 +161,12 @@ const CalibrationSchedule = () => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
       sno: index + 1,
-      UniqueCode: item["Unique Code"] || "",
-      CalibrationWorkflow: item["CalibrationWorkflow"] || "",
-      ScheduleDescription: item["Schedule Description"] || "",
-      StartDate: item["Start Date"] || "",
-      Frequency: item["Frequency"] || "",
-      NextCalibrationDue: item["Next Calibration Due"] || "",
+      uniqueCode: item["Unique Code"] || "",
+      calibrationWorkflow: item["CalibrationWorkflow"] || "",
+      scheduleDescription: item["Schedule Description"] || "",
+      startDate: item["Start Date"] || "",
+      frequency: item["Frequency"] || "",
+      nextCalibrationDue: item["Next Calibration Due"] || "",
       status: item["Status"] || "",
     }));
 
@@ -238,6 +195,231 @@ const CalibrationSchedule = () => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
     console.log("Deleted item:", item);
+  };
+
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          uniqueCode: "000",
+          calibrationWorkflow: newInstrument.calibrationWorkFlow,
+          scheduleDescription:newInstrument.scheduleDescription,
+          startDate: newInstrument.startDate,
+          frequency: newInstrument.frequency,
+          nextCalibrationDue: "next",
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle className="font-bold">
+            Add Calibration Schedule
+          </CModalTitle>
+        </CModalHeader>
+  
+        <CModalBody>
+          <CFormSelect
+            className="mb-3"
+            label="Instrument Category"
+            options={[
+              { label: "Select Instrument Category", value: "" },
+              { label: "chromatography", value: "chromatography" },
+              { label: "weighing balance", value: "weighing-balance" },
+            ]}
+            value={formData?.instrumentCategory||""}
+            onChange={ handleChange}
+            name="instrumentCategory"
+          />
+          <CFormSelect
+            className="mb-3"
+            label="Calibration Type"
+            options={[
+              { label: "Select Calibration Type", value: "" },
+              { label: "yearly", value: "yearly" },
+              { label: "monthly", value: "monthly" },
+              { label: "daily", value: "daily" },
+            ]}
+            value={formData?.calibrationType||""}
+            onChange={ handleChange}
+            name="calibrationType"
+          />
+          <CFormSelect
+            className="mb-3"
+            label="Instrument (Instrument ID)"
+            options={["Select Instrument ID"]}
+            value={formData?.instrumentId||""}
+            onChange={ handleChange}
+            name="instrumentId"
+          />
+          <CFormSelect
+            className="mb-3"
+            label="Module (Module ID)"
+            options={["Select Module ID"]}
+            value={formData?.moduleId||""}
+            onChange={ handleChange}
+            name="moduleId"
+          />
+  
+          <FormLabel className="mt-3">
+            Calibration Work Flow
+          </FormLabel>
+          <div className="d-flex gap-4 mb-3">
+            <div>
+            <input
+              type="radio"
+              id="calibrationDataSheet"
+              name="calibrationWorkFlow"
+              value="calibrationDataSheet"
+              checked={formData?.calibrationWorkFlow === "calibrationDataSheet"||""}
+              onChange={ handleChange}
+             
+            />
+              <label htmlFor="calibrationDataSheet" className="ms-2">
+                Calibration Data Sheet
+              </label>
+            </div>
+            <div>
+            <input
+              type="radio"
+              id="sampleLoginTemplate"
+              name="calibrationWorkFlow"
+              value="sampleLoginTemplate"
+              checked={formData?.calibrationWorkFlow === "sampleLoginTemplate"||""}
+              onChange={ handleChange}
+            />
+              <label htmlFor="sampleLoginTemplate" className="ms-2">
+                Sample Login Template
+              </label>
+            </div>
+          </div>
+  
+          <CFormSelect
+            className="mb-3"
+            label="Calibration Datasheet"
+            options={[
+              { label: "Select Calibration Datasheet", value: "" },
+              { label: "Cal data sheet", value: "cal-data-sheet" },
+              { label: "Data sheet1", value: "data-sheet1" },
+            ]}
+            value={formData?.calibrationDataSheet||""}
+            onChange={ handleChange}
+            name="calibrationDataSheet"
+          />
+  
+          <div className="mb-3">
+            <label htmlFor="scheduleDescription" className="form-label">
+              Schedule Description
+            </label>
+            <CFormInput
+              id="scheduleDescription"
+              type="text"
+              placeholder="Schedule Description"
+              value={formData?.scheduleDescription||""}
+              onChange={ handleChange}
+              name="scheduleDescription"
+            />
+          </div>
+  
+          <div className="mb-3">
+            <label htmlFor="startDate" className="form-label">
+              Start Date
+            </label>
+            <CFormInput id="startDate" type="date" placeholder="" 
+            value={formData?.startDate||""}
+            onChange={ handleChange}
+            name="startDate"
+            />
+          </div>
+  
+          <CFormSelect
+            className="mb-3"
+            label="Frequency"
+            options={[
+              { label: "Select Frequency", value: "" },
+              { label: "Daily", value: "daily" },
+              { label: "Weekly", value: "weekly" },
+              { label: "Monthly", value: "monthly" },
+              { label: "Yearly", value: "yearly" },
+            ]}
+            value={formData?.frequency||""}
+            onChange={ handleChange}
+            name="frequency"
+          />
+  
+          <div className="mb-3">
+            <label htmlFor="tolerancePeriod" className="form-label">
+              Tolerance Period
+            </label>
+            <CFormInput
+              id="tolerancePeriod"
+              type="text"
+              placeholder="Tolerance Period"
+              value={formData?.tolerancePeriod||""}
+              onChange={ handleChange}
+              name="tolerancePeriod"
+            />
+            <span className="ms-2">Day(s)</span>
+          </div>
+  
+          <div className="d-flex gap-3 mt-4">
+            <CButton color="light w-50" onClick={closeModal}>
+              &lt; Back
+            </CButton>
+            <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+          </div>
+        </CModalBody>
+      </CModal>
+    );
   };
 
   return (
@@ -289,8 +471,14 @@ const CalibrationSchedule = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
-      <CalibrationScheduleModal visible={isModalOpen} closeModal={closeModal} />
+      <CalibrationScheduleModal 
+      visible={isModalOpen}
+       closeModal={closeModal}
+        handleSubmit={handleModalSubmit} />
+
+
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -305,6 +493,14 @@ const CalibrationSchedule = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+       {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>
