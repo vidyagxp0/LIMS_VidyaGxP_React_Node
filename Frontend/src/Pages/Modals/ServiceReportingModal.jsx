@@ -57,7 +57,8 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             label="Instrument (Instrument ID)"
             placeholder="hplc"
-            disabled
+            value={serviceReporting.instrumentID}
+            onChange={(e) => handleInputChange("instrumentID", e.target.value)}
           />
           <CFormSelect
             type="text"

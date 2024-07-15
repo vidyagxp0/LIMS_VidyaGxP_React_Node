@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
@@ -198,6 +198,19 @@ const ESampling = () => {
 };
 
 const StatusModal = (_props) => {
+  const [samplingConfigurationValue, setSamplingConfigurationValue] = useState("");
+
+  const handleValueChange = (event) => {
+    setSamplingConfigurationValue(event.target.value);
+  }
+
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setCurrentDate(today);
+  }, []);
+
   return (
     <CModal
       alignment="center"
@@ -213,14 +226,220 @@ const StatusModal = (_props) => {
           className="mb-3"
           type="select"
           label="Sampling Configuration"
+          value={samplingConfigurationValue}
+          onChange={handleValueChange}
           options={[
-            "Select",
+
             { label: "SC-072023-0000001", value: "SC-072023-0000001" },
             { label: "SC-072023-0000002", value: "SC-072023-0000002" },
             { label: "SC-072023-0000003", value: "SC-072023-0000003" },
             { label: "SC-072023-0000004", value: "SC-072023-0000004" },
+            { label: "SC-072023-0000005", value: "SC-072023-0000005" },
+            { label: "SC-072023-0000006", value: "SC-072023-0000006" },
+            { label: "SC-072023-0000007", value: "SC-072023-0000007" },
+            { label: "SC-072023-0000008", value: "SC-072023-0000008" },
+
           ]}
         />
+        {
+          samplingConfigurationValue === "SC-072023-0000001" && (
+
+            <>
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Batch No."
+                placeholder="Batch No."
+              />
+
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Container Name"
+                placeholder="Container Name"
+              />
+            </>
+          )
+        }
+
+        {
+          samplingConfigurationValue === "SC-072023-0000003" && (
+
+            <>
+              <CFormInput
+                className="mb-3"
+                type="date"
+                label="Manufacturing Date"
+                placeholder="Manufacturing Date"
+              />
+
+              <label className="mb-3">Cracks Observed</label>
+            <div className="flex gap-3">
+            <CFormCheck
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="Yes"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="No"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="NA"
+              />
+            </div>
+
+            </>
+          )
+        }
+
+{
+          samplingConfigurationValue === "SC-072023-0000004" && (
+
+            <>
+              <CFormInput
+                className="mb-3"
+                type="date"
+                label="Manufacturing Date"
+                placeholder="Manufacturing Date"
+              />
+
+              <label className="mb-3">Cracks Observed</label>
+            <div className="flex gap-3">
+            <CFormCheck
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="Yes"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="No"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="NA"
+              />
+
+            </div>
+            <CFormInput
+                className="mb-3"
+                type="text"
+                label="Batch No."
+                placeholder="Batch No."
+              />
+
+            </>
+          )
+        }
+
+        {
+          samplingConfigurationValue === "SC-072023-0000005" && (
+
+            <>
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Room is Clean"
+                placeholder="Room is Clean"
+              />
+              <CFormInput
+                className="mb-3"
+                type="date"
+                label="Manufacturing Date"
+                placeholder="Manufacturing Date"
+              />
+
+              <label className="mb-3">Cracks Observed</label>
+            <div className="flex gap-3">
+            <CFormCheck
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="Yes"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="No"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="NA"
+              />
+
+            </div>
+          
+
+            </>
+          )
+        }
+
+{
+          samplingConfigurationValue === "SC-072023-0000006" && (
+
+            <>
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Room is Clean"
+                placeholder="Room is Clean"
+              />
+              <CFormInput
+                className="mb-3"
+                type="date"
+                label="Manufacturing Date"
+                placeholder="Manufacturing Date"
+              />
+
+              <label className="mb-3">Cracks Observed</label>
+            <div className="flex gap-3">
+            <CFormCheck
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="Yes"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="No"
+              />
+              <CFormCheck
+                className="mb-3"
+                type="radio"
+                id="cracksObserved"
+                name="cracksObserved"
+                label="NA"
+              />
+
+            </div>
+          
+
+            </>
+          )
+        }
 
         <CFormInput
           className="mb-3"
@@ -274,6 +493,7 @@ const StatusModal = (_props) => {
         />
 
         <label className="mb-3">Sampling Conclusion</label>
+        <div className="flex gap-3">
         <CFormCheck
           type="radio"
           id="SamplingConclusionPass"
@@ -287,8 +507,10 @@ const StatusModal = (_props) => {
           name="SamplingConclusion"
           label="Fail"
         />
+        </div>
 
         <label className="mb-3">Check point passed</label>
+        <div className="flex gap-3">
         <CFormCheck
           type="radio"
           id="CheckPointPassedYes"
@@ -302,6 +524,8 @@ const StatusModal = (_props) => {
           name="CheckPointPassed"
           label="No"
         />
+</div>
+
 
         <CFormInput
           className="mb-3"
@@ -324,11 +548,12 @@ const StatusModal = (_props) => {
           disabled
         />
         <CFormInput
-          className="mb-3"
-          type="date"
-          label="Initiated On"
-          placeholder="05/24/2024"
-        />
+        className="mb-3"
+        type="date"
+        label="Initiated On"
+        value={currentDate}
+        readOnly
+      />
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>
