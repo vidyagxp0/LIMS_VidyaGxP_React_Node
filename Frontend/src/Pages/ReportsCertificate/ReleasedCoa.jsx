@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -16,6 +13,15 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
     {
@@ -38,58 +44,9 @@ const initialData = [
       SpecificationCode: "CH-002",
       status: "Inactive",
     },
-    {
-      checkbox: false,
-      sno: 3,
-      SampleType: "ST-003",
-      ProductMaterial: "COA-003",
-      ArNo: "Type 3",
-      GenericName: "2024-06-03",
-      SpecificationCode: "CH-003",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 4,
-      SampleType: "ST-004",
-      ProductMaterial: "COA-004",
-      ArNo: "Type 4",
-      GenericName: "2024-06-04",
-      SpecificationCode: "CH-004",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 5,
-      SampleType: "ST-005",
-      ProductMaterial: "COA-005",
-      ArNo: "Type 5",
-      GenericName: "2024-06-05",
-      SpecificationCode: "CH-005",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 6,
-      SampleType: "ST-006",
-      ProductMaterial: "COA-006",
-      ArNo: "Type 6",
-      GenericName: "2024-06-06",
-      SpecificationCode: "CH-006",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 7,
-      SampleType: "ST-007",
-      ProductMaterial: "COA-007",
-      ArNo: "Type 7",
-      GenericName: "2024-06-07",
-      SpecificationCode: "CH-007",
-      status: "Active",
-    },
-  ];
+   
   
+  ];
   
 
 const ReleasedCoa = () => {
@@ -105,6 +62,27 @@ const ReleasedCoa = () => {
   });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -226,6 +204,60 @@ setData(concatenateData ); // Update data state with parsed Excel data
     console.log("Deleted item:", item);
   };
 
+  const EditModal = ({visible , closeModal,data, onSave}) => {
+    const [formData, setFormData] = useState(data);
+
+    
+    useEffect(() => {
+      if(data){
+        setFormData(data);
+      }
+     
+    }, [data]);
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+  
+    const handleSave = () => {
+      onSave(formData);
+    };
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModalHeader>
+        <CModalTitle>New Storage Condition</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CFormInput
+          type="text"
+          label="Generic Name"
+          placeholder="Generic Name"
+          value={formData?.GenericName || ""}
+          onChange={handleChange}
+          name="GenericName"
+        />
+         <CFormInput
+          type="text"
+          label="Product Name"
+          placeholder="Product Name"
+          value={formData?.ProductMaterial || ""}
+          onChange={handleChange}
+          name="ProductMaterial"
+        />
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={closeModal}>
+          Cancel
+        </CButton>
+        <CButton color="primary" onClick={handleSave}>
+          Add
+        </CButton>
+      </CModalFooter>
+    </CModal>
+    );
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Released Coa</h1>
@@ -268,6 +300,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <InternalRegistrationModal
         visible={isModalOpen}
@@ -283,6 +316,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
       {isModalsOpen && (
         <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
+      <EditModal
+        visible={Boolean(editModalData)}
+        closeModal={closeEditModal}
+        data={editModalData}
+        onSave={handleEditSave}
+      />
     </div>
   );
 };

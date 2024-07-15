@@ -121,8 +121,9 @@ const ServiceReporting = () => {
               className="mb-3"
               options={["Select...", { label: "SHMDZ" }]}
               placeholder="Select..."
-              value={formData?.problemId || ""}
+              value={formData?.ProblemId || ""}
               onChange={handleChange}
+              name="ProblemId"
             />
             <CFormInput
               type="text"
@@ -136,9 +137,9 @@ const ServiceReporting = () => {
               className="mb-3"
               options={["Select...", { label: "wl/wb/m/001" }]}
               placeholder="Select..."
-              value={formData?.moduleId || ""}
+              value={formData?.ModuleId || ""}
               onChange={handleChange}
-              name="moduleId"
+              name="ModuleId"
             />
             <CFormInput
               type="text"

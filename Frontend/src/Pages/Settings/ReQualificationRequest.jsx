@@ -72,61 +72,7 @@ const initialData = [
     InitiatedOn: "BA-002",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    Analyst: "BA-003",
-    QualificationId: "BA-003",
-    QualificationType: "BA-003",
-    EmployeeId: "BA-003",
-    TestTechnique: "BA-003",
-    InitiatedOn: "BA-003",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    Analyst: "BA-004",
-    QualificationId: "BA-004",
-    QualificationType: "BA-004",
-    EmployeeId: "BA-004",
-    TestTechnique: "BA-004",
-    InitiatedOn: "BA-004",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    Analyst: "BA-005",
-    QualificationId: "BA-005",
-    QualificationType: "BA-005",
-    EmployeeId: "BA-005",
-    TestTechnique: "BA-005",
-    InitiatedOn: "BA-005",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    Analyst: "BA-006",
-    QualificationId: "BA-006",
-    QualificationType: "BA-006",
-    EmployeeId: "BA-006",
-    TestTechnique: "BA-006",
-    InitiatedOn: "BA-006",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    Analyst: "BA-007",
-    QualificationId: "BA-007",
-    QualificationType: "BA-007",
-    EmployeeId: "BA-007",
-    TestTechnique: "BA-007",
-    InitiatedOn: "BA-007",
-    status: "Inactive",
-  },
+ 
 ];
 
 
@@ -146,6 +92,9 @@ const ReQualifictionRequest = () => {
   });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  // const [editModalData, setEditModalData] = useState(null);
+  // const [editModalOpen, setEditModalOpen] = useState(false);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -274,6 +223,32 @@ const ReQualifictionRequest = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (nomination) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === nomination.sno ? nomination : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Analyst:nomination.analyst,
+          TestTechnique:nomination.testTechnique,
+          TotalExperience: nomination.totalExperience,
+          PastExperience: nomination.pastExperience,
+          JustificationforDirectNomination:nomination.justification,
+          AddedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Re-Qualification Request</h1>
@@ -338,6 +313,7 @@ const ReQualifictionRequest = () => {
       <RequalificationModalModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
