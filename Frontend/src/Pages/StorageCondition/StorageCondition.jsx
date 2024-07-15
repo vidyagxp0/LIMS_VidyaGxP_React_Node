@@ -63,9 +63,8 @@ function StorageLocation() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Inactive");
   const [editModalData, setEditModalData] = useState(null)
-
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -80,6 +79,10 @@ function StorageLocation() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
@@ -133,6 +136,7 @@ function StorageLocation() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
   const handleCheckboxChange = (index) => {
@@ -325,8 +329,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal}   onAdd={addNewStorageCondition}/>
       )}
-      {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      {isViewModalOpen && (
+        <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} />
       )}
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
