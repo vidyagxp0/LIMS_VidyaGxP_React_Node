@@ -283,7 +283,7 @@ const ChemicalRegitration = () => {
         </div>
         <div className="float-right flex gap-4">
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Add Usage" color="blue" onClick={openModal} />
+          <ATMButton text="Add Chemical" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table

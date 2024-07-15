@@ -27,7 +27,7 @@ const initialData = [
     sno: 1,
     ClientName: "Client 1",
     EmailAddress: "client1@example.com",
-    ContactNumber: "1234567890",
+    phone: "1234567890",
     Address: "Address 1",
     AddedOn: "2024-06-01",
     status: "Active",
@@ -37,7 +37,7 @@ const initialData = [
     sno: 2,
     ClientName: "Client 2",
     EmailAddress: "client2@example.com",
-    ContactNumber: "2345678901",
+    phone: "2345678901",
     Address: "Address 2",
     AddedOn: "2024-06-02",
     status: "Active",
@@ -106,7 +106,7 @@ const Clients = () => {
             className="mb-3"
             label="Client Name"
             name="ClientName"
-            placeholder="Bussiness Associate Name"
+            placeholder="Client Name"
             value={formData?.ClientName || ""}
             onChange={handleChange}
           />
@@ -123,17 +123,17 @@ const Clients = () => {
             type="email"
             className="mb-3"
             label="Email"
-            name="email"
-            placeholder="Email"
-            value={formData?.email || ""}
+            name="EmailAddress"
+            placeholder="EmailAddress"
+            value={formData?.EmailAddress || ""}
             onChange={handleChange}
           />
           <CFormInput
             type="number"
             className="mb-3"
-            name="Phone"
-            label="Phone"
-            placeholder="Phone"
+            name="phone"
+            label="phone"
+            placeholder="phone"
             value={formData?.phone || ""}
             onChange={handleChange}
           />
@@ -149,7 +149,7 @@ const Clients = () => {
           <CFormInput
             type="text"
             className="mb-3"
-            name="ContactPerson"
+            name="contactPerson"
             label="Contact Person"
             placeholder="Contact Person"
             value={formData?.contactPerson || ""}
@@ -165,7 +165,7 @@ const Clients = () => {
             onChange={handleChange}
           />
           <CFormInput
-            type="text"
+            type="number"
             className="mb-3"
             label="Tax Number"
             name="taxNumber"
@@ -174,11 +174,11 @@ const Clients = () => {
             onChange={handleChange}
           />
           <CFormInput
-            type="text"
+            type="number"
             className="mb-3"
             label="Fax"
             name="fax"
-            placeholder="Fax"
+            placeholder="fax"
             value={formData?.fax || ""}
             onChange={handleChange}
           />
@@ -196,7 +196,7 @@ const Clients = () => {
             className="mb-3"
             label="Name"
             name="name"
-            placeholder="Name"
+            placeholder="name"
             value={formData?.name || ""}
             onChange={handleChange}
           />
@@ -279,7 +279,7 @@ const Clients = () => {
     { header: "SrNo.", accessor: "sno" },
     { header: "Client Name", accessor: "ClientName" },
     { header: "Email Address", accessor: "EmailAddress" },
-    { header: "Contact Number", accessor: "ContactNumber" },
+    { header: "Contact Number", accessor: "phone" },
     { header: "Address", accessor: "Address" },
     { header: "Added On", accessor: "AddedOn" },
     { header: "Status", accessor: "status" },
@@ -314,7 +314,7 @@ const Clients = () => {
       sno: index + 1,
       ClientName: item["Client Name"] || "",
       EmailAddress: item["Email Address"] || "",
-      ContactNumber: item["Contact Number"] || "",
+      phone: item["Contact Number"] || "",
       Address: item["Address"] || "",
       AddedOn: item["Added On"] || "",
       status: item["Status"] || "",
@@ -327,6 +327,8 @@ const Clients = () => {
 
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
   const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
     if (editModalData) {
       const updatedList = data.map((item) =>
         item.sno === newInstrument.sno ? newInstrument : item
@@ -340,7 +342,7 @@ const Clients = () => {
           sno: prevData.length + 1,
           ClientName: newInstrument.ClientName,
           alternateName: newInstrument.alternateName,
-          email: newInstrument.email,
+          EmailAddress: newInstrument.EmailAddress,
           phone: newInstrument.phone,
           Address: newInstrument.Address,
           contactPerson: newInstrument.contactPerson,
@@ -348,6 +350,7 @@ const Clients = () => {
           taxNumber: newInstrument.taxNumber,
           fax: newInstrument.fax,
           website: newInstrument.website,
+          AddedOn: currentDate,
           name: newInstrument.name,
           plantCode: newInstrument.plantCode,
           status: "Active",

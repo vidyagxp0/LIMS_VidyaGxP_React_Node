@@ -1,60 +1,4 @@
-
-// const StatusModal = (_props) => {
-//   return (
-//     
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle>
-//           Delete Plant
-//         </CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-
-//       <p className="fs-5">Do you want to delete this Plant</p>
-//       </CModalBody>
-
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
-
-
-
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -67,6 +11,15 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import PlantsModal from "../Modals/PlantsModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -87,73 +40,7 @@ const initialData = [
     RegisterOn: "03-07-2024",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    PlantCode: "Client 3",
-    PlantName: "client3@example.com",
-    Address: "Address 3",
-    RegisterOn: "04-07-2024",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    PlantCode: "Client 4",
-    PlantName: "client4@example.com",
-    Address: "Address 4",
-    RegisterOn: "05-07-2024",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    PlantCode: "Client 5",
-    PlantName: "client5@example.com",
-    Address: "Address 5",
-    RegisterOn: "06-07-2024",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    PlantCode: "Client 6",
-    PlantName: "client6@example.com",
-    Address: "Address 6",
-    RegisterOn: "07-07-2024",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    PlantCode: "Client 7",
-    PlantName: "client7@example.com",
-    Address: "Address 7",
-    RegisterOn: "08-07-2024",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    PlantCode: "Client 8",
-    PlantName: "client8@example.com",
-    Address: "Address 8",
-    RegisterOn: "09-07-2024",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    PlantCode: "Client 9",
-    PlantName: "client9@example.com",
-    Address: "Address 9",
-    RegisterOn: "10-07-2024",
-    status: "Active",
-  },
 ];
-
-
-
 
 const Plants = () => {
   const [data, setData] = useState(initialData);
@@ -162,11 +49,97 @@ const Plants = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    Active: 0,
-    Inactive: 0,
-   
-  });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Plant</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Name"
+            placeholder="Name"
+            name="PlantName"
+            value={formData?.PlantName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Plant Code"
+            name="PlantCode"
+            placeholder="Plant Code"
+            value={formData?.PlantCode || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Address"
+            placeholder="Address"
+            name="Address"
+            value={formData?.Address || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -190,8 +163,6 @@ const Plants = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -208,7 +179,7 @@ const Plants = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.PlantName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.PlantCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -257,19 +228,44 @@ const Plants = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       PlantCode: item["Plant Code"] || "",
       PlantName: item["Plant Name"] || "",
       Address: item["Address"] || "",
       RegisterOn: item["Register On"] || "",
-      status: item["Status"] || "Active", // Default status if not provided
+      status: item["Status"] || "Active", 
     }));
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenateData);
+    setIsModalsOpen(false); 
   };
 
-  
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          PlantName: newInstrument.PlantName,
+          PlantCode: newInstrument.PlantCode,
+          Address: newInstrument.Address,
+          RegisterOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -280,10 +276,6 @@ setData(concatenateData ); // Update data state with parsed Excel data
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -310,12 +302,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Plant" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -325,10 +312,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <PlantsModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -337,11 +326,31 @@ setData(concatenateData ); // Update data state with parsed Excel data
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );
 };
 export default Plants;
-

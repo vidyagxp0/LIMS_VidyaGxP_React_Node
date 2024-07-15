@@ -171,7 +171,6 @@ const SolutionTemplate = () => {
     setIsModalsOpen(false);
   };
 
-
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -199,7 +198,7 @@ const SolutionTemplate = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       name: item["Name"] || "",
       prefix: item["Prefix"] || "",
       TheoreticalStrength: item["Theoretical Strength"] || "",
@@ -210,7 +209,7 @@ const SolutionTemplate = () => {
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -339,17 +338,19 @@ const SolutionTemplate = () => {
       {/* <div className="text-center">
         <h3 className="text-gray-500">No Template Found</h3>
       </div> */}
-      <Table
+      {/* <Table
         columns={columns}
         data={filteredData}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
-      />
-      <SolutionTemplateModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      /> */}
+      <div className="text-center flex justify-center items-center">
+        <h2 className="text-blue-500 font-serif font-bold">
+          No Template Found
+        </h2>
+      </div>
+      <SolutionTemplateModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -358,7 +359,13 @@ const SolutionTemplate = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );
