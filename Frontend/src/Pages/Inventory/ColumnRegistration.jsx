@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -140,7 +138,7 @@ const ColumnRegistration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       ColumnName: item["Column Name"] || "",
       ColumnNumber: item["Column Number"] || "",
       BrandName: item["Brand Name"] || "",
@@ -150,7 +148,7 @@ const ColumnRegistration = () => {
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -278,10 +276,7 @@ const ColumnRegistration = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <ColumnRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <ColumnRegistrationModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
