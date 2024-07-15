@@ -7,9 +7,15 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
 const WorkFlowModal = ({ visible, closeModal }) => {
+  const[workFlowData, setWorkFloData]=useState({
+    Name: "",
+    UniqueCode: "",
+    GenericName: "",
+    ReTestingPeriod: "",
+  })
   return (
     <div>
       <CModal

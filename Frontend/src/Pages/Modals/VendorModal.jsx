@@ -11,9 +11,9 @@ import {
 import React, { useState } from "react";
 const VendorModal = ({ visible, closeModal, handleSubmit }) => {
   const [vendorData, setVendorData] = useState({
-    ProductName: "",
+    ProductName: [],
     UniqueCode: "",
-    VendorName: "",
+    VendorName: [],
     QualificationCriteria: "",
     Comments: "",
   });

@@ -20,7 +20,7 @@ const ChemicalRegistrationModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Chemicals</CModalTitle>
@@ -55,6 +55,40 @@ const ChemicalRegistrationModal = (_props) => {
             label="Category"
             placeholder="Select"
             className="custom-placeholder mb-3"
+            options={[
+              {
+                value: "Organic Solvent",
+                label: "Organic Solvent",
+              },
+              {
+                value: "Iron Chelator Substance",
+                label: "Iron Chelator Substance",
+              },
+              {
+                value: "Solvent",
+                label: "Solvent",
+              },
+              {
+                value: "Organic Acid",
+                label: "Organic Acid",
+              },
+              {
+                value: "Polymers",
+                label: "Polymers",
+              },
+              {
+                value: "Biochemical Compunds",
+                label: "Biochemical Compunds",
+              },
+              {
+                value: "Inorganic Compunds",
+                label: "Inorganic Compunds",
+              },
+              {
+                value: "organic Compunds",
+                label: "organic Compunds",
+              },
+            ]}
           />
 
           <CFormSelect
@@ -62,24 +96,88 @@ const ChemicalRegistrationModal = (_props) => {
             label="Grade"
             placeholder="Grade"
             className="custom-placeholder mb-3"
+            options={[
+              {
+                value: "Analytical Grade",
+                label: "Analytical Grade",
+              },
+              {
+                value: "HPLC Grade",
+                label: "HPLC Grade",
+              },
+              {
+                value: "Grd-1",
+                label: "Grd-1",
+              },
+            ]}
           />
           <CFormSelect
             type="number"
             label="Handling Symbol"
             placeholder="Select..."
             className="custom-placeholder mb-3"
+            options={[
+              {
+                value: "A",
+                label: "A",
+              },
+              {
+                value: "B",
+                label: "B",
+              },
+              {
+                value: "C",
+                label: "C",
+              },
+              {
+                value: "D",
+                label: "D",
+              },
+              {
+                value: "E",
+                label: "E",
+              },
+            ]}
           />
           <CFormSelect
             type="number"
             label="Storage Conditions"
             placeholder="Select"
             className="custom-placeholder mb-3"
+            options={[
+              {
+                value: "Analytical",
+                label: "Analytical",
+              },
+              {
+                value: "HPLC",
+                label: "HPLC",
+              },
+              {
+                value: "Grd-1",
+                label: "Grd-1",
+              },
+            ]}
           />
           <CFormSelect
             type="number"
             label="Lot UOM"
             placeholder="select"
             className="custom-placeholder mb-3"
+            options={[
+              {
+                value: "kg",
+                label: "kg",
+              },
+              {
+                value: "L",
+                label: "L",
+              },
+              {
+                value: "mL",
+                label: "mL",
+              },
+            ]}
           />
           <CFormInput
             type="number"

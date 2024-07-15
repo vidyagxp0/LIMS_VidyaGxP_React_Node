@@ -13,11 +13,10 @@ const ClientsModal = ({ visible, closeModal, handleSubmit }) => {
   const [ClientData, setClientData] = useState({
     ClientName: "",
     EmailAddress: "",
-    ContactNumber: "",
+    phone: "",
     Address: "",
     AddedOn: "",
     alternateName: "",
-    phone: "",
     contactPerson: "",
     contactPersonNumber: "",
     taxNumber: "",
@@ -72,17 +71,17 @@ const ClientsModal = ({ visible, closeModal, handleSubmit }) => {
             }}
           />
           <CFormInput
-            type="text"
+            type="email"
             className="mb-3"
             label="Email"
             placeholder="Email"
-            value={ClientData.email}
+            value={ClientData.EmailAddress}
             onChange={(e) => {
-              handleInputChange("email", e.target.value);
+              handleInputChange("EmailAddress", e.target.value);
             }}
           />
           <CFormInput
-            type="text"
+            type="number"
             className="mb-3"
             label="Phone"
             placeholder="Phone"
@@ -112,7 +111,7 @@ const ClientsModal = ({ visible, closeModal, handleSubmit }) => {
             }}
           />
           <CFormInput
-            type="text"
+            type="number"
             className="mb-3"
             label="Contact Person Number"
             placeholder="Contact Person Number"
@@ -122,7 +121,7 @@ const ClientsModal = ({ visible, closeModal, handleSubmit }) => {
             }}
           />
           <CFormInput
-            type="text"
+            type="number"
             className="mb-3"
             label="Tax Number"
             placeholder="Tax Number"
@@ -132,7 +131,7 @@ const ClientsModal = ({ visible, closeModal, handleSubmit }) => {
             }}
           />
           <CFormInput
-            type="text"
+            type="number"
             className="mb-3"
             label="Fax"
             placeholder="Fax"

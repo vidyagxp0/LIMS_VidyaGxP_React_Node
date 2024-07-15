@@ -1,14 +1,26 @@
-import { CButton, CForm, CFormCheck, CFormInput, CFormLabel, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const SolutionStandardizationModal = (_props) => {
   return (
     <div>
-         <CModal
+      <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size='xl'
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Add Standardization</CModalTitle>
@@ -19,6 +31,12 @@ const SolutionStandardizationModal = (_props) => {
             label="Preparation No."
             placeholder="Preparation No."
             className="custom-placeholder mb-3"
+            options={[
+              { value: "prep001", label: "Preparation 001" },
+              { value: "prep002", label: "Preparation 002" },
+              { value: "prep003", label: "Preparation 003" },
+              { value: "prep004", label: "Preparation 004" },
+            ]}
           />
           <CFormInput
             type="text"
@@ -102,7 +120,7 @@ const SolutionStandardizationModal = (_props) => {
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
-              marginBottom: "1rem"
+              marginBottom: "1rem",
             }}
           >
             <label>Comments</label>
@@ -118,10 +136,8 @@ const SolutionStandardizationModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-
-      
     </div>
-  )
-}
+  );
+};
 
-export default SolutionStandardizationModal
+export default SolutionStandardizationModal;
