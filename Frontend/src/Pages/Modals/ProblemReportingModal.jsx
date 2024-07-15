@@ -6,7 +6,7 @@ const ProblemReportingModal = ({visible, closeModal, handleSubmit}) => {
     InstrumentId:"",
     InstrumentCategory:"",
     SuppliedBy:"",
-    ProblemID:"",
+    ProblemId:"",
     ProblemIn:"",
     ProblemInBrief:"",
     ReferenceDocument:"",
