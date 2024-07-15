@@ -1,10 +1,22 @@
-import { CButton, CForm, CFormCheck, CFormInput, CFormLabel, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const SolutionPreparationModal = (_props) => {
   return (
     <div>
-         <CModal
+      <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
@@ -22,6 +34,15 @@ const SolutionPreparationModal = (_props) => {
             label="Volumetric Solution Name"
             placeholder="Volumetric Solution Name "
             className="custom-placeholder mb-3"
+            options={
+              ({ value: "S1", label: "S1" },
+              { value: "Tadalfil", label: "Tadalfil" },
+              { value: "xcvn", label: "xcvn" },
+              {
+                value: "Aspirin (Asetylselic Acid)",
+                label: "Aspirin (Asetylselic Acid)",
+              })
+            }
           />
 
           <CFormInput
@@ -87,7 +108,7 @@ const SolutionPreparationModal = (_props) => {
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
-              marginBottom: "1rem"
+              marginBottom: "1rem",
             }}
           >
             <label>Comments</label>
@@ -103,10 +124,8 @@ const SolutionPreparationModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-
-      
     </div>
-  )
-}
+  );
+};
 
-export default SolutionPreparationModal
+export default SolutionPreparationModal;

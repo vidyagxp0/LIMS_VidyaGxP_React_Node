@@ -15,94 +15,36 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ProblemReportingModal from "../Modals/ProblemReportingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle ,} from "@coreui/react";
 
 const initialData = [
-    {
-      checkbox: false,
-      sno: 1,
-      Instrument: "INST-001",
-      InstrumentCategory: "Cat-001",
-      SuppliedBy: "Supplier A",
-      ProblemId: "PRB-001",
-      ProblemInBrief: "Brief description 1",
-      ProblemInDetails: "Detailed description 1",
-      OccuredOn: "2024-06-01",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 2,
-      Instrument: "INST-002",
-      InstrumentCategory: "Cat-002",
-      SuppliedBy: "Supplier B",
-      ProblemId: "PRB-002",
-      ProblemInBrief: "Brief description 2",
-      ProblemInDetails: "Detailed description 2",
-      OccuredOn: "2024-06-02",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 3,
-      Instrument: "INST-003",
-      InstrumentCategory: "Cat-003",
-      SuppliedBy: "Supplier C",
-      ProblemId: "PRB-003",
-      ProblemInBrief: "Brief description 3",
-      ProblemInDetails: "Detailed description 3",
-      OccuredOn: "2024-06-03",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 4,
-      Instrument: "INST-004",
-      InstrumentCategory: "Cat-004",
-      SuppliedBy: "Supplier D",
-      ProblemId: "PRB-004",
-      ProblemInBrief: "Brief description 4",
-      ProblemInDetails: "Detailed description 4",
-      OccuredOn: "2024-06-04",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 5,
-      Instrument: "INST-005",
-      InstrumentCategory: "Cat-005",
-      SuppliedBy: "Supplier E",
-      ProblemId: "PRB-005",
-      ProblemInBrief: "Brief description 5",
-      ProblemInDetails: "Detailed description 5",
-      OccuredOn: "2024-06-05",
-      status: "Active",
-    },
-    {
-      checkbox: false,
-      sno: 6,
-      Instrument: "INST-006",
-      InstrumentCategory: "Cat-006",
-      SuppliedBy: "Supplier F",
-      ProblemId: "PRB-006",
-      ProblemInBrief: "Brief description 6",
-      ProblemInDetails: "Detailed description 6",
-      OccuredOn: "2024-06-06",
-      status: "Inactive",
-    },
-    {
-      checkbox: false,
-      sno: 7,
-      Instrument: "INST-007",
-      InstrumentCategory: "Cat-007",
-      SuppliedBy: "Supplier G",
-      ProblemId: "PRB-007",
-      ProblemInBrief: "Brief description 7",
-      ProblemInDetails: "Detailed description 7",
-      OccuredOn: "2024-06-07",
-      status: "Active",
-    },
-  ];
-  
+  {
+    checkbox: false,
+    sno: 1,
+    InstrumentId: "INST-001",
+    InstrumentCategory: "Cat-001",
+    SuppliedBy: "Supplier A",
+    ProblemId: "PRB-001",
+    ProblemInBrief: "Brief description 1",
+    ProblemInDetails: "Detailed description 1",
+    OccuredOn: "2024-06-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    InstrumentId: "INST-002",
+    InstrumentCategory: "Cat-002",
+    SuppliedBy: "Supplier B",
+    ProblemId: "PRB-002",
+    ProblemInBrief: "Brief description 2",
+    ProblemInDetails: "Detailed description 2",
+    OccuredOn: "2024-06-02",
+    status: "Inactive",
+  },
+
+];
+
 const ProblemReporting = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -114,6 +56,190 @@ const ProblemReporting = () => {
     Active: 0,
     Inactive: 0,
   });
+
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size='xl'
+      >
+        <CModalHeader>
+          <CModalTitle>Add Problem Reporting</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information and Add Problem Reporting</p>
+          <CFormSelect
+            type="text"
+            label="Instrument (Instrument ID)"
+            options={[
+              "Select...",
+              { label: "eqi/eng/163" },
+              { label: "arzph001" },
+              { label: "arz003" },
+              { label: "qc/bal/0011" },
+              { label: "hplc" },
+              { label: "qc/bal/02" },
+            ]}
+            placeholder="Select... "
+            name="InstrumentId"
+            value={formData?.InstrumentId || ""}
+            onChange={handleChange}
+
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Instrument Category"
+            placeholder="weighing balance "
+            name="InstrumentCategory "
+            value={formData?.InstrumentCategory || ""}
+            onChange={handleChange}
+
+
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Supplied By"
+            placeholder="Supplied By "
+            name="SuppliedBy"
+            value={formData?.SuppliedBy || ""}
+            onChange={handleChange}
+
+
+
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Problem ID"
+            placeholder="Problem ID"
+            name="ProblemId"
+            value={formData?.ProblemId || ""}
+            onChange={handleChange}
+
+          />
+          <label>Problem In</label>
+          <CFormCheck
+            type="radio"
+            id="ProblemInInstrument"
+            name="ProblemIn"
+            label="Instrument"
+            value={formData?.ProblemIn || ""}
+            onChange={handleChange}
+          />
+          <CFormCheck
+            type="radio"
+            className="mb-3"
+            id="ProblemInModule"
+            name="ProblemIn"
+            label="Module"
+            value={formData?.ProblemIn || ""}
+            onChange={handleChange}
+
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="ProblemInBrief"
+            label="Problem In Brief"
+            placeholder=" Problem In Brief"
+            value={formData?.ProblemInBrief || ""}
+            onChange={handleChange}
+
+          />
+          <CFormInput
+            type="file"
+            className="mb-3"
+            label="Reference Document"
+            placeholder=" choose file"
+            name="ReferenceDocument"
+            value={formData?.ReferenceDocument || ""}
+            onChange={handleChange}
+
+          />
+          <CFormInput type="date"
+            label="Occurred On"
+            name=""
+            placeholder="OccurredOn"
+            value={formData?.OccurredOn || ""}
+            onChange={handleChange}
+          />
+
+
+          <CFormInput
+            type="date"
+            className="mb-3"
+            label="Reported On"
+            name="ReportedOn"
+            placeholder=" "
+            value={formData?.ReportedOn || ""}
+            onChange={handleChange}
+
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Problem In Details"
+            placeholder=" Problem In Details"
+            name="ProblemInDetails"
+            value={formData?.ProblemInDetails || ""}
+            onChange={handleChange}
+
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -153,7 +279,7 @@ const ProblemReporting = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.Instrument.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.SuppliedBy.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -169,7 +295,7 @@ const ProblemReporting = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Instrument", accessor: "Instrument" },
+    { header: "InstrumentId", accessor: "InstrumentId" },
     { header: "Instrument Category", accessor: "InstrumentCategory" },
     { header: "Supplied By", accessor: "SuppliedBy" },
     { header: "Problem ID", accessor: "ProblemId" },
@@ -190,11 +316,13 @@ const ProblemReporting = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
             key="delete"
             className="cursor-pointer"
+            onClick={() => handleDelete(row)}
           />
         </>
       ),
@@ -204,7 +332,7 @@ const ProblemReporting = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       instrument: item["Instrument"] || "",
       instrumentCategory: item["Instrument Category"] || "",
       suppliedBy: item["Supplied By"] || "",
@@ -213,11 +341,40 @@ const ProblemReporting = () => {
       occurredOn: item["Occurred On"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Instrument: newInstrument.Instrument,
+          rumentCategory: newInstrument.rumentCategory,
+          SuppliedBy: newInstrument.SuppliedBy,
+          ProblemId: newInstrument.ProblemId,
+          ProblemInBrief: newInstrument.ProblemInBrief,
+          ProblemInDetails: newInstrument.ProblemInDetails,
+          OccuredOn: newInstrument.OccuredOn,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -259,12 +416,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
+          <ATMButton
             text="Import"
             color='pink'
             onClick={handleOpenModals}
-            
-             />
+
+          />
           <ATMButton text="Add Problem" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -274,20 +431,31 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ProblemReportingModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+
         />
       )}
        {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+       {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

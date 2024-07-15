@@ -1,60 +1,4 @@
-
-
-  // const StatusModal = (_props) => {
-  //   return (
-  //     
-  //   );
-  // };
-
-  // const DeleteModal = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //       size="lg"
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>
-  //         Delete Calibration Type
-  //         </CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-
-  //         <p className="fs-5">Do you want to delete this Client ?</p>
-  //       </CModalBody>
-
-  //       <CModalFooter>
-  //         <CButton
-  //           color="secondary"
-  //           onClick={_props.closeModal}
-  //           style={{
-  //             marginRight: "0.5rem",
-  //             fontWeight: "500",
-  //           }}
-  //         >
-  //           Cancel
-  //         </CButton>
-  //         <CButton
-  //           color="danger"
-  //           onClick={_props.handleDelete}
-  //           style={{
-  //             fontWeight: "500",
-  //             color: "white",
-  //           }}
-  //         >
-  //           Delete
-  //         </CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-  
-  
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -67,6 +11,15 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ClientsModal from "../Modals/ClientsModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -74,7 +27,7 @@ const initialData = [
     sno: 1,
     ClientName: "Client 1",
     EmailAddress: "client1@example.com",
-    ContactNumber: "1234567890",
+    phone: "1234567890",
     Address: "Address 1",
     AddedOn: "2024-06-01",
     status: "Active",
@@ -84,64 +37,12 @@ const initialData = [
     sno: 2,
     ClientName: "Client 2",
     EmailAddress: "client2@example.com",
-    ContactNumber: "2345678901",
+    phone: "2345678901",
     Address: "Address 2",
     AddedOn: "2024-06-02",
     status: "Active",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    ClientName: "Client 3",
-    EmailAddress: "client3@example.com",
-    ContactNumber: "3456789012",
-    Address: "Address 3",
-    AddedOn: "2024-06-03",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ClientName: "Client 4",
-    EmailAddress: "client4@example.com",
-    ContactNumber: "4567890123",
-    Address: "Address 4",
-    AddedOn: "2024-06-04",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ClientName: "Client 5",
-    EmailAddress: "client5@example.com",
-    ContactNumber: "5678901234",
-    Address: "Address 5",
-    AddedOn: "2024-06-05",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    ClientName: "Client 6",
-    EmailAddress: "client6@example.com",
-    ContactNumber: "6789012345",
-    Address: "Address 6",
-    AddedOn: "2024-06-06",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    ClientName: "Client 7",
-    EmailAddress: "client7@example.com",
-    ContactNumber: "7890123456",
-    Address: "Address 7",
-    AddedOn: "2024-06-07",
-    status: "Active",
-  },
 ];
-
-
 
 const Clients = () => {
   const [data, setData] = useState(initialData);
@@ -150,11 +51,179 @@ const Clients = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    Active: 0,
-    Inactive: 0,
-   
-  });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Client</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="mb-3 fw-bold">Add information and add new Client</p>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Client Name"
+            name="ClientName"
+            placeholder="Client Name"
+            value={formData?.ClientName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Alternate Name"
+            name="alternateName"
+            placeholder="Alternate Name"
+            value={formData?.alternateName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="email"
+            className="mb-3"
+            label="Email"
+            name="EmailAddress"
+            placeholder="EmailAddress"
+            value={formData?.EmailAddress || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            name="phone"
+            label="phone"
+            placeholder="phone"
+            value={formData?.phone || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Address"
+            name="Address"
+            placeholder="Address"
+            value={formData?.Address || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="contactPerson"
+            label="Contact Person"
+            placeholder="Contact Person"
+            value={formData?.contactPerson || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            name="contactPersonNumber"
+            label="Contact Person Number"
+            placeholder="Contact Person Number"
+            value={formData?.contactPersonNumber || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            label="Tax Number"
+            name="taxNumber"
+            placeholder="Tax Number"
+            value={formData?.taxNumber || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            label="Fax"
+            name="fax"
+            placeholder="fax"
+            value={formData?.fax || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Website"
+            placeholder="Website"
+            name="website"
+            value={formData?.website || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Name"
+            name="name"
+            placeholder="name"
+            value={formData?.name || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="plantCode"
+            label="Plant Code"
+            placeholder="Plant Code"
+            value={formData?.plantCode || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -176,8 +245,6 @@ const Clients = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -212,7 +279,7 @@ const Clients = () => {
     { header: "SrNo.", accessor: "sno" },
     { header: "Client Name", accessor: "ClientName" },
     { header: "Email Address", accessor: "EmailAddress" },
-    { header: "Contact Number", accessor: "ContactNumber" },
+    { header: "Contact Number", accessor: "phone" },
     { header: "Address", accessor: "Address" },
     { header: "Added On", accessor: "AddedOn" },
     { header: "Status", accessor: "status" },
@@ -244,19 +311,56 @@ const Clients = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       ClientName: item["Client Name"] || "",
       EmailAddress: item["Email Address"] || "",
-      ContactNumber: item["Contact Number"] || "",
+      phone: item["Contact Number"] || "",
       Address: item["Address"] || "",
       AddedOn: item["Added On"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          ClientName: newInstrument.ClientName,
+          alternateName: newInstrument.alternateName,
+          EmailAddress: newInstrument.EmailAddress,
+          phone: newInstrument.phone,
+          Address: newInstrument.Address,
+          contactPerson: newInstrument.contactPerson,
+          contactPersonNumber: newInstrument.contactPersonNumber,
+          taxNumber: newInstrument.taxNumber,
+          fax: newInstrument.fax,
+          website: newInstrument.website,
+          AddedOn: currentDate,
+          name: newInstrument.name,
+          plantCode: newInstrument.plantCode,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -268,10 +372,6 @@ setData(concatenateData ); // Update data state with parsed Excel data
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -298,11 +398,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Clients" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -312,10 +408,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ClientsModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -327,6 +425,13 @@ setData(concatenateData ); // Update data state with parsed Excel data
         {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
+       {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />)}
     </div>
   );
 };

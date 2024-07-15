@@ -1,8 +1,4 @@
-
-  
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +11,16 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import VendorModal from "../Modals/VendorModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -37,58 +43,7 @@ const initialData = [
     Comments: "Comment 2",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    ProductName: "Product 3",
-    UniqueCode: "UC-003",
-    VendorName: "Vendor C",
-    QualificationCriteria: "Criteria 3",
-    Comments: "Comment 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ProductName: "Product 4",
-    UniqueCode: "UC-004",
-    VendorName: "Vendor D",
-    QualificationCriteria: "Criteria 4",
-    Comments: "Comment 4",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ProductName: "Product 5",
-    UniqueCode: "UC-005",
-    VendorName: "Vendor E",
-    QualificationCriteria: "Criteria 5",
-    Comments: "Comment 5",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    ProductName: "Product 6",
-    UniqueCode: "UC-006",
-    VendorName: "Vendor F",
-    QualificationCriteria: "Criteria 6",
-    Comments: "Comment 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    ProductName: "Product 7",
-    UniqueCode: "UC-007",
-    VendorName: "Vendor G",
-    QualificationCriteria: "Criteria 7",
-    Comments: "Comment 7",
-    status: "INITIATED",
-  },
 ];
-
 
 const Vendors = () => {
   const [data, setData] = useState(initialData);
@@ -97,13 +52,132 @@ const Vendors = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    APPROVED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    REJECTED: 0,
-    DROPPED: 0,
-  });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Edit Approved Vendor</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="mb-3 fw-bold">
+            Edit information and update approved vendor
+          </p>
+          <label>Product/Material Name</label>
+          <CFormSelect
+            className="mb-3"
+            name="ProductName"
+            options={[
+              { value: "Tadalafil", label: "Tadalafil" },
+              { value: "Diclofenac Resinate", label: "Diclofenac Resinate" },
+              {
+                value: "Diclofenac Sodium (BromineFree)",
+                label: "Diclofenac Sodium (BromineFree)",
+              },
+            ]}
+            value={formData?.ProductName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Unique Code"
+            name="UniqueCode"
+            placeholder="Unique Code"
+            value={formData?.UniqueCode || ""}
+            onChange={handleChange}
+          />
+          <label>Vendor Name</label>
+          <CFormSelect
+            className="mb-3"
+            name="VendorName"
+            options={[
+              {
+                value: "Aavis Pharmaceuticals",
+                label: "Aavis Pharmaceuticals",
+              },
+              { value: "Diclofenac Resinate", label: "Diclofenac Resinate" },
+              {
+                value: "Diclofenac Sodium (BromineFree)",
+                label: "Diclofenac Sodium (BromineFree)",
+              },
+            ]}
+            value={formData?.VendorName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Qualification Criteria"
+            name="QualificationCriteria"
+            placeholder="Qualification Criteria"
+            value={formData?.QualificationCriteria || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="Comments"
+            label="Comments If Any"
+            placeholder="Comments If Any"
+            value={formData?.Comments || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Save
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -128,8 +202,6 @@ const Vendors = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -146,7 +218,7 @@ const Vendors = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ProductName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.UniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -182,11 +254,13 @@ const Vendors = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
             key="delete"
             className="cursor-pointer"
+            onClick={() => handleDelete(row)}
           />
         </>
       ),
@@ -196,7 +270,7 @@ const Vendors = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       ProductName: item["Product Name"] || "",
       UniqueCode: item["Unique Code"] || "",
       VendorName: item["Vendor Name"] || "",
@@ -204,12 +278,38 @@ const Vendors = () => {
       Comments: item["Comments"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenateData);
+    setIsModalsOpen(false);
   };
-  
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          ProductCode: newInstrument.ProductCode,
+          UniqueCode: newInstrument.UniqueCode,
+          VendorName: newInstrument.VendorName,
+          QualificationCriteria: newInstrument.QualificationCriteria,
+          Comments: newInstrument.Comments,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -221,10 +321,6 @@ setData(concatenateData ); // Update data state with parsed Excel data
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -254,13 +350,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
-          <ATMButton text="Add Approved Vendors" color="blue" onClick={openModal} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Approved Vendors"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -269,10 +364,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <VendorModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -283,6 +380,14 @@ setData(concatenateData ); // Update data state with parsed Excel data
       )}
        {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

@@ -206,7 +206,7 @@ const SamplingTemplate = () => {
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
 
-    const currentDate = new Date().toISOString().split("T")[0]
+    
 
     const [SamplingTemplate, setSamplingTemplate] = useState({
       templateName: "",
@@ -219,8 +219,9 @@ const SamplingTemplate = () => {
     const [footerColumns, setFooterColumns] = useState(1);
 
     const handleAdd = () => {
+      const currentDate = new Date().toISOString().split("T")[0]
       const newCondition = {
-        addedOn: currentDate,
+        addedOn:currentDate,
         templateName: SamplingTemplate.templateName,
         uniqueCode: SamplingTemplate.uniqueCode,
         sampleType: SamplingTemplate.sampleType,
@@ -254,7 +255,7 @@ const SamplingTemplate = () => {
           tableColumns.push(
             <td key={j} className="flex gap-4">
               <CFormInput type="text" placeholder={`Lower Count `} />
-
+  
               <CFormSelect
                 className="mb-2"
                 options={[
@@ -560,6 +561,120 @@ const SamplingTemplate = () => {
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(1);
+    const [footerColumns, setFooterColumns] = useState(1);
+
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+
+    const handleHeaderColumnsChange = (e) => {
+      setHeaderColumns(parseInt(e.target.value, 10));
+    };
+
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+
+    const handleFooterColumnsChange = (e) => {
+      setFooterColumns(parseInt(e.target.value, 10));
+    };
+
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+  
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+
+    const [leftArray, setLeftArray] = useState([
+      "Change Control",
+      "CAPA",
+      "Internal Audit",
+      "External Audit",
+      "Initiator",
+      "SQM",
+      "CTMS",
+      "Calendar",
+      "EHS",
+      "Environment",
+      "Documents",
+      "Deviation",
+    ]);
+
+    const [rightArray, setRightArray] = useState([
+      "Inspections",
+      "Audit",
+      "Refference",
+      "CCTT",
+    ]);
+
+    const moveRight = () => {
+      let leftElement = document.getElementsByClassName("check-left");
+      for (let index = 0; index < leftElement.length; index++) {
+        if (leftElement[index].checked) {
+          let data = leftElement[index].value;
+          let left = leftArray.filter((value) => value !== data);
+          setLeftArray(left);
+          rightArray.push(data);
+          setRightArray(rightArray);
+          break; // Important
+        }
+      }
+    };
+
+    const moveLeft = () => {
+      let rightElement = document.getElementsByClassName("check-right");
+      for (let index = 0; index < rightElement.length; index++) {
+        if (rightElement[index].checked) {
+          let data = rightElement[index].value;
+          let right = rightArray.filter((value) => value !== data);
+          setRightArray(right);
+          leftArray.push(data);
+          setLeftArray(leftArray);
+          break; // Important
+        }
+      }
+    };
+
+    const clicked = () => {
+      let checkboxes = document.querySelectorAll(".check-left, .check-right");
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      let allLabels = document.querySelectorAll(".labels");
+      allLabels.forEach((label) => {
+        label.classList.remove("clicked");
+      });
+
+      let label = event.target;
+      label.classList.add("clicked");
+      label.checked = true;
+    };
+
 
     useEffect(() => {
       if (data) {
@@ -790,7 +905,7 @@ const SamplingTemplate = () => {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleSave}>Submit</CButton>
 
         </CModalFooter>
       </CModal>

@@ -1,26 +1,49 @@
-import { CButton, CForm, CFormCheck, CFormInput, CFormLabel, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const WorkingStandardUsageModal = (_props) => {
   return (
     <div>
-      
       <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size='xl'
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Reference Standard Lot Usage</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          
           <CFormSelect
             type="text"
             label="W.S Lot No."
             placeholder="Select.. "
             className="custom-placeholder mb-3"
+            options={[
+              { value: "WSI-102023-000006/1", label: "WSI-102023-000006/1" },
+              { value: "WSI-102023-000006/2", label: "WSI-102023-000006/2" },
+              { value: "WSI-102023-000006/3", label: "WSI-102023-000006/3" },
+              { value: "WSI-102023-000006/4", label: "WSI-102023-000006/4" },
+              { value: "WSI-102023-000006/5", label: "WSI-102023-000006/5" },
+              { value: "WSI-102023-000006/6", label: "WSI-102023-000006/6" },
+              { value: "WSI-102023-000006/7", label: "WSI-102023-000006/7" },
+              { value: "WSI-102023-000006/8", label: "WSI-102023-000006/8" },
+              { value: "WSI-102023-000006/9", label: "WSI-102023-000006/9" },
+              { value: "WSI-102023-000006/10", label: "WSI-102023-000006/10" },
+            ]}
           />
           <CFormInput
             type="text"
@@ -78,7 +101,7 @@ const WorkingStandardUsageModal = (_props) => {
           />
           <CForm className="mb-3">
             <CFormLabel>Collection Type</CFormLabel>
-            <div style={{display:"flex", justifyContent:"space-around"}}>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
@@ -122,7 +145,7 @@ const WorkingStandardUsageModal = (_props) => {
           />
           <CForm className="mb-3">
             <CFormLabel>Usage for</CFormLabel>
-            <div style={{display:"flex", justifyContent:"space-around"}}>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
@@ -157,9 +180,8 @@ const WorkingStandardUsageModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-
     </div>
-  )
-}
+  );
+};
 
-export default WorkingStandardUsageModal
+export default WorkingStandardUsageModal;

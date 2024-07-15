@@ -1,27 +1,84 @@
-import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React, { useState } from "react";
 
-const PlantsModal = (_props) => {
+const PlantsModal = ({ visible, closeModal, handleSubmit }) => {
+  const [plantData, setPlantData] = useState({
+    PlantName: "",
+    PlantCode: "",
+    Address: "",
+  });
+
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...plantData, [field]: value };
+    setPlantData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...plantData });
+    closeModal();
+  };
+
   return (
     <div>
-
-<CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size='xl'>
-       <CModalHeader>
-         <CModalTitle>Add Plant</CModalTitle>
-       </CModalHeader>
-       <CModalBody>
-         <CFormInput type="text" className="mb-3" label="Name" placeholder="Name" />
-         <CFormInput type="text" className="mb-3" label="Plant Code" placeholder="Plant Code" />
-         <CFormInput type="text" className="mb-3" label="Address" placeholder="Address" />
-       </CModalBody>
-       <CModalFooter>
-         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-         <CButton color="primary">Add</CButton>
-       </CModalFooter>
-     </CModal>
-      
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Plant</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Name"
+            placeholder="Name"
+            value={plantData.PlantName}
+            onChange={(e) => {
+              handleInputChange("PlantName", e.target.value);
+            }}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Plant Code"
+            placeholder="Plant Code"
+            value={plantData.PlantCode}
+            onChange={(e) => {
+              handleInputChange("PlantCode", e.target.value);
+            }}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Address"
+            placeholder="Address"
+            value={plantData.Address}
+            onChange={(e) => {
+              handleInputChange("Address", e.target.value);
+            }}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleFormSubmit}>Add</CButton>
+        </CModalFooter>
+      </CModal>
     </div>
-  )
-}
+  );
+};
 
-export default PlantsModal
+export default PlantsModal;
