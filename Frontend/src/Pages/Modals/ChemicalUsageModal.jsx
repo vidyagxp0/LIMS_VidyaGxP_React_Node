@@ -11,15 +11,26 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const ChemicalUsageModal = (_props) => {
+const ChemicalUsageModal = (props) => {
+  const [usageFor, setUsageFor] = useState("");
+  const [collectionType, setCollectionType] = useState("");
+
+  const handleUsageForChange = (e) => {
+    setUsageFor(e.target.value);
+  };
+
+  const handleCollectionTypeChange = (e) => {
+    setCollectionType(e.target.value);
+  };
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={props.visible}
+        onClose={props.closeModal}
         size="xl"
       >
         <CModalHeader>
@@ -71,20 +82,69 @@ const ChemicalUsageModal = (_props) => {
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <CFormCheck
                 type="radio"
-                name="sampleRadio"
-                id="acceptRadio"
+                name="collectionType"
+                id="manualRadio"
                 label="Manual"
-                value="accept"
+                value="manual"
+                onChange={handleCollectionTypeChange}
               />
               <CFormCheck
                 type="radio"
-                name="sampleRadio"
-                id="rejectRadio"
+                name="collectionType"
+                id="autoBindingRadio"
                 label="Auto Binding"
-                value="reject"
+                value="autoBinding"
+                onChange={handleCollectionTypeChange}
               />
             </div>
           </CForm>
+          {collectionType === "autoBinding" && (
+            <div>
+              <CFormSelect
+                type="Instrument Category"
+                label="Received From"
+                placeholder="Received From"
+                className="mb-3"
+                options={[{ value: "select", label: "select" }]}
+              />
+              <div className="flex gap-5">
+                <CFormSelect
+                  type="Instrument ID"
+                  label="Instrument ID"
+                  placeholder=""
+                  className="mb-3"
+                  options={[{ value: "select", label: "select" }]}
+                />
+                <CFormInput
+                  type="date"
+                  label="Usage Start-Date & Time:"
+                  placeholder="Select"
+                  className="mb-3"
+                />
+              </div>
+              <CForm className="mb-3">
+                <CFormLabel>Data Transfer Mode</CFormLabel>
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
+                >
+                  <CFormCheck
+                    type="radio"
+                    name="dataTransferMode"
+                    id="instConnRadio"
+                    label="Inst Conn."
+                    value="Inst Conn."
+                  />
+                  <CFormCheck
+                    type="radio"
+                    name="dataTransferMode"
+                    id="bypassInstConnRadio"
+                    label="By Pass Inst. Conn."
+                    value="By Pass Inst. Conn."
+                  />
+                </div>
+              </CForm>
+            </div>
+          )}
           <CFormInput
             type="number"
             label="Consumed"
@@ -98,10 +158,10 @@ const ChemicalUsageModal = (_props) => {
             className="mb-3"
           />
           <CFormSelect
-            type="date"
+            type="text"
             label="Used by"
             placeholder="Select"
-            className="mb-3"
+            className="custom-placeholder mb-3"
           />
           <CFormInput
             type="date"
@@ -115,35 +175,61 @@ const ChemicalUsageModal = (_props) => {
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <CFormCheck
                 type="radio"
-                name="sampleRadio"
-                id="acceptRadio"
+                name="usageFor"
+                id="sampleAnalysisRadio"
                 label="Sample Analysis"
-                value="accept"
+                value="sampleAnalysis"
+                onChange={handleUsageForChange}
               />
               <CFormCheck
                 type="radio"
-                name="sampleRadio"
-                id="rejectRadio"
+                name="usageFor"
+                id="miscellaneousRadio"
                 label="Miscellaneous"
-                value="reject"
+                value="miscellaneous"
+                onChange={handleUsageForChange}
               />
             </div>
           </CForm>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-              marginBottom: "1rem",
-            }}
-          >
-            <label>Consumption Details</label>
-            <textarea name="" id="" className="form-control"></textarea>
-          </div>
+          {usageFor === "sampleAnalysis" && (
+            <div>
+              <CFormInput
+                type="text"
+                label="Consumption Details"
+                placeholder=""
+                className="mb-3"
+              />
+              <CFormInput
+                type="file"
+                label="Product/Material"
+                placeholder=""
+                className="mb-3"
+              />
+              <CFormInput
+                type="text"
+                label="Test Name"
+                placeholder=""
+                className="mb-3"
+              />
+              <CFormInput
+                type="file"
+                label="AR NOS."
+                placeholder="File 2"
+                className="mb-3"
+              />
+            </div>
+          )}
+
+          {usageFor === "miscellaneous" && (
+            <div className="mb-3">
+              <label>Consumption Details</label>
+              <textarea name="" id="" className="form-control"></textarea>
+            </div>
+          )}
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={props.closeModal}>
             Cancel
           </CButton>
           <CButton style={{ background: "#0F93C3", color: "white" }}>
