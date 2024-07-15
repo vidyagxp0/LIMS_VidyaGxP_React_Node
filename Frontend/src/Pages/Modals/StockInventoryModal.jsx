@@ -90,7 +90,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             label="Truck No."
             className="mb-3"
-            type="number"
+            type="text"
             placeholder="Truck No."
             value={stockInventory.TruckNo}
             onChange={(e) => handleChange("TruckNo" , e.target.value)}
@@ -98,7 +98,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             label="Ch No."
             className="mb-3"
-            type="number"
+            type="text"
             placeholder="Ch No."
             value={stockInventory.ChNo}
             onChange={(e) => handleChange("ChNo" , e.target.value)}
@@ -106,7 +106,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             label="Invoice Number"
             className="mb-3"
-            type="number"
+            type="text"
             placeholder="Invoice Number"
             value={stockInventory.InvoiceNo}
             onChange={(e) => handleChange("InvoiceNo" , e.target.value)}

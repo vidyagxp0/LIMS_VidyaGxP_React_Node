@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import {
   CButton,
   CFormInput,
@@ -63,7 +63,8 @@ function StorageLocation() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-
+  const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null)
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -72,12 +73,56 @@ function StorageLocation() {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
+  
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Condition Code", accessor: "conditionCode" },
+    { header: "Stability Storage Condition", accessor: "storageCondition" },
+    { header: "Created At", accessor: "createdAt" },
+    { header: "attachment", accessor: "attachment" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
+
 
   const filteredData = data.filter((row) => {
     return (
@@ -162,55 +207,78 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     );
   };
 
-  const columns = [
-    {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
-    { header: "SrNo.", accessor: "sno" },
-    { header: "Condition Code", accessor: "conditionCode" },
-    { header: "Stability Storage Condition", accessor: "storageCondition" },
-    { header: "Created At", accessor: "createdAt" },
-    { header: "attachment", accessor: "attachment" },
-    { header: "Status", accessor: "status" },
-    {
-      header: "Actions",
-      accessor: "action",
-      Cell: ({ row }) => (
-        <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-          />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
-        </>
-      ),
-    },
-  ];
-
-  const openModal = () => {
-    setIsModalOpen(true);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
   };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+  
+  const closeEditModal = () => {
+    setEditModalData(null);
   };
-
-  const closeViewModal = () => {
-    setViewModalData(false);
-  };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
     setData(newData);
-    console.log("Deleted item:", item);
+    setEditModalData(null);
   };
-
+  const EditModal = ({visible , closeModal,data, onSave}) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+  
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+  
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
+    
+    useEffect(() => {
+      if(data){
+        setFormData(data);
+      }
+     
+    }, [data]);
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+  
+    const handleSave = () => {
+      onSave(formData);
+    };
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModalHeader>
+        <CModalTitle>New Storage Condition</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CFormInput
+          type="text"
+          label="Name"
+          placeholder="Storage Name"
+          value={formData?.conditionCode || ""}
+          onChange={handleChange}
+          name="conditionCode"
+        />
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={closeModal}>
+          Cancel
+        </CButton>
+        <CButton color="primary" onClick={handleSave}>
+          Add
+        </CButton>
+      </CModalFooter>
+    </CModal>
+    );
+  };
+  
   return (
     <>
       <div className="m-5 mt-3">
@@ -250,6 +318,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
       </div>
 
@@ -262,6 +331,12 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       {isModalsOpen && (
         <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
+       <EditModal
+        visible={Boolean(editModalData)}
+        closeModal={closeEditModal}
+        data={editModalData}
+        onSave={handleEditSave}
+      />
     </>
   );
 }

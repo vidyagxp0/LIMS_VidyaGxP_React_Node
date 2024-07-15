@@ -13,6 +13,14 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import CalibrationFrequencyModal from "../Modals/CalibrationFrequencyModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -31,46 +39,6 @@ const initialData = [
     AddedOn: "2024-06-02",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    CalibrationType: "Tool Calibration",
-    CalibrationPrefix: "TOOL-001",
-    AddedOn: "2024-06-03",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    CalibrationType: "Instrument Calibration",
-    CalibrationPrefix: "INST-001",
-    AddedOn: "2024-06-04",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    CalibrationType: "Meter Calibration",
-    CalibrationPrefix: "METER-001",
-    AddedOn: "2024-06-05",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    CalibrationType: "Gauge Calibration",
-    CalibrationPrefix: "GAUGE-001",
-    AddedOn: "2024-06-06",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    CalibrationType: "Sensor Calibration",
-    CalibrationPrefix: "SENSOR-001",
-    AddedOn: "2024-06-07",
-    status: "Active",
-  },
 ];
 
 
@@ -85,7 +53,7 @@ const CalibrationFrequency = () => {
     Active: 0,
     Inactive: 0,
   });
-
+  const [editModalData, setEditModalData] = useState(null); 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -205,6 +173,103 @@ setData(concatenateData ); // Update data state with parsed Excel data
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          CalibrationType: newInstrument.CalibrationType,
+          CalibrationPrefix: newInstrument.CalibrationPrefix,
+          AddedOn:currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+        >
+          <CModalHeader>
+            <CModalTitle> Add Calibration Type</CModalTitle>
+          </CModalHeader>
+          <p className="ms-3 m-2">Add information and add new calibration type</p>
+          <CModalBody>
+            <CFormInput
+              label="Calibration Type"
+              className="mb-3"
+              type="text"
+              name="CalibrationType"
+              placeholder="Calibration Type"
+              value={formData?.CalibrationType||""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              label="Calibration Type Prefix"
+              className="mb-3"
+              type="text"
+              name="CalibrationPrefix"
+              placeholder="Calibration Type Prefix"
+              value={formData?.CalibrationPrefix||""}
+              onChange={handleChange}
+            />
+  
+            <div className="d-flex gap-3 mt-4">
+              <CButton color="light w-50" onClick={closeModal}>
+                &lt; Back
+              </CButton>
+              <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+            </div>
+          </CModalBody>
+        </CModal>
+      </div>
+    );
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Calibration Frequency</h1>
@@ -238,10 +303,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <CalibrationFrequencyModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -252,6 +319,15 @@ setData(concatenateData ); // Update data state with parsed Excel data
       )}
       {isModalsOpen && (
         <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+
+{editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

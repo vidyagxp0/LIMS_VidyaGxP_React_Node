@@ -17,8 +17,6 @@ import {
 import "react-quill/dist/quill.snow.css";
 
 const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
-
- 
   const [instrumentCategoryData, setInstrumentCategoryData] = useState({
     CategoryName: "",
     Description: "",
