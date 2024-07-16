@@ -18,6 +18,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table3 from "../../components/ATM components/Table/Table3.jsx";
 import ChamberConditionMappingModal from "../Modals/ChamberConditionMappingModal.jsx";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -256,6 +257,7 @@ function ChamberConditionMapping() {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Chamber_Mapping.pdf" title="Chamber Condition Mapping Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             {/* <ATMButton text="Update" color="blue" onClick={openModal} /> */}
           </div>

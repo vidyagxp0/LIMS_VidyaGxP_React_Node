@@ -17,6 +17,7 @@ import {CButton,CCol,CFormCheck,CFormInput,CFormSelect,CModal,CModalBody,CModalF
 import { Button } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa6";
 import ReactQuill from "react-quill";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -566,6 +567,7 @@ const Registration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Instrument_Master.pdf" title="Instrument Master Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Instrument Registration"

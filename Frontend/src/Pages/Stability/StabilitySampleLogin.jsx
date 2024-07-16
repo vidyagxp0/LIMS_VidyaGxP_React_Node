@@ -21,6 +21,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 const initialData = [
   {
     checkbox: false,
@@ -593,6 +594,7 @@ function StabilitySampleLogin() {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login.pdf" title="Sample Login Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Sample LogIn"

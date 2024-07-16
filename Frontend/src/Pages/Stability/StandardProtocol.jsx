@@ -19,6 +19,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -308,6 +309,7 @@ const handleSave = ()=>{
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Standard_Protocol.pdf" title="Standard Protocol Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Standard Protocol"

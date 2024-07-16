@@ -36,6 +36,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -382,6 +383,7 @@ const SampleLoginTemplate = () => {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login_Template.pdf" title="Sample Login Template Data" />
             <ATMButton
               text="Import"
               color='pink'

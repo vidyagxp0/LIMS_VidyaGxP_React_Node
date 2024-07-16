@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import Table from '../../components/ATM components/Table/Table';
-import Details from './Details';
-import ImportModal from '../Modals/importModal';
-import ATMButton from '../../components/ATM components/Button/ATMButton';
+import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import Table from "../../components/ATM components/Table/Table";
+import Details from "./Details";
+import ImportModal from "../Modals/importModal";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
 import {
   CButton,
   CCol,
@@ -17,7 +21,7 @@ import {
   CModalTitle,
   CRow,
 } from "@coreui/react";
-import PDFDownload from '../PDFComponent/PDFDownload ';
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -27,7 +31,6 @@ const initialData = [
     role: "Admin",
     status: "Active",
     checkbox: false,
-    
   },
   {
     sno: 2,
@@ -36,7 +39,6 @@ const initialData = [
     role: "User",
     status: "Inactive",
     checkbox: false,
-    
   },
   {
     sno: 3,
@@ -45,7 +47,6 @@ const initialData = [
     role: "Manager",
     status: "Active",
     checkbox: false,
-    
   },
 ];
 
@@ -118,8 +119,8 @@ const Approval = () => {
       role: item["Role"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
@@ -134,7 +135,7 @@ const Approval = () => {
   const handleDelete = (item) => {
     const newData = data.filter((d) => d.sno !== item.sno);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
 
   const openEditModal = (rowData) => {
@@ -216,35 +217,41 @@ const Approval = () => {
   };
 
   return (
-   <>
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">User List</h1>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
+    <>
+      <div className="p-4">
+        <h1 className="text-xl font-bold mb-4">User List</h1>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4"></div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={initialData}
+              fileName="approval.pdf"
+              title="Approval Data" 
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={initialData} fileName="audit_trail.pdf" title="Audit Trail Data" />
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-        </div>
+        <Table
+          columns={columns}
+          data={data}
+          onCheckboxChange={handleCheckboxChange}
+          onDelete={handleDelete}
+          onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
+        />
       </div>
-      <Table
-        columns={columns}
-        data={data}
-        onCheckboxChange={handleCheckboxChange}
-        onDelete={handleDelete}
-        onViewDetails={onViewDetails}
-        openEditModal={openEditModal}
-      />
-    </div>
-    {viewModalData && (
-      <Details visible={viewModalData} closeModal={closeViewModal} />
-    )}
-     {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {viewModalData && (
+        <Details visible={viewModalData} closeModal={closeViewModal} />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
       {editModalData && (
         <EditModal
@@ -252,7 +259,8 @@ const Approval = () => {
           closeModal={closeEditModal}
           data={editModalData}
           onSave={handleEditSave}
-        />)}
+        />
+      )}
     </>
   );
 };

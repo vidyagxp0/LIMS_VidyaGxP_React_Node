@@ -11,6 +11,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import SampleLogin2Modal from "../Modals/SampleLogin2Modal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -230,6 +231,7 @@ const SampleLogin = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="sampleLogin.pdf" title="Sample LogIn Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />

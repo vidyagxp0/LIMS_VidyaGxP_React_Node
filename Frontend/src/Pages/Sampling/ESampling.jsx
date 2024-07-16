@@ -22,6 +22,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -168,6 +169,7 @@ const ESampling = () => {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="E_Sampling.pdf" title="E Sampling Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add E-Sampling" color="blue" onClick={openModal} />
           </div>

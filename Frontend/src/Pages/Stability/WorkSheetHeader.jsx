@@ -23,6 +23,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -704,6 +705,7 @@ function WorkSheetHeader() {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="WorkSheet_Header.pdf" title="WorkSheet Header Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add WorkSheet" color="blue" onClick={openModal} />
           </div>

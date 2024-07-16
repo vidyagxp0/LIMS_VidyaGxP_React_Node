@@ -13,6 +13,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import TestRegistrationModal from "../Modals/TestRegistrationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -284,6 +285,7 @@ const TestRegistration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Test_Registrations.pdf" title="Test Registration Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Add Registration"

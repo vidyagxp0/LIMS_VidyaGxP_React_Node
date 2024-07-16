@@ -38,6 +38,7 @@ import {
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -947,6 +948,7 @@ function TestPlan() {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Test_plan.pdf" title="Test Plan Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Test Categories"
