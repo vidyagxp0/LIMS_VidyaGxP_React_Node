@@ -1,14 +1,25 @@
-import { CButton, CForm, CFormCheck, CFormInput, CFormLabel, CModal, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const MediaLotUsageModal = (_props) => {
   return (
     <div>
-          <CModal
+      <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size='xl'
+        size="xl"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Media Lot Usage</CModalTitle>
@@ -17,11 +28,24 @@ const MediaLotUsageModal = (_props) => {
           <p>Add information and add new Media Lot Usage</p>
           <CForm>
             <div className="mb-3">
-              <CFormInput
+              <CFormSelect
                 type="text"
                 label="Media Lot No."
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "MED-LOT0000001/1", label: "MED-LOT0000001/1" },
+                  { value: "MED-LOT0000002/2", label: "MED-LOT0000002/2" },
+                  { value: "MED-LOT0000003/3", label: "MED-LOT0000003/3" },
+                  { value: "MED-LOT0000004/4", label: "MED-LOT0000004/4" },
+                  { value: "MED-LOT0000005/5", label: "MED-LOT0000005/5" },
+                  { value: "MED-LOT0000005/5", label: "MED-LOT0000005/5" },
+                  { value: "MED-LOT0000006/6", label: "MED-LOT0000006/6" },
+                  { value: "MED-LOT0000007/7", label: "MED-LOT0000007/7" },
+                  { value: "MED-LOT0000008/8", label: "MED-LOT0000008/8" },
+                  { value: "MED-LOT0000009/9", label: "MED-LOT0000009/9" },
+                  { value: "MED-LOT00000010/10", label: "MED-LOT00000010/10" },
+                ]}
               />
             </div>
             <div className="mb-3">
@@ -147,9 +171,8 @@ const MediaLotUsageModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-      
     </div>
-  )
-}
+  );
+};
 
-export default MediaLotUsageModal
+export default MediaLotUsageModal;

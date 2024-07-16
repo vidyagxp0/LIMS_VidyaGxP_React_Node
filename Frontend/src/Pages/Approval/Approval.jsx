@@ -246,7 +246,7 @@ const Approval = () => {
       )}
       {isModalsOpen && (
         <ImportModal
-          initialData={filteredData}
+          initialData={initialData}
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}

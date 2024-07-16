@@ -11,6 +11,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import WorkFlowModal from "../Modals/WorkFlowModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -182,6 +183,7 @@ const WorkFlow = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="WorkFlow.pdf" title="WorkFlow Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add WorkFlow" color="blue" onClick={openModal} />
         </div>

@@ -16,6 +16,7 @@ import ViewModal from "../Modals/ViewModal";
 import { PiDownloadBold } from "react-icons/pi";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -291,21 +292,8 @@ const AuditTrail = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div
-          style={{
-            border: "1px solid #f98d6b",
-            padding: "7px",
-            width: "42px",
-            display: "flex",
-            justifyContent: "center",
-            backgroundColor: "#f98d6b",
-            borderRadius: "5px",
-            cursor: "pointer",
-            color: "white",
-          }}
-          onClick={handleDownload}
-        >
-          <PiDownloadBold />
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Audit_Trail.pdf" title="Audit Trail Data" />
         </div>
       </div>
       <Table

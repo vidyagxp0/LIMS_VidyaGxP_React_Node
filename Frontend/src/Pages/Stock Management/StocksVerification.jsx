@@ -424,6 +424,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -667,6 +668,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         <div className="flex space-x-4">
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={initialData} fileName="Stock_Verification.pdf" title="Stock Verification Data" />
             <ATMButton 
             text="Import"
             color='pink'

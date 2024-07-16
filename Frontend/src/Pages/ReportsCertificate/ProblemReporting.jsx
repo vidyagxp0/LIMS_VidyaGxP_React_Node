@@ -14,6 +14,7 @@ import ProblemReportingModal from "../Modals/ProblemReportingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle ,} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -414,6 +415,7 @@ const ProblemReporting = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Problem_Reporting.pdf" title="Problem Reporting Data" />
           <ATMButton
             text="Import"
             color='pink'

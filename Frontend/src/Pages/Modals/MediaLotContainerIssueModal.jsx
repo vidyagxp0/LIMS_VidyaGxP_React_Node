@@ -15,7 +15,7 @@ const MediaLotContainerIssueModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="lg"
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle size="lg">Add Media Lot</CModalTitle>
