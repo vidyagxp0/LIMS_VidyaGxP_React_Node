@@ -223,11 +223,15 @@ const AuditTrail = () => {
     const doc = new jsPDF();
     doc.text("Audit Trail Data", 20, 20);
 
-    const tableColumn = columns.map((col) =>
+    const filteredColumns = columns.filter(
+      (col) => col.accessor !== "checkbox" && col.accessor !== "action"
+    );
+
+    const tableColumn = filteredColumns.map((col) =>
       col.header.props ? "Select All" : col.header
     );
     const tableRows = filteredData.map((row) =>
-      columns.map((col) => row[col.accessor])
+      filteredColumns.map((col) => row[col.accessor])
     );
 
     doc.autoTable({
