@@ -8,7 +8,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState} from "react";
+import React, { useEffect, useState} from "react";
 
 const NominationModal = ({ visible, closeModal, handleSubmit }) => {
 
@@ -30,7 +30,24 @@ const NominationModal = ({ visible, closeModal, handleSubmit }) => {
   const handleFormSubmit = () => {
     handleSubmit({ ...nomination });
     closeModal();
+    resetForm();
   };
+
+  const resetForm = () => {
+    setNomination({
+      analyst: "",
+      employeeId: "",
+      role: "",
+      testTechnique: "",
+      totalExperience: "",
+      pastExperience: "",
+      justification: "",
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, []);
 
   return (
     <div>

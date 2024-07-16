@@ -54,7 +54,9 @@ const ESampling = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Inactive");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -147,11 +149,8 @@ const ESampling = () => {
     setIsModalOpen(false);
   };
 
-
-
-
   const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "DROPPED" ? "INTIATED" : "DROPPED";
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
     setData((prevData) => [
       ...prevData,
       { ...newCondition, sno: prevData.length + 1, checkbox: false, status: nextStatus },
@@ -161,14 +160,17 @@ const ESampling = () => {
   }
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
+
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
     const [eSampling, setESampling] = useState({
+
+
       samplingConfiguration: [],
       productMaterialName: "",
       noOfContainers: "",
       containersSampled: "",
-      samplingConclusion: ""
+      samplingConclusion: "",
     });
 
     const handleRadioChange = (e) => {
@@ -219,6 +221,7 @@ const ESampling = () => {
       return rows;
     };
 
+
     const handleAdd = () => {
       const newCondition = {
         samplingConfiguration: eSampling.samplingConfiguration,
@@ -226,6 +229,7 @@ const ESampling = () => {
         containersSampled: eSampling.containersSampled,
         noOfContainers: eSampling.noOfContainers,
         samplingConclusion: eSampling.samplingConclusion,
+        addedOn: currentDate,
         action: [],
       }
       onAdd(newCondition)
@@ -782,23 +786,23 @@ const ESampling = () => {
 
           <label className="mb-3">Sampling Conclusion</label>
           <div className="flex gap-3">
-          <CFormCheck
-          type="radio"
-          id="SamplingConclusionPass"
-          name="SamplingConclusion"
-          label="Pass"
-          value="Pass"
-          onChange={handleRadioChange}
-        />
-        <CFormCheck
-          className="mb-3"
-          type="radio"
-          id="SamplingConclusionFail"
-          name="SamplingConclusion"
-          label="Fail"
-          value="Fail"
-          onChange={handleRadioChange}
-        />
+            <CFormCheck
+              type="radio"
+              id="SamplingConclusionPass"
+              name="SamplingConclusion"
+              label="Pass"
+              value="Pass"
+              onChange={handleRadioChange}
+            />
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="SamplingConclusionFail"
+              name="SamplingConclusion"
+              label="Fail"
+              value="Fail"
+              onChange={handleRadioChange}
+            />
           </div>
 
           <label className="mb-3">Check point passed</label>
@@ -857,6 +861,120 @@ const ESampling = () => {
     );
 
   };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, data, closeModal, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add E-Sample</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product/Material Name"
+            placeholder="Product/Material Name"
+            value={formData?.productMaterialName || ""}
+              onChange={handleChange}
+              name="productMaterialName"
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="No. of containers to be sampled"
+            placeholder="No. of containers to be sampled"
+            value={formData?.noOfContainers || ""}
+            onChange={handleChange}
+            name="noOfContainers"
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Containers sampled"
+            options={[
+              "Select",
+              {
+                label: "No. Of Sampled Containers",
+                value: "No. Of Sampled Containers",
+              },
+            ]}
+            value={formData?.containersSampled || ""}
+              onChange={handleChange}
+              name="containersSampled"
+          />
+
+          <label className="mb-3">Sampling Conclusion</label>
+          <div className="flex gap-3">
+            <CFormCheck
+              type="radio"
+              id="SamplingConclusionPass"
+              name="SamplingConclusion"
+              label="Pass"
+              value={formData?.samplingConclusion || ""}
+              onChange={handleChange}
+              // name="samplingConclusion"
+            />
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="SamplingConclusionFail"
+              name="SamplingConclusion"
+              label="Fail"
+              value={formData?.samplingConclusion || ""}
+              onChange={handleChange}
+              // name="samplingConclusion"
+            />
+          </div>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+
+  };
+
   return (
     <>
       <div className="m-5 mt-3">
@@ -890,6 +1008,7 @@ const ESampling = () => {
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
         />
       </div>
 
@@ -903,6 +1022,14 @@ const ESampling = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </>

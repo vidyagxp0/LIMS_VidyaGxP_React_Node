@@ -22,7 +22,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import ViewModal from "../Modals/ViewModal";
-
+import PDFDownload from '../PDFComponent/PDFDownload '
 const initialData = [
   {
     checkbox: false, sno: 1, storageCode: "SC001", storageName: "Storage 1", attachment: "attachment", status: "Active", 
@@ -277,6 +277,7 @@ function StorageLocation() {
             />
           </div>
           <div className="float-right flex gap-4">
+            <PDFDownload columns={columns} data={filteredData} title="Storage Location" fileName="Storage_Location.pdf"/>
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add Storage Location" color="blue" onClick={openModal} />
           </div>

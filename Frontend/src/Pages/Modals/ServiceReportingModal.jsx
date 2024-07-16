@@ -8,7 +8,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
   const [serviceReporting, setServiceReporting] = useState({
@@ -28,7 +28,22 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
   const handleFormSubmit = () => {
     handleSubmit({ ...serviceReporting });
     closeModal();
+    resetForm();
   };
+  const resetForm = () => {
+    setServiceReporting({
+      problemId: "",
+      instrumentID: "",
+      moduleId: "",
+      problemInBrief: "",
+      problemInDetail: "",
+      jobDetails: ""
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, []);
 
   return (
     <div>
