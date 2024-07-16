@@ -13,28 +13,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InstrumentMasterModal from "../Modals/InstrumentMasterModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-import {
-  CButton,
-  CCol,
-  CContainer,
-  CFormCheck,
-  CFormInput,
-  CFormLabel,
-  CFormSelect,
-  CFormTextarea,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
+import {CButton,CCol,CFormCheck,CFormInput,CFormSelect,CModal,CModalBody,CModalFooter,CModalHeader,CModalTitle,CRow,} from "@coreui/react";
 import { Button } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa6";
 import ReactQuill from "react-quill";

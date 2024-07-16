@@ -4,7 +4,11 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faEye,faPenToSquare,faTrashCan,} from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
@@ -20,7 +24,6 @@ const initialData = [
     containerStart: "Start 1",
     sampleReference: "Ref 1",
     status: "DROPPED",
-   
   },
   {
     checkbox: false,
@@ -31,95 +34,6 @@ const initialData = [
     containerStart: "Start 2",
     sampleReference: "Ref 2",
     status: "DROPPED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    name: "Product 3",
-    sequence: "Seq 3",
-    additionalInfo: "Info 3",
-    containerStart: "Start 3",
-    sampleReference: "Ref 3",
-    status: "REINITIATED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    name: "Product 4",
-    sequence: "Seq 4",
-    additionalInfo: "Info 4",
-    containerStart: "Start 4",
-    sampleReference: "Ref 4",
-    status: "APPROVED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    name: "Product 5",
-    sequence: "Seq 5",
-    additionalInfo: "Info 5",
-    containerStart: "Start 5",
-    sampleReference: "Ref 5",
-    status: "APPROVED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    name: "Product 6",
-    sequence: "Seq 6",
-    additionalInfo: "Info 6",
-    containerStart: "Start 6",
-    sampleReference: "Ref 6",
-    status: "APPROVED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    name: "Product 7",
-    sequence: "Seq 7",
-    additionalInfo: "Info 7",
-    containerStart: "Start 7",
-    sampleReference: "Ref 7",
-    status: "INITIATED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    name: "Product 8",
-    sequence: "Seq 8",
-    additionalInfo: "Info 8",
-    containerStart: "Start 8",
-    sampleReference: "Ref 8",
-    status: "REINITIATED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    name: "Product 9",
-    sequence: "Seq 9",
-    additionalInfo: "Info 9",
-    containerStart: "Start 9",
-    sampleReference: "Ref 9",
-    status: "APPROVED",
-   
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    name: "Product 10",
-    sequence: "Seq 10",
-    additionalInfo: "Info 10",
-    containerStart: "Start 10",
-    sampleReference: "Ref 10",
-    status: "REJECTED",
-   
   },
 ];
 
@@ -173,7 +87,6 @@ const InternalRegistration = () => {
     setIsModalsOpen(false);
   };
 
-
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -188,8 +101,8 @@ const InternalRegistration = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); 
-    setIsViewModalOpen(true); 
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
   const columns = [
@@ -253,7 +166,7 @@ const InternalRegistration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       name: item["Name"] || "",
       sequence: item["Sequence"] || "",
       additionalInfo: item["Additional Information"] || "",
@@ -262,8 +175,8 @@ const InternalRegistration = () => {
       status: item["Status"] || "INITIATED",
     }));
 
-    const concatenatedData = [ ...updatedData];
-    setData(concatenatedData); 
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
 
     setIsModalsOpen(false);
   };
@@ -320,8 +233,8 @@ const InternalRegistration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Internal" color="blue" onClick={openModal} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add Internal" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -343,7 +256,13 @@ const InternalRegistration = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );

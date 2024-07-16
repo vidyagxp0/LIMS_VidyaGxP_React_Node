@@ -423,22 +423,9 @@ const InstrumentUsage = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal
-          initialData={initialData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-          onDataUpload={handleExcelDataUpload}
-        />
+        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={() => setIsViewModalOpen(false)}
-          data={viewModalData}
-        />
-      )}
-      {editModalOpen && (
+       {editModalOpen && (
         <EditModal
           visible={editModalOpen}
           closeModal={closeEditModal}

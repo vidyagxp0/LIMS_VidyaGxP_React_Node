@@ -288,7 +288,7 @@ function StorageLocation() {
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
       )}
-      {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
+      {isViewModalOpen && <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} />}
       {isModalsOpen && (
         <ImportModal initialData={initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}

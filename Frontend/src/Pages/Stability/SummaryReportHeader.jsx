@@ -448,16 +448,6 @@ function SummaryReportHeader() {
       }
       return tableRows;
     };
-
-    
-    // const handleAdd = ()=>{
-    //   const newCondition = {
-    //     productCaption:productCaption,
-    //     reportTitle:reportTitle,
-    //     action:[],
-    //   }
-    //   onAdd(newCondition)
-    // }
     
     return (
       <CModal

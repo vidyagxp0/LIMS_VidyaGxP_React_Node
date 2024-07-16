@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import Table from '../../components/ATM components/Table/Table';
 import Details from './Details';
 import ImportModal from '../Modals/importModal';
 import ATMButton from '../../components/ATM components/Button/ATMButton';
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+} from "@coreui/react";
+import PDFDownload from '../PDFComponent/PDFDownload ';
 
 const initialData = [
   {
@@ -39,7 +52,8 @@ const initialData = [
 const Approval = () => {
   const [data, setData] = useState(initialData);
   const [viewModalData, setViewModalData] = useState(null);
-  
+  const [lastStatus, setLastStatus] = useState("Active");
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -123,6 +137,84 @@ const Approval = () => {
     console.log('Deleted item:', item);
   };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Update User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="User Name"
+            placeholder="UserName "
+            value={formData?.name || ""}
+            onChange={handleChange}
+            name="name"
+          />
+          <CFormInput
+            className="mb-3"
+            type="email"
+            label="Gmail Address"
+            placeholder="sample@gmail.com"
+            value={formData?.email || ""}
+            onChange={handleChange}
+            name="email"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Role"
+            placeholder="Role "
+            value={formData?.role || ""}
+            onChange={handleChange}
+            name="role"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   return (
    <>
     <div className="p-4">
@@ -131,6 +223,7 @@ const Approval = () => {
         <div className="flex space-x-4">
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={initialData} fileName="audit_trail.pdf" title="Audit Trail Data" />
             <ATMButton 
             text="Import"
             color='pink'
@@ -144,14 +237,22 @@ const Approval = () => {
         onCheckboxChange={handleCheckboxChange}
         onDelete={handleDelete}
         onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
       />
     </div>
     {viewModalData && (
       <Details visible={viewModalData} closeModal={closeViewModal} />
     )}
      {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />)}
     </>
   );
 };

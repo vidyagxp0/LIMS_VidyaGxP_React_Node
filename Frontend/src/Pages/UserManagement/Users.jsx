@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
@@ -67,6 +67,7 @@ const Users = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -165,7 +166,7 @@ const Users = () => {
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [name, setName] = useState("");
     const [contact, setContact] = useState("");
-    const [gmail, setGmail] = useState("");
+    const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
     const [plant, setPlant] = useState("");
     const [department, setDepartment] = useState("");
@@ -211,8 +212,8 @@ const Users = () => {
               type="email"
               label="Gmail Address"
               placeholder=" sample@gmail.com"
-              value={gmail}
-              onChange={(e) => setGmail(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <CFormInput
@@ -273,6 +274,133 @@ const Users = () => {
     );
   };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+          <CModalHeader>
+            <CModalTitle>Add User </CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput 
+            type="text"
+             label="User Name" 
+            placeholder="UserName " 
+            value={formData?. user||""}
+            onChange={handleChange} 
+            name="user"
+            />
+            <CFormInput
+              type="number"
+              label="Contact Number"
+              placeholder="+91 0000000000 "
+              value={formData?.contact||""}
+              onChange={handleChange}
+              name="contact"
+            />
+            <CFormInput
+              type="email"
+              label="Gmail Address"
+              placeholder=" sample@gmail.com"
+              value={formData?.email||""}
+              onChange={handleChange}
+              name="email"
+            />
+
+            <CFormInput
+             type="text" 
+            label="Address"
+             placeholder="Address "
+              value={formData?.address||""} 
+            onChange={handleChange}
+            name="address" 
+             />
+
+            <CFormSelect
+              type="select"
+              label="Plant"
+              placeholder="Select... "
+              value={formData?.plant||""}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Master", value: "Master" },
+                { label: "win_Master", value: "win_Master" },
+                { label: "plant3", value: "plant3" },
+                { label: "PlantDemo4", value: "PlantDemo4" },
+              ]}
+              name="plant"
+            />
+            <CFormSelect
+              type="select"
+              label="Department"
+              placeholder="Select Department"
+              value={formData?.department||""}
+              onChange={handleChange}
+              options={[
+                "Select Department",
+                { label: "Admin", value: "Admin" },
+                { label: "Quality Assurance", value: "Quality Assurance" },
+                { label: "Quality Check", value: "Quality Check" },
+                { label: "Store", value: "Store" },
+              ]}
+              name="department"
+            />
+            <CFormSelect
+              type="select"
+              label="Role"
+              placeholder="Select Role "
+              value={formData?.role||""}
+              onChange={handleChange}
+              options={[
+                "Select Role",
+                { label: "No Options", value: "No Options" },
+              ]}
+              name="role"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
   return (
     <div className="m-5 mt-3">
       <div className="main-head">
@@ -301,7 +429,7 @@ const Users = () => {
         onDelete={handleDelete}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
-
+        openEditModal={openEditModal}
       />
 
       {isModalOpen && (
@@ -314,6 +442,14 @@ const Users = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+        {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

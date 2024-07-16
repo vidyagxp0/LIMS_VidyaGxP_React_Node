@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Admin.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -64,6 +64,7 @@ const QualityCheck = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -179,7 +180,7 @@ const QualityCheck = () => {
   const StatusModal = ({visible , closeModal,onAdd}) => {
     const [name , setName] = useState("");
     const [contact , setContact] = useState("");
-    const [gmail , setGmail] = useState("");
+    const [email , setEmail] = useState("");
     const [address , setAddress] = useState("");
 
     const handleAdd = ()=>{
@@ -187,7 +188,7 @@ const QualityCheck = () => {
         employeeId:"EMP00",
         storageName:name,
         role:"Role 00",
-        email:gmail,
+        email:email,
         addedOn: new Date().toISOString().split('T')[0],
         attachment:"attachment",
         action:[],
@@ -226,8 +227,8 @@ const QualityCheck = () => {
             type="email"
             label="Gmail Address"
             placeholder="sample@gmail.com"
-            value={gmail}
-            onChange={(e) => setGmail(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -243,6 +244,93 @@ const QualityCheck = () => {
             Back
           </CButton>
           <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Update User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="User Name"
+            placeholder="UserName "
+            value={formData?.storageName || ""}
+            onChange={handleChange}
+            name="storageName"
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Contact Number"
+            placeholder="+91 0000000000 "
+            value={formData?.contact || ""}
+            onChange={handleChange}
+            name="contact"
+          />
+          <CFormInput
+            className="mb-3"
+            type="email"
+            label="Gmail Address"
+            placeholder="sample@gmail.com"
+            value={formData?.email || ""}
+            onChange={handleChange}
+            name="email"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Address"
+            placeholder="Address "
+            value={formData?.address || ""}
+            onChange={handleChange}
+            name="address"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -276,6 +364,7 @@ const QualityCheck = () => {
         onDelete={handleDelete}
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
       />
 
       {isModalOpen && (
@@ -288,6 +377,14 @@ const QualityCheck = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+       {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

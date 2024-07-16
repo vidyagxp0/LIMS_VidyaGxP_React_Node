@@ -308,7 +308,7 @@ const SampleArea = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
     </div>
   );

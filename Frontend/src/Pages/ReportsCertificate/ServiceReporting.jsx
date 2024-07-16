@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -14,6 +13,16 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ServiceReportingModal from "../Modals/ServiceReportingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -40,66 +49,8 @@ const initialData = [
     JobDetails: "Job details 2",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    ProblemId: "PRB-003",
-    InstrumentId: "INST-003",
-    ModuleId: "MOD-003",
-    ProblemInBrief: "Brief description 3",
-    ProblemInDetails: "Detailed description 3",
-    ExpectedClosureDate: "2024-07-03",
-    JobDetails: "Job details 3",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ProblemId: "PRB-004",
-    InstrumentId: "INST-004",
-    ModuleId: "MOD-004",
-    ProblemInBrief: "Brief description 4",
-    ProblemInDetails: "Detailed description 4",
-    ExpectedClosureDate: "2024-07-04",
-    JobDetails: "Job details 4",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ProblemId: "PRB-005",
-    InstrumentId: "INST-005",
-    ModuleId: "MOD-005",
-    ProblemInBrief: "Brief description 5",
-    ProblemInDetails: "Detailed description 5",
-    ExpectedClosureDate: "2024-07-05",
-    JobDetails: "Job details 5",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    ProblemId: "PRB-006",
-    InstrumentId: "INST-006",
-    ModuleId: "MOD-006",
-    ProblemInBrief: "Brief description 6",
-    ProblemInDetails: "Detailed description 6",
-    ExpectedClosureDate: "2024-07-06",
-    JobDetails: "Job details 6",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    ProblemId: "PRB-007",
-    InstrumentId: "INST-007",
-    ModuleId: "MOD-007",
-    ProblemInBrief: "Brief description 7",
-    ProblemInDetails: "Detailed description 7",
-    ExpectedClosureDate: "2024-07-07",
-    JobDetails: "Job details 7",
-    status: "Active",
-  },
+
+
 ];
 
 const ServiceReporting = () => {
@@ -114,6 +65,150 @@ const ServiceReporting = () => {
     Inactive: 0,
   });
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Service Reporting</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add information and Add Service Reporting</p>
+            <CFormSelect
+              type="text"
+              label="Problem ID"
+              className="mb-3"
+              options={["Select...", { label: "SHMDZ" }]}
+              placeholder="Select..."
+              value={formData?.ProblemId || ""}
+              onChange={handleChange}
+              name="ProblemId"
+            />
+            <CFormInput
+              type="text"
+              label="Instrument (Instrument ID)"
+              placeholder="hplc"
+              disabled
+            />
+            <CFormSelect
+              type="text"
+              label="Module ID"
+              className="mb-3"
+              options={["Select...", { label: "wl/wb/m/001" }]}
+              placeholder="Select..."
+              value={formData?.ModuleId || ""}
+              onChange={handleChange}
+              name="ModuleId"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Problem In Brief"
+              placeholder="Problem In Brief "
+              value={formData?.ProblemInBrief || ""}
+              onChange={handleChange}
+              name="ProblemInBrief"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Problem In Details"
+              placeholder="Problem In Details"
+              value={formData?.ProblemInDetails || ""}
+              onChange={handleChange}
+              name="ProblemInDetails"
+            />
+            <CFormInput
+              type="file"
+              className="mb-3"
+              label="Reference Document"
+              placeholder=" choose file"
+            />
+            <CFormInput
+              type="date"
+              className="mb-3"
+              label="Occurred On"
+              placeholder=" "
+            />
+            <CFormInput
+              type="date"
+              className="mb-3"
+              label="Reported On"
+              placeholder=" "
+            />
+            <CFormInput
+              type="date"
+              className="mb-3"
+              label="Attended On"
+              placeholder=" "
+            />
+            <CFormInput
+              type="date"
+              className="mb-3"
+              label="Expected Closure Date"
+              placeholder=" "
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Job Details"
+              placeholder=" Job Details"
+              value={formData?.JobDetails || ""}
+              onChange={handleChange}
+              name="JobDetails"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -200,10 +295,11 @@ const ServiceReporting = () => {
     },
   ];
 
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       ProblemId: item["Problem ID"] || "",
       InstrumentId: item["Instrument ID"] || "",
       ModuleId: item["Module ID"] || "",
@@ -213,9 +309,9 @@ const ServiceReporting = () => {
       JobDetails: item["Job Details"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
@@ -241,6 +337,37 @@ setData(concatenateData ); // Update data state with parsed Excel data
     console.log("Deleted item:", item);
   };
 
+
+  const handleModalSubmit = (serviceReporting) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === serviceReporting.sno ? serviceReporting : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          ProblemId: serviceReporting.problemId,
+          InstrumentId: serviceReporting.instrumentID,
+          ModuleId: serviceReporting.moduleId,
+          ProblemInDetails:serviceReporting.problemInDetail,
+          ProblemInBrief: serviceReporting.problemInBrief,
+          JobDetails: serviceReporting.jobDetails,
+          ExpectedClosureDate:currentDate,
+          AddedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Service Reporting</h1>
@@ -259,12 +386,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
+          <ATMButton
             text="Import"
             color='pink'
             onClick={handleOpenModals}
-            
-             />
+
+          />
           <ATMButton text="Add Service" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -274,10 +401,12 @@ setData(concatenateData ); // Update data state with parsed Excel data
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ServiceReportingModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -287,8 +416,18 @@ setData(concatenateData ); // Update data state with parsed Excel data
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
+
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+
     </div>
   );
 };

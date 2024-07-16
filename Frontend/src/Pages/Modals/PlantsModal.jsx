@@ -7,17 +7,32 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const PlantsModal = (_props) => {
+const PlantsModal = ({ visible, closeModal, handleSubmit }) => {
+  const [plantData, setPlantData] = useState({
+    PlantName: "",
+    PlantCode: "",
+    Address: "",
+  });
 
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...plantData, [field]: value };
+    setPlantData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...plantData });
+    closeModal();
+  };
 
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="xl"
       >
         <CModalHeader>
@@ -29,25 +44,37 @@ const PlantsModal = (_props) => {
             className="mb-3"
             label="Name"
             placeholder="Name"
+            value={plantData.PlantName}
+            onChange={(e) => {
+              handleInputChange("PlantName", e.target.value);
+            }}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Plant Code"
             placeholder="Plant Code"
+            value={plantData.PlantCode}
+            onChange={(e) => {
+              handleInputChange("PlantCode", e.target.value);
+            }}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Address"
             placeholder="Address"
+            value={plantData.Address}
+            onChange={(e) => {
+              handleInputChange("Address", e.target.value);
+            }}
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" >Add</CButton>
+          <CButton color="primary" onClick={handleFormSubmit}>Add</CButton>
         </CModalFooter>
       </CModal>
     </div>

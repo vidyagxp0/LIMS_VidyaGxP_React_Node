@@ -13,7 +13,16 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import NominationModal from "../Modals/NominationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -38,61 +47,7 @@ const initialData = [
     AddedOn: "BA-002",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    Analyst: "BA-003",
-    TestTechnique: "BA-003",
-    TotalExperience: "BA-003",
-    PastExperience: "BA-003",
-    JustificationforDirectNomination: "BA-003",
-    AddedOn: "BA-003",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    Analyst: "BA-004",
-    TestTechnique: "BA-004",
-    TotalExperience: "BA-004",
-    PastExperience: "BA-004",
-    JustificationforDirectNomination: "BA-004",
-    AddedOn: "BA-004",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    Analyst: "BA-005",
-    TestTechnique: "BA-005",
-    TotalExperience: "BA-005",
-    PastExperience: "BA-005",
-    JustificationforDirectNomination: "BA-005",
-    AddedOn: "BA-005",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    Analyst: "BA-006",
-    TestTechnique: "BA-006",
-    TotalExperience: "BA-006",
-    PastExperience: "BA-006",
-    JustificationforDirectNomination: "BA-006",
-    AddedOn: "BA-006",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    Analyst: "BA-007",
-    TestTechnique: "BA-007",
-    TotalExperience: "BA-007",
-    PastExperience: "BA-007",
-    JustificationforDirectNomination: "BA-007",
-    AddedOn: "BA-007",
-    status: "Active",
-  },
+ 
 ];
 
 
@@ -113,6 +68,139 @@ const Nominations = () => {
 
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle> Add Nominations</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p className="my-3 fs-6 fw-bold">
+              {" "}
+              Add information about Nominations.
+            </p>
+            <CFormSelect
+              className="mb-3"
+              label="Analyst"
+              options={[
+                { value: "Analyst", label: "Analyst" },
+                { value: "Analyst Two", label: "Analyst Two" },
+              ]}
+              value={formData?.Analyst || ""}
+              onChange={handleChange}
+              name="Analyst"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Employee ID"
+              placeholder="Employee ID"
+              value={formData?.EmployeeId || ""}
+              onChange={handleChange}
+              name="EmployeeId"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Role/Title"
+              placeholder="Role/Title"
+              value={formData?.role || ""}
+              onChange={handleChange}
+              name="role"
+            />
+            <CFormSelect
+              label="Test Technique"
+              placeholder="Select"
+              className="mb-3"
+              options={[
+                { value: "select", label: "Select" },
+                { value: "Description", label: "Description" }]}
+                value={formData?.TestTechnique || ""}
+                onChange={handleChange}
+                name="TestTechnique"
+           
+            />
+            <CFormInput type="file" id="formFile" label="Training Documents" />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Total Experience / Work Area"
+              placeholder="Total Experience / Work Area"
+              value={formData?.TotalExperience || ""}
+              onChange={handleChange}
+              name="TotalExperience"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Past Experience / Work Area"
+              placeholder="Past Experience / Work Area"
+              value={formData?.PastExperience || ""}
+              onChange={handleChange}
+              name="PastExperience"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Justification for Direct Nomination"
+              placeholder="Justification for Direct Nomination"
+              value={formData?.JustificationforDirectNomination || ""}
+              onChange={handleChange}
+              name="JustificationforDirectNomination"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Add</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -153,7 +241,7 @@ const Nominations = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.TestTechnique.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.JustificationforDirectNomination.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -241,6 +329,32 @@ const Nominations = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (nomination) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === nomination.sno ? nomination : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Analyst:nomination.analyst,
+          TestTechnique:nomination.testTechnique,
+          TotalExperience: nomination.totalExperience,
+          PastExperience: nomination.pastExperience,
+          JustificationforDirectNomination:nomination.justification,
+          AddedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Nominations</h1>
@@ -301,10 +415,12 @@ const Nominations = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <NominationModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -319,6 +435,14 @@ const Nominations = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

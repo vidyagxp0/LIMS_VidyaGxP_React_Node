@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,76 +33,6 @@ const initialData = [
     Workflow: "dummy workflow",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    PlantCode: "Client 3",
-    PlantName: "client3@example.com",
-    Address: "Address 3",
-    Comments: "04-07-2024",
-    Workflow: "dummy workflow",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    PlantCode: "Client 4",
-    PlantName: "client4@example.com",
-    Address: "Address 4",
-    Comments: "05-07-2024",
-    Workflow: "dummy workflow",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    PlantCode: "Client 5",
-    PlantName: "client5@example.com",
-    Address: "Address 5",
-    Comments: "06-07-2024",
-    Workflow: "dummy workflow",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    PlantCode: "Client 6",
-    PlantName: "client6@example.com",
-    Address: "Address 6",
-    Comments: "07-07-2024",
-    Workflow: "dummy workflow",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    PlantCode: "Client 7",
-    PlantName: "client7@example.com",
-    Address: "Address 7",
-    Comments: "08-07-2024",
-    Workflow: "dummy workflow",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    PlantCode: "Client 8",
-    PlantName: "client8@example.com",
-    Address: "Address 8",
-    Comments: "09-07-2024",
-    Workflow: "dummy workflow",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    PlantCode: "Client 9",
-    PlantName: "client9@example.com",
-    Address: "Address 9",
-    Comments: "10-07-2024",
-    Workflow: "dummy workflow",
-    status: "Active",
-  },
 ];
 
 const WorkFlow = () => {
@@ -114,10 +42,6 @@ const WorkFlow = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    Active: 0,
-    Inactive: 0,
-  });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -142,8 +66,6 @@ const WorkFlow = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -210,19 +132,19 @@ const WorkFlow = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       PlantCode: item["Plant Code"] || "",
       PlantName: item["Plant Name"] || "",
       Address: item["Address"] || "",
-        Comments: item["Comments"] || "",
-        Workflow: item["Workflow"] || "",
-        status: item["Status"] || "",
-      }));
+      Comments: item["Comments"] || "",
+      Workflow: item["Workflow"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -234,10 +156,6 @@ const WorkFlow = () => {
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {

@@ -13,69 +13,33 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import CalibrationSampleLoginModal from "../Modals/CalibrationSampleLoginModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-
+import { FormLabel } from "react-bootstrap";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    SampleType: "Product 1",
-    ProductMaterial: "Seq 1",
-    GenericName: "Info 1",
-    SpecificationCode: "Start 1",
+    sampleType: "Product 1",
+    productMaterial: "Seq 1",
+    genericName: "Info 1",
+    specificationCode: "Start 1",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    SampleType: "Product 2",
-    ProductMaterial: "Seq 2",
-    GenericName: "Info 2",
-    SpecificationCode: "Start 2",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    SampleType: "Product 3",
-    ProductMaterial: "Seq 3",
-    GenericName: "Info 3",
-    SpecificationCode: "Start 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    SampleType: "Product 4",
-    ProductMaterial: "Seq 4",
-    GenericName: "Info 4",
-    SpecificationCode: "Start 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    SampleType: "Product 5",
-    ProductMaterial: "Seq 5",
-    GenericName: "Info 5",
-    SpecificationCode: "Start 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    SampleType: "Product 6",
-    ProductMaterial: "Seq 6",
-    GenericName: "Info 6",
-    SpecificationCode: "Start 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    SampleType: "Product 7",
-    ProductMaterial: "Seq 7",
-    GenericName: "Info 7",
-    SpecificationCode: "Start 7",
+    sampleType: "Product 2",
+    productMaterial: "Seq 2",
+    genericName: "Info 2",
+    specificationCode: "Start 2",
     status: "INITIATED",
   },
 ];
@@ -95,7 +59,7 @@ const CalibrationSampleLogin = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
+  const [editModalData, setEditModalData] = useState(null); 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -138,7 +102,7 @@ const CalibrationSampleLogin = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.SampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.sampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -154,10 +118,10 @@ const CalibrationSampleLogin = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Sample Type", accessor: "SampleType" },
-    { header: "Product / Material", accessor: "ProductMaterial" },
-    { header: "Generic Name", accessor: "GenericName" },
-    { header: "Specification Code", accessor: "SpecificationCode" },
+    { header: "Sample Type", accessor: "sampleType" },
+    { header: "Product / Material", accessor: "productMaterial" },
+    { header: "Generic Name", accessor: "genericName" },
+    { header: "Specification Code", accessor: "specificationCode" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -186,10 +150,10 @@ const CalibrationSampleLogin = () => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
       sno:  index + 1,
-      SampleType: item["Sample Type"] || "",
-      ProductMaterial: item["Product / Material"] || "",
-      GenericName: item["Generic Name"] || "",
-      SpecificationCode: item["Specification Code"] || "",
+      sampleType: item["Sample Type"] || "",
+      productMaterial: item["Product / Material"] || "",
+      genericName: item["Generic Name"] || "",
+      specificationCode: item["Specification Code"] || "",
       status: item["Status"] || "",
     }));
   
@@ -218,6 +182,169 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
     const newData = data.filter((d) => d !== item);
     setData(newData);
     console.log("Deleted item:", item);
+  };
+
+
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          sampleType: newInstrument.sampleType,
+          productMaterial: newInstrument.productMaterial,
+          genericName:newInstrument.genericName,
+          specificationCode: newInstrument.specificationCode,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Sample Login</CModalTitle>
+          </CModalHeader>
+  
+          <CModalBody>
+            <CFormInput
+              label="Sample Login Template/ Revision No."
+              className="mb-3"
+              type="text"
+              placeholder=""
+              value={formData?.setCalibrationScheduleampleType||""}
+              onChange={ handleChange}
+              name="setCalibrationScheduleampleType"
+            />
+            <CFormInput
+              label="Test Plan / Revision No."
+              className="mb-3"
+              type="text"
+              placeholder=" Prefix"
+              value={formData?.testPlan||""}
+              onChange={ handleChange}
+              name="testPlan"
+            />
+            <CFormInput
+              label="Product / Material"
+              className="mb-3"
+              type="text"
+              placeholder=" Prefix"
+              value={formData?.productMaterial||""}
+              onChange={ handleChange}
+              name="productMaterial"
+            />
+            <CFormInput
+              label="Product / Material Code"
+              className="mb-3"
+              type="text"
+              placeholder=" "
+              value={formData?.productMaterialCode||""}
+              onChange={ handleChange}
+              name="productMaterialCode"
+            />
+            <CFormInput
+              label="Generic Name"
+              className="mb-3"
+              type="text"
+              placeholder=" "
+              value={formData?.genericName||""}
+              onChange={ handleChange}
+              name="genericName"
+            />
+            <CFormInput
+              label="Specification ID"
+              className="mb-3"
+              type="text"
+              placeholder=" "
+              value={formData?.specificationCode||""}
+              onChange={ handleChange}
+              name="specificationCode"
+            />
+            <CFormInput
+              label="Sample Type"
+              className="mb-3"
+              type="text"
+              placeholder=" "
+              value={formData?.sampleType||""}
+              onChange={ handleChange}
+              name="sampleType"
+            />
+            <FormLabel
+              style={{ margin: "15px 20px" }}
+              id="demo-row-radio-buttons-group-label"
+            >
+              Auto Sample Allotted
+            </FormLabel>
+            <RadioGroup
+              style={{ margin: "15px 20px" }}
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              value={formData?.autoSampleAllotted||""}
+              onChange={ handleChange}
+              className="mb-3"
+            >
+              <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="No" control={<Radio />} label="No" />
+            </RadioGroup>
+  
+            <div className="d-flex gap-3 mt-4">
+              <CButton color="light w-50" onClick={closeModal}>
+                &lt; Back
+              </CButton>
+              <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+            </div>
+          </CModalBody>
+        </CModal>
+      </div>
+    );
   };
 
   return (
@@ -286,10 +413,12 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <CalibrationSampleLoginModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit} 
       />
       {isViewModalOpen && (
         <ViewModal
@@ -299,7 +428,15 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
         />
       )}
        {isModalsOpen && (
-        <ImportModal initialData = {initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+        {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

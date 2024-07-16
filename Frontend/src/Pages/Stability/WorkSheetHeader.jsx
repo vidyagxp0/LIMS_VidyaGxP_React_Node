@@ -43,78 +43,7 @@ const initialData = [
     reportTitle: "Report 2",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    sampleType: "Type A",
-    worksheetType: "Worksheet 3",
-    product: "Product 3",
-    reportTitle: "Report 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    sampleType: "Type C",
-    worksheetType: "Worksheet 4",
-    product: "Product 4",
-    reportTitle: "Report 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    sampleType: "Type B",
-    worksheetType: "Worksheet 5",
-    product: "Product 5",
-    reportTitle: "Report 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    sampleType: "Type A",
-    worksheetType: "Worksheet 6",
-    product: "Product 6",
-    reportTitle: "Report 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    sampleType: "Type C",
-    worksheetType: "Worksheet 7",
-    product: "Product 7",
-    reportTitle: "Report 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    sampleType: "Type B",
-    worksheetType: "Worksheet 8",
-    product: "Product 8",
-    reportTitle: "Report 8",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    sampleType: "Type A",
-    worksheetType: "Worksheet 9",
-    product: "Product 9",
-    reportTitle: "Report 9",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    sampleType: "Type C",
-    worksheetType: "Worksheet 10",
-    product: "Product 10",
-    reportTitle: "Report 10",
-    status: "REJECTED",
-  },
+  
 ];
 
 function WorkSheetHeader() {
@@ -132,6 +61,8 @@ function WorkSheetHeader() {
     REJECTED: 0,
   });
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null)
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -249,6 +180,477 @@ function WorkSheetHeader() {
     setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData)=>[
+      ...prevData,
+      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+    ])
+    setLastStatus(nextStatus)
+    setIsModalOpen(false);
+  }
+
+  const StatusModal = ({visible , closeModal,onAdd}) => {
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(2);
+    const [footerColumns, setFooterColumns] = useState(2);
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [worksheetHeader, setWorksheetHeader] = useState({
+      sampleType: "",
+      worksheetType: "",
+      reportTitle:"",
+      productCaption:""
+    });
+
+    const handleAdd = ()=>{
+      const newCondition = {
+        sampleType:worksheetHeader.sampleType,
+        worksheetType:worksheetHeader.worksheetType,
+        reportTitle:worksheetHeader.reportTitle,
+        product:worksheetHeader.productCaption,
+        action:[],
+      }
+      onAdd(newCondition)
+    }
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+  
+    const handleHeaderColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setHeaderColumns(columns);
+      if (headerRows > 0) {
+        setHeaderRows(0);
+      }
+    };
+  
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+  
+    const handleFooterColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setFooterColumns(columns);
+      if (footerRows > 0) {
+        setFooterRows(0);
+      }
+    };
+  
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+  
+    
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Worksheet Header</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Sample Type"
+            placeholder="Select..."
+            options={[
+              "Select...",
+              { label: "HCL" },
+              { label: "Hydrochrolic Acid" },
+              { label: "Petrochemical" },
+              { label: "Initial Product" },
+            ]}
+            value={worksheetHeader.sampleType}
+        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, sampleType: e.target.value })}
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Worksheet Type"
+            placeholder="Select Worksheet Type"
+            options={[
+              "Select Coa Type",
+              { label: "With Specification" },
+              { label: "Without Specification" },
+              { label: "ERP" },
+            ]}
+            value={worksheetHeader.worksheetType}
+        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, worksheetType: e.target.value })}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            disabled
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Report Title"
+            placeholder="Report Title"
+            value={worksheetHeader.reportTitle}
+        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, reportTitle: e.target.value })}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product/Material Caption"
+            placeholder="Product"
+            value={worksheetHeader.productCaption}
+        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, productCaption: e.target.value })}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Format No."
+            placeholder="Format No."
+          />
+          <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={headerRows}
+                onChange={handleHeaderRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={headerColumns.toString()}
+                onChange={handleHeaderColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
+          <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns.toString()}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+  const EditModal = ({visible , closeModal,data, onSave}) => {
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(2);
+    const [footerColumns, setFooterColumns] = useState(2);
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if(data){
+        setFormData(data);
+      }
+     
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+  
+    const handleHeaderColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setHeaderColumns(columns);
+      if (headerRows > 0) {
+        setHeaderRows(0);
+      }
+    };
+  
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+  
+    const handleFooterColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setFooterColumns(columns);
+      if (footerRows > 0) {
+        setFooterRows(0);
+      }
+    };
+  
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+  
+    
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Worksheet Header</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Sample Type"
+            placeholder="Select..."
+            options={[
+              "Select...",
+              { label: "HCL" },
+              { label: "Hydrochrolic Acid" },
+              { label: "Petrochemical" },
+              { label: "Initial Product" },
+            ]}
+            value={formData?.sampleType||""}
+            onChange={handleChange}
+            name="sampleType"
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Worksheet Type"
+            placeholder="Select Worksheet Type"
+            options={[
+              "Select Coa Type",
+              { label: "With Specification" },
+              { label: "Without Specification" },
+              { label: "ERP" },
+            ]}
+            value={formData?.worksheetType||""}
+            onChange={handleChange}
+            name="worksheetType"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            disabled
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Report Title"
+            placeholder="Report Title"
+            value={formData?.reportTitle||""}
+            onChange={handleChange}
+            name="reportTitle"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product/Material Caption"
+            placeholder="Product"
+            value={formData?.product||""}
+            onChange={handleChange}
+            name="product"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Format No."
+            placeholder="Format No."
+          />
+          <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={headerRows}
+                onChange={handleHeaderRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={headerColumns.toString()}
+                onChange={handleHeaderColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
+          <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns.toString()}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  
+
   return (
     <>
       <div className="p-4">
@@ -312,10 +714,11 @@ function WorkSheetHeader() {
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal} />
+          <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
         )}
         {isModalsOpen && (
           <ImportModal
@@ -326,194 +729,19 @@ function WorkSheetHeader() {
             onDataUpload={handleExcelDataUpload}
           />
         )}
+        {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
       </div>
     </>
   );
 }
 
-const StatusModal = (_props) => {
-  const [headerRows, setHeaderRows] = useState(0);
-  const [footerRows, setFooterRows] = useState(0);
-  const [headerColumns, setHeaderColumns] = useState(2);
-  const [footerColumns, setFooterColumns] = useState(2);
 
-  const handleHeaderRowsChange = (e) => {
-    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
-    setHeaderRows(value);
-  };
-
-  const handleHeaderColumnsChange = (e) => {
-    const columns = parseInt(e.target.value, 10);
-    setHeaderColumns(columns);
-    if (headerRows > 0) {
-      setHeaderRows(0);
-    }
-  };
-
-  const handleFooterRowsChange = (e) => {
-    const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
-    setFooterRows(value);
-  };
-
-  const handleFooterColumnsChange = (e) => {
-    const columns = parseInt(e.target.value, 10);
-    setFooterColumns(columns);
-    if (footerRows > 0) {
-      setFooterRows(0);
-    }
-  };
-
-  const renderTable = (rows, columns) => {
-    const tableRows = [];
-    for (let i = 0; i < rows; i++) {
-      const tableColumns = [];
-      for (let j = 0; j < columns; j++) {
-        tableColumns.push(
-          <td key={j} className="flex gap-4">
-            <CFormInput type="text" placeholder={`Lower Count `} />
-            <CFormSelect
-              className="mb-2"
-              options={[
-                {
-                  label: "Select Field",
-                  value: "1",
-                },
-              ]}
-            />
-          </td>
-        );
-      }
-      tableRows.push(<tr key={i}>{tableColumns}</tr>);
-    }
-    return tableRows;
-  };
-
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="xl"
-    >
-      <CModalHeader>
-        <CModalTitle>Add Worksheet Header</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Sample Type"
-          placeholder="Select..."
-          options={[
-            "Select...",
-            { label: "HCL" },
-            { label: "Hydrochrolic Acid" },
-            { label: "Petrochemical" },
-            { label: "Initial Product" },
-          ]}
-        />
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Worksheet Type"
-          placeholder="Select Worksheet Type"
-          options={[
-            "Select Coa Type",
-            { label: "With Specification" },
-            { label: "Without Specification" },
-            { label: "ERP" },
-          ]}
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Unique Code"
-          placeholder="Unique Code"
-          disabled
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Report Title"
-          placeholder="Report Title"
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Product/Material Caption"
-          placeholder="Product"
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Format No."
-          placeholder="Format No."
-        />
-        <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
-        <div className="d-flex pb-2">
-          <div className="mb-3">
-            <CFormInput
-              type="number"
-              label="Rows"
-              placeholder="Rows"
-              value={headerRows}
-              onChange={handleHeaderRowsChange}
-            />
-          </div>
-          <div className="ps-3 w-50">
-            <CFormSelect
-              label="Columns"
-              placeholder="Columns"
-              options={[
-                { label: "2", value: "2" },
-                { label: "4", value: "4" },
-                { label: "6", value: "6" },
-              ]}
-              value={headerColumns.toString()}
-              onChange={handleHeaderColumnsChange}
-            />
-          </div>
-        </div>
-        <table className="table mb-3">
-          <tbody>{renderTable(headerRows, headerColumns)}</tbody>
-        </table>
-        <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
-        <div className="d-flex pb-2">
-          <div className="mb-3">
-            <CFormInput
-              type="number"
-              label="Rows"
-              placeholder="Rows"
-              value={footerRows}
-              onChange={handleFooterRowsChange}
-            />
-          </div>
-          <div className="ps-3 w-50">
-            <CFormSelect
-              label="Columns"
-              placeholder="Columns"
-              options={[
-                { label: "2", value: "2" },
-                { label: "4", value: "4" },
-                { label: "6", value: "6" },
-              ]}
-              value={footerColumns.toString()}
-              onChange={handleFooterColumnsChange}
-            />
-          </div>
-        </div>
-        <table className="table mb-3">
-          <tbody>{renderTable(footerRows, footerColumns)}</tbody>
-        </table>
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 
 export default WorkSheetHeader;

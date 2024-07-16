@@ -26,71 +26,55 @@ const ColumnRegistrationModal = (_props) => {
           <CModalTitle>Add Registration</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p style={{ marginLeft: "2px" }}>
+          <p className="ml-1 mb-2 text-lg">
             Add information and Add registration.
           </p>
-          <CFormInput
-            type="text"
-            label="Column Application"
-            placeholder="Column Application "
-          />
           <CFormSelect
-            type="text"
-            label="Column Name"
-            placeholder=" Column Name "
-            className="custom-placeholder"
+            label="Column Application"
+            options={[
+              { value: "select..", label: "select.." },
+              { value: "columnspecs", label: "columnspecs" },
+              { value: "HPLC", label: "HPLC" },
+              { value: "Apixaban", label: "Apixaban" },
+              { value: "Acetic Acid", label: "Acetic Acid" },
+              { value: "columnspecs", label: "columnspecs" },
+            ]}
+            className="mb-4"
           />
-
-          <CFormInput
-            type="text"
-            label="Column Number"
-            placeholder="Column Number"
-            className="custom-placeholder"
-          />
+          <CFormSelect label="Column Name" className="mb-4" />
+          <CFormInput type="text" label="Column Number" className="mb-4" />
           <CFormInput
             type="text"
             label="Brand Name / Manufacturer Name"
-            placeholder="Brand Name / Manufacturer Name"
-            className="custom-placeholder"
+            className="mb-4"
           />
-          <CFormInput
-            type="text"
-            label="Mfg. Serial No. "
-            placeholder="Select"
-            className="custom-placeholder"
-          />
-
-          <CFormInput
-            type="number"
-            label="Film Thikness / Particle Size"
-            placeholder="Film Thikness / Particle Size"
-            className="custom-placeholder"
-          />
-          <CFormInput type="number" label="UOM" placeholder="UOM" />
-          <CFormInput
-            type="number"
-            label="Packing Material"
-            placeholder="Packing Material"
-          />
-          <CFormInput type="number" label="Length" placeholder="select" />
-          <CFormInput type="number" label=" UOM" placeholder="UOM" />
-          <CFormInput
-            type="number"
-            label="Inner Diameter"
-            placeholder="select"
-          />
-
-          <CFormInput
-            type="number"
-            label="Outer Diameter"
-            placeholder="Outer Diameter"
-          />
-
-          <CFormInput type="date" label="Recieved On" placeholder="" />
-
+          <CFormInput type="text" label="Mfg. Serial No." className="mb-4" />
+          <div className="flex gap-3 mb-4">
+            <CFormInput
+              type="number"
+              label="Film Thickness / Particle Size"
+              className="mb-4 flex-1"
+            />
+            <CFormInput type="number" label="UOM" className="mb-4 flex-1" />
+          </div>
+          <CFormInput type="number" label="Packing Material" className="mb-4" />
+          <div className="flex gap-3 mb-4">
+            <CFormInput type="number" label="Length" className="mb-4 flex-1" />
+            <CFormInput type="number" label="UOM" className="mb-4 flex-1" />
+          </div>
+          <div className="flex gap-3 mb-4">
+            <CFormInput
+              type="number"
+              label="Inner Diameter"
+              className="mb-4 flex-1"
+            />
+            <CFormInput type="number" label="UOM" className="mb-4 flex-1" />
+          </div>
+          <CFormInput type="number" label="Outer Diameter" className="mb-4" />
+          <CFormInput type="date" label="Received On" className="mb-4" />
           <CForm className="mb-3">
             <CFormLabel>Certificate Received</CFormLabel>
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <div className="flex justify-around w-14 gap-2">
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
@@ -107,27 +91,21 @@ const ColumnRegistrationModal = (_props) => {
               />
             </div>
           </CForm>
-
-          <CFormInput type="number" label="Certificate" placeholder="Browse" />
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-            }}
-          >
+          <CFormInput type="file" label="Certificate" className="mb-4" />
+          <div className="flex flex-col mb-4">
             <label>Remarks if</label>
-            <textarea name="" id=""></textarea>
+            <textarea
+              name=""
+              id=""
+              className="w-full h-24 p-2 mt-2 border rounded-md"
+            ></textarea>
           </div>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
             Cancel
           </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add Chemical
-          </CButton>
+          <CButton className="bg-[#0F93C3] text-white">Add Chemical</CButton>
         </CModalFooter>
       </CModal>
     </div>

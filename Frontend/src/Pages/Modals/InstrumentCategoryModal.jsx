@@ -16,11 +16,13 @@ import {
 } from "@coreui/react";
 import "react-quill/dist/quill.snow.css";
 
+ 
 const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
+
   const [instrumentCategoryData, setInstrumentCategoryData] = useState({
-    CategoryName: "",
-    Description: "",
-    AddedOn: "",
+    CategoryName: " ",
+    Description: " ",
+    AddedOn: " ",
   });
 
   const handleInputChange = (field, value) => {

@@ -22,9 +22,9 @@ const LotRegistrationModal = (_props) => {
         <CModalHeader>
           <CModalTitle>Lot Registration</CModalTitle>
         </CModalHeader>
-        <p style={{ marginLeft: "13px" }}>Add information</p>
         <CModalBody>
-          <p style={{ fontWeight: "800", fontSize: "19px" }}>
+          <p >Add information</p>
+          <p style={{ fontWeight: "700", fontSize: "19px" }}>
             Registration Initiation
           </p>
           <CFormSelect
@@ -44,12 +44,6 @@ const LotRegistrationModal = (_props) => {
             type="text"
             label="Delivery Receipt No"
             placeholder="Delivery Receipt No"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="CAS / CAT no."
-            placeholder="Enter CAS"
             className="custom-placeholder mb-3"
           />
           <CFormSelect
@@ -95,7 +89,6 @@ const LotRegistrationModal = (_props) => {
             placeholder="select"
             className="custom-placeholder mb-3"
           />
-          <p style={{ fontWeight: "bolder" }}>Inventory Control</p>
 
           <CFormSelect
             type="number"
@@ -122,30 +115,34 @@ const LotRegistrationModal = (_props) => {
             placeholder="select"
             className="custom-placeholder mb-3"
           />
-          <CFormInput
-            type="text"
-            label="Potency"
-            placeholder="select"
-            className="custom-placeholder mb-3"
-          />
-          <CFormSelect
-            type="text"
-            label="UOM"
-            placeholder="select"
-            className="custom-placeholder mb-3"
-          />
-          <CFormInput
-            type="text"
-            label="Water Content"
-            placeholder="select"
-            className="custom-placeholder mb-3"
-          />
-          <CFormSelect
-            type="text"
-            label="UOM"
-            placeholder="select"
-            className="custom-placeholder mb-3"
-          />
+          <div className="flex gap-5 items-center justify-center mb-4">
+            <CFormInput
+              type="text"
+              label="Potency"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+            />
+            <CFormSelect
+              type="text"
+              label="UOM"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+            />
+          </div>
+          <div className="flex gap-5 items-center justify-center mb-4">
+            <CFormInput
+              type="text"
+              label="Water Content"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+            />
+            <CFormSelect
+              type="text"
+              label="UOM"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+            />
+          </div>
 
           <div
             style={{
