@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Admin.css";
 import { FaArrowRight } from "react-icons/fa";
 import { faPenToSquare, faTrashCan, faEye, } from "@fortawesome/free-regular-svg-icons";
@@ -47,7 +47,8 @@ const Admin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-
+  const [lastStatus, setLastStatus] = useState("Active");
+  const [editModalData, setEditModalData] = useState(null);
   // Calculate start and end indices for current page
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -216,6 +217,96 @@ setIsModalsOpen(false);;
     );
   };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+      >
+        <CModalHeader>
+          <CModalTitle>Add User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Please Add User To fill This Details</p>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="User Name"
+            placeholder="UserName "
+            value={formData?.name||""}
+            onChange={handleChange}
+            name="name"
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Contact Number"
+            placeholder="+91 0000000000 "
+            value={formData?.contact||""}
+            onChange={handleChange}
+            name="contact"
+          />
+          <CFormInput
+            className="mb-3"
+            type="email"
+            label="Gmail Address"
+            placeholder="sample@gmail.com"
+            value={formData?.gmail||""}
+            onChange={handleChange}
+            name="gmail"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Address"
+            placeholder="Address "
+            value={formData?.address||""}
+            onChange={handleChange}
+            name="address"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   return (
     <div>
       <div className="m-5 mt-3">
@@ -240,7 +331,7 @@ setIsModalsOpen(false);;
             <ATMButton text="Add User" color="blue" onClick={openModal} />
           </div>
         </div>
-        <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} />
+        <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails}   openEditModal={openEditModal}/>
 
       </div>
 
@@ -251,6 +342,14 @@ setIsModalsOpen(false);;
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
+
+{editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />)}
     </div>
   );
 };
