@@ -27,10 +27,16 @@ const FacilityModal = (_props) => {
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Plant
-                "
+                label="Plant"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Master", label: "Master" },
+                  { value: "win_master", label: "win_master" },
+                  { value: "PLant3", label: "Plant3" },
+                  { value: "Plantdemo4", label: "Plantdemo4" },
+                ]}
               />
             </div>
             <div className="mb-3">

@@ -5,6 +5,8 @@ import {
   CFormInput,
   CFormLabel,
   CFormSelect,
+  CFormText,
+  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
@@ -52,27 +54,35 @@ const MediaTemplateConfigurationModal = (_props) => {
 "
             placeholder=""
           />
-          <CFormInput
-            type="text"
-            label="Prepared Media Validity Period
-            "
-            placeholder=""
-          />
+          <div className="flex gap-3">
+            <CFormInput
+              type="text"
+              label="Prepared Media Validity Period"
+              placeholder=""
+            />
+            <span className="mt-3">Day(s)/</span>
+          </div>
           <CFormInput
             type="text"
             label="Sample Login Tempalate for Media Preparation"
             placeholder=""
           />
-          <CFormInput
+          <CFormSelect
             type="text"
-            label="Prepared Media Container Types
-
-          "
+            label="Prepared Media Container Types"
             placeholder=""
+            options={[
+              { value: "Plate", label: "Plate" },
+              { value: "SLANT", label: "SLANT" },
+              { value: "BROTH", label: "BROTH" },
+              { value: "Molten Agar", label: "Molten Agar" },
+              { value: "100ml BROTH(VIAl)", label: "100ml BROTH(VIAl)" },
+              { value: "200ml brox", label: "200ml brox" },
+            ]}
           />
           <CForm>
             <CFormLabel>Prepared Media Usage</CFormLabel>
-            <div>
+            <div className="flex gap-3 mb-3">
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
@@ -89,9 +99,11 @@ const MediaTemplateConfigurationModal = (_props) => {
               />
             </div>
           </CForm>
-          <h6>Comments</h6>
-
-          <textarea name="" id=""></textarea>
+          <CFormTextarea
+            type="text"
+            label="Comments"
+            placeholder=""
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>

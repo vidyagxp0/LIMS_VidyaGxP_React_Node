@@ -11,7 +11,7 @@ import React from "react";
 const MediaLotAcceptanceModal = (_props) => {
   return (
     <div>
-      <CModal
+      {/* <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
@@ -170,7 +170,7 @@ const MediaLotAcceptanceModal = (_props) => {
             Submit
           </CButton>
         </CModalFooter>
-      </CModal>
+      </CModal> */}
     </div>
   );
 };
