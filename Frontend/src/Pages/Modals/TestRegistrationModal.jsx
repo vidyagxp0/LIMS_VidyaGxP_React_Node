@@ -901,7 +901,10 @@ const TestRegistrationModal = (_props) => {
           <span className="font-bold font-serif">W2</span> = Final weight of
           beaker + residue, g
         </h6>
-        <h6 className="font-serif"> <span className="font-bold font-serif">v</span> = Sample Taken, ml</h6>
+        <h6 className="font-serif">
+          {" "}
+          <span className="font-bold font-serif">v</span> = Sample Taken, ml
+        </h6>
         <label htmlFor="PassLimit" className="mt-4">
           Pass Limit(s)
         </label>
@@ -965,7 +968,7 @@ const TestRegistrationModal = (_props) => {
       alignment="center"
       visible={_props.visible}
       onClose={_props.closeModal}
-      size="xl"
+      size="lg"
     >
       <CModalHeader closeButton>
         <CModalTitle>Add Test Registration</CModalTitle>

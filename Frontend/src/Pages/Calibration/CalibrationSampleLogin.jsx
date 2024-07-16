@@ -44,7 +44,6 @@ const initialData = [
   },
 ];
 
-
 const CalibrationSampleLogin = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -59,7 +58,7 @@ const CalibrationSampleLogin = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-  const [editModalData, setEditModalData] = useState(null); 
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -149,19 +148,19 @@ const CalibrationSampleLogin = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       sampleType: item["Sample Type"] || "",
       productMaterial: item["Product / Material"] || "",
       genericName: item["Generic Name"] || "",
       specificationCode: item["Specification Code"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the import modal after data upload
+    setIsModalsOpen(false); // Update data state with parsed Excel data/ Close the import modal after data upload
   };
-  
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -184,7 +183,6 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
     console.log("Deleted item:", item);
   };
 
-
   const handleModalSubmit = (newInstrument) => {
     const currentDate = new Date().toISOString().split("T")[0];
     if (editModalData) {
@@ -200,7 +198,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
           sno: prevData.length + 1,
           sampleType: newInstrument.sampleType,
           productMaterial: newInstrument.productMaterial,
-          genericName:newInstrument.genericName,
+          genericName: newInstrument.genericName,
           specificationCode: newInstrument.specificationCode,
           status: "Active",
         },
@@ -246,20 +244,20 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Sample Login</CModalTitle>
           </CModalHeader>
-  
+
           <CModalBody>
             <CFormInput
               label="Sample Login Template/ Revision No."
               className="mb-3"
               type="text"
               placeholder=""
-              value={formData?.setCalibrationScheduleampleType||""}
-              onChange={ handleChange}
+              value={formData?.setCalibrationScheduleampleType || ""}
+              onChange={handleChange}
               name="setCalibrationScheduleampleType"
             />
             <CFormInput
@@ -267,8 +265,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
               className="mb-3"
               type="text"
               placeholder=" Prefix"
-              value={formData?.testPlan||""}
-              onChange={ handleChange}
+              value={formData?.testPlan || ""}
+              onChange={handleChange}
               name="testPlan"
             />
             <CFormInput
@@ -276,8 +274,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
               className="mb-3"
               type="text"
               placeholder=" Prefix"
-              value={formData?.productMaterial||""}
-              onChange={ handleChange}
+              value={formData?.productMaterial || ""}
+              onChange={handleChange}
               name="productMaterial"
             />
             <CFormInput
@@ -285,8 +283,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
               className="mb-3"
               type="text"
               placeholder=" "
-              value={formData?.productMaterialCode||""}
-              onChange={ handleChange}
+              value={formData?.productMaterialCode || ""}
+              onChange={handleChange}
               name="productMaterialCode"
             />
             <CFormInput
@@ -294,8 +292,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
               className="mb-3"
               type="text"
               placeholder=" "
-              value={formData?.genericName||""}
-              onChange={ handleChange}
+              value={formData?.genericName || ""}
+              onChange={handleChange}
               name="genericName"
             />
             <CFormInput
@@ -303,8 +301,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
               className="mb-3"
               type="text"
               placeholder=" "
-              value={formData?.specificationCode||""}
-              onChange={ handleChange}
+              value={formData?.specificationCode || ""}
+              onChange={handleChange}
               name="specificationCode"
             />
             <CFormInput
@@ -312,8 +310,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
               className="mb-3"
               type="text"
               placeholder=" "
-              value={formData?.sampleType||""}
-              onChange={ handleChange}
+              value={formData?.sampleType || ""}
+              onChange={handleChange}
               name="sampleType"
             />
             <FormLabel
@@ -327,19 +325,21 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
-              value={formData?.autoSampleAllotted||""}
-              onChange={ handleChange}
+              value={formData?.autoSampleAllotted || ""}
+              onChange={handleChange}
               className="mb-3"
             >
               <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
               <FormControlLabel value="No" control={<Radio />} label="No" />
             </RadioGroup>
-  
+
             <div className="d-flex gap-3 mt-4">
               <CButton color="light w-50" onClick={closeModal}>
                 &lt; Back
               </CButton>
-              <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+              <CButton color="primary w-50" onClick={handleSave}>
+                Submit
+              </CButton>
             </div>
           </CModalBody>
         </CModal>
@@ -399,11 +399,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -418,7 +414,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
       <CalibrationSampleLoginModal
         visible={isModalOpen}
         closeModal={closeModal}
-        handleSubmit={handleModalSubmit} 
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -427,10 +423,16 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data/ Close the 
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-        {editModalData && (
+      {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
           closeModal={closeEditModal}

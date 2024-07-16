@@ -11,33 +11,33 @@ import React, { useState } from "react";
 import { FormLabel } from "react-bootstrap";
 
 const CalibrationSampleLoginModal = ({ visible, closeModal, handleSubmit }) => {
-  const [calibrationSchedule , setCalibrationSchedule ] = useState({
-    setCalibrationScheduleampleType : "",
-    testPlan:"",
-    productMaterial:"",
-    productMaterialCode:"",
+  const [calibrationSchedule, setCalibrationSchedule] = useState({
+    setCalibrationScheduleampleType: "",
+    testPlan: "",
+    productMaterial: "",
+    productMaterialCode: "",
     genericName: "",
-    specificationCode:"",
+    specificationCode: "",
     sampleType: "",
     autoSampleAllotted: "",
-  })
+  });
 
-  const handleChange = (field , value) => {
-    const updatedData = {...calibrationSchedule, [field]:value }
-    setCalibrationSchedule(updatedData)
+  const handleChange = (field, value) => {
+    const updatedData = { ...calibrationSchedule, [field]: value };
+    setCalibrationSchedule(updatedData);
   };
 
   const handleFormSubmit = (e) => {
-    handleSubmit({...calibrationSchedule});
+    handleSubmit({ ...calibrationSchedule });
     closeModal();
-  }
+  };
   return (
     <div>
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Sample Login</CModalTitle>
@@ -50,7 +50,9 @@ const CalibrationSampleLoginModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder=""
             value={calibrationSchedule.setCalibrationScheduleampleType}
-            onChange={(e) => handleChange("setCalibrationScheduleampleType", e.target.value)}
+            onChange={(e) =>
+              handleChange("setCalibrationScheduleampleType", e.target.value)
+            }
           />
           <CFormInput
             label="Test Plan / Revision No."
@@ -74,7 +76,9 @@ const CalibrationSampleLoginModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder=" "
             value={calibrationSchedule.productMaterialCode}
-            onChange={(e) => handleChange("productMaterialCode", e.target.value)}
+            onChange={(e) =>
+              handleChange("productMaterialCode", e.target.value)
+            }
           />
           <CFormInput
             label="Generic Name"
@@ -122,7 +126,9 @@ const CalibrationSampleLoginModal = ({ visible, closeModal, handleSubmit }) => {
             <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50" onClick={handleFormSubmit}>Submit</CButton>
+            <CButton color="primary w-50" onClick={handleFormSubmit}>
+              Submit
+            </CButton>
           </div>
         </CModalBody>
       </CModal>

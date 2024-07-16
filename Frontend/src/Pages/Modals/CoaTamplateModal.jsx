@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -8,17 +8,17 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
-} from '@coreui/react';
+} from "@coreui/react";
 
-const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
-  const [CaoData, setCaoData]=useState({
-    SampleType:"",
-    CoaType:"",
-    ReportTitle:"",
-    MaterialCaption:"",
-    SerialNo:"",
-    FormatNo:"",
-  })
+const CoaTamplateModal = ({ visible, closeModal, handleSubmit }) => {
+  const [CaoData, setCaoData] = useState({
+    SampleType: "",
+    CoaType: "",
+    ReportTitle: "",
+    MaterialCaption: "",
+    SerialNo: "",
+    FormatNo: "",
+  });
 
   const [headerRows, setHeaderRows] = useState(0);
   const [footerRows, setFooterRows] = useState(0);
@@ -65,8 +65,8 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
               className="mb-2"
               options={[
                 {
-                  label: 'Select Field',
-                  value: '1',
+                  label: "Select Field",
+                  value: "1",
                 },
               ]}
             />
@@ -77,17 +77,16 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
     }
     return tableRows;
   };
-    const handleInputChange = (field, value) => {
+  const handleInputChange = (field, value) => {
     const updatedData = { ...CaoData, [field]: value };
     setCaoData(updatedData);
     console.log(updatedData);
   };
 
-   const handleFormSubmit = () => { 
-    handleSubmit({ ...CaoData});
-    closeModal(); 
+  const handleFormSubmit = () => {
+    handleSubmit({ ...CaoData });
+    closeModal();
   };
-
 
   return (
     <div>
@@ -95,7 +94,7 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Coa Template</CModalTitle>
@@ -108,16 +107,15 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
             label="Sample Type"
             placeholder="Select..."
             options={[
-              { label: 'Select...', value: '' },
-              { label: 'Hydraulic Oil', value: 'Hydraulic Oil' },
-              { label: 'HCL', value: 'HCL' },
-              { label: 'Petrochemical', value: 'Petrochemical' },
-              { label: 'Initiated Product', value: 'Initiated Product' },
+              { label: "Select...", value: "" },
+              { label: "Hydraulic Oil", value: "Hydraulic Oil" },
+              { label: "HCL", value: "HCL" },
+              { label: "Petrochemical", value: "Petrochemical" },
+              { label: "Initiated Product", value: "Initiated Product" },
             ]}
-            name='SampleType'
+            name="SampleType"
             value={CaoData.SampleType}
             onChange={(e) => handleInputChange("SampleType", e.target.value)}
-
           />
 
           <CFormSelect
@@ -125,15 +123,15 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
             label="Coa Type"
             placeholder="Select Coa Type"
             options={[
-              { label: 'Select Coa Type', value: '' },
-              { label: 'With Specification', value: 'With Specification' },
+              { label: "Select Coa Type", value: "" },
+              { label: "With Specification", value: "With Specification" },
               {
-                label: 'Without Specification',
-                value: 'Without Specification',
+                label: "Without Specification",
+                value: "Without Specification",
               },
-              { label: 'ERP', value: 'ERP' },
+              { label: "ERP", value: "ERP" },
             ]}
-            name='CoaType'
+            name="CoaType"
             value={CaoData.CoaType}
             onChange={(e) => handleInputChange("CoaType", e.target.value)}
           />
@@ -142,7 +140,7 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
             className="mb-3"
             label="Report Title"
             placeholder="Report Title"
-            name='ReportTitle'
+            name="ReportTitle"
             value={CaoData.ReportTitle}
             onChange={(e) => handleInputChange("ReportTitle", e.target.value)}
           />
@@ -151,16 +149,18 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
             className="mb-3"
             label="Product/Material Caption"
             placeholder="Product/Material Caption"
-            name='MaterialCaption'
+            name="MaterialCaption"
             value={CaoData.MaterialCaption}
-            onChange={(e) => handleInputChange("MaterialCaption", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("MaterialCaption", e.target.value)
+            }
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Serial No."
             placeholder="Serial Number"
-            name='SerialNo'
+            name="SerialNo"
             value={CaoData.SerialNo}
             onChange={(e) => handleInputChange("SerialNo", e.target.value)}
           />
@@ -169,7 +169,7 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
             className="mb-3"
             label="Format No."
             placeholder="Format No."
-            name='FormatNo'
+            name="FormatNo"
             value={CaoData.FormatNo}
             onChange={(e) => handleInputChange("FormatNo", e.target.value)}
           />
@@ -182,7 +182,7 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
                 type="number"
                 label="Rows"
                 placeholder="Rows"
-                name='Rows'
+                name="Rows"
                 value={CaoData.Rows}
                 onChange={(e) => handleInputChange("Rows", e.target.value)}
               />
@@ -192,13 +192,13 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
                 label="Columns"
                 placeholder="Columns"
                 options={[
-                  { label: '2', value: '2' },
-                  { label: '4', value: '4' },
-                  { label: '6', value: '6' },
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
                 ]}
                 value={CaoData.Columns}
                 onChange={(e) => handleInputChange("Columns", e.target.value)}
-              /> 
+              />
             </div>
           </div>
 
@@ -214,7 +214,7 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
                 type="number"
                 label="Rows"
                 placeholder="Rows"
-                name='Columns'
+                name="Columns"
                 value={CaoData.Columns}
                 onChange={(e) => handleInputChange("Columns", e.target.value)}
               />
@@ -224,11 +224,11 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
                 label="Columns"
                 placeholder="Columns"
                 options={[
-                  { label: '2', value: '2' },
-                  { label: '4', value: '4' },
-                  { label: '6', value: '6' },
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
                 ]}
-                name='Columns'
+                name="Columns"
                 value={CaoData.Columns}
                 onChange={(e) => handleInputChange("Columns", e.target.value)}
               />
@@ -244,19 +244,23 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
                 type="text"
                 className="mb-3"
                 placeholder="Approved By"
-                name='ApprovedBy'
+                name="ApprovedBy"
                 value={CaoData.ApprovedBy}
-                onChange={(e) => handleInputChange("ApprovedBy", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("ApprovedBy", e.target.value)
+                }
               />
             </div>
             <div className="ps-3 w-50">
               <CFormSelect
                 className="mb-3"
                 placeholder="approved_by"
-                options={[{ label: 'approved_by', value: 'approved_by' }]}
-                name='approved_by'
+                options={[{ label: "approved_by", value: "approved_by" }]}
+                name="approved_by"
                 value={CaoData.approved_by}
-                onChange={(e) => handleInputChange("approved_by", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("approved_by", e.target.value)
+                }
               />
             </div>
           </div>
@@ -267,19 +271,23 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
                 type="text"
                 className="mb-3"
                 placeholder="Reviewed By"
-                name='ReviewedBy'
+                name="ReviewedBy"
                 value={CaoData.ReviewedBy}
-                onChange={(e) => handleInputChange("ReviewedBy", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("ReviewedBy", e.target.value)
+                }
               />
             </div>
             <div className="ps-3 w-50">
               <CFormSelect
                 className="mb-3"
                 placeholder="reviewed_by"
-                options={[{ label: 'reviewed_by', value: 'reviewed_by' }]}
-                name='reviewed_by'
+                options={[{ label: "reviewed_by", value: "reviewed_by" }]}
+                name="reviewed_by"
                 value={CaoData.reviewed_by}
-                onChange={(e) => handleInputChange("reviewed_by", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("reviewed_by", e.target.value)
+                }
               />
             </div>
           </div>
@@ -290,7 +298,7 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
                 type="text"
                 className="mb-3"
                 placeholder="Checked By"
-                name='CheckedBy'
+                name="CheckedBy"
                 value={CaoData.CheckedBy}
                 onChange={(e) => handleInputChange("CheckedBy", e.target.value)}
               />
@@ -299,10 +307,12 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
               <CFormSelect
                 className="mb-3"
                 placeholder="checked_by"
-                options={[{ label: 'checked_by', value: 'checked_by' }]}
-                name='checked_by'
+                options={[{ label: "checked_by", value: "checked_by" }]}
+                name="checked_by"
                 value={CaoData.checked_by}
-                onChange={(e) => handleInputChange("checked_by", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("checked_by", e.target.value)
+                }
               />
             </div>
           </div>
@@ -311,7 +321,9 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary"  onClick={handleFormSubmit}>Submit</CButton>
+          <CButton color="primary" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

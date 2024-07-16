@@ -103,7 +103,7 @@ const InstrumentModule = () => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Instrument Module</CModalTitle>

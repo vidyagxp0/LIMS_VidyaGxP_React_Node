@@ -20,7 +20,7 @@ const LocationModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Location</CModalTitle>

@@ -208,30 +208,29 @@ function CoaTemplate() {
     const [headerColumns, setHeaderColumns] = useState(1);
     const [footerColumns, setFooterColumns] = useState(1);
     const [sampleType, setSampleType] = useState("");
-    const [coaType , setCoaType] = useState("");
-    const [reportTitle , setReportTitle] = useState("");
+    const [coaType, setCoaType] = useState("");
+    const [reportTitle, setReportTitle] = useState("");
     const [productMaterialCaption, setProductMaterialCaption] = useState("");
-    const [formatNo , setFormatNo] = useState("");
+    const [formatNo, setFormatNo] = useState("");
 
-  
     const handleHeaderRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setHeaderRows(value);
     };
-  
+
     const handleHeaderColumnsChange = (e) => {
       setHeaderColumns(parseInt(e.target.value, 10));
     };
-  
+
     const handleFooterRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setFooterRows(value);
     };
-  
+
     const handleFooterColumnsChange = (e) => {
       setFooterColumns(parseInt(e.target.value, 10));
     };
-  
+
     const renderTable = (rows, columns) => {
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
@@ -240,7 +239,7 @@ function CoaTemplate() {
           tableColumns.push(
             <td key={j} className="flex gap-4">
               <CFormInput type="text" placeholder={`Lower Count `} />
-  
+
               <CFormSelect
                 className="mb-2"
                 options={[
@@ -258,26 +257,24 @@ function CoaTemplate() {
       return tableRows;
     };
 
-
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
         productName: productMaterialCaption,
         chamberID: "0000",
         actualQuantity: "000",
         availableQuantity: "0000",
         protocolType: coaType,
-        action:[],
-      }
-      onAdd(newCondition)
-    }
-
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
     return (
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Coa Template</CModalTitle>
@@ -337,67 +334,69 @@ function CoaTemplate() {
           />
           <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
           <div className="d-flex pb-2">
-              <div className="mb-3">
-                <CFormInput
-                  type="number"
-                  label="Rows"
-                  placeholder="Rows"
-                  value={headerRows}
-                  onChange={handleHeaderRowsChange}
-                />
-              </div>
-              <div className="ps-3 w-50">
-                <CFormSelect
-                  label="Columns"
-                  placeholder="Columns"
-                  options={[
-                    { label: "2", value: "2" },
-                    { label: "4", value: "4" },
-                    { label: "6", value: "6" },
-                  ]}
-                  value={headerColumns}
-                  onChange={handleHeaderColumnsChange}
-                />
-              </div>
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={headerRows}
+                onChange={handleHeaderRowsChange}
+              />
             </div>
-  
-            <table className="table mb-3">
-              <tbody>{renderTable(headerRows, headerColumns)}</tbody>
-            </table>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={headerColumns}
+                onChange={handleHeaderColumnsChange}
+              />
+            </div>
+          </div>
+
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
           <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
           <div className="d-flex pb-2">
-              <div className="mb-3">
-                <CFormInput
-                  type="number"
-                  label="Rows"
-                  placeholder="Rows"
-                  value={footerRows}
-                  onChange={handleFooterRowsChange}
-                />
-              </div>
-              <div className="ps-3 w-50">
-                <CFormSelect
-                  label="Columns"
-                  placeholder="Columns"
-                  options={[
-                    { label: "2", value: "2" },
-                    { label: "4", value: "4" },
-                    { label: "6", value: "6" },
-                  ]}
-                  value={footerColumns}
-                  onChange={handleFooterColumnsChange}
-                />
-              </div>
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
             </div>
-            <table className="table mb-3">
-              <tbody>{renderTable(footerRows, footerColumns)}</tbody>
-            </table>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -418,7 +417,7 @@ function CoaTemplate() {
     setEditModalData(null);
   };
 
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(1);
@@ -426,10 +425,9 @@ function CoaTemplate() {
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
 
     const handleChange = (e) => {
@@ -440,25 +438,25 @@ function CoaTemplate() {
     const handleSave = () => {
       onSave(formData);
     };
-  
+
     const handleHeaderRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setHeaderRows(value);
     };
-  
+
     const handleHeaderColumnsChange = (e) => {
       setHeaderColumns(parseInt(e.target.value, 10));
     };
-  
+
     const handleFooterRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setFooterRows(value);
     };
-  
+
     const handleFooterColumnsChange = (e) => {
       setFooterColumns(parseInt(e.target.value, 10));
     };
-  
+
     const renderTable = (rows, columns) => {
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
@@ -467,7 +465,7 @@ function CoaTemplate() {
           tableColumns.push(
             <td key={j} className="flex gap-4">
               <CFormInput type="text" placeholder={`Lower Count `} />
-  
+
               <CFormSelect
                 className="mb-2"
                 options={[
@@ -485,26 +483,24 @@ function CoaTemplate() {
       return tableRows;
     };
 
-
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
         productName: productMaterialCaption,
         chamberID: "0000",
         actualQuantity: "000",
         availableQuantity: "0000",
         protocolType: coaType,
-        action:[],
-      }
-      onAdd(newCondition)
-    }
-
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
     return (
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Coa Template</CModalTitle>
@@ -522,7 +518,7 @@ function CoaTemplate() {
               { label: "Petrochemical" },
               { label: "Initial Product" },
             ]}
-            value={formData?.productName||""}
+            value={formData?.productName || ""}
             onChange={handleChange}
             name="productName"
           />
@@ -536,7 +532,7 @@ function CoaTemplate() {
               { label: "Without Specification" },
               { label: "ERP" },
             ]}
-            value={formData?.protocolType||""}
+            value={formData?.protocolType || ""}
             onChange={handleChange}
             name="protocolType"
           />
@@ -545,7 +541,7 @@ function CoaTemplate() {
             type="text"
             label="Report Title"
             placeholder="Report Title"
-            value={formData?.reportTitle||""}
+            value={formData?.reportTitle || ""}
             onChange={handleChange}
             name="reportTitle"
           />
@@ -554,7 +550,7 @@ function CoaTemplate() {
             type="text"
             label="Product/Material Caption"
             placeholder="Product"
-            value={formData?.productMaterialCaption||""}
+            value={formData?.productMaterialCaption || ""}
             onChange={handleChange}
             name="productMaterialCaption"
           />
@@ -563,78 +559,79 @@ function CoaTemplate() {
             type="text"
             label="Format No."
             placeholder="Format No."
-            value={formData?.formatNo||""}
+            value={formData?.formatNo || ""}
             onChange={handleChange}
             name="formatNo"
           />
           <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
           <div className="d-flex pb-2">
-              <div className="mb-3">
-                <CFormInput
-                  type="number"
-                  label="Rows"
-                  placeholder="Rows"
-                  value={headerRows}
-                  onChange={handleHeaderRowsChange}
-                />
-              </div>
-              <div className="ps-3 w-50">
-                <CFormSelect
-                  label="Columns"
-                  placeholder="Columns"
-                  options={[
-                    { label: "2", value: "2" },
-                    { label: "4", value: "4" },
-                    { label: "6", value: "6" },
-                  ]}
-                  value={headerColumns}
-                  onChange={handleHeaderColumnsChange}
-                />
-              </div>
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={headerRows}
+                onChange={handleHeaderRowsChange}
+              />
             </div>
-  
-            <table className="table mb-3">
-              <tbody>{renderTable(headerRows, headerColumns)}</tbody>
-            </table>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={headerColumns}
+                onChange={handleHeaderColumnsChange}
+              />
+            </div>
+          </div>
+
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
           <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
           <div className="d-flex pb-2">
-              <div className="mb-3">
-                <CFormInput
-                  type="number"
-                  label="Rows"
-                  placeholder="Rows"
-                  value={footerRows}
-                  onChange={handleFooterRowsChange}
-                />
-              </div>
-              <div className="ps-3 w-50">
-                <CFormSelect
-                  label="Columns"
-                  placeholder="Columns"
-                  options={[
-                    { label: "2", value: "2" },
-                    { label: "4", value: "4" },
-                    { label: "6", value: "6" },
-                  ]}
-                  value={footerColumns}
-                  onChange={handleFooterColumnsChange}
-                />
-              </div>
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
             </div>
-            <table className="table mb-3">
-              <tbody>{renderTable(footerRows, footerColumns)}</tbody>
-            </table>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
-
 
   return (
     <>
@@ -707,7 +704,11 @@ function CoaTemplate() {
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} onAdd={addNewStorageCondition} closeModal={closeModal} />
+          <StatusModal
+            visible={isModalOpen}
+            onAdd={addNewStorageCondition}
+            closeModal={closeModal}
+          />
         )}
         {isModalsOpen && (
           <ImportModal
@@ -719,15 +720,14 @@ function CoaTemplate() {
           />
         )}
 
-{editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </>
   );

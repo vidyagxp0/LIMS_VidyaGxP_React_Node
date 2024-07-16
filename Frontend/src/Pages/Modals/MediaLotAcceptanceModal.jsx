@@ -1,4 +1,11 @@
-import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
+import {
+  CButton,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import React from "react";
 
 const MediaLotAcceptanceModal = (_props) => {
@@ -8,10 +15,10 @@ const MediaLotAcceptanceModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
-          <CModalTitle size="xl">Add Media Lot</CModalTitle>
+          <CModalTitle size="lg">Add Media Lot</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <table

@@ -16,7 +16,7 @@ const PerformanceTestModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Chemicals</CModalTitle>
@@ -27,6 +27,7 @@ const PerformanceTestModal = (_props) => {
             type="text"
             label="Performance Test Name"
             placeholder="Performance Test Name"
+            className="mb-3"
           />
           <CFormInput
             type="text"

@@ -21,7 +21,7 @@ const WorkingStandardUsageModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Reference Standard Lot Usage</CModalTitle>

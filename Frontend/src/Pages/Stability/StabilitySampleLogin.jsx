@@ -228,7 +228,7 @@ function StabilitySampleLogin() {
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Sample login</CModalTitle>
@@ -371,7 +371,7 @@ function StabilitySampleLogin() {
     setEditModalData(null);
   };
 
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
@@ -402,7 +402,7 @@ function StabilitySampleLogin() {
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Sample login</CModalTitle>
@@ -467,7 +467,7 @@ function StabilitySampleLogin() {
               placeholder=" Select..."
               name="copySampleForm"
               options={["Select...", { label: "No Options" }]}
-              value={formData?.copySampleForm||""}
+              value={formData?.copySampleForm || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -476,7 +476,7 @@ function StabilitySampleLogin() {
               label="Sample Type"
               name="sampleType"
               placeholder="Sample Type"
-              value={formData?.sampleType||""}
+              value={formData?.sampleType || ""}
               onChange={handleChange}
             />
             <CFormSelect
@@ -486,7 +486,7 @@ function StabilitySampleLogin() {
               placeholder=" Select..."
               name="certificatsIfAny"
               options={["Select...", { label: "No Options" }]}
-              value={formData?.certificatsIfAny||""}
+              value={formData?.certificatsIfAny || ""}
               onchange={handleChange}
             />
             <CFormSelect
@@ -504,7 +504,7 @@ function StabilitySampleLogin() {
                 { label: "RPS-TSLV-00" },
                 { label: "rest0001" },
               ]}
-              value={formData?.protocolId||""}
+              value={formData?.protocolId || ""}
               onchange={handleChange}
             />
             <CFormSelect
@@ -523,7 +523,7 @@ function StabilitySampleLogin() {
                 { label: "24°F" },
                 { label: "25°C" },
               ]}
-              value={formData?.storageCondition||""}
+              value={formData?.storageCondition || ""}
               onChange={handleChange}
             />
           </CModalBody>
@@ -626,14 +626,14 @@ function StabilitySampleLogin() {
             onDataUpload={handleExcelDataUpload}
           />
         )}
-          {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </>
   );

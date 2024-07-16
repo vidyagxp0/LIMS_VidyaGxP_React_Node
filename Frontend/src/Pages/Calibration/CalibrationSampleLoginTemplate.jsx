@@ -1,10 +1,9 @@
-
 //   const StatusModal = (_props) => {
 //     return (
 
 //     )
 //   }
-   
+
 //   const DeleteModal = (_props) => {
 //     return (
 //         <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
@@ -40,7 +39,6 @@
 //     );
 // };
 
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -66,28 +64,25 @@ import {
 } from "@coreui/react";
 
 const initialData = [
-    {
-      checkbox: false,
-      sno: 1,
-      sampleLogintemplate: "Product 1",
-      testPlan: "Seq 1",
-      QuantitativeParameters: "Info 1",
-      AutoSampleAllotmentRequired: "Start 1",
-      status: "DROPPED",
-    },
-    {
-      checkbox: false,
-      sno: 2,
-      sampleLogintemplate: "Product 2",
-      testPlan: "Seq 2",
-      QuantitativeParameters: "Info 2",
-      AutoSampleAllotmentRequired: "Start 2",
-      status: "INITIATED",
-    },
-   
-  ];
-  
-
+  {
+    checkbox: false,
+    sno: 1,
+    sampleLogintemplate: "Product 1",
+    testPlan: "Seq 1",
+    QuantitativeParameters: "Info 1",
+    AutoSampleAllotmentRequired: "Start 1",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    sampleLogintemplate: "Product 2",
+    testPlan: "Seq 2",
+    QuantitativeParameters: "Info 2",
+    AutoSampleAllotmentRequired: "Start 2",
+    status: "INITIATED",
+  },
+];
 
 const CalibrationSampleLoginTemplate = () => {
   const [data, setData] = useState(initialData);
@@ -103,7 +98,7 @@ const CalibrationSampleLoginTemplate = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-  const [editModalData, setEditModalData] = useState(null); 
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -115,7 +110,7 @@ const CalibrationSampleLoginTemplate = () => {
   };
 
   useEffect(() => {
-    const storedData = localStorage.getItem('calibrationData');
+    const storedData = localStorage.getItem("calibrationData");
     if (storedData) {
       setData(JSON.parse(storedData));
     } else {
@@ -124,7 +119,7 @@ const CalibrationSampleLoginTemplate = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('calibrationData', JSON.stringify(data));
+    localStorage.setItem("calibrationData", JSON.stringify(data));
     const counts = {
       DROPPED: 0,
       INITIATED: 0,
@@ -158,7 +153,9 @@ const CalibrationSampleLoginTemplate = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.sampleLogintemplate.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.sampleLogintemplate
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -176,7 +173,10 @@ const CalibrationSampleLoginTemplate = () => {
     { header: "SrNo.", accessor: "sno" },
     { header: "Sample Login template", accessor: "sampleLogintemplate" },
     { header: "Test Plan", accessor: "testPlan" },
-    { header: "Auto Sample Allotment Required", accessor: "AutoSampleAllotmentRequired" },
+    {
+      header: "Auto Sample Allotment Required",
+      accessor: "AutoSampleAllotmentRequired",
+    },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -312,7 +312,7 @@ const CalibrationSampleLoginTemplate = () => {
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Sample Login Template</CModalTitle>
@@ -323,34 +323,34 @@ const CalibrationSampleLoginTemplate = () => {
               className="mb-3"
               type="text"
               placeholder=""
-              value={formData?.sampleLogintemplate||""}
+              value={formData?.sampleLogintemplate || ""}
               onChange={handleChange}
               name="sampleLogintemplate"
             />
-           <div>
-           <label htmlFor="testPlan">Test Plan / Revision No.</label>
-          <select
-            name="testPlan"
-            id="testPlan"
-            className="mb-3 form-select"
-            value={formData?.testPlan||""}
-            onChange={ handleChange}
-          >
-            <option value="">Select a film</option>
-            {top100Films.map((film, index) => (
-              <option key={index} value={film.title}>
-                {film.title} ({film.year})
-              </option>
-            ))}
-          </select>
-      </div>
-  
+            <div>
+              <label htmlFor="testPlan">Test Plan / Revision No.</label>
+              <select
+                name="testPlan"
+                id="testPlan"
+                className="mb-3 form-select"
+                value={formData?.testPlan || ""}
+                onChange={handleChange}
+              >
+                <option value="">Select a film</option>
+                {top100Films.map((film, index) => (
+                  <option key={index} value={film.title}>
+                    {film.title} ({film.year})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <CFormInput
               label="Product / Material"
               className="mb-3"
               type="text"
               placeholder=""
-              value={formData?.productMaterial||""}
+              value={formData?.productMaterial || ""}
               onChange={handleChange}
               name="productMaterial"
             />
@@ -359,7 +359,7 @@ const CalibrationSampleLoginTemplate = () => {
               className="mb-3"
               type="text"
               placeholder=""
-              value={formData?.productMaterialCode||""}
+              value={formData?.productMaterialCode || ""}
               onChange={handleChange}
               name="productMaterialCode"
             />
@@ -368,7 +368,7 @@ const CalibrationSampleLoginTemplate = () => {
               className="mb-3"
               type="text"
               placeholder=""
-              value={formData?.AutoSampleAllotmentRequired||""}
+              value={formData?.AutoSampleAllotmentRequired || ""}
               onChange={handleChange}
               name="AutoSampleAllotmentRequired"
             />
@@ -377,7 +377,7 @@ const CalibrationSampleLoginTemplate = () => {
               className="mb-3"
               type="text"
               placeholder=""
-              value={formData?.specificationId||""}
+              value={formData?.specificationId || ""}
               onChange={handleChange}
               name="specificationId"
             />
@@ -385,18 +385,20 @@ const CalibrationSampleLoginTemplate = () => {
               <CButton color="light w-50" onClick={closeModal}>
                 &lt; Back
               </CButton>
-              <CButton color="primary w-50" onClick={handleSave}>Add</CButton>
+              <CButton color="primary w-50" onClick={handleSave}>
+                Add
+              </CButton>
             </div>
           </CModalBody>
         </CModal>
       </div>
     );
-  }
+  };
 
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Sample Login Template</h1>
-     
+
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
@@ -414,12 +416,12 @@ const CalibrationSampleLoginTemplate = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-          <ATMButton text="Add Login Template" color="blue" onClick={openModal} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Login Template"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -442,10 +444,16 @@ const CalibrationSampleLoginTemplate = () => {
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
-      )} 
-       {editModalData && (
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
           closeModal={closeEditModal}

@@ -94,7 +94,7 @@ const Clients = () => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Client</CModalTitle>
@@ -422,16 +422,23 @@ const Clients = () => {
           data={viewModalData}
         />
       )}
-        {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-       {editModalOpen && (
+      {editModalOpen && (
         <EditModal
           visible={editModalOpen}
           closeModal={closeEditModal}
           data={editModalData}
           onSave={handleEditSave}
-        />)}
+        />
+      )}
     </div>
   );
 };

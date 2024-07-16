@@ -1,17 +1,24 @@
-import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const MediaLotContainerIssueModal = (_props) => {
   return (
     <div>
-         <CModal
+      <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
-          <CModalTitle size="xl">Add Media Lot</CModalTitle>
+          <CModalTitle size="lg">Add Media Lot</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <table
@@ -22,7 +29,7 @@ const MediaLotContainerIssueModal = (_props) => {
               <tr>
                 <th style={{ background: "#0F93C3", color: "white" }}>SNo.</th>
                 <th style={{ background: "#0F93C3", color: "white" }}>
-                Media Container No.
+                  Media Container No.
                 </th>
                 <th style={{ background: "#0F93C3", color: "white" }}>
                   Container Qty
@@ -164,9 +171,8 @@ const MediaLotContainerIssueModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-      
     </div>
-  )
-}
+  );
+};
 
-export default MediaLotContainerIssueModal
+export default MediaLotContainerIssueModal;
