@@ -23,18 +23,7 @@ const initialData = [
     specificationCode: "Spec 001",
     attachment: "attachment",
     status: "INITIATED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit1"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete1"
-        className="cursor-pointer"
-      />,
-    ],
+  
   },
   {
     checkbox: false,
@@ -46,18 +35,7 @@ const initialData = [
     specificationCode: "Spec 002",
     attachment: "attachment",
     status: "APPROVED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit2"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete2"
-        className="cursor-pointer"
-      />,
-    ],
+  
   },
   {
     checkbox: false,
@@ -69,64 +47,7 @@ const initialData = [
     specificationCode: "Spec 003",
     attachment: "attachment",
     status: "REJECTED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit3"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete3"
-        className="cursor-pointer"
-      />,
-    ],
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    sampleType: "USR004",
-    storageCondition: "Product 4",
-    createdAt: "2024-01-04",
-    genericName: "Generic 4",
-    specificationCode: "Spec 004",
-    attachment: "attachment",
-    status: "REINITIATED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit4"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete4"
-        className="cursor-pointer"
-      />,
-    ],
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    sampleType: "USR005",
-    storageCondition: "Product 5",
-    createdAt: "2024-01-05",
-    genericName: "Generic 5",
-    specificationCode: "Spec 005",
-    attachment: "attachment",
-    status: "DROPPED",
-    action: [
-      <FontAwesomeIcon
-        icon={faPenToSquare}
-        key="edit5"
-        className="mr-2 cursor-pointer"
-      />,
-      <FontAwesomeIcon
-        icon={faTrashCan}
-        key="delete5"
-        className="cursor-pointer"
-      />,
-    ],
+  
   },
 ];
 
