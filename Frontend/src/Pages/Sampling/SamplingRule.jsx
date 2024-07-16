@@ -149,7 +149,7 @@ const SamplingRule = () => {
   };
 
   const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "Inactive" ? "Active" : "Inactive";
+    const nextStatus = lastStatus === "INACTIVE" ? "ACTIVE" : "INACTIVE";
     setData((prevData)=>[
       ...prevData,
       {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
