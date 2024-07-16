@@ -9,22 +9,21 @@ import {
 import React, { useState } from "react";
 
 const MaterialModal = ({ visible, closeModal, handleSubmit }) => {
-  const [stockMaterial , setStockMaterial ] = useState({
-    MaterialName : "",
-    Description:"",
-  })
+  const [stockMaterial, setStockMaterial] = useState({
+    MaterialName: "",
+    Description: "",
+  });
 
-  const handleChange = (field , value) => {
-    const updatedData = {...stockMaterial, [field]:value }
-    setStockMaterial(updatedData)
-    console.log(updatedData)
+  const handleChange = (field, value) => {
+    const updatedData = { ...stockMaterial, [field]: value };
+    setStockMaterial(updatedData);
+    console.log(updatedData);
   };
 
   const handleFormSubmit = (e) => {
-    handleSubmit({...stockMaterial});
+    handleSubmit({ ...stockMaterial });
     closeModal();
-  }
-
+  };
 
   return (
     <div>
@@ -32,7 +31,7 @@ const MaterialModal = ({ visible, closeModal, handleSubmit }) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Material</CModalTitle>
@@ -45,7 +44,7 @@ const MaterialModal = ({ visible, closeModal, handleSubmit }) => {
             placeholder="Material Name"
             // name="materialName"
             value={stockMaterial.MaterialName}
-            onChange={(e)=>handleChange("MaterialName",e.target.value)}
+            onChange={(e) => handleChange("MaterialName", e.target.value)}
           />
           <CFormInput
             label="Description"
@@ -54,14 +53,16 @@ const MaterialModal = ({ visible, closeModal, handleSubmit }) => {
             placeholder="Description"
             // name="description"
             value={stockMaterial.Description}
-            onChange={(e)=>handleChange("Description",e.target.value)}
+            onChange={(e) => handleChange("Description", e.target.value)}
           />
 
           <div className="d-flex gap-3 mt-">
             <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50" onClick={handleFormSubmit}>Add Material</CButton>
+            <CButton color="primary w-50" onClick={handleFormSubmit}>
+              Add Material
+            </CButton>
           </div>
         </CModalBody>
       </CModal>

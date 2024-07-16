@@ -92,7 +92,7 @@ const Plants = () => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Plant</CModalTitle>
@@ -233,11 +233,11 @@ const Plants = () => {
       PlantName: item["Plant Name"] || "",
       Address: item["Address"] || "",
       RegisterOn: item["Register On"] || "",
-      status: item["Status"] || "Active", 
+      status: item["Status"] || "Active",
     }));
     const concatenateData = [...updatedData];
     setData(concatenateData);
-    setIsModalsOpen(false); 
+    setIsModalsOpen(false);
   };
 
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
@@ -326,8 +326,14 @@ const Plants = () => {
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
       {editModalOpen && (
         <EditModal

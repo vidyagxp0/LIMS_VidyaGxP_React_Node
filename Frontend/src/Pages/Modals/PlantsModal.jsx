@@ -33,7 +33,7 @@ const PlantsModal = ({ visible, closeModal, handleSubmit }) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Plant</CModalTitle>
@@ -74,7 +74,9 @@ const PlantsModal = ({ visible, closeModal, handleSubmit }) => {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleFormSubmit}>Add</CButton>
+          <CButton color="primary" onClick={handleFormSubmit}>
+            Add
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

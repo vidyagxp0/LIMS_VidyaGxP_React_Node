@@ -8,7 +8,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
 const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
 

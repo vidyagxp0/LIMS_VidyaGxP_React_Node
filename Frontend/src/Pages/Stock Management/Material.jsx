@@ -13,7 +13,14 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import MaterialModal from "../Modals/MaterialModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-import { CButton, CFormInput, CModal, CModalBody, CModalHeader, CModalTitle } from "@coreui/react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -36,7 +43,6 @@ const initialData = [
   },
 ];
 
-
 const Material = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +55,7 @@ const Material = () => {
     Inactive: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null); 
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -57,8 +63,6 @@ const Material = () => {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-  
-
 
   useEffect(() => {
     const counts = {
@@ -136,18 +140,17 @@ const Material = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       UniqueCode: item["Unique Code"] || "",
       MaterialName: item["Material Name"] || "",
       Description: item["Description"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
-  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -185,7 +188,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           sno: prevData.length + 1,
           MaterialName: newInstrument.MaterialName,
           Description: newInstrument.Description,
-          UniqueCode:"000",
+          UniqueCode: "000",
           status: "Active",
         },
       ]);
@@ -225,14 +228,13 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       setFormData({ ...formData, [name]: value });
     };
 
-
     return (
       <div>
         <CModal
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Material</CModalTitle>
@@ -244,7 +246,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               type="text"
               placeholder="Material Name"
               name="MaterialName"
-              value={formData?.MaterialName||""}
+              value={formData?.MaterialName || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -253,15 +255,17 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               type="text"
               placeholder="Description"
               name="Description"
-              value={formData?.Description||""}
+              value={formData?.Description || ""}
               onChange={handleChange}
             />
-   
+
             <div className="d-flex gap-3 mt-">
               <CButton color="light w-50" onClick={closeModal}>
                 &lt; Back
               </CButton>
-              <CButton color="primary w-50" onClick={handleSave}>Update Material</CButton>
+              <CButton color="primary w-50" onClick={handleSave}>
+                Update Material
+              </CButton>
             </div>
           </CModalBody>
         </CModal>
@@ -287,11 +291,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Material" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -316,11 +316,17 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         />
       )}
 
-{isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
 
-{editModalData && (
+      {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
           closeModal={closeEditModal}
@@ -328,7 +334,6 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           onSave={handleEditSave}
         />
       )}
-
     </div>
   );
 };

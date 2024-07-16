@@ -11,16 +11,15 @@ import {
 import React, { useState } from "react";
 
 const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
-
   const [serviceReporting, setServiceReporting] = useState({
     problemId: "",
     instrumentID: "",
     moduleId: "",
     problemInBrief: "",
     problemInDetail: "",
-    jobDetails: ""
-   });
-   const handleInputChange = (field, value) => {
+    jobDetails: "",
+  });
+  const handleInputChange = (field, value) => {
     const updatedData = { ...serviceReporting, [field]: value };
     setServiceReporting(updatedData);
     console.log(updatedData);
@@ -37,7 +36,7 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Service Reporting</CModalTitle>
@@ -74,7 +73,9 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
             label="Problem In Brief"
             placeholder="Problem In Brief "
             value={serviceReporting.problemInBrief}
-            onChange={(e) => handleInputChange("problemInBrief", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("problemInBrief", e.target.value)
+            }
           />
           <CFormInput
             type="text"
@@ -82,7 +83,9 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
             label="Problem In Details"
             placeholder="Problem In Details"
             value={serviceReporting.problemInDetail}
-            onChange={(e) => handleInputChange("problemInDetail", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("problemInDetail", e.target.value)
+            }
           />
           <CFormInput
             type="file"
@@ -127,7 +130,9 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleFormSubmit}>Submit</CButton>
+          <CButton color="primary" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

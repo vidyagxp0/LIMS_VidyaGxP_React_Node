@@ -17,13 +17,13 @@ const LotRegistrationModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Lot Registration</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p >Add information</p>
+          <p>Add information</p>
           <p style={{ fontWeight: "700", fontSize: "19px" }}>
             Registration Initiation
           </p>

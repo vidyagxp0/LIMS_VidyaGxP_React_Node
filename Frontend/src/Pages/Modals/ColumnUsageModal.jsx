@@ -1,6 +1,7 @@
 import {
   CButton,
   CFormInput,
+  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
@@ -16,7 +17,7 @@ const ColumnUsageModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Column Usage</CModalTitle>
@@ -25,67 +26,67 @@ const ColumnUsageModal = (_props) => {
           <p style={{ fontWeight: "bolder" }}>
             Add information and Add column usage.
           </p>
-          <CFormInput type="text" label="Column No." placeholder="Column No." />
+          <CFormInput type="text" label="Column No." placeholder="" />
           <CFormInput
             type="text"
             label=" Qualification Number"
-            placeholder=" Qualification Number "
+            placeholder="  "
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Assignment Number"
-            placeholder=" Assignment Number "
+            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Brand Name / Manufacturer Name"
-            placeholder=" Brand Name / Manufacturer Name "
+            placeholder="  "
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Film Thikness / Particle Size"
-            placeholder=" Film Thikness / Particle Size "
+            placeholder=" "
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" UMO"
-            placeholder="UMO "
+            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label="Mfg. Serial No."
-            placeholder="Mfg. Serial No."
+            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Length"
-            placeholder="Length"
+            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" UMO"
-            placeholder="UMO"
+            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Packing Material"
-            placeholder="Packing Material"
+            placeholder=""
             className="custom-placeholder"
           />
 
@@ -99,7 +100,7 @@ const ColumnUsageModal = (_props) => {
           <CFormInput
             type="text"
             label=" UMO"
-            placeholder="UMO"
+            placeholder=""
             className="custom-placeholder"
           />
 
@@ -180,60 +181,88 @@ const ColumnUsageModal = (_props) => {
           />
           <CFormInput
             type="text"
-            label="Batch Number
-            "
-            placeholder=""
+            label="Batch Number"
             className="custom-placeholder"
           />
+          <CFormTextarea
+            type="Remarks"
+            label="Batch Number"
+            className="custom-placeholder mb-"
+          />
 
-          <h5>Remarks</h5>
-          <textarea
-            style={{ width: "350px", height: "100px" }}
-            name=""
-            id=""
-          ></textarea>
-
-          <table className="table table-bordered">
+          <table className="w-full border border-collapse border-gray-300 mt-5">
             <thead>
               <tr>
-                <th>Sr no.</th>
-                <th>Column Performance Test</th>
-                <th>Test(s)</th>
-                <th>Pass Limits</th>
-                <th>Observations</th>
-                <th>Pass/Fail</th>
-                <th>Final Result</th>
+                <th style={{ backgroundColor: "#6187D4", color: "white" }}>
+                  Sr no.
+                </th>
+                <th style={{ backgroundColor: "#6187D4", color: "white" }}>
+                  Column Performance Test
+                </th>
+                <th style={{ backgroundColor: "#6187D4", color: "white" }}>
+                  Test(s)
+                </th>
+                <th style={{ backgroundColor: "#6187D4", color: "white" }}>
+                  Pass Limits
+                </th>
+                <th style={{ backgroundColor: "#6187D4", color: "white" }}>
+                  Observations
+                </th>
+                <th style={{ backgroundColor: "#6187D4", color: "white" }}>
+                  Pass/Fail
+                </th>
+                <th style={{ backgroundColor: "#6187D4", color: "white" }}>
+                  Final Result
+                </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>1</td>
-                <td>GC CHROMOTOGRAPHY</td>
-                <td>
+                <td className="p-2 border border-gray-300">1</td>
+                <td className="p-2 border border-gray-300">
+                  GC CHROMOTOGRAPHY
+                </td>
+                <td className="p-2 border border-gray-300  items-center">
                   <input type="radio" name="test1" value="yes" /> Yes
                   <input type="radio" name="test1" value="no" /> No
                 </td>
-                <td>
-                  <table className="table table-bordered">
+                <td className="p-2 border border-gray-500">
+                  <table className="w-full border border-collapse border-gray-500 mt-3">
                     <thead>
                       <tr>
-                        <th>Lower</th>
-                        <th>Upper</th>
-                        <th>Decimals</th>
+                        <th className="bg-lightblue p-1 border border-gray-500">
+                          Lower
+                        </th>
+                        <th className="bg-lightblue p-1 border border-gray-500">
+                          Upper
+                        </th>
+                        <th className="bg-lightblue p-1 border border-gray-500">
+                          Decimals
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Lower value</td>
-                        <td>Upper value</td>
-                        <td>Decimals value</td>
+                        <td className="p-1 border border-gray-500   ">
+                          Lower value
+                        </td>
+                        <td className="p-1 border border-gray-500 ">
+                          Upper value
+                        </td>
+                        <td className="p-1 border border-gray-500 ">
+                          Decimals value
+                        </td>
                       </tr>
                     </tbody>
                   </table>
                 </td>
-                <td>Observations data</td>
-                <td>Pass/Fail data</td>
-                <td>Final Result data</td>
+                <td className="p-2 border border-gray-300">
+                  Observations data
+                </td>
+                <td className="p-2 border border-gray-300">Pass/Fail data</td>
+                <td className="p-2 border border-gray-300">
+                  Final Result data
+                </td>
               </tr>
             </tbody>
           </table>

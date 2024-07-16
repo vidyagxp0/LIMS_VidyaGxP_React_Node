@@ -39,7 +39,6 @@ const initialData = [
     reportTitle: "Report 2",
     status: "INITIATED",
   },
- 
 ];
 
 function SummaryReportHeader() {
@@ -57,7 +56,7 @@ function SummaryReportHeader() {
     REJECTED: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -177,16 +176,20 @@ function SummaryReportHeader() {
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData)=>[
+    setData((prevData) => [
       ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
+  };
 
-
-  const StatusModal = ({visible , closeModal,onAdd}) => {
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(1);
@@ -196,19 +199,19 @@ function SummaryReportHeader() {
     const [productCaption, setProductCaption] = useState("");
     const [formatNo, setFormatNo] = useState("");
     const [reportTitle, setReportTitle] = useState("");
-    
+
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
         setInputValue(value);
       }
     };
-  
+
     const handleHeaderRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setHeaderRows(value);
     };
-  
+
     const handleHeaderColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setHeaderColumns(columns);
@@ -216,12 +219,12 @@ function SummaryReportHeader() {
         setHeaderRows(0);
       }
     };
-  
+
     const handleFooterRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setFooterRows(value);
     };
-  
+
     const handleFooterColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setFooterColumns(columns);
@@ -229,7 +232,7 @@ function SummaryReportHeader() {
         setFooterRows(0);
       }
     };
-  
+
     const renderTable = (rows, columns) => {
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
@@ -255,22 +258,21 @@ function SummaryReportHeader() {
       return tableRows;
     };
 
-    
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
-        productCaption:productCaption,
-        reportTitle:reportTitle,
-        action:[],
-      }
-      onAdd(newCondition)
-    }
-    
+        productCaption: productCaption,
+        reportTitle: reportTitle,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
     return (
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Summary Report Header</CModalTitle>
@@ -282,7 +284,7 @@ function SummaryReportHeader() {
             label="Report Title"
             placeholder=" Report Title"
             value={reportTitle}
-            onChange={(e)=>setReportTitle(e.target.value)}
+            onChange={(e) => setReportTitle(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -290,7 +292,7 @@ function SummaryReportHeader() {
             label="Product/Material Caption"
             placeholder=" Product"
             value={productCaption}
-            onChange={(e)=>setProductCaption(e.target.value)}
+            onChange={(e) => setProductCaption(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -298,7 +300,7 @@ function SummaryReportHeader() {
             label="Format No."
             placeholder=" Format No."
             value={formatNo}
-            onChange={(e)=>setFormatNo(e.target.value)}
+            onChange={(e) => setFormatNo(e.target.value)}
           />
           <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
           <CFormInput
@@ -314,7 +316,12 @@ function SummaryReportHeader() {
             type="select"
             label="Columns"
             placeholder=" Columns"
-            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            options={[
+              " Columns",
+              { label: "2" },
+              { label: "4" },
+              { label: "6" },
+            ]}
             value={headerColumns.toString()}
             onChange={handleHeaderColumnsChange}
           />
@@ -335,7 +342,12 @@ function SummaryReportHeader() {
             type="select"
             label="Columns"
             placeholder=" Columns"
-            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            options={[
+              " Columns",
+              { label: "2" },
+              { label: "4" },
+              { label: "6" },
+            ]}
             value={footerColumns.toString()}
             onChange={handleFooterColumnsChange}
           />
@@ -347,12 +359,14 @@ function SummaryReportHeader() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
-  
+
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
@@ -367,7 +381,7 @@ function SummaryReportHeader() {
     setData(newData);
     setEditModalData(null);
   };
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(1);
@@ -375,10 +389,9 @@ function SummaryReportHeader() {
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
 
     const handleChange = (e) => {
@@ -390,19 +403,18 @@ function SummaryReportHeader() {
       onSave(formData);
     };
 
-
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
         setInputValue(value);
       }
     };
-  
+
     const handleHeaderRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setHeaderRows(value);
     };
-  
+
     const handleHeaderColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setHeaderColumns(columns);
@@ -410,12 +422,12 @@ function SummaryReportHeader() {
         setHeaderRows(0);
       }
     };
-  
+
     const handleFooterRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setFooterRows(value);
     };
-  
+
     const handleFooterColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setFooterColumns(columns);
@@ -423,7 +435,7 @@ function SummaryReportHeader() {
         setFooterRows(0);
       }
     };
-  
+
     const renderTable = (rows, columns) => {
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
@@ -448,13 +460,13 @@ function SummaryReportHeader() {
       }
       return tableRows;
     };
-    
+
     return (
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Summary Report Header</CModalTitle>
@@ -465,7 +477,7 @@ function SummaryReportHeader() {
             type="text"
             label="Report Title"
             placeholder=" Report Title"
-            value={formData?.reportTitle||""}
+            value={formData?.reportTitle || ""}
             onChange={handleChange}
             name="reportTitle"
           />
@@ -474,7 +486,7 @@ function SummaryReportHeader() {
             type="text"
             label="Product/Material Caption"
             placeholder=" Product"
-            value={formData?.productCaption||""}
+            value={formData?.productCaption || ""}
             onChange={handleChange}
             name="productCaption"
           />
@@ -483,7 +495,7 @@ function SummaryReportHeader() {
             type="text"
             label="Format No."
             placeholder=" Format No."
-            value={formData?.formatNo||""}
+            value={formData?.formatNo || ""}
             onChange={handleChange}
             name="formatNo"
           />
@@ -501,7 +513,12 @@ function SummaryReportHeader() {
             type="select"
             label="Columns"
             placeholder=" Columns"
-            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            options={[
+              " Columns",
+              { label: "2" },
+              { label: "4" },
+              { label: "6" },
+            ]}
             value={headerColumns.toString()}
             onChange={handleHeaderColumnsChange}
           />
@@ -522,7 +539,12 @@ function SummaryReportHeader() {
             type="select"
             label="Columns"
             placeholder=" Columns"
-            options={[" Columns", { label: "2" }, { label: "4" }, { label: "6" }]}
+            options={[
+              " Columns",
+              { label: "2" },
+              { label: "4" },
+              { label: "6" },
+            ]}
             value={footerColumns.toString()}
             onChange={handleFooterColumnsChange}
           />
@@ -534,7 +556,9 @@ function SummaryReportHeader() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -611,7 +635,11 @@ function SummaryReportHeader() {
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
+          <StatusModal
+            visible={isModalOpen}
+            closeModal={closeModal}
+            onAdd={addNewStorageCondition}
+          />
         )}
         {isModalsOpen && (
           <ImportModal
@@ -623,17 +651,16 @@ function SummaryReportHeader() {
           />
         )}
         {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </>
   );
 }
-
 
 export default SummaryReportHeader;

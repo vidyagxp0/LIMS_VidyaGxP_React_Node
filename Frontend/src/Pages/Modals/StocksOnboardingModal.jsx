@@ -1,4 +1,11 @@
-import { CButton, CFormCheck, CModal, CModalBody, CModalHeader, CModalTitle } from "@coreui/react";
+import {
+  CButton,
+  CFormCheck,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import React from "react";
 
 const StocksOnboardingModal = (_props) => {
@@ -8,7 +15,7 @@ const StocksOnboardingModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Stock Registration</CModalTitle>

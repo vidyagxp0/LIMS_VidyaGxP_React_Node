@@ -99,7 +99,7 @@ const InstrumentUsage = () => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Instrument usage</CModalTitle>
@@ -346,7 +346,7 @@ const InstrumentUsage = () => {
           InstrumentID: newInstrument.InstrumentID,
           InstrumentCategory: newInstrument.InstrumentCategory,
           UsageCode: newInstrument.UsageCode,
-          ProductName:newInstrument.ProductName,
+          ProductName: newInstrument.ProductName,
           ARNO: newInstrument.ARNO,
           UsedFor: newInstrument.UsedFor,
           UsedBy: newInstrument.UsedBy,
@@ -423,9 +423,15 @@ const InstrumentUsage = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-       {editModalOpen && (
+      {editModalOpen && (
         <EditModal
           visible={editModalOpen}
           closeModal={closeEditModal}

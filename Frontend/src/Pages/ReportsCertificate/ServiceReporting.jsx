@@ -49,8 +49,6 @@ const initialData = [
     JobDetails: "Job details 2",
     status: "Inactive",
   },
-
-
 ];
 
 const ServiceReporting = () => {
@@ -108,7 +106,7 @@ const ServiceReporting = () => {
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Service Reporting</CModalTitle>
@@ -203,7 +201,9 @@ const ServiceReporting = () => {
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton color="primary" onClick={handleSave}>Submit</CButton>
+            <CButton color="primary" onClick={handleSave}>
+              Submit
+            </CButton>
           </CModalFooter>
         </CModal>
       </div>
@@ -295,7 +295,6 @@ const ServiceReporting = () => {
     },
   ];
 
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -337,7 +336,6 @@ const ServiceReporting = () => {
     console.log("Deleted item:", item);
   };
 
-
   const handleModalSubmit = (serviceReporting) => {
     const currentDate = new Date().toISOString().split("T")[0];
     if (editModalData) {
@@ -364,8 +362,6 @@ const ServiceReporting = () => {
     closeModal();
   };
 
-  
-
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Service Reporting</h1>
@@ -384,12 +380,7 @@ const ServiceReporting = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-          <ATMButton
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-
-          />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Service" color="blue" onClick={openModal} />
         </div>
       </div>
@@ -414,7 +405,13 @@ const ServiceReporting = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
 
       {editModalOpen && (
@@ -425,7 +422,6 @@ const ServiceReporting = () => {
           onSave={handleEditSave}
         />
       )}
-
     </div>
   );
 };

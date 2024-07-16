@@ -17,14 +17,14 @@ const BathSampleModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Batch Sample Registration</CModalTitle>
         </CModalHeader>
 
         <div className="modal-body p-4">
-        <p>Add information and register new Batch Sample</p>
+          <p>Add information and register new Batch Sample</p>
           <CForm>
             <div className="mb-3">
               <CFormInput

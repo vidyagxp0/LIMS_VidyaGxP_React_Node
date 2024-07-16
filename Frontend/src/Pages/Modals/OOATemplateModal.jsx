@@ -1,14 +1,23 @@
-import { CButton, CForm, CFormInput, CFormSelect, CModal, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const OOATemplateModal = (_props) => {
   return (
     <div>
-        <CModal
+      <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add OOA Template</CModalTitle>
@@ -47,7 +56,7 @@ const OOATemplateModal = (_props) => {
                 className="custom-placeholder"
               />
             </div>
-            <div className="mb-3 d-flex gap-4"  >
+            <div className="mb-3 d-flex gap-4">
               <CFormInput
                 type="text"
                 label="Analyst Check List
@@ -81,9 +90,8 @@ const OOATemplateModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-      
     </div>
-  )
-}
+  );
+};
 
-export default OOATemplateModal
+export default OOATemplateModal;

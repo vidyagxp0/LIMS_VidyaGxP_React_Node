@@ -28,7 +28,7 @@ const VendorModal = ({ visible, closeModal, handleSubmit }) => {
   };
 
   return (
-    <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
+    <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
       <CModalHeader>
         <CModalTitle>Add Approved Vendor</CModalTitle>
       </CModalHeader>
