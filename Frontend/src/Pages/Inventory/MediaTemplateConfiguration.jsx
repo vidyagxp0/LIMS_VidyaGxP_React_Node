@@ -256,7 +256,7 @@ const MediaTemplateConfiguration = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Media Onboarding</h1>
+      <h1 className="text-2xl font-bold mb-4">Media Template Configuration</h1>
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
@@ -273,7 +273,7 @@ const MediaTemplateConfiguration = () => {
         </div>
         <div className="float-right flex gap-4">
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Media Onboarding" color="blue" onClick={openModal} />
+          <ATMButton text="Media Template Configuration" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table

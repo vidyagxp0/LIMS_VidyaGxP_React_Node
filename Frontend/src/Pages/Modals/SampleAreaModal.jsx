@@ -31,6 +31,12 @@ const SampleAreaModal = (_props) => {
                 label="Category"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "cat11", label: "cat11" },
+                  { value: "in-process", label: "in-process" },
+                  { value: "prified water", label: "prified water" },
+                ]}
               />
             </div>
             <div className="mb-3">

@@ -14,6 +14,7 @@ import CoaTamplateModal from "../Modals/CoaTamplateModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 
 const initialData = [
   {
@@ -50,6 +51,165 @@ const Coa_Template = () => {
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+
+ 
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  useEffect(() => {
+    const counts = {
+      Active: 0,
+      Inactive: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    const sampleType = row.SampleType ? row.SampleType.toLowerCase() : '';
+    const query = searchQuery ? searchQuery.toLowerCase() : '';
+  
+    return (
+      sampleType.includes(query) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Sample Type", accessor: "SampleType" },
+    { header: "Cao ID", accessor: "CoaId" },
+    { header: "Coa Type", accessor: "CoaType" },
+    { header: "Updated At", accessor: "UpdatedAt" },
+    { header: "Status", accessor: "status" },
+
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+            onClick={() => handleDelete(row)}
+          />
+        </>
+      ),
+    },
+  ];
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      SampleType: item["Sample Type"] || "",
+      CoaId: item["Cao ID"] || "",
+      CoaType: item["Coa Type"] || "",
+      UpdatedAt: item["Updated At"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (coaData) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === coaData.sno ? coaData : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          SampleType:coaData.sampleType,
+          CoaId:"COA-003",
+          CoaType:coaData.coaType,
+          SerialNo:coaData.serialNo,
+          MaterialCaption:coaData.materialCaption,
+          ReportTitle:coaData.reportTitle,
+          FormatNo:coaData.formatNo,
+          UpdatedAt: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -196,9 +356,9 @@ const Coa_Template = () => {
               </div>
             </div>
 
-            <table className="table mb-3">
+            {/* <table className="table mb-3">
               <tbody>{renderTable(headerRows, headerColumns)}</tbody>
-            </table>
+            </table> */}
 
             <CModalTitle className="bg-light mb-3">Footer</CModalTitle>
 
@@ -228,9 +388,9 @@ const Coa_Template = () => {
                 />
               </div>
             </div>
-            <table className="table mb-3">
+            {/* <table className="table mb-3">
               <tbody>{renderTable(footerRows, footerColumns)}</tbody>
-            </table>
+            </table> */}
 
             <div className="d-flex">
               <div className="pe-3">
@@ -314,159 +474,6 @@ const Coa_Template = () => {
     );
   };
 
-  const [isModalsOpen, setIsModalsOpen] = useState(false);
-
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
-
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
-  };
-
-  useEffect(() => {
-    const counts = {
-      Active: 0,
-      Inactive: 0,
-    };
-
-    data.forEach((item) => {
-      if (item.status === "Active") counts.Active++;
-      else if (item.status === "Inactive") counts.Inactive++;
-    });
-
-    setCardCounts(counts);
-  }, [data]);
-
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
-  };
-
-  const handleSelectAll = (e) => {
-    const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
-  };
-
-  const filteredData = data.filter((row) => {
-    return (
-      row.SampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
-  };
-
-  const columns = [
-    {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
-    { header: "SrNo.", accessor: "sno" },
-    { header: "Sample Type", accessor: "SampleType" },
-    { header: "Cao ID", accessor: "CoaId" },
-    { header: "Coa Type", accessor: "CoaType" },
-    { header: "Updated At", accessor: "UpdatedAt" },
-    { header: "Status", accessor: "status" },
-
-    {
-      header: "Actions",
-      accessor: "action",
-      Cell: ({ row }) => (
-        <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row)}
-          />
-          <FontAwesomeIcon
-            icon={faTrashCan}
-            key="delete"
-            className="cursor-pointer"
-            onClick={() => handleDelete(row)}
-          />
-        </>
-      ),
-    },
-  ];
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno: index + 1,
-      SampleType: item["Sample Type"] || "",
-      CoaId: item["Cao ID"] || "",
-      CoaType: item["Coa Type"] || "",
-      UpdatedAt: item["Updated At"] || "",
-      status: item["Status"] || "",
-    }));
-
-    const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
-  };
-
-  //********************************Fetch data from Modal and added to the new row**************************************************************** */
-  const handleModalSubmit = (newInstrument) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
-      );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
-        {
-          checkbox: false,
-          sno: prevData.length + 1,
-          Instrument: newInstrument.Instrument,
-          rumentCategory: newInstrument.rumentCategory,
-          SuppliedBy: newInstrument.SuppliedBy,
-          ProblemId: newInstrument.ProblemId,
-          ProblemInBrief: newInstrument.ProblemInBrief,
-          ProblemInDetails: newInstrument.ProblemInDetails,
-          OccuredOn: newInstrument.OccuredOn,
-          status: "Active",
-        },
-      ]);
-    }
-    closeModal();
-  };
-
-  //************************************************************************************************ */
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
-  };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Certificate of Analysis</h1>
@@ -498,7 +505,8 @@ const Coa_Template = () => {
         onDelete={handleDelete}
         openEditModal={openEditModal}
       />
-      <CoaTamplateModal visible={isModalOpen} closeModal={closeModal} />
+      <CoaTamplateModal visible={isModalOpen} closeModal={closeModal} handleSubmit={handleModalSubmit} />
+
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}

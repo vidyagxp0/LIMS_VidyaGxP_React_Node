@@ -47,7 +47,16 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import RequalificationModalModal from "../Modals/RequalificationModalModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -93,8 +102,119 @@ const ReQualifictionRequest = () => {
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INACTIVE");
-  // const [editModalData, setEditModalData] = useState(null);
-  // const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        {" "}
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle> Add Re-Qualification Request</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p className="my-3 fs-6 fw-bold">
+              {" "}
+              Add information about Re-Qualification Request.
+            </p>
+            <CFormSelect
+              className="mb-3"
+              label="Analyst"
+              options={[
+                { value: "Analyst", label: "Analyst" },
+                { value: "Analyst Two", label: "Analyst Two" },
+              ]}
+              value={formData?.Analyst || ""}
+              onChange={handleChange}
+              name="Analyst"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Employee ID"
+              placeholder="Employee ID"
+              value={formData?.EmployeeId || ""}
+              onChange={handleChange}
+              name="EmployeeId"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Role/Title"
+              placeholder="Role/Title"
+              value={formData?.role || ""}
+              onChange={handleChange}
+              name="role"
+            />
+            <CFormSelect
+              label="Test Technique"
+              className="mb-3"
+              options={[{ value: "Description", label: "Description" }]}
+              value={formData?.TestTechnique || ""}
+              onChange={handleChange}
+              name="TestTechnique"
+         
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Justification For Requalification"
+              placeholder="Training Details"
+              value={formData?.Justification || ""}
+              onChange={handleChange}
+              name="Justification"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Add</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -223,11 +343,11 @@ const ReQualifictionRequest = () => {
     console.log("Deleted item:", item);
   };
 
-  const handleModalSubmit = (nomination) => {
+  const handleModalSubmit = (requalification) => {
     const currentDate = new Date().toISOString().split("T")[0];
     if (editModalData) {
       const updatedList = data.map((item) =>
-        item.sno === nomination.sno ? nomination : item
+        item.sno === requalification.sno ? requalification : item
       );
       setData(updatedList);
     } else {
@@ -236,12 +356,14 @@ const ReQualifictionRequest = () => {
         {
           checkbox: false,
           sno: prevData.length + 1,
-          Analyst:nomination.analyst,
-          TestTechnique:nomination.testTechnique,
-          TotalExperience: nomination.totalExperience,
-          PastExperience: nomination.pastExperience,
-          JustificationforDirectNomination:nomination.justification,
-          AddedOn: currentDate,
+          Analyst:requalification.analyst,
+          Role:requalification.role,
+          EmployeeId:requalification.employeeId,
+          TestTechnique:requalification.testTechnique,
+          QualificationId: "BA-00#",
+          QualificationType: "BA-00@",
+          JustificationforRequalification:requalification.justification,
+          InitiatedOn: currentDate,
           status: "Active",
         },
       ]);
@@ -309,6 +431,7 @@ const ReQualifictionRequest = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <RequalificationModalModal
         visible={isModalOpen}
@@ -328,6 +451,14 @@ const ReQualifictionRequest = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+        {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>
