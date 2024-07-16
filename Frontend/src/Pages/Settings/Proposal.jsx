@@ -44,7 +44,16 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ProposalModal from "../Modals/ProposalModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -80,61 +89,8 @@ const initialData = [
     InitiatedOn: "BA-003",
     status: "Active",
   },
-  {
-    checkbox: false,
-    sno: 4,
-    TrainingConfirmationId: "Associate 4",
-    Analyst: "BA-004",
-    EmployeeId: "BA-004",
-    TestTechnique: "BA-004",
-    TestTechniqueType: "BA-004",
-    InitiatedOn: "BA-004",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    TrainingConfirmationId: "Associate 5",
-    Analyst: "BA-005",
-    EmployeeId: "BA-005",
-    TestTechnique: "BA-005",
-    TestTechniqueType: "BA-005",
-    InitiatedOn: "BA-005",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    TrainingConfirmationId: "Associate 6",
-    Analyst: "BA-006",
-    EmployeeId: "BA-006",
-    TestTechnique: "BA-006",
-    TestTechniqueType: "BA-006",
-    InitiatedOn: "BA-006",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    TrainingConfirmationId: "Associate 7",
-    Analyst: "BA-007",
-    EmployeeId: "BA-007",
-    TestTechnique: "BA-007",
-    TestTechniqueType: "BA-007",
-    InitiatedOn: "BA-007",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    TrainingConfirmationId: "Associate 8",
-    Analyst: "BA-008",
-    EmployeeId: "BA-008",
-    TestTechnique: "BA-008",
-    TestTechniqueType: "BA-008",
-    InitiatedOn: "BA-008",
-    status: "Active",
-  },
+ 
+ 
 ];
 
 const Proposal = () => {
@@ -152,9 +108,149 @@ const Proposal = () => {
     REJECTED: 0,
   });
 
+  
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Analyst Proposal</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p className="my-3 fs-5">
+              Add information and add new Analyst Proposal
+            </p>
+            <CFormSelect
+              type="text"
+              className="mb-3"
+              label="Training Confirmation ID"
+              placeholder="Training Confirmation ID"
+              options={["Select", { label: "No Options" }]}
+              value={formData?.Analyst || ""}
+              onChange={handleChange}
+              name="Analyst"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Analyst"
+              placeholder="Analyst"
+              value={formData?.Analyst || ""}
+              onChange={handleChange}
+              name="Analyst"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Employee ID"
+              placeholder="Employee ID"
+              value={formData?.EmployeeId || ""}
+              onChange={handleChange}
+              name="EmployeeId"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Test Technique"
+              placeholder="Test Technique"
+              value={formData?.TestTechnique || ""}
+              onChange={handleChange}
+              name="TestTechnique"
+              
+            />
+            <CFormSelect
+              type="text"
+              className="mb-3"
+              label="Test Plan"
+              placeholder="Test Plan"
+              options={["Select", { label: "No Options" }]}
+              value={formData?.TestPlan || ""}
+              onChange={handleChange}
+              name="TestPlan"
+            />
+            <CFormInput
+              type="number"
+              className="mb-3"
+              label="AR Number"
+              placeholder="AR Number"
+              value={formData?.ArNo || ""}
+              onChange={handleChange}
+              name="ArNo"
+            />
+            <CFormInput
+              type="date"
+              className="mb-3"
+              label="Due Date"
+              placeholder="Due Date"
+              value={formData?.DueDate || ""}
+              onChange={handleChange}
+              name="DueDate"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Comments"
+              placeholder="Comments"
+              value={formData?.Comments || ""}
+              onChange={handleChange}
+              name="Comments"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+  
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -282,6 +378,37 @@ const Proposal = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (proposal) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === proposal.sno ? proposal : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Analyst:proposal.analyst,
+          TestTechnique:proposal.testTechnique,
+          EmployeeId:proposal.employeeId,
+          TrainingConfirmationId:proposal.trainingConfirmationId,
+          TestOfTechnique:proposal.testOfTechnique,
+          TestPlan:proposal.testPlan,
+          ArNo:proposal.arNo,
+          Comments:proposal.comments,
+          DueDate:proposal.dueDate,
+          TestTechniqueType:"BA-001",
+          InitiatedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Analyst Proposal</h1>
@@ -342,10 +469,13 @@ const Proposal = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
+
       />
       <ProposalModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -362,6 +492,14 @@ const Proposal = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
     </div>
   );
 };
