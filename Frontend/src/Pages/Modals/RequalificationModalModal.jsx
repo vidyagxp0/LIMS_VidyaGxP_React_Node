@@ -8,12 +8,12 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 
 const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
 
   const [requalification, setRequalification] = useState({
-    name:"",
+    analyst:"",
     employeeId: "",
     role: "",
     testTechnique:"",
@@ -28,7 +28,24 @@ const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
   const handleFormSubmit = () => {
     handleSubmit({ ...requalification });
     closeModal();
+    resetForm();
+
   };
+
+  const resetForm = () => {
+    setRequalification({
+      analyst:"",
+      employeeId: "",
+      role: "",
+      testTechnique:"",
+      justification: "",
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, []);
+
 
 
   return (
@@ -77,7 +94,9 @@ const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormSelect
             label="Test Technique"
             className="mb-3"
-            options={[{ value: "Description", label: "Description" }]}
+            options={[{ value: "Select", label: "Select" },
+              { value: "Description", label: "Description" }
+            ]}
             value={requalification.testTechnique}
             onChange={(e) => handleInputChange("testTechnique", e.target.value)}
           />

@@ -1,18 +1,18 @@
 import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import React, { useState, useEffect } from 'react'
 
-const ProblemReportingModal = ({visible, closeModal, handleSubmit}) => {
-  const [problemData, setProblemData]=useState({
-    instrumentId:"",
-    InstrumentCategory:"",
-    suppliedBy:"",
-    problemId:"",
-    problemIn:"",
-    problemInBrief:"",
-    referenceDocument:"",
-    occurredOn:"",
-    reportedOn:"",
-    problemInDetails:"",
+const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
+  const [problemData, setProblemData] = useState({
+    instrumentId: "",
+    InstrumentCategory: "",
+    suppliedBy: "",
+    problemId: "",
+    problemIn: "",
+    problemInBrief: "",
+    referenceDocument: "",
+    occurredOn: "",
+    reportedOn: "",
+    problemInDetails: "",
 
   })
   const handleInputChange = (field, value) => {
@@ -21,24 +21,24 @@ const ProblemReportingModal = ({visible, closeModal, handleSubmit}) => {
     console.log(updatedData);
   };
 
-  const handleFormSubmit = () => { 
-    handleSubmit({ ...problemData});
+  const handleFormSubmit = () => {
+    handleSubmit({ ...problemData });
     closeModal();
     resetForm();
   };
 
   const resetForm = () => {
     setProblemData({
-      instrumentId:"",
-    InstrumentCategory:"",
-    suppliedBy:"",
-    problemId:"",
-    problemIn:"",
-    problemInBrief:"",
-    referenceDocument:"",
-    occurredOn:"",
-    reportedOn:"",
-    problemInDetails:"",
+      instrumentId: "",
+      InstrumentCategory: "",
+      suppliedBy: "",
+      problemId: "",
+      problemIn: "",
+      problemInBrief: "",
+      referenceDocument: "",
+      occurredOn: "",
+      reportedOn: "",
+      problemInDetails: "",
     });
   };
 
@@ -48,7 +48,7 @@ const ProblemReportingModal = ({visible, closeModal, handleSubmit}) => {
 
   return (
     <div>
-        <CModal
+      <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
@@ -95,9 +95,6 @@ const ProblemReportingModal = ({visible, closeModal, handleSubmit}) => {
             name='SuppliedBy'
             value={problemData.suppliedBy}
             onChange={(e) => handleInputChange("suppliedBy", e.target.value)}
-
-
-
           />
           <CFormInput
             type="text"
@@ -150,12 +147,12 @@ const ProblemReportingModal = ({visible, closeModal, handleSubmit}) => {
 
           />
           <CFormInput type="date"
-           label="Occurred On"
+            label="Occurred On"
             placeholder=" "
             name='OccurredOn'
             value={problemData.occurredOn}
             onChange={(e) => handleInputChange("occurredOn", e.target.value)}
-             />
+          />
 
 
           <CFormInput
@@ -186,7 +183,7 @@ const ProblemReportingModal = ({visible, closeModal, handleSubmit}) => {
           <CButton className="bg-info text-white" onClick={handleFormSubmit}>Submit</CButton>
         </CModalFooter>
       </CModal>
-      
+
     </div>
   )
 }

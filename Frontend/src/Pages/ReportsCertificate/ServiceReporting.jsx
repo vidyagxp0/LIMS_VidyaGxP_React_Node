@@ -382,9 +382,6 @@ const ServiceReporting = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-<<<<<<< Updated upstream
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-=======
 
         <PDFDownload columns={columns} data = {filteredData} title="Service Reporting" fileName="ServiceReporting.pdf" />
 
@@ -393,7 +390,6 @@ const ServiceReporting = () => {
             color='pink'
             onClick={handleOpenModals}
           />
->>>>>>> Stashed changes
           <ATMButton text="Add Service" color="blue" onClick={openModal} />
         </div>
       </div>
