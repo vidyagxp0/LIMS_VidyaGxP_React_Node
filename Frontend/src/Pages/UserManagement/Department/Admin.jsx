@@ -147,7 +147,7 @@ setIsModalsOpen(false);;
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [name , setName] = useState("");
     const [contact , setContact] = useState("");
-    const [gmail , setGmail] = useState("");
+    const [email , setEmail] = useState("");
     const [address , setAddress] = useState("");
 
     const handleAdd = ()=>{
@@ -155,7 +155,7 @@ setIsModalsOpen(false);;
         employeeId:"EMP00",
         storageName:name,
         role:"Role 00",
-        email:gmail,
+        email:email,
         addedOn: new Date().toISOString().split('T')[0],
         attachment:"attachment",
         status:"Active",
@@ -195,8 +195,8 @@ setIsModalsOpen(false);;
             type="email"
             label="Gmail Address"
             placeholder="sample@gmail.com"
-            value={gmail}
-            onChange={(e) => setGmail(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -265,9 +265,9 @@ setIsModalsOpen(false);;
             type="text"
             label="User Name"
             placeholder="UserName "
-            value={formData?.name||""}
+            value={formData?.storageName||""}
             onChange={handleChange}
-            name="name"
+            name="storageName"
           />
           <CFormInput
             className="mb-3"
@@ -283,9 +283,9 @@ setIsModalsOpen(false);;
             type="email"
             label="Gmail Address"
             placeholder="sample@gmail.com"
-            value={formData?.gmail||""}
+            value={formData?.email||""}
             onChange={handleChange}
-            name="gmail"
+            name="email"
           />
           <CFormInput
             className="mb-3"
