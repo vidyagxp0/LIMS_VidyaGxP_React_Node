@@ -1,39 +1,4 @@
-
-  // const StatusModal = (_props) => {
-
-  //   return (
-      
-  //   );
-  // };
-
-  // const DeleteModel = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Delete Worksheet Resources</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         Do you want to delete this Worksheet Resources <code>Resource 5</code>?
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-  
-  
-  
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
@@ -47,60 +12,32 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ResourcesModal from "../Modals/ResourcesModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    ResourceName: "BA-001",
-    AddedOn: "BA-001",
+    resourceName: "BA-001",
+    addedOn: "BA-001",
     status: "Active",
   },
   {
     checkbox: false,
     sno: 2,
-    ResourceName: "BA-002",
-    AddedOn: "BA-002",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    ResourceName: "BA-003",
-    AddedOn: "BA-003",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ResourceName: "BA-004",
-    AddedOn: "BA-004",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ResourceName: "BA-005",
-    AddedOn: "BA-005",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    ResourceName: "BA-006",
-    AddedOn: "BA-006",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    ResourceName: "BA-007",
-    AddedOn: "BA-007",
+    resourceName: "BA-002",
+    addedOn: "BA-002",
     status: "Inactive",
   },
 ];
-
 
 const Resources = () => {
   const [data, setData] = useState(initialData);
@@ -109,13 +46,82 @@ const Resources = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Worksheet Resource</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="my-3 fs-6 fw-bold">
+            Add information and add new worksheet resource.
+          </p>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Resource Name"
+            placeholder="Resource Name"
+            name="resourceName"
+            value={formData.resourceName}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -125,7 +131,6 @@ const Resources = () => {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-
 
   useEffect(() => {
     const counts = {
@@ -140,8 +145,6 @@ const Resources = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -158,7 +161,7 @@ const Resources = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ResourceName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.resourceName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -170,16 +173,16 @@ const Resources = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      ResourceName: item["Resource Name"] || "",
-      AddedOn: item["Added On"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      resourceName: item["Resource Name"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -187,8 +190,8 @@ const Resources = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Resource Name", accessor: "ResourceName" },
-    { header: "Added On", accessor: "AddedOn" },
+    { header: "Resource Name", accessor: "resourceName" },
+    { header: "Added On", accessor: "addedOn" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -214,6 +217,32 @@ const Resources = () => {
     },
   ];
 
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newTechnique) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newTechnique.sno ? newTechnique : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          resourceName: newTechnique.resourceName,
+          addedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -224,10 +253,6 @@ const Resources = () => {
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -285,9 +310,13 @@ const Resources = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
-          <ATMButton text="Add Worksheet Resources" color="blue" onClick={openModal} />
+          <ATMButton
+            text="Add Worksheet Resources"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -296,9 +325,11 @@ const Resources = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ResourcesModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -308,12 +339,27 @@ const Resources = () => {
           data={viewModalData}
         />
       )}
-        {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

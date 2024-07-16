@@ -1,14 +1,40 @@
-import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
-import React from "react";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React, { useState } from "react";
 
-const WosTestModal = (_props) => {
+const WosTestModal = ({ visible, closeModal, handleSubmit }) => {
+  const [wosData, setWosData] = useState({
+    specificationId: [],
+    productName: "",
+    testName: "",
+    testCode: "",
+    methodNo: "",
+    copyTestFrom: [],
+    testCategory: [],
+    testTechnique: [],
+    testType: [],
+  });
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...wosData, [field]: value };
+    setWosData(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...wosData });
+    closeModal();
+  };
+
   return (
     <div>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>Add WOS Tests</CModalTitle>
         </CModalHeader>
@@ -21,6 +47,19 @@ const WosTestModal = (_props) => {
             label="Specification ID
 "
             placeholder="Select "
+            options={[
+              { value: "select", label: "select" },
+              { value: "test1", label: "test1" },
+              { value: "test2", label: "test2" },
+              { value: "test3", label: "test3" },
+              { value: "test4", label: "test4" },
+              { value: "test5", label: "test5" },
+              { value: "test6", label: "test6" },
+            ]}
+            value={wosData.specificationId}
+            onChange={(e) => {
+              handleInputChange("specificationId", e.target.value);
+            }}
           />
           <CFormInput
             type="text"
@@ -28,6 +67,10 @@ const WosTestModal = (_props) => {
             "
             placeholder="Select.. "
             className="custom-placeholder"
+            value={wosData.productName}
+            onChange={(e) => {
+              handleInputChange("productName", e.target.value);
+            }}
           />
           <CFormInput
             type="text"
@@ -35,6 +78,10 @@ const WosTestModal = (_props) => {
             "
             placeholder="Product/Material"
             className="custom-placeholder"
+            value={wosData.testName}
+            onChange={(e) => {
+              handleInputChange("testName", e.target.value);
+            }}
           />
           <CFormInput
             type="text"
@@ -42,6 +89,10 @@ const WosTestModal = (_props) => {
             "
             placeholder="Lot Created Date "
             className="custom-placeholder"
+            value={wosData.testCode}
+            onChange={(e) => {
+              handleInputChange("testCode", e.target.value);
+            }}
           />
           <CFormInput
             type="text"
@@ -49,6 +100,10 @@ const WosTestModal = (_props) => {
             "
             placeholder=" "
             className="custom-placeholder"
+            value={wosData.methodNo}
+            onChange={(e) => {
+              handleInputChange("methodNo", e.target.value);
+            }}
           />
           <CFormSelect
             type="text"
@@ -56,20 +111,41 @@ const WosTestModal = (_props) => {
             "
             placeholder=""
             className="custom-placeholder"
+            value={wosData.copyTestFrom}
+            onChange={(e) => {
+              handleInputChange("copyTestFrom", e.target.value);
+            }}
           />
           <CFormSelect
             type="text"
-            label="Test Category
-            "
+            label="Test Category"
             placeholder=""
             className="custom-placeholder"
+            options={[
+              { value: "select", label: "select" },
+              { value: "test1", label: "test1" },
+              { value: "test2", label: "test2" },
+              { value: "test3", label: "test3" },
+            ]}
+            value={wosData.testCategory}
+            onChange={(e) => {
+              handleInputChange("testCategory", e.target.value);
+            }}
           />
           <CFormInput
             type="text"
-            label="Test Technique
-            "
+            label="Test Technique"
             placeholder=" "
             className="custom-placeholder"
+            options={[
+              { value: "select", label: "Select" },
+              { value: "Description", label: "Description" },
+              { value: "jgt", label: "jgt" },
+            ]}
+            value={wosData.testTechnique}
+            onChange={(e) => {
+              handleInputChange("testTechnique", e.target.value);
+            }}
           />
           <CFormInput
             type="text  "
@@ -77,14 +153,21 @@ const WosTestModal = (_props) => {
             "
             placeholder=""
             className="custom-placeholder"
+            value={wosData.testType}
+            onChange={(e) => {
+              handleInputChange("testType", e.target.value);
+            }}
           />
         </CModalBody>
 
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Cancel
           </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
+          <CButton
+            onClick={handleFormSubmit}
+            style={{ background: "#0F93C3", color: "white" }}
+          >
             Submit
           </CButton>
         </CModalFooter>

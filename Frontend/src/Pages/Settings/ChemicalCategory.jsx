@@ -1,34 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-   
-//   );
-// };
-
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Delete Chemical Category</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         Do you want to delete this Plant <code>Iron Chelator Standard</code> ?
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -44,66 +13,42 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ChemicalCategoryModal from "../Modals/ChemicalCategoryModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import ReQualifictionRequest from "./ReQualificationRequest.jsx";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    CategoryCode: "BA-001",
-    CategoryName: "Associate 1",
+    categoryCode: "BA-001",
+    categoryName: "Associate 1",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    CategoryCode: "BA-002",
-    CategoryName: "Associate 2",
+    categoryCode: "BA-002",
+    categoryName: "Associate 2",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    CategoryCode: "BA-003",
-    CategoryName: "Associate 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    CategoryCode: "BA-004",
-    CategoryName: "Associate 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    CategoryCode: "BA-005",
-    CategoryName: "Associate 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    CategoryCode: "BA-006",
-    CategoryName: "Associate 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    CategoryCode: "BA-007",
-    CategoryName: "Associate 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    CategoryCode: "BA-008",
-    CategoryName: "Associate 8",
-    status: "REINITIATED",
   },
 ];
+const generateRandomSymbolCode = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "SYM-";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
 
 const ChemicalCategory = () => {
   const [data, setData] = useState(initialData);
@@ -120,6 +65,83 @@ const ChemicalCategory = () => {
     REJECTED: 0,
   });
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Chemical Category</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add a new category.</p>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Name"
+              placeholder="Name"
+              name="categoryName"
+              value={formData.categoryName}
+              onChange={handleChange}
+              required
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton onClick={handleSave} className="bg-info text-white">
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -129,7 +151,6 @@ const ChemicalCategory = () => {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-
 
   useEffect(() => {
     const counts = {
@@ -165,7 +186,7 @@ const ChemicalCategory = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.CategoryName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.categoryName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -178,16 +199,16 @@ const ChemicalCategory = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      CategoryCode: item["Category Code"] || "",
-      CategoryName: item["Category Name"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      categoryCode: item["Category Code"] || "",
+      categoryName: item["Category Name"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -195,8 +216,8 @@ const ChemicalCategory = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Category Code", accessor: "CategoryCode" },
-    { header: "Category Name", accessor: "CategoryName" },
+    { header: "Category Code", accessor: "categoryCode" },
+    { header: "Category Name", accessor: "categoryName" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -221,6 +242,26 @@ const ChemicalCategory = () => {
       ),
     },
   ];
+  const handleModalSubmit = (requalification) => {
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          categoryCode: requalification.categoryCode,
+          categoryName: generateRandomSymbolCode(),
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -232,10 +273,6 @@ const ChemicalCategory = () => {
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -296,7 +333,7 @@ const ChemicalCategory = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Category" color="blue" onClick={openModal} />
         </div>
@@ -307,9 +344,11 @@ const ChemicalCategory = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ChemicalCategoryModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -319,12 +358,28 @@ const ChemicalCategory = () => {
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

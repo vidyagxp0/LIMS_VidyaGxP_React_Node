@@ -1,34 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-
-//   );
-// };
-
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Delete Grades</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         Do you want to delete this Grade <code>HPLC Grade</code>?
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -44,65 +13,41 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import GradeModal from "../Modals/GradeModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
     GradeCode: "BA-001",
-    GradeName: "Associate 1",
+    gradeName: "Associate 1",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
     GradeCode: "BA-002",
-    GradeName: "Associate 2",
+    gradeName: "Associate 2",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    GradeCode: "BA-003",
-    GradeName: "Associate 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    GradeCode: "BA-004",
-    GradeName: "Associate 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    GradeCode: "BA-005",
-    GradeName: "Associate 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    GradeCode: "BA-006",
-    GradeName: "Associate 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    GradeCode: "BA-007",
-    GradeName: "Associate 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    GradeCode: "BA-008",
-    GradeName: "Associate 8",
-    status: "REINITIATED",
   },
 ];
+const generateRandomSymbolCode = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "SYM-";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
 
 const Grade = () => {
   const [data, setData] = useState(initialData);
@@ -118,6 +63,80 @@ const Grade = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Grades</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add a new Grade.</p>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Name"
+            name="gradeName"
+            value={formData.gradeName}
+            onChange={handleChange}
+            required
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -162,7 +181,7 @@ const Grade = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.GradeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.gradeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -175,9 +194,9 @@ const Grade = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       GradeCode: item["GradeCode"] || "",
-      GradeName: item["GradeName"] || "",
+      gradeName: item["gradeName"] || "",
       status: item["Status"] || "",
     }));
 
@@ -193,7 +212,7 @@ const Grade = () => {
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Grade Code", accessor: "GradeCode" },
-    { header: "Grade Name", accessor: "GradeName" },
+    { header: "Grade Name", accessor: "gradeName" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -218,6 +237,32 @@ const Grade = () => {
       ),
     },
   ];
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newTechnique) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newTechnique.sno ? newTechnique : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          gradeName: newTechnique.gradeName,
+          GradeCode: generateRandomSymbolCode(),
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -304,8 +349,13 @@ const Grade = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
-      <GradeModal visible={isModalOpen} closeModal={closeModal} />
+      <GradeModal
+        visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
+        closeModal={closeModal}
+      />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -319,6 +369,21 @@ const Grade = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

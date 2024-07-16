@@ -1,14 +1,23 @@
-import { CButton, CForm, CFormInput, CFormSelect, CModal, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const EmMoniteringDetailsModal = (_props) => {
   return (
     <div>
-         <CModal
+      <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size='xl'
+        size="xl"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Add Monitoring Details</CModalTitle>
@@ -19,9 +28,7 @@ const EmMoniteringDetailsModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Object Name
-
-                "
+                label="Object Name"
                 placeholder=""
                 className="custom-placeholder"
               />
@@ -29,9 +36,7 @@ const EmMoniteringDetailsModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Unique Code
-
-                "
+                label="Unique Code"
                 placeholder=""
                 className="custom-placeholder"
               />
@@ -40,153 +45,184 @@ const EmMoniteringDetailsModal = (_props) => {
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Date Of Monitoring
-
-                "
+                label="Date Of Monitoring"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
             <div className="mb-3">
               <CFormInput
                 type="text"
-                label="Monitored / Sampled By
-
-                "
+                label="Monitored / Sampled By"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
 
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Activity Type
-                "
+                label="Activity Type"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
 
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Exposure Start Time
-
-                "
+                label="Exposure Start Time"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
 
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Exposure End Time
-
-                "
+                label="Exposure End Time"
                 placeholder=""
+                className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
+              />
+            </div>
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Monitoring Comments"
+                placeholder=""
+                className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
+              />
+            </div>
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Product Name"
+                placeholder=""
+                className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
+              />
+            </div>
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Batch No."
+                placeholder=""
+                className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
+              />
+            </div>
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Report No."
+                placeholder=""
+                className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
+              />
+            </div>
+            <div className="mb-3">
+              <CFormSelect
+                type="text"
+                label="Charge No."
+                placeholder=""
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
                 className="custom-placeholder"
               />
             </div>
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Monitoring Comments
-
-                "
+                label="Membrane Holder Sterilized On"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Product Name
-
-                "
+                label="Membrane Holder ID"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Batch No.
-
-                "
+                label="Gelatine Membrane Lot No."
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Report No.
-
-                "
+                label="Sterlized On"
                 placeholder=""
                 className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
             <div className="mb-3">
               <CFormSelect
                 type="text"
-                label="Charge No.
-
-                "
+                label="Use Before"
                 placeholder=""
                 className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Membrane Holder Sterilized On
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Membrane Holder ID
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Gelatine Membrane Lot No.
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Sterlized On
-
-                "
-                placeholder=""
-                className="custom-placeholder"
-              />
-            </div>
-            <div className="mb-3">
-              <CFormSelect
-                type="text"
-                label="Use Before
-
-                "
-                placeholder=""
-                className="custom-placeholder"
+                options={[
+                  { value: "select", label: "select" },
+                  { value: "Sampling Scheedule", label: "Sampling Scheedule" },
+                ]}
               />
             </div>
           </CForm>
@@ -201,9 +237,8 @@ const EmMoniteringDetailsModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-      
     </div>
-  )
-}
+  );
+};
 
-export default EmMoniteringDetailsModal
+export default EmMoniteringDetailsModal;

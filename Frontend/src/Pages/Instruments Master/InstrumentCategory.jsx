@@ -291,7 +291,7 @@ const Registration = () => {
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
-        <Dropdown
+          <Dropdown
             options={[
               { value: "All", label: "All" },
               { value: "Active", label: "Active" },
@@ -302,7 +302,12 @@ const Registration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Instrument_Category.pdf" title="Instrument Category Data" />
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Instrument_Category.pdf"
+            title="Instrument Category Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Instrument Category"

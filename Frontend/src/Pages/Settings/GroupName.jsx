@@ -15,79 +15,34 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import GroupNameModal from "../Modals/GroupNameModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    WorksheetField: "BA-001",
-    SampleTypeName: "Associate 1",
-    Description: "City A",
-    AddedOn: "State A",
+    worksheetField: "BA-001",
+    sampleTypeName: "Associate 1",
+    description: "City A",
+    addedOn: "State A",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    WorksheetField: "BA-002",
-    SampleTypeName: "Associate 2",
-    Description: "City B",
-    AddedOn: "State B",
+    worksheetField: "BA-002",
+    sampleTypeName: "Associate 2",
+    description: "City B",
+    addedOn: "State B",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    WorksheetField: "BA-003",
-    SampleTypeName: "Associate 3",
-    Description: "City C",
-    AddedOn: "State C",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    WorksheetField: "BA-004",
-    SampleTypeName: "Associate 4",
-    Description: "City D",
-    AddedOn: "State D",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    WorksheetField: "BA-005",
-    SampleTypeName: "Associate 5",
-    Description: "City E",
-    AddedOn: "State E",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    WorksheetField: "BA-006",
-    SampleTypeName: "Associate 6",
-    Description: "City F",
-    AddedOn: "State F",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    WorksheetField: "BA-007",
-    SampleTypeName: "Associate 7",
-    Description: "City G",
-    AddedOn: "State G",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    WorksheetField: "BA-008",
-    SampleTypeName: "Associate 8",
-    Description: "City H",
-    AddedOn: "State H",
-    status: "REINITIATED",
   },
 ];
 
@@ -106,8 +61,94 @@ const GroupName = () => {
     REJECTED: 0,
   });
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Group Name</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add information and add new Group Name</p>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Group Name"
+              placeholder="Group Name"
+              value={formData?.sampleTypeName || ""}
+              onChange={handleChange}
+              required
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="description"
+              placeholder="description"
+              value={formData?.description || ""}
+              onChange={handleChange}
+              required
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -150,7 +191,7 @@ const GroupName = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.SampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -162,11 +203,11 @@ const GroupName = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      WorksheetField: item["Worksheet Field"] || "",
-      SampleTypeName: item["Sample_type Name"] || "",
-      Description: item["Description"] || "",
-      AddedOn: item["Added On"] || "",
+      sno: index + 1,
+      worksheetField: item["Worksheet Field"] || "",
+      sampleTypeName: item["Sample_type Name"] || "",
+      description: item["description"] || "",
+      addedOn: item["Added On"] || "",
       status: item["Status"] || "",
     }));
 
@@ -181,10 +222,10 @@ const GroupName = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Worksheet Field", accessor: "WorksheetField" },
-    { header: "Sample_type Name", accessor: "SampleTypeName" },
-    { header: "Description", accessor: "Description" },
-    { header: "Added On", accessor: "AddedOn" },
+    { header: "Worksheet Field", accessor: "worksheetField" },
+    { header: "Sample_type Name", accessor: "sampleTypeName" },
+    { header: "description", accessor: "description" },
+    { header: "Added On", accessor: "addedOn" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -209,6 +250,27 @@ const GroupName = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          sampleTypeName: requalification.sampleTypeName,
+          description: requalification.description,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -286,11 +348,7 @@ const GroupName = () => {
         <div className="float-right flex gap-4">
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
-          <ATMButton
-            text="Add Group Name"
-            color="blue"
-            onClick={openModal}
-          />
+          <ATMButton text="Add Group Name" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -299,8 +357,13 @@ const GroupName = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
-      <GroupNameModal visible={isModalOpen} closeModal={closeModal} />
+      <GroupNameModal
+        visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
+        closeModal={closeModal}
+      />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -314,6 +377,22 @@ const GroupName = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

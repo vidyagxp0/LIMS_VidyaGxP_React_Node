@@ -7,15 +7,30 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const HandelingSymbolModal = (_props) => {
+const HandelingSymbolModal = ({ visible, closeModal, handleSubmit }) => {
+  const [symbolData, setSymbolData] = useState({
+    name: "",
+  });
+
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...symbolData, [field]: value };
+    setSymbolData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...symbolData });
+    closeModal();
+  };
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="lg"
       >
         <CModalHeader>
@@ -28,14 +43,20 @@ const HandelingSymbolModal = (_props) => {
             type="text"
             label="Name"
             placeholder="Name"
+            value={symbolData.name}
+            onChange={(e) => {
+              handleInputChange("name", e.target.value);
+            }}
             required
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>
