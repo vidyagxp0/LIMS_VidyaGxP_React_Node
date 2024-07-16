@@ -16,9 +16,7 @@ import {
 } from "@coreui/react";
 import "react-quill/dist/quill.snow.css";
 
- 
 const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
-
   const [instrumentCategoryData, setInstrumentCategoryData] = useState({
     CategoryName: " ",
     Description: " ",
@@ -42,7 +40,7 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Instrument</CModalTitle>

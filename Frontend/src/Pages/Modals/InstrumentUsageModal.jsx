@@ -10,12 +10,12 @@ import {
   CModalTitle,
 } from "@coreui/react";
 
-const InstrumentUsageModal = ({visible, closeModal, handleSubmit}) => {
+const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
   const [usageData, setUsagedata] = useState({
     InstrumentID: "",
     InstrumentCategory: "",
     UsageCode: "",
-    ProductName:"",
+    ProductName: "",
     ARNO: "",
     UsedFor: "",
     UsedBy: "",
@@ -41,7 +41,7 @@ const InstrumentUsageModal = ({visible, closeModal, handleSubmit}) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Instrument usage</CModalTitle>
@@ -90,7 +90,7 @@ const InstrumentUsageModal = ({visible, closeModal, handleSubmit}) => {
               handleInputChange("UsageCode", e.target.value);
             }}
           />
-           <CFormInput
+          <CFormInput
             className="mb-3"
             type="text"
             label="Product Name"

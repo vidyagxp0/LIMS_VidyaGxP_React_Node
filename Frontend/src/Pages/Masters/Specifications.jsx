@@ -83,7 +83,6 @@ function Specifications() {
     );
   });
 
-
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
@@ -178,7 +177,6 @@ function Specifications() {
     setIsModalOpen(false);
   };
 
-
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [specificationData, setSpecificationData] = useState({
       productCode: [],
@@ -219,7 +217,7 @@ function Specifications() {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>
@@ -270,7 +268,6 @@ function Specifications() {
                 specificationName: e.target.value,
               })
             }
-           
           />
           <CFormInput
             className="mb-3"
@@ -284,7 +281,6 @@ function Specifications() {
                 specificationID: e.target.value,
               })
             }
-           
           />
 
           <CFormSelect
@@ -466,7 +462,7 @@ function Specifications() {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>

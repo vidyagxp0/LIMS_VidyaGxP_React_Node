@@ -20,7 +20,7 @@ const ColumnRegistrationModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Registration</CModalTitle>

@@ -10,14 +10,14 @@ import {
 } from "@coreui/react";
 import React from "react";
 
-const CultureTemplateConfigurationModal = (_props) => {
+const CultureaTemplateConfigurationModal = (_props) => {
   return (
     <div>
       <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="lg"
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Add Culture Template Configuration</CModalTitle>
@@ -25,34 +25,27 @@ const CultureTemplateConfigurationModal = (_props) => {
         <CModalBody>
           <p>Add information and Add Template</p>
           <h3>Registration Initiation</h3>
-
-          <CFormSelect
-            type="text"
-            label="Reference Culture Name
-
-            "
-            placeholder=" "
-          />
           <CFormInput
             type="text"
-            label="Reference Culture Code
-
-            "
+            label="Reference Culture Name"
             placeholder=""
           />
           <CFormInput
             type="text"
-            label="Sample Login Template For Culture Lot Acceptance
-
-"
+            label="Reference Culture Code"
             placeholder=""
           />
-
+          <CFormInput
+            type="file"
+            label="Sample Login Template For Culture Lot Acceptance"
+            placeholder=""
+            className=""
+          />
+          <label htmlFor="comments" className="mt-3">Comments</label>
           <CFormInput
             type="text"
-            label="Comments
-"
             placeholder=""
+            className="mt-3"
           />
         </CModalBody>
         <CModalFooter>
@@ -60,7 +53,7 @@ const CultureTemplateConfigurationModal = (_props) => {
             Cancel
           </CButton>
           <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add Template Culture
+            Add Template Configuration
           </CButton>
         </CModalFooter>
       </CModal>
@@ -68,4 +61,4 @@ const CultureTemplateConfigurationModal = (_props) => {
   );
 };
 
-export default CultureTemplateConfigurationModal;
+export default CultureaTemplateConfigurationModal;

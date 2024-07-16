@@ -18,36 +18,36 @@ const top100Films = [
 ];
 
 const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
-  const [stockInventory , setStockInventory ] = useState({
-    MaterialName : "",
-    Description:"",
-    revisedDate : "",
-    SupplierName : "",
+  const [stockInventory, setStockInventory] = useState({
+    MaterialName: "",
+    Description: "",
+    revisedDate: "",
+    SupplierName: "",
     TruckNo: "",
     ChNo: "",
     InvoiceNo: "",
     QuantityInMt: "",
-    remarks:"",
-  })
+    remarks: "",
+  });
 
-  const handleChange = (field , value) => {
-    const updatedData = {...stockInventory, [field]:value }
-    setStockInventory(updatedData)
-    console.log(updatedData)
+  const handleChange = (field, value) => {
+    const updatedData = { ...stockInventory, [field]: value };
+    setStockInventory(updatedData);
+    console.log(updatedData);
   };
 
   const handleFormSubmit = (e) => {
-    handleSubmit({...stockInventory});
+    handleSubmit({ ...stockInventory });
     closeModal();
-  }
+  };
 
   return (
     <div>
       <CModal
         alignment="center"
-        visible={visible} 
+        visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Inventory</CModalTitle>
@@ -63,8 +63,8 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             options={top100Films}
             getOptionLabel={(option) => option.title}
             renderInput={(params) => <TextField {...params} label="" />}
-           value={stockInventory.MaterialName}
-           onChange={(e) => handleChange("MaterialName" , e.target.value)}
+            value={stockInventory.MaterialName}
+            onChange={(e) => handleChange("MaterialName", e.target.value)}
           />
           <CFormInput
             label="Received Date"
@@ -72,7 +72,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             type="date"
             placeholder="Received Date"
             value={stockInventory.revisedDate}
-            onChange={(e) => handleChange("revisedDate" , e.target.value)}
+            onChange={(e) => handleChange("revisedDate", e.target.value)}
           />
           <label className="mb-2" htmlFor="supplier-name">
             Supplier Name
@@ -85,7 +85,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             getOptionLabel={(option) => option.title}
             renderInput={(params) => <TextField {...params} label="" />}
             value={stockInventory.SupplierName}
-            onChange={(e) => handleChange("SupplierName" , e.target.value)}
+            onChange={(e) => handleChange("SupplierName", e.target.value)}
           />
           <CFormInput
             label="Truck No."
@@ -93,7 +93,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder="Truck No."
             value={stockInventory.TruckNo}
-            onChange={(e) => handleChange("TruckNo" , e.target.value)}
+            onChange={(e) => handleChange("TruckNo", e.target.value)}
           />
           <CFormInput
             label="Ch No."
@@ -101,7 +101,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder="Ch No."
             value={stockInventory.ChNo}
-            onChange={(e) => handleChange("ChNo" , e.target.value)}
+            onChange={(e) => handleChange("ChNo", e.target.value)}
           />
           <CFormInput
             label="Invoice Number"
@@ -109,7 +109,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder="Invoice Number"
             value={stockInventory.InvoiceNo}
-            onChange={(e) => handleChange("InvoiceNo" , e.target.value)}
+            onChange={(e) => handleChange("InvoiceNo", e.target.value)}
           />
           <CFormInput
             label="Quantity In MT"
@@ -117,7 +117,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder="Quantity In MT"
             value={stockInventory.QuantityInMt}
-            onChange={(e) => handleChange("QuantityInMt" , e.target.value)}
+            onChange={(e) => handleChange("QuantityInMt", e.target.value)}
           />
           <CFormInput
             label="Remarks"
@@ -125,13 +125,15 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder="Remarks"
             value={stockInventory.remarks}
-            onChange={(e) => handleChange("remarks" , e.target.value)}
+            onChange={(e) => handleChange("remarks", e.target.value)}
           />
           <div className="d-flex gap-3 mt-3">
             <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50" onClick={handleFormSubmit}>Submit</CButton>
+            <CButton color="primary w-50" onClick={handleFormSubmit}>
+              Submit
+            </CButton>
           </div>
         </CModalBody>
       </CModal>

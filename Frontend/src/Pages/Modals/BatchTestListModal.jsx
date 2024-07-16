@@ -19,7 +19,7 @@ const BatchTestListModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Batch Tests List Registration</CModalTitle>
@@ -80,7 +80,7 @@ const BatchTestListModal = (_props) => {
               </div>
             </CForm>
             <div>
-              <CTable size="xl">
+              <CTable size="lg">
                 <thead
                   style={{ background: "lightblue", border: "2px solid black" }}
                 >

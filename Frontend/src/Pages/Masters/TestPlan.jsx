@@ -68,7 +68,7 @@ function TestPlan() {
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null); 
+  const [editModalData, setEditModalData] = useState(null);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -265,19 +265,19 @@ function TestPlan() {
     setLastStatus(nextStatus);
     setIsModalOpen(false);
   };
-  
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [selectedSpecId, setSelectedSpecId] = useState("");
     const [availableTests, setAvailableTests] = useState([]);
     const [selectedTests, setSelectedTests] = useState([]);
     const [refreshedTests, setRefreshedTests] = useState([]);
-    const [testPlan , setTestPlan] = useState({
+    const [testPlan, setTestPlan] = useState({
       specificationId: [],
       productName: "",
       testPlanComments: "",
-      samplingQuantityUOM:[],
-      coaTemplate:[],
-      remarks:""
+      samplingQuantityUOM: [],
+      coaTemplate: [],
+      remarks: "",
     });
     const currentDate = new Date().toISOString().split("T")[0];
     const handleAdd = () => {
@@ -318,7 +318,7 @@ function TestPlan() {
           return [...prevSelectedTests, test];
         }
       });
-    
+
       setAvailableTests((prevAvailableTests) => {
         if (prevAvailableTests.includes(test)) {
           return prevAvailableTests.filter((t) => t !== test);
@@ -327,7 +327,6 @@ function TestPlan() {
         }
       });
     };
-    
 
     const handleRefresh = () => {
       setRefreshedTests(selectedTests);
@@ -338,7 +337,7 @@ function TestPlan() {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Test Plan</CModalTitle>
@@ -361,7 +360,9 @@ function TestPlan() {
               { label: "BATCH-789", value: "BATCH-789" },
             ]}
             value={testPlan.selectedSpecId}
-            onChange={(e) => setTestPlan({ ...testPlan, selectedSpecId: e.target.value })}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, selectedSpecId: e.target.value })
+            }
           />
           <CFormInput
             label="Product/Material Name"
@@ -370,7 +371,9 @@ function TestPlan() {
             placeholder="Product/Material Name"
             name="productName"
             value={testPlan.productName}
-            onChange={(e) => setTestPlan({ ...testPlan, productName: e.target.value })}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, productName: e.target.value })
+            }
           />
           <CFormInput
             label="Test Plan Comments"
@@ -379,7 +382,9 @@ function TestPlan() {
             placeholder="Test Plan Comments"
             name="testPlanComments"
             value={testPlan.testPlanComments}
-            onChange={(e) => setTestPlan({ ...testPlan, testPlanComments: e.target.value })}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, testPlanComments: e.target.value })
+            }
           />
           <CFormSelect
             className="mb-3"
@@ -391,7 +396,9 @@ function TestPlan() {
             ]}
             name="samplingQuantityUOM"
             value={testPlan.samplingQuantityUOM}
-            onChange={(e) => setTestPlan({ ...testPlan, samplingQuantityUOM: e.target.value })}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, samplingQuantityUOM: e.target.value })
+            }
           />
           <div className="drag-drop">
             <div className="sub-container">
@@ -569,24 +576,35 @@ function TestPlan() {
             ]}
             name="coaTemplate"
             value={testPlan.coaTemplate}
-            onChange={(e) => setTestPlan({ ...testPlan, coaTemplate: e.target.value })}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, coaTemplate: e.target.value })
+            }
           />
           <label className="my-2" htmlFor="">
             Remarks
           </label>
           <br />
-          <textarea value={testPlan.remarks} onChange={(e) => setTestPlan({ ...testPlan, remarks: e.target.value })} className="line4 w-100 mx-1" rows="4" cols="50"></textarea>
+          <textarea
+            value={testPlan.remarks}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, remarks: e.target.value })
+            }
+            className="line4 w-100 mx-1"
+            rows="4"
+            cols="50"
+          ></textarea>
           <div className="d-flex gap-3 mt-4">
             <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50" onClick={handleAdd}>Submit</CButton>
+            <CButton color="primary w-50" onClick={handleAdd}>
+              Submit
+            </CButton>
           </div>
         </CModalBody>
       </CModal>
     );
   };
-
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -603,13 +621,11 @@ function TestPlan() {
     setEditModalData(null);
   };
 
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [selectedSpecId, setSelectedSpecId] = useState("");
     const [availableTests, setAvailableTests] = useState([]);
     const [selectedTests, setSelectedTests] = useState([]);
     const [refreshedTests, setRefreshedTests] = useState([]);
-  
 
     const [formData, setFormData] = useState(data);
     useEffect(() => {
@@ -626,7 +642,6 @@ function TestPlan() {
     const handleSave = () => {
       onSave(formData);
     };
-
 
     const specTestsMap = {
       "ACC-00-QC-01": ["Test 1", "Test 2", "Test 3"],
@@ -655,7 +670,7 @@ function TestPlan() {
           return [...prevSelectedTests, test];
         }
       });
-    
+
       setAvailableTests((prevAvailableTests) => {
         if (prevAvailableTests.includes(test)) {
           return prevAvailableTests.filter((t) => t !== test);
@@ -664,7 +679,6 @@ function TestPlan() {
         }
       });
     };
-    
 
     const handleRefresh = () => {
       setRefreshedTests(selectedTests);
@@ -675,7 +689,7 @@ function TestPlan() {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Test Plan</CModalTitle>
@@ -697,7 +711,7 @@ function TestPlan() {
               { label: "FG-TEST-123", value: "FG-TEST-123" },
               { label: "BATCH-789", value: "BATCH-789" },
             ]}
-            value={formData?.selectedSpecId|""}
+            value={formData?.selectedSpecId | ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -706,7 +720,7 @@ function TestPlan() {
             type="text"
             placeholder="Product/Material Name"
             name="productName"
-            value={formData?.productName||""}
+            value={formData?.productName || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -912,12 +926,20 @@ function TestPlan() {
             Remarks
           </label>
           <br />
-          <textarea value={formData?.remarks} onChange={handleChange} className="line4 w-100 mx-1" rows="4" cols="50"></textarea>
+          <textarea
+            value={formData?.remarks}
+            onChange={handleChange}
+            className="line4 w-100 mx-1"
+            rows="4"
+            cols="50"
+          ></textarea>
           <div className="d-flex gap-3 mt-4">
             <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+            <CButton color="primary w-50" onClick={handleSave}>
+              Submit
+            </CButton>
           </div>
         </CModalBody>
       </CModal>
@@ -966,7 +988,11 @@ function TestPlan() {
       </div>
 
       {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
       )}
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
@@ -988,7 +1014,6 @@ function TestPlan() {
           onSave={handleEditSave}
         />
       )}
-
     </>
   );
 }

@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -48,7 +46,7 @@ const Coa_Template = () => {
     Active: 0,
     Inactive: 0,
   });
-// *********************Edit ****************************
+  // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
@@ -85,233 +83,234 @@ const Coa_Template = () => {
       onSave(formData);
     };
 
-  return (
-    <div>
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="xl"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Coa Template</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Add information and Add Coa Template</p>
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Coa Template</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add information and Add Coa Template</p>
 
-          <CFormSelect
-            className="mb-3"
-            label="Sample Type"
-            placeholder="Select..."
-            options={[
-              { label: 'Select...', value: '' },
-              { label: 'Hydraulic Oil', value: 'Hydraulic Oil' },
-              { label: 'HCL', value: 'HCL' },
-              { label: 'Petrochemical', value: 'Petrochemical' },
-              { label: 'Initiated Product', value: 'Initiated Product' },
-            ]}
-            name='SampleType'
-            value={formData?.SampleType || ""}
-            onChange={handleChange}
-          />
+            <CFormSelect
+              className="mb-3"
+              label="Sample Type"
+              placeholder="Select..."
+              options={[
+                { label: "Select...", value: "" },
+                { label: "Hydraulic Oil", value: "Hydraulic Oil" },
+                { label: "HCL", value: "HCL" },
+                { label: "Petrochemical", value: "Petrochemical" },
+                { label: "Initiated Product", value: "Initiated Product" },
+              ]}
+              name="SampleType"
+              value={formData?.SampleType || ""}
+              onChange={handleChange}
+            />
 
-          <CFormSelect
-            className="mb-3"
-            label="Coa Type"
-            placeholder="Select Coa Type"
-            options={[
-              { label: 'Select Coa Type', value: '' },
-              { label: 'With Specification', value: 'With Specification' },
-              {
-                label: 'Without Specification',
-                value: 'Without Specification',
-              },
-              { label: 'ERP', value: 'ERP' },
-            ]}
-            name='CoaType'
-            value={formData?.CoaType || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Report Title"
-            placeholder="Report Title"
-            name='ReportTitle'
-            value={formData?.ReportTitle || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product/Material Caption"
-            placeholder="Product/Material Caption"
-            name='MaterialCaption'
-            value={formData?.MaterialCaption || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Serial No."
-            placeholder="Serial Number"
-            name='SerialNo'
-            value={formData?.SerialNo || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Format No."
-            placeholder="Format No."
-            name='FormatNo'
-            value={formData?.FormatNo || ""}
-            onChange={handleChange}
-          />
+            <CFormSelect
+              className="mb-3"
+              label="Coa Type"
+              placeholder="Select Coa Type"
+              options={[
+                { label: "Select Coa Type", value: "" },
+                { label: "With Specification", value: "With Specification" },
+                {
+                  label: "Without Specification",
+                  value: "Without Specification",
+                },
+                { label: "ERP", value: "ERP" },
+              ]}
+              name="CoaType"
+              value={formData?.CoaType || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Report Title"
+              placeholder="Report Title"
+              name="ReportTitle"
+              value={formData?.ReportTitle || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Product/Material Caption"
+              placeholder="Product/Material Caption"
+              name="MaterialCaption"
+              value={formData?.MaterialCaption || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Serial No."
+              placeholder="Serial Number"
+              name="SerialNo"
+              value={formData?.SerialNo || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Format No."
+              placeholder="Format No."
+              name="FormatNo"
+              value={formData?.FormatNo || ""}
+              onChange={handleChange}
+            />
 
-          <CModalTitle className="bg-light mb-3">Header</CModalTitle>
+            <CModalTitle className="bg-light mb-3">Header</CModalTitle>
 
-          <div className="d-flex pb-2">
-            <div className="mb-3">
-              <CFormInput
-                type="number"
-                label="Rows"
-                placeholder="Rows"
-                name='Rows'
-                value={formData?.Rows || ""}
-                onChange={handleChange}
-              />
+            <div className="d-flex pb-2">
+              <div className="mb-3">
+                <CFormInput
+                  type="number"
+                  label="Rows"
+                  placeholder="Rows"
+                  name="Rows"
+                  value={formData?.Rows || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="ps-3 w-50">
+                <CFormSelect
+                  label="Columns"
+                  placeholder="Columns"
+                  options={[
+                    { label: "2", value: "2" },
+                    { label: "4", value: "4" },
+                    { label: "6", value: "6" },
+                  ]}
+                  value={formData?.Columns || ""}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="ps-3 w-50">
-              <CFormSelect
-                label="Columns"
-                placeholder="Columns"
-                options={[
-                  { label: '2', value: '2' },
-                  { label: '4', value: '4' },
-                  { label: '6', value: '6' },
-                ]}
-                value={formData?.Columns || ""}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
 
-          <table className="table mb-3">
-            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
-          </table>
+            <table className="table mb-3">
+              <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+            </table>
 
-          <CModalTitle className="bg-light mb-3">Footer</CModalTitle>
+            <CModalTitle className="bg-light mb-3">Footer</CModalTitle>
 
-          <div className="d-flex pb-2">
-            <div className="mb-3">
-              <CFormInput
-                type="number"
-                label="Rows"
-                placeholder="Rows"
-                name='Columns'
-                value={formData?.Columns || ""}
-                onChange={handleChange}
-              />
+            <div className="d-flex pb-2">
+              <div className="mb-3">
+                <CFormInput
+                  type="number"
+                  label="Rows"
+                  placeholder="Rows"
+                  name="Columns"
+                  value={formData?.Columns || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="ps-3 w-50">
+                <CFormSelect
+                  label="Columns"
+                  placeholder="Columns"
+                  options={[
+                    { label: "2", value: "2" },
+                    { label: "4", value: "4" },
+                    { label: "6", value: "6" },
+                  ]}
+                  name="Columns"
+                  value={formData?.Columns || ""}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="ps-3 w-50">
-              <CFormSelect
-                label="Columns"
-                placeholder="Columns"
-                options={[
-                  { label: '2', value: '2' },
-                  { label: '4', value: '4' },
-                  { label: '6', value: '6' },
-                ]}
-                name='Columns'
-                value={formData?.Columns || ""}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <table className="table mb-3">
-            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
-          </table>
+            <table className="table mb-3">
+              <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+            </table>
 
-          <div className="d-flex">
-            <div className="pe-3">
-              <CFormInput
-                type="text"
-                className="mb-3"
-                placeholder="Approved By"
-                name='ApprovedBy'
-                value={formData?.ApprovedBy || ""}
-                onChange={handleChange}
-              />
+            <div className="d-flex">
+              <div className="pe-3">
+                <CFormInput
+                  type="text"
+                  className="mb-3"
+                  placeholder="Approved By"
+                  name="ApprovedBy"
+                  value={formData?.ApprovedBy || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="ps-3 w-50">
+                <CFormSelect
+                  className="mb-3"
+                  placeholder="approved_by"
+                  options={[{ label: "approved_by", value: "approved_by" }]}
+                  name="approved_by"
+                  value={formData?.approved_by || ""}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="ps-3 w-50">
-              <CFormSelect
-                className="mb-3"
-                placeholder="approved_by"
-                options={[{ label: 'approved_by', value: 'approved_by' }]}
-                name='approved_by'
-                value={formData?.approved_by || ""}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
 
-          <div className="d-flex">
-            <div className="pe-3">
-              <CFormInput
-                type="text"
-                className="mb-3"
-                placeholder="Reviewed By"
-                name='ReviewedBy'
-                value={formData?.ReviewedBy || ""}
-                onChange={handleChange}
-              />
+            <div className="d-flex">
+              <div className="pe-3">
+                <CFormInput
+                  type="text"
+                  className="mb-3"
+                  placeholder="Reviewed By"
+                  name="ReviewedBy"
+                  value={formData?.ReviewedBy || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="ps-3 w-50">
+                <CFormSelect
+                  className="mb-3"
+                  placeholder="reviewed_by"
+                  options={[{ label: "reviewed_by", value: "reviewed_by" }]}
+                  name="reviewed_by"
+                  value={formData?.reviewed_by || ""}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="ps-3 w-50">
-              <CFormSelect
-                className="mb-3"
-                placeholder="reviewed_by"
-                options={[{ label: 'reviewed_by', value: 'reviewed_by' }]}
-                name='reviewed_by'
-                value={formData?.reviewed_by || ""}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
 
-          <div className="d-flex">
-            <div className="pe-3">
-              <CFormInput
-                type="text"
-                className="mb-3"
-                placeholder="Checked By"
-                name='CheckedBy'
-                value={formData?.CheckedBy || ""}
-                onChange={handleChange}
-              />
+            <div className="d-flex">
+              <div className="pe-3">
+                <CFormInput
+                  type="text"
+                  className="mb-3"
+                  placeholder="Checked By"
+                  name="CheckedBy"
+                  value={formData?.CheckedBy || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="ps-3 w-50">
+                <CFormSelect
+                  className="mb-3"
+                  placeholder="checked_by"
+                  options={[{ label: "checked_by", value: "checked_by" }]}
+                  name="checked_by"
+                  value={formData?.checked_by || ""}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="ps-3 w-50">
-              <CFormSelect
-                className="mb-3"
-                placeholder="checked_by"
-                options={[{ label: 'checked_by', value: 'checked_by' }]}
-                name='checked_by'
-                value={formData?.checked_by || ""}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary" onClick={handleSave}>Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    </div>
-  );
-
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton color="primary" onClick={handleSave}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
   };
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
@@ -415,7 +414,6 @@ const Coa_Template = () => {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
-
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
   const handleModalSubmit = (newInstrument) => {
     const currentDate = new Date().toISOString().split("T")[0];
@@ -445,7 +443,6 @@ const Coa_Template = () => {
   };
 
   //************************************************************************************************ */
-
 
   const openModal = () => {
     setIsModalOpen(true);

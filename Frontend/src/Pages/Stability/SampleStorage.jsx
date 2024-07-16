@@ -204,7 +204,8 @@ function SampleStorage() {
     const [storageCondition, setStorageCondition] = useState("");
     const [chamberID, setChamberID] = useState("");
     const [actualStorageQuantity, setActualStorageQuantity] = useState("");
-    const [availableStorageQuantity, setAvailableStorageQuantity] =useState("");
+    const [availableStorageQuantity, setAvailableStorageQuantity] =
+      useState("");
     const [numberOfStoragePosition, setNumberOfStoragePosition] = useState("");
     const [chamberDescription, setChamberDescription] = useState("");
     const [chamberLocation, setChamberLocation] = useState("");
@@ -227,26 +228,25 @@ function SampleStorage() {
         setInputValue(value);
       }
     };
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
         productName: "Product",
         chamberID: chamberID,
         actualQuantity: actualStorageQuantity,
         availableQuantity: availableStorageQuantity,
         protocolType: "protocol-X",
-        action:[],
-      }
-      onAdd(newCondition)
-    }
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
-    
     return (
       <>
         <CModal
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Sample Storage</CModalTitle>
@@ -493,16 +493,14 @@ function SampleStorage() {
     setEditModalData(null);
   };
 
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [rows, setRows] = useState([]);
     const [formData, setFormData] = useState(data);
 
-
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
 
     const handleChange = (e) => {
@@ -530,7 +528,7 @@ function SampleStorage() {
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Sample Storage</CModalTitle>
@@ -551,7 +549,7 @@ function SampleStorage() {
                 { label: "RPS-TSLV-00" },
                 { label: "rest0001" },
               ]}
-              value={formData?.specificationsID||""}
+              value={formData?.specificationsID || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -574,7 +572,7 @@ function SampleStorage() {
                 { label: "RPS-TSLV-00" },
                 { label: "rest0001" },
               ]}
-              value={formData?.protocolID||""}
+              value={formData?.protocolID || ""}
               onChange={handleChange}
             />
             <CFormSelect
@@ -592,7 +590,7 @@ function SampleStorage() {
                 { label: "RPS-TSLV-00" },
                 { label: "rest0001" },
               ]}
-              value={formData?.storageCondition||""}
+              value={formData?.storageCondition || ""}
               onChange={handleChange}
             />
             <CFormSelect
@@ -601,7 +599,7 @@ function SampleStorage() {
               label="Chamber ID"
               placeholder="select... "
               name="chamberID"
-              value={formData?.chamberID||""}
+              value={formData?.chamberID || ""}
               options={[
                 "select...",
                 { label: "asdf3453" },
@@ -618,7 +616,7 @@ function SampleStorage() {
               type="text"
               label=" Actual Storage Quantity"
               placeholder="Actual Storage Quantity "
-              value={formData?.actualQuantity||""}
+              value={formData?.actualQuantity || ""}
               onChange={handleChange}
               name="actualQuantity"
             />
@@ -628,7 +626,7 @@ function SampleStorage() {
               type="text"
               label="Available Storage Quantity"
               placeholder="Available Storage Quantity "
-              value={formData?.availableQuantity||""}
+              value={formData?.availableQuantity || ""}
               onChange={handleChange}
               name="availableQuantity"
             />
@@ -639,7 +637,7 @@ function SampleStorage() {
                 type="text"
                 label="Number Of Storage Positions"
                 placeholder="Number Of Positions"
-                value={formData?.numberOfStoragePosition||""}
+                value={formData?.numberOfStoragePosition || ""}
                 onChange={handleChange}
                 name="numberOfStoragePosition"
               />
@@ -744,7 +742,7 @@ function SampleStorage() {
               type="text"
               label="Chamber Description"
               placeholder=" Chamber Description"
-              value={formData?.chamberDescription||""}
+              value={formData?.chamberDescription || ""}
               onChange={handleChange}
               name="chamberDescription"
             />
@@ -753,7 +751,7 @@ function SampleStorage() {
               type="text"
               label="Chamber Location"
               placeholder=" Chamber Location"
-              value={formData?.chamberLocation||""}
+              value={formData?.chamberLocation || ""}
               onChange={handleChange}
               name="chamberLocation"
             />
@@ -842,7 +840,11 @@ function SampleStorage() {
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal}  onAdd={addNewStorageCondition}/>
+          <StatusModal
+            visible={isModalOpen}
+            closeModal={closeModal}
+            onAdd={addNewStorageCondition}
+          />
         )}
 
         {isModalsOpen && (
@@ -852,17 +854,16 @@ function SampleStorage() {
             onClose={handleCloseModals}
             columns={columns}
             onDataUpload={handleExcelDataUpload}
-
           />
         )}
         {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </>
   );

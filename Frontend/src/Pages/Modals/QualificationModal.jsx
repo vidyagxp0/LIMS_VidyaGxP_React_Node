@@ -1,22 +1,71 @@
 import {
   CButton,
   CFormInput,
+  CFormSelect,
+  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const QualificationModal = (_props) => {
+  const [selectedColumnNo, setSelectedColumnNo] = useState("");
+  const [formData, setFormData] = useState({
+    assignmentNo: "",
+    columnName: "",
+    brandName: "",
+    filmThickness: "",
+    umo: "",
+    serialNo: "",
+    length: "",
+    packingMaterial: "",
+    innerDiameter: "",
+    receivedOn: "",
+    outerDiameter: "",
+    productName: "",
+    tests: "",
+    qualificationType: "",
+    certificate: "",
+    remarks: "",
+  });
+  const generateRandomData = () => {
+    return {
+      assignmentNo: "A12345",
+      columnName: "Column A",
+      brandName: "Brand X",
+      filmThickness: "0.5mm",
+      umo: "UMO Value",
+      serialNo: "SN123456",
+      length: "100cm",
+      packingMaterial: "Material Y",
+      innerDiameter: "10mm",
+      receivedOn: "2024-07-15",
+      outerDiameter: "12mm",
+      productName: "Product Z",
+      tests: "Test 1",
+      qualificationType: "Type A",
+      certificate: "Cert123",
+      remarks: "Sample remarks",
+    };
+  };
+
+  useEffect(() => {
+    if (selectedColumnNo) {
+      const randomData = generateRandomData();
+      setFormData(randomData);
+    }
+  }, [selectedColumnNo]);
+
   return (
     <div>
       <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size='xl'
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Qualification</CModalTitle>
@@ -25,137 +74,149 @@ const QualificationModal = (_props) => {
           <p style={{ fontWeight: "bolder" }}>
             Add information and Add qualification.
           </p>
-          <CFormInput type="text" label="Column No." placeholder="Column No." />
+          <CFormSelect
+            type="text"
+            label="Column No."
+            placeholder="Column No."
+            options={[
+              { value: "", label: "Select Column No." },
+              { value: "apxbn-20240524", label: "apxbn-20240524" },
+              { value: "c313", label: "c313" },
+              { value: "1234", label: "1234" },
+            ]}
+            onChange={(e) => setSelectedColumnNo(e.target.value)}
+          />
           <CFormInput
             type="text"
             label=" Assignment No."
-            placeholder=" Assignment No. "
             className="custom-placeholder"
+            value={formData.assignmentNo}
+            disabled
           />
 
           <CFormInput
             type="text"
             label=" Column Name"
-            placeholder=" Column Name "
             className="custom-placeholder"
+            value={formData.columnName}
+            disabled
           />
 
           <CFormInput
             type="text"
             label=" Brand Name / Manufacturer Name"
-            placeholder=" Brand Name / Manufacturer Name "
             className="custom-placeholder"
+            value={formData.brandName}
+            disabled
           />
 
           <CFormInput
             type="text"
             label=" Film Thikness / Particle Size"
-            placeholder=" Film Thikness / Particle Size "
+            disabled
             className="custom-placeholder"
+            value={formData.filmThickness}
           />
 
           <CFormInput
             type="text"
             label=" UMO"
-            placeholder="UMO "
+            disabled
             className="custom-placeholder"
+            value={formData.umo}
           />
 
           <CFormInput
             type="text"
             label="Mfg. Serial No."
-            placeholder="Mfg. Serial No."
+            disabled
             className="custom-placeholder"
+            value={formData.serialNo}
           />
 
           <CFormInput
             type="text"
             label=" Length"
-            placeholder="Length"
+            disabled
             className="custom-placeholder"
+            value={formData.length}
           />
 
           <CFormInput
             type="text"
             label=" UMO"
-            placeholder="UMO"
             className="custom-placeholder"
+            disabled
+            value={formData.packingMaterial}
           />
 
           <CFormInput
             type="text"
             label=" Packing Material"
-            placeholder="Packing Material"
             className="custom-placeholder"
+            disabled
+            value={formData.innerDiameter}
           />
 
           <CFormInput
             type="text"
             label=" Inner Diameter"
-            placeholder=""
             className="custom-placeholder"
+            disabled
+            value={formData.receivedOn}
           />
 
           <CFormInput
             type="text"
             label=" UMO"
-            placeholder="UMO"
             className="custom-placeholder"
+            disabled
+            value={formData.outerDiameter}
           />
 
           <CFormInput
             type="date"
             label=" Recieved On"
-            placeholder=""
             className="custom-placeholder"
+            disabled
+            value={formData.productName}
           />
           <CFormInput
             type="text"
             label=" Outer Diameter"
-            placeholder=""
             className="custom-placeholder"
+            disabled
+            value={formData.tests}
           />
 
           <CFormInput
             type="text"
             label=" Product name"
-            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Test(s)"
-            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Qualification Type"
-            placeholder=""
             className="custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label="Certificate"
-            placeholder=""
             className="custom-placeholder"
           />
-
-          <div>
-            <h4>Reasons/Remarks</h4>
-            <textarea style={{ width: "350px" }} name="" id=""></textarea>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-            }}
-          ></div>
+          <CFormTextarea
+            type="checkbox"
+            label="Reasons / Remarks"
+            className="custom-placeholder"
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>

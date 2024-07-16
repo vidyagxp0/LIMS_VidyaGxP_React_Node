@@ -27,7 +27,7 @@ const InternalRegistrationModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>New Internal</CModalTitle>
