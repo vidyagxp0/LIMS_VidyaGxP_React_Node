@@ -7,15 +7,30 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const GroupNameModal = (_props) => {
+const GroupNameModal = ({ visible, closeModal, handleSubmit }) => {
+  const [groupData, setGroupData] = useState({
+    sampleTypeName: "",
+    description: "",
+  });
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...groupData, [field]: value };
+    setGroupData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...groupData });
+    closeModal();
+  };
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="lg"
       >
         <CModalHeader>
@@ -28,22 +43,32 @@ const GroupNameModal = (_props) => {
             type="text"
             label="Group Name"
             placeholder="Group Name"
+            value={groupData.sampleTypeName}
+            onChange={(e) => {
+              handleInputChange("sampleTypeName", e.target.value);
+            }}
             required
           />
 
           <CFormInput
             className="mb-3"
             type="text"
-            label="Description"
-            placeholder="Description"
+            label="description"
+            placeholder="description"
+            value={groupData.description}
+            onChange={(e) => {
+              handleInputChange("description", e.target.value);
+            }}
             required
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

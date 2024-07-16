@@ -1,35 +1,4 @@
-// const StatusModal = (_props) => {
-
-//   return (
- 
-//   );
-// };
-
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//     >
-//       <CModalHeader>
-//         <CModalTitle>Delete Test Technique</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         Do you want to delete this Test Technique <code>Description</code>?
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>
-//           Back
-//         </CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
@@ -43,83 +12,37 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import TestTechniqueModal from "../Modals/TestTechniqueModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormCheck,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    TechniqueName: "SPH-001",
-    Type: "Product A",
-    Description: "Purity Test",
-    AddedOn: "2024-06-01",
+    techniqueName: "SPH-001",
+    techniqueType: "Product A",
+    techniqueDescription: "Purity Test",
+    addedOn: "2024-06-01",
     status: "Active",
   },
   {
     checkbox: false,
     sno: 2,
-    TechniqueName: "SPH-002",
-    Type: "Product B",
-    Description: "Strength Test",
-    AddedOn: "2024-06-02",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    TechniqueName: "SPH-003",
-    Type: "Product C",
-    Description: "Microbial Test",
-    AddedOn: "2024-06-03",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    TechniqueName: "SPH-004",
-    Type: "Product D",
-    Description: "Dissolution Test",
-    AddedOn: "2024-06-04",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    TechniqueName: "SPH-005",
-    Type: "Product E",
-    Description: "Moisture Content",
-    AddedOn: "2024-06-05",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    TechniqueName: "SPH-006",
-    Type: "Product F",
-    Description: "Hardness Test",
-    AddedOn: "2024-06-06",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    TechniqueName: "SPH-007",
-    Type: "Product G",
-    Description: "Viscosity Test",
-    AddedOn: "2024-06-07",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    TechniqueName: "SPH-008",
-    Type: "Product H",
-    Description: "PH Test",
-    AddedOn: "2024-06-08",
+    techniqueName: "SPH-002",
+    techniqueType: "Product B",
+    techniqueDescription: "Strength Test",
+    addedOn: "2024-06-02",
     status: "Active",
   },
 ];
-
 
 const TestTechniques = () => {
   const [data, setData] = useState(initialData);
@@ -128,13 +51,116 @@ const TestTechniques = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Edit Test Technique</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="my-3">
+            Edit information and update the Test Technique.
+          </p>
+
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Technique Name"
+            placeholder="Technique Name"
+            name="techniqueName"
+            value={formData?.techniqueName || ""}
+            onChange={handleChange}
+          />
+          <label htmlFor="">Type of Technique</label>
+          <div className="flex gap-3">
+            <CFormCheck
+              type="radio"
+              className="mt-3"
+              label="Complex"
+              name="techniqueType"
+              checked={formData?.techniqueType === "Complex"}
+              onChange={() => {
+                setFormData({ ...formData, techniqueType: "Complex" });
+              }}
+            />
+            <CFormCheck
+              type="radio"
+              className="mt-3"
+              label="Non-Complex"
+              name="techniqueType"
+              checked={formData?.techniqueType === "Non-Complex"}
+              onChange={() => {
+                setFormData({ ...formData, techniqueType: "Non-Complex" });
+              }}
+            />
+          </div>
+
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Technique Description"
+            placeholder="Technique Description"
+            name="techniqueDescription"
+            value={formData?.techniqueDescription || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -157,8 +183,6 @@ const TestTechniques = () => {
       if (item.status === "Active") counts.Active++;
       else if (item.status === "Inactive") counts.Inactive++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleCheckboxChange = (index) => {
@@ -175,7 +199,7 @@ const TestTechniques = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.TechniqueName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.techniqueName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -187,18 +211,18 @@ const TestTechniques = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      TechniqueName: item["Technique Name"] || "",
-      Type: item["Type"] || "",
-      Description: item["Description"] || "",
-      AddedOn: item["Added On"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      techniqueName: item["Technique Name"] || "",
+      techniqueType: item["Type"] || "",
+      techniqueDescription: item["techniqueDescription"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -206,10 +230,10 @@ const TestTechniques = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Technique Name", accessor: "TechniqueName" },
-    { header: "Type", accessor: "Type" },
-    { header: "Description", accessor: "Description" },
-    { header: "Added On", accessor: "AddedOn" },
+    { header: "Technique Name", accessor: "techniqueName" },
+    { header: "Type", accessor: "techniqueType" },
+    { header: "techniqueDescription", accessor: "techniqueDescription" },
+    { header: "Added On", accessor: "addedOn" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -235,6 +259,34 @@ const TestTechniques = () => {
     },
   ];
 
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newTechnique) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newTechnique.sno ? newTechnique : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          techniqueName: newTechnique.techniqueName,
+          techniqueType: newTechnique.techniqueType,
+          techniqueDescription: newTechnique.techniqueDescription,
+          addedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -247,10 +299,6 @@ const TestTechniques = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
-  };
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
@@ -259,39 +307,7 @@ const TestTechniques = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Service Provider</h1>
-      {/* <div className="grid grid-cols-5 gap-4 mb-4">
-        <Card
-          title="DROPPED"
-          count={cardCounts.DROPPED}
-          color="pink"
-          onClick={() => handleCardClick("DROPPED")}
-        />
-        <Card
-          title="INITIATED"
-          count={cardCounts.INITIATED}
-          color="blue"
-          onClick={() => handleCardClick("INITIATED")}
-        />
-        <Card
-          title="REINITIATED"
-          count={cardCounts.REINITIATED}
-          color="yellow"
-          onClick={() => handleCardClick("REINITIATED")}
-        />
-        <Card
-          title="APPROVED"
-          count={cardCounts.APPROVED}
-          color="green"
-          onClick={() => handleCardClick("APPROVED")}
-        />
-        <Card
-          title="REJECTED"
-          count={cardCounts.REJECTED}
-          color="red"
-          onClick={() => handleCardClick("REJECTED")}
-        />
-      </div> */}
+      <h1 className="text-2xl font-bold mb-4">Test Techniques</h1>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
           <SearchBar value={searchQuery} onChange={setSearchQuery} />
@@ -306,13 +322,9 @@ const TestTechniques = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
-          <ATMButton
-            text="Add Service Provider"
-            color="blue"
-            onClick={openModal}
-          />
+          <ATMButton text="Add Technique" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -321,9 +333,11 @@ const TestTechniques = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <TestTechniqueModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -333,12 +347,27 @@ const TestTechniques = () => {
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

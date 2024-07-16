@@ -7,15 +7,29 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const ChemicalCategoryModal = (_props) => {
+const ChemicalCategoryModal = ({ visible, closeModal, handleSubmit }) => {
+  const [chemicaldata, setChemicalData] = useState({
+    categoryName: "",
+  });
+
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...chemicaldata, [field]: value };
+    setChemicalData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...chemicaldata });
+    closeModal();
+  };
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="lg"
       >
         <CModalHeader>
@@ -28,14 +42,20 @@ const ChemicalCategoryModal = (_props) => {
             type="text"
             label="Name"
             placeholder="Name"
+            value={chemicaldata.categoryName}
+            onChange={(e) => {
+              handleInputChange("categoryName", e.target.value);
+            }}
             required
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

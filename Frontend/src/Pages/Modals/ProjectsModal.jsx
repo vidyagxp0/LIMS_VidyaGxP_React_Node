@@ -1,13 +1,38 @@
-import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
-import React from "react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React, { useState } from "react";
 
-const ProjectsModal = (_props) => {
+const ProjectsModal = ({ visible, closeModal, handleSubmit }) => {
+  const [projectData, setProjectData] = useState({
+    projectsName: "",
+    uniqueCode: "",
+    description: "",
+  });
+
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...projectData, [field]: value };
+    setProjectData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...projectData });
+    closeModal();
+  };
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="lg"
       >
         <CModalHeader>
@@ -18,16 +43,24 @@ const ProjectsModal = (_props) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label={<>Projects Name</>}
+            label="Projects Name"
             placeholder="Specification Type Name"
+            value={projectData.projectsName}
+            onChange={(e) => {
+              handleInputChange("projectsName", e.target.value);
+            }}
             required
           />
 
           <CFormInput
             className="mb-3"
             type="text"
-            label={<>Unique Code</>}
+            label="Unique Code"
             placeholder="Unique Code"
+            value={projectData.uniqueCode}
+            onChange={(e) => {
+              handleInputChange("uniqueCode", e.target.value);
+            }}
             required
           />
 
@@ -36,14 +69,20 @@ const ProjectsModal = (_props) => {
             type="text"
             label="Description"
             placeholder="Description"
+            value={projectData.description}
+            onChange={(e) => {
+              handleInputChange("description", e.target.value);
+            }}
             required
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

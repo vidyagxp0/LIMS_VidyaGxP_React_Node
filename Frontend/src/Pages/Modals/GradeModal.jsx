@@ -7,15 +7,31 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
-const GradeModal = (_props) => {
+const GradeModal = ({ visible, closeModal, handleSubmit }) => {
+  const [gradeData, setGradeData] = useState({
+    gradeName: "",
+    gradeValue: "",
+    gradeDescription: "",
+    gradeColor: "",
+  });
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...gradeData, [field]: value };
+    setGradeData(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...gradeData });
+    closeModal();
+  };
+
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="lg"
       >
         <CModalHeader>
@@ -28,14 +44,18 @@ const GradeModal = (_props) => {
             type="text"
             label="Name"
             placeholder="Name"
+            value={gradeData.gradeName}
+            onChange={(e)=>{handleInputChange("gradeName", e.target.value)}}
             required
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
+          <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

@@ -1,29 +1,3 @@
-
-// const StatusModal = (_props) => {
-//   return (
-  
-//   );
-// }
-
-// const DeleteModel = (_props) => {
-//   return (
-//     <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-//       <CModalHeader>
-//         <CModalTitle>Delete Projects</CModalTitle>
-//       </CModalHeader>
-//       <CModalBody>
-//         Do you want to delete this Projects <code>Sample</code>?
-//       </CModalBody>
-//       <CModalFooter>
-//         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-//         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// }
-
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -39,83 +13,36 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ProjectsModal from "../Modals/ProjectsModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    ProjectName: "Associate 1",
-    UniqueCode: "BA-001",
-    Description: "BA-001",
-    AddedOn: "BA-001",
+    projectsName: "Associate 1",
+    uniqueCode: "BA-001",
+    description: "BA-001",
+    addedOn: "BA-001",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    ProjectName: "Associate 2",
-    UniqueCode: "BA-002",
-    Description: "BA-002",
-    AddedOn: "BA-002",
+    projectsName: "Associate 2",
+    uniqueCode: "BA-002",
+    description: "BA-002",
+    addedOn: "BA-002",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    ProjectName: "Associate 3",
-    UniqueCode: "BA-003",
-    Description: "BA-003",
-    AddedOn: "BA-003",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ProjectName: "Associate 4",
-    UniqueCode: "BA-004",
-    Description: "BA-004",
-    AddedOn: "BA-004",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ProjectName: "Associate 5",
-    UniqueCode: "BA-005",
-    Description: "BA-005",
-    AddedOn: "BA-005",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    ProjectName: "Associate 6",
-    UniqueCode: "BA-006",
-    Description: "BA-006",
-    AddedOn: "BA-006",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    ProjectName: "Associate 7",
-    UniqueCode: "BA-007",
-    Description: "BA-007",
-    AddedOn: "BA-007",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    ProjectName: "Associate 8",
-    UniqueCode: "BA-008",
-    Description: "BA-008",
-    AddedOn: "BA-008",
-    status: "REINITIATED",
   },
 ];
-
 
 const Projects = () => {
   const [data, setData] = useState(initialData);
@@ -131,6 +58,105 @@ const Projects = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Project List</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <h6 className="my-3 fs-5">Add information and add new project</h6>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Projects Name"
+              placeholder="Specification Type Name"
+              name="projectsName"
+              value={formData?.projectsName || ""}
+              onChange={handleChange}
+              required
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Unique Code"
+              placeholder="Unique Code"
+              name="uniqueCode"
+              value={formData?.uniqueCode || ""}
+              onChange={handleChange}
+              required
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              placeholder="Description"
+              name="description"
+              value={formData?.description || ""}
+              onChange={handleChange}
+              required
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -176,7 +202,7 @@ const Projects = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ProjectName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.projectsName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -189,18 +215,18 @@ const Projects = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      ProjectName: item["Project Name"] || "",
-      UniqueCode: item["Unique Code"] || "",
-      Description: item["Description"] || "",
-      AddedOn: item["Added On"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      projectsName: item["Project Name"] || "",
+      uniqueCode: item["Unique Code"] || "",
+      description: item["description"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -208,10 +234,10 @@ const Projects = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Project Name", accessor: "ProjectName" },
-    { header: "Unique Code", accessor: "UniqueCode" },
-    { header: "Description", accessor: "Description" },
-    { header: "Added On", accessor: "AddedOn" },
+    { header: "Project Name", accessor: "projectsName" },
+    { header: "Unique Code", accessor: "uniqueCode" },
+    { header: "description", accessor: "description" },
+    { header: "Added On", accessor: "addedOn" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -236,6 +262,31 @@ const Projects = () => {
       ),
     },
   ];
+  // ************************************************************************************************
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          projectsName: requalification.projectsName,
+          uniqueCode: requalification.uniqueCode,
+          description: requalification.description,
+          addedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+  // ************************************************************************************************
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -311,7 +362,7 @@ const Projects = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Project" color="blue" onClick={openModal} />
         </div>
@@ -322,9 +373,11 @@ const Projects = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ProjectsModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -334,12 +387,28 @@ const Projects = () => {
           data={viewModalData}
         />
       )}
-        {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

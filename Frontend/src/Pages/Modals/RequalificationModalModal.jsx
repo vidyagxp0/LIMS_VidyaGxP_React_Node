@@ -8,18 +8,17 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
-
   const [requalification, setRequalification] = useState({
-    analyst:"",
+    analyst: "",
     employeeId: "",
     role: "",
-    testTechnique:"",
+    testTechnique: "",
     justification: "",
-   });
-   const handleInputChange = (field, value) => {
+  });
+  const handleInputChange = (field, value) => {
     const updatedData = { ...requalification, [field]: value };
     setRequalification(updatedData);
     console.log(updatedData);
@@ -29,15 +28,14 @@ const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
     handleSubmit({ ...requalification });
     closeModal();
     resetForm();
-
   };
 
   const resetForm = () => {
     setRequalification({
-      analyst:"",
+      analyst: "",
       employeeId: "",
       role: "",
-      testTechnique:"",
+      testTechnique: "",
       justification: "",
     });
   };
@@ -45,8 +43,6 @@ const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
   useEffect(() => {
     resetForm();
   }, []);
-
-
 
   return (
     <div>
@@ -94,8 +90,9 @@ const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormSelect
             label="Test Technique"
             className="mb-3"
-            options={[{ value: "Select", label: "Select" },
-              { value: "Description", label: "Description" }
+            options={[
+              { value: "Select", label: "Select" },
+              { value: "Description", label: "Description" },
             ]}
             value={requalification.testTechnique}
             onChange={(e) => handleInputChange("testTechnique", e.target.value)}
@@ -113,7 +110,9 @@ const RequalificationModalModal = ({ visible, closeModal, handleSubmit }) => {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white" onClick={handleFormSubmit}>Add</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Add
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

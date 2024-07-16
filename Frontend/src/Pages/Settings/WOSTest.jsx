@@ -1,63 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-    
-//     </>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -73,112 +13,43 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import WosTestModal from "../Modals/WosTestModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    SpecificationId: "SPH-001",
-    ProductName: "Product A",
-    TestName: "Purity Test",
-    TestCode: "PT-001",
-    MethodNo: "M-001",
-    TestCategory: "Chemical",
-    TestTechnique: "Chromatography",
-    TestType: "Quantitative",
+    specificationId: "SPH-001",
+    productName: "Product A",
+    testName: "Purity Test",
+    testCode: "PT-001",
+    methodNo: "M-001",
+    testCategory: "Chemical",
+    testTechnique: "Chromatography",
+    testType: "Quantitative",
     status: "REJECTED",
   },
   {
     checkbox: false,
     sno: 2,
-    SpecificationId: "SPH-002",
-    ProductName: "Product B",
-    TestName: "Strength Test",
-    TestCode: "ST-002",
-    MethodNo: "M-002",
-    TestCategory: "Physical",
-    TestTechnique: "Tensile Testing",
-    TestType: "Mechanical",
+    specificationId: "SPH-002",
+    productName: "Product B",
+    testName: "Strength Test",
+    testCode: "ST-002",
+    methodNo: "M-002",
+    testCategory: "Physical",
+    testTechnique: "Tensile Testing",
+    testType: "Mechanical",
     status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    SpecificationId: "SPH-003",
-    ProductName: "Product C",
-    TestName: "Microbial Test",
-    TestCode: "MT-003",
-    MethodNo: "M-003",
-    TestCategory: "Biological",
-    TestTechnique: "Culture Testing",
-    TestType: "Qualitative",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    SpecificationId: "SPH-004",
-    ProductName: "Product D",
-    TestName: "Dissolution Test",
-    TestCode: "DT-004",
-    MethodNo: "M-004",
-    TestCategory: "Chemical",
-    TestTechnique: "UV Spectroscopy",
-    TestType: "Quantitative",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    SpecificationId: "SPH-005",
-    ProductName: "Product E",
-    TestName: "Moisture Content",
-    TestCode: "MC-005",
-    MethodNo: "M-005",
-    TestCategory: "Physical",
-    TestTechnique: "Gravimetric",
-    TestType: "Quantitative",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    SpecificationId: "SPH-006",
-    ProductName: "Product F",
-    TestName: "Hardness Test",
-    TestCode: "HT-006",
-    MethodNo: "M-006",
-    TestCategory: "Mechanical",
-    TestTechnique: "Rockwell Hardness",
-    TestType: "Quantitative",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    SpecificationId: "SPH-007",
-    ProductName: "Product G",
-    TestName: "Viscosity Test",
-    TestCode: "VT-007",
-    MethodNo: "M-007",
-    TestCategory: "Physical",
-    TestTechnique: "Viscometer",
-    TestType: "Quantitative",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    SpecificationId: "SPH-008",
-    ProductName: "Product H",
-    TestName: "PH Test",
-    TestCode: "PH-008",
-    MethodNo: "M-008",
-    TestCategory: "Chemical",
-    TestTechnique: "PH Meter",
-    TestType: "Quantitative",
-    status: "DROPPED",
   },
 ];
 
@@ -196,6 +67,160 @@ const WOSTest = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setformData] = useState(data);
+
+    useEffect(() => {
+      setformData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setformData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add WOS Tests</CModalTitle>
+        </CModalHeader>
+        <p style={{ marginLeft: "20px", marginTop: "5px" }}>
+          Add information about WOS test
+        </p>
+        <CModalBody>
+          <CFormSelect
+            type="text"
+            label="Specification ID"
+            placeholder="Select "
+            name="specificationId"
+            value={formData?.specificationId || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Product/Material Name
+            "
+            placeholder="Select.. "
+            className="custom-placeholder"
+            name="productName"
+            value={formData?.productName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Test Name
+            "
+            placeholder="Product/Material"
+            className="custom-placeholder"
+            name="testName"
+            value={formData?.testName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Test Code
+            "
+            placeholder="Lot Created Date "
+            className="custom-placeholder"
+            name="testCode"
+            value={formData?.testCode || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Method No.
+            "
+            placeholder=" "
+            className="custom-placeholder"
+            name="methodNo"
+            value={formData?.methodNo || ""}
+            onChange={handleChange}
+          />
+          <CFormSelect
+            type="text"
+            label="Copy Test From
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="copyTestFrom"
+            value={formData?.copyTestFrom || ""}
+            onChange={handleChange}
+          />
+          <CFormSelect
+            type="text"
+            label="Test Category
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="testCategory"
+            value={formData?.testCategory || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Test Technique
+            "
+            placeholder=" "
+            className="custom-placeholder"
+            name="testTechnique"
+            value={formData?.testTechnique || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text  "
+            label="Test Type
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="testType"
+            value={formData?.testType || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton
+            onClick={handleSave}
+            style={{ background: "#0F93C3", color: "white" }}
+          >
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -240,7 +265,7 @@ const WOSTest = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ProductName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -253,22 +278,22 @@ const WOSTest = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      SpecificationId: item["Specification ID"] || "",
-      ProductName: item["Product Name"] || "",
-      TestName: item["Test Name"] || "",
-      TestCode: item["Test Code"] || "",
-      MethodNo: item["Method No."] || "",
-      TestCategory: item["TestCategory"] || "",
-      TestTechnique: item["Workflow"] || "",
-      TestType: item["TestType"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      specificationId: item["Specification ID"] || "",
+      productName: item["Product Name"] || "",
+      testName: item["Test Name"] || "",
+      testCode: item["Test Code"] || "",
+      methodNo: item["Method No."] || "",
+      testCategory: item["testCategory"] || "",
+      testTechnique: item["Workflow"] || "",
+      testType: item["testType"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -276,14 +301,14 @@ const WOSTest = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Specification ID", accessor: "SpecificationId" },
-    { header: "Product Name", accessor: "ProductName" },
-    { header: "Test Name", accessor: "TestName" },
-    { header: "Test Code", accessor: "TestCode" },
-    { header: "Method No.", accessor: "MethodNo" },
-    { header: "TestCategory", accessor: "TestCategory" },
-    { header: "Test Technique", accessor: "TestTechnique" },
-    { header: "TestType", accessor: "TestType" },
+    { header: "Specification ID", accessor: "specificationId" },
+    { header: "Product Name", accessor: "productName" },
+    { header: "Test Name", accessor: "testName" },
+    { header: "Test Code", accessor: "testCode" },
+    { header: "Method No.", accessor: "methodNo" },
+    { header: "testCategory", accessor: "testCategory" },
+    { header: "Test Technique", accessor: "testTechnique" },
+    { header: "testType", accessor: "testType" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -308,6 +333,39 @@ const WOSTest = () => {
       ),
     },
   ];
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newTechnique) => {
+    // const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newTechnique.sno ? newTechnique : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          specificationId: newTechnique.specificationId,
+          productName: newTechnique.productName,
+          testName: newTechnique.testName,
+          testCode: newTechnique.testCode,
+          methodNo: newTechnique.methodNo,
+          copyTestFrom: newTechnique.copyTestFrom,
+          testCategory: newTechnique.testCategory,
+          testTechnique: newTechnique.testTechnique,
+          testType: newTechnique.testType,
+          status: "INITIATED",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -383,7 +441,7 @@ const WOSTest = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add WOS Test" color="blue" onClick={openModal} />
         </div>
@@ -394,9 +452,11 @@ const WOSTest = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <WosTestModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -406,12 +466,27 @@ const WOSTest = () => {
           data={viewModalData}
         />
       )}
-        {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

@@ -1,37 +1,3 @@
-
-
-  // const StatusModal = (_props) => {
-
-  //   return (
-     
-  //   );
-  // };
-
-  // const DeleteModel = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Delete Re-Qualification Request</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         Do you want to delete this Re-Qualification Request <code>Q126</code>?
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-  
-  
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -81,9 +47,7 @@ const initialData = [
     InitiatedOn: "BA-002",
     status: "Inactive",
   },
- 
 ];
-
 
 const ReQualifictionRequest = () => {
   const [data, setData] = useState(initialData);
@@ -101,7 +65,8 @@ const ReQualifictionRequest = () => {
   });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  
+  // ************************************************************************************************
   const [editModalData, setEditModalData] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -123,7 +88,6 @@ const ReQualifictionRequest = () => {
     closeEditModal();
   };
 
-  
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -193,7 +157,6 @@ const ReQualifictionRequest = () => {
               value={formData?.TestTechnique || ""}
               onChange={handleChange}
               name="TestTechnique"
-         
             />
             <CFormInput
               type="text"
@@ -209,12 +172,16 @@ const ReQualifictionRequest = () => {
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleSave}>Add</CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Add
+            </CButton>
           </CModalFooter>
         </CModal>
       </div>
     );
   };
+
+  // ************************************************************************************************
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -268,21 +235,20 @@ const ReQualifictionRequest = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       Analyst: item["Analyst"] || "",
       QualificationId: item["Qualification ID"] || "",
       QualificationType: item["Qualification Type"] || "",
       EmployeeId: item["Employee ID"] || "",
       TestTechnique: item["Test Technique"] || "",
       InitiatedOn: item["Initiated On"] || "",
-        status: item["Status"] || "",
-      }));
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
-
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -356,13 +322,13 @@ const ReQualifictionRequest = () => {
         {
           checkbox: false,
           sno: prevData.length + 1,
-          Analyst:requalification.analyst,
-          Role:requalification.role,
-          EmployeeId:requalification.employeeId,
-          TestTechnique:requalification.testTechnique,
+          Analyst: requalification.analyst,
+          Role: requalification.role,
+          EmployeeId: requalification.employeeId,
+          TestTechnique: requalification.testTechnique,
           QualificationId: "BA-00#",
           QualificationType: "BA-00@",
-          JustificationforRequalification:requalification.justification,
+          JustificationforRequalification: requalification.justification,
           InitiatedOn: currentDate,
           status: "Active",
         },
@@ -420,7 +386,7 @@ const ReQualifictionRequest = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Request" color="blue" onClick={openModal} />
         </div>
@@ -445,7 +411,7 @@ const ReQualifictionRequest = () => {
           data={viewModalData}
         />
       )}
-        {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
@@ -453,7 +419,7 @@ const ReQualifictionRequest = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-        {editModalOpen && (
+      {editModalOpen && (
         <EditModal
           visible={editModalOpen}
           closeModal={closeEditModal}

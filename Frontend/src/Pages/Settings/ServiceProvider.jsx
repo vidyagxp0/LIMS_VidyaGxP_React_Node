@@ -1,63 +1,3 @@
-// const StatusModal = (_props) => {
-//   return (
-//     <>
-
-//     </>
-//   );
-// };
-
-// const DeleteModal = (_props) => {
-//   return (
-//     <CModal
-//       alignment="center"
-//       visible={_props.visible}
-//       onClose={_props.closeModal}
-//       size="lg"
-//     >
-//       <CModalHeader>
-//         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-//           Delete Batch Sample Allotment
-//         </CModalTitle>
-//       </CModalHeader>
-//       <div
-//         className="modal-body"
-//         style={{
-//           fontSize: "1.2rem",
-//           fontWeight: "500",
-//           lineHeight: "1.5",
-//           marginBottom: "1rem",
-//           columnGap: "0px",
-//           border: "0px !important",
-//         }}
-//       >
-//         <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-//       </div>
-//       <CModalFooter>
-//         <CButton
-//           color="secondary"
-//           onClick={_props.closeModal}
-//           style={{
-//             marginRight: "0.5rem",
-//             fontWeight: "500",
-//           }}
-//         >
-//           Cancel
-//         </CButton>
-//         <CButton
-//           color="danger"
-//           onClick={_props.handleDelete}
-//           style={{
-//             fontWeight: "500",
-//             color: "white",
-//           }}
-//         >
-//           Delete
-//         </CButton>
-//       </CModalFooter>
-//     </CModal>
-//   );
-// };
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -73,102 +13,39 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ServiceProviderModal from "../Modals/ServiceProviderModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    ServiceProviderName: "SPH-001",
-    UniqueCode: "Product A",
-    City: "Purity Test",
-    State: "PT-001",
-    Country: "M-001",
-    PinCode: "123456",
-    ValidUpto: "2024-12-31",
+    serviceProviderName: "SPH-001",
+    uniqueCode: "Product A",
+    city: "Purity Test",
+    state: "PT-001",
+    country: "M-001",
+    zip: "123456",
+    validUpto: "2024-12-31",
     status: "REJECTED",
   },
   {
     checkbox: false,
     sno: 2,
-    ServiceProviderName: "SPH-002",
-    UniqueCode: "Product B",
-    City: "Strength Test",
-    State: "ST-002",
-    Country: "M-002",
-    PinCode: "654321",
-    ValidUpto: "2025-06-30",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    ServiceProviderName: "SPH-003",
-    UniqueCode: "Product C",
-    City: "Microbial Test",
-    State: "MT-003",
-    Country: "M-003",
-    PinCode: "789456",
-    ValidUpto: "2024-09-15",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ServiceProviderName: "SPH-004",
-    UniqueCode: "Product D",
-    City: "Dissolution Test",
-    State: "DT-004",
-    Country: "M-004",
-    PinCode: "321789",
-    ValidUpto: "2025-01-20",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ServiceProviderName: "SPH-005",
-    UniqueCode: "Product E",
-    City: "Moisture Content",
-    State: "MC-005",
-    Country: "M-005",
-    PinCode: "456123",
-    ValidUpto: "2024-11-05",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    ServiceProviderName: "SPH-006",
-    UniqueCode: "Product F",
-    City: "Hardness Test",
-    State: "HT-006",
-    Country: "M-006",
-    PinCode: "147258",
-    ValidUpto: "2025-03-12",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    ServiceProviderName: "SPH-007",
-    UniqueCode: "Product G",
-    City: "Viscosity Test",
-    State: "VT-007",
-    Country: "M-007",
-    PinCode: "369852",
-    ValidUpto: "2025-02-28",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    ServiceProviderName: "SPH-008",
-    UniqueCode: "Product H",
-    City: "PH Test",
-    State: "PH-008",
-    Country: "M-008",
-    PinCode: "258963",
-    ValidUpto: "2024-08-19",
+    serviceProviderName: "SPH-002",
+    uniqueCode: "Product B",
+    city: "Strength Test",
+    state: "ST-002",
+    country: "M-002",
+    zip: "654321",
+    validUpto: "2025-06-30",
     status: "INITIATED",
   },
 ];
@@ -187,6 +64,234 @@ const ServiceProvider = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Service Provider</CModalTitle>
+        </CModalHeader>
+        <p style={{ marginLeft: "20px", marginTop: "5px" }}>
+          Add information and add new service provider
+        </p>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            label="Name"
+            placeholder=" "
+            name="serviceProviderName"
+            value={formData?.serviceProviderName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Unique Code
+
+            "
+            name="uniqueCode"
+            placeholder=" "
+            className="custom-placeholder"
+            value={formData?.uniqueCode || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Refrence Documents
+            "
+            placeholder="Product/Material"
+            className="custom-placeholder"
+            name="referenceDocuments"
+            value={formData?.referenceDocuments || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="date"
+            label="Valid Upto            "
+            placeholder=" "
+            className="custom-placeholder"
+            name="validUpto"
+            value={formData?.validUpto || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Service Type
+            "
+            placeholder=" "
+            name="serviceType"
+            className="custom-placeholder"
+            value={formData?.serviceType || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Contact Person
+
+            "
+            placeholder=""
+            name="contactPerson"
+            className="custom-placeholder"
+            value={formData?.contactPerson || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Address : Line 1
+
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="addressLine1"
+            value={formData?.addressLine1 || ""}
+            onChange={handleChange}
+          />{" "}
+          <CFormInput
+            type="text"
+            label="Address : Line 2
+
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="addressLine2"
+            value={formData?.addressLine2 || ""}
+            onChange={handleChange}
+          />{" "}
+          <CFormInput
+            type="text"
+            label="Address : Line 3
+
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="addressLine3"
+            value={formData?.addressLine3 || ""}
+            onChange={handleChange}
+          />{" "}
+          <CFormInput
+            type="text"
+            label="City
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="city"
+            value={formData?.city || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="State
+            "
+            placeholder=" "
+            className="custom-placeholder"
+            name="state"
+            value={formData?.state || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text  "
+            label="Country
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="country"
+            value={formData?.country || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text  "
+            label="ZIP / PIN
+
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="zip"
+            value={formData?.zip || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text  "
+            label="Phone
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="phone"
+            value={formData?.phone || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text  "
+            label="Fax
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="fax"
+            value={formData?.fax || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text  "
+            label="Email
+            "
+            placeholder=""
+            className="custom-placeholder"
+            name="email"
+            value={formData?.email || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton
+            style={{ background: "#0F93C3", color: "white" }}
+            onClick={handleSave}
+          >
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -232,9 +337,7 @@ const ServiceProvider = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ServiceProviderName.toLowerCase().includes(
-        searchQuery.toLowerCase()
-      ) &&
+      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -247,14 +350,14 @@ const ServiceProvider = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      ServiceProviderName: item["Service Provider Name"] || "",
-      UniqueCode: item["Unique Code"] || "",
-      City: item["City"] || "",
-      State: item["State"] || "",
-      Country: item["Country"] || "",
-      PinCode: item["Pin Code"] || "",
-      ValidUpto: item["Valid Upto"] || "",
+      sno: index + 1,
+      serviceProviderName: item["Service Provider Name"] || "",
+      uniqueCode: item["Unique Code"] || "",
+      city: item["city"] || "",
+      state: item["state"] || "",
+      country: item["country"] || "",
+      zip: item["Pin Code"] || "",
+      validUpto: item["Valid Upto"] || "",
       status: item["Status"] || "",
     }));
 
@@ -269,13 +372,13 @@ const ServiceProvider = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Service Provider Name", accessor: "ServiceProviderName" },
-    { header: "Unique Code", accessor: "UniqueCode" },
-    { header: "City", accessor: "City" },
-    { header: "State", accessor: "State" },
-    { header: "Country", accessor: "Country" },
-    { header: "Pin Code", accessor: "PinCode" },
-    { header: "Valid Upto", accessor: "ValidUpto" },
+    { header: "Service Provider Name", accessor: "serviceProviderName" },
+    { header: "Unique Code", accessor: "uniqueCode" },
+    { header: "city", accessor: "city" },
+    { header: "state", accessor: "state" },
+    { header: "country", accessor: "country" },
+    { header: "Pin Code", accessor: "zip" },
+    { header: "Valid Upto", accessor: "validUpto" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -300,6 +403,46 @@ const ServiceProvider = () => {
       ),
     },
   ];
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newTechnique) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newTechnique.sno ? newTechnique : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          serviceProviderName: newTechnique.serviceProviderName,
+          uniqueCode: newTechnique.uniqueCode,
+          referenceDocuments: newTechnique.referenceDocuments,
+          validUpto: currentDate,
+          serviceType: newTechnique.serviceType,
+          contactPerson: newTechnique.contactPerson,
+          addressLine1: newTechnique.addressLine1,
+          addressLine2: newTechnique.addressLine2,
+          addressLine3: newTechnique.addressLine3,
+          city: newTechnique.city,
+          state: newTechnique.state,
+          country: newTechnique.country,
+          zip: newTechnique.zip,
+          phone: newTechnique.phone,
+          fax: newTechnique.fax,
+          email: newTechnique.email,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -390,8 +533,14 @@ const ServiceProvider = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
+        closeModal={closeModal}
       />
-      <ServiceProviderModal visible={isModalOpen} closeModal={closeModal} />
+      <ServiceProviderModal
+        visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
+        closeModal={closeModal}
+      />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -405,6 +554,21 @@ const ServiceProvider = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

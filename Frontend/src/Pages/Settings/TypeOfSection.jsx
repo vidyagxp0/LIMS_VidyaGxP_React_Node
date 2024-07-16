@@ -1,39 +1,3 @@
-
-
-  // const StatusModal = (_props) => {
-
-  //   return (
-     
-  //   );
-  // };
-
-  // const DeleteModel = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle>Delete Worksheet Section Type</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         Do you want to delete this worksheet section type <code>Sampling Phase</code>?
-  //       </CModalBody>
-  //       <CModalFooter>
-  //         <CButton color="light" onClick={_props.closeModal}>
-  //           Back
-  //         </CButton>
-  //         <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-  //       </CModalFooter>
-  //     </CModal>
-  //   );
-  // };
-
-
-  
-  
-  
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -49,68 +13,34 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import TypeOfSectionModal from "../Modals/TypeOfSectionModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    TypeOfSection: "Sampling Phase",
-    Prefix: "SPH",
-    AddedOn: "BA-001",
+    typeOfSection: "Sampling Phase",
+    prefix: "SPH",
+    addedOn: "BA-001",
     status: "Active",
   },
   {
     checkbox: false,
     sno: 2,
-    TypeOfSection: "Testing Phase",
-    Prefix: "TPH",
-    AddedOn: "BA-002",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    TypeOfSection: "Analysis Phase",
-    Prefix: "APH",
-    AddedOn: "BA-003",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    TypeOfSection: "Review Phase",
-    Prefix: "RPH",
-    AddedOn: "BA-004",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    TypeOfSection: "Approval Phase",
-    Prefix: "APH",
-    AddedOn: "BA-005",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    TypeOfSection: "Finalization Phase",
-    Prefix: "FPH",
-    AddedOn: "BA-006",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    TypeOfSection: "Closure Phase",
-    Prefix: "CPH",
-    AddedOn: "BA-007",
+    typeOfSection: "Testing Phase",
+    prefix: "TPH",
+    addedOn: "BA-002",
     status: "Active",
   },
 ];
-
-
 
 const TypeOfSection = () => {
   const [data, setData] = useState(initialData);
@@ -126,6 +56,91 @@ const TypeOfSection = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Type Of Section</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="my-3 fs-6 fw-bold">
+            Add information and add new Type Of Section
+          </p>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Type Of Section"
+            placeholder="Type Of Section"
+            name="typeOfSection"
+            value={formData.typeOfSection}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Prefix"
+            placeholder="Prefix"
+            name="prefix"
+            value={formData.prefix}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton onClick={handleSave} className="bg-info text-white">
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -166,8 +181,9 @@ const TypeOfSection = () => {
   };
 
   const filteredData = data.filter((row) => {
+    const prefix = row.prefix ? row.prefix.toLowerCase() : "";
     return (
-      row.TypeOfSection.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      prefix.includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -177,30 +193,29 @@ const TypeOfSection = () => {
     setIsViewModalOpen(true);
   };
 
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      TypeOfSection: item["Type Of Section"] || "",
-      Prefix: item["Prefix"] || "",
-      AddedOn: item["Added On"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      typeOfSection: item["Type Of Section"] || "",
+      prefix: item["prefix"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Type Of Section", accessor: "TypeOfSection" },
-    { header: "Prefix", accessor: "Prefix" },
-    { header: "Added On", accessor: "AddedOn" },
+    { header: "Type Of Section", accessor: "typeOfSection" },
+    { header: "Prefix", accessor: "prefix" },
+    { header: "Added On", accessor: "addedOn" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -226,6 +241,33 @@ const TypeOfSection = () => {
     },
   ];
 
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newTechnique) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newTechnique.sno ? newTechnique : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          typeOfSection: newTechnique.typeOfSection,
+          prefix: newTechnique.prefix,
+          addedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -236,10 +278,6 @@ const TypeOfSection = () => {
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
   };
 
   const handleDelete = (item) => {
@@ -297,7 +335,7 @@ const TypeOfSection = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Section Type" color="blue" onClick={openModal} />
         </div>
@@ -308,8 +346,10 @@ const TypeOfSection = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <TypeOfSectionModal
+        handleSubmit={handleModalSubmit}
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -320,12 +360,27 @@ const TypeOfSection = () => {
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>
