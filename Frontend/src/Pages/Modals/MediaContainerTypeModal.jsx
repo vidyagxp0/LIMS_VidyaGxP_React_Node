@@ -1,5 +1,6 @@
 import {
   CButton,
+  CFormInput,
   CFormSelect,
   CModal,
   CModalBody,
@@ -24,13 +25,10 @@ const MediaContainerTypeModal = (_props) => {
         <CModalBody>
           <p>Add information and add new Media Container Type</p>
           {/* <h3>Registration Initiation</h3> */}
-          <CFormSelect
+          <CFormInput
             type="text"
-            label="Prepared Media Conatiner Type
-
-            "
-            placeholder=" Media Conatiner Type Name
-            "
+            label="Prepared Media Conatiner Type"
+            placeholder=" Media Conatiner Type Name"
           />
         </CModalBody>
         <CModalFooter>
