@@ -67,6 +67,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 // import "./CalibrationDatasheetModal.css";
 
 const initialData = [
@@ -622,6 +623,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Calibration_Data_Sheet.pdf" title="Calibration Data Sheet Data" />
             <ATMButton 
             text="Import"
             color='pink'

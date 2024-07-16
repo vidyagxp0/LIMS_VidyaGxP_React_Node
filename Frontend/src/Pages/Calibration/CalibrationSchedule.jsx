@@ -25,6 +25,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import { FormControl, FormLabel } from "react-bootstrap";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -448,19 +449,7 @@ const CalibrationSchedule = () => {
         </div>
         <CCol sm={1}></CCol>
         <div className="float-right flex gap-4">
-          <div
-            style={{
-              border: "1px solid #f98d6b",
-              padding: "7px",
-              width: "38px",
-              display: "flex",
-              justifyContent: "center",
-              backgroundColor: "#f98d6b",
-              borderRadius: "5px",
-            }}
-          >
-            <PiDownloadBold />
-          </div>
+        <PDFDownload columns={columns} data={filteredData} fileName="Calibration_Schedule.pdf" title="Calibration Schedule Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Calibration Schedule"

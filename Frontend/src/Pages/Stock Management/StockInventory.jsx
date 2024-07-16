@@ -22,6 +22,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import { Autocomplete, TextField } from "@mui/material";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -376,6 +377,7 @@ const StockInventory = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Stock_Inventory.pdf" title="Stock Inventory Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Add Inventory Registration"

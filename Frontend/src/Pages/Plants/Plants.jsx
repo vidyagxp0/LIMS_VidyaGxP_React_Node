@@ -20,6 +20,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -302,6 +303,7 @@ const Plants = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="plants.pdf" title="Plants Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Plant" color="blue" onClick={openModal} />
         </div>

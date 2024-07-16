@@ -23,6 +23,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 const initialData = [
   {
     checkbox: false,
@@ -399,6 +400,7 @@ const CalibrationSampleLogin = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Calibration_Sample_Login.pdf" title="Calibration Sample Login Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />
         </div>

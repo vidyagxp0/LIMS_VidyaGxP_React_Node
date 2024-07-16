@@ -23,6 +23,7 @@ import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import ViewModal from "../Modals/ViewModal";
 import PDFDownload from '../PDFComponent/PDFDownload '
+
 const initialData = [
   {
     checkbox: false, sno: 1, storageCode: "SC001", storageName: "Storage 1", attachment: "attachment", status: "Active", 
@@ -299,6 +300,7 @@ function StorageLocation() {
         data={editModalData}
         onSave={handleEditSave}
       />
+       
     </>
   );
 }

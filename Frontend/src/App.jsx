@@ -214,7 +214,8 @@ import AdminMainPanel from "./components/AdminPanel/AdminMainPanel.jsx";
 import UserMgnt from "./components/AdminPanel/User Management/UserMgnt.jsx";
 import SiteManagement from "./components/AdminPanel/Site-Management/SiteManagement.jsx";
 import ProcessManagement from "./components/AdminPanel/Process-Management/ProcessManagement.jsx";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -807,8 +808,11 @@ function App() {
               element={<ProcessManagement />}
             />
           </Route>
+        
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
+      
     </>
   );
 }
