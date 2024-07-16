@@ -274,34 +274,34 @@ const StatusModal = (_props) => {
               />
 
               <label className="mb-3">Cracks Observed</label>
-            <div className="flex gap-3">
-            <CFormCheck
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="Yes"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="No"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="NA"
-              />
-            </div>
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="NA"
+                />
+              </div>
 
             </>
           )
         }
 
-{
+        {
           samplingConfigurationValue === "SC-072023-0000004" && (
 
             <>
@@ -313,30 +313,30 @@ const StatusModal = (_props) => {
               />
 
               <label className="mb-3">Cracks Observed</label>
-            <div className="flex gap-3">
-            <CFormCheck
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="Yes"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="No"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="NA"
-              />
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="NA"
+                />
 
-            </div>
-            <CFormInput
+              </div>
+              <CFormInput
                 className="mb-3"
                 type="text"
                 label="Batch No."
@@ -365,36 +365,36 @@ const StatusModal = (_props) => {
               />
 
               <label className="mb-3">Cracks Observed</label>
-            <div className="flex gap-3">
-            <CFormCheck
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="Yes"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="No"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="NA"
-              />
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="NA"
+                />
 
-            </div>
-          
+              </div>
+
 
             </>
           )
         }
 
-{
+        {
           samplingConfigurationValue === "SC-072023-0000006" && (
 
             <>
@@ -412,31 +412,295 @@ const StatusModal = (_props) => {
               />
 
               <label className="mb-3">Cracks Observed</label>
-            <div className="flex gap-3">
-            <CFormCheck
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="Yes"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="No"
-              />
-              <CFormCheck
-                className="mb-3"
-                type="radio"
-                id="cracksObserved"
-                name="cracksObserved"
-                label="NA"
-              />
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="cracksObserved"
+                  name="cracksObserved"
+                  label="NA"
+                />
 
-            </div>
-          
+              </div>
 
+
+            </>
+          )
+        }
+
+{
+          samplingConfigurationValue === "SC-072023-0000007" && (
+
+            <>
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity"
+                placeholder="Sample quantity"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Approx Quantity taken from each container"
+                placeholder="Approx Quantity taken from each container"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for identification"
+                placeholder="Sample quantity for identification"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for chemical analysis"
+                placeholder="Sample quantity for chemical analysis"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for micro analysis"
+                placeholder="Sample quantity for micro analysis"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for control sample"
+                placeholder="Sample quantity for control sample"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Appearance"
+                placeholder="Appearance"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Color"
+                placeholder="Color"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Foreign Particle"
+                placeholder="Foreign Particle"
+              />
+              
+
+              
+
+
+            </>
+          )
+        }
+
+{
+          samplingConfigurationValue === "SC-072023-0000008" && (
+
+            <>
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity"
+                placeholder="Sample quantity"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Approx Quantity taken from each container"
+                placeholder="Approx Quantity taken from each container"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for identification"
+                placeholder="Sample quantity for identification"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for chemical analysis"
+                placeholder="Sample quantity for chemical analysis"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for micro analysis"
+                placeholder="Sample quantity for micro analysis"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Sample quantity for control sample"
+                placeholder="Sample quantity for control sample"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Appearance"
+                placeholder="Appearance"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Color"
+                placeholder="Color"
+              />
+              
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Foreign Particle"
+                placeholder="Foreign Particle"
+              />
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Pharmacopoeial Status"
+                placeholder="Pharmacopoeial Status"
+              />
+              
+              <label className="mb-3">Storage Condition</label>
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="storageCondition"
+                  name="storageCondition"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="storageCondition"
+                  name="storageCondition"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="storageCondition"
+                  name="storageCondition"
+                  label="NA"
+                />
+              </div>
+
+              <label className="mb-3">Packing Condition</label>
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="packingCondition"
+                  name="packingCondition"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="packingCondition"
+                  name="packingCondition"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="packingCondition"
+                  name="packingCondition"
+                  label="NA"
+                />
+              </div>
+
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Differential Pressure of romm"
+                placeholder="Differential Pressure of romm"
+              />
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Temperature ( Not more than 25deg)"
+                placeholder="Temperature ( Not more than 25deg)"
+              />
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Relative Humidity (Not more than 60%)"
+                placeholder="Relative Humidity (Not more than 60%)"
+              />
+               <label className="mb-3">Physical condition of container</label>
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="physicalConditionOfContainer"
+                  name="physicalConditionOfContainer"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="physicalConditionOfContainer"
+                  name="physicalConditionOfContainer"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="physicalConditionOfContainer"
+                  name="physicalConditionOfContainer"
+                  label="NA"
+                />
+              </div>
+               <label className="mb-3">Balance Verification/calibration status</label>
+              <div className="flex gap-3">
+                <CFormCheck
+                  type="radio"
+                  id="balanceVerificationCalibrationStatus"
+                  name="balanceVerificationCalibrationStatus"
+                  label="Yes"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="balanceVerificationCalibrationStatus"
+                  name="balanceVerificationCalibrationStatus"
+                  label="No"
+                />
+                <CFormCheck
+                  className="mb-3"
+                  type="radio"
+                  id="balanceVerificationCalibrationStatus"
+                  name="balanceVerificationCalibrationStatus"
+                  label="NA"
+                />
+              </div>
             </>
           )
         }
@@ -494,37 +758,37 @@ const StatusModal = (_props) => {
 
         <label className="mb-3">Sampling Conclusion</label>
         <div className="flex gap-3">
-        <CFormCheck
-          type="radio"
-          id="SamplingConclusionPass"
-          name="SamplingConclusion"
-          label="Pass"
-        />
-        <CFormCheck
-          className="mb-3"
-          type="radio"
-          id="SamplingConclusionFail"
-          name="SamplingConclusion"
-          label="Fail"
-        />
+          <CFormCheck
+            type="radio"
+            id="SamplingConclusionPass"
+            name="SamplingConclusion"
+            label="Pass"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="radio"
+            id="SamplingConclusionFail"
+            name="SamplingConclusion"
+            label="Fail"
+          />
         </div>
 
         <label className="mb-3">Check point passed</label>
         <div className="flex gap-3">
-        <CFormCheck
-          type="radio"
-          id="CheckPointPassedYes"
-          name="CheckPointPassed"
-          label="Yes"
-        />
-        <CFormCheck
-          className="mb-3"
-          type="radio"
-          id="CheckPointPassedNo"
-          name="CheckPointPassed"
-          label="No"
-        />
-</div>
+          <CFormCheck
+            type="radio"
+            id="CheckPointPassedYes"
+            name="CheckPointPassed"
+            label="Yes"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="radio"
+            id="CheckPointPassedNo"
+            name="CheckPointPassed"
+            label="No"
+          />
+        </div>
 
 
         <CFormInput
@@ -548,12 +812,12 @@ const StatusModal = (_props) => {
           disabled
         />
         <CFormInput
-        className="mb-3"
-        type="date"
-        label="Initiated On"
-        value={currentDate}
-        readOnly
-      />
+          className="mb-3"
+          type="date"
+          label="Initiated On"
+          value={currentDate}
+          readOnly
+        />
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={_props.closeModal}>
