@@ -21,14 +21,14 @@ const EMCOATemplateModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add COA Template</CModalTitle>
         </CModalHeader>
 
         <div className="modal-body p-4">
-        <p>Add information and Add Coa Template</p>
+          <p>Add information and Add Coa Template</p>
           <CForm>
             <div className="mb-3">
               <CFormInput

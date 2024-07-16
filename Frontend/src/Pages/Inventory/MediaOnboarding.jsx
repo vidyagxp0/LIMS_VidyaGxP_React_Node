@@ -12,7 +12,6 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import MediaOnboardingModal from "../Modals/MediaOnboardingModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";

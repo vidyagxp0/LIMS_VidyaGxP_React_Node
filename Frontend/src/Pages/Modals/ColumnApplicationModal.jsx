@@ -1,11 +1,19 @@
-import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const ColumnApplicationModal = (props) => {
   return (
     <div>
-        <CModal
-        size="xl"
+      <CModal
+        size="lg"
         alignment=""
         visible={props.visible}
         onClose={props.closeModal}
@@ -263,9 +271,8 @@ const ColumnApplicationModal = (props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-      
     </div>
-  )
-}
+  );
+};
 
-export default ColumnApplicationModal
+export default ColumnApplicationModal;

@@ -24,7 +24,7 @@ const ViewModal = ({ visible, closeModal, data }) => {
         onClose={closeModal}
         alignment="center"
         // className="w-full"
-        size="xl"
+        size="lg"
       >
         <div id="approval-page" className="py-3 bg-light h-100">
           <div className="container-fluid">

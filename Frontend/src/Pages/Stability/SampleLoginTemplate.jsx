@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -70,7 +69,7 @@ const SampleLoginTemplate = () => {
     REJECTED: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -100,7 +99,7 @@ const SampleLoginTemplate = () => {
     setCardCounts(counts);
   }, [data]);
 
-  const handleCheckboxChange = (index) => { 
+  const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
@@ -161,11 +160,9 @@ const SampleLoginTemplate = () => {
     setIsModalOpen(false);
   };
 
-
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
-
 
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
@@ -188,16 +185,20 @@ const SampleLoginTemplate = () => {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
-
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
     setData((prevData) => [
       ...prevData,
-      { ...newCondition, sno: prevData.length + 1, checkbox: false, status: nextStatus },
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
+  };
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [inputValue, setInputValue] = useState(0);
     const [templateTitle, setTemplateTitle] = useState("");
@@ -209,49 +210,133 @@ const SampleLoginTemplate = () => {
       }
     };
 
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
-        templateTitle:templateTitle,
-        addedOn:"2024-01-02",
-        action:[],
-      }
-      onAdd(newCondition)
-    }
-
+        templateTitle: templateTitle,
+        addedOn: "2024-01-02",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
         <CModalHeader>
           <CModalTitle>Add Sample Login Template</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput className="mb-3" type="text" label="Template Title" placeholder="template title " value={templateTitle} onChange={(e) => setTemplateTitle(e.target.value)} />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox1" label="Reference Protocol No." />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox2" label="Customer" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox3" label="Study Location" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox4" label="Proposed Market" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox5" label="Batch Type" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox6" label="Batch No." />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox7" label="Manufacturing Date" />  
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox8" label="Manufactured At" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox9" label="Expiry / Retest Date" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox10" label="Packed At" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox11" label="No. Of API's" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox12" label="Source of API" />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Template Title"
+            placeholder="template title "
+            value={templateTitle}
+            onChange={(e) => setTemplateTitle(e.target.value)}
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox1"
+            label="Reference Protocol No."
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox2"
+            label="Customer"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox3"
+            label="Study Location"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox4"
+            label="Proposed Market"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox5"
+            label="Batch Type"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox6"
+            label="Batch No."
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox7"
+            label="Manufacturing Date"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox8"
+            label="Manufactured At"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox9"
+            label="Expiry / Retest Date"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox10"
+            label="Packed At"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox11"
+            label="No. Of API's"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox12"
+            label="Source of API"
+          />
           <label className="mb-3">Auto Detection Required</label>
-          <CFormCheck className="mb-3" type="radio" id="AutoDetectionYes" name="AutoDetection" label="Yes" />
-          <CFormCheck className="mb-3" type="radio" id="AutoDetectionNo" name="AutoDetection" label="No" />
+          <CFormCheck
+            className="mb-3"
+            type="radio"
+            id="AutoDetectionYes"
+            name="AutoDetection"
+            label="Yes"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="radio"
+            id="AutoDetectionNo"
+            name="AutoDetection"
+            label="No"
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
-
-  }
+  };
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -268,15 +353,14 @@ const SampleLoginTemplate = () => {
     setEditModalData(null);
   };
 
-  const EditModal = ({ visible , closeModal,data, onSave }) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
 
     const handleChange = (e) => {
@@ -295,40 +379,125 @@ const SampleLoginTemplate = () => {
       }
     };
 
-
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
         <CModalHeader>
           <CModalTitle>Add Sample Login Template</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput className="mb-3" type="text" label="Template Title" placeholder="template title " name="templateTitle" value={formData?.templateTitle||""} onChange={handleChange} />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox1" label="Reference Protocol No." />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox2" label="Customer" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox3" label="Study Location" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox4" label="Proposed Market" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox5" label="Batch Type" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox6" label="Batch No." />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox7" label="Manufacturing Date" />  
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox8" label="Manufactured At" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox9" label="Expiry / Retest Date" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox10" label="Packed At" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox11" label="No. Of API's" />
-          <CFormCheck className="mb-3" type="checkbox" id="checkbox12" label="Source of API" />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Template Title"
+            placeholder="template title "
+            name="templateTitle"
+            value={formData?.templateTitle || ""}
+            onChange={handleChange}
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox1"
+            label="Reference Protocol No."
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox2"
+            label="Customer"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox3"
+            label="Study Location"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox4"
+            label="Proposed Market"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox5"
+            label="Batch Type"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox6"
+            label="Batch No."
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox7"
+            label="Manufacturing Date"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox8"
+            label="Manufactured At"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox9"
+            label="Expiry / Retest Date"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox10"
+            label="Packed At"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox11"
+            label="No. Of API's"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="checkbox"
+            id="checkbox12"
+            label="Source of API"
+          />
           <label className="mb-3">Auto Detection Required</label>
-          <CFormCheck className="mb-3" type="radio" id="AutoDetectionYes" name="AutoDetection" label="Yes" />
-          <CFormCheck className="mb-3" type="radio" id="AutoDetectionNo" name="AutoDetection" label="No" />
+          <CFormCheck
+            className="mb-3"
+            type="radio"
+            id="AutoDetectionYes"
+            name="AutoDetection"
+            label="Yes"
+          />
+          <CFormCheck
+            className="mb-3"
+            type="radio"
+            id="AutoDetectionNo"
+            name="AutoDetection"
+            label="No"
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
-
-  }
+  };
 
   return (
     <>
@@ -384,13 +553,12 @@ const SampleLoginTemplate = () => {
           </div>
           <div className="float-right flex gap-4">
           <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login_Template.pdf" title="Sample Login Template Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
-              text="Import"
-              color='pink'
-              onClick={handleOpenModals}
-
+              text="Add Sample LogIn"
+              color="blue"
+              onClick={openModal}
             />
-            <ATMButton text="Add Sample LogIn" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -406,30 +574,28 @@ const SampleLoginTemplate = () => {
           <StatusModal
             visible={isModalOpen}
             closeModal={closeModal}
-
-onAdd={addNewStorageCondition}          />
+            onAdd={addNewStorageCondition}
+          />
         )}
         {isModalsOpen && (
-          <ImportModal initialData={initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
         )}
         {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </>
   );
-
-}
+};
 export default SampleLoginTemplate;
-
-
-
-
-
-
-

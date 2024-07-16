@@ -133,7 +133,7 @@ function SampleType() {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Sample Type</CModalTitle>
@@ -366,7 +366,6 @@ function SampleType() {
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
-    
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
     useEffect(() => {
@@ -390,13 +389,12 @@ function SampleType() {
       }
     };
 
-
     return (
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Sample Type</CModalTitle>
@@ -408,7 +406,7 @@ function SampleType() {
             label="Sample Name"
             placeholder="Sample Name"
             name="sampleTypeName"
-            value={formData?.sampleTypeName||""}
+            value={formData?.sampleTypeName || ""}
             onChange={handleChange}
           />
 
@@ -418,7 +416,7 @@ function SampleType() {
             label="Prefix"
             placeholder="Prefix"
             name="prefix"
-            value={formData?.prefix||""}
+            value={formData?.prefix || ""}
             onChange={handleChange}
           />
 
@@ -428,7 +426,7 @@ function SampleType() {
             label="Days To Complete"
             placeholder="Days To Complete"
             name="daysToComplete"
-            value={formData?.daysToComplete||""}
+            value={formData?.daysToComplete || ""}
             onChange={handleChange}
           />
 
@@ -731,13 +729,14 @@ function SampleType() {
       {viewModalData && (
         <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
-        {editModalData && (
+      {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
           closeModal={closeEditModal}
           data={editModalData}
           onSave={handleEditSave}
-        />)}
+        />
+      )}
     </>
   );
 }

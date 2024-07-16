@@ -44,7 +44,6 @@ const initialData = [
     reportTitle: "Report 2",
     status: "INITIATED",
   },
-  
 ];
 
 function WorkSheetHeader() {
@@ -63,7 +62,7 @@ function WorkSheetHeader() {
   });
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -184,15 +183,20 @@ function WorkSheetHeader() {
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData)=>[
+    setData((prevData) => [
       ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
+  };
 
-  const StatusModal = ({visible , closeModal,onAdd}) => {
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(2);
@@ -202,20 +206,20 @@ function WorkSheetHeader() {
     const [worksheetHeader, setWorksheetHeader] = useState({
       sampleType: "",
       worksheetType: "",
-      reportTitle:"",
-      productCaption:""
+      reportTitle: "",
+      productCaption: "",
     });
 
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
-        sampleType:worksheetHeader.sampleType,
-        worksheetType:worksheetHeader.worksheetType,
-        reportTitle:worksheetHeader.reportTitle,
-        product:worksheetHeader.productCaption,
-        action:[],
-      }
-      onAdd(newCondition)
-    }
+        sampleType: worksheetHeader.sampleType,
+        worksheetType: worksheetHeader.worksheetType,
+        reportTitle: worksheetHeader.reportTitle,
+        product: worksheetHeader.productCaption,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
@@ -228,7 +232,7 @@ function WorkSheetHeader() {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setHeaderRows(value);
     };
-  
+
     const handleHeaderColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setHeaderColumns(columns);
@@ -236,12 +240,12 @@ function WorkSheetHeader() {
         setHeaderRows(0);
       }
     };
-  
+
     const handleFooterRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setFooterRows(value);
     };
-  
+
     const handleFooterColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setFooterColumns(columns);
@@ -249,7 +253,7 @@ function WorkSheetHeader() {
         setFooterRows(0);
       }
     };
-  
+
     const renderTable = (rows, columns) => {
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
@@ -274,15 +278,13 @@ function WorkSheetHeader() {
       }
       return tableRows;
     };
-  
-    
 
     return (
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Worksheet Header</CModalTitle>
@@ -301,7 +303,12 @@ function WorkSheetHeader() {
               { label: "Initial Product" },
             ]}
             value={worksheetHeader.sampleType}
-        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, sampleType: e.target.value })}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                sampleType: e.target.value,
+              })
+            }
           />
           <CFormSelect
             className="mb-3"
@@ -315,7 +322,12 @@ function WorkSheetHeader() {
               { label: "ERP" },
             ]}
             value={worksheetHeader.worksheetType}
-        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, worksheetType: e.target.value })}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                worksheetType: e.target.value,
+              })
+            }
           />
           <CFormInput
             className="mb-3"
@@ -330,7 +342,12 @@ function WorkSheetHeader() {
             label="Report Title"
             placeholder="Report Title"
             value={worksheetHeader.reportTitle}
-        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, reportTitle: e.target.value })}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                reportTitle: e.target.value,
+              })
+            }
           />
           <CFormInput
             className="mb-3"
@@ -338,7 +355,12 @@ function WorkSheetHeader() {
             label="Product/Material Caption"
             placeholder="Product"
             value={worksheetHeader.productCaption}
-        onChange={(e) => setWorksheetHeader({ ...worksheetHeader, productCaption: e.target.value })}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                productCaption: e.target.value,
+              })
+            }
           />
           <CFormInput
             className="mb-3"
@@ -407,7 +429,9 @@ function WorkSheetHeader() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -427,7 +451,7 @@ function WorkSheetHeader() {
     setData(newData);
     setEditModalData(null);
   };
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(2);
@@ -435,10 +459,9 @@ function WorkSheetHeader() {
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
 
     const handleChange = (e) => {
@@ -449,7 +472,6 @@ function WorkSheetHeader() {
     const handleSave = () => {
       onSave(formData);
     };
-
 
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
@@ -462,7 +484,7 @@ function WorkSheetHeader() {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setHeaderRows(value);
     };
-  
+
     const handleHeaderColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setHeaderColumns(columns);
@@ -470,12 +492,12 @@ function WorkSheetHeader() {
         setHeaderRows(0);
       }
     };
-  
+
     const handleFooterRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
       setFooterRows(value);
     };
-  
+
     const handleFooterColumnsChange = (e) => {
       const columns = parseInt(e.target.value, 10);
       setFooterColumns(columns);
@@ -483,7 +505,7 @@ function WorkSheetHeader() {
         setFooterRows(0);
       }
     };
-  
+
     const renderTable = (rows, columns) => {
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
@@ -508,15 +530,13 @@ function WorkSheetHeader() {
       }
       return tableRows;
     };
-  
-    
 
     return (
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Worksheet Header</CModalTitle>
@@ -534,7 +554,7 @@ function WorkSheetHeader() {
               { label: "Petrochemical" },
               { label: "Initial Product" },
             ]}
-            value={formData?.sampleType||""}
+            value={formData?.sampleType || ""}
             onChange={handleChange}
             name="sampleType"
           />
@@ -549,7 +569,7 @@ function WorkSheetHeader() {
               { label: "Without Specification" },
               { label: "ERP" },
             ]}
-            value={formData?.worksheetType||""}
+            value={formData?.worksheetType || ""}
             onChange={handleChange}
             name="worksheetType"
           />
@@ -565,7 +585,7 @@ function WorkSheetHeader() {
             type="text"
             label="Report Title"
             placeholder="Report Title"
-            value={formData?.reportTitle||""}
+            value={formData?.reportTitle || ""}
             onChange={handleChange}
             name="reportTitle"
           />
@@ -574,7 +594,7 @@ function WorkSheetHeader() {
             type="text"
             label="Product/Material Caption"
             placeholder="Product"
-            value={formData?.product||""}
+            value={formData?.product || ""}
             onChange={handleChange}
             name="product"
           />
@@ -645,12 +665,13 @@ function WorkSheetHeader() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
-  
 
   return (
     <>
@@ -720,7 +741,11 @@ function WorkSheetHeader() {
         />
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
+          <StatusModal
+            visible={isModalOpen}
+            closeModal={closeModal}
+            onAdd={addNewStorageCondition}
+          />
         )}
         {isModalsOpen && (
           <ImportModal
@@ -732,18 +757,16 @@ function WorkSheetHeader() {
           />
         )}
         {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </>
   );
 }
-
-
 
 export default WorkSheetHeader;

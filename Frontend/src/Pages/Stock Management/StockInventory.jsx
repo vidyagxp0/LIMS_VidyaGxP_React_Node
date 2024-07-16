@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -60,7 +59,7 @@ const StockInventory = () => {
     Active: 0,
     Inactive: 0,
   });
-  const [editModalData, setEditModalData] = useState(null); 
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -148,7 +147,7 @@ const StockInventory = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       MaterialName: item["Material Name"] || "",
       SupplierName: item["Supplier Name"] || "",
       TruckNo: item["Truck No."] || "",
@@ -157,12 +156,11 @@ const StockInventory = () => {
       QuantityInMt: item["Quantity in Mt"] || "",
       status: item["Status"] || "",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
-  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -254,9 +252,9 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
       <div>
         <CModal
           alignment="center"
-          visible={visible} 
+          visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Add Inventory</CModalTitle>
@@ -273,8 +271,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               options={top100Films}
               getOptionLabel={(option) => option.title}
               renderInput={(params) => <TextField {...params} label="" />}
-             value={formData?.MaterialName||""}
-             onChange={handleChange}
+              value={formData?.MaterialName || ""}
+              onChange={handleChange}
             />
             <CFormInput
               label="Received Date"
@@ -282,7 +280,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               type="date"
               name="revisedDate"
               placeholder="Received Date"
-              value={formData?.revisedDate||""}
+              value={formData?.revisedDate || ""}
               onChange={handleChange}
             />
             <label className="mb-2" htmlFor="supplier-name">
@@ -296,8 +294,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               options={top100Films}
               getOptionLabel={(option) => option.title}
               renderInput={(params) => <TextField {...params} label="" />}
-              value={formData?.SupplierName||""}
-              onChange={ handleChange}
+              value={formData?.SupplierName || ""}
+              onChange={handleChange}
             />
             <CFormInput
               label="Truck No."
@@ -305,8 +303,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               name="TruckNo"
               type="text"
               placeholder="Truck No."
-              value={formData?.TruckNo||""}
-              onChange={ handleChange}
+              value={formData?.TruckNo || ""}
+              onChange={handleChange}
             />
             <CFormInput
               label="Ch No."
@@ -314,8 +312,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               type="text"
               name="ChNo"
               placeholder="Ch No."
-              value={formData?.ChNo||""}
-              onChange={ handleChange}
+              value={formData?.ChNo || ""}
+              onChange={handleChange}
             />
             <CFormInput
               label="Invoice Number"
@@ -323,8 +321,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               type="text"
               name="InvoiceNo"
               placeholder="Invoice Number"
-              value={formData?.InvoiceNo||""}
-              onChange={ handleChange}
+              value={formData?.InvoiceNo || ""}
+              onChange={handleChange}
             />
             <CFormInput
               label="Quantity In MT"
@@ -332,8 +330,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               type="text"
               name="QuantityInMt"
               placeholder="Quantity In MT"
-              value={formData?.QuantityInMt||""}
-              onChange={ handleChange}
+              value={formData?.QuantityInMt || ""}
+              onChange={handleChange}
             />
             <CFormInput
               label="Remarks"
@@ -341,26 +339,28 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
               type="text"
               name="remarks"
               placeholder="Remarks"
-              value={formData?.remarks||""}
-              onChange={ handleChange}
+              value={formData?.remarks || ""}
+              onChange={handleChange}
             />
             <div className="d-flex gap-3 mt-3">
               <CButton color="light w-50" onClick={closeModal}>
                 &lt; Back
               </CButton>
-              <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+              <CButton color="primary w-50" onClick={handleSave}>
+                Submit
+              </CButton>
             </div>
           </CModalBody>
         </CModal>
       </div>
     );
   };
-  
-
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Inventory/Inventory Registration</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Inventory/Inventory Registration
+      </h1>
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
@@ -376,12 +376,12 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
-          <ATMButton text="Add Inventory Registration" color="blue" onClick={openModal} />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Inventory Registration"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
       </div>
       <Table
@@ -404,8 +404,14 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
       {editModalData && (
         <EditModal

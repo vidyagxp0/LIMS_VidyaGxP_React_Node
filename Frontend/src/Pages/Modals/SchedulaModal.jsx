@@ -1,4 +1,15 @@
-import { CButton, CForm, CFormCheck, CFormInput, CFormLabel, CFormSelect, CModal, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import React from "react";
 
 const SchedulaModal = (_props) => {
@@ -8,7 +19,7 @@ const SchedulaModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Schedule Registration</CModalTitle>

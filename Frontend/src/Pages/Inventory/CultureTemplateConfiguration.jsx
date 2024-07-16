@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -12,8 +10,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
-import RefrenceCultureLotModal from "../Modals/RefrenceCultureLotModal";
+import CultureaTemplateConfigurationModal from "../Modals/CultureaTemplateConfigurationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
@@ -149,7 +146,7 @@ const CultureTemplateConfiguration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       ReferenceCultureName: item["Reference Culture Name"] || "",
       ReferenceCultureCode: item["TemReference Culture Code"] || "",
       SampleCultureLotAcceptance: item["Sample Culture Lot Acceptance"] || "",
@@ -157,12 +154,11 @@ const CultureTemplateConfiguration = () => {
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
   };
-
 
   const columns = [
     {
@@ -262,7 +258,7 @@ const CultureTemplateConfiguration = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <RefrenceCultureLotModal
+      <CultureaTemplateConfigurationModal
         visible={isModalOpen}
         closeModal={closeModal}
       />
@@ -274,7 +270,13 @@ const CultureTemplateConfiguration = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );

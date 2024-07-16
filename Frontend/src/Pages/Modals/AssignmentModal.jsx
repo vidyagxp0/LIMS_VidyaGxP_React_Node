@@ -6,17 +6,42 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
 } from "@coreui/react";
-import React from "react";
+import React, { useState } from "react";
 
 const AssignmentModal = (_props) => {
+  const [numVariables, setNumVariables] = useState("");
+  const [rows, setRows] = useState([]);
+
+  const handleInputChange = (e) => {
+    setNumVariables(e.target.value);
+  };
+
+  const handleAddClick = () => {
+    if (numVariables) {
+      const numberOfRows = parseInt(numVariables, 10);
+      const newRows = Array.from({ length: numberOfRows }, (_, index) => ({
+        column1: `Row ${index + 1}, Cell 1`,
+        column2: `Row ${index + 1}, Cell 2`,
+        column3: `Row ${index + 1}, Cell 3`,
+        column4: `Row ${index + 1}, Cell 4`,
+      }));
+      setRows(newRows);
+    }
+  };
   return (
     <div>
       <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Assignmment</CModalTitle>
@@ -28,109 +53,109 @@ const AssignmentModal = (_props) => {
             type="text"
             label=" Column Name"
             placeholder=" Column Name "
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Column Application"
             placeholder=" Column Application "
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Brand Name / Manufacturer Name"
             placeholder=" Brand Name / Manufacturer Name "
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Film Thikness / Particle Size"
             placeholder=" Film Thikness / Particle Size "
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" UMO"
             placeholder="UMO "
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label="Mfg. Serial No."
             placeholder="Mfg. Serial No."
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Length"
             placeholder="Length"
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" UMO"
             placeholder="UMO"
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Packing Material"
             placeholder="Packing Material"
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Inner Diameter"
             placeholder=""
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" UMO"
             placeholder="UMO"
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Outer Diameter"
             placeholder=""
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="date"
             label=" Recieved On"
             placeholder=""
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Specification ID"
             placeholder=""
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <CFormInput
             type="text"
             label=" Product / Material"
             placeholder=""
-            className="custom-placeholder"
+            className=" mb-3  custom-placeholder"
           />
 
           <h3>Test(s) Selection for Analysis</h3>
-          <table className="table table-bordered">
+          <table className=" mb-3  table table-bordered">
             <thead>
               <th>S No.</th>
               <th>Test Name</th>
@@ -280,15 +305,62 @@ const AssignmentModal = (_props) => {
           </table>
 
           <h3>Column Performance Test</h3>
-          <CFormInput
-            type="text"
-            label=" Number of Performance Test"
-            placeholder="No. of Variables"
-            className="custom-placeholder"
-          />
-          <CButton color="info" onClick={_props.closeModal}>
-            Add
-          </CButton>
+          <div className=" mb-3  form-container">
+            <label className=" mb-3  form-label">
+              Number of Performance Test
+            </label>
+            <div className=" mb-3  flex gap-3">
+              <CFormInput
+                type="number"
+                placeholder="Number of variables"
+                className=" mb-3  custom-input"
+                value={numVariables}
+                onChange={handleInputChange}
+              />
+              <CButton
+                color="info"
+                className=" mb-3  custom-button"
+                onClick={handleAddClick}
+              >
+                Add
+              </CButton>
+            </div>
+
+            {rows.length > 0 && (
+              <CTable>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell scope="col">S no.</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">
+                      Performance Test Name
+                    </CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Pass Limits</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Lower</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Upper</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">Decimals</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">UMO</CTableHeaderCell>
+                    <CTableHeaderCell scope="col">
+                      Pass Limit Description
+                    </CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {rows.map((row, index) => (
+                    <CTableRow key={index}>
+                      <CTableDataCell>{row.column1}</CTableDataCell>
+                      <CTableDataCell>{row.column2}</CTableDataCell>
+                      <CTableDataCell>{row.column3}</CTableDataCell>
+                      <CTableDataCell>{row.column4}</CTableDataCell>
+                      <CTableDataCell>{row.column5}</CTableDataCell>
+                      <CTableDataCell>{row.column6}</CTableDataCell>
+                      <CTableDataCell>{row.column7}</CTableDataCell>
+                      <CTableDataCell>{row.column8}</CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
+            )}
+          </div>
 
           <div
             style={{

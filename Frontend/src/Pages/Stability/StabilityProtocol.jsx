@@ -77,7 +77,7 @@ function StabilityProtocol() {
     REJECTED: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -206,42 +206,48 @@ function StabilityProtocol() {
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData)=>[
+    setData((prevData) => [
       ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
-
-  const StatusModal = ({visible , closeModal,onAdd}) => {
-    const [conditions, setConditions] = useState([]);
-  const [specificationID, setSpecificationID] = useState("")
-  const [sampleType, setSampleType] = useState("")
-  const [newProtocolType, setNewProtocolType] = useState("")
-  const [oldProtocolType, setOldProtocolType] = useState("")
-  const [protocolID, setProtocolID] = useState("")
-  const [sampleLoginTemplet, setSampleLoginTemplet] = useState("")
-  const [manufacturingDate, setManufacturingDate] = useState("")
-  const [shortDate , setShortDate] = useState("")
-  const [longDate , setLongDate] = useState("")
-  const [sampleBy, setSampleBy] = useState("")
-  const [storageConditionUOM , setStorageConditionUOM] = useState("")
-  const [defineChargingStartDate, setDefineChargingStartDate] = useState("")
-  const [startDate , setStartDate] = useState("")
-  const [initialTestingRequired, setInitialTestingRequired] = useState("")
-  const [certificatesIfAny, setCertificatesIfAny] = useState("")
-  const [numberOfStorageConditions, setNumberOfStorageConditions] = useState("")
-  const [testPlanet, setTestPlanet] = useState("")
-  const [instructions , setInstructions] = useState("")
-  const [packageConfiguration , setPackageConfiguration] = useState("")
-
-  const handleInputChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 0) {
-      setInputValue(value);
-    }
   };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [conditions, setConditions] = useState([]);
+    const [specificationID, setSpecificationID] = useState("");
+    const [sampleType, setSampleType] = useState("");
+    const [newProtocolType, setNewProtocolType] = useState("");
+    const [oldProtocolType, setOldProtocolType] = useState("");
+    const [protocolID, setProtocolID] = useState("");
+    const [sampleLoginTemplet, setSampleLoginTemplet] = useState("");
+    const [manufacturingDate, setManufacturingDate] = useState("");
+    const [shortDate, setShortDate] = useState("");
+    const [longDate, setLongDate] = useState("");
+    const [sampleBy, setSampleBy] = useState("");
+    const [storageConditionUOM, setStorageConditionUOM] = useState("");
+    const [defineChargingStartDate, setDefineChargingStartDate] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [initialTestingRequired, setInitialTestingRequired] = useState("");
+    const [certificatesIfAny, setCertificatesIfAny] = useState("");
+    const [numberOfStorageConditions, setNumberOfStorageConditions] =
+      useState("");
+    const [testPlanet, setTestPlanet] = useState("");
+    const [instructions, setInstructions] = useState("");
+    const [packageConfiguration, setPackageConfiguration] = useState("");
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
     const handleAddConditions = () => {
       const numberOfConditions = parseInt(
         document.getElementById("numberOfConditions").value
@@ -257,28 +263,27 @@ function StabilityProtocol() {
       }
     };
 
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
-        productMaterial:"000",
-        specificationID:specificationID,
-        genericName:"generic",
-        sampleType:sampleType,
-        protocolType:[newProtocolType,oldProtocolType],
-        protocolID:protocolID,
-        addedOn:"2022-01-01",
-        action:[],
-      }
-      onAdd(newCondition)
-    }
+        productMaterial: "000",
+        specificationID: specificationID,
+        genericName: "generic",
+        sampleType: sampleType,
+        protocolType: [newProtocolType, oldProtocolType],
+        protocolID: protocolID,
+        addedOn: "2022-01-01",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
-  
     return (
       <>
         <CModal
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Stability Protocol</CModalTitle>
@@ -305,7 +310,6 @@ function StabilityProtocol() {
               label="Product"
               placeholder="testamine"
               disabled
-
             />
             <CFormInput
               className="mb-3"
@@ -367,7 +371,6 @@ function StabilityProtocol() {
               ]}
               value={sampleLoginTemplet}
               onChange={(e) => setSampleLoginTemplet(e.target.value)}
-             
             />
             <CFormInput
               className="mb-3"
@@ -377,7 +380,7 @@ function StabilityProtocol() {
               value={manufacturingDate}
               onChange={(e) => setManufacturingDate(e.target.value)}
             />
-  
+
             <label>DateFormat</label>
             <CFormCheck
               className="mb-3"
@@ -397,7 +400,7 @@ function StabilityProtocol() {
               value={longDate}
               onChange={(e) => setLongDate(e.target.value)}
             />
-  
+
             <CFormInput
               className="mb-3"
               type="text"
@@ -423,7 +426,6 @@ function StabilityProtocol() {
               label="Now"
               value={defineChargingStartDate}
               onChange={(e) => setDefineChargingStartDate(e.target.value)}
-            
             />
             <CFormCheck
               className="mb-3"
@@ -432,7 +434,7 @@ function StabilityProtocol() {
               name="ChangingDate"
               label="Later"
             />
-  
+
             <CFormInput
               className="mb-3"
               type="date"
@@ -441,7 +443,7 @@ function StabilityProtocol() {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-  
+
             <label className="mb-3">Initial Testing Required</label>
             <CFormCheck
               className="mb-3"
@@ -461,7 +463,7 @@ function StabilityProtocol() {
               value={initialTestingRequired}
               onChange={(e) => setInitialTestingRequired(e.target.value)}
             />
-  
+
             <CFormInput
               className="mb-3"
               type="file"
@@ -470,7 +472,7 @@ function StabilityProtocol() {
               value={certificatesIfAny}
               onChange={(e) => setCertificatesIfAny(e.target.value)}
             />
-  
+
             <CRow>
               <CCol sm={10}>
                 <CFormInput
@@ -483,7 +485,7 @@ function StabilityProtocol() {
                   onChange={(e) => setNumberOfStorageConditions(e.target.value)}
                 />
               </CCol>
-  
+
               <CCol sm={2}>
                 <CButton
                   className="bg-info text-white mb-3 mt-4"
@@ -508,7 +510,7 @@ function StabilityProtocol() {
               value={testPlanet}
               onChange={(e) => setTestPlanet(e.target.value)}
             />
-  
+
             {conditions.map((condition, index) => (
               <div className="each-condition-data mt-4" key={condition.id}>
                 <h6 className="font-extrabold">
@@ -530,7 +532,9 @@ function StabilityProtocol() {
                     >
                       <option value="">Select</option>
                       <option value="6651c0dfa9d2755d7705ce05">10 to 25</option>
-                      <option value="664f1373a9d2755d770568b4">-20 ± 5°c</option>
+                      <option value="664f1373a9d2755d770568b4">
+                        -20 ± 5°c
+                      </option>
                       <option value="664f06cea9d2755d77055787">
                         25 ± 2°c 60 ± 5% rh
                       </option>
@@ -650,13 +654,14 @@ function StabilityProtocol() {
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleAdd}>Add Protocol</CButton>
+            <CButton className="bg-info text-white" onClick={handleAdd}>
+              Add Protocol
+            </CButton>
           </CModalFooter>
         </CModal>
       </>
     );
   };
-
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -673,15 +678,14 @@ function StabilityProtocol() {
     setEditModalData(null);
   };
 
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [conditions, setConditions] = useState([]);
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
 
     const handleChange = (e) => {
@@ -693,12 +697,12 @@ function StabilityProtocol() {
       onSave(formData);
     };
 
-  const handleInputChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 0) {
-      setInputValue(value);
-    }
-  };
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
     const handleAddConditions = () => {
       const numberOfConditions = parseInt(
         document.getElementById("numberOfConditions").value
@@ -714,15 +718,13 @@ function StabilityProtocol() {
       }
     };
 
-  
-  
     return (
       <>
         <CModal
           alignment="center"
           visible={visible}
           onClose={closeModal}
-          size="xl"
+          size="lg"
         >
           <CModalHeader>
             <CModalTitle>Stability Protocol</CModalTitle>
@@ -740,7 +742,7 @@ function StabilityProtocol() {
                 { label: "CHPOIL001" },
                 { label: "rest0001" },
               ]}
-              value = {formData?.specificationID || ""}
+              value={formData?.specificationID || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -749,7 +751,6 @@ function StabilityProtocol() {
               label="Product"
               placeholder="testamine"
               disabled
-
             />
             <CFormInput
               className="mb-3"
@@ -780,7 +781,7 @@ function StabilityProtocol() {
               id="protocolTypeNew"
               name="protocolType"
               label="New"
-              value={formData?.newProtocolType||""}
+              value={formData?.newProtocolType || ""}
               onChange={handleChange}
             />
             <CFormCheck
@@ -788,7 +789,7 @@ function StabilityProtocol() {
               id="protocolTypeExisting"
               name="protocolType"
               label="Existing"
-              value={formData?.oldProtocolType||""}
+              value={formData?.oldProtocolType || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -796,7 +797,7 @@ function StabilityProtocol() {
               type="text"
               label="Protocol Id"
               placeholder="Protocol Id"
-              value={formData?.protocolID||""}
+              value={formData?.protocolID || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -809,19 +810,18 @@ function StabilityProtocol() {
                 { label: "ARZ Temp" },
                 { label: "AAT" },
               ]}
-              value={formData?.sampleLoginTemplet||""}
+              value={formData?.sampleLoginTemplet || ""}
               onChange={handleChange}
-             
             />
             <CFormInput
               className="mb-3"
               type="date"
               label="Manufacturing Date"
               placeholder=" "
-              value={formData?.manufacturingDate||""}
+              value={formData?.manufacturingDate || ""}
               onChange={handleChange}
             />
-  
+
             <label>DateFormat</label>
             <CFormCheck
               className="mb-3"
@@ -829,7 +829,7 @@ function StabilityProtocol() {
               id="DateFormatShort"
               name="DateFormat"
               label="Short Date"
-              value={formData?.shortDate||""}
+              value={formData?.shortDate || ""}
               onChange={handleChange}
             />
             <CFormCheck
@@ -838,16 +838,16 @@ function StabilityProtocol() {
               id="DateFormatLong"
               name="DateFormat"
               label="Long Date"
-              value={formData?.longDate||""}
+              value={formData?.longDate || ""}
               onChange={handleChange}
             />
-  
+
             <CFormInput
               className="mb-3"
               type="text"
               label="Sample By"
               placeholder="Sample By"
-              value={formData?.sampleBy||""}
+              value={formData?.sampleBy || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -855,7 +855,7 @@ function StabilityProtocol() {
               type="text"
               label="Storage Condition UOM"
               placeholder="Storage Condition UOM"
-              value={formData?.storageConditionUOM||""}
+              value={formData?.storageConditionUOM || ""}
               onChange={handleChange}
             />
             <label className="mb-3">Define Charging Start Date</label>
@@ -865,9 +865,8 @@ function StabilityProtocol() {
               id="DateFormatNow"
               name="ChangingDate"
               label="Now"
-              value={formData?.defineChargingStartDate||""}
+              value={formData?.defineChargingStartDate || ""}
               onChange={handleChange}
-            
             />
             <CFormCheck
               className="mb-3"
@@ -876,16 +875,16 @@ function StabilityProtocol() {
               name="ChangingDate"
               label="Later"
             />
-  
+
             <CFormInput
               className="mb-3"
               type="date"
               label="Starting Date"
               placeholder=""
-              value={formData?.startDate||""}
+              value={formData?.startDate || ""}
               onChange={handleChange}
             />
-  
+
             <label className="mb-3">Initial Testing Required</label>
             <CFormCheck
               className="mb-3"
@@ -893,7 +892,7 @@ function StabilityProtocol() {
               id="TestingRequiredYes"
               name="TestingRequired"
               label="Yes"
-              value={formData?.initialTestingRequired||""}
+              value={formData?.initialTestingRequired || ""}
               onChange={handleChange}
             />
             <CFormCheck
@@ -902,19 +901,19 @@ function StabilityProtocol() {
               id="TestingRequiredNo"
               name="TestingRequired"
               label="No"
-              value={formData?.initialTestingRequired||""}
+              value={formData?.initialTestingRequired || ""}
               onChange={handleChange}
             />
-  
+
             <CFormInput
               className="mb-3"
               type="file"
               label="Certificates If Any"
               placeholder=" "
-              value={formData?.certificatesIfAny||""}
+              value={formData?.certificatesIfAny || ""}
               onChange={handleChange}
             />
-  
+
             <CRow>
               <CCol sm={10}>
                 <CFormInput
@@ -923,11 +922,11 @@ function StabilityProtocol() {
                   id="numberOfConditions"
                   label="Number Of Storage Conditions"
                   placeholder="Number Of Storage Conditions"
-                  value={formData?.numberOfStorageConditions||""}
+                  value={formData?.numberOfStorageConditions || ""}
                   onChange={handleChange}
                 />
               </CCol>
-  
+
               <CCol sm={2}>
                 <CButton
                   className="bg-info text-white mb-3 mt-4"
@@ -949,10 +948,10 @@ function StabilityProtocol() {
                 { label: "Sacubitril" },
                 { label: "Bio Burden Test For PM" },
               ]}
-              value={formData?.testPlanet||""}
+              value={formData?.testPlanet || ""}
               onChange={handleChange}
             />
-  
+
             {conditions.map((condition, index) => (
               <div className="each-condition-data mt-4" key={condition.id}>
                 <h6 className="font-extrabold">
@@ -974,7 +973,9 @@ function StabilityProtocol() {
                     >
                       <option value="">Select</option>
                       <option value="6651c0dfa9d2755d7705ce05">10 to 25</option>
-                      <option value="664f1373a9d2755d770568b4">-20 ± 5°c</option>
+                      <option value="664f1373a9d2755d770568b4">
+                        -20 ± 5°c
+                      </option>
                       <option value="664f06cea9d2755d77055787">
                         25 ± 2°c 60 ± 5% rh
                       </option>
@@ -1078,7 +1079,7 @@ function StabilityProtocol() {
               label="Instructions"
               placeholder="Instructions"
               name="instructions"
-              value={formData?.instructions||""}
+              value={formData?.instructions || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -1086,7 +1087,7 @@ function StabilityProtocol() {
               type="text"
               label="Package Configuration"
               placeholder="Package Configuration"
-              value={formData?.packageConfiguration||""}
+              value={formData?.packageConfiguration || ""}
               onChange={handleChange}
             />
           </CModalBody>
@@ -1094,13 +1095,14 @@ function StabilityProtocol() {
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleSave}>Add Protocol</CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Add Protocol
+            </CButton>
           </CModalFooter>
         </CModal>
       </>
     );
   };
-
 
   return (
     <>
@@ -1170,7 +1172,11 @@ function StabilityProtocol() {
         />
 
         {isModalOpen && (
-          <StatusModal onAdd={addNewStorageCondition} visible={isModalOpen} closeModal={closeModal} />
+          <StatusModal
+            onAdd={addNewStorageCondition}
+            visible={isModalOpen}
+            closeModal={closeModal}
+          />
         )}
         {isModalsOpen && (
           <ImportModal
@@ -1182,20 +1188,17 @@ function StabilityProtocol() {
           />
         )}
 
-{editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
     </>
   );
 }
-
-
 
 export default StabilityProtocol;

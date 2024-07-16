@@ -17,7 +17,7 @@ const AcknowledgementModal = (_props) => {
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader className="p-3">
           <CModalTitle>Add Acknowledgement</CModalTitle>
@@ -25,7 +25,7 @@ const AcknowledgementModal = (_props) => {
         <div className="modal-body p-4">
           <CForm>
             <div className="mb-3">
-          <p>Add information and register new Acknowledfghnjm,dgement</p>
+              <p>Add information and register new Acknowledfghnjm,dgement</p>
               <CFormSelect
                 type="text"
                 label="Schedule Code

@@ -11,35 +11,30 @@ import {
 import { FormControl, FormLabel } from "react-bootstrap";
 
 const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
-  const [calibrationSchedule , setCalibrationSchedule ] = useState({
-    instrumentCategory : "",
-    calibrationType:"",
-    instrumentId:"",
-    moduleId:"",
+  const [calibrationSchedule, setCalibrationSchedule] = useState({
+    instrumentCategory: "",
+    calibrationType: "",
+    instrumentId: "",
+    moduleId: "",
     calibrationWorkFlow: "",
-    calibrationDataSheet:"",
+    calibrationDataSheet: "",
     scheduleDescription: "",
     startDate: "",
-    frequency:"",
+    frequency: "",
     tolerancePeriod: "",
-  })
+  });
 
-  const handleChange = (field , value) => {
-    const updatedData = {...calibrationSchedule, [field]:value }
-    setCalibrationSchedule(updatedData)
+  const handleChange = (field, value) => {
+    const updatedData = { ...calibrationSchedule, [field]: value };
+    setCalibrationSchedule(updatedData);
   };
 
   const handleFormSubmit = (e) => {
-    handleSubmit({...calibrationSchedule});
+    handleSubmit({ ...calibrationSchedule });
     closeModal();
-  }
+  };
   return (
-    <CModal
-      alignment="center"
-      visible={visible}
-      onClose={closeModal}
-      size="xl"
-    >
+    <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
       <CModalHeader>
         <CModalTitle className="font-bold">
           Add Calibration Schedule
@@ -85,32 +80,40 @@ const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
           onChange={(e) => handleChange("moduleId", e.target.value)}
         />
 
-        <FormLabel className="mt-3">
-          Calibration Work Flow
-        </FormLabel>
+        <FormLabel className="mt-3">Calibration Work Flow</FormLabel>
         <div className="d-flex gap-4 mb-3">
           <div>
-          <input
-            type="radio"
-            id="calibrationDataSheet"
-            name="calibrationWorkFlow"
-            value="calibrationDataSheet"
-            checked={calibrationSchedule.calibrationWorkFlow === "calibrationDataSheet"}
-            onChange={(e) => handleChange("calibrationWorkFlow", e.target.value)}
-          />
+            <input
+              type="radio"
+              id="calibrationDataSheet"
+              name="calibrationWorkFlow"
+              value="calibrationDataSheet"
+              checked={
+                calibrationSchedule.calibrationWorkFlow ===
+                "calibrationDataSheet"
+              }
+              onChange={(e) =>
+                handleChange("calibrationWorkFlow", e.target.value)
+              }
+            />
             <label htmlFor="calibrationDataSheet" className="ms-2">
               Calibration Data Sheet
             </label>
           </div>
           <div>
-          <input
-            type="radio"
-            id="sampleLoginTemplate"
-            name="calibrationWorkFlow"
-            value="sampleLoginTemplate"
-            checked={calibrationSchedule.calibrationWorkFlow === "sampleLoginTemplate"}
-            onChange={(e) => handleChange("calibrationWorkFlow", e.target.value)}
-          />
+            <input
+              type="radio"
+              id="sampleLoginTemplate"
+              name="calibrationWorkFlow"
+              value="sampleLoginTemplate"
+              checked={
+                calibrationSchedule.calibrationWorkFlow ===
+                "sampleLoginTemplate"
+              }
+              onChange={(e) =>
+                handleChange("calibrationWorkFlow", e.target.value)
+              }
+            />
             <label htmlFor="sampleLoginTemplate" className="ms-2">
               Sample Login Template
             </label>
@@ -138,7 +141,9 @@ const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
             type="text"
             placeholder="Schedule Description"
             value={calibrationSchedule.scheduleDescription}
-            onChange={(e) => handleChange("scheduleDescription", e.target.value)}
+            onChange={(e) =>
+              handleChange("scheduleDescription", e.target.value)
+            }
           />
         </div>
 
@@ -146,9 +151,12 @@ const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
           <label htmlFor="startDate" className="form-label">
             Start Date
           </label>
-          <CFormInput id="startDate" type="date" placeholder="" 
-          value={calibrationSchedule.startDate}
-          onChange={(e) => handleChange("startDate", e.target.value)}
+          <CFormInput
+            id="startDate"
+            type="date"
+            placeholder=""
+            value={calibrationSchedule.startDate}
+            onChange={(e) => handleChange("startDate", e.target.value)}
           />
         </div>
 
@@ -184,7 +192,9 @@ const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
           <CButton color="light w-50" onClick={closeModal}>
             &lt; Back
           </CButton>
-          <CButton color="primary w-50" onClick={handleFormSubmit}>Submit</CButton>
+          <CButton color="primary w-50" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </div>
       </CModalBody>
     </CModal>

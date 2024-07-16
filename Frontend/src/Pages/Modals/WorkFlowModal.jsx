@@ -10,19 +10,19 @@ import {
 import React, { useState } from "react";
 
 const WorkFlowModal = ({ visible, closeModal }) => {
-  const[workFlowData, setWorkFloData]=useState({
+  const [workFlowData, setWorkFloData] = useState({
     Name: "",
     UniqueCode: "",
     GenericName: "",
     ReTestingPeriod: "",
-  })
+  });
   return (
     <div>
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>New Plant</CModalTitle>

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -59,7 +59,7 @@ const SamplingRule = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Inactive");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -151,237 +151,280 @@ const SamplingRule = () => {
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "Inactive" ? "Active" : "Inactive";
-    setData((prevData)=>[
+    setData((prevData) => [
       ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
-
-
-const StatusModal = ({visible , closeModal,onAdd}) => {
-  const [numRows, setNumRows] = useState(0);
-  const [inputValue, setInputValue] = useState(0);
-  const [samplingRuleName, setSamplingRuleName] = useState({
-    samplingName: "",
-    uniqueCode: "",
-    numberofRanges: ""
-  });
-
-  const handleInputChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 0) {
-      setInputValue(value);
-    }
   };
 
-  const addRows = () => {
-    setNumRows(inputValue);
-  };
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [samplingRuleName, setSamplingRuleName] = useState({
+      samplingName: "",
+      uniqueCode: "",
+      numberofRanges: "",
+    });
 
-  const renderRows = () => {
-    const rows = [];
-    for (let i = 0; i < numRows; i++) {
-      rows.push(
-        <CTableRow key={i}>
-          <CTableHeaderCell className="mb-3 m-2 flex justify-between itmes center gap-4" scope="row">
-            {i + 1}
-            <CFormInput className="border-1 border-black" placeholder="Lower"></CFormInput>
-            <CFormInput className="border-1 border-black" placeholder="Upper"></CFormInput>
-            <CFormInput className="border-1 border-black" placeholder="No. of Containers"></CFormInput>
-          </CTableHeaderCell>
-          {/* <CTableDataCell className="mb-3 m-2">
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
+
+    const renderRows = () => {
+      const rows = [];
+      for (let i = 0; i < numRows; i++) {
+        rows.push(
+          <CTableRow key={i}>
+            <CTableHeaderCell
+              className="mb-3 m-2 flex justify-between itmes center gap-4"
+              scope="row"
+            >
+              {i + 1}
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Lower"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Upper"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="No. of Containers"
+              ></CFormInput>
+            </CTableHeaderCell>
+            {/* <CTableDataCell className="mb-3 m-2">
             Rack {i + 1}: <input type="text" />{" "}
           </CTableDataCell> */}
-        </CTableRow>
-      );
-    }
-    return rows;
+          </CTableRow>
+        );
+      }
+      return rows;
+    };
+
+    const handleAdd = () => {
+      const newCondition = {
+        description: "jhjj",
+        uniqueCode: samplingRuleName.uniqueCode,
+        numberofRanges: samplingRuleName.numberofRanges,
+        updatedAt: "2020-2-20",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Rule</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sampling Rule Name"
+            placeholder="Sampling Rule Name"
+            value={samplingRuleName.samplingName}
+            onChange={(e) =>
+              setSamplingRuleName({
+                ...samplingRuleName,
+                samplingName: e.target.value,
+              })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            value={samplingRuleName.uniqueCode}
+            onChange={(e) =>
+              setSamplingRuleName({
+                ...samplingRuleName,
+                uniqueCode: e.target.value,
+              })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Number of Ranges"
+            placeholder="Number of Ranges"
+            value={inputValue}
+            onChange={handleInputChange}
+            min="0"
+          />
+          <CButton color="primary" onClick={addRows}>
+            Add Range
+          </CButton>
+        </CModalBody>
+        <CTableBody className="mb-3">{renderRows()}</CTableBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
-  const handleAdd = ()=>{
-    const newCondition = {
-      description:"jhjj",
-      uniqueCode:samplingRuleName.uniqueCode,
-      numberofRanges:samplingRuleName.numberofRanges,
-      updatedAt:"2020-2-20",
-      action:[],
-    }
-    onAdd(newCondition)
-  }
-
-  return (
-    <CModal
-      alignment="center"
-      visible={visible}
-      onClose={closeModal}
-      size="xl"
-    >
-      <CModalHeader>
-        <CModalTitle>Add Rule</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Sampling Rule Name"
-          placeholder="Sampling Rule Name"
-          value={samplingRuleName.samplingName}
-          onChange={(e)=>setSamplingRuleName({...samplingRuleName , samplingName:e.target.value})}
-        />
-
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Unique Code"
-          placeholder="Unique Code"
-          value={samplingRuleName.uniqueCode}
-          onChange={(e)=>setSamplingRuleName({...samplingRuleName , uniqueCode:e.target.value})}
-        />
-
-        <CFormInput
-          className="mb-3"
-          type="number"
-          label="Number of Ranges"
-          placeholder="Number of Ranges"
-          value={inputValue}
-          onChange={handleInputChange}
-          min="0"
-        />
-        <CButton color="primary" onClick={addRows}>
-          Add Range
-        </CButton>
-      </CModalBody>
-      <CTableBody className="mb-3">{renderRows()}</CTableBody>
-      <CModalFooter>
-        <CButton color="light" onClick={closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary" onClick={handleAdd}>Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
-const openEditModal = (rowData) => {
-  setEditModalData(rowData);
-};
-
-const closeEditModal = () => {
-  setEditModalData(null);
-};
-const handleEditSave = (updatedData) => {
-  const newData = data.map((item) =>
-    item.sno === updatedData.sno ? updatedData : item
-  );
-  setData(newData);
-  setEditModalData(null);
-};
-
-const EditModal = ({visible , closeModal,data, onSave}) => {
-  const [numRows, setNumRows] = useState(0);
-  const [inputValue, setInputValue] = useState(0);
-  const [formData, setFormData] = useState(data);
-
-  const handleInputChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 0) {
-      setInputValue(value);
-    }
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
   };
 
-  const addRows = () => {
-    setNumRows(inputValue);
+  const closeEditModal = () => {
+    setEditModalData(null);
   };
-  
-  useEffect(() => {
-    if(data){
-      setFormData(data);
-    }
-   
-  }, [data]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
   };
 
-  const handleSave = () => {
-    onSave(formData);
-  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
 
-  const renderRows = () => {
-    const rows = [];
-    for (let i = 0; i < numRows; i++) {
-      rows.push(
-        <CTableRow key={i}>
-          <CTableHeaderCell className="mb-3 m-2 flex justify-between itmes center gap-4" scope="row">
-            {i + 1}
-            <CFormInput className="border-1 border-black" placeholder="Lower"></CFormInput>
-            <CFormInput className="border-1 border-black" placeholder="Upper"></CFormInput>
-            <CFormInput className="border-1 border-black" placeholder="No. of Containers"></CFormInput>
-          </CTableHeaderCell>
-          {/* <CTableDataCell className="mb-3 m-2">
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const renderRows = () => {
+      const rows = [];
+      for (let i = 0; i < numRows; i++) {
+        rows.push(
+          <CTableRow key={i}>
+            <CTableHeaderCell
+              className="mb-3 m-2 flex justify-between itmes center gap-4"
+              scope="row"
+            >
+              {i + 1}
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Lower"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Upper"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="No. of Containers"
+              ></CFormInput>
+            </CTableHeaderCell>
+            {/* <CTableDataCell className="mb-3 m-2">
             Rack {i + 1}: <input type="text" />{" "}
           </CTableDataCell> */}
-        </CTableRow>
-      );
-    }
-    return rows;
+          </CTableRow>
+        );
+      }
+      return rows;
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Rule</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sampling Rule Name"
+            placeholder="Sampling Rule Name"
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            value={formData?.uniqueCode || ""}
+            onChange={handleChange}
+            name="uniqueCode"
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Number of Ranges"
+            placeholder="Number of Ranges"
+            value={inputValue}
+            onChange={handleInputChange}
+            min="0"
+          />
+          <CButton color="primary" onClick={addRows}>
+            Add Range
+          </CButton>
+        </CModalBody>
+        <CTableBody className="mb-3">{renderRows()}</CTableBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
-  return (
-    <CModal
-      alignment="center"
-      visible={visible}
-      onClose={closeModal}
-      size="xl"
-    >
-      <CModalHeader>
-        <CModalTitle>Add Rule</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-      <CFormInput
-        className="mb-3"
-        type="text"
-        label="Sampling Rule Name"
-        placeholder="Sampling Rule Name"
-      />
 
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Unique Code"
-          placeholder="Unique Code"
-          value={formData?.uniqueCode||""}
-          onChange={handleChange}
-          name="uniqueCode"
-        />
-
-        <CFormInput
-          className="mb-3"
-          type="number"
-          label="Number of Ranges"
-          placeholder="Number of Ranges"
-          value={inputValue}
-          onChange={handleInputChange}
-         min="0"
-        />
-        <CButton color="primary" onClick={addRows}>
-          Add Range
-        </CButton>
-      </CModalBody>
-      <CTableBody className="mb-3">{renderRows()}</CTableBody>
-      <CModalFooter>
-        <CButton color="light" onClick={closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary" onClick={handleSave}>Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 
 
 return (

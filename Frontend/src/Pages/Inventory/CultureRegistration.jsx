@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -12,7 +10,6 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import CultureRegistrationModal from "../Modals/CultureRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
@@ -91,13 +88,6 @@ const UsageRegistration = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
 
   useEffect(() => {
     const counts = {
@@ -115,8 +105,6 @@ const UsageRegistration = () => {
       else if (item.status === "APPROVED") counts.APPROVED++;
       else if (item.status === "REJECTED") counts.REJECTED++;
     });
-
-    setCardCounts(counts);
   }, [data]);
 
   const handleOpenModals = () => {
@@ -154,7 +142,7 @@ const UsageRegistration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       TemplateName: item["Template Name"] || "",
       TemplateDescription: item["Template Description"] || "",
       UniqueCode: item["Unique Code"] || "",
@@ -163,7 +151,7 @@ const UsageRegistration = () => {
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -217,10 +205,6 @@ const UsageRegistration = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
-  };
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
@@ -263,10 +247,7 @@ const UsageRegistration = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <CultureRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
+      <CultureRegistrationModal visible={isModalOpen} closeModal={closeModal} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -275,7 +256,13 @@ const UsageRegistration = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );

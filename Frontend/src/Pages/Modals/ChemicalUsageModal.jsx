@@ -31,7 +31,7 @@ const ChemicalUsageModal = (props) => {
         alignment="center"
         visible={props.visible}
         onClose={props.closeModal}
-        size="xl"
+        size="lg"
       >
         <CModalHeader>
           <CModalTitle>Add Chemicals</CModalTitle>
