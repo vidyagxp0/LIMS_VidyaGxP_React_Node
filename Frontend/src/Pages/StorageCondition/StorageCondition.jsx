@@ -305,7 +305,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="audit_trail.pdf" title="Audit Trail Data" />
+          <PDFDownload columns={columns} data={filteredData} fileName="Storage_Condition.pdf" title="Storage Condition Data" />
           <ATMButton
               text="Import"
               color="pink"

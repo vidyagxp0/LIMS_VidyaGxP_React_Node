@@ -33,6 +33,7 @@ import Table from "../../components/ATM components/Table/Table";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -1156,6 +1157,7 @@ function StabilityProtocol() {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Stability_Protocol.pdf" title="Stability Protocol Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add Protocol" color="blue" onClick={openModal} />
           </div>

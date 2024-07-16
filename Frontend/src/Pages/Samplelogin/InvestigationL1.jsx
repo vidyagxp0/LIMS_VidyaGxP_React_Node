@@ -23,6 +23,7 @@ import {
   CModalTitle,
   CRow,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -243,6 +244,7 @@ const InvestigationL1 = () => {
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="InvestigationL1.pdf" title="Investigation L1 Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             {/* <ATMButton text="Add investigation L1 In" color="blue" onClick={openModal} /> */}
           </div>

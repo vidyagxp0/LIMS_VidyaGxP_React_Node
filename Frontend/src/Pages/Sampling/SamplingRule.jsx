@@ -19,6 +19,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -423,70 +424,69 @@ const SamplingRule = () => {
     );
   };
 
-  return (
-    <>
-      <div className="m-5 mt-3 ">
-        <div className="main-head">
-          <h4 className="fw-bold">Sampling Rule</h4>
-        </div>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex space-x-4">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
-            <Dropdown
-              options={[
-                { value: "All", label: "All" },
-                { value: "Active", label: "Active" },
-                { value: "Inactive", label: "Inactive" },
-              ]}
-              value={statusFilter}
-              onChange={setStatusFilter}
-            />
-          </div>
-          <div className="float-right flex gap-4">
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Sampling Rule"
-              color="blue"
-              onClick={openModal}
-            />
-          </div>
-        </div>
-        <Table
-          columns={columns}
-          data={filteredData}
-          onDelete={handleDelete}
-          onCheckboxChange={handleCheckboxChange}
-          onViewDetails={onViewDetails}
-          openEditModal={openEditModal}
-        />
-      </div>
 
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          onAdd={addNewStorageCondition}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={initialData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-          onDataUpload={handleExcelDataUpload}
-        />
-      )}
-      {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-    </>
-  );
-};
+
+
+return (
+  <>
+    <div className="m-5 mt-3 ">
+      <div className="main-head">
+        <h4 className="fw-bold">Sampling Rule</h4>
+      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Sampling_Rule.pdf" title="Sampling Rule Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Sampling Rule"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onDelete={handleDelete}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
+      />
+    </div>
+
+    {isModalOpen && (
+      <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
+    )}
+    {isModalsOpen && (
+      <ImportModal
+        initialData={initialData}
+        isOpen={isModalsOpen}
+        onClose={handleCloseModals}
+        columns={columns}
+        onDataUpload={handleExcelDataUpload}
+      />
+    )}{editModalData && (
+      <EditModal
+        visible={Boolean(editModalData)}
+        closeModal={closeEditModal}
+        data={editModalData}
+        onSave={handleEditSave}
+      />
+    )}
+  </>
+)
+}
 
 export default SamplingRule;

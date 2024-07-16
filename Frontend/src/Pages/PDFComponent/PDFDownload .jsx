@@ -2,7 +2,7 @@ import React from "react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
-const PDFDownload = ({ columns, data, fileName = "data.pdf", title = "Data" }) => {
+const PDFDownload = ({ columns, data, fileName, title}) => {
   const handleDownload = () => {
     const doc = new jsPDF();
     doc.text(title, 20, 20);

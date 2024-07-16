@@ -22,6 +22,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -38,7 +39,7 @@ const initialData = [
     CategoryName: "Product 2",
     Description: "Description 2",
     AddedOn: "2024-06-02",
-    status: "Active",
+    status: "Inactive",
   },
 ];
 
@@ -182,6 +183,12 @@ const Registration = () => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
+  const filteredData = data.filter((row) => {
+    return (
+      row.CategoryName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
   const columns = [
     {
@@ -284,7 +291,7 @@ const Registration = () => {
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
-          <Dropdown
+        <Dropdown
             options={[
               { value: "All", label: "All" },
               { value: "Active", label: "Active" },
@@ -295,6 +302,7 @@ const Registration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Instrument_Category.pdf" title="Instrument Category Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Instrument Category"

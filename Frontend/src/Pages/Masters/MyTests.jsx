@@ -9,6 +9,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from '../Modals/importModal';
+import PDFDownload from '../PDFComponent/PDFDownload ';
 
 
 const initialData = [
@@ -218,6 +219,7 @@ function MyTests() {
          
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="My_Test.pdf" title="My Test Data" />
             <ATMButton 
             text="Import"
             color='pink'

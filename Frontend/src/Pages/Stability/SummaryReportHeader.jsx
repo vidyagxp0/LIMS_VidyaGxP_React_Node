@@ -23,6 +23,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 const initialData = [
   {
@@ -617,6 +618,7 @@ function SummaryReportHeader() {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Summary_Report_Header.pdf" title="Summary Report Header Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Summary Report"

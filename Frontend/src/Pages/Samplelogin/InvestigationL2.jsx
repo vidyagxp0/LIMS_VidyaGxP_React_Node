@@ -23,6 +23,7 @@ import {
   CModalTitle,
   CRow,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 const initialData = [
   {
     checkbox: false,
@@ -254,6 +255,7 @@ const InvestigationL2 = () => {
             />
           </div>
           <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="InvestigationL2.pdf" title="Investigation L2 Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             {/* <ATMButton text="Add investigation L2 In" color="blue" onClick={openModal} /> */}
           </div>

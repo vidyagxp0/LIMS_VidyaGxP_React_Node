@@ -21,6 +21,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -405,6 +406,7 @@ const InstrumentModule = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Instrument_Module.pdf" title="Instrument Module Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Instrument Category"
