@@ -15,18 +15,11 @@ const connectToDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("Successfully connected to DB");
+    return sequelize; // Return the Sequelize instance after successful authentication
   } catch (e) {
-    console.log(e);
+    console.error("Unable to connect to the database:", e);
+    throw e; // Propagate the error upwards if needed
   }
 };
-
-sequelize
-  .sync({ alter: true })
-  .then(() => {
-    console.log("Tables synchronized");
-  })
-  .catch((error) => {
-    console.error("Error synchronizing tables:", error);
-  });
 
 module.exports = { sequelize, connectToDB };

@@ -68,6 +68,7 @@ import PlantsModal from "../Modals/PlantsModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 
+
 const initialData = [
   {
     checkbox: false,
@@ -87,71 +88,7 @@ const initialData = [
     RegisterOn: "03-07-2024",
     status: "Inactive",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    PlantCode: "Client 3",
-    PlantName: "client3@example.com",
-    Address: "Address 3",
-    RegisterOn: "04-07-2024",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    PlantCode: "Client 4",
-    PlantName: "client4@example.com",
-    Address: "Address 4",
-    RegisterOn: "05-07-2024",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    PlantCode: "Client 5",
-    PlantName: "client5@example.com",
-    Address: "Address 5",
-    RegisterOn: "06-07-2024",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    PlantCode: "Client 6",
-    PlantName: "client6@example.com",
-    Address: "Address 6",
-    RegisterOn: "07-07-2024",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    PlantCode: "Client 7",
-    PlantName: "client7@example.com",
-    Address: "Address 7",
-    RegisterOn: "08-07-2024",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    PlantCode: "Client 8",
-    PlantName: "client8@example.com",
-    Address: "Address 8",
-    RegisterOn: "09-07-2024",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    PlantCode: "Client 9",
-    PlantName: "client9@example.com",
-    Address: "Address 9",
-    RegisterOn: "10-07-2024",
-    status: "Active",
-  },
-];
-
+]
 
 
 
