@@ -46,7 +46,7 @@ const MediaOnboardingModal = (_props) => {
           <CFormInput type="text" label="UOM" placeholder="" />
           <CForm>
             <CFormLabel>Mode of Prepration</CFormLabel>
-            <div>
+            <div className="flex gap-3">
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
@@ -64,7 +64,7 @@ const MediaOnboardingModal = (_props) => {
             </div>
           </CForm>
           <CFormInput
-            type="text"
+            type="file"
             label="Refrence Document if Any"
             placeholder="choose file"
           />
