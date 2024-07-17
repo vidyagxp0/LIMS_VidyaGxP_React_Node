@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -24,6 +24,29 @@ const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
     comment: "",
     status: "",
   });
+
+  const resetForm = () => {
+    setUsagedata({
+      InstrumentID: "",
+    InstrumentCategory: "",
+    UsageCode: "",
+    ProductName: "",
+    ARNO: "",
+    UsedFor: "",
+    UsedBy: "",
+    UsedFrom: "",
+    UsedTo: "",
+    comment: "",
+    status: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
+
   const handleInputChange = (field, value) => {
     const updatedData = { ...usageData, [field]: value };
     setUsagedata(updatedData);

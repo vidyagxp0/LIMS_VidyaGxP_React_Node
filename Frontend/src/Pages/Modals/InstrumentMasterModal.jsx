@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCol,
@@ -57,6 +57,35 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
     software: "",
     description: "",
   });
+
+  const resetForm = () => {
+    setInstrumentData({
+      Category: "",
+      instrumentCategoryDescription: "",
+      Instrument: "",
+      InstrumentId: "",
+      Made: "",
+      Model: "",
+      fields: [],
+      manufacturerSerialNo: "",
+      capacitySize: "",
+      equipNo: "",
+      InstalledAt: "",
+      installedOn: "",
+      warrantyExpiresOn: "",
+      suppliedBy: "",
+      containsModule: "",
+      sopNo: "",
+      software: "",
+      description: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   const handleInputChange = (field, value) => {
     const updatedData = { ...instrumentData, [field]: value };

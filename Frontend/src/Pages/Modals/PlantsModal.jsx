@@ -7,7 +7,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const PlantsModal = ({ visible, closeModal, handleSubmit }) => {
   const [plantData, setPlantData] = useState({
@@ -15,6 +15,19 @@ const PlantsModal = ({ visible, closeModal, handleSubmit }) => {
     PlantCode: "",
     Address: "",
   });
+  const resetForm = () => {
+    setPlantData({
+      PlantName: "",
+      PlantCode: "",
+      Address: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   const handleInputChange = (field, value) => {
     const updatedData = { ...plantData, [field]: value };

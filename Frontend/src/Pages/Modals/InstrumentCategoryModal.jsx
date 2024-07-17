@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCol,
@@ -22,6 +22,20 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
     Description: " ",
     AddedOn: " ",
   });
+
+  const resetForm = () => {
+    setInstrumentCategoryData({
+      CategoryName: " ",
+      Description: " ",
+      AddedOn: " ",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   const handleInputChange = (field, value) => {
     const updatedData = { ...instrumentCategoryData, [field]: value };

@@ -8,15 +8,31 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 const VendorModal = ({ visible, closeModal, handleSubmit }) => {
   const [vendorData, setVendorData] = useState({
-    ProductName: [],
+    productName: [],
     UniqueCode: "",
-    VendorName: [],
+    vendorName: [],
     QualificationCriteria: "",
     Comments: "",
   });
+
+  const resetForm = () => {
+    setVendorData({
+      productName: [],
+      UniqueCode: "",
+      vendorName: [],
+      QualificationCriteria: "",
+      Comments: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   const handleInputChange = (field, value) => {
     setVendorData((prevData) => ({ ...prevData, [field]: value }));
@@ -39,7 +55,7 @@ const VendorModal = ({ visible, closeModal, handleSubmit }) => {
         <label>Product/Material Name</label>
         <CFormSelect
           className="mb-3"
-          name="ProductName"
+          name="productName"
           placeholder="Select product"
           options={[
             { value: "Tadalafil", label: "Tadalafil" },
@@ -49,8 +65,8 @@ const VendorModal = ({ visible, closeModal, handleSubmit }) => {
               label: "Diclofenac Sodium (BromineFree)",
             },
           ]}
-          value={vendorData.ProductName}
-          onChange={(e) => handleInputChange("ProductName", e.target.value)}
+          value={vendorData.productName}
+          onChange={(e) => handleInputChange("productName", e.target.value)}
         />
         <CFormInput
           type="text"
@@ -64,7 +80,7 @@ const VendorModal = ({ visible, closeModal, handleSubmit }) => {
         <label>Vendor Name</label>
         <CFormSelect
           className="mb-3"
-          name="VendorName"
+          name="vendorName"
           placeholder="Select vendor"
           options={[
             { value: "Aavis Pharmaceuticals", label: "Aavis Pharmaceuticals" },
@@ -74,8 +90,8 @@ const VendorModal = ({ visible, closeModal, handleSubmit }) => {
               label: "Diclofenac Sodium (BromineFree)",
             },
           ]}
-          value={vendorData.VendorName}
-          onChange={(e) => handleInputChange("VendorName", e.target.value)}
+          value={vendorData.vendorName}
+          onChange={(e) => handleInputChange("vendorName", e.target.value)}
         />
         <CFormInput
           type="text"
