@@ -14,6 +14,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import FunctionalGroupingModal from "../Modals/FunctionalGroupingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 
 const initialData = [
@@ -34,60 +35,6 @@ const initialData = [
     TestTechniques: "City B",
     InitiatedAt: "State B",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    GroupName: "Associate 3",
-    GroupDescription: "BA-003",
-    TestTechniques: "City C",
-    InitiatedAt: "State C",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    GroupName: "Associate 4",
-    GroupDescription: "BA-004",
-    TestTechniques: "City D",
-    InitiatedAt: "State D",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    GroupName: "Associate 5",
-    GroupDescription: "BA-005",
-    TestTechniques: "City E",
-    InitiatedAt: "State E",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    GroupName: "Associate 6",
-    GroupDescription: "BA-006",
-    TestTechniques: "City F",
-    InitiatedAt: "State F",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    GroupName: "Associate 7",
-    GroupDescription: "BA-007",
-    TestTechniques: "City G",
-    InitiatedAt: "State G",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    GroupName: "Associate 8",
-    GroupDescription: "BA-008",
-    TestTechniques: "City H",
-    InitiatedAt: "State H",
-    status: "REINITIATED",
   },
 ];
 
@@ -285,6 +232,7 @@ const FuctionalGrouping = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Functional_Grouping.pdf" title="Functional Grouping Data" />
         <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Grouping" color="blue" onClick={openModal} />
