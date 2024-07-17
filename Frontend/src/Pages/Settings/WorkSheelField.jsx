@@ -21,80 +21,35 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import WorkSheetFieldModal from "../Modals/WorkSheetFieldModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    WorksheetField: "BA-001",
-    SampleTypeName: "Associate 1",
-    Description: "City A",
-    AddedOn: "State A",
+    worksheetField: "BA-001",
+    sampleTypeName: "Associate 1",
+    description: "City A",
+    addedOn: "State A",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    WorksheetField: "BA-002",
-    SampleTypeName: "Associate 2",
-    Description: "City B",
-    AddedOn: "State B",
+    worksheetField: "BA-002",
+    sampleTypeName: "Associate 2",
+    description: "City B",
+    addedOn: "State B",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    WorksheetField: "BA-003",
-    SampleTypeName: "Associate 3",
-    Description: "City C",
-    AddedOn: "State C",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    WorksheetField: "BA-004",
-    SampleTypeName: "Associate 4",
-    Description: "City D",
-    AddedOn: "State D",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    WorksheetField: "BA-005",
-    SampleTypeName: "Associate 5",
-    Description: "City E",
-    AddedOn: "State E",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    WorksheetField: "BA-006",
-    SampleTypeName: "Associate 6",
-    Description: "City F",
-    AddedOn: "State F",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    WorksheetField: "BA-007",
-    SampleTypeName: "Associate 7",
-    Description: "City G",
-    AddedOn: "State G",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    WorksheetField: "BA-008",
-    SampleTypeName: "Associate 8",
-    Description: "City H",
-    AddedOn: "State H",
-    status: "REINITIATED",
   },
 ];
 
@@ -112,6 +67,100 @@ const WorkSheetField = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+          <CModalHeader>
+            <CModalTitle>Add Worksheet Fields</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              type="text"
+              label="Name"
+              placeholder="WorkSheet Field Name "
+              value={formData?.sampleTypeName || ""}
+              name="sampleTypeName"
+              onChange={handleChange}
+            />
+
+            <CFormSelect
+              type="text"
+              label="Binds To"
+              placeholder="Select..."
+              options={[
+                "Select...",
+                { label: "HCL" },
+                { label: "Hydrochrolic Acid" },
+                { label: "Petrochemical" },
+                { label: "Initial Product" },
+              ]}
+              name="bindsTo"
+              value={formData?.bindsTo || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="description"
+              placeholder="description"
+              value={formData?.description || ""}
+              name="description"
+              onChange={handleChange}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Add Field
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -157,7 +206,7 @@ const WorkSheetField = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.SampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.description.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -170,18 +219,18 @@ const WorkSheetField = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      WorksheetField: item["Worksheet Field"] || "",
-      SampleTypeName: item["Sample_type Name"] || "",
-      Description: item["Description"] || "",
-      AddedOn: item["Added On"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      worksheetField: item["Worksheet Field"] || "",
+      sampleTypeName: item["Sample_type Name"] || "",
+      description: item["description"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -189,10 +238,10 @@ const WorkSheetField = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Worksheet Field", accessor: "WorksheetField" },
-    { header: "Sample_type Name", accessor: "SampleTypeName" },
-    { header: "Description", accessor: "Description" },
-    { header: "Added On", accessor: "AddedOn" },
+    { header: "Worksheet Field", accessor: "worksheetField" },
+    { header: "Sample_type Name", accessor: "sampleTypeName" },
+    { header: "description", accessor: "description" },
+    { header: "Added On", accessor: "addedOn" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -217,6 +266,44 @@ const WorkSheetField = () => {
       ),
     },
   ];
+
+  const generateRandomSymbolCode = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "SYM-";
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return result;
+  };
+
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          sampleTypeName: requalification.sampleTypeName,
+          worksheetField: generateRandomSymbolCode(),
+          bindsTo: requalification.bindsTo,
+          description: requalification.description,
+          addedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -307,8 +394,13 @@ const WorkSheetField = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
-      <WorkSheetFieldModal visible={isModalOpen} closeModal={closeModal} />
+      <WorkSheetFieldModal
+        visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
+        closeModal={closeModal}
+      />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -322,6 +414,22 @@ const WorkSheetField = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

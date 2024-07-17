@@ -7,7 +7,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ServiceProviderModal = ({ visible, closeModal, handleSubmit }) => {
   const [providerData, setProviderData] = useState({
@@ -39,6 +39,33 @@ const ServiceProviderModal = ({ visible, closeModal, handleSubmit }) => {
     handleSubmit({ ...providerData });
     closeModal();
   };
+
+  const resetForm = () => {
+    setProviderData({
+      serviceProviderName: "",
+      uniqueCode: "",
+      referenceDocuments: "",
+      validUpto: "",
+      serviceType: "",
+      contactPerson: "",
+      addressLine1: "",
+      addressLine2: "",
+      addressLine3: "",
+      city: "",
+      state: "",
+      country: "",
+      zip: "",
+      phone: "",
+      fax: "",
+      email: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   return (
     <div>

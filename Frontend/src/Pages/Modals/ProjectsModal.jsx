@@ -7,7 +7,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ProjectsModal = ({ visible, closeModal, handleSubmit }) => {
   const [projectData, setProjectData] = useState({
@@ -15,6 +15,22 @@ const ProjectsModal = ({ visible, closeModal, handleSubmit }) => {
     uniqueCode: "",
     description: "",
   });
+
+  const resetForm = () => {
+    setProjectData({
+      projectsName: "",
+      uniqueCode: "",
+      description: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
+
+
 
   const handleInputChange = (field, value) => {
     const updatedData = { ...projectData, [field]: value };

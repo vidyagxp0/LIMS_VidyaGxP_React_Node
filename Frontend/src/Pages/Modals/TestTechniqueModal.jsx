@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CModal,
   CModalHeader,
@@ -27,6 +27,20 @@ const TestTechniqueModal = ({ visible, closeModal, handleSubmit }) => {
     handleSubmit({ ...techniqueData });
     closeModal();
   };
+  const resetForm = () => {
+    setTechniqueData({
+      techniqueName: "",
+      techniqueType: "",
+      techniqueDescription: "",
+      addedOn: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   return (
     <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
@@ -85,7 +99,7 @@ const TestTechniqueModal = ({ visible, closeModal, handleSubmit }) => {
         <CButton color="light" onClick={closeModal}>
           Back
         </CButton>
-        <CButton className="bg-info text-white" >
+        <CButton className="bg-info text-white" onClick={handleFormSubmit}>
           Submit
         </CButton>
       </CModalFooter>
