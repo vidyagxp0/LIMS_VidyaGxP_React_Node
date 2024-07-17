@@ -8,7 +8,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const WosTestModal = ({ visible, closeModal, handleSubmit }) => {
   const [wosData, setWosData] = useState({
@@ -22,6 +22,27 @@ const WosTestModal = ({ visible, closeModal, handleSubmit }) => {
     testTechnique: [],
     testType: [],
   });
+
+  const resetForm = () => {
+    setWosData({
+      specificationId: [],
+      productName: "",
+      testName: "",
+      testCode: "",
+      methodNo: "",
+      copyTestFrom: [],
+      testCategory: [],
+      testTechnique: [],
+      testType: [],
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
+
   const handleInputChange = (field, value) => {
     const updatedData = { ...wosData, [field]: value };
     setWosData(updatedData);

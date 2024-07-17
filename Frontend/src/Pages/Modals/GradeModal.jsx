@@ -7,7 +7,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const GradeModal = ({ visible, closeModal, handleSubmit }) => {
   const [gradeData, setGradeData] = useState({
@@ -16,6 +16,21 @@ const GradeModal = ({ visible, closeModal, handleSubmit }) => {
     gradeDescription: "",
     gradeColor: "",
   });
+  const resetForm = () => {
+    setGradeData({
+      gradeName: "",
+      gradeValue: "",
+      gradeDescription: "",
+      gradeColor: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
+
   const handleInputChange = (field, value) => {
     const updatedData = { ...gradeData, [field]: value };
     setGradeData(updatedData);
@@ -45,7 +60,9 @@ const GradeModal = ({ visible, closeModal, handleSubmit }) => {
             label="Name"
             placeholder="Name"
             value={gradeData.gradeName}
-            onChange={(e)=>{handleInputChange("gradeName", e.target.value)}}
+            onChange={(e) => {
+              handleInputChange("gradeName", e.target.value);
+            }}
             required
           />
         </CModalBody>

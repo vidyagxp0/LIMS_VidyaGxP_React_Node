@@ -7,13 +7,26 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const TypeOfSectionModal = ({ visible, closeModal, handleSubmit }) => {
   const [sectionData, setSectionData] = useState({
     typeOfSection: "",
     prefix: "",
   });
+
+  const resetForm = () => {
+    setSectionData({
+      typeOfSection: "",
+      prefix: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   const handleInputChange = (field, value) => {
     const updatedData = { ...sectionData, [field]: value };

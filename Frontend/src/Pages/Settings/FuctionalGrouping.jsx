@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -16,24 +15,34 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import { TiArrowLeftThick, TiArrowRightThick } from "react-icons/ti";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    GroupName: "Associate 1",
-    GroupDescription: "BA-001",
-    TestTechniques: "City A",
-    InitiatedAt: "State A",
+    groupName: "Associate 1",
+    groupDescription: "BA-001",
+    availableTechnologies: "City A",
+    initiatedAt: "State A",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    GroupName: "Associate 2",
-    GroupDescription: "BA-002",
-    TestTechniques: "City B",
-    InitiatedAt: "State B",
+    groupName: "Associate 2",
+    groupDescription: "BA-002",
+    availableTechnologies: "City B",
+    initiatedAt: "State B",
     status: "INITIATED",
   },
 ];
@@ -53,6 +62,231 @@ const FuctionalGrouping = () => {
     REJECTED: 0,
   });
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    const [leftArray, setLeftArray] = useState(["Description", "CAPA"]);
+    const [rightArray, setRightArray] = useState([]);
+
+    const moveRight = () => {
+      let leftElement = document.getElementsByClassName("check-left");
+      for (let index = 0; index < leftElement.length; index++) {
+        if (leftElement[index].checked) {
+          let data = leftElement[index].value;
+          let left = leftArray.filter((value) => value !== data);
+          setLeftArray(left);
+          rightArray.push(data);
+          setRightArray([...rightArray]);
+
+          // Update availableTechnologies in functionalData
+          formData((prevData) => ({
+            ...prevData,
+            availableTechnologies: [...prevData.availableTechnologies, data],
+          }));
+          break; // Important
+        }
+      }
+    };
+
+    const moveLeft = () => {
+      let rightElement = document.getElementsByClassName("check-right");
+      for (let index = 0; index < rightElement.length; index++) {
+        if (rightElement[index].checked) {
+          let data = rightElement[index].value;
+          let right = rightArray.filter((value) => value !== data);
+          setRightArray(right);
+          leftArray.push(data);
+          setLeftArray([...leftArray]);
+
+          // Update availableTechnologies in functionalData
+          formData((prevData) => ({
+            ...prevData,
+            availableTechnologies: prevData.availableTechnologies.filter(
+              (value) => value !== data
+            ),
+          }));
+          break;
+        }
+      }
+    };
+    const clicked = (event) => {
+      let checkboxes = document.querySelectorAll(".check-left, .check-right");
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      let allLabels = document.querySelectorAll(".labels");
+      allLabels.forEach((label) => {
+        label.classList.remove("clicked");
+      });
+
+      let label = event.target;
+      label.classList.add("clicked");
+      label.checked = true;
+    };
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Functional Groupings</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add information and add new Functional Grouping</p>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Group Name"
+              placeholder="Group Name"
+              name="groupName"
+              value={formData?.groupName || ""}
+              onChange={handleChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Group Description"
+              placeholder="Group Description"
+              name="groupDescription"
+              value={formData?.groupDescription || ""}
+              onChange={handleChange}
+              required
+            />
+            <label htmlFor="drag-drop" className="mb-2">
+              Available Technologies
+            </label>
+            <div className="d-flex" id="drag-drop">
+              <div className="w-100 m-3">
+                <h5>Available</h5>
+                <div
+                  className="shadow p-2 rounded border overflow-y-auto"
+                  style={{ height: "350px" }}
+                >
+                  <ul className="list-group">
+                    {leftArray.map((data) => (
+                      <li
+                        key={data}
+                        className="bg-light rounded my-1 px-3 py-1 text-dark"
+                      >
+                        <input
+                          type="checkbox"
+                          value={data}
+                          id={data}
+                          className="check-left d-none"
+                        />
+                        <label
+                          className="labels cursor-pointer bg-light"
+                          htmlFor={data}
+                          onClick={clicked}
+                        >
+                          {data}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="m-auto justify-content-center">
+                <button
+                  className="btn shadow py-1 px-3 mt-5 text-warning fs-4"
+                  onClick={moveRight}
+                >
+                  <TiArrowRightThick />
+                </button>
+                <button
+                  className="btn shadow py-1 px-3 mt-2 text-warning fs-4"
+                  onClick={moveLeft}
+                >
+                  <TiArrowLeftThick />
+                </button>
+              </div>
+              <div className="w-100 m-3">
+                <h5>Selected</h5>
+                <div
+                  className="shadow p-2 rounded border overflow-y-auto"
+                  style={{ height: "350px" }}
+                >
+                  <ul className="list-group">
+                    {rightArray.map((data) => (
+                      <li
+                        key={data}
+                        className="bg-light rounded my-1 px-3 py-1 text-dark"
+                      >
+                        <input
+                          type="checkbox"
+                          value={data}
+                          id={data}
+                          className="check-right d-none"
+                        />
+                        <label
+                          className="labels cursor-pointer bg-light"
+                          htmlFor={data}
+                          onClick={clicked}
+                        >
+                          {data}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   const handleOpenModals = () => {
@@ -62,7 +296,6 @@ const FuctionalGrouping = () => {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-
 
   useEffect(() => {
     const counts = {
@@ -98,7 +331,7 @@ const FuctionalGrouping = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.GroupName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.groupName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -114,10 +347,10 @@ const FuctionalGrouping = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Group Name", accessor: "GroupName" },
-    { header: "Group Description", accessor: "GroupDescription" },
-    { header: "Test Techniques", accessor: "TestTechniques" },
-    { header: "Initiated At", accessor: "InitiatedAt" },
+    { header: "Group Name", accessor: "groupName" },
+    { header: "Group Description", accessor: "groupDescription" },
+    { header: "Test Techniques", accessor: "availableTechnologies" },
+    { header: "Initiated At", accessor: "initiatedAt" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -145,18 +378,44 @@ const FuctionalGrouping = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      GroupName: item["Group Name"] || "",
-      GroupDescription: item["Group Description"] || "",
-      TestTechniques: item["Test Techniques"] || "",
-      InitiatedAt: item["Initiated At"] || "",
-        status: item["Status"] || "",
-      }));
+      sno: index + 1,
+      groupName: item["Group Name"] || "",
+      groupDescription: item["Group Description"] || "",
+      availableTechnologies: item["Test Techniques"] || "",
+      initiatedAt: item["Initiated At"] || "",
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          groupName: requalification.groupName,
+          groupDescription: requalification.groupDescription,
+          capa: requalification.capa,
+          availableTechnologies: requalification.availableTechnologies,
+          initiatedAt: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -244,9 +503,11 @@ const FuctionalGrouping = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <FunctionalGroupingModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -256,12 +517,28 @@ const FuctionalGrouping = () => {
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>
