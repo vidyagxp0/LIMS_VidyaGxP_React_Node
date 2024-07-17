@@ -11,22 +11,96 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-const InternalRegistrationModal = (_props) => {
-  const [lotType, setLotType] = useState("");
+const InternalRegistrationModal = ({ visible, closeModal, handleSubmit }) => {
+  const [internalData, setInternalData] = useState({
+    lotType: "",
+    sampleLogin: "",
+    productMaterial: "",
+    wsarNo: "",
+    sampleReferenceNo: "",
+    containerType: "",
+    storageCondition: "",
+    wsBatchQuantity: "",
+    availableQuantity: "",
+    lotQuantity: "",
+    wsValidateOn: "",
+    lotValidUpto: "",
+    usageType: "",
+    directionOfUsage: "",
+    sequence: "",
+    noOfPurities: "",
+    uom: "",
+    purityDetails: [{ sno: 1, purity: "", valueUom: "" }],
+    additionalPuritiesInformation: "",
+    standardType: "",
+    source: "",
+    comments: "",
+    containerValidityPeriod: "",
+    containerStartingNo: "",
+    minNoOfContainersForAlert: "",
+    noOfContainersPrepared: "",
+    containerDetails: [{ sno: 1, containerNo: "", quantityInContainers: "" }],
+    totalQuantityInContainers: "",
+  });
 
-  const handleLotTypeChange = (event) => {
-    setLotType(event.target.value);
+  const resetForm = () => {
+    setInternalData({
+      lotType: "",
+      sampleLogin: "",
+      productMaterial: "",
+      wsarNo: "",
+      sampleReferenceNo: "",
+      containerType: "",
+      storageCondition: "",
+      wsBatchQuantity: "",
+      availableQuantity: "",
+      lotQuantity: "",
+      wsValidateOn: "",
+      lotValidUpto: "",
+      usageType: "",
+      directionOfUsage: "",
+      noOfPurities: "",
+      uom: "",
+      purityDetails: [{ sno: 1, purity: "", valueUom: "" }],
+      additionalPuritiesInformation: "",
+      standardType: "",
+      source: "",
+      comments: "",
+      containerValidityPeriod: "",
+      containerStartingNo: "",
+      minNoOfContainersForAlert: "",
+      noOfContainersPrepared: "",
+      containerDetails: [{ sno: 1, containerNo: "", quantityInContainers: "" }],
+      totalQuantityInContainers: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
+
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...internalData, [field]: value };
+    setInternalData(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...internalData });
+    closeModal();
   };
 
   return (
     <div>
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="lg"
       >
         <CModalHeader>
@@ -36,20 +110,24 @@ const InternalRegistrationModal = (_props) => {
           <p>Add Information and add new Internal</p>
           <CFormSelect
             label="Lot Type"
-            value={lotType}
-            onChange={handleLotTypeChange}
+            value={internalData.lotType}
+            onChange={(e) => handleInputChange("lotType", e.target.value)}
             className="mb-3"
             options={[
-              { value: "Select...", label: "Select..." },
+              { value: "", label: "Select..." },
               { value: "Internal", label: "Internal" },
               { value: "External", label: "External" },
             ]}
           />
-          {lotType === "Internal" && (
+          {internalData.lotType === "Internal" && (
             <>
               <CFormSelect
                 label="Sample Login"
                 className="mb-3"
+                value={internalData.sampleLogin}
+                onChange={(e) =>
+                  handleInputChange("sampleLogin", e.target.value)
+                }
                 options={[
                   { value: "Option 1", label: "Option 1" },
                   { value: "Option 2", label: "Option 2" },
@@ -64,24 +142,34 @@ const InternalRegistrationModal = (_props) => {
                 placeholder="Product/Material"
                 className="custom-placeholder mb-3"
                 disabled
+                value={internalData.productMaterial}
+                onChange={(e) => {
+                  handleInputChange("productMaterial", e.target.value);
+                }}
               />
             </>
           )}
-          {lotType === "External" && (
+          {internalData.lotType === "External" && (
             <>
               <CFormInput
                 type="text"
                 label="W.S.A.R No."
                 className="custom-placeholder mb-3"
                 placeholder="AR No."
+                value={internalData.wsarNo}
+                onChange={(e) => handleInputChange("wsarNo", e.target.value)}
               />
             </>
           )}
           <CFormInput
             type="text"
-            label="Sample Refrence No."
-            placeholder="Sample Refrence No."
+            label="Sample Reference No."
+            placeholder="Sample Reference No."
             className="custom-placeholder mb-3"
+            value={internalData.sampleReferenceNo}
+            onChange={(e) =>
+              handleInputChange("sampleReferenceNo", e.target.value)
+            }
           />
           <CForm className="mb-3">
             <CFormLabel>Container Type</CFormLabel>
@@ -89,16 +177,24 @@ const InternalRegistrationModal = (_props) => {
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
-                id="acceptRadio"
+                id="bottleRadio"
                 label="Bottle"
-                value="accept"
+                value="Bottle"
+                checked={internalData.containerType === "Bottle"}
+                onChange={(e) =>
+                  handleInputChange("containerType", e.target.value)
+                }
               />
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
-                id="rejectRadio"
+                id="vialRadio"
                 label="Vial"
-                value="reject"
+                value="Vial"
+                checked={internalData.containerType === "Vial"}
+                onChange={(e) =>
+                  handleInputChange("containerType", e.target.value)
+                }
               />
             </div>
           </CForm>
@@ -107,34 +203,52 @@ const InternalRegistrationModal = (_props) => {
             label="Storage Condition"
             placeholder="Storage Condition"
             className="custom-placeholder mb-3"
+            value={internalData.storageCondition}
+            onChange={(e) =>
+              handleInputChange("storageCondition", e.target.value)
+            }
           />
           <CFormInput
             type="number"
             label="W.s Batch Quantity"
             placeholder="W.s Batch Quantity"
             className="custom-placeholder mb-3"
+            value={internalData.wsBatchQuantity}
+            onChange={(e) =>
+              handleInputChange("wsBatchQuantity", e.target.value)
+            }
           />
           <CFormInput
             type="text"
             label="Available Quantity for Distribution"
             placeholder="Available Quantity"
             className="custom-placeholder mb-3"
+            value={internalData.availableQuantity}
+            onChange={(e) =>
+              handleInputChange("availableQuantity", e.target.value)
+            }
           />
           <CFormInput
             type="text"
             label="Lot Quantity for Distribution"
             placeholder="Lot Quantity"
             className="custom-placeholder mb-3"
+            value={internalData.lotQuantity}
+            onChange={(e) => handleInputChange("lotQuantity", e.target.value)}
           />
           <CFormInput
             type="date"
             label="W.s Validate On"
             className="custom-placeholder mb-3"
+            value={internalData.wsValidateOn}
+            onChange={(e) => handleInputChange("wsValidateOn", e.target.value)}
           />
           <CFormInput
             type="date"
             label="Lot Valid Upto"
             className="custom-placeholder mb-3"
+            value={internalData.lotValidUpto}
+            onChange={(e) => handleInputChange("lotValidUpto", e.target.value)}
           />
           <CFormLabel>Usage Type</CFormLabel>
           <div className="flex gap-5">
@@ -143,14 +257,18 @@ const InternalRegistrationModal = (_props) => {
               name="usageRadio"
               id="singleRadio"
               label="Single"
-              value="single"
+              value="Single"
+              checked={internalData.usageType === "Single"}
+              onChange={(e) => handleInputChange("usageType", e.target.value)}
             />
             <CFormCheck
               type="radio"
               name="usageRadio"
               id="multipleRadio"
               label="Multiple"
-              value="multiple"
+              value="Multiple"
+              checked={internalData.usageType === "Multiple"}
+              onChange={(e) => handleInputChange("usageType", e.target.value)}
             />
           </div>
           <CFormInput
@@ -158,6 +276,10 @@ const InternalRegistrationModal = (_props) => {
             label="Direction of Usage"
             placeholder="Direction of Usage"
             className="custom-placeholder mb-3"
+            value={internalData.directionOfUsage}
+            onChange={(e) =>
+              handleInputChange("directionOfUsage", e.target.value)
+            }
           />
           <div className="flex gap-3">
             <CFormInput
@@ -165,163 +287,186 @@ const InternalRegistrationModal = (_props) => {
               label="No. Of Purities"
               placeholder="1"
               className="custom-placeholder mb-3"
+              value={internalData.noOfPurities}
+              onChange={(e) =>
+                handleInputChange("noOfPurities", e.target.value)
+              }
             />
             <span className="mt-2 w-10">
               <IoIosAddCircleOutline />
             </span>
           </div>
           <CFormSelect
-            type="number"
             label="UOM"
-            placeholder="Select..."
-            className="custom-placeholder mb-3"
+            className="mb-3"
+            value={internalData.uom}
+            onChange={(e) => handleInputChange("uom", e.target.value)}
+            options={[
+              { value: "Option 1", label: "Option 1" },
+              { value: "Option 2", label: "Option 2" },
+              { value: "Option 3", label: "Option 3" },
+              { value: "Option 4", label: "Option 4" },
+              { value: "Option 5", label: "Option 5" },
+            ]}
           />
-          <div className="container mt-5 mb-3">
-            <table className="table table-bordered">
-              <thead className="thead-light">
-                <tr>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Sno.
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Purity
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Value-UOM
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <select className="form-control">
-                      <option>Acids</option>
-                      <option>Bases</option>
-                      <option>Salts</option>
-                      <option>Solvents</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="flex gap-3">
+            <CFormInput
+              type="number"
+              label="S.No"
+              className="custom-placeholder mb-3"
+              value={internalData.purityDetails[0].sno}
+              onChange={(e) => {
+                const updatedPurityDetails = [...internalData.purityDetails];
+                updatedPurityDetails[0].sno = e.target.value;
+                handleInputChange("purityDetails", updatedPurityDetails);
+              }}
+            />
+            <CFormInput
+              type="text"
+              label="Purity"
+              placeholder="Purity"
+              className="custom-placeholder mb-3"
+              value={internalData.purityDetails[0].purity}
+              onChange={(e) => {
+                const updatedPurityDetails = [...internalData.purityDetails];
+                updatedPurityDetails[0].purity = e.target.value;
+                handleInputChange("purityDetails", updatedPurityDetails);
+              }}
+            />
+            <CFormInput
+              type="text"
+              label="Value/UOM"
+              placeholder="Value/UOM"
+              className="custom-placeholder mb-3"
+              value={internalData.purityDetails[0].valueUom}
+              onChange={(e) => {
+                const updatedPurityDetails = [...internalData.purityDetails];
+                updatedPurityDetails[0].valueUom = e.target.value;
+                handleInputChange("purityDetails", updatedPurityDetails);
+              }}
+            />
           </div>
           <CFormInput
-            type="number"
+            type="text"
             label="Additional Purities Information"
-            placeholder="Additional Information"
+            placeholder="Additional Purities Information"
             className="custom-placeholder mb-3"
+            value={internalData.additionalPuritiesInformation}
+            onChange={(e) =>
+              handleInputChange("additionalPuritiesInformation", e.target.value)
+            }
           />
-          <CFormInput
-            type="number"
+          <CFormSelect
             label="Standard Type"
-            placeholder="Standard Type"
-            className="custom-placeholder mb-3"
+            className="mb-3"
+            value={internalData.standardType}
+            onChange={(e) => handleInputChange("standardType", e.target.value)}
+            options={[
+              { value: "Option 1", label: "Option 1" },
+              { value: "Option 2", label: "Option 2" },
+              { value: "Option 3", label: "Option 3" },
+              { value: "Option 4", label: "Option 4" },
+              { value: "Option 5", label: "Option 5" },
+            ]}
           />
           <CFormInput
-            type="number"
+            type="text"
             label="Source"
             placeholder="Source"
-            className="mb-3"
+            className="custom-placeholder mb-3"
+            value={internalData.source}
+            onChange={(e) => handleInputChange("source", e.target.value)}
           />
           <CFormInput
-            type="number"
+            type="text"
             label="Comments"
             placeholder="Comments"
-            className="mb-3"
+            className="custom-placeholder mb-3"
+            value={internalData.comments}
+            onChange={(e) => handleInputChange("comments", e.target.value)}
           />
-          <div className="flex gap-2 mt-4">
+          <CFormInput
+            type="text"
+            label="Container Validity Period"
+            placeholder="Container Validity Period"
+            className="custom-placeholder mb-3"
+            value={internalData.containerValidityPeriod}
+            onChange={(e) =>
+              handleInputChange("containerValidityPeriod", e.target.value)
+            }
+          />
+          <div className="flex gap-3">
             <CFormInput
               type="number"
-              label="Container Validaty Period"
-              placeholder="Container Validaty"
-              className="mb-3"
+              label="S.No"
+              className="custom-placeholder mb-3"
+              value={internalData.containerDetails[0].sno}
+              onChange={(e) => {
+                const updatedContainerDetails = [
+                  ...internalData.containerDetails,
+                ];
+                updatedContainerDetails[0].sno = e.target.value;
+                handleInputChange("containerDetails", updatedContainerDetails);
+              }}
             />
-            <span className="mt-2">Days</span>
+            <CFormInput
+              type="text"
+              label="Container No."
+              placeholder="Container No."
+              className="custom-placeholder mb-3"
+              value={internalData.containerDetails[0].containerNo}
+              onChange={(e) => {
+                const updatedContainerDetails = [
+                  ...internalData.containerDetails,
+                ];
+                updatedContainerDetails[0].containerNo = e.target.value;
+                handleInputChange("containerDetails", updatedContainerDetails);
+              }}
+            />
+            <CFormInput
+              type="text"
+              label="Quantity in Containers"
+              placeholder="Quantity in Containers"
+              className="custom-placeholder mb-3"
+              value={internalData.containerDetails[0].quantityInContainers}
+              onChange={(e) => {
+                const updatedContainerDetails = [
+                  ...internalData.containerDetails,
+                ];
+                updatedContainerDetails[0].quantityInContainers =
+                  e.target.value;
+                handleInputChange("containerDetails", updatedContainerDetails);
+              }}
+            />
           </div>
           <CFormInput
-            type="number"
+            type="text"
+            label="Total Quantity in Containers"
+            placeholder="Total Quantity in Containers"
+            className="custom-placeholder mb-3"
+            value={internalData.totalQuantityInContainers}
+            onChange={(e) =>
+              handleInputChange("totalQuantityInContainers", e.target.value)
+            }
+          />
+          <CFormInput
+            type="text"
             label="Container Starting No."
-            placeholder="Container No."
-            className="mb-3"
+            placeholder="Container Starting No."
+            className="custom-placeholder mb-3"
+            value={internalData.containerStartingNo}
+            name="containerStartingNo"
+            onChange={(e) =>
+              handleInputChange("containerStartingNo", e.target.value)
+            }
           />
-          <CFormInput
-            type="number"
-            label="Minimum No. of Containers for Alert"
-            placeholder="1"
-            className="mb-3"
-          />
-          <div className="flex gap-2">
-            <CFormInput
-              type="number"
-              label="No. of Containers Prepared"
-              className="mb-3"
-            />
-            <span className="mt-2 w-10">
-              <IoIosAddCircleOutline />
-            </span>
-          </div>
-          <div className="container mt-5 mb-3">
-            <table className="table table-bordered">
-              <thead className="thead-light">
-                <tr>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Sno.
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Container No.
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Quantity in Containers
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <select className="form-control">
-                      <option>Acids</option>
-                      <option>Bases</option>
-                      <option>Salts</option>
-                      <option>Solvents</option>
-                    </select>
-                  </td>
-                  <td className="flex gap-2">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                    />
-                    <span className="mt-2">kg</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="flex gap-2 mt-4">
-            <CFormInput
-              type="number"
-              label="Total Quantity in containers"
-              placeholder="Total Quantity in containers"
-              className="mb-3"
-            />
-            <span className="mt-2">Kg</span>
-          </div>
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
+          <CButton color="secondary" onClick={closeModal}>
+            Close
           </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add
+          <CButton color="primary" onClick={handleFormSubmit}>
+            Save
           </CButton>
         </CModalFooter>
       </CModal>

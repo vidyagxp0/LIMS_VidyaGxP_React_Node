@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import Table from "../../components/ATM components/Table/Table";
@@ -37,94 +36,6 @@ const initialData = [
     AddedOn: "28/06/2024 11:45",
     status: "Active",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    WorkingContainerNo: "code3",
-    ContainerQty: "material 3",
-    ContainerValidityPeriodDay: "description 3",
-    ContainerValidUpto: "02/07/2024 00:00",
-    LotValidUpto: "2024-07-02",
-    AddedOn: "27/06/2024 12:56",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    WorkingContainerNo: "code4",
-    ContainerQty: "material 4",
-    ContainerValidityPeriodDay: "description 4",
-    ContainerValidUpto: "03/07/2024 00:00",
-    LotValidUpto: "2024-07-03",
-    AddedOn: "26/06/2024 13:12",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    WorkingContainerNo: "code5",
-    ContainerQty: "material 5",
-    ContainerValidityPeriodDay: "description 5",
-    ContainerValidUpto: "04/07/2024 00:00",
-    LotValidUpto: "2024-07-04",
-    AddedOn: "25/06/2024 14:23",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    WorkingContainerNo: "code6",
-    ContainerQty: "material 6",
-    ContainerValidityPeriodDay: "description 6",
-    ContainerValidUpto: "05/07/2024 00:00",
-    LotValidUpto: "2024-07-05",
-    AddedOn: "24/06/2024 15:34",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    WorkingContainerNo: "code7",
-    ContainerQty: "material 7",
-    ContainerValidityPeriodDay: "description 7",
-    ContainerValidUpto: "06/07/2024 00:00",
-    LotValidUpto: "2024-07-06",
-    AddedOn: "23/06/2024 16:45",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    WorkingContainerNo: "code8",
-    ContainerQty: "material 8",
-    ContainerValidityPeriodDay: "description 8",
-    ContainerValidUpto: "07/07/2024 00:00",
-    LotValidUpto: "2024-07-07",
-    AddedOn: "22/06/2024 17:56",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    WorkingContainerNo: "code9",
-    ContainerQty: "material 9",
-    ContainerValidityPeriodDay: "description 9",
-    ContainerValidUpto: "08/07/2024 00:00",
-    LotValidUpto: "2024-07-08",
-    AddedOn: "21/06/2024 18:12",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    WorkingContainerNo: "code10",
-    ContainerQty: "material 10",
-    ContainerValidityPeriodDay: "description 10",
-    ContainerValidUpto: "09/07/2024 00:00",
-    LotValidUpto: "2024-07-09",
-    AddedOn: "20/06/2024 19:23",
-    status: "Inactive",
-  },
 ];
 
 const WorkingStandardIssue = () => {
@@ -135,13 +46,6 @@ const WorkingStandardIssue = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
 
   useEffect(() => {
     const counts = {
@@ -157,7 +61,6 @@ const WorkingStandardIssue = () => {
       else if (item.status === "Inactive") counts.INITIATED++;
     });
 
-    setCardCounts(counts);
   }, [data]);
 
   const handleOpenModals = () => {
@@ -197,10 +100,11 @@ const WorkingStandardIssue = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       WorkingContainerNo: item["Working Container No"] || "",
       ContainerQty: item["Container Qty"] || "",
-      ContainerValidityPeriodDay: item["Container Validity Period Day(s)"] || "",
+      ContainerValidityPeriodDay:
+        item["Container Validity Period Day(s)"] || "",
       ContainerValidUpto: item["Container Valid Upto"] || "",
       LotValidUpto: item["Lot Valid Upto"] || "",
       AddedOn: item["Added On"] || "",
@@ -208,7 +112,7 @@ const WorkingStandardIssue = () => {
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -267,10 +171,6 @@ const WorkingStandardIssue = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
-  };
-
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
@@ -295,8 +195,8 @@ const WorkingStandardIssue = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
             text="Media Lot Containers Issue"
             color="blue"
             onClick={openModal}
@@ -322,7 +222,13 @@ const WorkingStandardIssue = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
     </div>
   );
