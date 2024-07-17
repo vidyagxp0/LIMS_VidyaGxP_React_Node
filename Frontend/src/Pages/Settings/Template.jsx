@@ -44,7 +44,16 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import TemplateModal from "../Modals/TemplateModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -74,51 +83,7 @@ const initialData = [
     UpdatedAt: "BA-003",
     status: "Active",
   },
-  {
-    checkbox: false,
-    sno: 4,
-    TemplateName: "Associate 4",
-    UniqueCode: "BA-004",
-    NoOfCheckItems: "BA-004",
-    UpdatedAt: "BA-004",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    TemplateName: "Associate 5",
-    UniqueCode: "BA-005",
-    NoOfCheckItems: "BA-005",
-    UpdatedAt: "BA-005",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    TemplateName: "Associate 6",
-    UniqueCode: "BA-006",
-    NoOfCheckItems: "BA-006",
-    UpdatedAt: "BA-006",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    TemplateName: "Associate 7",
-    UniqueCode: "BA-007",
-    NoOfCheckItems: "BA-007",
-    UpdatedAt: "BA-007",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    TemplateName: "Associate 8",
-    UniqueCode: "BA-008",
-    NoOfCheckItems: "BA-008",
-    UpdatedAt: "BA-008",
-    status: "Active",
-  },
+  
 ];
 
 const Template = () => {
@@ -138,6 +103,101 @@ const Template = () => {
 
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Analyst Template</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p className="my-3 fs-5">
+              Add information and add new Analyst Template
+            </p>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label={<>Analyst Template</>}
+              placeholder="Analyst Template"
+              value={formData?.TemplateName || ""}
+              onChange={handleChange}
+              name="TemplateName"
+              
+            />
+  
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label={<>Unique Code</>}
+              placeholder="Unique Code"
+              value={formData?.UniqueCode || ""}
+              onChange={handleChange}
+              name="UniqueCode"
+              
+            />
+  
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="No. of Check Items"
+              placeholder="No. of Check Items"
+              value={formData?.NoOfCheckItems || ""}
+              onChange={handleChange}
+              name="NoOfCheckItems"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -177,12 +237,15 @@ const Template = () => {
   };
 
   const filteredData = data.filter((row) => {
+    const templateName = row.TemplateName || ""; // Default to an empty string if undefined
+    const query = searchQuery || ""; // Default to an empty string if undefined
+  
     return (
-      row.TemplateName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      templateName.toLowerCase().includes(query.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
-
+  
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
@@ -261,6 +324,30 @@ const Template = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (template) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === template.sno ? template : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          TemplateName:template.analyst,
+          UniqueCode:template.uniqueCode,
+          NoOfCheckItems: template.noOfCheckItems,
+          UpdatedAt: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Analyst Template</h1>
@@ -325,10 +412,14 @@ const Template = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
+
       />
       <TemplateModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+
       />
       {isViewModalOpen && (
         <ViewModal
@@ -343,6 +434,14 @@ const Template = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+       {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

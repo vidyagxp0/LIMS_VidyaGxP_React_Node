@@ -10,6 +10,19 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import WorkSheetModal from "../Modals/WorkSheetModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import ReactQuill from "react-quill";
+import { TiArrowRightThick, TiArrowLeftThick } from "react-icons/ti";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx"
 
 
 const initialData = [
@@ -46,61 +59,7 @@ const initialData = [
     StandardPreparation: "34567",
     status: "REINITIATED",
   },
-  {
-    checkbox: false,
-    sno: 4,
-    SequenceNumber: "Associate 4",
-    WorksheetName: "BA-004",
-    ProductName: "City D",
-    GtpNumber: "State D",
-    MethodValidationNo: "Country D",
-    StandardPreparation: "45678",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    SequenceNumber: "Associate 5",
-    WorksheetName: "BA-005",
-    ProductName: "City E",
-    GtpNumber: "State E",
-    MethodValidationNo: "Country E",
-    StandardPreparation: "56789",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    SequenceNumber: "Associate 6",
-    WorksheetName: "BA-006",
-    ProductName: "City F",
-    GtpNumber: "State F",
-    MethodValidationNo: "Country F",
-    StandardPreparation: "67890",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    SequenceNumber: "Associate 7",
-    WorksheetName: "BA-007",
-    ProductName: "City G",
-    GtpNumber: "State G",
-    MethodValidationNo: "Country G",
-    StandardPreparation: "78901",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    SequenceNumber: "Associate 8",
-    WorksheetName: "BA-008",
-    ProductName: "City H",
-    GtpNumber: "State H",
-    MethodValidationNo: "Country H",
-    StandardPreparation: "89012",
-    status: "REINITIATED",
-  },
+
 ];
 
 
@@ -121,6 +80,250 @@ const WorkSheet = () => {
   });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+  // const [description, setDescription] = useState("");
+
+    const [leftArray, setLeftArray] = useState(["Description"]);
+    const [rightArray, setRightArray] = useState([]);
+    const moveRight = () => {
+      let leftElement = document.getElementsByClassName("check-left");
+      for (let index = 0; index < leftElement.length; index++) {
+        if (leftElement[index].checked) {
+          let data = leftElement[index].value;
+          let left = leftArray.filter((value) => value !== data);
+          setLeftArray(left);
+          rightArray.push(data);
+          setRightArray([...rightArray]);
+          break; // Important
+        }
+      }
+    };
+  
+    const moveLeft = () => {
+      let rightElement = document.getElementsByClassName("check-right");
+      for (let index = 0; index < rightElement.length; index++) {
+        if (rightElement[index].checked) {
+          let data = rightElement[index].value;
+          let right = rightArray.filter((value) => value !== data);
+          setRightArray(right);
+          leftArray.push(data);
+          setLeftArray([...leftArray]);
+          break; // Important
+        }
+      }
+    };
+  
+    const clicked = (event) => {
+      let checkboxes = document.querySelectorAll(".check-left, .check-right");
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      let allLabels = document.querySelectorAll(".labels");
+      allLabels.forEach((label) => {
+        label.classList.remove("clicked");
+      });
+  
+      let label = event.target;
+      label.classList.add("clicked");
+      label.checked = true;
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Worksheets</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information about Worksheet</p>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Type"
+            placeholder="Worksheet"
+            // readOnly
+            value={formData?.worksheetType || ""}
+            onChange={handleChange}
+            name="worksheetType"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Name"
+            value={formData?.WorksheetName || ""}
+              onChange={handleChange}
+              name="WorksheetName"
+          />
+           <CFormInput
+          className="mb-3"
+          type="text"
+          label="Product Name"
+          placeholder="Product Name"
+          value={formData?.ProductName || ""}
+          onChange={handleChange}
+          name="ProductName"
+        />
+          <label htmlFor="drag-drop" className="">
+            User Defined Worksheet fields
+          </label>
+          <div className="d-flex" id="drag-drop">
+            <div className="w-100 m-3">
+              <h5>Available</h5>
+              <div
+                className="shadow p-2 rounded border overflow-y-auto"
+                style={{ height: "350px" }}
+              >
+                <ul className="list-group">
+                  {leftArray.map((data) => (
+                    <li
+                      key={data}
+                      className="bg-light rounded my-1 px-3 py-1 text-dark"
+                    >
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-left d-none"
+                      />
+                      <label
+                        className="labels cursor-pointer bg-light"
+                        htmlFor={data}
+                        onClick={clicked}
+                      >
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="m-auto justify-content-center">
+              <button
+                className="btn shadow py-1 px-3 mt-5 text-warning fs-4"
+                onClick={moveRight}
+              >
+                <TiArrowRightThick />
+              </button>
+              <button
+                className="btn shadow py-1 px-3 mt-2 text-warning fs-4"
+                onClick={moveLeft}
+              >
+                <TiArrowLeftThick />
+              </button>
+            </div>
+            <div className="w-100 m-3">
+              <h5>Selected</h5>
+              <div
+                className="shadow p-2 rounded border overflow-y-auto"
+                style={{ height: "350px" }}
+              >
+                <ul className="list-group">
+                  {rightArray.map((data) => (
+                    <li
+                      key={data}
+                      className="bg-light rounded my-1 px-3 py-1 text-dark"
+                    >
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-right d-none"
+                      />
+                      <label
+                        className="labels cursor-pointer bg-light"
+                        htmlFor={data}
+                        onClick={clicked}
+                      >
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <h5>Uniformity of Dosage Units:</h5>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="GTP No:"
+            placeholder="GTP No"
+            value={formData?.GtpNumber || ""}
+              onChange={handleChange}
+              name="GtpNumber"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Method Validation No:"
+            placeholder="Method Validation No"
+            value={formData?.MethodValidationNo || ""}
+              onChange={handleChange}
+              name="MethodValidationNo"
+          />
+          <div className="mb-3">
+            <label>Description</label>
+            <ReactQuill
+              theme="snow"
+              // value={description}
+              // onChange={setDescription}
+              value={formData?.Description || ""}
+              onChange={handleChange}
+              name="Description"
+            />
+          </div>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -252,6 +455,35 @@ const WorkSheet = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (worksheet) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === worksheet.sno ? worksheet : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          WorksheetName:worksheet.worksheetName,
+          WorksheetType:worksheet.worksheetType,
+          ProductName: worksheet.worksheetProduct,
+          GtpNumber: worksheet.gtpNo,
+          MethodValidationNo:worksheet.methodValidationNo,
+          Description:worksheet.description,
+          SequenceNumber: "Associate 1",
+          StandardPreparation: "12345",
+          // AddedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Worksheets</h1>
@@ -304,6 +536,8 @@ const WorkSheet = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data = {filteredData} title="Worksheet" fileName="Worksheet.pdf" />
+
         <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Worksheet" color="blue" onClick={openModal} />
@@ -315,10 +549,14 @@ const WorkSheet = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
+
       />
       <WorkSheetModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+
       />
       {isViewModalOpen && (
         <ViewModal
@@ -333,6 +571,14 @@ const WorkSheet = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+         {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

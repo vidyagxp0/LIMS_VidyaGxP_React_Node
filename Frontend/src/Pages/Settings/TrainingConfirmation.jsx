@@ -43,7 +43,16 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import TrainingConfirmationModal from "../Modals/TrainingConfirmationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -76,56 +85,7 @@ const initialData = [
     AddedOn: "BA-003",
     status: "Active",
   },
-  {
-    checkbox: false,
-    sno: 4,
-    Analyst: "Associate 4",
-    TestTechnique: "BA-004",
-    TrainingDetails: "BA-004",
-    Remarks: "BA-004",
-    AddedOn: "BA-004",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    Analyst: "Associate 5",
-    TestTechnique: "BA-005",
-    TrainingDetails: "BA-005",
-    Remarks: "BA-005",
-    AddedOn: "BA-005",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    Analyst: "Associate 6",
-    TestTechnique: "BA-006",
-    TrainingDetails: "BA-006",
-    Remarks: "BA-006",
-    AddedOn: "BA-006",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    Analyst: "Associate 7",
-    TestTechnique: "BA-007",
-    TrainingDetails: "BA-007",
-    Remarks: "BA-007",
-    AddedOn: "BA-007",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    Analyst: "Associate 8",
-    TestTechnique: "BA-008",
-    TrainingDetails: "BA-008",
-    Remarks: "BA-008",
-    AddedOn: "BA-008",
-    status: "Active",
-  },
+ 
 ];
 
 const TrainingConfirmation = () => {
@@ -145,6 +105,137 @@ const TrainingConfirmation = () => {
 
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Training Confirmations</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p className="my-3 fs-5">
+              Add information about Training Confirmation
+            </p>
+            <CFormSelect
+              type="text"
+              className="mb-3"
+              label="Analyst"
+              placeholder="Select..."
+              options={["Select...", { label: "No Options" }]}
+              value={formData?.Analyst || ""}
+              onChange={handleChange}
+              name="Analyst"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Employee Id"
+              placeholder="Employee Id"
+              value={formData?.EmployeeId || ""}
+              onChange={handleChange}
+              name="EmployeeId"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Role/Title"
+              placeholder="Role/Title"
+              value={formData?.Role || ""}
+              onChange={handleChange}
+              name="Role"
+            />
+            <CFormSelect
+              type="text"
+              className="mb-3"
+              label="Test Technique"
+              placeholder="Select..."
+              options={["Select...", { label: "Description" }]}
+              value={formData?.TestTechnique || ""}
+              onChange={handleChange}
+              name="TestTechnique"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Training Details"
+              placeholder="Training Details"
+              value={formData?.TrainingDetails || ""}
+              onChange={handleChange}
+              name="TrainingDetails"
+            />
+             
+             <CFormInput
+              type="file"
+              className="mb-3"
+              label="Training Documents"
+              placeholder="Choose File"
+              value={formData?.ChooseFile || ""}
+              onChange={handleChange}
+              name="ChooseFile"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Remark(s)/Reason(s)"
+              placeholder="Remark(s)/Reason(s)"
+              value={formData?.Remarks || ""}
+              onChange={handleChange}
+              name="Remarks"
+            />
+           
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -270,6 +361,36 @@ const TrainingConfirmation = () => {
     console.log("Deleted item:", item);
   };
 
+
+  const handleModalSubmit = (trainingConfirmation) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === trainingConfirmation.sno ? trainingConfirmation : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Analyst:trainingConfirmation.analyst,
+          Role:trainingConfirmation.role,
+          EmployeeId:trainingConfirmation.emplyoeeId,
+          TestTechnique:trainingConfirmation.testTechnique,
+          TrainingDetails: trainingConfirmation.trainingDetails,
+          TrainingDocuments: trainingConfirmation.trainingDocuments,
+          Remarks:trainingConfirmation.remarks,
+          AddedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Training Confirmations</h1>
@@ -330,10 +451,13 @@ const TrainingConfirmation = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
+
       />
       <TrainingConfirmationModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -348,6 +472,14 @@ const TrainingConfirmation = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+        {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>
