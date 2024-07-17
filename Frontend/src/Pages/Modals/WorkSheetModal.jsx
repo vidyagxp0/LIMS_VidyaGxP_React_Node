@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TiArrowRightThick, TiArrowLeftThick } from "react-icons/ti";
 import {
   CModal,
@@ -13,7 +13,42 @@ import {
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const WorkSheetModal = (_props) => {
+const WorkSheetModal = ({ visible, closeModal, handleSubmit }) => {
+
+  const [worksheet, setWorksheet] = useState({
+    worksheetType: "",
+    worksheetName: "",
+    worksheetProduct: "",
+    gtpNo: "",
+    methodValidationNo: "",
+    description: ""
+  });
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...worksheet, [field]: value };
+    setWorksheet(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...worksheet });
+    closeModal();
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setWorksheet({
+      worksheetType: "",
+      worksheetName: "",
+      worksheetProduct: "",
+      gtpNo: "",
+      methodValidationNo: "",
+      description: ""
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, []);
   const [leftArray, setLeftArray] = useState(["Description"]);
   const [rightArray, setRightArray] = useState([]);
 
@@ -59,13 +94,14 @@ const WorkSheetModal = (_props) => {
     label.classList.add("clicked");
     label.checked = true;
   };
+
   const [description, setDescription] = useState("");
 
   return (
     <CModal
       alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
+      visible={visible}
+      onClose={closeModal}
       size="lg"
     >
       <CModalHeader>
@@ -78,13 +114,25 @@ const WorkSheetModal = (_props) => {
           type="text"
           label="Type"
           placeholder="Worksheet"
-          readOnly
+          // readOnly
+          value={worksheet.worksheetType}
+          onChange={(e) => handleInputChange("worksheetType", e.target.value)}
         />
         <CFormInput
           className="mb-3"
           type="text"
           label="Name"
           placeholder="Name"
+          value={worksheet.worksheetName}
+          onChange={(e) => handleInputChange("worksheetName", e.target.value)}
+        />
+        <CFormInput
+          className="mb-3"
+          type="text"
+          label="Product Name"
+          placeholder="Product Name"
+          value={worksheet.worksheetProduct}
+          onChange={(e) => handleInputChange("worksheetProduct", e.target.value)}
         />
         <label htmlFor="drag-drop" className="">
           User Defined Worksheet fields
@@ -171,12 +219,16 @@ const WorkSheetModal = (_props) => {
           type="text"
           label="GTP No:"
           placeholder="GTP No"
+          value={worksheet.gtpNo}
+          onChange={(e) => handleInputChange("gtpNo", e.target.value)}
         />
         <CFormInput
           className="mb-3"
           type="text"
           label="Method Validation No:"
           placeholder="Method Validation No"
+          value={worksheet.methodValidationNo}
+          onChange={(e) => handleInputChange("methodValidationNo", e.target.value)}
         />
         <div className="mb-3">
           <label>Description</label>
@@ -184,14 +236,16 @@ const WorkSheetModal = (_props) => {
             theme="snow"
             value={description}
             onChange={setDescription}
+            // value={worksheet.description}
+            // onChange={(e) => handleInputChange("description", e.target.value)}
           />
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
+        <CButton color="light" onClick={closeModal}>
           Back
         </CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-info text-white" onClick={handleFormSubmit}>Submit</CButton>
       </CModalFooter>
     </CModal>
   );
