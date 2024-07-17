@@ -22,6 +22,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -335,6 +336,7 @@ const TypeOfSection = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Type_Of_Section.pdf" title="Type Of Section Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Section Type" color="blue" onClick={openModal} />

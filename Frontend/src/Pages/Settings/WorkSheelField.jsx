@@ -31,6 +31,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -379,6 +380,7 @@ const WorkSheetField = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="WorkSheet_Field.pdf" title="WorkSheet Fields Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton

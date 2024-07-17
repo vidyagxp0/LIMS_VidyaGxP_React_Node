@@ -22,6 +22,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -337,6 +338,7 @@ const HandlingSymbol = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Handling_Symbol.pdf" title="Handling Symbol Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Symbol" color="blue" onClick={openModal} />

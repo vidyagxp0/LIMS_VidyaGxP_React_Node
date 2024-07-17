@@ -53,6 +53,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -440,6 +441,7 @@ const TrainingConfirmation = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Training_Confirmation.pdf" title="Training Confirmation Data" />
         <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Confirmation" color="blue" onClick={openModal} />

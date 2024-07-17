@@ -14,6 +14,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 
 const initialData = [
@@ -52,111 +53,7 @@ const initialData = [
     TestsPlanned: "25",
     TestsExecuted: "20",
   },
-  {
-    checkbox: false,
-    sno: 6,
-    TestName: "Test-006",
-    TestsPlanned: "12",
-    TestsExecuted: "11",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    TestName: "Test-007",
-    TestsPlanned: "18",
-    TestsExecuted: "16",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    TestName: "Test-008",
-    TestsPlanned: "30",
-    TestsExecuted: "27",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    TestName: "Test-009",
-    TestsPlanned: "22",
-    TestsExecuted: "19",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    TestName: "Test-010",
-    TestsPlanned: "8",
-    TestsExecuted: "7",
-  },
-  {
-    checkbox: false,
-    sno: 11,
-    TestName: "Test-011",
-    TestsPlanned: "14",
-    TestsExecuted: "13",
-  },
-  {
-    checkbox: false,
-    sno: 12,
-    TestName: "Test-012",
-    TestsPlanned: "6",
-    TestsExecuted: "5",
-  },
-  {
-    checkbox: false,
-    sno: 13,
-    TestName: "Test-013",
-    TestsPlanned: "28",
-    TestsExecuted: "25",
-  },
-  {
-    checkbox: false,
-    sno: 14,
-    TestName: "Test-014",
-    TestsPlanned: "35",
-    TestsExecuted: "30",
-  },
-  {
-    checkbox: false,
-    sno: 15,
-    TestName: "Test-015",
-    TestsPlanned: "17",
-    TestsExecuted: "15",
-  },
-  {
-    checkbox: false,
-    sno: 16,
-    TestName: "Test-016",
-    TestsPlanned: "11",
-    TestsExecuted: "10",
-  },
-  {
-    checkbox: false,
-    sno: 17,
-    TestName: "Test-017",
-    TestsPlanned: "19",
-    TestsExecuted: "18",
-  },
-  {
-    checkbox: false,
-    sno: 18,
-    TestName: "Test-018",
-    TestsPlanned: "23",
-    TestsExecuted: "21",
-  },
-  {
-    checkbox: false,
-    sno: 19,
-    TestName: "Test-019",
-    TestsPlanned: "9",
-    TestsExecuted: "8",
-  },
-  {
-    checkbox: false,
-    sno: 20,
-    TestName: "Test-020",
-    TestsPlanned: "16",
-    TestsExecuted: "15",
-  },
+ 
 ];
 
 const TestHistory = () => {
@@ -274,6 +171,7 @@ const TestHistory = () => {
   return (
     <div className="p-4">
       <div className="float-right flex gap-4">
+      <PDFDownload columns={columns} data={initialData} fileName="Test_History.pdf" title="Test History Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
         </div>
       <h1 className="text-2xl font-bold mb-4">Service Provider</h1>

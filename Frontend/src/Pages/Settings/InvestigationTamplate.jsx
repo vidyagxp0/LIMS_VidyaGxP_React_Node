@@ -11,6 +11,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 
 const initialData = [
@@ -291,7 +292,8 @@ const InvestigationTamplate = () => {
             onChange={setStatusFilter}
           />
         </div>
-        <div className="float-right">
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={initialData} fileName="Investigation_Template.pdf" title="Investigation Template Data" />
         <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           {/* <ATMButton text="Add Worksheet Fields" color="blue" onClick={openModal} /> */}

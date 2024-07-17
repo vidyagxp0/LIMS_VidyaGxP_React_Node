@@ -23,6 +23,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import ReQualifictionRequest from "./ReQualificationRequest.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -333,6 +334,7 @@ const ChemicalCategory = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Chemical_Catergory.pdf" title="Chemical Category Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Category" color="blue" onClick={openModal} />
