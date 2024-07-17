@@ -27,9 +27,9 @@ const initialData = [
   {
     checkbox: false,
     sno: 1,
-    ProductName: "Product 1",
+    productName: "Product 1",
     UniqueCode: "UC-001",
-    VendorName: "Vendor A",
+    vendorName: "Vendor A",
     QualificationCriteria: "Criteria 1",
     Comments: "Comment 1",
     status: "INITIATED",
@@ -37,9 +37,9 @@ const initialData = [
   {
     checkbox: false,
     sno: 2,
-    ProductName: "Product 2",
+    productName: "Product 2",
     UniqueCode: "UC-002",
-    VendorName: "Vendor B",
+    vendorName: "Vendor B",
     QualificationCriteria: "Criteria 2",
     Comments: "Comment 2",
     status: "INITIATED",
@@ -108,7 +108,7 @@ const Vendors = () => {
           <label>Product/Material Name</label>
           <CFormSelect
             className="mb-3"
-            name="ProductName"
+            name="productName"
             options={[
               { value: "Tadalafil", label: "Tadalafil" },
               { value: "Diclofenac Resinate", label: "Diclofenac Resinate" },
@@ -117,7 +117,7 @@ const Vendors = () => {
                 label: "Diclofenac Sodium (BromineFree)",
               },
             ]}
-            value={formData?.ProductName || ""}
+            value={formData?.productName || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -132,7 +132,7 @@ const Vendors = () => {
           <label>Vendor Name</label>
           <CFormSelect
             className="mb-3"
-            name="VendorName"
+            name="vendorName"
             options={[
               {
                 value: "Aavis Pharmaceuticals",
@@ -144,7 +144,7 @@ const Vendors = () => {
                 label: "Diclofenac Sodium (BromineFree)",
               },
             ]}
-            value={formData?.VendorName || ""}
+            value={formData?.vendorName || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -235,9 +235,9 @@ const Vendors = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Product Name", accessor: "ProductName" },
+    { header: "Product Name", accessor: "productName" },
     { header: "Unique Code", accessor: "UniqueCode" },
-    { header: "Vendor Name", accessor: "VendorName" },
+    { header: "Vendor Name", accessor: "vendorName" },
     { header: "Qualification Criteria", accessor: "QualificationCriteria" },
     { header: "Comments", accessor: "Comments" },
     { header: "Status", accessor: "status" },
@@ -272,9 +272,9 @@ const Vendors = () => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
       sno: index + 1,
-      ProductName: item["Product Name"] || "",
+      productName: item["Product Name"] || "",
       UniqueCode: item["Unique Code"] || "",
-      VendorName: item["Vendor Name"] || "",
+      vendorName: item["Vendor Name"] || "",
       QualificationCriteria: item["Qualification Criteria"] || "",
       Comments: item["Comments"] || "",
       status: item["Status"] || "",
@@ -300,7 +300,8 @@ const Vendors = () => {
           sno: prevData.length + 1,
           ProductCode: newInstrument.ProductCode,
           UniqueCode: newInstrument.UniqueCode,
-          VendorName: newInstrument.VendorName,
+          vendorName: newInstrument.vendorName,
+          productName:newInstrument.productName,
           QualificationCriteria: newInstrument.QualificationCriteria,
           Comments: newInstrument.Comments,
           status: "Active",
