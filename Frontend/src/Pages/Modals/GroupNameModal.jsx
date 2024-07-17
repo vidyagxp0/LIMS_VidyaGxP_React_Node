@@ -7,13 +7,14 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const GroupNameModal = ({ visible, closeModal, handleSubmit }) => {
   const [groupData, setGroupData] = useState({
     sampleTypeName: "",
     description: "",
   });
+
   const handleInputChange = (field, value) => {
     const updatedData = { ...groupData, [field]: value };
     setGroupData(updatedData);
@@ -24,6 +25,19 @@ const GroupNameModal = ({ visible, closeModal, handleSubmit }) => {
     handleSubmit({ ...groupData });
     closeModal();
   };
+
+  const resetForm = () => {
+    setGroupData({
+      sampleTypeName: "",
+      description: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   return (
     <div>

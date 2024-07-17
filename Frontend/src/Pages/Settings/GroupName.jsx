@@ -46,6 +46,16 @@ const initialData = [
   },
 ];
 
+const generateRandomSymbolCode = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "SYM-";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
 const GroupName = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
@@ -117,6 +127,7 @@ const GroupName = () => {
               type="text"
               label="Group Name"
               placeholder="Group Name"
+              name="sampleTypeName"
               value={formData?.sampleTypeName || ""}
               onChange={handleChange}
               required
@@ -127,6 +138,7 @@ const GroupName = () => {
               type="text"
               label="description"
               placeholder="description"
+              name="description"
               value={formData?.description || ""}
               onChange={handleChange}
               required
@@ -212,8 +224,8 @@ const GroupName = () => {
     }));
 
     const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenateData);
+    setIsModalsOpen(false);
   };
 
   const columns = [
@@ -252,6 +264,8 @@ const GroupName = () => {
   ];
 
   const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
     if (editModalData) {
       const updatedList = data.map((item) =>
         item.sno === requalification.sno ? requalification : item
@@ -265,6 +279,8 @@ const GroupName = () => {
           sno: prevData.length + 1,
           sampleTypeName: requalification.sampleTypeName,
           description: requalification.description,
+          worksheetField: generateRandomSymbolCode(),
+          addedOn: currentDate,
           status: "Active",
         },
       ]);

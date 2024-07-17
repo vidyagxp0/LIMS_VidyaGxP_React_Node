@@ -7,12 +7,24 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ChemicalCategoryModal = ({ visible, closeModal, handleSubmit }) => {
   const [chemicaldata, setChemicalData] = useState({
     categoryName: "",
   });
+
+  const resetForm = () => {
+    setChemicalData({
+      categoryName: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   const handleInputChange = (field, value) => {
     const updatedData = { ...chemicaldata, [field]: value };

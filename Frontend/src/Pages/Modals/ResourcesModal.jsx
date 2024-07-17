@@ -7,12 +7,26 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ResourcesModal = ({ visible, closeModal, handleSubmit }) => {
   const [resourceData, setResourceData] = useState({
     resourceName: "",
   });
+
+
+  const resetForm = () => {
+    setResourceData({
+      resourceName: "",
+
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
   const handleInputChange = (field, value) => {
     const updatedData = { ...resourceData, [field]: value };
     setResourceData(updatedData);
