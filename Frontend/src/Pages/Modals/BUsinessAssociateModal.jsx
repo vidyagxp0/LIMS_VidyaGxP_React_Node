@@ -1,13 +1,67 @@
 import { CButton, CFormCheck, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-const BUsinessAssociateModal = (_props) => {
+const BUsinessAssociateModal = ({ visible, closeModal, handleSubmit }) => {
+  const [businessAssociate, setBusinessAssociate] = useState({
+    BusinessAssociateName:"",
+    UniqueCode:"",
+    CategoryOfBussinessAssociate:[],
+    ContactPerson:"",
+    Location:"",
+    AddressLine1:"",
+    AddressLine2:"",
+    AddressLine3:"",
+    City:"",
+    State:"",
+    Country:"",
+    ZipCode:"",
+    Email:"",
+    Phone:"",
+    Fax:"",
+  })
+
+  const handleInputChange = (field, value) => {
+    const updatedData = { ...businessAssociate, [field]: value };
+    setBusinessAssociate(updatedData);
+    console.log(updatedData);
+  };
+
+  const handleFormSubmit = () => {
+    handleSubmit({ ...businessAssociate });
+    closeModal();
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setBusinessAssociate({
+      BusinessAssociateName:"",
+      UniqueCode:"",
+      CategoryOfBussinessAssociate:[],
+      ContactPerson:"",
+      Location:"",
+      AddressLine1:"",
+      AddressLine2:"",
+      AddressLine3:"",
+      City:"",
+      State:"",
+      Country:"",
+      ZipCode:"",
+      Email:"",
+      Phone:"",
+      Fax:"",
+    });
+  };
+
+  useEffect(() => {
+    resetForm();
+  }, []);
+
   return (
     <div>
          <CModal
       alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
+      visible={visible}
+      onClose={closeModal}
       size="lg"
     >
       <CModalHeader>
@@ -23,6 +77,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Business Associate Name"
+          value={businessAssociate.BusinessAssociateName}
+          onChange={(e) => handleInputChange("BusinessAssociateName", e.target.value)}
           required
         />
 
@@ -35,6 +91,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Unique Code"
+          value={businessAssociate.UniqueCode}
+          onChange={(e) => handleInputChange("UniqueCode", e.target.value)}
           required
         />
 
@@ -43,23 +101,29 @@ const BUsinessAssociateModal = (_props) => {
         </label>
 
         <CFormCheck
-          className="mb-3"
-          type="checkbox"
-          id="checkbox1"
-          label="Customer"
-        />
-        <CFormCheck
-          className="mb-3"
-          type="checkbox"
-          id="checkbox2"
-          label="Supplier"
-        />
-        <CFormCheck
-          className="mb-3"
-          type="checkbox"
-          id="checkbox3"
-          label="Manufacturer"
-        />
+  className="mb-3"
+  type="checkbox"
+  id="checkbox1"
+  label="Customer"
+  checked={businessAssociate.CategoryOfBussinessAssociate.includes("Customer")}
+  onChange={(e) => handleInputChange("CategoryOfBussinessAssociate", "Customer")}
+/>
+<CFormCheck
+  className="mb-3"
+  type="checkbox"
+  id="checkbox2"
+  label="Supplier"
+  checked={businessAssociate.CategoryOfBussinessAssociate.includes("Supplier")}
+  onChange={(e) => handleInputChange("CategoryOfBussinessAssociate", "Supplier")}
+/>
+<CFormCheck
+  className="mb-3"
+  type="checkbox"
+  id="checkbox3"
+  label="Manufacturer"
+  checked={businessAssociate.CategoryOfBussinessAssociate.includes("Manufacturer")}
+  onChange={(e) => handleInputChange("CategoryOfBussinessAssociate", "Manufacturer")}
+/>
 
         <CFormInput
           className="mb-3"
@@ -70,6 +134,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Contact Person"
+          value={businessAssociate.ContactPerson}
+          onChange={(e) => handleInputChange("ContactPerson", e.target.value)}
           required
         />
 
@@ -82,6 +148,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Location"
+          value={businessAssociate.Location}
+          onChange={(e) => handleInputChange("Location", e.target.value)}
           required
         />
 
@@ -94,6 +162,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Address : Line 1"
+          value={businessAssociate.AddressLine1}
+          onChange={(e) => handleInputChange("AddressLine1", e.target.value)}
           required
         />
 
@@ -102,6 +172,8 @@ const BUsinessAssociateModal = (_props) => {
           type="text"
           label={<>Address : Line 2</>}
           placeholder="Address : Line 2"
+          value={businessAssociate.AddressLine2}
+          onChange={(e) => handleInputChange("AddressLine2", e.target.value)}
           required
         />
 
@@ -110,6 +182,8 @@ const BUsinessAssociateModal = (_props) => {
           type="text"
           label={<>Address : Line 3</>}
           placeholder="Address : Line 3"
+          value={businessAssociate.AddressLine3}
+          onChange={(e) => handleInputChange("AddressLine3", e.target.value)}
           required
         />
 
@@ -122,6 +196,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="City"
+          value={businessAssociate.City}
+          onChange={(e) => handleInputChange("City", e.target.value)}
           required
         />
 
@@ -134,6 +210,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="State"
+          value={businessAssociate.State}
+          onChange={(e) => handleInputChange("State", e.target.value)}
           required
         />
 
@@ -146,6 +224,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Country"
+          value={businessAssociate.Country}
+          onChange={(e) => handleInputChange("Country", e.target.value)}
           required
         />
 
@@ -158,6 +238,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="ZIP / PIN"
+          value={businessAssociate.ZipCode}
+          onChange={(e) => handleInputChange("ZipCode", e.target.value)}
           required
         />
 
@@ -169,7 +251,10 @@ const BUsinessAssociateModal = (_props) => {
               Phone <span style={{ color: "red" }}>*</span>
             </>
           }
+          
           placeholder="Phone"
+          value={businessAssociate.Phone}
+          onChange={(e) => handleInputChange("Phone", e.target.value)}
           required
         />
 
@@ -182,6 +267,8 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Fax"
+          value={businessAssociate.Fax}
+          onChange={(e) => handleInputChange("Fax", e.target.value)}
           required
         />
 
@@ -194,14 +281,16 @@ const BUsinessAssociateModal = (_props) => {
             </>
           }
           placeholder="Email"
+          value={businessAssociate.Email}
+          onChange={(e) => handleInputChange("Email", e.target.value)}
           required
         />
       </CModalBody>
       <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
+        <CButton color="light" onClick={closeModal}>
           Back
         </CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
+        <CButton className="bg-info text-white" onClick={handleFormSubmit}>Submit</CButton>
       </CModalFooter>
     </CModal>
       

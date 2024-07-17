@@ -13,7 +13,17 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import LabelManagemantModal from "../Modals/LabelManagemantModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-
+import {
+  CButton,
+  CFormCheck,
+  CFormInput,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
@@ -38,83 +48,7 @@ const initialData = [
     ZipCode: "23456",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    LabelName: "Associate 3",
-    UniqueCode: "BA-003",
-    City: "City C",
-    State: "State C",
-    Country: "Country C",
-    ZipCode: "34567",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    LabelName: "Associate 4",
-    UniqueCode: "BA-004",
-    City: "City D",
-    State: "State D",
-    Country: "Country D",
-    ZipCode: "45678",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    LabelName: "Associate 5",
-    UniqueCode: "BA-005",
-    City: "City E",
-    State: "State E",
-    Country: "Country E",
-    ZipCode: "56789",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    LabelName: "Associate 6",
-    UniqueCode: "BA-006",
-    City: "City F",
-    State: "State F",
-    Country: "Country F",
-    ZipCode: "67890",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    LabelName: "Associate 7",
-    UniqueCode: "BA-007",
-    City: "City G",
-    State: "State G",
-    Country: "Country G",
-    ZipCode: "78901",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    LabelName: "Associate 8",
-    UniqueCode: "BA-008",
-    City: "City H",
-    State: "State H",
-    Country: "Country H",
-    ZipCode: "89012",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    LabelName: "Associate 9",
-    UniqueCode: "BA-009",
-    City: "City I",
-    State: "State I",
-    Country: "Country I",
-    ZipCode: "90123",
-    status: "APPROVED",
-  },
+ 
 ];
 
 const LabelManagement = () => {
@@ -131,7 +65,8 @@ const LabelManagement = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -264,6 +199,151 @@ const LabelManagement = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (labelManagement) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === labelManagement.sno ? labelManagement : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          LabelName: labelManagement.label,
+          UniqueCode: "0000",
+          City: labelManagement.Address,
+          State:  "UNKNOWN",
+          Country:  "UNKNOWN",
+          ZipCode:  "UNKNOWN", 
+          status: "DROPPED",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+        >
+          <CModalHeader>
+            <CModalTitle>Add Label</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add information and add new Label</p>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label={
+                <>
+                  Label <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              placeholder="Enter Label"
+              value={formData?.LabelName||""}
+              onChange={handleChange}
+              name="LabelName"
+            />
+            <CFormTextarea
+              className="mb-3"
+              type="text"
+              label={
+                <>
+                  Address <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              placeholder=" Address "
+              value={formData?.City||""}
+              onChange={handleChange}
+              name="City"
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label={
+                <>
+                  logo <span style={{ color: "red" }}>*</span>
+                </>
+              }
+              placeholder="logo"
+              value={formData?.Logo||""}
+              onChange={handleChange}
+              name="Logo"
+            />
+            <label className="mb-2">
+              UM <span style={{ color: "red" }}>*</span>
+            </label>
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="UMCM"
+              name="UM"
+              label="CM"
+              checked={formData?.UM === "CM"||""}
+              onChange={handleChange}
+           
+            />
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="UMMM"
+              name="UM"
+              label="MM"
+              checked={FormData?.UM === "MM"||""}
+              onChange={handleChange}
+      
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Label Management</h1>
@@ -327,8 +407,13 @@ const LabelManagement = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
-      <LabelManagemantModal visible={isModalOpen} closeModal={closeModal} />
+      <LabelManagemantModal
+       visible={isModalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+         />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -342,6 +427,15 @@ const LabelManagement = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+
+{editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>

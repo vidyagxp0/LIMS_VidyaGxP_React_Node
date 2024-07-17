@@ -13,7 +13,8 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import BUsinessAssociateModal from "../Modals/BUsinessAssociateModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-
+import { CButton, CFormCheck, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
+import PDFDownload from "../PDFComponent/PDFDownload "
 const initialData = [
   {
     checkbox: false,
@@ -37,83 +38,6 @@ const initialData = [
     ZipCode: "23456",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    BusinessAssociateName: "Associate 3",
-    UniqueCode: "BA-003",
-    City: "City C",
-    State: "State C",
-    Country: "Country C",
-    ZipCode: "34567",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    BusinessAssociateName: "Associate 4",
-    UniqueCode: "BA-004",
-    City: "City D",
-    State: "State D",
-    Country: "Country D",
-    ZipCode: "45678",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    BusinessAssociateName: "Associate 5",
-    UniqueCode: "BA-005",
-    City: "City E",
-    State: "State E",
-    Country: "Country E",
-    ZipCode: "56789",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    BusinessAssociateName: "Associate 6",
-    UniqueCode: "BA-006",
-    City: "City F",
-    State: "State F",
-    Country: "Country F",
-    ZipCode: "67890",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    BusinessAssociateName: "Associate 7",
-    UniqueCode: "BA-007",
-    City: "City G",
-    State: "State G",
-    Country: "Country G",
-    ZipCode: "78901",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    BusinessAssociateName: "Associate 8",
-    UniqueCode: "BA-008",
-    City: "City H",
-    State: "State H",
-    Country: "Country H",
-    ZipCode: "89012",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    BusinessAssociateName: "Associate 9",
-    UniqueCode: "BA-009",
-    City: "City I",
-    State: "State I",
-    Country: "Country I",
-    ZipCode: "90123",
-    status: "APPROVED",
-  },
 ];
 
 const BussinessAssociate = () => {
@@ -130,6 +54,10 @@ const BussinessAssociate = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
+
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
 
   useEffect(() => {
     const counts = {
@@ -263,6 +191,324 @@ const BussinessAssociate = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleModalSubmit = (bussinessAssociate) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === bussinessAssociate.sno ? bussinessAssociate : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          BusinessAssociateName: bussinessAssociate.BusinessAssociateName,
+          UniqueCode: bussinessAssociate.UniqueCode,
+          City: bussinessAssociate.City,
+          State: bussinessAssociate.State,
+          Country: bussinessAssociate.Country,
+          ZipCode: bussinessAssociate.ZipCode, 
+          status: "DROPPED",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    return (
+      <div>
+      <CModal
+   alignment="center"
+   visible={visible}
+   onClose={closeModal}
+   size="lg"
+ >
+   <CModalHeader>
+     <CModalTitle>Add Business Associate</CModalTitle>
+   </CModalHeader>
+   <CModalBody>
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Business Associate Name <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Business Associate Name"
+       value={formData?.BusinessAssociateName||""}
+       onChange={handleChange}
+       name="BusinessAssociateName"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Unique Code <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Unique Code"
+       value={formData?.UniqueCode||""}
+       onChange={handleChange}
+       name="UniqueCode"
+       required
+     />
+
+     <label className="mb-2">
+       Category Of Business Associate <span style={{ color: "red" }}>*</span>
+     </label>
+
+     <CFormCheck
+className="mb-3"
+type="checkbox"
+id="checkbox1"
+label="Customer"
+checked={formData?.CategoryOfBussinessAssociate||""}
+onChange={handleChange}
+name="CategoryOfBussinessAssociate"
+/>
+<CFormCheck
+className="mb-3"
+type="checkbox"
+id="checkbox2"
+label="Supplier"
+checked={formData?.CategoryOfBussinessAssociate||""}
+onChange={handleChange}
+name="CategoryOfBussinessAssociate"
+/>
+<CFormCheck
+className="mb-3"
+type="checkbox"
+id="checkbox3"
+label="Manufacturer"
+checked={formData.CategoryOfBussinessAssociate||""}
+onChange={handleChange}
+name="CategoryOfBussinessAssociate"
+/>
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Contact Person <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Contact Person"
+       value={formData?.ContactPerson||""}
+       onChange={handleChange}
+       name="ContactPerson"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Location <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Location"
+       value={formData?.Location||""}
+       onChange={handleChange}
+       name="Location"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Address : Line 1 <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Address : Line 1"
+       value={formData?.AddressLine1}
+       onChange={handleChange}
+       name="AddressLine1"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={<>Address : Line 2</>}
+       placeholder="Address : Line 2"
+       value={formData?.AddressLine2}
+       onChange={handleChange}
+       name="AddressLine2"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={<>Address : Line 3</>}
+       placeholder="Address : Line 3"
+       value={formData?.AddressLine3}
+       onChange={handleChange}
+       name="AddressLine3"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           City <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="City"
+       value={formData?.City||""}
+       onChange={handleChange}
+       name="City"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           State <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="State"
+       value={formData?.State||""}
+       onChange={handleChange}
+       name="State"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Country <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Country"
+       value={formData?.Country||""}
+       onChange={handleChange}
+       name="Country"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           ZIP / PIN <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="ZIP / PIN"
+       value={formData?.ZipCode||""}
+       onChange={handleChange}
+       name="ZipCode"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Phone <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       
+       placeholder="Phone"
+       value={formData?.Phone}
+       onChange={handleChange}
+       name="Phone"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Fax <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Fax"
+       value={formData.Fax}
+       onChange={handleChange}
+       name="Fax"
+       required
+     />
+
+     <CFormInput
+       className="mb-3"
+       type="text"
+       label={
+         <>
+           Email <span style={{ color: "red" }}>*</span>
+         </>
+       }
+       placeholder="Email"
+       value={formData?.Email}
+       onChange={handleChange}
+       name="Email"
+       required
+     />
+   </CModalBody>
+   <CModalFooter>
+     <CButton color="light" onClick={closeModal}>
+       Back
+     </CButton>
+     <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+   </CModalFooter>
+ </CModal>
+   
+ </div>
+    )
+  }
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Business Associate</h1>
@@ -315,6 +561,7 @@ const BussinessAssociate = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Bussiness_Associate.pdf" title="Bussiness Associate Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Associate" color="blue" onClick={openModal} />
         </div>
@@ -325,8 +572,13 @@ const BussinessAssociate = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
-      <BUsinessAssociateModal visible={isModalOpen} closeModal={closeModal} />
+      <BUsinessAssociateModal
+       visible={isModalOpen}
+       closeModal={closeModal}
+       handleSubmit={handleModalSubmit}
+        />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -340,6 +592,14 @@ const BussinessAssociate = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+  {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>
