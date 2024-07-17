@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -25,6 +25,30 @@ const InstrumentModuleModal = ({ visible, closeModal, handleSubmit }) => {
     SuppliedBy: "",
     SopNo: "",
   });
+
+  const resetForm = () => {
+    setModuleData({
+      sno: "",
+      InstrumentId: "",
+      Category: "",
+      Module: "",
+      ModuleId: "",
+      Make: "",
+      Model: "",
+      ManufacturerNo: "",
+      InstallOn: "",
+      ExpiresOn: "",
+      SuppliedBy: "",
+      SopNo: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
+
   const handleInputChange = (field, value) => {
     const updatedData = { ...moduleData, [field]: value };
     setModuleData(updatedData);
