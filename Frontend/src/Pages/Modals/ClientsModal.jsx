@@ -7,7 +7,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ClientsModal = ({ visible, closeModal, handleSubmit }) => {
   const [ClientData, setClientData] = useState({
@@ -25,6 +25,29 @@ const ClientsModal = ({ visible, closeModal, handleSubmit }) => {
     name: "",
     plantCode: "",
   });
+  const resetForm = () => {
+    setClientData({
+      ClientName: "",
+      EmailAddress: "",
+      phone: "",
+      Address: "",
+      AddedOn: "",
+      alternateName: "",
+      contactPerson: "",
+      contactPersonNumber: "",
+      taxNumber: "",
+      fax: "",
+      website: "",
+      name: "",
+      plantCode: "",
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      resetForm();
+    }
+  }, [visible]);
 
   const handleInputChange = (field, value) => {
     const updatedData = { ...ClientData, [field]: value };
