@@ -1,351 +1,470 @@
-import React, { useState } from "react";
-import { CiSearch } from "react-icons/ci";
-import { CgAddR } from "react-icons/cg";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { FaArrowRight } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+//   const StatusModal = (_props) => {
+//     return (
+
+//     )
+//   }
+
+//   const DeleteModal = (_props) => {
+//     return (
+//         <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+//             <CModalHeader>
+//                 <CModalTitle>Delete User</CModalTitle>
+//             </CModalHeader>
+//             <CModalBody>
+//                 <p>Are you sure you want to delete this sample login template?</p>
+//             </CModalBody>
+//             <CModalFooter>
+//                 <CButton
+//                     color="secondary"
+//                     onClick={_props.closeModal}
+//                     style={{
+//                         marginRight: "0.5rem",
+//                         fontWeight: "500",
+//                     }}
+//                 >
+//                     Cancel
+//                 </CButton>
+//                 <CButton
+//                     color="danger"
+//                     onClick={_props.confirmDelete}
+//                     style={{
+//                         fontWeight: "500",
+//                         color: "white",
+//                     }}
+//                 >
+//                     Delete
+//                 </CButton>
+//             </CModalFooter>
+//         </CModal>
+//     );
+// };
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import CalibrationSampleLoginTemplateModal from "../Modals/CalibrationSampleLoginTemplateModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
-export default function CalibrationSampleLoginTemplate() {
-    const [addModal, setAddModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-  
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    sampleLogintemplate: "Product 1",
+    testPlan: "Seq 1",
+    QuantitativeParameters: "Info 1",
+    AutoSampleAllotmentRequired: "Start 1",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    sampleLogintemplate: "Product 2",
+    testPlan: "Seq 2",
+    QuantitativeParameters: "Info 2",
+    AutoSampleAllotmentRequired: "Start 2",
+    status: "INITIATED",
+  },
+];
 
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 },
-        { label: 'The Godfather: Part II', year: 1974 },
-        { label: 'The Dark Knight', year: 2008 },
-        { label: '12 Angry Men', year: 1957 },
-    ];
+const CalibrationSampleLoginTemplate = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+  const [editModalData, setEditModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-    const [storageName, setStorageName] = useState("");
-    const [searchTerm, setSearchTerm] = useState("");
-    const [filterStatus, setFilterStatus] = useState("");
-
-
-    const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
-  };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-  const StatusModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-        <CModalHeader>
-          <CModalTitle>Add Sample Login Template</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-        <CFormInput
-          label='Sample Login Template'
-          className="mb-3"
-          type="text"
-          placeholder=""
-          />  
-           <label className="" htmlFor="">Test Plan / Revision No.</label>
-           <Autocomplete
-                        disablePortal
-                        className="mb-3"
-                        id="combo-box-demo"
-                        options={top100Films}
-                        renderInput={(params) => <TextField {...params} label="" />}
-                    />
-
-          <CFormInput
-          label='Product / Material'
-          className="mb-3"
-          type="text"
-          placeholder=""
-          /> 
-           <CFormInput
-          label='Product / Material Code'
-          className="mb-3"
-          type="text"
-          placeholder=""
-          /> 
-           <CFormInput
-          label='Generic Name'
-          className="mb-3"
-          type="text"
-          placeholder=""
-          />  
-          <CFormInput
-          label='Specification ID'
-          className="mb-3"
-          type="text"
-          placeholder=""
-          /> 
-         <div className="d-flex gap-3 mt-4">
-        <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
-        <CButton color="primary w-50">Add</CButton>
-      </div>
-        </CModalBody>
-      </CModal>
-    )
-  }
-   
-  const DeleteModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-            <CModalHeader>
-                <CModalTitle>Delete User</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <p>Are you sure you want to delete this sample login template?</p>
-            </CModalBody>
-            <CModalFooter>
-                <CButton
-                    color="secondary"
-                    onClick={_props.closeModal}
-                    style={{
-                        marginRight: "0.5rem",
-                        fontWeight: "500",
-                    }}
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="danger"
-                    onClick={_props.confirmDelete}
-                    style={{
-                        fontWeight: "500",
-                        color: "white",
-                    }}
-                >
-                    Delete
-                </CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
-
-const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
-  };
-  
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
   };
 
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
-    const [employees, setEmployees] = useState([
-        {id:1, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' },
-        {id:2, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'DROPPED' },
-        {id:3, user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'REJECTED' },
-        {id:4, user: 'Test Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'APPROVED' }, { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'REJECTED' },
-        {id:5, user: 'hpcl', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INITIATED' },
-    ]);
+  useEffect(() => {
+    const storedData = localStorage.getItem("calibrationData");
+    if (storedData) {
+      setData(JSON.parse(storedData));
+    } else {
+      setData(initialData);
+    }
+  }, []);
 
-    const pageSize = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-    const [editRowIndex, setEditRowIndex] = useState(null);
-    const [editFormData, setEditFormData] = useState({
-        user: '',
-        role: '',
-        departments: '',
-        joiningDate: '',
-        addedBy: '',
-        status: ''
+  useEffect(() => {
+    localStorage.setItem("calibrationData", JSON.stringify(data));
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
     });
 
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
+    setCardCounts(counts);
+  }, [data]);
 
-    const handleStatusChange = (e) => {
-        setFilterStatus(e.target.value);
-    };
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
-    const handleAddStorage = () => {
-        if (storageName.trim() === "") {
-            setErrorMessage("Storage condition is Required");
-        } else {
-            toast.warning("Apologies, an unexpected error occurred while adding the Storage Condition.");
-        }
-    };
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-    const handleEdit = (index) => {
-        setEditRowIndex(index);
-        setEditFormData(employees[index]);
-    };
+  const filteredData = data.filter((row) => {
+    return (
+      row.sampleLogintemplate
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-    const handleDelete = (index) => {
-        const newEmployees = [...employees];
-        newEmployees.splice(index, 1);
-        setEmployees(newEmployees);
-    };
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Sample Login template", accessor: "sampleLogintemplate" },
+    { header: "Test Plan", accessor: "testPlan" },
+    {
+      header: "Auto Sample Allotment Required",
+      accessor: "AutoSampleAllotmentRequired",
+    },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      sampleLogintemplate: item["Sample Login template"] || "",
+      testPlan: item["Test Plan"] || "",
+      AutoSampleAllotmentRequired: item["Auto Sample Allotment Required"] || "",
+      status: item["Status"] || "",
+    }));
+    const concatenateData = [...updatedData];
+    setData(concatenateData);
+    setIsModalsOpen(false);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          sampleLogintemplate: newInstrument.sampleLogintemplate,
+          testPlan: newInstrument.testPlan,
+          AutoSampleAllotmentRequired: newInstrument.genericName,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const top100Films = [
+      { title: "The Shawshank Redemption", year: 1994 },
+      { title: "The Godfather", year: 1972 },
+      { title: "The Godfather: Part II", year: 1974 },
+      { title: "Pulp Fiction", year: 1994 },
+      { title: "The Dark Knight", year: 2008 },
+      { title: "12 Angry Men", year: 1957 },
+      { title: "Schindler's List", year: 1993 },
+      { title: "The Lord of the Rings: The Return of the King", year: 2003 },
+      { title: "Fight Club", year: 1999 },
+      { title: "Star Wars: Episode IV - A" },
+    ];
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
 
     const handleSave = () => {
-        const updatedEmployees = [...employees];
-        updatedEmployees[editRowIndex] = editFormData;
-        setEmployees(updatedEmployees);
-        setEditRowIndex(null);
+      onSave(formData);
     };
 
-    const filteredEmployees = employees.filter((employee) => {
-        return (
-            employee.user.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            (filterStatus === "" || employee.status === filterStatus)
-        );
-    });
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
-
-    const renderRows = () => {
-        return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
-                <td><input type="checkbox" /></td>
-                <td>{employee.user}</td>
-                <td>{employee.role}</td>
-                <td>{employee.addedBy}</td>
-                <td  ><button  
-                        className={`py-1 px-2 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          employee.status === "INITIATED"
-                            ? "blue-700"
-                            : employee.status === "APPROVED"
-                            ? "green-700"
-                            : employee.status === "REJECTED"
-                            ? "red-700"
-                            : employee.status === "REINITIATED"
-                            ? "yellow-500"
-                            : employee.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {employee.status}
-                      </button>
-                        </td>
-                <td>
-                    <div className="d-flex gap-3">
-                        <Link to="/calibration/sample-login-template-details"><FontAwesomeIcon icon={faEye} /></Link>
-                        <div onClick={() => setAddModal(true)}>
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                        </div>
-                        <Link to="#"  onClick={() => handleDeleteClick(employee.id)}>
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </Link>
-                    </div>
-                </td>
-            </tr>
-        ));
-    };
-
-    const nextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
-
-    const prevPage = () => {
-        setCurrentPage(currentPage - 1);
-    };
-
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
     };
 
     return (
-        <>
-               <div className="m-5 mt-3"  >
-               <h4 className="fw-bold ">Sample Login Template</h4>
-
-               <CRow className="mt-5 mb-3">
-        <CCol sm={4}>
-          <CFormInput
-            type="text"
-            placeholder="Search..."
-            style={{fontSize:'0.9rem'}}
-            className="border-2"
-            onChange={handleSearchChange}
-          />
-        </CCol>
-
-        <CCol sm={3}>
-          <CFormSelect
-            onChange={handleStatusChange}
-            className="border-2"
-            style={{fontSize:'0.9rem'}}
-            options={[
-              { label: "All", value: "" },
-              { label: "Initiated", value: "INITIATED" },
-              { label: "Approved", value: "APPROVED" },
-              { label: "Rejected", value: "REJECTED" },
-              { label: "Reinitiated", value: "REINITIATED" },
-              { label: "Dropped", value: "DROPPED" },
-            ]}
-          />
-        </CCol>
-        
-        <CCol sm={2}></CCol>
-        <CCol sm={3}>
-          <div className="d-flex justify-content-end">
-            <CButton color="primary" style={{fontSize:'0.9rem'}} onClick={() => setAddModal(true)}>
-            Add Login Template
-            </CButton>
-          </div>
-        </CCol>
-      </CRow>
-
-          
-              <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
         >
-                <table className='table table-responsive    text-xs' >
-                    <thead>
-                        <tr>
-                            <th  style={{ background: "#5D76A9", color: "white"}}><input type="checkbox" /></th>
-                            <th  style={{ background: "#5D76A9", color: "white"}}>Sample Login Template</th>
-                            <th  style={{ background: "#5D76A9", color: "white"}}>Test Plan</th>
-                            <th  style={{ background: "#5D76A9", color: "white"}}>Auto Sample Allotment Required</th>
-                            <th  style={{ background: "#5D76A9", color: "white"}}>Status</th>
-                            <th  style={{ background: "#5D76A9", color: "white"}}>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderRows()}
-                    </tbody>
-                </table>
+          <CModalHeader>
+            <CModalTitle>Add Sample Login Template</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              label="Sample Login Template"
+              className="mb-3"
+              type="text"
+              placeholder=""
+              value={formData?.sampleLogintemplate || ""}
+              onChange={handleChange}
+              name="sampleLogintemplate"
+            />
+            <div>
+              <label htmlFor="testPlan">Test Plan / Revision No.</label>
+              <select
+                name="testPlan"
+                id="testPlan"
+                className="mb-3 form-select"
+                value={formData?.testPlan || ""}
+                onChange={handleChange}
+              >
+                <option value="">Select a film</option>
+                {top100Films.map((film, index) => (
+                  <option key={index} value={film.title}>
+                    {film.title} ({film.year})
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
+            <CFormInput
+              label="Product / Material"
+              className="mb-3"
+              type="text"
+              placeholder=""
+              value={formData?.productMaterial || ""}
+              onChange={handleChange}
+              name="productMaterial"
+            />
+            <CFormInput
+              label="Product / Material Code"
+              className="mb-3"
+              type="text"
+              placeholder=""
+              value={formData?.productMaterialCode || ""}
+              onChange={handleChange}
+              name="productMaterialCode"
+            />
+            <CFormInput
+              label="Generic Name"
+              className="mb-3"
+              type="text"
+              placeholder=""
+              value={formData?.AutoSampleAllotmentRequired || ""}
+              onChange={handleChange}
+              name="AutoSampleAllotmentRequired"
+            />
+            <CFormInput
+              label="Specification ID"
+              className="mb-3"
+              type="text"
+              placeholder=""
+              value={formData?.specificationId || ""}
+              onChange={handleChange}
+              name="specificationId"
+            />
+            <div className="d-flex gap-3 mt-4">
+              <CButton color="light w-50" onClick={closeModal}>
+                &lt; Back
+              </CButton>
+              <CButton color="primary w-50" onClick={handleSave}>
+                Add
+              </CButton>
             </div>
+          </CModalBody>
+        </CModal>
+      </div>
+    );
+  };
 
-                       
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Sample Login Template</h1>
 
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal}
-          closeModal={() => setDeleteModal(false)}
-          confirmDelete={handleDeleteConfirm}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Calibration_Sample_login_Template.pdf" title="Calibration Sample Login Template Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Login Template"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+      />
+      <CalibrationSampleLoginTemplateModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-        </>
-    );
-}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
+  );
+};
+
+export default CalibrationSampleLoginTemplate;

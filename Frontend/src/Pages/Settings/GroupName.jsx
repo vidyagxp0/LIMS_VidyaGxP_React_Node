@@ -1,312 +1,420 @@
-import { CButton, CCol, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import GroupNameModal from "../Modals/GroupNameModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
-function GroupName() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null)
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    worksheetField: "BA-001",
+    sampleTypeName: "Associate 1",
+    description: "City A",
+    addedOn: "State A",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    worksheetField: "BA-002",
+    sampleTypeName: "Associate 2",
+    description: "City B",
+    addedOn: "State B",
+    status: "INITIATED",
+  },
+];
 
-  const [removeModal, setRemoveModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStatus, setSelectedStatus] = useState('All');
-  const recordsPerPage = 5;
+const generateRandomSymbolCode = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "SYM-";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
 
-  const [tableData, setTableData] = useState([
+const GroupName = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Group Name</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add information and add new Group Name</p>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Group Name"
+              placeholder="Group Name"
+              name="sampleTypeName"
+              value={formData?.sampleTypeName || ""}
+              onChange={handleChange}
+              required
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="description"
+              placeholder="description"
+              name="description"
+              value={formData?.description || ""}
+              onChange={handleChange}
+              required
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      worksheetField: item["Worksheet Field"] || "",
+      sampleTypeName: item["Sample_type Name"] || "",
+      description: item["description"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...updatedData];
+    setData(concatenateData);
+    setIsModalsOpen(false);
+  };
+
+  const columns = [
     {
-      id: 1,
-      groupName: "Dissolution",
-      description: "dissolution",
-      addedOn: "Jun 17th 23 14:45",
-      status: "APPROVED",
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
     },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Worksheet Field", accessor: "worksheetField" },
+    { header: "Sample_type Name", accessor: "sampleTypeName" },
+    { header: "description", accessor: "description" },
+    { header: "Added On", accessor: "addedOn" },
+    { header: "Status", accessor: "status" },
     {
-      id: 2,
-      groupName: "Uniformity of dosage units (By Content uniformity)",
-      description: "uniformity",
-      addedOn: "Jun 17th 23 14:45",
-      status: "APPROVED",
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
     },
-    {
-      id: 3,
-      groupName: "Related substances",
-      description: "rs",
-      addedOn: "Jun 17th 23 14:46",
-      status: "APPROVED",
-    },
-    {
-      id: 4,
-      groupName: "Each film coated bilayered tablet contains",
-      description: "tablets",
-      addedOn: "Jun 17th 23 14:50",
-      status: "APPROVED",
-    },
-    {
-      id: 5,
-      groupName: "Microbial Limit Test",
-      description: "mct",
-      addedOn: "Jun 17th 23 14:50",
-      status: "APPROVED",
-    },
-    {
-      id: 6,
-      groupName: "Assay",
-      description: "Assay",
-      addedOn: "Aug 16th 23 13:16",
-      status: "APPROVED",
-    },
-    {
-      id: 7,
-      groupName: "Specific Gravity",
-      description: "sg",
-      addedOn: "Mar 16th 24 16:29",
-      status: "APPROVED",
+  ];
+
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          sampleTypeName: requalification.sampleTypeName,
+          description: requalification.description,
+          worksheetField: generateRandomSymbolCode(),
+          addedOn: currentDate,
+          status: "Active",
+        },
+      ]);
     }
-  ]);
-
-
-  const handleStatusChange = (e) => {
-    setSelectedStatus(e.target.value);
-    setCurrentPage(1);
+    closeModal();
   };
 
-  const handleChartClick = (status) => {
-    setSelectedStatus(status);
-    setCurrentPage(1);
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const handleDelete = () => {
-    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-    setRemoveModal(false);
-    setDeleteId(null)
-  }
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setRemoveModal(true);
-  }
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
 
-  const filteredData = selectedStatus === 'All' ? tableData : tableData.filter(data => data.status === selectedStatus);
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
 
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
   return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Group Name</h4>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Group Name</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
         </div>
-        <div className="mt-3 d-flex gap-4">
-          <div className="chart-widgets w-100">
-            <div className="row">
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleChartClick('DROPPED')}>
-                <div className="text-light fs-5">DROPPED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'DROPPED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => handleChartClick('INITIATED')}>
-                <div className="text-light fs-5">INITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'INITIATED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => handleChartClick('REINITIATED')}>
-                <div className="text-light fs-5">REINITIATED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REINITIATED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => handleChartClick('APPROVED')}>
-                <div className="text-light fs-5">APPROVED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'APPROVED').length}</div>
-              </div>
-              <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => handleChartClick('REJECTED')}>
-                <div className="text-light fs-5">REJECTED</div>
-                <div className="count fs-1 text-light fw-bolder">{tableData.filter(data => data.status === 'REJECTED').length}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <CRow className="mb-3">
-            <CCol sm={3}>
-              <CFormSelect
-                value={selectedStatus}
-                onChange={handleStatusChange}
-                style={{ fontSize: '0.9rem' }}
-                options={[
-                  { value: 'All', label: 'All' },
-                  { value: 'INITIATED', label: 'Initiated' },
-                  { value: 'APPROVED', label: 'Approved' },
-                  { value: 'REJECTED', label: 'Rejected' },
-                  { value: 'REINITIATED', label: 'Reinitiated' },
-                  { value: 'DROPPED', label: 'Dropped' }
-                ]}
-              />
-            </CCol>
-            <CCol sm={6}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-              <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Group Name
-                  </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-        <div
-          className="rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >
-          <CTable className="mb-0 table table-responsive" >
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >S NO.</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Group Name</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Description</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Added On</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Status</CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >Actions</CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {currentRecords.map((data, index) => (
-                <CTableRow key={data.id}>
-                  <CTableDataCell>{indexOfFirstRecord + index + 1}</CTableDataCell>
-                  <CTableDataCell>{data.groupName}</CTableDataCell>
-                  <CTableDataCell>{data.description}</CTableDataCell>
-                  <CTableDataCell>{data.addedOn}</CTableDataCell>
-                  <CTableDataCell>
-                  <button
-                      className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "INITIATED"
-                        ? "blue-700"
-                        : data.status === "APPROVED"
-                          ? "green-700"
-                          : data.status === "REJECTED"
-                            ? "red-700"
-                            : data.status === "REINITIATED"
-                              ? "yellow-500"
-                              : data.status === "DROPPED"
-                                ? "purple-700"
-                                : "white"
-                        }`} style={{ fontSize: '0.6rem' }}
-                    >
-                      {data.status}
-                    </button>
-                  </CTableDataCell>
-                  <CTableDataCell>
-                    <div className="d-flex gap-3">
-                      <Link to="/settings/bussinessAssociateDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                      <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-              ))}
-            </CTableBody>
-          </CTable>
-        </div>
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
-          </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Group_Name.pdf" title="Group Name Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
+          <ATMButton text="Add Group Name" color="blue" onClick={openModal} />
         </div>
       </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModel visible={removeModal} closeModal={() => setRemoveModal(false)} handleDelete={handleDelete} />}
-
-    </>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+      />
+      <GroupNameModal
+        visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
   );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Add Group Name</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Add information and add new Group Name</p>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Group Name"
-          placeholder="Group Name"
-          required
-        />
-
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Description"
-          placeholder="Description"
-          required
-        />
-
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-info text-white">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-}
-
-const DeleteModel = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Delete Group Name</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Do you want to delete this Group Name <code>Uniformity of dosage units (By Content uniformity)</code>?</p>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="User Id"
-          placeholder="User Id"
-          required
-        />
-        <CFormInput
-          className="mb-3"
-          type="password"
-          label="Password"
-          placeholder="password"
-          required
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-}
+};
 
 export default GroupName;

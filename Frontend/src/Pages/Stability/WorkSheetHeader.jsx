@@ -1,394 +1,772 @@
-import {
-  CButton, CCol, CFooter, CFormInput, CFormSelect, CHeader, CModal,
-  CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable,
-  CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow
-} from "@coreui/react";
-import { faEye, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CFormSelect,
+  CHeader,
+  CFooter,
+} from "@coreui/react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    sampleType: "Type A",
+    worksheetType: "Worksheet 1",
+    product: "Product 1",
+    reportTitle: "Report 1",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    sampleType: "Type B",
+    worksheetType: "Worksheet 2",
+    product: "Product 2",
+    reportTitle: "Report 2",
+    status: "INITIATED",
+  },
+];
 
 function WorkSheetHeader() {
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [addModal, setAddModal] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
 
-  const [data, setData] = useState([
-    { id: 1, sampleType: "Micro Media", worksheetType: "With Specification", product: "testing", reportTitle: "testing001", status: "APPROVED" },
-    { id: 2, sampleType: "water type", worksheetType: "without-specification", product: "pm01", reportTitle: "R123", status: "APPROVED" },
-    { id: 3, sampleType: "HCL", worksheetType: "With Specification", product: "chemical1", reportTitle: "C101", status: "REINITIATED" },
-    { id: 4, sampleType: "Petrochemical", worksheetType: "ERP", product: "petro1", reportTitle: "P101", status: "INITIATED" },
-    { id: 5, sampleType: "Initial Product", worksheetType: "Without Specification", product: "init1", reportTitle: "I101", status: "REJECTED" },
-    { id: 6, sampleType: "Micro Media", worksheetType: "With Specification", product: "testing2", reportTitle: "T202", status: "APPROVED" },
-    { id: 7, sampleType: "water type", worksheetType: "ERP", product: "water1", reportTitle: "W101", status: "INITIATED" },
-    { id: 8, sampleType: "HCL", worksheetType: "Without Specification", product: "chemical2", reportTitle: "C202", status: "REINITIATED" },
-    { id: 9, sampleType: "Petrochemical", worksheetType: "With Specification", product: "petro2", reportTitle: "P202", status: "APPROVED" },
-    { id: 10, sampleType: "Initial Product", worksheetType: "ERP", product: "init2", reportTitle: "I202", status: "APPROVED" }
-  ]);
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-  const [search, setSearch] = useState("");
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
-  const nextPage = () => setCurrentPage(currentPage + 1);
-  const prevPage = () => setCurrentPage(currentPage - 1);
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
-    return filteredData.filter((item) =>
-      item.sampleType.toLowerCase().includes(search.toLowerCase()) ||
-      item.worksheetType.toLowerCase().includes(search.toLowerCase()) ||
-      item.product.toLowerCase().includes(search.toLowerCase()) ||
-      item.reportTitle.toLowerCase().includes(search.toLowerCase())
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.sampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData); // Set the data for ViewModal
+    setIsViewModalOpen(true); // Open the ViewModal
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Sample Type", accessor: "sampleType" },
+    { header: "Worksheet Type", accessor: "worksheetType" },
+    { header: "Product", accessor: "product" },
+    { header: "Report Title", accessor: "reportTitle" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+
+      sno: initialData.length + index + 1,
+      sampleType: item["Sample Type"] || "",
+      worksheetType: item["Worksheet Type"] || "",
+      product: item["Product"] || "",
+      reportTitle: item["Report Title"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(2);
+    const [footerColumns, setFooterColumns] = useState(2);
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [worksheetHeader, setWorksheetHeader] = useState({
+      sampleType: "",
+      worksheetType: "",
+      reportTitle: "",
+      productCaption: "",
+    });
+
+    const handleAdd = () => {
+      const newCondition = {
+        sampleType: worksheetHeader.sampleType,
+        worksheetType: worksheetHeader.worksheetType,
+        reportTitle: worksheetHeader.reportTitle,
+        product: worksheetHeader.productCaption,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+
+    const handleHeaderColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setHeaderColumns(columns);
+      if (headerRows > 0) {
+        setHeaderRows(0);
+      }
+    };
+
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+
+    const handleFooterColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setFooterColumns(columns);
+      if (footerRows > 0) {
+        setFooterRows(0);
+      }
+    };
+
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Worksheet Header</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Sample Type"
+            placeholder="Select..."
+            options={[
+              "Select...",
+              { label: "HCL" },
+              { label: "Hydrochrolic Acid" },
+              { label: "Petrochemical" },
+              { label: "Initial Product" },
+            ]}
+            value={worksheetHeader.sampleType}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                sampleType: e.target.value,
+              })
+            }
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Worksheet Type"
+            placeholder="Select Worksheet Type"
+            options={[
+              "Select Coa Type",
+              { label: "With Specification" },
+              { label: "Without Specification" },
+              { label: "ERP" },
+            ]}
+            value={worksheetHeader.worksheetType}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                worksheetType: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            disabled
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Report Title"
+            placeholder="Report Title"
+            value={worksheetHeader.reportTitle}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                reportTitle: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product/Material Caption"
+            placeholder="Product"
+            value={worksheetHeader.productCaption}
+            onChange={(e) =>
+              setWorksheetHeader({
+                ...worksheetHeader,
+                productCaption: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Format No."
+            placeholder="Format No."
+          />
+          <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={headerRows}
+                onChange={handleHeaderRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={headerColumns.toString()}
+                onChange={handleHeaderColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
+          <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns.toString()}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [headerRows, setHeaderRows] = useState(0);
+    const [footerRows, setFooterRows] = useState(0);
+    const [headerColumns, setHeaderColumns] = useState(2);
+    const [footerColumns, setFooterColumns] = useState(2);
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const handleHeaderRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setHeaderRows(value);
+    };
+
+    const handleHeaderColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setHeaderColumns(columns);
+      if (headerRows > 0) {
+        setHeaderRows(0);
+      }
+    };
+
+    const handleFooterRowsChange = (e) => {
+      const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
+      setFooterRows(value);
+    };
+
+    const handleFooterColumnsChange = (e) => {
+      const columns = parseInt(e.target.value, 10);
+      setFooterColumns(columns);
+      if (footerRows > 0) {
+        setFooterRows(0);
+      }
+    };
+
+    const renderTable = (rows, columns) => {
+      const tableRows = [];
+      for (let i = 0; i < rows; i++) {
+        const tableColumns = [];
+        for (let j = 0; j < columns; j++) {
+          tableColumns.push(
+            <td key={j} className="flex gap-4">
+              <CFormInput type="text" placeholder={`Lower Count `} />
+              <CFormSelect
+                className="mb-2"
+                options={[
+                  {
+                    label: "Select Field",
+                    value: "1",
+                  },
+                ]}
+              />
+            </td>
+          );
+        }
+        tableRows.push(<tr key={i}>{tableColumns}</tr>);
+      }
+      return tableRows;
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Worksheet Header</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Sample Type"
+            placeholder="Select..."
+            options={[
+              "Select...",
+              { label: "HCL" },
+              { label: "Hydrochrolic Acid" },
+              { label: "Petrochemical" },
+              { label: "Initial Product" },
+            ]}
+            value={formData?.sampleType || ""}
+            onChange={handleChange}
+            name="sampleType"
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Worksheet Type"
+            placeholder="Select Worksheet Type"
+            options={[
+              "Select Coa Type",
+              { label: "With Specification" },
+              { label: "Without Specification" },
+              { label: "ERP" },
+            ]}
+            value={formData?.worksheetType || ""}
+            onChange={handleChange}
+            name="worksheetType"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            disabled
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Report Title"
+            placeholder="Report Title"
+            value={formData?.reportTitle || ""}
+            onChange={handleChange}
+            name="reportTitle"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product/Material Caption"
+            placeholder="Product"
+            value={formData?.product || ""}
+            onChange={handleChange}
+            name="product"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Format No."
+            placeholder="Format No."
+          />
+          <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={headerRows}
+                onChange={handleHeaderRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={headerColumns.toString()}
+                onChange={handleHeaderColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(headerRows, headerColumns)}</tbody>
+          </table>
+          <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
+          <div className="d-flex pb-2">
+            <div className="mb-3">
+              <CFormInput
+                type="number"
+                label="Rows"
+                placeholder="Rows"
+                value={footerRows}
+                onChange={handleFooterRowsChange}
+              />
+            </div>
+            <div className="ps-3 w-50">
+              <CFormSelect
+                label="Columns"
+                placeholder="Columns"
+                options={[
+                  { label: "2", value: "2" },
+                  { label: "4", value: "4" },
+                  { label: "6", value: "6" },
+                ]}
+                value={footerColumns.toString()}
+                onChange={handleFooterColumnsChange}
+              />
+            </div>
+          </div>
+          <table className="table mb-3">
+            <tbody>{renderTable(footerRows, footerColumns)}</tbody>
+          </table>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
     );
   };
 
   return (
     <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold"> Stability WorkSheet Header</h4>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Work Sheet Header</h1>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
+          />
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
+            color="blue"
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
+          />
         </div>
-        <div className="mt-3 d-flex gap-4">
-          <div className="chart-widgets w-100">
-            <div className="">
-              <div className="row" style={{ cursor: "pointer" }}>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
-
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("DROPPED")}
-                >
-                  <div className="text-light font-bold fs-5">DROPPED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "DROPPED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("INITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">INITIATED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "INITIATED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, orange , #f7e05f )",
-
-                    textAlign: "left",
-                    boxShadow: "0px 10px 20px  black !important",
-                  }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">REINITIATED</div>
-
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg, green , #0fd850  )",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("APPROVED")}
-                >
-                  <div className="text-light font-bold fs-5">APPROVED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white", textAlign: "left" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "APPROVED")
-                        .length
-                    }
-                  </div>
-                </button>
-
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg ,red, #FF719A)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("REJECTED")}
-                >
-                  <div className="text-light font-bold fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">
-                    {
-                      filterData().filter((item) => item.status === "REJECTED")
-                        .length
-                    }
-                  </div>
-                </button>
-              </div>
-            </div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="WorkSheet_Header.pdf" title="WorkSheet Header Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add WorkSheet" color="blue" onClick={openModal} />
           </div>
         </div>
-        <div>
-          <CRow className="mb-3">
-            <CCol sm={4}>
-              <CFormInput
-                style={{ fontSize: '0.9rem' }}
-                type="text"
-                placeholder="Search..."
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                value={selectedStatus}
-                style={{ fontSize: '0.9rem' }}
-                options={[
-                  { value: "All", label: "All" },
-                  { value: "INITIATED", label: "Initiated" },
-                  { value: "APPROVED", label: "Approved" },
-                  { value: "REJECTED", label: "Rejected" },
-                  { value: "REINITIATED", label: "Reinitiated" },
-                  { value: "DROPPED", label: "Dropped" },
-                ]}
-              />
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Worksheet</CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-        <div
-          className=" rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Sample Type</CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Worksheet Type</CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Product</CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Report Title</CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Status</CTableHeaderCell>
-                <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {filterData().slice(startIndex, endIndex)
-                .filter((item) => {
-                  return search.toLowerCase() === ""
-                    ? item
-                    : item.sampleType.toLowerCase().includes(search.toLowerCase()) ||
-                    item.worksheetType.toLowerCase().includes(search.toLowerCase()) ||
-                    item.product.toLowerCase().includes(search.toLowerCase()) ||
-                    item.reportTitle.toLowerCase().includes(search.toLowerCase())
-                })
-                .map((item, index) => (
-                  <CTableRow key={index}>
-                    <CTableHeaderCell scope="row" className="text-center">
-                      <input type="checkbox" />
-                    </CTableHeaderCell>
-                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                    <CTableDataCell key={item.id}>{item.sampleType}</CTableDataCell>
-                    <CTableDataCell>{item.worksheetType}</CTableDataCell>
-                    <CTableDataCell>{item.product}</CTableDataCell>
-                    <CTableDataCell>{item.reportTitle}</CTableDataCell>
-                    <CTableDataCell>
-                      <button
-                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "INITIATED"
-                          ? "blue-700"
-                          : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
-                              ? "red-700"
-                              : item.status === "REINITIATED"
-                                ? "yellow-500"
-                                : item.status === "DROPPED"
-                                  ? "purple-700"
-                                  : "white"
-                          }`} style={{ fontSize: '0.6rem' }}
-                      >
-                        {item.status}
-                      </button>
-                    </CTableDataCell>
-                    <CTableDataCell>
-                      <div className="d-flex gap-3">
-                        <Link to="/stability/worksheetHeaderDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                      </div>
-                    </CTableDataCell>
-                  </CTableRow>
-                ))}
-            </CTableBody>
-          </CTable>
-        </div>
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-              &lt;&lt;
-            </button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
+        />
+
+        {isModalOpen && (
+          <StatusModal
+            visible={isModalOpen}
+            closeModal={closeModal}
+            onAdd={addNewStorageCondition}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
     </>
   );
 }
-
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Add Worksheet Header</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Sample Type"
-          placeholder="Select..."
-          options={[
-            "Select...",
-            { label: "HCL" },
-            { label: "Hydrochrolic Acid" },
-            { label: "Petrochemical" },
-            { label: "Initial Product" }
-          ]}
-        />
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Worksheet Type"
-          placeholder="Select Worksheet Type"
-          options={[
-            "Select Coa Type",
-            { label: "With Specification" },
-            { label: "Without Specification" },
-            { label: "ERP" }
-          ]}
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Unique Code"
-          placeholder="Unique Code"
-          disabled
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Report Title"
-          placeholder="Report Title"
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Product/Material Caption"
-          placeholder="Product"
-        />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Format No."
-          placeholder="Format No."
-        />
-        <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Rows"
-          placeholder="Rows"
-        />
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Columns"
-          placeholder="Columns"
-          options={[
-            "Columns",
-            { label: "2" },
-            { label: "4" },
-            { label: "6" }
-          ]}
-        />
-        <CFooter className="bg-secondary text-light mb-3 p-2">Footer</CFooter>
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Rows"
-          placeholder="Rows"
-        />
-        <CFormSelect
-          className="mb-3"
-          type="select"
-          label="Columns"
-          placeholder="Columns"
-          options={[
-            "Columns",
-            { label: "2" },
-            { label: "4" },
-            { label: "6" }
-          ]}
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
-
 
 export default WorkSheetHeader;

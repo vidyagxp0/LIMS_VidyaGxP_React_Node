@@ -1,207 +1,441 @@
-import { CButton, CCol, CFooter, CFormInput, CFormSelect, CHeader, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { FaArrowRight } from "react-icons/fa"
-import { Link } from "react-router-dom"
+// const StatusModal = (_props) => {
+//   return (
+//     <>
 
-function WorkSheelField() {
-     const [addModal, setAddModal] = useState(false)
-     const badgeStyle = { background: "#cdffca" }
-     return (
-          <>
+//     </>
+//   );
+// };
 
-               <div id="approval-page" className="h-100 mx-5">
-                    <div className="container-fluid my-5">
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import WorkSheetFieldModal from "../Modals/WorkSheetFieldModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
-                         <div className="main-head">
-                              <div className="title fw-bold fs-5"> WorkSheet Field</div>
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    worksheetField: "BA-001",
+    sampleTypeName: "Associate 1",
+    description: "City A",
+    addedOn: "State A",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    worksheetField: "BA-002",
+    sampleTypeName: "Associate 2",
+    description: "City B",
+    addedOn: "State B",
+    status: "INITIATED",
+  },
+];
 
+const WorkSheetField = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
 
-                         </div>
-                         <div className="d-flex gap-4">
-                              <div className="chart-widgets w-100">
-                                   <div className="">
-                                        <div className="row">
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#0d6efd, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">INITIATED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">0</div>
-                                             </div>
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#d63384, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">REINITIATED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">0</div>
-                                             </div>
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#ffc107, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">APPROVED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">2</div>
-                                             </div>
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
-                                             <div className="col shadow p-3 m-3 rounded" style={{ background: 'linear-gradient(#dc3545, #9ec5fe)' }}>
-                                                  <div className="text-light fs-5">REJECTED</div>
-                                                  <div className="count fs-1 text-light fw-bolder">0</div>
-                                             </div>
-                                        </div>
-                                   </div>
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
 
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
 
-                              </div>
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
 
-                         </div>
-                         <div>
-                              <CRow className="mb-3">
-                                   
-                                   <CCol sm={3}>
-                                        <CFormSelect
-                                             options={[
-                                                  'Select Status',
-                                                  { label: 'All' },
-                                                  { label: 'Initiated' },
-                                                  { label: 'Approved' },
-                                                  { label: 'Rejected' },
-                                                  { label: 'Reinitiated' },
-                                                  { label: 'Dropped' }
-                                             ]}
-                                        />
-                                   </CCol>
-                                   <CCol sm={6}>
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
 
-                                   </CCol>
-                                   <CCol sm={3}>
-                                        <div className="d-flex justify-content-end">
-                                             <CButton className="bg-info text-white" onClick={() => setAddModal(true)}>Add Worksheet Fields</CButton>
-                                        </div>
-                                   </CCol>
-                              </CRow>
-                         </div>
-                         <div className="bg-white mt-5">
-                              <CTable align="middle" responsive className=" shadow">
-                                   <CTableHead>
-                                        <CTableRow>
-                                             <CTableHeaderCell scope="col">S NO.</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Worksheet Field</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">sample_type Name</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Description</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Added On</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Status</CTableHeaderCell>
-                                             <CTableHeaderCell scope="col">Actions</CTableHeaderCell>
-                                        </CTableRow>
-                                   </CTableHead>
-                                   <CTableBody>
-                                        <CTableRow>
-                                             
-                                             <CTableDataCell>1</CTableDataCell>
-                                             <CTableDataCell>Chemical</CTableDataCell>
-                                             <CTableDataCell>hcl</CTableDataCell>
-                                             <CTableDataCell>testing</CTableDataCell>
-                                             <CTableDataCell>May 22nd 24 11:28</CTableDataCell>
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
 
-                                             <CTableDataCell className="d-flex">
-                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Initiated</div>
-                                             </CTableDataCell>
-                                             <CTableDataCell>
-                                                  <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                                  </div>
-                                             </CTableDataCell>
-                                        </CTableRow>
-                                        <CTableRow>
-                                             
-                                             <CTableDataCell>2</CTableDataCell>
-                                             <CTableDataCell>Chemical</CTableDataCell>
-                                             <CTableDataCell>hcl</CTableDataCell>
-                                             <CTableDataCell>testing</CTableDataCell>
-                                             <CTableDataCell>May 22nd 24 11:28</CTableDataCell>
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
 
-                                             <CTableDataCell className="d-flex">
-                                                  <div className="py-2 px-3 small rounded fw-bold" style={badgeStyle}>Initiated</div>
-                                             </CTableDataCell>
-                                             <CTableDataCell>
-                                                  <div className="d-flex gap-3">
-                                                       <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                                                       <Link to="#"><FontAwesomeIcon icon={faTrashCan} /></Link>
-                                                  </div>
-                                             </CTableDataCell>
-                                        </CTableRow>
+    const handleSave = () => {
+      onSave(formData);
+    };
 
-                                   </CTableBody>
-                              </CTable>
-                         </div>
+    return (
+      <div>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+          <CModalHeader>
+            <CModalTitle>Add Worksheet Fields</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              type="text"
+              label="Name"
+              placeholder="WorkSheet Field Name "
+              value={formData?.sampleTypeName || ""}
+              name="sampleTypeName"
+              onChange={handleChange}
+            />
 
-                         <div className="pagination">
+            <CFormSelect
+              type="text"
+              label="Binds To"
+              placeholder="Select..."
+              options={[
+                "Select...",
+                { label: "HCL" },
+                { label: "Hydrochrolic Acid" },
+                { label: "Petrochemical" },
+                { label: "Initial Product" },
+              ]}
+              name="bindsTo"
+              value={formData?.bindsTo || ""}
+              onChange={handleChange}
+            />
 
-                              <div className="pagination">
-                                   <div className='mr-5'>
-                                        <button className="btn  mr-2" >&lt;&lt;</button>
-                                   </div>
-                                   <div className="current-page-number mr-2 bg-dark-subtle page-item">
-                                        <button className='btn rounded-circle'> 1 </button>
-                                   </div>
-                                   <div>
-                                        <button className="btn mr-2" >&gt;&gt;</button>
+            <CFormInput
+              type="text"
+              label="description"
+              placeholder="description"
+              value={formData?.description || ""}
+              name="description"
+              onChange={handleChange}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Add Field
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
 
-                                   </div>
+  // ************************************************************************************************
 
-                              </div>
-                              <button className="btn btn-next" > Next <FaArrowRight /></button>
-                         </div>
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
-                    </div>
-               </div>
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
-               {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-          </>
-     )
-}
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
 
-const StatusModal = (_props) => {
-     return (
-          <>
+    setCardCounts(counts);
+  }, [data]);
 
-               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-                    <CModalHeader>
-                         <CModalTitle>Add Worksheet Fields</CModalTitle>
-                    </CModalHeader>
-                    <CModalBody>
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
-                    <CFormInput
-                              type="text"
-                              label="Name"
-                              placeholder="WorkSheet Field Name "
-                         />
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-                         <CFormSelect
-                              type="text"
-                              label="Binds To"
-                              placeholder="Select..."
-                              options={[
-                                   "Select...",
-                                   { label: "HCL" },
-                                   { label: "Hydrochrolic Acid" },
-                                   { label: "Petrochemical" },
-                                   { label: "Initial Product" }
-                                 ]}
-                         />
-                         
-                         
-                         <CFormInput
-                              type="text"
-                              label="Description"
-                              placeholder="Description"
-                         />
-                                               
-                                                 
-                    </CModalBody>
-                    <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                         <CButton className="bg-info text-white">Add Field</CButton>
-                    </CModalFooter>
-               </CModal>
+  const filteredData = data.filter((row) => {
+    return (
+      row.description.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-          </>
-     )
-}
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
 
-export default WorkSheelField
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      worksheetField: item["Worksheet Field"] || "",
+      sampleTypeName: item["Sample_type Name"] || "",
+      description: item["description"] || "",
+      addedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Worksheet Field", accessor: "worksheetField" },
+    { header: "Sample_type Name", accessor: "sampleTypeName" },
+    { header: "description", accessor: "description" },
+    { header: "Added On", accessor: "addedOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  const generateRandomSymbolCode = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "SYM-";
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return result;
+  };
+
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          sampleTypeName: requalification.sampleTypeName,
+          worksheetField: generateRandomSymbolCode(),
+          bindsTo: requalification.bindsTo,
+          description: requalification.description,
+          addedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Worksheet Fields</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="WorkSheet_Field.pdf" title="WorkSheet Fields Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
+          <ATMButton
+            text="Add Worksheet Fields"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+      />
+      <WorkSheetFieldModal
+        visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
+  );
+};
+
+export default WorkSheetField;

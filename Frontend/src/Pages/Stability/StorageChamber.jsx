@@ -1,17 +1,23 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   CButton,
-  CCol,
   CContainer,
   CFormInput,
   CFormLabel,
-  CFormSelect,
   CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -19,656 +25,659 @@ import {
   CTableHeaderCell,
   CTableRow,
 } from "@coreui/react";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
-function StorageChamber() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("All");
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    chamberID: "CH001",
+    description: "Description 1",
+    makeModel: "Model A",
+    serialNo: "S001",
+    location: "Location A",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    chamberID: "CH002",
+    description: "Description 2",
+    makeModel: "Model B",
+    serialNo: "S002",
+    location: "Location B",
+    status: "INITIATED",
+  },
+];
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+const StorageChamber = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      chamberId: "stmp1",
-      description: "describe",
-      makeModel: "isubus111",
-      serialNo: "54255455",
-      location: "loc1",
-      status: "APPROVED",
-    },
-    {
-      id: 2,
-      chamberId: "test21",
-      description: "NA",
-      makeModel: "testing",
-      serialNo: "25365488",
-      location: "Plant1",
-      status: "INITIATED",
-    },
-    {
-      id: 3,
-      chamberId: "test",
-      description: "NA",
-      makeModel: "testing525",
-      serialNo: "25255488",
-      location: "Lab1",
-      status: "REJECTED",
-    },
-    {
-      id: 4,
-      chamberId: "chmb4",
-      description: "Temperature controlled",
-      makeModel: "coolerX200",
-      serialNo: "85236974",
-      location: "Warehouse",
-      status: "APPROVED",
-    },
-    {
-      id: 5,
-      chamberId: "chmb5",
-      description: "Humidity controlled",
-      makeModel: "humidX100",
-      serialNo: "96325874",
-      location: "Lab2",
-      status: "REJECTED",
-    },
-    {
-      id: 6,
-      chamberId: "chmb6",
-      description: "High pressure",
-      makeModel: "pressurX500",
-      serialNo: "15975326",
-      location: "Plant2",
-      status: "APPROVED",
-    },
-    {
-      id: 7,
-      chamberId: "chmb7",
-      description: "Vacuum chamber",
-      makeModel: "vacuumV700",
-      serialNo: "75395184",
-      location: "Plant3",
-      status: "INITIATED",
-    },
-    {
-      id: 8,
-      chamberId: "chmb8",
-      description: "Thermal chamber",
-      makeModel: "thermoT300",
-      serialNo: "45612378",
-      location: "loc2",
-      status: "APPROVED",
-    },
-    {
-      id: 9,
-      chamberId: "chmb9",
-      description: "Soundproof",
-      makeModel: "soundS100",
-      serialNo: "14725836",
-      location: "Lab3",
-      status: "INITIATED",
-    },
-    {
-      id: 10,
-      chamberId: "chmb10",
-      description: "Refrigerated",
-      makeModel: "refrigR400",
-      serialNo: "32165498",
-      location: "Plant4",
-      status: "REJECTED",
-    },
-    {
-      id: 11,
-      chamberId: "chmb11",
-      description: "Cryogenic",
-      makeModel: "cryoC600",
-      serialNo: "78945612",
-      location: "Warehouse",
-      status: "APPROVED",
-    },
-    {
-      id: 12,
-      chamberId: "chmb12",
-      description: "Dust-free",
-      makeModel: "dustD200",
-      serialNo: "12378945",
-      location: "Lab4",
-      status: "INITIATED",
-    },
-  ]);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-  const [search, setSearch] = useState("");
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter(
-          (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-        );
-    return filteredData.filter((item) =>
-      item.chamberId.toLowerCase().includes(search.toLowerCase()) ||
-      item.description.toLowerCase().includes(search.toLowerCase()) ||
-      item.makeModel.toLowerCase().includes(search.toLowerCase()) ||
-      item.serialNo.toLowerCase().includes(search.toLowerCase()) ||
-      item.location.toLowerCase().includes(search.toLowerCase())
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.chamberID.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
-  };
-  const filteredData = filterData();
+  });
 
-  const nextPage = () => setCurrentPage(currentPage + 1);
-  const prevPage = () => setCurrentPage(currentPage - 1);
-
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData); // Set the data for ViewModal
+    setIsViewModalOpen(true); // Open the ViewModal
   };
 
-  return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Storage Chamber</h4>
-        </div>
-        <div className="mt-3 d-flex gap-4">
-          <div className="chart-widgets w-100">
-            <div className="">
-              <div className="row" style={{ cursor: "pointer" }}>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Chamber ID", accessor: "chamberID" },
+    { header: "Description", accessor: "description" },
+    { header: "Make/ Model", accessor: "makeModel" },
+    { header: "Serial No.", accessor: "serialNo" },
+    { header: "Location", accessor: "location" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
 
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("DROPPED")}
-                >
-                  <div className="text-light font-bold fs-5">DROPPED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "DROPPED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("INITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">INITIATED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "INITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background: "linear-gradient(25deg, orange , #f7e05f )",
-
-                    textAlign: "left",
-                    boxShadow: "0px 10px 20px  black !important",
-                  }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">REINITIATED</div>
-
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background: "linear-gradient(27deg, green , #0fd850  )",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("APPROVED")}
-                >
-                  <butto className="text-light font-bold fs-5">
-                    APPROVED
-                  </butto>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white", textAlign: "left" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "APPROVED"
-                      ).length
-                    }
-                  </div>
-                </button>
-
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background: "linear-gradient(27deg ,red, #FF719A)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("REJECTED")}
-                >
-                  <div className="text-light font-bold fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REJECTED"
-                      ).length
-                    }
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <CRow className="mb-3">
-            <CCol sm={4}>
-              <CFormInput
-                style={{ fontSize: '0.9rem' }}
-                type="text"
-                placeholder="Search..."
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                value={selectedStatus}
-                style={{ fontSize: '0.9rem' }}
-                options={[
-                  { value: "All", label: "All" },
-                  { value: "INITIATED", label: "Initiated" },
-                  { value: "APPROVED", label: "Approved" },
-                  { value: "REJECTED", label: "Rejected" },
-                  { value: "REINITIATED", label: "Reinitiated" },
-                  { value: "DROPPED", label: "Dropped" },
-                ]}
-              />
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}>
-                  Add Chamber
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-        <div
-          className=" rounded bg-white"
-          style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-        >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
-
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                  className="text-center"
-                >
-                  <input type="checkbox" />
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  S NO.
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Chamber ID
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Description
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Make/Model
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Serial.No.
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Location
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Status
-                </CTableHeaderCell>
-                <CTableHeaderCell
-                  style={{ background: "#5D76A9", color: "white" }}
-                  scope="col"
-                >
-                  Actions
-                </CTableHeaderCell>
-              </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {filterData()
-                .slice(startIndex, endIndex)
-                .filter((item) => {
-                  return search.toLowerCase() === ""
-                    ? item
-                    : item.chamberId.toLowerCase().includes(search.toLowerCase()) ||
-                    item.description.toLowerCase().includes(search.toLowerCase()) ||
-                    item.makeModel.toLowerCase().includes(search.toLowerCase()) ||
-                    item.serialNo.toLowerCase().includes(search.toLowerCase()) ||
-                    item.location.toLowerCase().includes(search.toLowerCase());
-
-                })
-                .map((item, index) => (
-                  <CTableRow key={index}>
-                    <CTableHeaderCell scope="row" className="text-center">
-                      <input type="checkbox" />
-                    </CTableHeaderCell>
-                    <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                    <CTableDataCell key={item.id}>
-                      {item.chamberId}
-                    </CTableDataCell>
-                    <CTableDataCell>{item.description}</CTableDataCell>
-                    <CTableDataCell>{item.makeModel}</CTableDataCell>
-                    <CTableDataCell>{item.serialNo}</CTableDataCell>
-                    <CTableDataCell>{item.location}</CTableDataCell>
-                    <CTableDataCell>
-                      <button
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "INITIATED"
-                          ? "blue-700"
-                          : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
-                              ? "red-700"
-                              : item.status === "REINITIATED"
-                                ? "yellow-500"
-                                : item.status === "DROPPED"
-                                  ? "purple-700"
-                                  : "white"
-                          }`} style={{ fontSize: '0.6rem' }}
-                      >
-                        {item.status}
-                      </button>
-                    </CTableDataCell>
-                    <CTableDataCell>
-                      <div className="d-flex gap-3">
-                        <Link to="/stability/storageChamberDetails">
-                          <FontAwesomeIcon icon={faEye} />
-                        </Link>
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => setAddModal(true)}
-                        >
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </div>
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => setDeleteModal(item.id)}
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} />
-                        </div>
-                      </div>
-                    </CTableDataCell>
-                  </CTableRow>
-                ))}
-            </CTableBody>
-          </CTable>
-        </div>
-        <div className="d-flex justify-content-end align-items-center mt-4">
-          <div className="pagination">
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-              &lt;&lt;
-            </button>
-            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-            <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-              &gt;&gt;
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
-        />
-      )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  const [numRows, setNumRows] = useState(0);
-  const [inputValue, setInputValue] = useState(0);
-
-  const handleInputChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 0) {
-      setInputValue(value);
-    }
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const addRows = () => {
-    setNumRows(inputValue);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const renderRows = () => {
-    const rows = [];
-    for (let i = 0; i < numRows; i++) {
-      rows.push(
-        <CTableRow key={i}>
-          <CTableHeaderCell className="mb-3" scope="row">{i + 1}</CTableHeaderCell>
-          <CTableDataCell className="mb-3">Rack {i + 1}: <input type="text" /> </CTableDataCell>
-        </CTableRow>
-      );
-    }
-    return rows;
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
   };
 
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Storage Chamber</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Chamber ID"
-            placeholder="Chamber Id "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Description"
-            placeholder="Enter Description "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Make / Model"
-            placeholder="Make / Model "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Serial No."
-            placeholder="Serial Number "
-          />
-          <CFormInput type="text" label="Location" placeholder="Location " />
-          <CFormTextarea type="text" label="Comments" placeholder="" />
-          <CFormInput
-            className="mb-3"
-            type="select"
-            label="Stability Storage Condition"
-            placeholder="Select... "
-          />
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
-          <CContainer>
-            <CFormLabel htmlFor="numRowsInput">Number of Racks</CFormLabel>
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      chamberID: item["Chamber ID"] || "",
+      description: item["Description"] || "",
+      makeModel: item["Make/ Model"] || "",
+      serialNo: item["Serial No."] || "",
+      location: item["Location"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [chamberId, setChamberId] = useState("");
+    const [description, setDescription] = useState("");
+    const [makeModel, setMakeModel] = useState("");
+    const [serialNo, setSerialNo] = useState("");
+    const [location, setLocation] = useState("");
+    const [comments, setComments] = useState("");
+    const [stabilityStorageCondition, setStabilityStorageCondition] = useState("");
+    const [numberOfShelfs, setNumberOfShelfs] = useState("");
+    const [maximunNumberOfShelfs, setMaximunNumberOfShelfs] = useState("");
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
+
+    const renderRows = () => {
+      const rows = [];
+      for (let i = 0; i < numRows; i++) {
+        rows.push(
+          <CTableRow key={i}>
+            <CTableHeaderCell className="mb-3" scope="row">
+              {i + 1}
+            </CTableHeaderCell>
+            <CTableDataCell className="mb-3">
+              Rack {i + 1}: <input type="text" />{" "}
+            </CTableDataCell>
+          </CTableRow>
+        );
+      }
+      return rows;
+    };
+
+    const handleAdd = () => {
+      const newCondition = {
+        chamberID: chamberId,
+        description: description,
+        makeModel: makeModel,
+        serialNo: serialNo,
+        location: location,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Storage Chamber</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
             <CFormInput
               className="mb-3"
-              type="number"
-              id="numRowsInput"
-              value={inputValue}
-              onChange={handleInputChange}
-              min="0"
-              placeholder="Number of Racks"
+              type="text"
+              label="Chamber ID"
+              placeholder="Chamber Id "
+              value={chamberId}
+              onChange={(e) => setChamberId(e.target.value)}
             />
-            <div className="py-4 mb-3">
-              <Button className="bg-primary" onClick={addRows}>
-                Add Rows
-              </Button>
-              <CTable striped>
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell>Sno.</CTableHeaderCell>
-                    <CTableHeaderCell>
-                      Number of Shelfs Per Rack
-                    </CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody className="mb-3">{renderRows()}</CTableBody>
-              </CTable>
-            </div>
-          </CContainer>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              placeholder="Enter Description "
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Make / Model"
+              placeholder="Make / Model "
+              value={makeModel}
+              onChange={(e) => setMakeModel(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Serial No."
+              placeholder="Serial Number "
+              value={serialNo}
+              onChange={(e) => setSerialNo(e.target.value)}
+            />
+            <CFormInput
+              type="text"
+              label="Location"
+              placeholder="Location "
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+            <CFormTextarea
+              type="text"
+              label="Comments"
+              placeholder=""
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="select"
+              label="Stability Storage Condition"
+              placeholder="Select... "
+              value={stabilityStorageCondition}
+              onChange={(e) => setStabilityStorageCondition(e.target.value)}
+            />
 
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Number Of Shelfs"
-            placeholder="Number Of Shelfs "
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Maximum No. Of Positions For Shelf"
-            placeholder="0"
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton className="bg-info text-white">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
+            <CContainer>
+              <CFormLabel htmlFor="numRowsInput">Number of Racks</CFormLabel>
+              <CFormInput
+                className="mb-3"
+                type="number"
+                id="numRowsInput"
+                value={inputValue}
+                onChange={handleInputChange}
+                min="0"
+                placeholder="Number of Racks"
+              />
+              <div className="py-4 mb-3">
+                <Button className="bg-primary" onClick={addRows}>
+                  Add Rows
+                </Button>
+                <CTable striped>
+                  <CTableHead>
+                    <CTableRow>
+                      <CTableHeaderCell>Sno.</CTableHeaderCell>
+                      <CTableHeaderCell>
+                        Number of Shelfs Per Rack
+                      </CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
+                  <CTableBody className="mb-3">{renderRows()}</CTableBody>
+                </CTable>
+              </div>
+            </CContainer>
 
-const DeleteModal = (_props) => {
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Number Of Shelfs"
+              placeholder="Number Of Shelfs "
+              value={numberOfShelfs}
+              onChange={(e) => setNumberOfShelfs(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Maximum No. Of Positions For Shelf"
+              placeholder="0"
+              value={maximunNumberOfShelfs}
+              onChange={(e) => setMaximunNumberOfShelfs(e.target.value)}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleAdd}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
+
+    const renderRows = () => {
+      const rows = [];
+      for (let i = 0; i < numRows; i++) {
+        rows.push(
+          <CTableRow key={i}>
+            <CTableHeaderCell className="mb-3" scope="row">
+              {i + 1}
+            </CTableHeaderCell>
+            <CTableDataCell className="mb-3">
+              Rack {i + 1}: <input type="text" />{" "}
+            </CTableDataCell>
+          </CTableRow>
+        );
+      }
+      return rows;
+    };
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Storage Chamber</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber ID"
+              placeholder="Chamber Id "
+              name="chamberID"
+              value={formData?.chamberID || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              placeholder="Enter Description "
+              name="description"
+              value={formData?.description || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Make / Model"
+              placeholder="Make / Model "
+              name="makeModel"
+              value={formData?.makeModel || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Serial No."
+              placeholder="Serial Number "
+              name="serialNo"
+              value={formData?.serialNo || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Location"
+              placeholder="Location "
+              name="location"
+              value={formData?.location || ""}
+              onChange={handleChange}
+            />
+            <CFormTextarea
+              type="text"
+              label="Comments"
+              placeholder=""
+              name="comments"
+              value={formData?.comments || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="select"
+              label="Stability Storage Condition"
+              placeholder="Select... "
+              name="stabilityStorageCondition"
+              value={formData?.stabilityStorageCondition || ""}
+              onChange={handleChange}
+            />
+
+            <CContainer>
+              <CFormLabel htmlFor="numRowsInput">Number of Racks</CFormLabel>
+              <CFormInput
+                className="mb-3"
+                type="number"
+                id="numRowsInput"
+                value={inputValue}
+                onChange={handleInputChange}
+                min="0"
+                placeholder="Number of Racks"
+              />
+              <div className="py-4 mb-3">
+                <Button className="bg-primary" onClick={addRows}>
+                  Add Rows
+                </Button>
+                <CTable striped>
+                  <CTableHead>
+                    <CTableRow>
+                      <CTableHeaderCell>Sno.</CTableHeaderCell>
+                      <CTableHeaderCell>
+                        Number of Shelfs Per Rack
+                      </CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
+                  <CTableBody className="mb-3">{renderRows()}</CTableBody>
+                </CTable>
+              </div>
+            </CContainer>
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Number Of Shelfs"
+              placeholder="Number Of Shelfs "
+              name="numberOfShelfs"
+              value={formData?.numberOfShelfs || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Maximum No. Of Positions For Shelf"
+              placeholder="0"
+              name="maximunNumberOfShelfs"
+              value={formData?.maximunNumberOfShelfs || ""}
+              onChange={handleChange}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Update
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
   return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Storage Chamber
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Do you want to delete this storage chamber</p>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Storage Chamber</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
       </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Storage_Chamber.pdf" title="Storage Chamber Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Storage Chamber"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onDelete={handleDelete}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
+      />
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
   );
 };
-
 export default StorageChamber;

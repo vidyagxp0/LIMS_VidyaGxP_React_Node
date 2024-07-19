@@ -1,110 +1,208 @@
-import React, { useState } from "react";
-// import "./StorageCondition.css";
-import 'react-toastify/dist/ReactToastify.css';
-import { FaArrowRight } from 'react-icons/fa';
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 
-export default function TestHistory() {
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    TestName: "Test-001",
+    TestsPlanned: "10",
+    TestsExecuted: "8",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    TestName: "Test-002",
+    TestsPlanned: "15",
+    TestsExecuted: "12",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    TestName: "Test-003",
+    TestsPlanned: "20",
+    TestsExecuted: "18",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    TestName: "Test-004",
+    TestsPlanned: "5",
+    TestsExecuted: "4",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    TestName: "Test-005",
+    TestsPlanned: "25",
+    TestsExecuted: "20",
+  },
+ 
+];
 
-    const pageSize = 10;
-    const [currentPage, setCurrentPage] = useState(1);
+const TestHistory = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
 
-    const employees = [
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INPending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INPending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INPending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INPending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INPending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INPending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INPending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
-        { user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'Pending' },
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-    ];
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employees.length);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
-    const renderRows = () => {
-        return employees.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
-                <td><input type="checkbox" /></td>
-                <td>{startIndex + index + 1}</td>
-                <td>{employee.user}</td>
-                <td>{employee.role}</td>
-
-                <td>{employee.addedBy}</td>
-
-            </tr>
-        ));
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
     };
-    const nextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
 
-    const prevPage = () => {
-        setCurrentPage(currentPage - 1);
-    };
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
 
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
     return (
-        <>
-            <div className="m-5 mt-3">
-                <div className="main-head">
-                    <h4>Test History</h4>
-                </div>
-
-                <div
-                    className="mt-5 rounded bg-white"
-                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                >
-                    <table className="table table-responsive">
-                        <thead>
-                            <tr>
-                                <th style={{ background: "#5D76A9", color: "white" }}><input type="checkbox" /></th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>SNo.</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Test Name</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Tests Planned</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Tests Executed</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderRows()}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="d-flex justify-content-end align-items-center mt-4">
-                    <div className="pagination">
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                            &lt;&lt;
-                        </button>
-                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                            &gt;&gt;
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </>
+      row.TestName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
-}
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno:  index + 1,
+      TestName: item["Test Name"] || "",
+      TestsPlanned: item["Tests Planned"] || "",
+      TestsExecuted: item["Tests Executed"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Test Name", accessor: "TestName" },
+    { header: "Tests Planned", accessor: "TestsPlanned" },
+    { header: "Tests Executed", accessor: "TestsExecuted" },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  return (
+    <div className="p-4">
+      <div className="float-right flex gap-4">
+      <PDFDownload columns={columns} data={initialData} fileName="Test_History.pdf" title="Test History Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+        </div>
+      <h1 className="text-2xl font-bold mb-4">Service Provider</h1>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+        {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+    </div>
+  );
+};
+
+export default TestHistory;

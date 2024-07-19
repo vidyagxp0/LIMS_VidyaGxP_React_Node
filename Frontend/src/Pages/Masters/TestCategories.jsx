@@ -1,262 +1,426 @@
-import React, { useState } from 'react'
-import { FaArrowRight } from 'react-icons/fa';
-import { Link } from 'react-router-dom'
-
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import React, { useEffect, useState } from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import "../../Pages/StorageCondition/StorageCondition.css";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    categoryName: "Category 1",
+    uniqueCode: "UC001",
+    description: "Description 1",
+    addedOn: "2024-01-01",
+    effectFrom: "2024-01-01",
+    reviewDate: "2024-06-01",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    categoryName: "Category 2",
+    uniqueCode: "UC002",
+    description: "Description 2",
+    addedOn: "2024-01-02",
+    effectFrom: "2024-01-02",
+    reviewDate: "2024-06-02",
+    status: "APPROVED",
+  },
+];
 
-
-export default function TestCategories() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState('All');
-
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [employees, setEmployees] = useState([
-    { id: 1, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', AddedON: 'May 17th 24 14:34', Status: 'APPROVED' },
-    { id: 2, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
-    { id: 3, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
-    { id: 4, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-    { id: 5, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    { id: 6, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REJECTED' },
-    { id: 7, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REINITIATED' },
-    { id: 8, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    { id: 9, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    { id: 10, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-  ]);
-
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.Status.toUpperCase() === selectedStatus.toUpperCase()
-  );
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-  const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.DayComplete}</td>
-        <td>{employee.DayComplete}</td>
-        <td>{employee.Date}</td>
-        <td >
-        <button  
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          employee.Status === "INITIATED"
-                            ? "blue-700"
-                            : employee.Status === "APPROVED"
-                            ? "green-700"
-                            : employee.Status === "REJECTED"
-                            ? "red-700"
-                            : employee.Status === "REINITIATED"
-                            ? "yellow-500"
-                            : employee.Status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {employee.Status}
-                      </button>
-        </td>
-        <td>
-          <div className="d-flex gap-3">
-            <div>
-              <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => setAddModal(true)}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </div>
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-          </div>
-        </td>
-      </tr>
-    ));
+function Specifications() {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
   };
-  const nextPage = () => {
-    if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
-      setCurrentPage(currentPage + 1);
-    }
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
   };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+  const filteredData = data.filter((row) => {
+    return (
+      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
   };
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
+ 
 
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Category Name", accessor: "categoryName" },
+    { header: "	Unique Code", accessor: "uniqueCode" },
+    { header: "Description", accessor: "description" },
+    { header: "Added On", accessor: "addedOn" },
+    { header: "Effect From", accessor: "effectFrom" },
+    { header: "Review Date", accessor: "reviewDate" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      categoryName: item["Category Name"] || "",
+      uniqueCode: item["Unique Code"] || "",
+      description: item["Description"] || "",
+      addedOn: item["Added On"] || "",
+      effectFrom: item["Effect From"] || "",
+      reviewDate: item["Review Date"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setViewModalData(false);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [testCategoryData, setTestCategory] = useState({
+      categoryName: "",
+      uniqueCode: "",
+      description: "",
+    });
+
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    const handleAdd = () => {
+      const newCondition = {
+        categoryName: testCategoryData.categoryName,
+        uniqueCode: testCategoryData.uniqueCode,
+        description: testCategoryData.description,
+        addedOn: currentDate,
+        effectFrom: currentDate,
+        reviewDate: currentDate,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Test Category</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information of Test Category</p>
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Category Name"
+            name="categoryName"
+            value={testCategoryData.categoryName}
+            onChange={(e) => {
+              setTestCategory({
+                ...testCategoryData,
+                categoryName: e.target.value,
+              });
+            }}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code "
+            name="uniqueCode"
+            value={testCategoryData.uniqueCode}
+            onChange={(e) => {
+              setTestCategory({
+                ...testCategoryData,
+                uniqueCode: e.target.value,
+              });
+            }}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            placeholder="Description"
+            name="description"
+            value={testCategoryData.description}
+            onChange={(e) => {
+              setTestCategory({
+                ...testCategoryData,
+                description: e.target.value,
+              });
+            }}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const currentDate = new Date().toISOString().split("T")[0];
+
   
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Test Category</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information of Test Category</p>
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Name"
+            placeholder="Category Name"
+            name="categoryName"
+            value={formData?.categoryName||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code "
+            name="uniqueCode"
+            value={formData?.uniqueCode||""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            placeholder="Description"
+            name="description"
+            value={formData?.description||""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   return (
-    <div className="m-5 mt-3">
+    <>
+      <div className="m-5 mt-3">
         <div className="main-head">
-        <h4 className="fw-bold">Test Category</h4>
-        </div>
-        <div className="d-flex justify-content-between  mt-5 mb-3">
-          <div className="w-25">
-            <CFormSelect
-              onChange={(e) => {
-                setSelectedStatus(e.target.value);
-                setCurrentPage(1);
-              }}
-              value={selectedStatus}
-              style={{fontSize:'0.9rem'}}
-            >
-
-<option value="All">All</option>
-              <option value="Initiated">Initiated</option>
-              <option value="Approved">Approved</option>
-              <option value="Rejected">Rejected</option>
-              <option value="Reinitiated">Reinitiated</option>
-              <option value="Dropped">Dropped</option>
-            </CFormSelect>
-          </div>
-          <div className="">
-            <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Test Category</CButton>
-          </div>
+          <h4 className="fw-bold">Test Categories</h4>
         </div>
 
-  
-
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-               <th style={{ background: "#5D76A9", color: "white"}}>Category Name</th>
-               <th style={{ background: "#5D76A9", color: "white"}}>Unique Code</th>
-               <th style={{ background: "#5D76A9", color: "white"}}>Description</th>
-               <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
-               <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-               <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </CTable>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="test_categories.pdf" title="Test Categories Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Test Categories"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
-
-     <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
-    </div>
-  );
-};
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Add Test Category</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Add information of Test Category</p>
-
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Name"
-          placeholder="Category Name "
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Unique Code"
-          placeholder="Unique Code "
+      )}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
         />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Description"
-          placeholder="Description"
-        />
-        
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
 
-const DeleteModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete Test Category</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this Test Category { }?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
+{editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </>
   );
-};
+}
+
+export default Specifications;

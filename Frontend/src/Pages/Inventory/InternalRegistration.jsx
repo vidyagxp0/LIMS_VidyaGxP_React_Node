@@ -1,718 +1,742 @@
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CFormTextarea,
-  CModal,
-  CModalFooter,
-  CModalBody,
-  CModalTitle,
-  CRow,
-  CFormCheck,
-  CTable,
-  CFormLabel,
-  CForm,
-  CModalHeader,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
-function InternalRegistration() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    name: "Product 1",
+    sequence: "Seq 1",
+    additionalPuritiesInformation: "Info 1",
+    containerStartingNo: "Start 1",
+    sampleReferenceNo: "Ref 1",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    name: "Product 2",
+    sequence: "Seq 2",
+    additionalPuritiesInformation: "Info 2",
+    containerStartingNo: "Start 2",
+    sampleReferenceNo: "Ref 2",
+    status: "DROPPED",
+  },
+];
+
+const generateRandomSymbolCode = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "SYM-";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
+const InternalRegistration = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
   };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
 
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      ProductName: "stmp1",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "APPROVED",
-    },
-    {
-      id: 2,
-      ProductName: "stmp1",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "REJECTED",
-    },
-    {
-      id: 3,
-      ProductName: "Alpha",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "REINITIATED",
-    },
-    {
-      id: 4,
-      ProductName: "Infra",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "INITIATED",
-    },
-    {
-      id: 5,
-      ProductName: "Infra",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "DROPPED",
-    },
-    {
-      id: 6,
-      ProductName: "Alpha",
-      SequenceNo: "describe",
-      AdditionalInformation: "isubus111",
-      ContainerStartingNo: "54255455",
-      SampleRefrenceNo: "loc1",
-      status: "INITIATED",
-    },
-  ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-  const [search, setSearch] = useState("");
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
 
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter(
-            (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-          );
-    return filteredData.filter((item) =>
-      item.ContainerStartingNo.toLowerCase().includes(search.toLowerCase())
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
     );
+    setData(updatedList);
+    closeEditModal();
   };
-  const filteredData = filterData();
-  const nextPage = () =>
-    setCurrentPage((prev) =>
-      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-    );
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
 
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
-  };
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
 
-  return (
-    <>
-      <div id="approval-page" className="m-5 mt-3">
-          <div className="main-head">
-          <h4 className="fw-bold">Working Standard Internal</h4>
-          </div>
-          <div className="d-flex gap-4 mt-3">
-            <div className="chart-widgets w-100">
-              <div className="">
-              <div className="row" style={{ cursor: "pointer" }}>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
 
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("DROPPED")}
-                >
-                  <div className="text-light font-bold fs-5">DROPPED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "DROPPED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("INITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">INITIATED</div>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "INITIATED")
-                        .length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(25deg, orange , #f7e05f )",
+    const handleSave = () => {
+      onSave(formData);
+    };
 
-                    textAlign: "left",
-                    boxShadow: "0px 10px 20px  black !important",
-                  }}
-                  onClick={() => setSelectedStatus("REINITIATED")}
-                >
-                  <div className="text-light font-bold fs-5">REINITIATED</div>
-
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white" }}
-                  >
-                    {
-                      filterData().filter(
-                        (item) => item.status === "REINITIATED"
-                      ).length
-                    }
-                  </div>
-                </button>
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg, green , #0fd850  )",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("APPROVED")}
-                >
-                  <butto className="text-light font-bold fs-5">APPROVED</butto>
-                  <div
-                    className="count fs-1 text-light fw-bolder"
-                    style={{ color: "white", textAlign: "left" }}
-                  >
-                    {
-                      filterData().filter((item) => item.status === "APPROVED")
-                        .length
-                    }
-                  </div>
-                </button>
-
-                <button
-                  className="col shadow p-3 m-3 rounded"
-                  style={{
-                    background:
-                      "linear-gradient(27deg ,red, #FF719A)",
-                    textAlign: "left",
-                  }}
-                  onClick={() => setSelectedStatus("REJECTED")}
-                >
-                  <div className="text-light font-bold fs-5">REJECTED</div>
-                  <div className="count fs-1 text-light fw-bolder">
-                    {
-                      filterData().filter((item) => item.status === "REJECTED")
-                        .length
-                    }
-                  </div>
-                </button>
-              </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <CRow className="mb-3">
-              <CCol sm={4}>
-                <CFormInput
-                  style={{fontSize:'0.9rem'}}
-                  type="email"
-                  placeholder="Search..."
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </CCol>
-
-              <CCol sm={3}>
-                <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
-                >
-                  <option value="All">All</option>
-                  <option value="Initiated">Initiated</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Rejected">Rejected</option>
-                  <option value="Reinitiated">Reinitiated</option>
-                  <option value="Dropped">Dropped</option>
-                </CFormSelect>
-              </CCol>
-              {/* <CCol sm={2}></CCol> */}
-              <CCol sm={5}>
-                <div className="d-flex justify-content-end">
-                  <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
-                    Add Internal
-                  </CButton>
-                </div>
-              </CCol>
-            </CRow>
-          </div>
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-            <CTable
-              align="middle"
-              responsive
-              className="mb-0    table-responsive"
-            >
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                    className="text-center"
-                  >
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    S NO.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Product Name{" "}
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Sequence No.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Additional Information
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Container Starting No.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Sample Refrence no.
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Status
-                  </CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white"}}
-                    scope="col"
-                  >
-                    Actions
-                  </CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-
-              <CTableBody>
-                {filterData()
-                  .slice(startIndex, endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.ProductName.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={index}>
-                      <CTableHeaderCell scope="row" className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      {/* <CTableDataCell></CTableDataCell> */}
-                      <CTableDataCell key={item.id}>
-                        {item.ProductName}
-                      </CTableDataCell>
-
-                      <CTableDataCell>{item.SequenceNo}</CTableDataCell>
-                      <CTableDataCell>
-                        {item.AdditionalInformation}
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        {item.ContainerStartingNo}
-                      </CTableDataCell>
-                      <CTableDataCell>{item.SampleRefrenceNo}</CTableDataCell>
-                      <CTableDataCell className="d-flex">
-                      <button  
-                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          item.status === "INITIATED"
-                            ? "blue-700"
-                            : item.status === "APPROVED"
-                            ? "green-700"
-                            : item.status === "REJECTED"
-                            ? "red-700"
-                            : item.status === "REINITIATED"
-                            ? "yellow-500"
-                            : item.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {item.status}
-                      </button>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
-                        </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
-     
-
-          <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
-        />
-      )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <>
+    return (
       <CModal
         alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
+        visible={visible}
+        onClose={closeModal}
         size="lg"
       >
         <CModalHeader>
           <CModalTitle>New Internal</CModalTitle>
         </CModalHeader>
         <CModalBody>
+          <p>Add Information and add new Internal</p>
           <CFormSelect
-            type="text"
             label="Lot Type"
-            placeholder="Select "
+            value={formData?.lotType || ""}
+            name="lotType"
+            onChange={handleChange}
             className="mb-3"
+            options={[
+              { value: "", label: "Select..." },
+              { value: "Internal", label: "Internal" },
+              { value: "External", label: "External" },
+            ]}
           />
+          {formData?.lotType === "Internal" && (
+            <>
+              <CFormSelect
+                label="Sample Login"
+                className="mb-3"
+                value={formData?.sampleLogin || ""}
+                name="sampleLogin"
+                onChange={handleChange}
+                options={[
+                  { value: "Option 1", label: "Option 1" },
+                  { value: "Option 2", label: "Option 2" },
+                  { value: "Option 3", label: "Option 3" },
+                  { value: "Option 4", label: "Option 4" },
+                  { value: "Option 5", label: "Option 5" },
+                ]}
+              />
+              <CFormInput
+                type="text"
+                label="Product/Material"
+                placeholder="Product/Material"
+                className="custom-placeholder mb-3"
+                disabled
+                value={formData?.productMaterial || ""}
+                name="productMaterial"
+                onChange={handleChange}
+              />
+            </>
+          )}
+          {formData?.lotType === "External" && (
+            <>
+              <CFormInput
+                type="text"
+                label="W.S.A.R No."
+                className="custom-placeholder mb-3"
+                placeholder="AR No."
+                value={formData?.wsarNo || ""}
+                name="wsarNo"
+                onChange={handleChange}
+              />
+            </>
+          )}
           <CFormInput
             type="text"
-            label="Sample Refrence No."
-            placeholder="Sample Refrence No. "
+            label="Sample Reference No."
+            placeholder="Sample Reference No."
             className="custom-placeholder mb-3"
+            value={formData?.sampleReferenceNo || ""}
+            name="sampleReferenceNo"
+            onChange={handleChange}
           />
-
           <CForm className="mb-3">
             <CFormLabel>Container Type</CFormLabel>
-            <div>
+            <div className="flex gap-5">
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
-                id="acceptRadio"
+                id="bottleRadio"
                 label="Bottle"
-                value="accept"
+                value="Bottle"
+                checked={formData?.containerType === "Bottle" || ""}
+                onChange={handleChange}
               />
               <CFormCheck
                 type="radio"
                 name="sampleRadio"
-                id="rejectRadio"
+                id="vialRadio"
                 label="Vial"
-                value="reject"
+                value="Vial"
+                checked={formData?.containerType === "Vial" || ""}
+                onChange={handleChange}
               />
             </div>
           </CForm>
           <CFormInput
             type="text"
             label="Storage Condition"
-            placeholder="Storage Condition "
+            placeholder="Storage Condition"
             className="custom-placeholder mb-3"
+            value={formData?.storageCondition || ""}
+            name="storageCondition"
+            onChange={handleChange}
           />
           <CFormInput
             type="number"
             label="W.s Batch Quantity"
-            placeholder="W.s Batch Quantity "
+            placeholder="W.s Batch Quantity"
             className="custom-placeholder mb-3"
+            value={formData?.wsBatchQuantity || ""}
+            name="wsBatchQuantity"
+            onChange={handleChange}
           />
-          <CFormTextarea
+          <CFormInput
             type="text"
             label="Available Quantity for Distribution"
-            placeholder="Available Quantity for Distribution"
+            placeholder="Available Quantity"
             className="custom-placeholder mb-3"
+            value={formData?.availableQuantity || ""}
+            name="availableQuantity"
+            onChange={handleChange}
           />
           <CFormInput
             type="text"
             label="Lot Quantity for Distribution"
-            placeholder="Lot Quantity "
+            placeholder="Lot Quantity"
             className="custom-placeholder mb-3"
+            value={formData?.lotQuantity || ""}
+            name="lotQuantity"
+            onChange={handleChange}
           />
           <CFormInput
             type="date"
             label="W.s Validate On"
-            placeholder=" "
             className="custom-placeholder mb-3"
+            value={formData?.wsValidateOn || ""}
+            name="wsValidateOn"
+            onChange={handleChange}
           />
           <CFormInput
             type="date"
             label="Lot Valid Upto"
-            placeholder=""
             className="custom-placeholder mb-3"
+            value={formData?.lotValidUpto || ""}
+            name="lotValidUpto"
+            onChange={handleChange}
           />
-          <CFormInput
-            type="text"
-            label="Usage Type"
-            placeholder="Single / Multiple"
-            className="custom-placeholder mb-3"
-          />
+          <CFormLabel>Usage Type</CFormLabel>
+          <div className="flex gap-5">
+            <CFormCheck
+              type="radio"
+              name="usageRadio"
+              id="singleRadio"
+              label="Single"
+              value="Single"
+              checked={formData?.usageType === "Single" || ""}
+              onChange={handleChange}
+            />
+            <CFormCheck
+              type="radio"
+              name="usageRadio"
+              id="multipleRadio"
+              label="Multiple"
+              value="Multiple"
+              checked={formData?.usageType === "Multiple" || ""}
+              onChange={handleChange}
+            />
+          </div>
           <CFormInput
             type="text"
             label="Direction of Usage"
             placeholder="Direction of Usage"
             className="custom-placeholder mb-3"
+            value={formData?.directionOfUsage || ""}
+            name="directionOfUsage"
+            onChange={handleChange}
           />
-          <CFormInput
-            type="number"
-            label="No. Of Purities"
-            placeholder="1"
-            className="custom-placeholder mb-3"
-          />
-
+          <div className="flex gap-3">
+            <CFormInput
+              type="number"
+              label="No. Of Purities"
+              placeholder="1"
+              className="custom-placeholder mb-3"
+              value={formData?.noOfPurities || ""}
+              name="noOfPurities"
+              onChange={handleChange}
+            />
+            <span className="mt-2 w-10">
+              <IoIosAddCircleOutline />
+            </span>
+          </div>
           <CFormSelect
-            type="number"
             label="UOM"
-            placeholder="Select..."
-            className="custom-placeholder mb-3"
+            className="mb-3"
+            value={formData?.uom || ""}
+            name="uom"
+            onChange={handleChange}
+            options={[
+              { value: "Option 1", label: "Option 1" },
+              { value: "Option 2", label: "Option 2" },
+              { value: "Option 3", label: "Option 3" },
+              { value: "Option 4", label: "Option 4" },
+              { value: "Option 5", label: "Option 5" },
+            ]}
           />
-
-          <div className="container mt-5 mb-3">
-            <table className="table table-bordered">
-              <thead className="thead-light">
-                <tr>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Sno.
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Purity
-                  </th>
-                  <th style={{ background: "#0F93C3 ", color: "white" }}>
-                    Value-UOM
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>
-                    <select className="form-control">
-                      <option>Acids</option>
-                      <option>Bases</option>
-                      <option>Salts</option>
-                      <option>Solvents</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="flex gap-3">
+            <CFormInput
+              type="number"
+              label="S.No"
+              className="custom-placeholder mb-3"
+              // value={formData?.purityDetails. || ""}
+              name="purityDetails"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Purity"
+              placeholder="Purity"
+              className="custom-placeholder mb-3"
+              // value={formData?.purityDetails.purity || ""}
+              name="purityDetails"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Value/UOM"
+              placeholder="Value/UOM"
+              className="custom-placeholder mb-3"
+              // value={formData?.purityDetails.valueUom || ""}
+              name="purityDetails"
+              onChange={handleChange}
+            />
           </div>
           <CFormInput
-            type="number"
+            type="text"
             label="Additional Purities Information"
-            placeholder="Additional Information"
+            placeholder="Additional Purities Information"
             className="custom-placeholder mb-3"
+            value={formData?.additionalPuritiesInformation || ""}
+            name="additionalPuritiesInformation"
+            onChange={handleChange}
           />
-          <CFormInput
-            type="number"
+          <CFormSelect
             label="Standard Type"
-            placeholder="Standard Type"
-            className="custom-placeholder mb-3"
+            className="mb-3"
+            value={formData?.standardType || ""}
+            namestandardType
+            onChange={handleChange}
+            options={[
+              { value: "Option 1", label: "Option 1" },
+              { value: "Option 2", label: "Option 2" },
+              { value: "Option 3", label: "Option 3" },
+              { value: "Option 4", label: "Option 4" },
+              { value: "Option 5", label: "Option 5" },
+            ]}
           />
           <CFormInput
-            type="number"
+            type="text"
             label="Source"
             placeholder="Source"
-            className="mb-3"
+            className="custom-placeholder mb-3"
+            value={formData?.source}
+            name="source"
+            onChange={handleChange}
           />
-
           <CFormInput
-            type="number"
+            type="text"
             label="Comments"
             placeholder="Comments"
-            className="mb-3"
-          />
-
-          <CFormInput
-            type="number"
-            label="Container Validaty Period"
-            placeholder="Container Validaty Period"
-            className="mb-3"
+            className="custom-placeholder mb-3"
+            value={formData?.comments || ""}
+            name="comments"
+            onChange={handleChange}
           />
           <CFormInput
-            type="number"
-            label="Container Starting No."
-            placeholder="Container No."
-            className="mb-3"
+            type="text"
+            label="Container Validity Period"
+            placeholder="Container Validity Period"
+            className="custom-placeholder mb-3"
+            value={formData?.containerValidityPeriod || ""}
+            name="containerValidityPeriod"
+            onChange={handleChange}
           />
+          <div className="flex gap-3">
+            <CFormInput
+              type="number"
+              label="S.No"
+              className="custom-placeholder mb-3"
+              // value={formData?.containerDetails[0].sno || ""}
+              name="containerDetails"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Container No."
+              placeholder="Container No."
+              className="custom-placeholder mb-3"
+              // value={formData?.containerDetails[0].containerNo || ""}
+              name="containerDetails"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Quantity in Containers"
+              placeholder="Quantity in Containers"
+              className="custom-placeholder mb-3"
+              // value={formData?.containerDetails[0].quantityInContainers || ""}
+              name="containerDetails"
+              onChange={handleChange}
+            />
+          </div>
           <CFormInput
-            type="number"
-            label="Minimum No. of Containers for Alert"
-            placeholder="1"
-            className="mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="No. of Containers Prepared"
-            placeholder=""
-            className="mb-3"
-          />
-          <CFormInput
-            type="number"
-            label="Total Quantity in containers"
-            placeholder="Total Quantity in containers"
-            className="mb-3"
+            type="text"
+            label="Total Quantity in Containers"
+            placeholder="Total Quantity in Containers"
+            className="custom-placeholder mb-3"
+            value={formData?.totalQuantityInContainers || ""}
+            name="totalQuantityInContainers"
+            onChange={handleChange}
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
+          <CButton color="secondary" onClick={closeModal}>
+            Close
           </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Add
+          <CButton color="primary" onClick={handleSave}>
+            Save
           </CButton>
         </CModalFooter>
       </CModal>
-    </>
-  );
-};
-const DeleteModal = (_props) => {
+    );
+  };
+
+  // *********************Edit ****************************
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.additionalPuritiesInformation
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Product Name", accessor: "name" },
+    { header: "Sequence No.", accessor: "sequence" },
+    {
+      header: "Additional Information",
+      accessor: "additionalPuritiesInformation",
+    },
+    { header: "Container Starting No.", accessor: "containerStartingNo" },
+    { header: "Sample Reference No.", accessor: "sampleReferenceNo" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newTechnique) => {
+    // const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newTechnique.sno ? newTechnique : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          lotType: newTechnique.lotType,
+          sampleLogin: newTechnique.sampleLogin,
+          productMaterial: newTechnique.productMaterial,
+          wsarNo: newTechnique.wsarNo,
+          sampleReferenceNo: newTechnique.sampleReferenceNo,
+          containerType: newTechnique.containerType,
+          name: generateRandomSymbolCode(),
+          storageCondition: newTechnique.storageCondition,
+          wsBatchQuantity: newTechnique.wsBatchQuantity,
+          availableQuantity: newTechnique.availableQuantity,
+          lotQuantity: newTechnique.lotQuantity,
+          sequence: generateRandomSymbolCode(),
+          wsValidateOn: newTechnique.wsValidateOn,
+          lotValidUpto: newTechnique.lotValidUpto,
+          usageType: newTechnique.usageType,
+          directionOfUsage: newTechnique.directionOfUsage,
+          noOfPurities: newTechnique.noOfPurities,
+          additionalPuritiesInformation:
+            newTechnique.additionalPuritiesInformation,
+          standardType: newTechnique.standardType,
+          source: newTechnique.source,
+          comments: newTechnique.comments,
+          containerValidityPeriod: newTechnique.containerValidityPeriod,
+          containerStartingNo: newTechnique.containerStartingNo,
+          minNoOfContainersForAlert: newTechnique.minNoOfContainersForAlert,
+          noOfContainersPrepared: newTechnique.noOfContainersPrepared,
+          totalQuantityInContainers: newTechnique.totalQuantityInContainers,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      name: item["Name"] || "",
+      sequence: item["Sequence"] || "",
+      additionalPuritiesInformation: item["Additional Information"] || "",
+      containerStartingNo: item["Container Start"] || "",
+      sampleReferencesampleReferenceNo: item["Sample Reference"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+
+    setIsModalsOpen(false);
+  };
+
   return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Batch Sample Allotment
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Working Standard Internal</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
       </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add Internal" color="blue" onClick={openModal} />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+      />
+      <InternalRegistrationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
   );
 };
 

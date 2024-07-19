@@ -1,239 +1,492 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CTableBody,
+  CTableDataCell,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    uniqueCode: "UC001",
+    description: "Description for UC001",
+    numberofRanges: 5,
+    updatedAt: "2024-07-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    uniqueCode: "UC002",
+    description: "Description for UC002",
+    numberofRanges: 10,
+    updatedAt: "2024-06-30",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    uniqueCode: "UC002",
+    description: "Description for UC002",
+    numberofRanges: 10,
+    updatedAt: "2024-06-30",
+    status: "Inactive",
+  },
+];
 
 const SamplingRule = () => {
-    const pageSize = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-    const [addModal, setAddModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [selectedStatus, setSelectedStatus] = useState('All');
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
-    const [employee, setEmployee] = useState([
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-        { id: "1", uniqueCode: "USER-022024-000001", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "2", uniqueCode: "USER-022024-000002", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "3", uniqueCode: "USER-022024-000003", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "4", uniqueCode: "USER-022024-000004", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "5", uniqueCode: "USER-022024-000005", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "6", uniqueCode: "USER-022024-000006", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "7", uniqueCode: "USER-022024-000007", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "8", uniqueCode: "USER-022024-000008", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-        { id: "9", uniqueCode: "USER-022024-000009", description: 'Raw Sample', numberOfRanges: '3', updatedAt: '2024-05-15', status: 'ACTIVE' },
-        { id: "10", uniqueCode: "USER-022024-0000010", description: 'c1', numberOfRanges: '5', updatedAt: '2024-05-16', status: 'INACTIVE' },
-    ]);
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employee.length);
-
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
-    const filteredEmployee = employee.filter(employee =>
-        selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+  const filteredData = data.filter((row) => {
+    return (
+      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+  };
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Unique Code", accessor: "uniqueCode" },
+    { header: "Description", accessor: "description" },
+    { header: "Number of Ranges", accessor: "numberofRanges" },
+    { header: "Updated At", accessor: "updatedAt" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => {
+              onViewDetails(row), navigate("/testResultsDetails");
+            }}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      uniqueCode: item["Unique Code"] || "",
+      description: item["Description"] || "",
+      numberofRanges: item["Number of Ranges"] || "",
+      updatedAt: item["Updated At"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+    setIsModalsOpen(false); // Update data state with parsed Excel data
+  };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "Inactive" ? "Active" : "Inactive";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [samplingRuleName, setSamplingRuleName] = useState({
+      samplingName: "",
+      uniqueCode: "",
+      numberofRanges: "",
+    });
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
 
     const renderRows = () => {
-        return filteredEmployee.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
-                <td>{startIndex + index + 1}</td>
-                <td>{employee.uniqueCode}</td>
-                <td>{employee.description}</td>
-                <td>{employee.numberOfRanges}</td>
-                <td>{employee.updatedAt}</td>
-                <td>
-                    <button
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                            employee.status === "INACTIVE"
-                            ? "red-700"
-                            : employee.status === "ACTIVE"
-                                ? "green-700"
-                                : "white"
-                            }`} style={{ fontSize: '0.6rem' }}
-                    >
-                        {employee.status}
-                    </button>
-                </td>
-                <td>
-                    <div className='d-flex gap-3'>
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                        >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                        </div>
-                        <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </div>
-                    </div>
-
-                </td>
-            </tr>
-        ));
+      const rows = [];
+      for (let i = 0; i < numRows; i++) {
+        rows.push(
+          <CTableRow key={i}>
+            <CTableHeaderCell
+              className="mb-3 m-2 flex justify-between itmes center gap-4"
+              scope="row"
+            >
+              {i + 1}
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Lower"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Upper"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="No. of Containers"
+              ></CFormInput>
+            </CTableHeaderCell>
+            {/* <CTableDataCell className="mb-3 m-2">
+            Rack {i + 1}: <input type="text" />{" "}
+          </CTableDataCell> */}
+          </CTableRow>
+        );
+      }
+      return rows;
     };
 
-    const handleDeleteClick = (id) => {
-        setDeleteId(id);
-        setDeleteModal(true);
+    const handleAdd = () => {
+      const newCondition = {
+        description: "jhjj",
+        uniqueCode: samplingRuleName.uniqueCode,
+        numberofRanges: samplingRuleName.numberofRanges,
+        updatedAt: "2020-2-20",
+        action: [],
+      };
+      onAdd(newCondition);
     };
 
-    const handleDeleteConfirm = () => {
-        setEmployee((prevEmployee) => prevEmployee.filter((employee) => employee.id !== deleteId));
-        setDeleteModal(false);
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Rule</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sampling Rule Name"
+            placeholder="Sampling Rule Name"
+            value={samplingRuleName.samplingName}
+            onChange={(e) =>
+              setSamplingRuleName({
+                ...samplingRuleName,
+                samplingName: e.target.value,
+              })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            value={samplingRuleName.uniqueCode}
+            onChange={(e) =>
+              setSamplingRuleName({
+                ...samplingRuleName,
+                uniqueCode: e.target.value,
+              })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Number of Ranges"
+            placeholder="Number of Ranges"
+            value={inputValue}
+            onChange={handleInputChange}
+            min="0"
+          />
+          <CButton color="primary" onClick={addRows}>
+            Add Range
+          </CButton>
+        </CModalBody>
+        <CTableBody className="mb-3">{renderRows()}</CTableBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
     };
 
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const renderRows = () => {
+      const rows = [];
+      for (let i = 0; i < numRows; i++) {
+        rows.push(
+          <CTableRow key={i}>
+            <CTableHeaderCell
+              className="mb-3 m-2 flex justify-between itmes center gap-4"
+              scope="row"
+            >
+              {i + 1}
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Lower"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="Upper"
+              ></CFormInput>
+              <CFormInput
+                className="border-1 border-black"
+                placeholder="No. of Containers"
+              ></CFormInput>
+            </CTableHeaderCell>
+            {/* <CTableDataCell className="mb-3 m-2">
+            Rack {i + 1}: <input type="text" />{" "}
+          </CTableDataCell> */}
+          </CTableRow>
+        );
+      }
+      return rows;
+    };
 
     return (
-        <>
-            <div className="m-5 mt-3 ">
-                <div className="main-head">
-                    <h4 className="fw-bold">Sampling Rule</h4>
-                </div>
-                <div>
-                    <CRow className="mt-5 mb-3">
-                        <CCol sm={3}>
-                            <CFormSelect
-                                onChange={(e) => setSelectedStatus(e.target.value)}
-                                value={selectedStatus}
-                                style={{ fontSize: '0.9rem' }}
-                                options={[
-                                    { label: "All", value: "All" },
-                                    { label: "Active", value: "Active" },
-                                    { label: "Inactive", value: "Inactive" },
-                                ]}
-                            />
-                        </CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}>
-                            <div className="d-flex justify-content-end">
-                                <CButton
-                                    className=" text-white"
-                                    style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                                    onClick={() => setAddModal(true)}
-                                >
-                                    Add Sampling Rule</CButton>
-                            </div>
-                        </CCol>
-                    </CRow>
-                </div>
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Rule</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sampling Rule Name"
+            placeholder="Sampling Rule Name"
+          />
 
-                <div
-                    className=" rounded bg-white"
-                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                >
-                    <table className="mb-0 table table-responsive">
-                        <thead>
-                            <tr>
-                                <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Unique Code</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Description</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Number Of Ranges</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Updated At</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
-                                <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderRows()}
-                        </tbody>
-                    </table>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Unique Code"
+            placeholder="Unique Code"
+            value={formData?.uniqueCode || ""}
+            onChange={handleChange}
+            name="uniqueCode"
+          />
 
-                </div>
-
-                <div className="d-flex justify-content-end align-items-center mt-4">
-                    <div className="pagination">
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                            &lt;&lt;
-                        </button>
-                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
-                            &gt;&gt;
-                        </button>
-                    </div>
-                </div>
-
-                {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-                {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-            </div>
-        </>
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Number of Ranges"
+            placeholder="Number of Ranges"
+            value={inputValue}
+            onChange={handleInputChange}
+            min="0"
+          />
+          <CButton color="primary" onClick={addRows}>
+            Add Range
+          </CButton>
+        </CModalBody>
+        <CTableBody className="mb-3">{renderRows()}</CTableBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
     );
-};
-
-const StatusModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-            <CModalHeader>
-                <CModalTitle>Add Rule</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-
-                <CFormInput
-                    className="mb-3"
-                    type="text"
-                    label="Sampling Rule Name"
-                    placeholder="Sampling Rule Name"
-                />
-
-                <CFormInput
-                    className="mb-3"
-                    type="text"
-                    label="Unique Code"
-                    placeholder="Unique Code"
-                />
-
-                <CFormInput
-                    className="mb-3"
-                    type="number"
-                    label="Number of Ranges"
-                    placeholder="Number of Ranges"
-                />
+  };
 
 
-            </CModalBody>
-            <CModalFooter>
-                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                <CButton color="primary">Submit</CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
 
-const DeleteModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-            <CModalHeader>
-                <CModalTitle>Delete Sampling Rule</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <p>Are you sure you want to delete this Sampling Rule { }?</p>
-            </CModalBody>
-            <CModalFooter>
-                <CButton
-                    color="secondary"
-                    onClick={_props.closeModal}
-                    style={{
-                        marginRight: "0.5rem",
-                        fontWeight: "500",
-                    }}
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="danger"
-                    onClick={_props.confirmDelete}
-                    style={{
-                        fontWeight: "500",
-                        color: "white",
-                    }}
-                >
-                    Delete
-                </CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
 
-export default SamplingRule
+return (
+  <>
+    <div className="m-5 mt-3 ">
+      <div className="main-head">
+        <h4 className="fw-bold">Sampling Rule</h4>
+      </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Sampling_Rule.pdf" title="Sampling Rule Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Sampling Rule"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onDelete={handleDelete}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
+      />
+    </div>
+
+    {isModalOpen && (
+      <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
+    )}
+    {isModalsOpen && (
+      <ImportModal
+        initialData={initialData}
+        isOpen={isModalsOpen}
+        onClose={handleCloseModals}
+        columns={columns}
+        onDataUpload={handleExcelDataUpload}
+      />
+    )}{editModalData && (
+      <EditModal
+        visible={Boolean(editModalData)}
+        closeModal={closeEditModal}
+        data={editModalData}
+        onSave={handleEditSave}
+      />
+    )}
+  </>
+)
+}
+
+export default SamplingRule;

@@ -4,10 +4,71 @@ import { useState } from "react"
 
 function SampleLoginTemplateDetails() {
     const [statusModal, setStatusModal] = useState(false)
-
+     
+    const initialData = [
+     {
+       checkbox: false,
+       sno: 1,
+       SAMPLETYPE: "CSR001",
+       PRODUCT_MATERIAL: "product 1",
+       ARNO: "2024-01-01",
+       GENERICNAME: "2024-01-01",
+       SPECIFICATIONCODE: "2024-01-01",
+       ATTACHMENT: "DROPPED",
+       STATUS: "DROPPED",
+       ACTIONS: "DROPPED",
+     },
+     {
+          checkbox: false,
+          sno: 2,
+          SAMPLETYPE: "CSR001",
+          PRODUCT_MATERIAL: "product 1",
+          ARNO: "2024-01-01",
+          GENERICNAME: "2024-01-01",
+          SPECIFICATIONCODE: "2024-01-01",
+          ATTACHMENT: "DROPPED",
+          STATUS: "DROPPED",
+          ACTIONS: "DROPPED",
+        },
+        {
+          checkbox: false,
+          sno: 3,
+          SAMPLETYPE: "CSR001",
+          PRODUCT_MATERIAL: "product 1",
+          ARNO: "2024-01-01",
+          GENERICNAME: "2024-01-01",
+          SPECIFICATIONCODE: "2024-01-01",
+          ATTACHMENT: "DROPPED",
+          STATUS: "DROPPED",
+          ACTIONS: "DROPPED",
+        },
+        {
+             checkbox: false,
+             sno: 4,
+             SAMPLETYPE: "CSR001",
+             PRODUCT_MATERIAL: "product 1",
+             ARNO: "2024-01-01",
+             GENERICNAME: "2024-01-01",
+             SPECIFICATIONCODE: "2024-01-01",
+             ATTACHMENT: "DROPPED",
+             STATUS: "DROPPED",
+             ACTIONS: "DROPPED",
+           },
+           
+   ];
+        const handleDelete = (item) => {
+        const newData = data.filter((d) => d !== item);
+        setData(newData);
+        console.log("Deleted item:", item);
+   };
+       const handleCheckboxChange = (index) => {
+       const newData = [...data];
+       newData[index].checkbox = !newData[        index].checkbox;
+       setData(newData);
+   };
+   
      return (
           <>
-
                <div id="sampleLogin-page" className="py-3 bg-light h-100">
                     <div className="container-fluid">
                          <div className="block mb-3">
@@ -135,9 +196,10 @@ function SampleLoginTemplateDetails() {
                                              
                                         </CTableBody>
                                    </CTable>
+                                   
                               </div>
                          </div>
-                         <div className="block mb-3">
+                         <div className="block mb-3"> 
                               <div className="main-head">
                                    <h4 className="fw-bold mb-4 mt-3">History</h4>
                               </div>
@@ -149,11 +211,9 @@ function SampleLoginTemplateDetails() {
                </div>
 
                {statusModal && <StatusModal visible={statusModal} closeModal={() => setStatusModal(false)} />}
-
           </>
      )
 }
-
 const StatusModal = (_props) => {
     return (
          <>
@@ -179,7 +239,35 @@ const StatusModal = (_props) => {
                         <CButton color="dark">Update</CButton>
                    </CModalFooter>
               </CModal>
-
+              <Table
+                 columns={columns}
+                 data={filteredData}
+                 onDelete={handleDelete}
+                 onCheckboxChange={handleCheckboxChange}
+                 onViewDetails={onViewDetails}
+                 openEditModal={openEditModal}
+                />
+     
+              {isModalOpen && (
+                <StatusModal
+                  visible={isModalOpen}
+                  closeModal={closeModal}
+                 onAdd={addNewStorageCondition}
+               />
+             )}
+                 {isModalsOpen && (
+                 <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+              )}
+                {editModalData && (
+                <EditModal
+                visible={Boolean(editModalData)}
+                closeModal={closeEditModal}
+                 data={editModalData}
+                onSave={handleEditSave}
+                />
+             )}
+    
+             
          </>
     )
 }

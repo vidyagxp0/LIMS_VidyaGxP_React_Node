@@ -6,13 +6,8 @@ import {
   CCol,
   CFormSelect,
   CModal,
-  CBadge,
-  CCardBody,
   CFormInput,
-  CCard,
-  CModalBody,
   CModalFooter,
-  CContainer,
   CModalHeader,
   CModalTitle,
   CRow,
@@ -23,6 +18,8 @@ import {
   CTableHead,
   CTableRow,
 } from "@coreui/react";
+import React from 'react';
+
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -254,7 +251,7 @@ function ChemicalReagentReports() {
           {
             filteredData.map((data, index) => {
               return (
-                <View style={styles.tableRow}>
+                <View key={data} style={styles.tableRow}>
                   <View style={styles.tableCol}>
                     <Text style={styles.tableCell}>{index + 1}</Text>
                   </View>

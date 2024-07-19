@@ -1,119 +1,104 @@
-import React, { useState } from 'react'
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
-import { FaArrowRight } from 'react-icons/fa';
+import { CgAddR, CgCalendarDates } from "react-icons/cg";
+import { FaArrowRight } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { TiArrowRightThick } from "react-icons/ti";
 import { TiArrowLeftThick } from "react-icons/ti";
-import './TestPlan.css'
-import { Link } from 'react-router-dom';
-
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import "./TestPlan.css";
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
-export default function TestPlan() {
-  const [statusFilter, setStatusFilter] = useState('');
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    specificationId: "SP001",
+    productName: "Product 1",
+    tests: "Test A, Test B",
+    initiatedAt: "2024-01-01",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    specificationId: "SP002",
+    productName: "Product 2",
+    tests: "Test C, Test D",
+    initiatedAt: "2024-01-02",
+    status: "APPROVED",
+  },
+];
 
-  const [addModal, setAddModal] = useState(false)
+function TestPlan() {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-  const StatusModal = (_props) => {
+  const filteredData = data.filter((row) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-        <CModalHeader>
-          <CModalTitle>Add Material</CModalTitle>
-        </CModalHeader>
-        <CModalBody >
-        <CFormInput
-          label='Specification ID'
-          className="mb-3"
-          type="text"
-          placeholder=""
-          /> 
-           <CFormInput
-          label='Product/Material Name'
-          className="mb-3"
-          type="text"
-          placeholder="Product/Material Name"
-          /> 
-           <CFormInput
-          label='Test Plan Comments'
-          className="mb-3"
-          type="text"
-          placeholder="Test Plan Comments"
-          />  
-           <CFormSelect 
-           className="mb-3"
-         label="Sampling Quantity UOM"
-         options={[
-        'Select UOM',
-        { label: 'gm', value: 'gm' },
-        { label: 'ml', value: 'ml' },
-         ]}
-            /> 
+      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-        <div className="drag-drop">
-          <div className="sub-container">
-            <h5>Available Tests</h5>
-            <div className="list-container">
-              <ul>
-                {leftArray.map((data) =>
-                  <li key={data}><input type="checkbox" value={data} id={data} className="check-left" /><label className="labels" htmlFor={data} onClick={clicked}>{data}</label></li>
-                )}
-              </ul>
-            </div>
-          </div>
-          <div className="mid-container">
-            <button className="arrow-button" onClick={moveRight}><TiArrowRightThick /></button>
-            <button className="arrow-button" onClick={moveLeft}><TiArrowLeftThick /></button>
-          </div>
-          <div className="sub-container">
-            <h5>Selected</h5>
-            <div className="list-container">
-              <ul>
-                {rightArray.map((data) =>
-                  <li key={data}><input type="checkbox" value={data} id={data} className="check-right" /><label className="labels" htmlFor={data} onClick={clicked}>{data}</label></li>
-                )}
-              </ul>
-            </div>
-            <input  type="checkbox" /> <span>Test Grouping Required</span><button style={{ borderRadius: '5px', margin: '17px 20px', padding: '2px 6px', backgroundColor: '#0f93c3', border: '1px solid #0f93c3', color: 'white' }}>Refresh</button>
-          </div>
-        </div>
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+  };
 
-        <CFormSelect 
-           className="mb-3"
-         label="Coa Template"
-         options={[
-        'Select Coa Template',
-        { label: 'Test Coa', value: 'test-coa' },
-        { label: 'Windlas Template', value: 'windlas-template' },
-         ]}
-            /> 
-
-
-
-        <label className='my-2'  htmlFor="">Remarks</label> <br />
-        <textarea className="line4 w-100 mx-1"  rows="4" cols="50" ></textarea>
-
-        <div className="d-flex gap-3 mt-4">
-            <CButton color="light w-50" onClick={_props.closeModal}>&lt; Back</CButton>
-            <CButton color="primary w-50">Submit</CButton>
-          </div>
-        
-        </CModalBody>
-      </CModal>
-    )
-  }
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
   const [leftArray, setLeftArray] = useState([
     "Viscosity @40C",
@@ -149,7 +134,7 @@ export default function TestPlan() {
     "Assay (on anhydrous basis)",
     "Water content",
     "SP_T_001",
-    "New Product Test"
+    "New Product Test",
   ]);
 
   const [rightArray, setRightArray] = useState([
@@ -160,7 +145,7 @@ export default function TestPlan() {
   ]);
 
   const moveRight = () => {
-    let leftElement = document.getElementsByClassName('check-left');
+    let leftElement = document.getElementsByClassName("check-left");
     for (let index = 0; index < leftElement.length; index++) {
       if (leftElement[index].checked) {
         let data = leftElement[index].value;
@@ -168,13 +153,13 @@ export default function TestPlan() {
         setLeftArray(left);
         rightArray.push(data);
         setRightArray(rightArray);
-        break  // Important
+        break; // Important
       }
     }
-  }
+  };
 
   const moveLeft = () => {
-    let rightElement = document.getElementsByClassName('check-right');
+    let rightElement = document.getElementsByClassName("check-right");
     for (let index = 0; index < rightElement.length; index++) {
       if (rightElement[index].checked) {
         let data = rightElement[index].value;
@@ -182,231 +167,857 @@ export default function TestPlan() {
         setRightArray(right);
         leftArray.push(data);
         setLeftArray(leftArray);
-        break         // Important
+        break; // Important
       }
     }
-  }
+  };
 
   const clicked = () => {
-    let checkboxes = document.querySelectorAll('.check-left, .check-right');
+    let checkboxes = document.querySelectorAll(".check-left, .check-right");
     checkboxes.forEach((checkbox) => {
       checkbox.checked = false;
     });
-    let allLabels = document.querySelectorAll('.labels');
+    let allLabels = document.querySelectorAll(".labels");
     allLabels.forEach((label) => {
-      label.classList.remove('clicked');
+      label.classList.remove("clicked");
     });
 
     let label = event.target;
-    label.classList.add('clicked');
+    label.classList.add("clicked");
     label.checked = true;
   };
 
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Specification Id", accessor: "specificationId" },
+    { header: "	Product Name", accessor: "productName" },
+    { header: "Tests", accessor: "tests" },
+    { header: "Initiated At", accessor: "initiatedAt" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [employees, setEmployees] = useState([
-    {id:1, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-    {id:2, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
-    {id:3, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    {id:4, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'INITIATED' },
-    {id:5, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    {id:6, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REJECTED' },
-    {id:7, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'REINITIATED' },
-    {id:8, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    {id:9, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-    {id:10, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-  ]);
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      specificationId: item["Specification Id"] || "",
+      productName: item["Product Name"] || "",
+      tests: item["Tests"] || "",
+      initiatedAt: item["Initiated At"] || "",
+      status: item["Status"] || "",
+    }));
 
-  const DeleteModal = (_props) => {
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setViewModalData(false);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [selectedSpecId, setSelectedSpecId] = useState("");
+    const [availableTests, setAvailableTests] = useState([]);
+    const [selectedTests, setSelectedTests] = useState([]);
+    const [refreshedTests, setRefreshedTests] = useState([]);
+    const [testPlan, setTestPlan] = useState({
+      specificationId: [],
+      productName: "",
+      testPlanComments: "",
+      samplingQuantityUOM: [],
+      coaTemplate: [],
+      remarks: "",
+    });
+    const currentDate = new Date().toISOString().split("T")[0];
+    const handleAdd = () => {
+      const newCondition = {
+        specificationId: testPlan.specificationId,
+        productName: testPlan.productName,
+        tests: testPlan.testPlanComments,
+        initiatedAt: currentDate,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    const specTestsMap = {
+      "ACC-00-QC-01": ["Test 1", "Test 2", "Test 3"],
+      SPC001: ["Test A", "Test B"],
+      "WBL/STPF/FG/0493/02": ["Test X", "Test Y", "Test Z"],
+      "QC-002": ["Test M", "Test N"],
+      "LAB-03-A01": ["Test C", "Test D"],
+      "MFG-PLT-009": ["Test P", "Test Q"],
+      "FG-TEST-123": ["Test L", "Test O"],
+      "BATCH-789": ["Test G", "Test H"],
+    };
+
+    const handleSpecIdChange = (e) => {
+      const specId = e.target.value;
+      setSelectedSpecId(specId);
+      setAvailableTests(specTestsMap[specId] || []);
+      setSelectedTests([]);
+      setRefreshedTests([]);
+    };
+
+    const handleTestSelect = (test) => {
+      setSelectedTests((prevSelectedTests) => {
+        if (prevSelectedTests.includes(test)) {
+          return prevSelectedTests.filter((t) => t !== test);
+        } else {
+          return [...prevSelectedTests, test];
+        }
+      });
+
+      setAvailableTests((prevAvailableTests) => {
+        if (prevAvailableTests.includes(test)) {
+          return prevAvailableTests.filter((t) => t !== test);
+        } else {
+          return [...prevAvailableTests, test];
+        }
+      });
+    };
+
+    const handleRefresh = () => {
+      setRefreshedTests(selectedTests);
+    };
+
     return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-            <CModalHeader>
-                <CModalTitle>Delete User</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <p>Are you sure you want to delete this material?</p>
-            </CModalBody>
-            <CModalFooter>
-                <CButton
-                    color="secondary"
-                    onClick={_props.closeModal}
-                    style={{
-                        marginRight: "0.5rem",
-                        fontWeight: "500",
-                    }}
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="danger"
-                    onClick={_props.confirmDelete}
-                    style={{
-                        fontWeight: "500",
-                        color: "white",
-                    }}
-                >
-                    Delete
-                </CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
-
-const handleDeleteClick = (id) => {
-  setDeleteId(id);
-  setDeleteModal(true);
-};
-
-const handleDeleteConfirm = () => {
-  setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-  setDeleteModal(false);
-};
-
-
-  const filteredEmployees = employees.filter(employee =>
-    statusFilter === '' || employee.Status.toLowerCase() === statusFilter.toLowerCase()
-  );
-  const deleteEmployee = (index) => {
-    const updatedEmployees = employees.filter((_, i) => i !== index);
-    setEmployees(updatedEmployees);
-  };
-
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-  const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.user}</td>
-        <td>{employee.DayComplete}</td>
-        <td>{employee.Date}</td>
-        <td ><button  
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          employee.Status === "INITIATED"
-                            ? "blue-700"
-                            : employee.Status === "APPROVED"
-                            ? "green-700"
-                            : employee.Status === "REJECTED"
-                            ? "red-700"
-                            : employee.Status === "REINITIATED"
-                            ? "yellow-500"
-                            : employee.Status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {employee.Status}
-                      </button></td>
-        <td>
-          <div className="d-flex gap-3">
-            <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-            <div className="cursor-pointer" >
-              <FontAwesomeIcon onClick={() => setAddModal(true)} icon={faPenToSquare} />
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Test Plan</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormSelect
+            label="Specification ID"
+            className="mb-3"
+            name="specificationId"
+            type="text"
+            placeholder=""
+            options={[
+              { label: "ACC-00-QC-01", value: "ACC-00-QC-01" },
+              { label: "SPC001", value: "SPC001" },
+              { label: "WBL/STPF/FG/0493/02", value: "WBL/STPF/FG/0493/02" },
+              { label: "QC-002", value: "QC-002" },
+              { label: "LAB-03-A01", value: "LAB-03-A01" },
+              { label: "MFG-PLT-009", value: "MFG-PLT-009" },
+              { label: "FG-TEST-123", value: "FG-TEST-123" },
+              { label: "BATCH-789", value: "BATCH-789" },
+            ]}
+            value={testPlan.selectedSpecId}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, selectedSpecId: e.target.value })
+            }
+          />
+          <CFormInput
+            label="Product/Material Name"
+            className="mb-3"
+            type="text"
+            placeholder="Product/Material Name"
+            name="productName"
+            value={testPlan.productName}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, productName: e.target.value })
+            }
+          />
+          <CFormInput
+            label="Test Plan Comments"
+            className="mb-3"
+            type="text"
+            placeholder="Test Plan Comments"
+            name="testPlanComments"
+            value={testPlan.testPlanComments}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, testPlanComments: e.target.value })
+            }
+          />
+          <CFormSelect
+            className="mb-3"
+            label="Sampling Quantity UOM"
+            options={[
+              "Select UOM",
+              { label: "gm", value: "gm" },
+              { label: "ml", value: "ml" },
+            ]}
+            name="samplingQuantityUOM"
+            value={testPlan.samplingQuantityUOM}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, samplingQuantityUOM: e.target.value })
+            }
+          />
+          <div className="drag-drop">
+            <div className="sub-container">
+              <h5>Available Tests</h5>
+              <div className="list-container">
+                <ul>
+                  {availableTests.map((data) => (
+                    <li key={data}>
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-left"
+                        onChange={() => handleTestSelect(data)}
+                        checked={selectedTests.includes(data)}
+                      />
+                      <label className="labels" htmlFor={data}>
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <Link to="#"  onClick={() => handleDeleteClick(employee.id)}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </Link>
+            <div className="mid-container">
+              <button className="arrow-button" onClick={() => {}}>
+                <TiArrowRightThick />
+              </button>
+              <button className="arrow-button" onClick={() => {}}>
+                <TiArrowLeftThick />
+              </button>
+            </div>
+            <div className="sub-container">
+              <h5>Selected</h5>
+              <div className="list-container">
+                <ul>
+                  {selectedTests.map((data) => (
+                    <li key={data}>
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-right"
+                        onChange={() => handleTestSelect(data)}
+                        checked={selectedTests.includes(data)}
+                      />
+                      <label className="labels" htmlFor={data}>
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <input type="checkbox" /> <span>Test Grouping Required</span>
+              <button
+                style={{
+                  borderRadius: "5px",
+                  margin: "17px 20px",
+                  padding: "2px 6px",
+                  backgroundColor: "#0f93c3",
+                  border: "1px solid #0f93c3",
+                  color: "white",
+                }}
+                onClick={handleRefresh}
+              >
+                Refresh
+              </button>
+            </div>
           </div>
-
-        </td>
-      </tr>
-    ));
+          {refreshedTests.length > 0 && (
+            <>
+              <table className="border-1 border-black min-w-full divide-y divide-gray-200">
+                <thead className="border-1 border-black">
+                  <tr>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      S No.
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Tests
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Pass Limit Description
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Revision No.
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Worksheet
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Display in COA
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Re-Testing
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Reduced Testing
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {refreshedTests.map((test, index) => (
+                    <React.Fragment key={index}>
+                      <tr className="border-1 border-black">
+                        <td
+                          colSpan="9"
+                          className=" px-6 py-4 whitespace-nowrap"
+                        >
+                          <CFormSelect
+                            options={[
+                              "Select Group",
+                              { label: "Group 1", value: "group-1" },
+                              { label: "Group 2", value: "group-2" },
+                              { label: "Group 3", value: "group-3" },
+                            ]}
+                            className="w-full"
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-1 border-black">
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          {index + 1}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">{test}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">-</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          0
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <CFormSelect
+                            options={[
+                              "Select Worksheet",
+                              { label: "pH Test", value: "ph-test" },
+                              { label: "Assay1", value: "assay1" },
+                              { label: "E.coli", value: "e-coli" },
+                              { label: "Option 4", value: "option-4" },
+                              { label: "Option 5", value: "option-5" },
+                              { label: "Option 6", value: "option-6" },
+                            ]}
+                            className="w-full"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+          <CFormSelect
+            className="mb-3"
+            label="Coa Template"
+            options={[
+              "Select Coa Template",
+              { label: "Test Coa", value: "test-coa" },
+              { label: "Windlas Template", value: "windlas-template" },
+            ]}
+            name="coaTemplate"
+            value={testPlan.coaTemplate}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, coaTemplate: e.target.value })
+            }
+          />
+          <label className="my-2" htmlFor="">
+            Remarks
+          </label>
+          <br />
+          <textarea
+            value={testPlan.remarks}
+            onChange={(e) =>
+              setTestPlan({ ...testPlan, remarks: e.target.value })
+            }
+            className="line4 w-100 mx-1"
+            rows="4"
+            cols="50"
+          ></textarea>
+          <div className="d-flex gap-3 mt-4">
+            <CButton color="light w-50" onClick={closeModal}>
+              &lt; Back
+            </CButton>
+            <CButton color="primary w-50" onClick={handleAdd}>
+              Submit
+            </CButton>
+          </div>
+        </CModalBody>
+      </CModal>
+    );
   };
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(employees.length / pageSize));
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [selectedSpecId, setSelectedSpecId] = useState("");
+    const [availableTests, setAvailableTests] = useState([]);
+    const [selectedTests, setSelectedTests] = useState([]);
+    const [refreshedTests, setRefreshedTests] = useState([]);
+
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const specTestsMap = {
+      "ACC-00-QC-01": ["Test 1", "Test 2", "Test 3"],
+      SPC001: ["Test A", "Test B"],
+      "WBL/STPF/FG/0493/02": ["Test X", "Test Y", "Test Z"],
+      "QC-002": ["Test M", "Test N"],
+      "LAB-03-A01": ["Test C", "Test D"],
+      "MFG-PLT-009": ["Test P", "Test Q"],
+      "FG-TEST-123": ["Test L", "Test O"],
+      "BATCH-789": ["Test G", "Test H"],
+    };
+
+    const handleSpecIdChange = (e) => {
+      const specId = e.target.value;
+      setSelectedSpecId(specId);
+      setAvailableTests(specTestsMap[specId] || []);
+      setSelectedTests([]);
+      setRefreshedTests([]);
+    };
+
+    const handleTestSelect = (test) => {
+      setSelectedTests((prevSelectedTests) => {
+        if (prevSelectedTests.includes(test)) {
+          return prevSelectedTests.filter((t) => t !== test);
+        } else {
+          return [...prevSelectedTests, test];
+        }
+      });
+
+      setAvailableTests((prevAvailableTests) => {
+        if (prevAvailableTests.includes(test)) {
+          return prevAvailableTests.filter((t) => t !== test);
+        } else {
+          return [...prevAvailableTests, test];
+        }
+      });
+    };
+
+    const handleRefresh = () => {
+      setRefreshedTests(selectedTests);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Test Plan</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormSelect
+            label="Specification ID"
+            className="mb-3"
+            name="specificationId"
+            type="text"
+            placeholder=""
+            options={[
+              { label: "ACC-00-QC-01", value: "ACC-00-QC-01" },
+              { label: "SPC001", value: "SPC001" },
+              { label: "WBL/STPF/FG/0493/02", value: "WBL/STPF/FG/0493/02" },
+              { label: "QC-002", value: "QC-002" },
+              { label: "LAB-03-A01", value: "LAB-03-A01" },
+              { label: "MFG-PLT-009", value: "MFG-PLT-009" },
+              { label: "FG-TEST-123", value: "FG-TEST-123" },
+              { label: "BATCH-789", value: "BATCH-789" },
+            ]}
+            value={formData?.selectedSpecId | ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="Product/Material Name"
+            className="mb-3"
+            type="text"
+            placeholder="Product/Material Name"
+            name="productName"
+            value={formData?.productName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="Test Plan Comments"
+            className="mb-3"
+            type="text"
+            placeholder="Test Plan Comments"
+            name="testPlanComments"
+            value={formData?.testPlanComments}
+            onChange={handleChange}
+          />
+          <CFormSelect
+            className="mb-3"
+            label="Sampling Quantity UOM"
+            options={[
+              "Select UOM",
+              { label: "gm", value: "gm" },
+              { label: "ml", value: "ml" },
+            ]}
+            name="samplingQuantityUOM"
+            value={formData?.samplingQuantityUOM}
+            onChange={handleChange}
+          />
+          <div className="drag-drop">
+            <div className="sub-container">
+              <h5>Available Tests</h5>
+              <div className="list-container">
+                <ul>
+                  {availableTests.map((data) => (
+                    <li key={data}>
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-left"
+                        onChange={() => handleTestSelect(data)}
+                        checked={selectedTests.includes(data)}
+                      />
+                      <label className="labels" htmlFor={data}>
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="mid-container">
+              <button className="arrow-button" onClick={() => {}}>
+                <TiArrowRightThick />
+              </button>
+              <button className="arrow-button" onClick={() => {}}>
+                <TiArrowLeftThick />
+              </button>
+            </div>
+            <div className="sub-container">
+              <h5>Selected</h5>
+              <div className="list-container">
+                <ul>
+                  {selectedTests.map((data) => (
+                    <li key={data}>
+                      <input
+                        type="checkbox"
+                        value={data}
+                        id={data}
+                        className="check-right"
+                        onChange={() => handleTestSelect(data)}
+                        checked={selectedTests.includes(data)}
+                      />
+                      <label className="labels" htmlFor={data}>
+                        {data}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <input type="checkbox" /> <span>Test Grouping Required</span>
+              <button
+                style={{
+                  borderRadius: "5px",
+                  margin: "17px 20px",
+                  padding: "2px 6px",
+                  backgroundColor: "#0f93c3",
+                  border: "1px solid #0f93c3",
+                  color: "white",
+                }}
+                onClick={handleRefresh}
+              >
+                Refresh
+              </button>
+            </div>
+          </div>
+          {refreshedTests.length > 0 && (
+            <>
+              <table className="border-1 border-black min-w-full divide-y divide-gray-200">
+                <thead className="border-1 border-black">
+                  <tr>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      S No.
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Tests
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Pass Limit Description
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Revision No.
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Worksheet
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Display in COA
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Re-Testing
+                    </th>
+                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
+                      Reduced Testing
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {refreshedTests.map((test, index) => (
+                    <React.Fragment key={index}>
+                      <tr className="border-1 border-black">
+                        <td
+                          colSpan="9"
+                          className=" px-6 py-4 whitespace-nowrap"
+                        >
+                          <CFormSelect
+                            options={[
+                              "Select Group",
+                              { label: "Group 1", value: "group-1" },
+                              { label: "Group 2", value: "group-2" },
+                              { label: "Group 3", value: "group-3" },
+                            ]}
+                            className="w-full"
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-1 border-black">
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          {index + 1}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">{test}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">-</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          0
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <CFormSelect
+                            options={[
+                              "Select Worksheet",
+                              { label: "pH Test", value: "ph-test" },
+                              { label: "Assay1", value: "assay1" },
+                              { label: "E.coli", value: "e-coli" },
+                              { label: "Option 4", value: "option-4" },
+                              { label: "Option 5", value: "option-5" },
+                              { label: "Option 6", value: "option-6" },
+                            ]}
+                            className="w-full"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                          <input
+                            type="checkbox"
+                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          />
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+          <CFormSelect
+            className="mb-3"
+            label="Coa Template"
+            options={[
+              "Select Coa Template",
+              { label: "Test Coa", value: "test-coa" },
+              { label: "Windlas Template", value: "windlas-template" },
+            ]}
+            name="coaTemplate"
+            value={formData?.coaTemplate}
+            onChange={handleChange}
+          />
+          <label className="my-2" htmlFor="">
+            Remarks
+          </label>
+          <br />
+          <textarea
+            value={formData?.remarks}
+            onChange={handleChange}
+            className="line4 w-100 mx-1"
+            rows="4"
+            cols="50"
+          ></textarea>
+          <div className="d-flex gap-3 mt-4">
+            <CButton color="light w-50" onClick={closeModal}>
+              &lt; Back
+            </CButton>
+            <CButton color="primary w-50" onClick={handleSave}>
+              Submit
+            </CButton>
+          </div>
+        </CModalBody>
+      </CModal>
+    );
   };
   return (
-    <>   
-     <div className="m-5 mt-3">
-         <div className="main-head">
-             <h4 className="fw-bold">Test plans</h4>
-          </div>
-
-      <div className="d-flex justify-content-between mt-5 mb-3">
-        <div className="w-25">
-            <CFormSelect
-               onChange={(e) => setStatusFilter(e.target.value)} 
-               style={{fontSize:'0.9rem'}}
-               value={statusFilter}
-            >
-              <option value="">All</option>
-              <option value="initiated">Initiated</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="reinitiated">Reinitiated</option>
-              <option value="dropped">Dropped</option>
-            </CFormSelect>
+    <>
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold">Test plan</h4>
         </div>
 
-        <button
-          className="btn btn-primary"
-          type="button"
-          style={{fontSize:'0.9rem'}}
-          onClick={() => setAddModal(true)}
-          >
-          <span>Add Test Plan</span>
-        </button>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Test_plan.pdf" title="Test Plan Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Test Categories"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
-        <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Specification Id</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Tests</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Initiated At</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
-            </tr> 
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </CTable>
-      </div>
-
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      </div>
-                 
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-    
-      {deleteModal && (
-        <DeleteModal
-        visible={deleteModal}
-        closeModal={() => setDeleteModal(false)}
-        confirmDelete={handleDeleteConfirm}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
         />
       )}
-
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </>
-  )
+  );
 }
+
+export default TestPlan;

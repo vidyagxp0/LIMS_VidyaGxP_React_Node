@@ -19,7 +19,7 @@ function AdminPanel(props) {
 
   const handleLogin = () => {
     if (email === "Amit" && passwd === "Amit@121") {
-      navigate("/admin-panel/userManagement");
+      navigate("/admin-login/userManagement");
       props.show(true);
     } else if (email === "" || passwd === "") {
       toast.warning("Enter required credentials");
@@ -27,6 +27,27 @@ function AdminPanel(props) {
       toast.error("Invalid Credentials");
     }
   };
+  // const handleLogin = async () => {
+  //   if (email === "" || passwd === "") {
+  //     toast.warning("Enter required credentials");
+  //     return;
+  //   }
+    
+  //   try {
+  //     const response = await axios.post("http://localhost:9000/admin/login", {
+  //       email,
+  //       password: passwd,
+  //     });
+  
+  //     if (response.data.token) {
+  //       localStorage.setItem("adminToken", response.data.token);
+  //       navigate("/admin-panel/userManagement");
+  //       props.show(true);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Invalid Credentials");
+  //   }
+  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -65,7 +86,7 @@ function AdminPanel(props) {
                 Welcome To Admin Console
               </h2>
 
-              {/* <div className="text-center text-lg text-gray-200 mb-6"> <p>Enter your credencials to access the LIMS Software.</p></div> */}
+              {/* <div className="text-center text-lg text-gray-700 mb-6"> <p>Enter your credentials to access the LIMS Software.</p></div> */}
             </div>
             <CForm>
               <div className="mb-4 text-gray-200">

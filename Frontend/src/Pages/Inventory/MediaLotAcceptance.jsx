@@ -1,510 +1,289 @@
-import {
-  CButton,
-  CCol,
-  // CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  // CDropdown,
-  // CDropdownToggle,
-  // CDropdownMenu,
-  // CDropdownItem,
-  // CDropdownDivider,
-  CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
+
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import MediaLotAcceptanceModal from "../Modals/MediaLotAcceptanceModal";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
 
-function MediaLotAcceptance() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      MediaName	: "55",
-      MediaLotNo	: "Infra",
-      LotBatchNo		: "55",
-      ModeOfPreparation		: "55",
-      Sample	: "55",
-      AddedOn: "55",
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    MediaName: "Agar Plate 001",
+    MediaLotNo: "100",
+    LotBatchNo: "30",
+    ModeOfPreparation: "Autoclaved",
+    Sample: "Nutrient Agar",
+    AddedOn: "01-07-2024",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    MediaName: "Agar Plate 002",
+    MediaLotNo: "101",
+    LotBatchNo: "30",
+    ModeOfPreparation: "Autoclaved",
+    Sample: "MacConkey Agar",
+    AddedOn: "02-07-2024",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    MediaName: "Agar Plate 003",
+    MediaLotNo: "102",
+    LotBatchNo: "30",
+    ModeOfPreparation: "Sterilized",
+    Sample: "Blood Agar",
+    AddedOn: "03-07-2024",
+    status: "Inactive",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    MediaName: "Agar Plate 004",
+    MediaLotNo: "103",
+    LotBatchNo: "30",
+    ModeOfPreparation: "Autoclaved",
+    Sample: "Sabouraud Dextrose Agar",
+    AddedOn: "04-07-2024",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    MediaName: "Agar Plate 005",
+    MediaLotNo: "104",
+    LotBatchNo: "30",
+    ModeOfPreparation: "Autoclaved",
+    Sample: "Mannitol Salt Agar",
+    AddedOn: "05-07-2024",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    MediaName: "Agar Plate 006",
+    MediaLotNo: "105",
+    LotBatchNo: "30",
+    ModeOfPreparation: "Autoclaved",
+    Sample: "Chocolate Agar",
+    AddedOn: "06-07-2024",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    MediaName: "Agar Plate 007",
+    MediaLotNo: "106",
+    LotBatchNo: "30",
+    ModeOfPreparation: "Autoclaved",
+    Sample: "Cetrimide Agar",
+    AddedOn: "07-07-2024",
+    status: "Active",
+  },
+];
 
-      status: "Active",
-    },
-    {
-      id: 2,
-      MediaName	: "55",
-      MediaLotNo	: "Infra",
-      LotBatchNo		: "55",
-      ModeOfPreparation		: "55",
-      Sample	: "55",
-      AddedOn: "55",
-      status: "Active",
-    },
+const MediaLotAcceptance = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [cardCounts, setCardCounts] = useState({
+    Active: 0,
+    Inactive: 0,
+  });
 
-    {
-      id: 3,
-      MediaName	: "55",
-      MediaLotNo	: "Infra",
-      LotBatchNo		: "55",
-      ModeOfPreparation		: "55",
-      Sample	: "55",
-      AddedOn: "55",
-      status: "Active",
-    },
-    {
-      id: 4,
-      MediaName	: "55",
-      MediaLotNo	: "Infra",
-      LotBatchNo		: "55",
-      ModeOfPreparation		: "55",
-      Sample	: "55",
-      AddedOn: "55",
-      status: "Inactive",
-    },
-    {
-      id: 5,
-      MediaName	: "55",
-      MediaLotNo	: "Infra",
-      LotBatchNo		: "55",
-      ModeOfPreparation		: "55",
-      Sample	: "55",
-      AddedOn: "55",
-      status: "Inactive",
-    },
+  useEffect(() => {
+    const counts = {
+      Active: 0,
+      Inactive: 0,
+    };
 
-    {
-      id: 6,
-      MediaName	: "55",
-      MediaLotNo	: "Infra",
-      LotBatchNo		: "55",
-      ModeOfPreparation		: "55",
-      Sample	: "55",
-      AddedOn: "55",
-      status: "Inactive",
-    },
-  ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
 
-  const badgeStyle2 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "red", color: "white", width: "110px" };
+    setCardCounts(counts);
+  }, [data]);
 
-  const [search, setSearch] = useState("");
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, data.length);
-
-  const filterData = () => {
-    const filteredData =
-      selectedStatus === "All"
-        ? data
-        : data.filter((item) => item.status === selectedStatus);
-    return filteredData.filter((item) =>
-      item.MediaName.toLowerCase().includes(search.toLowerCase())
-    );
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const filteredData = filterData();
-
-  const nextPage = () =>
-    setCurrentPage((prev) =>
-      Math.min(prev + 1, Math.ceil(filteredData.length / pageSize))
-    );
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-
-  const handleDelete = (id) => {
-    setData((prevData) => prevData.filter((item) => item.id !== id));
-    setDeleteModal(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
   };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.MediaName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno:  index + 1,
+      MediaName: item["Media Name"] || "",
+      MediaLotNo: item["Media Lot No."] || "",
+      LotBatchNo: item["Lot Batch No."] || "",
+      ModeOfPreparation: item["Mode Of Preparation"] || "",
+      Sample: item["Sample"] || "",
+      AddedOn: item["Added On"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [ ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Media Name", accessor: "MediaName" },
+    { header: "Media Lot No.", accessor: "MediaLotNo" },
+    { header: "Lot Batch No.", accessor: "LotBatchNo" },
+    { header: "Mode Of Preparation", accessor: "ModeOfPreparation" },
+    { header: "Sample", accessor: "Sample" },
+    { header: "Added On", accessor: "AddedOn" },
+    { header: "Status", accessor: "status" },
+
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
   return (
-    <>
-      <div id="approval-page" className="m-5 mt-3">
-      
-          <div className="main-head">
-          <h4 className="fw-bold ">
-              Media Lot Acceptance
-            </h4>
-          </div>
-          <div className="d-flex gap-4 mt-5">
-            <div className="chart-widgets w-100"></div>
-          </div>
-          <div>
-          <CRow className="mb-3">
-              <CCol sm={3}>
-                <CFormSelect
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  value={selectedStatus}
-                  style={{fontSize:'0.9rem'}}
-                >
-                  <option value="All">All</option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </CFormSelect>
-              </CCol>
-              <CCol sm={2}></CCol>
-              <CCol sm={7}>
-                <div className="d-flex justify-content-end">
-                  <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>
-                    Media Lot Acceptance
-                  </CButton>
-                </div>
-              </CCol>
-            </CRow>
-          </div>
-  <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-          <CTable align="middle" responsive className="mb-0    table-responsive">
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col" className="text-center">
-                    <input type="checkbox" />
-                  </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">S NO.</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Media Name	</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Media Lot No.		 </CTableHeaderCell>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Media Lot Acceptance</h1>
 
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">
-                  Lot Batch No.	
-                  </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">
-                  Mode Of Preparation		
-                  </CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Sample	</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Added On</CTableHeaderCell>
-
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Status</CTableHeaderCell>
-                  <CTableHeaderCell  style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                {filterData().slice(startIndex, endIndex)
-                  .filter((item) => {
-                    return search.toLowerCase() === ""
-                      ? item
-                      : item.MediaName.toLowerCase().includes(search);
-                  })
-                  .map((item, index) => (
-                    <CTableRow key={index}>
-                      <CTableHeaderCell className="text-center">
-                        <input type="checkbox" />
-                      </CTableHeaderCell>
-                      <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                      <CTableDataCell key={item.id}>
-                        {item.MediaName	}
-                      </CTableDataCell>
-
-                      
-                      <CTableDataCell>{item.MediaLotNo	}</CTableDataCell>
-                      <CTableDataCell>{item.LotBatchNo		}</CTableDataCell>
-                      <CTableDataCell>{item.ModeOfPreparation		}</CTableDataCell>
-                      <CTableDataCell>{item.Sample	}</CTableDataCell>
-                      
-                      <CTableDataCell>{item.AddedOn}</CTableDataCell>
-                      
-
-                      <CTableDataCell >
-                       <button
-                          style={{
-                            background:
-                              item.status === "Active" ? "#15803d" : "#b91c1c",
-                            color: "white",
-                            width: "4rem",
-                            fontSize: "0.6rem",
-                            padding: "2px 7px",
-                            borderRadius: "7px",
-                          }}
-                        >
-                          {item.status}
-                        </button>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div className="d-flex gap-3">
-                          <Link to="/approval/1321">
-                            <FontAwesomeIcon icon={faEye} />
-                          </Link>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </div>
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => setDeleteModal(item.id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </div>
-                        </div>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-              </CTableBody>
-            </CTable>
-          </div>
-     
-          <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-        
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Media Lot Acceptance"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-      )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal !== false}
-          closeModal={() => setDeleteModal(false)}
-          handleDelete={() => handleDelete(deleteModal)}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <MediaLotAcceptanceModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="xl"
-      >
-        <CModalHeader>
-          <CModalTitle size="xl">Add Media Lot</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <table
-            className="table table-bordered"
-            style={{ width: "100%", height: "700px" }}
-          >
-            <thead className="thead-light">
-              <tr>
-                <th style={{ background: "#0F93C3", color: "white" }}>SNo.</th>
-                <th style={{ background: "#0F93C3", color: "white" }}>
-                Media Container No.	
-                </th>
-                <th style={{ background: "#0F93C3", color: "white" }}>
-                  Container Qty
-                </th>
-                <th style={{ background: "#0F93C3", color: "white" }}>
-                  Container Validity Period Day(s)
-                </th>
-                <th style={{ background: "#0F93C3", color: "white" }}>
-                  Container Valid Upto
-                </th>
-                <th style={{ background: "#0F93C3", color: "white" }}>
-                  Lot Valid Upto
-                </th>
-                <th style={{ background: "#0F93C3", color: "white" }}>
-                  Select
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>WSI-1020223-000000061</td>
-                <td>10</td>
-                <td>60</td>
-                <td>19/05/2024 15:08</td>
-                <td>19/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>WSI-1020223-000000062</td>
-                <td>10</td>
-                <td>60</td>
-                <td>19/05/2024 15:08</td>
-                <td>19/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>WSI-1020223-000000063</td>
-                <td>10</td>
-                <td>60</td>
-                <td>18/05/2024 15:08</td>
-                <td>18/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>WSI-1020223-000000064</td>
-                <td>10</td>
-                <td>60</td>
-                <td>18/05/2024 15:08</td>
-                <td>18/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>WSI-1020223-000000065</td>
-                <td>10</td>
-                <td>60</td>
-                <td>18/05/2024 15:08</td>
-                <td>18/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td>WSI-1020223-000000066</td>
-                <td>10</td>
-                <td>60</td>
-                <td>18/05/2024 15:08</td>
-                <td>18/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>WSI-1020223-000000067</td>
-                <td>10</td>
-                <td>60</td>
-                <td>19/05/2024 15:08</td>
-                <td>19/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>WSI-1020223-000000068</td>
-                <td>10</td>
-                <td>60</td>
-                <td>19/05/2024 15:08</td>
-                <td>19/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>9</td>
-                <td>WSI-1020223-000000069</td>
-                <td>10</td>
-                <td>60</td>
-                <td>19/05/2024 15:08</td>
-                <td>19/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-              <tr>
-                <td>10</td>
-                <td>WSI-1020223-000000610</td>
-                <td>10</td>
-                <td>60</td>
-                <td>19/05/2024 15:08</td>
-                <td>19/05/2024 15:08</td>
-                <td>
-                  <input type="checkbox" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Cancel
-          </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
-const DeleteModal = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-      size="lg"
-    >
-      <CModalHeader>
-        <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-          Delete Batch Sample Allotment
-        </CModalTitle>
-      </CModalHeader>
-      <div
-        className="modal-body"
-        style={{
-          fontSize: "1.2rem",
-          fontWeight: "500",
-          lineHeight: "1.5",
-          marginBottom: "1rem",
-          columnGap: "0px",
-          border: "0px !important",
-        }}
-      >
-        <p>Are you sure you want to delete this Batch Sample Allotment?</p>
-      </div>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.handleDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
+      {isModalsOpen && (
+        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+    </div>
   );
 };
 

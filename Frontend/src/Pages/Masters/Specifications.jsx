@@ -1,506 +1,689 @@
-import React, { useState } from "react";
-// import "./StorageCondition.css";
-import "react-toastify/dist/ReactToastify.css";
-import { FaArrowRight } from "react-icons/fa";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import { Link } from "react-router-dom";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { useEffect, useState } from "react";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
+
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../../Pages/StorageCondition/StorageCondition.css";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
-export default function Specifications() {
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    productCode: "P001",
+    productName: "Product 1",
+    specificationID: "S001",
+    specificationName: "Specification 1",
+    effectFrom: "2024-01-01",
+    reviewDate: "2024-06-01",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    productCode: "P002",
+    productName: "Product 2",
+    specificationID: "S002",
+    specificationName: "Specification 2",
+    effectFrom: "2024-01-02",
+    reviewDate: "2024-06-02",
+    status: "APPROVED",
+  },
+];
 
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState('All');
+function Specifications() {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState('');
-
-  const [storageName, setStorageName] = useState("");
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-  const [employees, setEmployees] = useState([
-    {
-      id: 1,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "APPROVED",
-    },
-    {
-      id: 2,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "INITIATED",
-    },
-    {
-      id: 3,
-      user: "CHPOIL",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "INITIATED",
-    },
-    {
-      id: 4,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "APPROVED",
-    },
-    {
-      id: 5,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "APPROVED",
-    },
-    {
-      id: 6,
-      user: "PM-001",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "REJECTED",
-    },
-    {
-      id: 7,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "REINITIATED",
-    },
-    {
-      id: 8,
-      user: "TSTvl",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "APPROVED",
-    },
-    {
-      id: 9,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "APPROVED",
-    },
-    {
-      id: 10,
-      user: "HYO",
-      ProdName: "Sacubitril",
-      SpecificID: "ARIP0000095",
-      SpecificName: "test",
-      EffectFrom: "May 18th 24",
-      ReviewDate: "Aug 18th 24",
-      status: "DROPPED",
-    },
-  ]);
-
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-  );
-
-
-  const deleteEmployee = (index) => {
-    const updatedEmployees = employees.filter((_, i) => i !== index);
-    setEmployees(updatedEmployees);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
   };
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-  const renderRows = () => {
-    return filteredEmployees
-      .slice(startIndex, endIndex)
-      .map((employee, index) => (
-        <tr key={startIndex + index}>
-          <td>{startIndex + index + 1}</td>
-          <td>{employee.user}</td>
-          <td>{employee.ProdName}</td>
-          <td>{employee.SpecificID}</td>
-          <td>{employee.SpecificName}</td>
-          <td>{employee.EffectFrom}</td>
-          <td>{employee.ReviewDate}</td>
-          <td>
-
-          <button  
-                        className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          employee.status === "INITIATED"
-                            ? "blue-700"
-                            : employee.status === "APPROVED"
-                            ? "green-700"
-                            : employee.status === "REJECTED"
-                            ? "red-700"
-                            : employee.status === "REINITIATED"
-                            ? "yellow-500"
-                            : employee.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {employee.status}
-                      </button>
-          </td>
-          <td>
-            <div className="d-flex gap-3">
-              <div>
-                <Link to="/approval/1321">
-                  <FontAwesomeIcon icon={faEye} />
-                </Link>
-              </div>
-
-              <div
-                className="cursor-pointer"
-                onClick={() => setAddModal(true)}
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </div>
-              <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </div>
-
-            </div>
-          </td>
-        </tr>
-      ));
-  };
-  const nextPage = () => {
-    if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
-      setCurrentPage(currentPage + 1);
-    }
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
   };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+  const filteredData = data.filter((row) => {
+    return (
+      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
   };
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Product Code", accessor: "productCode" },
+    { header: "Product Name", accessor: "productName" },
+    { header: "Specification ID", accessor: "specificationID" },
+    { header: "Specification Name", accessor: "specificationName" },
+    { header: "Effect From", accessor: "effectFrom" },
+    { header: "Review Date", accessor: "reviewDate" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
 
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setViewModalData(false);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      productCode: item["Product Code"] || "",
+      productName: item["Product Name"] || "",
+      specificationID: item["Specification ID"] || "",
+      specificationName: item["Specification Name"] || "",
+      effectFrom: item["Effect From"] || "",
+      reviewDate: item["Review Date"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [specificationData, setSpecificationData] = useState({
+      productCode: [],
+      productName: "",
+      specificationName: "",
+      specificationID: "",
+      sampleType: [],
+      specificationType: [],
+      effectFrom: "",
+      reviewDate: "",
+      supersedes: "",
+      standardTestProcedureNo: "",
+    });
+
+    const handleAdd = () => {
+      const newCondition = {
+        productName: specificationData.productName,
+        productCode: specificationData.productCode,
+        specificationID: specificationData.specificationID,
+        specificationName: specificationData.specificationName,
+        effectFrom: specificationData.effectFrom,
+        reviewDate: specificationData.reviewDate,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    const top100Films = [
+      { label: "The Shawshank Redemption", year: 1994 },
+      { label: "The Godfather", year: 1972 },
+      { label: "The Godfather: Part II", year: 1974 },
+      { label: "The Dark Knight", year: 2008 },
+      { label: "12 Angry Men", year: 1957 },
+    ];
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Specification</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <label className="mb-3" htmlFor="">
+            Product/Material Code
+          </label>
+          <Autocomplete
+            className="mb-3"
+            disablePortal
+            id="combo-box-demo"
+            options={top100Films}
+            renderInput={(params) => <TextField {...params} label="" />}
+            value={specificationData?.productCode}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                productCode: e.target.value,
+              })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product Name"
+            placeholder="Product Name"
+            // disabled
+            value={specificationData?.productName}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                productName: e.target.value,
+              })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Specification Name"
+            placeholder="Specification Name"
+            value={specificationData?.specificationName}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                specificationName: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Specification ID"
+            placeholder="Specification ID"
+            value={specificationData?.specificationID}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                specificationID: e.target.value,
+              })
+            }
+          />
+
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Sample Type"
+            value={specificationData?.sampleType}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                sampleType: e.target.value,
+              })
+            }
+            options={[
+              "Select Sample Type",
+              { label: "Raw Material", value: "Raw Material" },
+              { label: "hcl", value: "hcl" },
+              { label: "Hydrochloric Acid", value: "Hydrochloric Acid" },
+              { label: "Petrochemical", value: "Petrochemical" },
+              { label: "Initiated Product", value: "Initiated Product" },
+              { label: "Semi Finished", value: "Semi Finished" },
+              { label: "ABCD", value: "ABCD" },
+              { label: "H2So4", value: "H2So4" },
+              { label: "Micro Media", value: "Micro Media" },
+              { label: "FG Templage", value: "FG Templage" },
+            ]}
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Specification Type"
+            value={specificationData?.specificationType}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                specificationType: e.target.value,
+              })
+            }
+            options={[
+              "Select Specification Type",
+              { label: "environment", value: "environment" },
+              { label: "culture", value: "culture" },
+              { label: "culture1", value: "culture1" },
+              { label: "working-standard", value: "working-standard" },
+              { label: "tentative", value: "tentative" },
+              { label: "release", value: "release" },
+              { label: "regulatory", value: "regulatory" },
+              { label: "Raw Material", value: "Raw Material" },
+              { label: "instrument", value: "instrument" },
+              { label: "shell life", value: "shell life" },
+            ]}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Effective From"
+            placeholder=""
+            value={specificationData?.effectFrom}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                effectFrom: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Review Date"
+            placeholder=""
+            value={specificationData?.reviewDate}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                reviewDate: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Supersedes"
+            placeholder="Supersedes"
+            value={specificationData?.supersedes}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                supersedes: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Standard Test Procedure No."
+            placeholder="Standard Test Procedure No."
+            value={specificationData?.standardTestProcedureNo}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                standardTestProcedureNo: e.target.value,
+              })
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Document"
+            placeholder=""
+            value={specificationData?.document}
+            onChange={(e) =>
+              setSpecificationData({
+                ...specificationData,
+                document: e.target.value,
+              })
+            }
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Add Specifications
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const top100Films = [
+      { label: "The Shawshank Redemption", year: 1994 },
+      { label: "The Godfather", year: 1972 },
+      { label: "The Godfather: Part II", year: 1974 },
+      { label: "The Dark Knight", year: 2008 },
+      { label: "12 Angry Men", year: 1957 },
+    ];
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Specification</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <label className="mb-3" htmlFor="">
+            Product/Material Code
+          </label>
+          <Autocomplete
+            className="mb-3"
+            name="productCode"
+            disablePortal
+            id="combo-box-demo"
+            options={top100Films}
+            renderInput={(params) => <TextField {...params} label="" />}
+            value={formData?.productCode || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            name="productName"
+            type="text"
+            label="Product Name"
+            placeholder="Product Name"
+            // disabled
+            value={formData?.productName || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            name="specificationName"
+            label="Specification Name"
+            placeholder="Specification Name"
+            onChange={handleChange}
+            value={formData?.specificationName || ""}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            name="specificationID"
+            label="Specification ID"
+            placeholder="Specification ID"
+            onChange={handleChange}
+            value={formData?.specificationId || ""}
+          />
+
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Sample Type"
+            name="sampleType"
+            value={formData?.sampleType || ""}
+            onChange={handleChange}
+            options={[
+              "Select Sample Type",
+              { label: "Raw Material", value: "Raw Material" },
+              { label: "hcl", value: "hcl" },
+              { label: "Hydrochloric Acid", value: "Hydrochloric Acid" },
+              { label: "Petrochemical", value: "Petrochemical" },
+              { label: "Initiated Product", value: "Initiated Product" },
+              { label: "Semi Finished", value: "Semi Finished" },
+              { label: "ABCD", value: "ABCD" },
+              { label: "H2So4", value: "H2So4" },
+              { label: "Micro Media", value: "Micro Media" },
+              { label: "FG Templage", value: "FG Templage" },
+            ]}
+          />
+          <CFormSelect
+            className="mb-3"
+            type="select"
+            label="Specification Type"
+            value={formData?.specificationType || ""}
+            onChange={handleChange}
+            options={[
+              "Select Specification Type",
+              { label: "environment", value: "environment" },
+              { label: "culture", value: "culture" },
+              { label: "culture1", value: "culture1" },
+              { label: "working-standard", value: "working-standard" },
+              { label: "tentative", value: "tentative" },
+              { label: "release", value: "release" },
+              { label: "regulatory", value: "regulatory" },
+              { label: "Raw Material", value: "Raw Material" },
+              { label: "instrument", value: "instrument" },
+              { label: "shell life", value: "shell life" },
+            ]}
+            name="specificationType"
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Effective From"
+            placeholder=""
+            value={formData?.effectFrom || ""}
+            onChange={handleChange}
+            name="effectFrom"
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Review Date"
+            placeholder=""
+            value={formData?.reviewDate || ""}
+            onChange={handleChange}
+            name="reviewDate"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Supersedes"
+            placeholder="Supersedes"
+            value={formData?.supersedes || ""}
+            onChange={handleChange}
+            name="supersedes"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Standard Test Procedure No."
+            placeholder="Standard Test Procedure No."
+            value={formData?.standardTestProcedureNo || ""}
+            onChange={handleChange}
+            name="standardTestProcedureNo"
+          />
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Document"
+            placeholder=""
+            value={formData?.document || ""}
+            onChange={handleChange}
+            name="document"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Update Specifications
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
   return (
-    <div className="m-5 mt-3">
+    <>
+      <div className="m-5 mt-3">
         <div className="main-head">
-        <h4 className="fw-bold">Specifications</h4>
-        </div>
-        <div >
-        <div className="mt-5 mb-3">
-          <CRow className="mb-3">
-            <CCol sm={3}>
-              <CFormSelect
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="">Select Sample Type</option>
-                <option value="raw-material">Raw Material</option>
-                <option value="hcl">hcl</option>
-                <option value="hydrochloric-acid">Hydrochloric Acid</option>
-                <option value="petrochemical">Petrochemical</option>
-                <option value="initiated-product">Initiated Product</option>
-                <option value="semi-finished">Semi Finished</option>
-                <option value="abcd">ABCD</option>
-                <option value="h2so4">H2So4</option>
-                <option value="att108">ATT108</option>
-                <option value="micro-media">Micro Media </option>
-                <option value="fg-templage">FG Templage</option>
-                <option value="water-type">water type</option>
-                <option value="sodium">Sodium</option>
-                <option value="test-sample-type">test sample type</option>
-                <option value="new-product-sample-type">
-                  New Product Sample Type
-                </option>
-                <option value="packing-material">Packing Material</option>
-                <option value="raw-material-1">Raw Material-1</option>
-                <option value="finished-product">Finished Product</option>
-              </CFormSelect>
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                onChange={(e) => {
-                  setSelectedStatus(e.target.value);
-                  setCurrentPage(1);
-                }}
-                value={selectedStatus}
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="All">All</option>
-                <option value="Initiated">Initiated</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Reinitiated">Reinitiated</option>
-                <option value="Dropped">Dropped</option>
-              </CFormSelect>
-            </CCol>
-            <CCol sm={6}>
-              <div  className="d-flex justify-content-end">
-                <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Specifications</CButton>
-              </div>
-            </CCol>
-
-          </CRow>
-
-        </div>
+          <h4 className="fw-bold">Specifications</h4>
         </div>
 
-      
-
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Product Code</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Specification ID</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Specification Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Effect From</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Review Date</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </CTable>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Specification.pdf" title="Specification Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Specification"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
-    </div>
-
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </>
   );
 }
 
-const StatusModal = (_props) => {
-  const top100Films = [
-    { label: "The Shawshank Redemption", year: 1994 },
-    { label: "The Godfather", year: 1972 },
-    { label: "The Godfather: Part II", year: 1974 },
-    { label: "The Dark Knight", year: 2008 },
-    { label: "12 Angry Men", year: 1957 },
-  ];
-
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Add Specification</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-
-        <label className="mb-3" htmlFor="">
-          Product/Material Code
-        </label>
-        <Autocomplete
-          className="mb-3"
-          disablePortal
-          id="combo-box-demo"
-          options={top100Films}
-          renderInput={(params) => <TextField {...params} label="" />}
-        />
-
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Product Name"
-          placeholder="Product Name"
-          disabled
-        />
-
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Specification Name"
-          placeholder="Specification Name"
-        />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Specification ID"
-          placeholder="Specification ID"
-        />
-
-        <CFormSelect
-          className='mb-3'
-          type="select"
-          label="Sample Type"
-
-          options={[
-            "Select Sample Type",
-            { label: "Raw Material", value: "Raw Material" },
-            { label: "hcl", value: "hcl" },
-            { label: "Hydrochloric Acid", value: "Hydrochloric Acid" },
-            { label: "Petrochemical", value: "Petrochemical" },
-            { label: "Initiated Product", value: "Initiated Product" },
-            { label: "Semi Finished", value: "Semi Finished" },
-            { label: "ABCD", value: "ABCD" },
-            { label: "H2So4", value: "H2So4" },
-            { label: "Micro Media", value: "Micro Media" },
-            { label: "FG Templage", value: "FG Templage" }
-          ]}
-        />
-        <CFormSelect
-          className='mb-3'
-          type="select"
-          label="Specification Type"
-
-          options={[
-            "Select Specification Type",
-            { label: "environment", value: "environment" },
-            { label: "culture", value: "culture" },
-            { label: "culture1", value: "culture1" },
-            { label: "working-standard", value: "working-standard" },
-            { label: "tentative", value: "tentative" },
-            { label: "release", value: "release" },
-            { label: "regulatory", value: "regulatory" },
-            { label: "Raw Material", value: "Raw Material" },
-            { label: "instrument", value: "instrument" },
-            { label: "shell life", value: "shell life" }
-          ]}
-        />
-        <CFormInput
-          className='mb-3'
-          type="date"
-          label="Effective From"
-          placeholder=""
-        />
-        <CFormInput
-          className='mb-3'
-          type="date"
-          label="Review Date"
-          placeholder=""
-        />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Supersedes"
-          placeholder="Supersedes"
-        />
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Standard Test Procedure No."
-          placeholder="Standard Test Procedure No."
-        />
-        <CFormInput
-          className='mb-3'
-          type="file"
-          label="Document"
-          placeholder=""
-        />
-
-
-
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton color="primary">Add Specifications</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
-const DeleteModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete Specification</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this Specification { }?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+export default Specifications;

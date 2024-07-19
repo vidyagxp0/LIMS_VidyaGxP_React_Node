@@ -1,96 +1,245 @@
 import React, { useState } from 'react'
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-
-import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CTable } from '@coreui/react';
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from '../Modals/importModal';
+import PDFDownload from '../PDFComponent/PDFDownload ';
 
-export default function MyTests() {
-    const pageSize = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-    const employees = [
-        { id: 1, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-        { id: 2, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-        { id: 3, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-        { id: 4, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-        { id: 5, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-        { id: 6, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-        { id: 7, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-        { id: 8, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-        { id: 9, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'DROPPED' },
-        { id: 10, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', Status: 'APPROVED' },
-    ];
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, employees.length);
 
-    const renderRows = () => {
-        return employees.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
-                <td>{startIndex + index + 1}</td>
-                <td>{employee.user}</td>
-                <td>{employee.user}</td>
-                <td>{employee.DayComplete}</td>
-                <td>{employee.Date}</td>
-                <td>{employee.DayComplete}</td>
-                <td>
-                    &nbsp; &nbsp;
-                    <Link to="/approval/1321"><FontAwesomeIcon icon={faEye} /></Link>
-                </td>
-            </tr>
-        ));
-    };
-    const nextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
+const initialData = [
+    {
+      checkbox: false,
+      sno: 1,
+      ARNo: "AR001",
+      productName: "Product 1",
+      sampleIncharge: "John Doe",
+      assignedOn: "2024-01-01",
+      sampleType: "Type A",
+      status: "INITIATED",
+    },
+    {
+      checkbox: false,
+      sno: 2,
+      ARNo: "AR002",
+      productName: "Product 2",
+      sampleIncharge: "Jane Smith",
+      assignedOn: "2024-01-02",
+      sampleType: "Type B",
+      status: "APPROVED",
+    },
+    {
+      checkbox: false,
+      sno: 3,
+      ARNo: "AR003",
+      productName: "Product 3",
+      sampleIncharge: "Alice Johnson",
+      assignedOn: "2024-01-03",
+      sampleType: "Type C",
+      status: "REJECTED",
+    },
+    {
+      checkbox: false,
+      sno: 4,
+      ARNo: "AR004",
+      productName: "Product 4",
+      sampleIncharge: "Bob Brown",
+      assignedOn: "2024-01-04",
+      sampleType: "Type D",
+      status: "DROPPED",
+    },
+    {
+      checkbox: false,
+      sno: 5,
+      ARNo: "AR005",
+      productName: "Product 5",
+      sampleIncharge: "Charlie Davis",
+      assignedOn: "2024-01-05",
+      sampleType: "Type E",
+      status: "REINITIATED",
+    },
+    {
+      checkbox: false,
+      sno: 6,
+      ARNo: "AR006",
+      productName: "Product 6",
+      sampleIncharge: "Daniel Evans",
+      assignedOn: "2024-01-06",
+      sampleType: "Type F",
+      status: "INITIATED",
+    },
+    {
+      checkbox: false,
+      sno: 7,
+      ARNo: "AR007",
+      productName: "Product 7",
+      sampleIncharge: "Ella Foster",
+      assignedOn: "2024-01-07",
+      sampleType: "Type G",
+      status: "APPROVED",
+    },
+    {
+      checkbox: false,
+      sno: 8,
+      ARNo: "AR008",
+      productName: "Product 8",
+      sampleIncharge: "Frank Green",
+      assignedOn: "2024-01-08",
+      sampleType: "Type H",
+      status: "REJECTED",
+    },
+    {
+      checkbox: false,
+      sno: 9,
+      ARNo: "AR009",
+      productName: "Product 9",
+      sampleIncharge: "Grace Harris",
+      assignedOn: "2024-01-09",
+      sampleType: "Type I",
+      status: "DROPPED",
+    },
+    {
+      checkbox: false,
+      sno: 10,
+      ARNo: "AR010",
+      productName: "Product 10",
+      sampleIncharge: "Henry Jackson",
+      assignedOn: "2024-01-10",
+      sampleType: "Type J",
+      status: "REINITIATED",
+    },
+  ];
+  
 
-    const prevPage = () => {
-        setCurrentPage(currentPage - 1);
-    };
+function MyTests() {
+    const [data, setData] = useState(initialData);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("All");
+    const [viewModalData, setViewModalData] = useState(null);
+    const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(employees.length / pageSize));
+    const handleSelectAll = (e) => {
+      const checked = e.target.checked;
+      const newData = data.map((row) => ({ ...row, checkbox: checked }));
+      setData(newData);
     };
+  
+    const filteredData = data.filter((row) => {
+      return (
+        row.ARNo.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (statusFilter === "All" || row.status === statusFilter)
+      );
+    });
+  
+    const onViewDetails = (rowData) => {
+      setViewModalData(rowData);
+     
+    };
+  
+    const handleCheckboxChange = (index) => {
+      const newData = [...data];
+      newData[index].checkbox = !newData[index].checkbox;
+      setData(newData);
+    };
+    const columns = [
+        {
+          header: <input type="checkbox" onChange={handleSelectAll} />,
+          accessor: "checkbox",
+        },
+        { header: "SrNo.", accessor: "sno" },
+        { header: "A.R No.", accessor: "ARNo" },
+        { header: "Product Name", accessor: "productName" },
+        { header: "Sample Incharge", accessor: "sampleIncharge" },
+        { header: "Assigned On", accessor: "assignedOn" },
+        { header: "Sample Type", accessor: "sampleType" },
+        { header: "Status", accessor: "status" },
+        {
+          header: "Actions",
+          accessor: "action",
+          Cell: ({ row }) => (
+            <>
+              <FontAwesomeIcon
+                icon={faEye}
+                className="mr-2 cursor-pointer"
+                onClick={() => onViewDetails(row)}
+              />
+              <FontAwesomeIcon
+                icon={faPenToSquare}
+                className="mr-2 cursor-pointer"
+            
+              />
+              <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+            </>
+          ),
+        },
+      ];
+      
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log('Deleted item:', item);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      ARNo: item["A.R No."] || "", // Adjusted accessor
+      productName: item["Product Name"] || "", // Adjusted accessor
+      sampleIncharge: item["Sample Incharge"] || "", // Adjusted accessor
+      assignedOn: item["Assigned On"] || "", // Adjusted accessor
+      sampleType: item["Sample Type"] || "", // Adjusted accessor
+      status: item["Status"] || "", // Adjusted accessor
+    }));
+  
+    const concatenatedData = [ ...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+  
     return (
-
+        <>
         <div className="m-5 mt-3">
-                <div className="main-head">
-                    <h4 className="fw-bold">My Tests</h4>
-                </div>
-
-                  <div
-          className=" rounded bg-white mt-5"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-                        <tr>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>A.R. No.</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Product Name</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Incharge</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Assigned On</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Sample Type</th>
-                            <th style={{ background: "#5D76A9", color: "white"}}>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderRows()}
-                    </tbody>
-                </CTable>
-            </div>
-            <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
+          <div className="main-head">
+            <h4 className="fw-bold">My Test</h4>
+          </div>
+          <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+         
         </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="My_Test.pdf" title="My Test Data" />
+            <ATMButton 
+            text="Import"
+            color='pink'
+            onClick={handleOpenModals}
+             />
+        </div>
+      </div>
+          <Table
+            columns={columns}
+            data={filteredData}
+            onCheckboxChange={handleCheckboxChange}
+            onViewDetails={onViewDetails}
+            onDelete={handleDelete}
+          />
+          {isModalsOpen && (
+        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      )}
+        </div>
+      </>
     )
 }
+
+export default MyTests;

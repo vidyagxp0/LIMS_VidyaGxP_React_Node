@@ -1,276 +1,415 @@
-import React, { useState } from 'react';
-import './Admin.css';
-import { FaArrowRight } from 'react-icons/fa';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import React, { useEffect, useState } from "react";
+import "./Admin.css";
+import { FaArrowRight } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPenToSquare,
+  faTrashCan,
+  faEye,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+} from "@coreui/react";
+import Dropdown from "../../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../../components/ATM components/Button/ATMButton";
+import Table from "../../../components/ATM components/Table/Table";
+import ImportModal from "../../Modals/importModal";
+import PDFDownload from "../../PDFComponent/PDFDownload ";
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    employeeId: "EMP001",
+    storageName: "Analyst 1",
+    role: "Role 1",
+    email: "analyst1@example.com",
+    addedOn: "2024-01-01",
+    attachment: "attachment",
+    status: "Active",
+    action: [],
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    employeeId: "EMP002",
+    storageName: "Analyst 2",
+    role: "Role 2",
+    email: "analyst2@example.com",
+    addedOn: "2024-01-02",
+    attachment: "attachment",
+    status: "Inactive",
+    action: [],
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    employeeId: "EMP003",
+    storageName: "Analyst 3",
+    role: "Role 3",
+    email: "analyst3@example.com",
+    addedOn: "2024-01-03",
+    attachment: "attachment",
+    status: "Active",
+    action: [],
+  },
+];
 
 const Store = () => {
-    const [addModal, setAddModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const pageSize = 5; // Number of items per page
-    const [currentPage, setCurrentPage] = useState(1);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
-    const [selectedStatus, setSelectedStatus] = useState('All');
-    const badgeStyle = { background: "green", color: "white", width: "110px" };
-    const badgeStyle2 = { background: " red", color: "white", width: "110px" };
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null);
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
-    // Data for the table
-    const [employees, setEmployees] = useState([
-        { id: "USER-022024-000001", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
-        { id: "USER-022024-000002", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
-        { id: "USER-022024-000003", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
-        { id: "USER-022024-000004", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
-        { id: "USER-022024-000005", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
-        { id: "USER-022024-000006", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
-        { id: "USER-022024-000007", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
-        { id: "USER-022024-000008", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
-        { id: "USER-022024-000009", name: 'John Doe', analyst: 'Data Analyst', role: 'User', email: 'john@example.com', addedOn: '2024-05-15', status: 'Active' },
-        { id: "USER-022024-000010", name: 'Jane Smith', analyst: 'Business Analyst', role: 'User', email: 'jane@example.com', addedOn: '2024-05-16', status: 'Inactive' },
-    ]);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
-    const filteredEmployees = employees.filter(employee =>
-        selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.storageName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
+  });
 
-    // Function to calculate start and end indices for current page
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Employee ID", accessor: "employeeId" },
+    { header: "Analyst Name.", accessor: "storageName" },
+    { header: "Role", accessor: "role" },
+    { header: "Email.", accessor: "email" },
+    { header: "Added On.", accessor: "addedOn" },
+    { header: "attachment", accessor: "attachment" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => onDeleteItem(row)}
+          />
+        </>
+      ),
+    },
+  ];
 
-    // Function to render table rows for current page
-    const renderRows = () => {
-        return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-            <tr key={startIndex + index}>
-                <td>{startIndex + index + 1}</td>
-                <td>{employee.id}</td>
-                <td>{employee.analyst}</td>
-                <td>{employee.role}</td>
-                <td>{employee.email}
-                <button  style={{backgroundColor:'#577B8D',color:'white',borderRadius:'3px', fontSize:'0.7rem',padding:'3px',marginLeft:'2px'}}>Resend Email</button>
-                </td>
-                <td>{employee.addedOn}</td>
-                <td>  <button
-              className={`p-1 small w-100 rounded text-light d-flex justify-content-center align-items-center bg-${
-                employee.status === "Active"
-                  ? "green-700"
-                  : employee.status === "Inactive"
-                  ? "red-700"
-                  : "white"
-              }`}  style={{fontSize:'10px'}}
-            >
-              {employee.status}
-            </button></td>
-                <td>
-                    <div className="d-flex gap-3">
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => setAddModal(true)}
-                        >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                        </div>
-                        <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        ));
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      employeeId: item["Employee Id"] || "",
+      storageName: item["Storage Name"] || "",
+      role: item["Role"] || "",
+      email: item["Email"] || "",
+      addedOn: item["Added On"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      status: item["Status"] || "",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+    setIsModalsOpen(false); // Update data state with parsed Excel data
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [name, setName] = useState("");
+    const [contact, setContact] = useState("");
+    const [email, setEmail] = useState("");
+    const [address, setAddress] = useState("");
+
+    const handleAdd = () => {
+      const newCondition = {
+        employeeId: "EMP00",
+        storageName: name,
+        role: "Role 00",
+        email: email,
+        addedOn: new Date().toISOString().split("T")[0],
+        attachment: "attachment",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Please Add User To fill This Details</p>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="User Name"
+            placeholder="UserName "
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Contact Number"
+            placeholder="+91 0000000000 "
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="email"
+            label="Gmail Address"
+            placeholder="sample@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Address"
+            placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
     };
 
-    // Function to handle pagination
-    const nextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
-
-    const prevPage = () => {
-        setCurrentPage(currentPage - 1);
-    };
-
-    const nextToLastPage = () => {
-        setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
-    };
-
-    
-    const handleDeleteClick = (id) => {
-        setDeleteId(id);
-        setDeleteModal(true);
-    };
-
-    const handleDeleteConfirm = () => {
-        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-        setDeleteModal(false);
+    const handleSave = () => {
+      onSave(formData);
     };
 
     return (
-        <div className="m-5 mt-3">
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Update User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="User Name"
+            placeholder="UserName "
+            value={formData?.storageName || ""}
+            onChange={handleChange}
+            name="storageName"
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Contact Number"
+            placeholder="+91 0000000000 "
+            value={formData?.contact || ""}
+            onChange={handleChange}
+            name="contact"
+          />
+          <CFormInput
+            className="mb-3"
+            type="email"
+            label="Gmail Address"
+            placeholder="sample@gmail.com"
+            value={formData?.email || ""}
+            onChange={handleChange}
+            name="email"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Address"
+            placeholder="Address "
+            value={formData?.address || ""}
+            onChange={handleChange}
+            name="address"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+
+  return (
+    <div className="m-5 mt-3">
       <div className="main-head">
         <h4 className=" fw-bold">Store / Employees</h4>
       </div>
-      <CRow className="mt-5 mb-3 d-flex justify-content-between">
-        <CCol sm={3}>
-          <CFormSelect
-            style={{ fontSize: "0.9rem" }}
-            onChange={(e) => {
-              setSelectedStatus(e.target.value);
-              setCurrentPage(1);
-            }}
-            value={selectedStatus}
-          >
-            <option value="All">All</option>
-            <option value="ACTIVE">Active</option>
-            <option value="INACTIVE">Inactive</option>
-          </CFormSelect>
-        </CCol>
-
-        <CCol sm={3}>
-          <div className="d-flex justify-content-end">
-            <CButton
-              color="primary"
-              style={{ fontSize: "0.9rem" }}
-              onClick={() => setAddModal(true)}
-            >
-              Add User
-            </CButton>
-          </div>
-        </CCol>
-      </CRow>
-
-      <div
-        className=" bg-white rounded"
-        style={{
-          fontFamily: "sans-serif",
-          fontSize: "0.9rem",
-          boxShadow: "5px 5px 20px #5D76A9",
-        }}
-      >
-        <table className="mb-0 table table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white" }}>S.No.</th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Employee ID
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Analyst Name
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>Role</th>
-              <th style={{ background: "#5D76A9", color: "white" }}>Email</th>
-              <th style={{ background: "#5D76A9", color: "white" }}>
-                Added On
-              </th>
-              <th style={{ background: "#5D76A9", color: "white" }}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white" }}>Action</th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="User_Store.pdf" title="User Management Store Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add User" color="blue" onClick={openModal} />
+        </div>
       </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onDelete={handleDelete}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
+      />
 
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-     
-      
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
       )}
-      {deleteModal && (
-        <DeleteModal
-          visible={deleteModal}
-          closeModal={() => setDeleteModal(false)}
-          confirmDelete={handleDeleteConfirm}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
     </div>
-    );
+  );
 };
-const StatusModal = (_props) => {
-    return (
-        <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-            <CModalHeader>
-                <CModalTitle>Add User</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <p>Please Add User To fill This Details</p>
-                <CFormInput
-                className='mb-3'
-                    type="text"
-                    label="User Name"
-                    placeholder="UserName "
-                />
-                <CFormInput
-                className='mb-3'
-                    type="number"
-                    label="Contact Number"
-                    placeholder="+91 0000000000 "
-                />
-                <CFormInput
-                className='mb-3'
-                    type="email"
-                    label="Gmail Address"
-                    placeholder="sample@gmail.com"
-                />
-                <CFormInput
-                className='mb-3'
-                    type="text"
-                    label="Address"
-                    placeholder="Address "
-                />
-            </CModalBody>
-            <CModalFooter>
-                <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                <CButton color="primary">Submit</CButton>
-            </CModalFooter>
-        </CModal>
-    );
-};
-
-const DeleteModal = (_props) => {
-    return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-                <CModalHeader>
-                    <CModalTitle>Delete User</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Are you sure you want to delete this user { } ?</p>
-                </CModalBody>
-                <CModalFooter>
-                    <CButton
-                        color="secondary"
-                        onClick={_props.closeModal}
-                        style={{
-                            marginRight: "0.5rem",
-                            fontWeight: "500",
-                        }}
-                    >
-                        Cancel
-                    </CButton>
-                    <CButton
-                        color="danger"
-                        onClick={_props.confirmDelete}
-                        style={{
-                            fontWeight: "500",
-                            color: "white",
-                        }}
-                    >
-                        Delete
-                    </CButton>
-                </CModalFooter>
-            </CModal>
-        </>
-    )
-}
 
 export default Store;

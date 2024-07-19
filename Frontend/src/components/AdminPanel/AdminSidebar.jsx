@@ -52,7 +52,7 @@ const AdminSidebar = () => {
 
 
           <CNavGroup
-            className={isActive("/admin-panel/userManagement")}
+            className={isActive("/admin-login/userManagement")}
             toggler={
               <>
                 <GrUserAdmin />
@@ -61,11 +61,11 @@ const AdminSidebar = () => {
               </>
             }
           >
-            <Link to="/admin-panel/userManagement">
+            <Link to="/admin-login/userManagement">
               <CNavItem
                 href="#"
-                className={isActive("/admin-panel/userManagement")}
-                style={{ ...isActive("/admin-panel/userManagement") }}
+                className={isActive("/admin-login/userManagement")}
+                style={{ ...isActive("/admin-login/userManagement") }}
               >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
@@ -78,7 +78,7 @@ const AdminSidebar = () => {
           </CNavGroup>
 
           <CNavGroup
-            className={isActive("/admin-panel/site-management")}
+            className={isActive("/admin-login/site-management")}
             toggler={
               <>
                <SiSitecore />
@@ -87,11 +87,11 @@ const AdminSidebar = () => {
               </>
             }
           >
-            <Link to="/admin-panel/site-management">
+            <Link to="/admin-login/site-management">
               <CNavItem
                 href="#"
-                className={isActive("/admin-panel/site-management")}
-                style={{ ...isActive("/admin-panel/site-management") }}
+                className={isActive("/admin-login/site-management")}
+                style={{ ...isActive("/admin-login/site-management") }}
               >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
@@ -104,7 +104,7 @@ const AdminSidebar = () => {
           </CNavGroup>
 
           <CNavGroup
-            className={isActive("/admin-panel/process-management")}
+            className={isActive("/admin-login/process-management")}
             toggler={
               <>
                 <SiProcesswire />
@@ -113,11 +113,11 @@ const AdminSidebar = () => {
               </>
             }
           >
-            <Link to="/admin-panel/process-management">
+            <Link to="/admin-login/process-management">
               <CNavItem
                 href="#"
-                className={isActive("/admin-panel/process-management")}
-                style={{ ...isActive("/admin-panel/process-management") }}
+                className={isActive("/admin-login/process-management")}
+                style={{ ...isActive("/admin-login/process-management") }}
               >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>

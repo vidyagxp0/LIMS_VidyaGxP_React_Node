@@ -1,303 +1,491 @@
-import {
-	CButton,
-	CCol,
-	CFormInput,
-	CFormSelect,
-	CModal,
-	CModalBody,
-	CModalFooter,
-	CModalHeader,
-	CModalTitle,
-	CRow,
-	CTable,
-	CTableBody,
-	CTableDataCell,
-	CTableHead,
-	CTableHeaderCell,
-	CTableRow,
-} from "@coreui/react";
-import {
-	faPenToSquare,
-	faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+// const StatusModal = (_props) => {
+
+// 	return (
+		
+// 	);
+// };
+
+// const DeleteModel = (_props) => {
+// 	return (
+// 		<CModal
+// 			alignment="center"
+// 			visible={_props.visible}
+// 			onClose={_props.closeModal}
+// 		>
+// 			<CModalHeader>
+// 				<CModalTitle>Delete Training Confirmations</CModalTitle>
+// 			</CModalHeader>
+// 			<CModalBody>
+// 				Do you want to delete this Training Confirmations <code>ARZ ENT</code>?
+// 			</CModalBody>
+// 			<CModalFooter>
+// 				<CButton color="light" onClick={_props.closeModal}>
+// 					Back
+// 				</CButton>
+// 				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
+// 			</CModalFooter>
+// 		</CModal>
+// 	);
+// };
+
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import TrainingConfirmationModal from "../Modals/TrainingConfirmationModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
-function TrainingConfirmation() {
-	const [addModal, setAddModal] = useState(false);
-	const [removeModal, setRemoveModal] = useState(false);
-	const [currentPage, setCurrentPage] = useState(1);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [deleteId, setDeleteId] = useState(null)
-	const [selectedStatus, setSelectedStatus] = useState("All");
-	const recordsPerPage = 5;
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    Analyst: "Associate 1",
+    TestTechnique: "BA-001",
+    TrainingDetails: "BA-001",
+    Remarks: "BA-001",
+    AddedOn: "BA-001",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    Analyst: "Associate 2",
+    TestTechnique: "BA-002",
+    TrainingDetails: "BA-002",
+    Remarks: "BA-002",
+    AddedOn: "BA-002",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    Analyst: "Associate 3",
+    TestTechnique: "BA-003",
+    TrainingDetails: "BA-003",
+    Remarks: "BA-003",
+    AddedOn: "BA-003",
+    status: "Active",
+  },
+ 
+];
 
-	const [tableData, setTableData] = useState([
-		{ id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "Active" },
-		{ id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "Active" },
-		{ id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "Inactive" },
-		{ id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "Active" },
-		{ id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "Active" },
-		{ id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "Inactive" },
-		{ id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "Active" },
-		{ id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "Active" }
-	]);
+const TrainingConfirmation = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
 
 
-	const handleStatusChange = (e) => {
-		setSelectedStatus(e.target.value);
-		setCurrentPage(1);
-	};
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("INACTIVE");
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
-	const handleSearchChange = (e) => {
-		setSearchQuery(e.target.value);
-		setCurrentPage(1);
-	};
-	const handleDelete = () => {
-		setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-		setRemoveModal(false);
-		setDeleteId(null)
-	}
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
 
-	const handleDeleteClick = (id) => {
-		setDeleteId(id);
-		setRemoveModal(true);
-	}
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Training Confirmations</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p className="my-3 fs-5">
+              Add information about Training Confirmation
+            </p>
+            <CFormSelect
+              type="text"
+              className="mb-3"
+              label="Analyst"
+              placeholder="Select..."
+              options={["Select...", { label: "No Options" }]}
+              value={formData?.Analyst || ""}
+              onChange={handleChange}
+              name="Analyst"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Employee Id"
+              placeholder="Employee Id"
+              value={formData?.EmployeeId || ""}
+              onChange={handleChange}
+              name="EmployeeId"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Role/Title"
+              placeholder="Role/Title"
+              value={formData?.Role || ""}
+              onChange={handleChange}
+              name="Role"
+            />
+            <CFormSelect
+              type="text"
+              className="mb-3"
+              label="Test Technique"
+              placeholder="Select..."
+              options={["Select...", { label: "Description" }]}
+              value={formData?.TestTechnique || ""}
+              onChange={handleChange}
+              name="TestTechnique"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Training Details"
+              placeholder="Training Details"
+              value={formData?.TrainingDetails || ""}
+              onChange={handleChange}
+              name="TrainingDetails"
+            />
+             
+             <CFormInput
+              type="file"
+              className="mb-3"
+              label="Training Documents"
+              placeholder="Choose File"
+              value={formData?.ChooseFile || ""}
+              onChange={handleChange}
+              name="ChooseFile"
+            />
+            <CFormInput
+              type="text"
+              className="mb-3"
+              label="Remark(s)/Reason(s)"
+              placeholder="Remark(s)/Reason(s)"
+              value={formData?.Remarks || ""}
+              onChange={handleChange}
+              name="Remarks"
+            />
+           
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.TestTechnique.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno:  index + 1,
+      Analyst: item["Analyst"] || "",
+      TestTechnique: item["Test Technique"] || "",
+      TrainingDetails: item["Training Details"] || "",
+      Remarks: item["Remarks"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
+
+      const concatenateData = [...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
 
 
-	const filteredData = tableData.filter((data) => {
-		const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
-		const matchesSearchQuery = data.analyst.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			data.testTechnique.toLowerCase().includes(searchQuery.toLowerCase());
-		return matchesStatus && matchesSearchQuery;
-	});
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Analyst", accessor: "Analyst" },
+    { header: "Test Technique", accessor: "TestTechnique" },
+    { header: "Training Details", accessor: "TrainingDetails" },
+    { header: "Remarks", accessor: "Remarks" },
+    { header: "Added On", accessor: "AddedOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
 
-	const indexOfLastRecord = currentPage * recordsPerPage;
-	const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-	const currentRecords = filteredData.slice(
-		indexOfFirstRecord,
-		indexOfLastRecord
-	);
-	const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-	const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-	return (
-		<>
-			<div className="m-5 mt-3">
-				<div className="main-head">
-					<h4 className="fw-bold">Training Confirmations</h4>
-				</div>
-				<div>
-					<CRow className="mt-5 mb-3">
-						<CCol sm={3}>
-							<CFormInput
-								 style={{ fontSize: '0.9rem' }}
-								type="text"
-								placeholder="Search..."
-								value={searchQuery}
-								onChange={handleSearchChange}
-							/></CCol>
-						<CCol sm={3}>
-							<CFormSelect
-								value={selectedStatus}
-								style={{ fontSize: '0.9rem' }}
-								onChange={handleStatusChange}
-								options={[
-									{ value: "All", label: "All" },
-									{ value: "Active", label: "Active" },
-									{ value: "Inactive", label: "Inactive" },
-								]}
-							/>
-						</CCol>
-						<CCol sm={3}></CCol>
-						<CCol sm={3}>
-							<div className="d-flex justify-content-end">
-								<CButton
-									className=" text-white"
-									style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-									onClick={() => setAddModal(true)}
-								>
-									Add Confirmations
-								</CButton>
-							</div>
-						</CCol>
-					</CRow>
-				</div>
-				<div
-					className="rounded bg-white"
-					style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-				>          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
-						<CTableHead>
-							<CTableRow>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Id</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Analyst</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Test Technique</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Training Details</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Remarks</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Added On</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Status</CTableHeaderCell>
-								<CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
-							</CTableRow>
-						</CTableHead>
-						<CTableBody>
-							{currentRecords.map((data, index) => (
-								<CTableRow key={index}>
-									<CTableHeaderCell scope="row" className="text-center">
-										<input type="checkbox" />
-									</CTableHeaderCell>
-									<CTableDataCell>{index + 1}</CTableDataCell>
-									<CTableDataCell>{data.analyst}</CTableDataCell>
-									<CTableDataCell>{data.testTechnique}</CTableDataCell>
-									<CTableDataCell>{data.trainingDetails}</CTableDataCell>
-									<CTableDataCell>{data.remarks}</CTableDataCell>
-									<CTableDataCell>{data.addedOn}</CTableDataCell>
-									<CTableDataCell>
-										<button
-											className={`py-1 px-3 small w-50 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "Active"
-													? 'green-700'
-													: 'red-700'
-												}`} >{data.status}
-										</button>
-									</CTableDataCell>
-									<CTableDataCell>
-										<div className="d-flex gap-3">
-											<div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-											<div
-												className="cursor-pointer"
-												onClick={() => handleDeleteClick(data.id)}
-											>
-												<FontAwesomeIcon icon={faTrashCan} />
-											</div>
-										</div>
-									</CTableDataCell>
-								</CTableRow>
-							))}
-						</CTableBody>
-					</CTable>
-				</div>
-				<div className="d-flex justify-content-end align-items-center mt-4">
-					<div className="pagination">
-						<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>&lt; &lt;</button>
-						<button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-						<button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>&gt; &gt;</button>
-					</div>
-				</div>
-			</div>
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
 
-			{addModal && (
-				<StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
-			)}
-			{removeModal && (
-				<DeleteModel
-					visible={removeModal}
-					closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
-				/>
-			)}
-		</>
-	);
-}
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
 
-const StatusModal = (_props) => {
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
-	return (
-		<CModal
-			alignment="center"
-			visible={_props.visible}
-			onClose={_props.closeModal}
-			size="lg"
-		>
-			<CModalHeader>
-				<CModalTitle>Add Training Confirmations</CModalTitle>
-			</CModalHeader>
-			<CModalBody>
-				<p className="my-3 fs-5">Add information about Training Confirmation</p>
-				<CFormSelect
-					type="text"
-					className="mb-3"
-					label="Analyst"
-					placeholder="Select..."
-					options={[
-						"Select...",
-						{ label: "No Options" }
-					]}
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Employee Id"
-					placeholder="Employee Id"
-					disabled
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Role/Title"
-					placeholder="Role/Title"
-					disabled
-				/>
-				<CFormSelect
-					type="text"
-					className="mb-3"
-					label="Test Technique"
-					placeholder="Select..."
-					options={[
-						"Select...",
-						{ label: "Description" }
-					]}
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Training Details"
-					placeholder="Training Details"
-				/>
-				<CFormInput
-					type="text"
-					className="mb-3"
-					label="Training Details"
-					placeholder="Training Details"
-				/>
-				<CFormInput
-					type="file"
-					className="mb-3"
-					label="Browse"
-					placeholder="Choose File"
-				/>
 
-			</CModalBody>
-			<CModalFooter>
-				<CButton color="light" onClick={_props.closeModal}>
-					Back
-				</CButton>
-				<CButton className="bg-info text-white">Submit</CButton>
-			</CModalFooter>
-		</CModal>
-	);
-};
+  const handleModalSubmit = (trainingConfirmation) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === trainingConfirmation.sno ? trainingConfirmation : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Analyst:trainingConfirmation.analyst,
+          Role:trainingConfirmation.role,
+          EmployeeId:trainingConfirmation.emplyoeeId,
+          TestTechnique:trainingConfirmation.testTechnique,
+          TrainingDetails: trainingConfirmation.trainingDetails,
+          TrainingDocuments: trainingConfirmation.trainingDocuments,
+          Remarks:trainingConfirmation.remarks,
+          AddedOn: currentDate,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
-const DeleteModel = (_props) => {
-	return (
-		<CModal
-			alignment="center"
-			visible={_props.visible}
-			onClose={_props.closeModal}
-		>
-			<CModalHeader>
-				<CModalTitle>Delete Training Confirmations</CModalTitle>
-			</CModalHeader>
-			<CModalBody>
-				Do you want to delete this Training Confirmations <code>ARZ ENT</code>?
-			</CModalBody>
-			<CModalFooter>
-				<CButton color="light" onClick={_props.closeModal}>
-					Back
-				</CButton>
-				<CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-			</CModalFooter>
-		</CModal>
-	);
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Training Confirmations</h1>
+      {/* <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
+      </div> */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Training_Confirmation.pdf" title="Training Confirmation Data" />
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
+          <ATMButton text="Add Confirmation" color="blue" onClick={openModal} />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+
+      />
+      <TrainingConfirmationModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+         {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+        {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
+  );
 };
 
 export default TrainingConfirmation;

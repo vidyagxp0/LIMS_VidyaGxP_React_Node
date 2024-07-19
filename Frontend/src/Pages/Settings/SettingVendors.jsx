@@ -1,315 +1,325 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow
-} from "@coreui/react";
-import {
+  faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
-import { FaArrowRight } from "react-icons/fa";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import SettingVendorModal from "../Modals/SettingVendorModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    Vendor: "Vendor-001",
+    TestTechnique: "Technique-001",
+    TrainingDetails: "Details-001",
+    Remarks: "Remark-001",
+    AddedOn: "2024-06-01",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    Vendor: "Vendor-002",
+    TestTechnique: "Technique-002",
+    TrainingDetails: "Details-002",
+    Remarks: "Remark-002",
+    AddedOn: "2024-06-02",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    Vendor: "Vendor-003",
+    TestTechnique: "Technique-003",
+    TrainingDetails: "Details-003",
+    Remarks: "Remark-003",
+    AddedOn: "2024-06-03",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    Vendor: "Vendor-004",
+    TestTechnique: "Technique-004",
+    TrainingDetails: "Details-004",
+    Remarks: "Remark-004",
+    AddedOn: "2024-06-04",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    Vendor: "Vendor-005",
+    TestTechnique: "Technique-005",
+    TrainingDetails: "Details-005",
+    Remarks: "Remark-005",
+    AddedOn: "2024-06-05",
+    status: "REINITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    Vendor: "Vendor-006",
+    TestTechnique: "Technique-006",
+    TrainingDetails: "Details-006",
+    Remarks: "Remark-006",
+    AddedOn: "2024-06-06",
+    status: "REJECTED",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    Vendor: "Vendor-007",
+    TestTechnique: "Technique-007",
+    TrainingDetails: "Details-007",
+    Remarks: "Remark-007",
+    AddedOn: "2024-06-07",
+    status: "DROPPED",
+  },
+];
+
 
 const SettingVendors = () => {
-  const [addModal, setAddModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
-  const [removeModal, setRemoveModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null)
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const recordsPerPage = 5;
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-  const [tableData, setTableData] = useState([
-    { id: 1, analyst: "John Doe", testTechnique: "Technique A", trainingDetails: "Completed on Jan 1, 2024", remarks: "Excellent", addedOn: "May 22, 2024", status: "INITIATED" },
-    { id: 2, analyst: "Jane Smith", testTechnique: "Technique B", trainingDetails: "Completed on Feb 5, 2024", remarks: "Good", addedOn: "May 23, 2024", status: "APPROVED" },
-    { id: 3, analyst: "Alice Johnson", testTechnique: "Technique C", trainingDetails: "Completed on Mar 10, 2024", remarks: "Satisfactory", addedOn: "May 24, 2024", status: "REJECTED" },
-    { id: 4, analyst: "Bob Brown", testTechnique: "Technique D", trainingDetails: "Completed on Apr 15, 2024", remarks: "Needs Improvement", addedOn: "May 25, 2024", status: "REINITIATED" },
-    { id: 5, analyst: "Carol White", testTechnique: "Technique E", trainingDetails: "Completed on May 20, 2024", remarks: "Excellent", addedOn: "May 26, 2024", status: "INITIATED" },
-    { id: 6, analyst: "David Green", testTechnique: "Technique F", trainingDetails: "Completed on Jun 25, 2024", remarks: "Good", addedOn: "May 27, 2024", status: "APPROVED" },
-    { id: 7, analyst: "Eve Black", testTechnique: "Technique G", trainingDetails: "Completed on Jul 30, 2024", remarks: "Satisfactory", addedOn: "May 28, 2024", status: "REJECTED" },
-    { id: 8, analyst: "Frank Blue", testTechnique: "Technique H", trainingDetails: "Completed on Aug 5, 2024", remarks: "Needs Improvement", addedOn: "May 29, 2024", status: "REINITIATED" }
-  ]);
-
-  const handleStatusChange = (e) => {
-    setSelectedStatus(e.target.value);
-    setCurrentPage(1);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    setCurrentPage(1);
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
   };
 
-  const handleDelete = () => {
-    setTableData((prevData) => prevData.filter((item) => item.id !== deleteId));
-    setRemoveModal(false);
-    setDeleteId(null)
-  }
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setRemoveModal(true);
-  }
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
+    data.forEach((item) => {
+      if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+      else if (item.status === "DROPPED") counts.DROPPED++;
+    });
 
-  const filteredData = tableData.filter((data) => {
-    const matchesStatus = selectedStatus === "All" || data.status === selectedStatus;
-    const matchesSearchQuery = data.analyst.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      data.testTechnique.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearchQuery;
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.TestTechnique.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
   });
 
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredData.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno:  index + 1,
+      Vendor: item["Vendor"] || "",
+      TestTechnique: item["Test Technique"] || "",
+      TrainingDetails: item["Training Details"] || "",
+      Remarks: item["Remarks"] || "",
+      AddedOn: item["Added On"] || "",
+        status: item["Status"] || "",
+      }));
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+      const concatenateData = [...updatedData];
+      setData(concatenateData); // Update data state with parsed Excel data
+      setIsModalsOpen(false); // Close the import modal after data upload
+    };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Vendor", accessor: "Vendor" },
+    { header: "Test Technique", accessor: "TestTechnique" },
+    { header: "Training Details", accessor: "TrainingDetails" },
+    { header: "Remarks", accessor: "Remarks" },
+    { header: "Added On", accessor: "AddedOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const handleWidgetClick = (status) => {
-    setSelectedStatus(status);
-    setCurrentPage(1);
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
-  const statusCounts = {
-    INITIATED: tableData.filter(data => data.status === 'INITIATED').length,
-    REINITIATED: tableData.filter(data => data.status === 'REINITIATED').length,
-    APPROVED: tableData.filter(data => data.status === 'APPROVED').length,
-    REJECTED: tableData.filter(data => data.status === 'REJECTED').length,
-    DROPPED: tableData.filter(data => data.status === 'DROPPED').length,
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
-    <>
-    
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Vendors</h4>
-        </div>
-        <div className="mt-3 d-flex gap-4">
-        <div className="chart-widgets w-100">
-          <div className="row">
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)" }} onClick={() => handleWidgetClick('DROPPED')}>
-              <div className="text-light fs-5">DROPPED</div>
-              <div className="count fs-1 text-light fw-bolder">{statusCounts.DROPPED}</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, #13517a 6% , #2A5298 50%)" }} onClick={() => handleWidgetClick('INITIATED')}>
-              <div className="text-light fs-5">INITIATED</div>
-              <div className="count fs-1 text-light fw-bolder">{statusCounts.INITIATED}</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(25deg, orange , #f7e05f )" }} onClick={() => handleWidgetClick('REINITIATED')}>
-              <div className="text-light fs-5">REINITIATED</div>
-              <div className="count fs-1 text-light fw-bolder">{statusCounts.REINITIATED}</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg, green , #0fd850  )" }} onClick={() => handleWidgetClick('APPROVED')}>
-              <div className="text-light fs-5">APPROVED</div>
-              <div className="count fs-1 text-light fw-bolder">{statusCounts.APPROVED}</div>
-            </div>
-            <div className="col shadow p-3 m-3 rounded cursor-pointer" style={{ background: "linear-gradient(27deg ,red, #FF719A)" }} onClick={() => handleWidgetClick('REJECTED')}>
-              <div className="text-light fs-5">REJECTED</div>
-              <div className="count fs-1 text-light fw-bolder">{statusCounts.REJECTED}</div>
-            </div>
-          </div>
-        </div>
-        </div>
-
-        <div>
-          <CRow className="mb-3">
-            <CCol sm={4}>
-              <CFormInput
-                type="text"
-                style={{ fontSize: '0.9rem' }}
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                value={selectedStatus}
-                style={{ fontSize: '0.9rem' }}
-                onChange={handleStatusChange}
-                options={[
-                  { value: 'All', label: 'All' },
-                  { value: 'INITIATED', label: 'Initiated' },
-                  { value: 'APPROVED', label: 'Approved' },
-                  { value: 'REJECTED', label: 'Rejected' },
-                  { value: 'REINITIATED', label: 'Reinitiated' },
-                  { value: 'DROPPED', label: 'Dropped' }
-                ]}
-              />
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton
-                  className=" text-white"
-                  style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                  onClick={() => setAddModal(true)}
-                >
-                  Add Vendor
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </div>
-
-        {filteredData.length === 0 ? <center className='my-5'><h5>No Vendors Found</h5></center> : <div className="notFound">
-          <div
-            className=" rounded bg-white"
-            style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-          >
-            <CTable align="middle" responsive className="table-responsive   ">
-              <CTableHead>
-                <CTableRow>
-                  <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Id</CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Vendor</CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Test Technique</CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Training Details</CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Remarks</CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Added On</CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Status</CTableHeaderCell>
-                  <CTableHeaderCell
-                    style={{ background: "#5D76A9", color: "white" }}
-                    scope="col"
-                  >Actions</CTableHeaderCell>
-                </CTableRow>
-              </CTableHead>
-              <CTableBody>
-                {currentRecords.map((data, index) => (
-                  <CTableRow key={index}>
-                    <CTableHeaderCell scope="row" className="text-center">
-                      <input type="checkbox" />
-                    </CTableHeaderCell>
-                    <CTableDataCell>{index + 1}</CTableDataCell>
-                    <CTableDataCell>{data.analyst}</CTableDataCell>
-                    <CTableDataCell>{data.testTechnique}</CTableDataCell>
-                    <CTableDataCell>{data.trainingDetails}</CTableDataCell>
-                    <CTableDataCell>{data.remarks}</CTableDataCell>
-                    <CTableDataCell>{data.addedOn}</CTableDataCell>
-                    <CTableDataCell>
-                      <button
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${data.status === "INITIATED"
-                            ? "blue-700"
-                            : data.status === "APPROVED"
-                              ? "green-700"
-                              : data.status === "REJECTED"
-                                ? "red-700"
-                                : data.status === "REINITIATED"
-                                  ? "yellow-500"
-                                  : data.status === "DROPPED"
-                                    ? "purple-700"
-                                    : "white"
-                          }`} style={{ fontSize: '0.6rem' }}
-                      >
-                        {data.status}
-                      </button>
-                    </CTableDataCell>
-                    <CTableDataCell>
-                      <div className="d-flex gap-3">
-                        <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                        <div className="cursor-pointer" onClick={() => handleDeleteClick(data.id)}><FontAwesomeIcon icon={faTrashCan} /></div>
-                      </div>
-                    </CTableDataCell>
-                  </CTableRow>
-                ))}
-              </CTableBody>
-            </CTable>
-          </div>
-          <div className="d-flex justify-content-end align-items-center mt-4">
-            <div className="pagination">
-              <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handlePreviousPage} disabled={currentPage === 1}>&lt;&lt;</button>
-              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-              <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={handleNextPage} disabled={currentPage === totalPages}>&gt;&gt;</button>
-            </div>
-
-          </div>
-        </div>}
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Vendors</h1>
+      <div className="grid grid-cols-5 gap-4 mb-4">
+        <Card
+          title="DROPPED"
+          count={cardCounts.DROPPED}
+          color="pink"
+          onClick={() => handleCardClick("DROPPED")}
+        />
+        <Card
+          title="INITIATED"
+          count={cardCounts.INITIATED}
+          color="blue"
+          onClick={() => handleCardClick("INITIATED")}
+        />
+        <Card
+          title="REINITIATED"
+          count={cardCounts.REINITIATED}
+          color="yellow"
+          onClick={() => handleCardClick("REINITIATED")}
+        />
+        <Card
+          title="APPROVED"
+          count={cardCounts.APPROVED}
+          color="green"
+          onClick={() => handleCardClick("APPROVED")}
+        />
+        <Card
+          title="REJECTED"
+          count={cardCounts.REJECTED}
+          color="red"
+          onClick={() => handleCardClick("REJECTED")}
+        />
       </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "REJECTED", label: "REJECTED" },
+              { value: "DROPPED", label: "DROPPED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && (
-        <DeleteModel
-          visible={removeModal}
-          closeModal={() => setRemoveModal(false)} handleDelete={handleDelete}
+          <ATMButton
+            text="Add Vendors"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      {/* <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      /> */}
+      <SettingVendorModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
         />
       )}
-    </>
-  );
-};
-
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size='lg'>
-      <CModalHeader>
-        <CModalTitle>Add Vendor</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <h5 className='mb-4'>Add information and add new Vendor</h5>
-        <CFormInput type="text" className='mb-3' label="Material Name" placeholder="Material Name" />
-        <CFormInput type="text" className='mb-3' label="Supplier Name" placeholder="Supplier Name" />
-        <CFormInput type="text" className='mb-3' label="Email" placeholder="email@xyz.com" />
-        <CFormInput type="number" className='mb-3' label="Phone" placeholder="Phone" />
-        <CFormInput type="text" className='mb-3' label="Address" placeholder="Address" />
-        <CFormInput type="text" className='mb-3' label="Comments" placeholder="Comments" />
-        <CFormInput type="number" className='mb-3' label="Contact person number" placeholder="Contact person" />
-        <CFormInput type="text" className='mb-3' label="Website" placeholder="https://yourweb.com" />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Cancel</CButton>
-        <CButton color="primary">Add</CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
-
-const DeleteModel = (_props) => {
-  return (
-    <CModal
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>Delete Analyst Template</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        Do you want to delete this Analyst Template <code>ARZ ENT</code>?
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Back
-        </CButton>
-        <CButton className="bg-danger text-white" onClick={_props.handleDelete}>Delete</CButton>
-      </CModalFooter>
-    </CModal>
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+    </div>
   );
 };
 

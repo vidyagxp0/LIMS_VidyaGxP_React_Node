@@ -1,577 +1,267 @@
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import React, { useState } from "react";
-import "./Samplelogin.css";
-import { GrLinkNext } from "react-icons/gr";
-
-import { FaArrowRight } from "react-icons/fa";
-
-import { Link } from "react-router-dom";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-undef */
+import React, { useState, useEffect } from "react";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faEye,faPenToSquare,faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import SampleLogin2Modal from "../Modals/SampleLogin2Modal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
-export default function Samplelogin() {
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [addModal, setAddModal] = useState(false);
-  const [addModal2, setAddModal2] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = {
-    background: " #2A5298",
-    color: "white",
-    width: "110px",
-  };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    sampleType: "USR001",
+    storageCondition: "Product 1",
+    createdAt: "2024-01-01",
+    genericName: "Generic 1",
+    specificationCode: "Spec 001",
+    attachment: "attachment",
+    status: "INITIATED",
   
-  const DeleteModal = (_props) => {
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    sampleType: "USR002",
+    storageCondition: "Product 2",
+    createdAt: "2024-01-02",
+    genericName: "Generic 2",
+    specificationCode: "Spec 002",
+    attachment: "attachment",
+    status: "APPROVED",
+  
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    sampleType: "USR003",
+    storageCondition: "Product 3",
+    createdAt: "2024-01-03",
+    genericName: "Generic 3",
+    specificationCode: "Spec 003",
+    attachment: "attachment",
+    status: "REJECTED",
+  
+  },
+];
+
+const SampleLogin = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+      else if (item.status === "DROPPED") counts.DROPPED++;
+    });
+
+    setCardCounts(counts);
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-        <CModalHeader>
-          <CModalTitle>Delete User</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Are you sure you want to delete this storage?</p>
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={_props.closeModal}
-            style={{
-              marginRight: "0.5rem",
-              fontWeight: "500",
-            }}
-          >
-            Cancel
-          </CButton>
-          <CButton
-            color="danger"
-            onClick={_props.confirmDelete}
-            style={{
-              fontWeight: "500",
-              color: "white",
-            }}
-          >
-            Delete
-          </CButton>
-        </CModalFooter>
-      </CModal>
+      row.sampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
-  };
-  
-  const StatusModal2 = (_props) => {
-    return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal2}>
-        <CModalHeader>
-          <CModalTitle>Update Sample login</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-        <CFormInput
-            type="text"
-            className="mb-3"
-            label="Client"
-            placeholder="Select..."
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Test Plan / Revision No."
-            placeholder="Select..."
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product / Material"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product / Material Code"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Generic Name"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Specification ID"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Copy Sample from"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Sample Type"
-            placeholder=""
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Certificates (If any)"
-            placeholder=""
-          />
-  
-  <div className="bg-white rounded border-dark-subtle border-2 " >
-              <CTable align="middle" responsive className="   ">
-                <thead>
-                  <tr>
-                    <th className="bg-info text-light">Sno.</th>
-                    <th className="bg-info text-light">Test Name</th>
-                    <th className="bg-info text-light">Group Name</th>
-                    <th className="bg-info text-light">Selection</th>
-                  </tr>
-                </thead>
-                <tbody>
-                
-                    <tr >
-                      <td>1.</td>
-                      <td>Viscosity @40C</td>
-                      <td></td>
-                      <td>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                        />
-                      </td>
-                    </tr>
-                 <tr >
-                      <td>2.</td>
-                      <td>Total Acid Number (TAN)</td>
-                      <td></td>
-                      <td>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                        />
-                      </td>
-                    </tr>
-                <tr >
-                      <td>3.</td>
-                      <td>
-Water Content PPM</td>
-                      <td></td>
-                      <td>
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                        />
-                      </td>
-                    </tr>
-                
-                </tbody>
-              </CTable>
-            </div>
-  
-  
-          <div className="d-flex gap-3 mt-4">
-            <CButton color="light w-50" onClick={_props.closeModal2}>&lt; Back</CButton>
-            <CButton color="primary w-50">Update Sample</CButton>
-          </div>
-        
-        </CModalBody>
-      </CModal>
-    )
-  }
-  
-    const [employee, setEmployees] = useState([
-      {
-        id:1,  user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "INITIATED",
-      },
-      {
-       id:2, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "INITIATED",
-      },
-      {
-        id:3, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:4,user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:5, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "REJECTED",
-      },
-      {
-        id:6, user: "test Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:7, user: "test Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "DROPPED",
-      },
-      {
-        id:8,user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-      {
-        id:8, user: "test Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "DROPPED",
-      },
-      {
-        id:9, user: "Initiated Product",
-        role: "Sacubitril",
-        departments: "ARIP0000095",
-        joiningDate: "N/A",
-        addedBy: "RPS-TSLV-00",
-        status: "APPROVED",
-      },
-    ]);
+  });
 
- 
-  
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
-  };
-  const filteredEmployees = employee.filter(
-    (employee) =>
-      (employee.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        employee.role.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (statusFilter === "" || employee.status === statusFilter)
-  );
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      sampleType: item["Sample Type"] || "",
+      storageCondition: item["Storage Condition"] || "",
+      createdAt: item["Created At"] || "",
+      genericName: item["Generic Name"] || "",
+      specificationCode: item["Specification Code"] || "",
+      attachment: item["Attachment"] || "",
+      status: item["Status"] || "",
+    }));
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
-
-  const renderRows = () => {
-    return filteredEmployees
-      .slice(startIndex, endIndex)
-      .map((employee, index) => (
-        <tr key={startIndex + index}>
-          <td>{startIndex + index + 1}</td>
-          <td>{employee.user}</td>
-          <td>{employee.role}</td>
-          <td>{employee.departments}</td>
-          <td>{employee.joiningDate}</td>
-          <td>{employee.addedBy}</td>
-          <td>
-            <button
-            className={`px-3 py-1 w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-              employee.status === "INITIATED"
-                ? "blue-700"
-                : employee.status === "APPROVED"
-                ? "green-700"
-                : employee.status === "REJECTED"
-                ? "red-700"
-                : employee.status === "REINITIATED"
-                ? "yellow-500"
-                : employee.status === "DROPPED"
-                ? "purple-700"
-                : employee.status === "ALL"
-                ? badgeStyle
-                : badgeStyle
-              }`} style={{fontSize:'10px'}}
-          >
-            {employee.status}
-            </button>
-
-          </td>
-          <td>
-            <div className="d-flex gap-3">
-              <Link to="/viewDetails">
-                <FontAwesomeIcon icon={faEye} />
-              </Link>
-              <div
-                className="cursor-pointer"
-                onClick={() => setAddModal2(true)}
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </div>
-              <div
-                className="cursor-pointer"
-                 onClick={() => handleDeleteClick(employee.id)}
-              >
-                <FontAwesomeIcon icon={faTrashCan} />
-              </div>
-            </div>
-          </td>
-        </tr>
-      ));
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+    setIsModalsOpen(false);
   };
 
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Sample Type", accessor: "sampleType" },
+    { header: "Product / Material", accessor: "storageCondition" },
+    { header: "A.R. No.", accessor: "createdAt" },
+    { header: "Generic Name", accessor: "createdAt" },
+    { header: "Specification Code", accessor: "createdAt" },
+    { header: "attachment", accessor: "attachment" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={openModal2}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => onDeleteItem(row)}
+          />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
- 
-  const deleteEmployee = (index) => {
-    const newEmployees = [...employee];
-    newEmployees.splice(index, 1);
-    setemployees(newEmployees);
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Sample Login</h4>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Sample Login</h1>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <Dropdown
+            options={[
+              { value: "Ar No.", label: "Ar No." },
+              { value: "ARAMPHO000126", label: "ARAMPHO000126" },
+              { value: "ARRW0000125", label: "ARRW0000125" },
+              { value: "ARRW0000124", label: "ARRW0000124" },
+              { value: "ARFP0000123", label: "ARFP0000123" },
+              { value: "ARABEP0000122", label: "ARABEP0000122" },
+              { value: "ARAMPHO0000121", label: "ARAMPHO0000121" },
+              { value: "ARAMPHO0000120", label: "ARAMPHO0000120" },
+              { value: "ARAMPHO0000119", label: "ARAMPHO0000119" },
+              { value: "ARPC0000118", label: "ARPC0000118" },
+              { value: "ARFFT0000117", label: "ARFFT0000117" },
+              { value: "ARFP0000116", label: "ARFP0000116" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "REJECTED", label: "REJECTED" },
+              { value: "DROPPED", label: "DROPPED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
         </div>
-        <div>
-          <CRow className="mt-5 mb-3">
-            <CCol sm={4}>
-              <CFormInput
-                type="text"
-                style={{fontSize:'0.9rem'}}
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </CCol>
-            <CCol sm={3}>
-              <CFormSelect
-                value={statusFilter}
-                style={{fontSize:'0.9rem'}}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                options={[
-                  { label: "All", value: "" },
-                  { label: "Initiated", value: "INITIATED" },
-                  { label: "Approved", value: "APPROVED" },
-                  { label: "Rejected", value: "REJECTED" },
-                  { label: "Reinitiated", value: "REINITIATED" },
-                  { label: "Dropped", value: "DROPPED" },
-                ]}
-              />
-            </CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={3}>
-              <div className="d-flex justify-content-end">
-                <CButton color="primary" style={{fontSize:'0.9rem'}} onClick={() => setAddModal(true)}>
-                  Add Sample Login
-                </CButton>
-              </div>
-            </CCol>
-          </CRow>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="sampleLogin.pdf" title="Sample LogIn Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+
+          <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />
         </div>
-
-        <div
-          className=" rounded    bg-white"
-          style={{fontSize:'0.9rem'}}
-        >
-          <table className="table    ">
-            <thead>
-              <tr>
-                <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Sample Type
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Product / Material
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  A.R. No.
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Generic Name
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Specification code
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Status
-                </th>
-                <th style={{ background: "#5D76A9", color: "white"}}>
-                  Actions{" "}
-                </th>
-              </tr>
-            </thead>
-            <tbody>{renderRows()}</tbody>
-          </table>
-        </div>
-
-        {/* <div className="pagination d-flex justify-content-end  my-4">
-          <div className="pagination d-flex justify-content-end ">
-            
-              <button
-                style={{border:'2px solid',fontSize:'13px',borderRadius:'4px', width:'78px',height:'30px',color:'white',backgroundColor:'#5D76A9'}}
-                onClick={prevPage}
-              >
-                &#8592; &nbsp;Previous
-              </button>
-              <button  style={{fontSize:'13px',borderRadius:'', width:'24px',height:'30px',color:'white',backgroundColor:'#5D76A9'}}> {currentPage} </button>
-             <button
-             style={{border:'2px solid',fontSize:'13px',borderRadius:'4px', width:'60px',height:'30px',backgroundColor:'#5D76A9',color:'white'}}
-             onClick={nextToLastPage}
-             >
-              Next &nbsp;&rarr;
-             </button>
-           </div>
-        </div> */}
-
-<div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employee.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-
-
-
       </div>
-
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <SampleLogin2Modal visible={isModalOpen} closeModal={closeModal} />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
       )}
-       {addModal2 && (
-        <StatusModal2 visible={addModal2} closeModal2={() => setAddModal2(false)} />
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-
-<DeleteModal
-        visible={deleteModal}
-        closeModal={() => setDeleteModal(false)}
-        confirmDelete={handleDeleteConfirm}/>
-    </>
-  );
-}
-
-const StatusModal = (_props) => {
-  return (
-    <CModal
-      className="w-5"
-      alignment="center"
-      visible={_props.visible}
-      onClose={_props.closeModal}
-    >
-      <CModalHeader>
-        <CModalTitle>New Sample login</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Client"
-          placeholder="Select..."
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Test Plan / Revision No."
-          placeholder="Select..."
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Product / Material"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Product / Material Code"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Generic Name"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Specification ID"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Copy Sample from"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Sample Type"
-          placeholder=""
-        />
-        <CFormInput
-          type="text"
-          className="mb-3"
-          label="Certificates (If any)"
-          placeholder=""
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>
-          Back
-        </CButton>
-        <CButton color="primary">Add Sample</CButton>
-      </CModalFooter>
-    </CModal>
+    </div>
   );
 };
 
+export default SampleLogin;

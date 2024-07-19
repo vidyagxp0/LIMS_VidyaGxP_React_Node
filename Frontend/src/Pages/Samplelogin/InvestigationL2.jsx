@@ -1,208 +1,292 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { FaArrowRight } from "react-icons/fa";
-import { CCol, CFormInput, CFormSelect, CRow } from "@coreui/react";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import { useNavigate } from "react-router-dom";
+import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload ";
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    testName: "Test Name 1",
+    testCode: "T001",
+    testType: "Type A",
+    addedOn: "2024-01-01",
+    attachment: "attachment",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    testName: "Test Name 2",
+    testCode: "T002",
+    testType: "Type B",
+    addedOn: "2024-01-02",
+    attachment: "attachment",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    testName: "Test Name 3",
+    testCode: "T003",
+    testType: "Type A",
+    addedOn: "2024-01-03",
+    attachment: "attachment",
+  },
+];
 
-export default function InvestigationL2() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+const InvestigationL2 = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
-  const pageSize = 5;
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
-  const data = [
+  const navigate = useNavigate();
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.testName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    navigate("/testResultsDetails");
+  };
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const columns = [
     {
-      srNo: 1,
-      testName: "Test A",
-      testCode: "A001",
-      testType: "Type 1",
-      addedOn: "2024-05-01",
-      status: "PENDING",
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
     },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "test Name", accessor: "testName" },
+    { header: "Test Code", accessor: "testCode" },
+    { header: "Test Type", accessor: "testType" },
+    { header: "Added On", accessor: "addedOn" },
+    { header: "attachment", accessor: "attachment" },
     {
-      srNo: 2,
-      testName: "Test B",
-      testCode: "B002",
-      testType: "Type 2",
-      addedOn: "2024-05-02",
-      status: "APPROVED",
-    },
-    {
-      srNo: 3,
-      testName: "Test C",
-      testCode: "C003",
-      testType: "Type 3",
-      addedOn: "2024-05-03",
-      status: "PENDING",
-    },
-    {
-      srNo: 4,
-      testName: "Test D",
-      testCode: "D004",
-      testType: "Type 4",
-      addedOn: "2024-05-04",
-      status: "APPROVED",
-    },
-    {
-      srNo: 5,
-      testName: "Test E",
-      testCode: "E005",
-      testType: "Type 5",
-      addedOn: "2024-05-05",
-      status: "PENDING",
-    },
-    {
-      srNo: 6,
-      testName: "Test F",
-      testCode: "F006",
-      testType: "Type 6",
-      addedOn: "2024-05-06",
-      status: "APPROVED",
-    },
-    {
-      srNo: 7,
-      testName: "Test G",
-      testCode: "G007",
-      testType: "Type 7",
-      addedOn: "2024-05-07",
-      status: "PENDING",
-    },
-    {
-      srNo: 8,
-      testName: "Test H",
-      testCode: "H008",
-      testType: "Type 8",
-      addedOn: "2024-05-08",
-      status: "APPROVED",
-    },
-    {
-      srNo: 9,
-      testName: "Test I",
-      testCode: "I009",
-      testType: "Type 9",
-      addedOn: "2024-05-09",
-      status: "PENDING",
-    },
-    {
-      srNo: 10,
-      testName: "Test J",
-      testCode: "J010",
-      testType: "Type 10",
-      addedOn: "2024-05-10",
-      status: "APPROVED",
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => {
+              onViewDetails(row), navigate("/testResultsDetails");
+            }}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
     },
   ];
 
-  const filteredData = data.filter(
-    (item) =>
-      (item.testName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.testCode.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (statusFilter === "" || item.status === statusFilter)
-  );
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredData.length);
-  const totalPages = Math.ceil(filteredData.length / pageSize);
-
-  const renderRows = () => {
-    return filteredData.slice(startIndex, endIndex).map((item, index) => (
-      <tr key={index}>
-        <td>
-          <input type="checkbox" />
-        </td>
-        <td>{item.srNo}</td>
-        <td>{item.testName}</td>
-        <td>{item.testCode}</td>
-        <td>{item.testType}</td>
-        <td>{item.addedOn}</td>
-        <td hidden>{item.status}</td>
-        <td>
-          <Link to="/testResultsDetails">
-            <FontAwesomeIcon icon={faEye} />
-          </Link>
-        </td>
-      </tr>
-    ));
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const nextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      testName: item["Test Name"] || "",
+      testCode: item["Test Code"] || "",
+      testType: item["Test Type"] || "",
+      addedOn: item["Added On"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      status: item["Status"] || "",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+    setIsModalsOpen(false); // Update data state with parsed Excel data
+  };
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Update User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="test Name"
+            placeholder="Test Name "
+            value={formData?.testName || ""}
+            onChange={handleChange}
+            name="testName"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Code"
+            placeholder="Test Code"
+            value={formData?.testCode || ""}
+            onChange={handleChange}
+            name="testCode"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Type"
+            placeholder="Test Type "
+            value={formData?.testType || ""}
+            onChange={handleChange}
+            name="testType"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
   return (
     <>
-      <div  className="m-5 mt-3">
-        <h4 className="fw-bold">Test Results QA</h4>
-      <div  >
-        <CRow className="mt-5 mb-3">
-          <CCol sm={4}>
-            <CFormInput
-              type="text"
-              style={{fontSize:'0.9rem'}}
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </CCol>
-          <CCol sm={3}>
-            <CFormSelect
-              value={statusFilter}
-              style={{fontSize:'0.9rem'}}
-              onChange={(e) => setStatusFilter(e.target.value)}
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold">Investigation L2</h4>
+        </div>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
               options={[
-                'Select Status',
-                { label: 'All', value: '' },
-                { label: 'Pending', value: 'PENDING' },
-                { label: 'Approved', value: 'APPROVED' },
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
               ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
             />
-          </CCol>
-        </CRow>
+          </div>
+          <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="InvestigationL2.pdf" title="Investigation L2 Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            {/* <ATMButton text="Add investigation L2 In" color="blue" onClick={openModal} /> */}
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
+        />
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+         {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <table className="table   ">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}} scope="col">
-                <input type="checkbox" />
-              </th>
-              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Sr.No</th>
-              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Test Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Test Code</th>
-              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Test Type</th>
-              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Added On</th>
-              <th style={{ background: "#5D76A9", color: "white"}} scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
-      </div>
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-            </div>
     </>
   );
-}
+};
+export default InvestigationL2;

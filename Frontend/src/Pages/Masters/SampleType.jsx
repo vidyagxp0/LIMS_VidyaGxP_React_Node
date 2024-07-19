@@ -1,355 +1,744 @@
-import React, { useState } from 'react';
-import { HiDotsHorizontal } from "react-icons/hi";
-import { CgAddR, CgCalendarDates } from 'react-icons/cg';
-import { FaArrowRight } from 'react-icons/fa';
-import { IoEyeSharp } from "react-icons/io5";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { Link } from 'react-router-dom';
-
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { useEffect, useState } from "react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+  prefix,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import "../../Pages/StorageCondition/StorageCondition.css";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ViewModal from "../Modals/ViewModal";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
-export default function SampleType() {
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState('All');
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    sampleTypeName: "Type 1",
+    addDate: "2024-01-01",
+    daysToComplete: 10,
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    sampleTypeName: "Type 2",
+    addDate: "2024-01-02",
+    daysToComplete: 20,
+    status: "INITIATED",
+  },
+];
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState('');
+function SampleType() {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("Active");
+  const [editModalData, setEditModalData] = useState(null);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+  const filteredData = data.filter((row) => {
+    return (
+      row.sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-  const [employees, setEmployees] = useState([
-    { id: 1, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'APPROVED' },
-    { id: 2, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'INITIATED' },
-    { id: 3, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'DROPPED' },
-    { id: 4, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'INITIATED' },
-    { id: 5, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'REJECTED' },
-    { id: 6, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'APPROVED' },
-    { id: 7, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'APPROVED' },
-    { id: 8, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'DROPPED' },
-    { id: 9, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'DROPPED' },
-    { id: 10, user: 'Initiated Product', Date: 'May 17th 24 14:34', DayComplete: '10', status: 'REINITIATED' },
-  ]);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+  };
 
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-  );
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
 
-  const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.Date}</td>
-        <td>{employee.DayComplete}</td>
-        <td>
-        <button  
-                        className={`p-1 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          employee.status === "INITIATED"
-                            ? "blue-700"
-                            : employee.status === "APPROVED"
-                            ? "green-700"
-                            : employee.status === "REJECTED"
-                            ? "red-700"
-                            : employee.status === "REINITIATED"
-                            ? "yellow-500"
-                            : employee.status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {employee.status}
-                      </button>
-        </td>
-        <td>
-          <div className="d-flex gap-3">
-            <div>
-              <Link to="/masters/product-details"><FontAwesomeIcon icon={faEye} /></Link>
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => setAddModal(true)}
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [inputValue, setInputValue] = useState(0);
+    const [statusData, setStatusData] = useState({
+      sampleName: "",
+      prefix: "",
+      daysToComplete: 0,
+    });
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const handleAdd = () => {
+      const newCondition = {
+        sampleTypeName: statusData.sampleName,
+        addDate: "2020-02-20",
+        daysToComplete: statusData.daysToComplete,
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Sample Type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sample Name"
+            placeholder="Sample Name"
+            name="sampleName"
+            value={statusData.sampleName}
+            onChange={(e) =>
+              setStatusData({ ...statusData, sampleName: e.target.value })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Prefix"
+            placeholder="Prefix"
+            name="prefix"
+            value={statusData.prefix}
+            onChange={(e) =>
+              setStatusData({ ...statusData, prefix: e.target.value })
+            }
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Days To Complete"
+            placeholder="Days To Complete"
+            name="daysToComplete"
+            value={statusData.daysToComplete}
+            onChange={(e) =>
+              setStatusData({ ...statusData, daysToComplete: e.target.value })
+            }
+          />
+
+          <label className="line3" htmlFor="">
+            Selected Standard Fields Displays At Sample Registration
+          </label>
+          <FormGroup style={{ marginLeft: "20px" }}>
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Manufacturing Date"
+            />
+            <FormControlLabel control={<Checkbox />} label="Expiry Date" />
+            <FormControlLabel control={<Checkbox />} label="Batch No." />
+            <FormControlLabel control={<Checkbox />} label="Batch Size" />
+            <FormControlLabel control={<Checkbox />} label="Packing Type" />
+            <FormControlLabel control={<Checkbox />} label="Project" />
+            <FormControlLabel control={<Checkbox />} label="Supplier" />
+            <FormControlLabel control={<Checkbox />} label="Customer" />
+            <FormControlLabel control={<Checkbox />} label="Manufacturer" />
+            <FormControlLabel control={<Checkbox />} label="Priority" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Sampling Quantity"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Sample Reference No"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Recommended Reference Lot"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="W.S. Validity Period"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Storage Condition"
+            />
+            <FormControlLabel control={<Checkbox />} label="Storage Location" />
+            <FormControlLabel control={<Checkbox />} label="Comments" />
+          </FormGroup>
+
+          <FormControl style={{ margin: "20px" }}>
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Reserve Sample Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
             >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </div>
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-          </div>
-        </td>
-      </tr>
-    ));
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sampling Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Analyst Level Investigation Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sample Destruction Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sample Acceptance Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              TCI Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              SI Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              MGR Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              QA Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Reduced/Retesting Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+          </FormControl>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
-  const nextPage = () => {
-    if (currentPage < Math.ceil(filteredEmployees.length / pageSize)) {
-      setCurrentPage(currentPage + 1);
-    }
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
   };
 
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
-  };
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Sample Type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sample Name"
+            placeholder="Sample Name"
+            name="sampleTypeName"
+            value={formData?.sampleTypeName || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Prefix"
+            placeholder="Prefix"
+            name="prefix"
+            value={formData?.prefix || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Days To Complete"
+            placeholder="Days To Complete"
+            name="daysToComplete"
+            value={formData?.daysToComplete || ""}
+            onChange={handleChange}
+          />
+
+          <label className="line3" htmlFor="">
+            Selected Standard Fields Displays At Sample Registration
+          </label>
+          <FormGroup style={{ marginLeft: "20px" }}>
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Manufacturing Date"
+            />
+            <FormControlLabel control={<Checkbox />} label="Expiry Date" />
+            <FormControlLabel control={<Checkbox />} label="Batch No." />
+            <FormControlLabel control={<Checkbox />} label="Batch Size" />
+            <FormControlLabel control={<Checkbox />} label="Packing Type" />
+            <FormControlLabel control={<Checkbox />} label="Project" />
+            <FormControlLabel control={<Checkbox />} label="Supplier" />
+            <FormControlLabel control={<Checkbox />} label="Customer" />
+            <FormControlLabel control={<Checkbox />} label="Manufacturer" />
+            <FormControlLabel control={<Checkbox />} label="Priority" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Sampling Quantity"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Sample Reference No"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Recommended Reference Lot"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="W.S. Validity Period"
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Storage Condition"
+            />
+            <FormControlLabel control={<Checkbox />} label="Storage Location" />
+            <FormControlLabel control={<Checkbox />} label="Comments" />
+          </FormGroup>
+
+          <FormControl style={{ margin: "20px" }}>
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Reserve Sample Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sampling Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Analyst Level Investigation Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sample Destruction Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Sample Acceptance Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              TCI Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              SI Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              MGR Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              QA Approval Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+
+            <FormLabel id="demo-row-radio-buttons-group-label">
+              Reduced/Retesting Required
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+              <FormControlLabel value="no" control={<Radio />} label="No" />
+            </RadioGroup>
+          </FormControl>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Update
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Sample Type Name", accessor: "sampleTypeName" },
+    { header: "Add Date", accessor: "addDate" },
+    { header: "Days to Complete", accessor: "daysToComplete" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      sampleTypeName: item["Sample Type Name"] || "",
+      addDate: item["Add Date"] || "",
+      daysToComplete: item["Days to Complete"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setViewModalData(false);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
-    <div className="m-5 mt-3">
+    <>
+      <div className="m-5 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Specifications/Sample Type</h4>
+          <h4 className="fw-bold">Sample Type</h4>
         </div>
 
-    <div className="d-flex justify-content-between mt-5 mb-3">
-            <div className='w-25'>
-            <CFormSelect
-              onChange={(e) => {
-                setSelectedStatus(e.target.value);
-                setCurrentPage(1);
-              }}
-              value={selectedStatus}
-              style={{fontSize:'0.9rem'}}
-            >
-
-              <option value="All">All</option>
-              <option value="Initiated">Initiated</option>
-              <option value="Approved">Approved</option>
-              <option value="Rejected">Rejected</option>
-              <option value="Reinitiated">Reinitiated</option>
-              <option value="Dropped">Dropped</option>
-            </CFormSelect>
-            </div>
-
-          <div >
-            <CButton style={{fontSize:'0.9rem'}}  color="primary" onClick={() => setAddModal(true)}>Add Sample Type</CButton>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Type.pdf" title="Sample Type Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Sample Type"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
-
-     
-
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Sample Type Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Add Date</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Days to Complete</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}><HiDotsHorizontal /></th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </CTable>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
-
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
-    </div>
-  );
-};
-
-const StatusModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Add Product/Material</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-
-        <CFormInput
-          className='mb-3'
-          type='text'
-          label='Sample Name'
-          placeholder='ID'
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
-
-        <CFormInput
-          className='mb-3'
-          type='text'
-          label='Prefix'
-          placeholder='Model Number'
+      )}
+      {isModalOpen && (
+        <StatusModal
+          onAdd={addNewStorageCondition}
+          visible={isModalOpen}
+          closeModal={closeModal}
         />
-
-        <CFormInput
-          className='mb-3'
-          type='text'
-          label='Days To Complete'
-          placeholder='Number' />
-
-        <label className="line3" htmlFor="">Selected Standard Fields Displays At Sample Registration</label>
-        <FormGroup style={{ marginLeft: '20px' }}>
-          <FormControlLabel control={<Checkbox />} label="Manufacturing Date" />
-          <FormControlLabel control={<Checkbox />} label="Expiry Date" />
-          <FormControlLabel control={<Checkbox />} label="Batch No." />
-          <FormControlLabel control={<Checkbox />} label="Batch Size" />
-          <FormControlLabel control={<Checkbox />} label="Packing Type" />
-          <FormControlLabel control={<Checkbox />} label="Project" />
-          <FormControlLabel control={<Checkbox />} label="Supplier" />
-          <FormControlLabel control={<Checkbox />} label="Customer" />
-          <FormControlLabel control={<Checkbox />} label="Manufacturer" />
-          <FormControlLabel control={<Checkbox />} label="Priority" />
-          <FormControlLabel control={<Checkbox />} label="Sampling Quantity" />
-          <FormControlLabel control={<Checkbox />} label="Sample Reference No" />
-          <FormControlLabel control={<Checkbox />} label="Recommended Reference Lot" />
-          <FormControlLabel control={<Checkbox />} label="W.S. Validity Period" />
-          <FormControlLabel control={<Checkbox />} label="Storage Condition" />
-          <FormControlLabel control={<Checkbox />} label="Storage Location" />
-          <FormControlLabel control={<Checkbox />} label="Comments" />
-        </FormGroup>
-
-        <FormControl style={{ margin: '20px' }}>
-          <FormLabel id="demo-row-radio-buttons-group-label">Reserve Sample Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">Sampling Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">Analyst Level Investigation Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">Sample Destruction Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">Sample Acceptance Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">TCI Approval Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">SI Approval Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">MGR Approval Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">QA Approval Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-
-          <FormLabel id="demo-row-radio-buttons-group-label">Reduced/Retesting Required</FormLabel>
-          <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-            <FormControlLabel value="no" control={<Radio />} label="No" />
-          </RadioGroup>
-        </FormControl>
-
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
+      )}
+      {viewModalData && (
+        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </>
   );
-};
+}
 
-const DeleteModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete Sample type</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this Sample Type{ }?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+export default SampleType;

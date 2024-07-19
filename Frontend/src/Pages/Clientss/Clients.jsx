@@ -1,254 +1,447 @@
+import React, { useState, useEffect } from "react";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import ClientsModal from "../Modals/ClientsModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
 import {
   CButton,
-  CCol,
   CFormInput,
-  CFormSelect,
-  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
 } from "@coreui/react";
-import React, { useState } from 'react'
-import { FaArrowRight } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    ClientName: "Client 1",
+    EmailAddress: "client1@example.com",
+    phone: "1234567890",
+    Address: "Address 1",
+    AddedOn: "2024-06-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    ClientName: "Client 2",
+    EmailAddress: "client2@example.com",
+    phone: "2345678901",
+    Address: "Address 2",
+    AddedOn: "2024-06-02",
+    status: "Active",
+  },
+];
 
-export default function Clients() {
-  const [addModal, setAddModal] = useState(false);
-  const [removeModal, setRemoveModal] = useState(false);
-  const [statusFilter, setStatusFilter] = useState('');
-  const [deleteId, setDeleteId] = useState(null);
- 
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
+const Clients = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
 
-  const [employees, setEmployees] = useState([
-    { id: 1, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { id: 2, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { id: 3, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { id: 4, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { id: 5, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'INACTIVE' },
-    { id: 6, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-    { id: 7, user: 'Initiated Product', role: 'Sacubitril', departments: 'ARIP0000095', joiningDate: 'N/A', addedBy: 'RPS-TSLV-00', status: 'ACTIVE' },
-  ]);
-
-  const filteredEmployees = employees.filter(employee =>
-    statusFilter === '' || employee.status.toLowerCase() === statusFilter.toLowerCase()
-  );
-  
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-  const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.role}</td>
-        <td>{employee.departments}</td>
-        <td>{employee.joiningDate}</td>
-        <td>{employee.addedBy}</td>
-        <td>  <button
-              style={{
-                background:
-                  employee.status === "ACTIVE" ? "#15803d" : "#b91c1c",
-                color: "white",
-                width: "80%",
-                fontSize: "0.6rem",
-                padding: "2px 7px",
-                borderRadius: "7px",
-              }}
-            >
-              {employee.status}
-            </button></td>
-        <td>
-          <div className="d-flex gap-3">
-            <Link to="/clientss/clients-details"><FontAwesomeIcon icon={faEye} /></Link>
-
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)} >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-          </div>
-        </td>
-      </tr>
-    ));
-  };
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(employees.length / pageSize));
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
   };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
 
-  const handleDelete = () => {
-    setEmployees(employees.filter(employee => employee.id !== deleteId));
-    setRemoveModal(false);
-  };
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setRemoveModal(true);
-  };
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
 
-  const StatusModal = (_props) => {
+    const handleSave = () => {
+      onSave(formData);
+    };
+
     return (
-      <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
         <CModalHeader>
           <CModalTitle>Add Client</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p className="mb-3 fw-bold">Add information and add new Client</p>
-          <CFormInput type="text" className="mb-3" label="Client Name" placeholder="Bussiness Associate Name" />
-          <CFormInput type="text" className="mb-3" label="Alternate Name" placeholder="Alternate Name" />
-          <CFormInput type="email" className="mb-3" label="Email" placeholder="Email" />
-          <CFormInput type="number" className="mb-3" label="Phone" placeholder="Phone" />
-          <CFormInput type="text" className="mb-3" label="Address" placeholder="Address" />
-          <CFormInput type="text" className="mb-3" label="Contact Person" placeholder="Contact Person" />
-          <CFormInput type="number" className="mb-3" label="Contact Person Number" placeholder="Contact Person Number" />
-          <CFormInput type="text" className="mb-3" label="Tax Number" placeholder="Tax Number" />
-          <CFormInput type="text" className="mb-3" label="Fax" placeholder="Fax" />
-          <CFormInput type="text" className="mb-3" label="Website" placeholder="Website" />
-          <CFormInput type="text" className="mb-3" label="Name" placeholder="Name" />
-          <CFormInput type="text" className="mb-3" label="Plant Code" placeholder="Plant Code" />
-          <CFormInput type="text" className="mb-3" label="Address" placeholder="Address" />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Client Name"
+            name="ClientName"
+            placeholder="Client Name"
+            value={formData?.ClientName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Alternate Name"
+            name="alternateName"
+            placeholder="Alternate Name"
+            value={formData?.alternateName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="email"
+            className="mb-3"
+            label="Email"
+            name="EmailAddress"
+            placeholder="EmailAddress"
+            value={formData?.EmailAddress || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            name="phone"
+            label="phone"
+            placeholder="phone"
+            value={formData?.phone || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Address"
+            name="Address"
+            placeholder="Address"
+            value={formData?.Address || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="contactPerson"
+            label="Contact Person"
+            placeholder="Contact Person"
+            value={formData?.contactPerson || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            name="contactPersonNumber"
+            label="Contact Person Number"
+            placeholder="Contact Person Number"
+            value={formData?.contactPersonNumber || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            label="Tax Number"
+            name="taxNumber"
+            placeholder="Tax Number"
+            value={formData?.taxNumber || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="number"
+            className="mb-3"
+            label="Fax"
+            name="fax"
+            placeholder="fax"
+            value={formData?.fax || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Website"
+            placeholder="Website"
+            name="website"
+            value={formData?.website || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Name"
+            name="name"
+            placeholder="name"
+            value={formData?.name || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="plantCode"
+            label="Plant Code"
+            placeholder="Plant Code"
+            value={formData?.plantCode || ""}
+            onChange={handleChange}
+          />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-          <CButton color="primary">Add</CButton>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Add
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
 
-  const DeleteModal = (_props) => {
+  // *********************Edit ****************************
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  useEffect(() => {
+    const counts = {
+      APPROVED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      REJECTED: 0,
+      DROPPED: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
     return (
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>
-          Delete Calibration Type
-          </CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-
-          <p className="fs-5">Do you want to delete this Client ?</p>
-        </CModalBody>
-
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={_props.closeModal}
-            style={{
-              marginRight: "0.5rem",
-              fontWeight: "500",
-            }}
-          >
-            Cancel
-          </CButton>
-          <CButton
-            color="danger"
-            onClick={_props.handleDelete}
-            style={{
-              fontWeight: "500",
-              color: "white",
-            }}
-          >
-            Delete
-          </CButton>
-        </CModalFooter>
-      </CModal>
+      row.ClientName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Client Name", accessor: "ClientName" },
+    { header: "Email Address", accessor: "EmailAddress" },
+    { header: "Contact Number", accessor: "phone" },
+    { header: "Address", accessor: "Address" },
+    { header: "Added On", accessor: "AddedOn" },
+    { header: "Status", accessor: "status" },
+
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
+  ];
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      ClientName: item["Client Name"] || "",
+      EmailAddress: item["Email Address"] || "",
+      phone: item["Contact Number"] || "",
+      Address: item["Address"] || "",
+      AddedOn: item["Added On"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          ClientName: newInstrument.ClientName,
+          alternateName: newInstrument.alternateName,
+          EmailAddress: newInstrument.EmailAddress,
+          phone: newInstrument.phone,
+          Address: newInstrument.Address,
+          contactPerson: newInstrument.contactPerson,
+          contactPersonNumber: newInstrument.contactPersonNumber,
+          taxNumber: newInstrument.taxNumber,
+          fax: newInstrument.fax,
+          website: newInstrument.website,
+          AddedOn: currentDate,
+          name: newInstrument.name,
+          plantCode: newInstrument.plantCode,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   return (
-    <>
-      <div className="m-5 mt-3">
-        <div className="">
-          <h4 className="fw-bold">Clients</h4>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Clients</h1>
+
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
         </div>
-
-          <CRow className="mt-5 mb-3">
-            <CCol sm={3}>
-              <CFormSelect
-                onChange={(e) => setStatusFilter(e.target.value)}
-                value={statusFilter}
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="">All</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </CFormSelect>
-            </CCol>
-            <CCol sm={3}></CCol>
-            <CCol sm={2}></CCol>
-            <CCol sm={4}>
-              <div className="d-flex justify-content-end">
-                <CButton style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Client</CButton>
-              </div>
-            </CCol>
-          </CRow>
-
-        <div className='rounded bg-white'
-         style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}>
-          <table className='table table-responsive   '>
-            <thead>
-              <tr>
-                <th style={{ background: "#5D76A9", color: "white"}}>Sr.no.</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Client Name</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Email Address</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Contact Number</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Address</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Added On</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-                <th style={{ background: "#5D76A9", color: "white"}}>Actions </th>
-              </tr>
-            </thead>
-            <tbody>
-              {renderRows()}
-            </tbody>
-          </table>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Clients.pdf" title="Clients Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add Clients" color="blue" onClick={openModal} />
         </div>
-
-        <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
       </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {removeModal && <DeleteModal visible={removeModal}  closeModal={() => setRemoveModal(false)} handleDelete={handleDelete} />}
-
-    </>
-  )
-}
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+      />
+      <ClientsModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
+  );
+};
+export default Clients;

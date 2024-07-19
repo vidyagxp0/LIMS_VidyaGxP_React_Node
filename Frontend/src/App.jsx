@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -25,7 +25,7 @@ import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2";
 
 import Storage_Condition from "./Pages/Stability/Storage_Condition";
 import ChamberConditionMapping from "./Pages/Stability/ChamberConditionMapping";
-import ChamberTransfer from "./Pages/Stability/ChamberTransfer";
+// import ChamberTransfer from "./Pages/Stability/ChamberTransfer";
 import CoaTemplate from "./Pages/Stability/CoaTemplate";
 import StorageChamber from "./Pages/Stability/StorageChamber";
 import StandardProtocol from "./Pages/Stability/StandardProtocol";
@@ -56,6 +56,7 @@ import SamplingTemplate from "./Pages/Sampling/SamplingTemplate";
 import Product from "./Pages/Masters/Product";
 import SampleType from "./Pages/Masters/SampleType";
 import SpecificationType from "./Pages/Masters/SpecificationType";
+import SpecificationsTestProcedure from "./Pages/Masters/SpecificationsTestProcedure.jsx";
 import Specifications from "./Pages/Masters/Specifications";
 import TestCategories from "./Pages/Masters/TestCategories";
 import TestRegistrations from "./Pages/Masters/TestRegistrations";
@@ -144,6 +145,7 @@ import StockInventoryDetail from "./Pages/Stock Management/StockInventoryDetail.
 import StockMaterialDetail from "./Pages/Stock Management/StockMaterialDetail.jsx";
 import StockOnboardingDetails from "./Pages/Stock Management/StockOnboardingDetails.jsx";
 
+import Part from "./Pages/Calibration/Part.jsx";
 import CalibrationType from "./Pages/Calibration/CalibrationType.jsx";
 import CalibrationFrequency from "./Pages/Calibration/CalibrationFrequency.jsx";
 import CalibrationDataSheet from "./Pages/Calibration/CalibrationDataSheet.jsx";
@@ -152,6 +154,7 @@ import CalibrationSchedule from "./Pages/Calibration/CalibrationSchedule.jsx";
 import CalibrationRecord from "./Pages/Calibration/CalibrationRecord.jsx";
 import CalibrationSampleLogin from "./Pages/Calibration/CalibrationSampleLogin.jsx";
 import CalibrationCalender from "./Pages/Calibration/CalibrationCalender.jsx";
+
 import CalibrationDataSheetDetails from "./Pages/Calibration/Calibration Details/CalibrationDataSheetDetails.jsx";
 import CalibrationSampleLoginTemplateDetails from "./Pages/Calibration/Calibration Details/CalibrationSampleLoginTemplateDetails.jsx";
 import CalibrationScheduleDetails from "./Pages/Calibration/Calibration Details/CalibrationScheduleDetails.jsx";
@@ -211,7 +214,8 @@ import AdminMainPanel from "./components/AdminPanel/AdminMainPanel.jsx";
 import UserMgnt from "./components/AdminPanel/User Management/UserMgnt.jsx";
 import SiteManagement from "./components/AdminPanel/Site-Management/SiteManagement.jsx";
 import ProcessManagement from "./components/AdminPanel/Process-Management/ProcessManagement.jsx";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -267,7 +271,7 @@ function App() {
               path="/chamberConditionMapping"
               element={<ChamberConditionMapping />}
             />
-            <Route path="/chamberTransfer" element={<ChamberTransfer />} />
+            {/* <Route path="/chamberTransfer" element={<ChamberTransfer />} /> */}
             <Route path="/stabilityProtocol" element={<StabilityProtocol />} />
             <Route path="/sampleStorage" element={<SampleStorage />} />
             <Route path="/coaTemplate" element={<CoaTemplate />} />
@@ -296,6 +300,10 @@ function App() {
             <Route
               path="/Masters/Specifications"
               element={<Specifications />}
+            />
+            <Route
+              path="/Masters/SpecificationsTestProcedure"
+              element={<SpecificationsTestProcedure />}
             />
             <Route
               path="/Masters/TestCategories"
@@ -358,6 +366,8 @@ function App() {
               element={<SolutionStandardization />}
             />
             <Route path="Inventory/SolutionUsage" element={<SolutionUsage />} />
+
+            {/* *******************BLANK******************************** */}
             <Route path="/Inventory/Columns" element={<Columns />} />
             <Route
               path="/Inventory/ReferenceStandards"
@@ -369,11 +379,15 @@ function App() {
               element={<ReferenceStandards />}
             />
             <Route path="/Inventory/Media" element={<Media />} />
+
             <Route
               path="/Inventory/WaterManagement"
               element={<WaterManagement />}
             />
+
             <Route path="/Inventory/Environment" element={<Environment />} />
+            {/* *******************BLANK******************************** */}
+
             <Route
               path="Inventory/ChemicalRegistration"
               element={<ChemicalRegistration />}
@@ -566,6 +580,7 @@ function App() {
               element={<StockOnboardingDetails />}
             />
 
+            <Route path="/calibration/Part" element={<Part />} />
             <Route
               path="/calibration/calibration-type"
               element={<CalibrationType />}
@@ -774,24 +789,30 @@ function App() {
               element={<Sample_LoginDetails />}
             />
           </Route>
-       
-          <Route path="/adminPanel" element={<AdminPanel show={checkLoggedIn} />} />
+
+          <Route
+            path="/admin-login"
+            element={<AdminPanel show={checkLoggedIn} />}
+          />
           <Route path="" element={<AdminMainPanel />}>
             <Route
-              path="/admin-panel/userManagement"
+              path="/admin-login/userManagement"
               element={<UserMgnt setToast={checkLoggedIn} show={isLoggedIn} />}
             />
             <Route
-              path="/admin-panel/site-management"
+              path="/admin-login/site-management"
               element={<SiteManagement />}
             />
             <Route
-              path="/admin-panel/process-management"
+              path="/admin-login/process-management"
               element={<ProcessManagement />}
             />
           </Route>
+        
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
+      
     </>
   );
 }

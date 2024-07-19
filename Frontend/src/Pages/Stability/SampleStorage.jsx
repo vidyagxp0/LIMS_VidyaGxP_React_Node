@@ -1,483 +1,874 @@
-import { CButton, CCol, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CFormSelect,
+} from "@coreui/react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    productName: "Product 1",
+    chamberID: "CH001",
+    actualQuantity: 100,
+    availableQuantity: 80,
+    protocolType: "Type X",
+    status: "DROPPED",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    productName: "Product 2",
+    chamberID: "CH002",
+    actualQuantity: 150,
+    availableQuantity: 150,
+    protocolType: "Type Y",
+    status: "INITIATED",
+  },
+];
 
 function SampleStorage() {
-     const pageSize = 5;
-     const [currentPage, setCurrentPage] = useState(1);
-     const [addModal, setAddModal] = useState(false);
-     const [deleteModal, setDeleteModal] = useState(false);
-     const [deleteId, setDeleteId] = useState(null);
-     const [selectedStatus, setSelectedStatus] = useState("All");
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-     const [data, setData] = useState([
-          { id: 1, productName: "Sodium Propyl Paraben IP", chamberId: "EUR/SOP-AD-01", actualQty: 100, availableQty: 80, protocolId: "New001", status: "APPROVED" },
-          { id: 2, productName: "EM", chamberId: "EUR/SOP-AD-02", actualQty: 90, availableQty: 60, protocolId: "Test002", status: "DROPPED" },
-          { id: 3, productName: "Polycaprolactone IP", chamberId: "EUR/SOP-AD-03", actualQty: 80, availableQty: 80, protocolId: "New003", status: "INITIATED" },
-          { id: 4, productName: "Acetaminophen", chamberId: "EUR/SOP-AD-04", actualQty: 120, availableQty: 100, protocolId: "New004", status: "APPROVED" },
-          { id: 5, productName: "Ibuprofen", chamberId: "EUR/SOP-AD-05", actualQty: 110, availableQty: 90, protocolId: "New005", status: "REINITIATED" },
-          { id: 6, productName: "Aspirin", chamberId: "EUR/SOP-AD-06", actualQty: 130, availableQty: 110, protocolId: "New006", status: "REJECTED" },
-          { id: 7, productName: "Caffeine", chamberId: "EUR/SOP-AD-07", actualQty: 140, availableQty: 120, protocolId: "New007", status: "INITIATED" },
-          { id: 8, productName: "Naproxen", chamberId: "EUR/SOP-AD-08", actualQty: 150, availableQty: 130, protocolId: "New008", status: "APPROVED" },
-          { id: 9, productName: "Lidocaine", chamberId: "EUR/SOP-AD-09", actualQty: 160, availableQty: 140, protocolId: "New009", status: "DROPPED" },
-          { id: 10, productName: "Ethanol", chamberId: "EUR/SOP-AD-10", actualQty: 170, availableQty: 150, protocolId: "New010", status: "REJECTED" },
-     ]);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
 
-     const startIndex = (currentPage - 1) * pageSize;
-     const endIndex = Math.min(startIndex + pageSize, data.length);
-     const [search, setSearch] = useState("");
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
-     const nextPage = () => setCurrentPage(currentPage + 1);
-     const prevPage = () => setCurrentPage(currentPage - 1);
+  useEffect(() => {
+    const counts = {
+      DROPPED: 0,
+      INITIATED: 0,
+      REINITIATED: 0,
+      APPROVED: 0,
+      REJECTED: 0,
+    };
 
-     const filterData = () => {
-          const filteredData =
-               selectedStatus === "All"
-                    ? data
-                    : data.filter(
-                         (item) => item.status.toUpperCase() === selectedStatus.toUpperCase()
-                    );
-          return filteredData.filter((item) =>
-               item.productName.toLowerCase().includes(search.toLowerCase()) ||
-               item.chamberId.toLowerCase().includes(search.toLowerCase()) ||
-               item.protocolId.toLowerCase().includes(search.toLowerCase())
-          );
-     };
+    data.forEach((item) => {
+      if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
 
-     const handleDeleteClick = (id) => {
-          setDeleteId(id);
-          setDeleteModal(true);
-     };
+    setCardCounts(counts);
+  }, [data]);
 
-     const handleDeleteConfirm = () => {
-          setData(data.filter((item) => item.id !== deleteId));
-          setDeleteModal(false);
-          setDeleteId(null);
-     };
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
 
-     return (
-          <>
-               <div className="m-5 mt-3">
-                    <div className="main-head">
-                         <h4 className="fw-bold">Sample Storage</h4>
-                    </div>
-                    <div className="mt-3 d-flex gap-4">
-                         <div className="chart-widgets w-100">
-                              <div className="">
-                                   <div className="row" style={{ cursor: "pointer" }}>
-                                        <button
-                                             className="col shadow p-3 m-3 rounded"
-                                             style={{
-                                                  background:
-                                                       "linear-gradient(25deg, #0250c5 0%, #d43f8d 100%)",
+  const filteredData = data.filter((row) => {
+    return (
+      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
-                                                  textAlign: "left",
-                                             }}
-                                             onClick={() => setSelectedStatus("DROPPED")}
-                                        >
-                                             <div className="text-light font-bold fs-5">DROPPED</div>
-                                             <div
-                                                  className="count fs-1 text-light fw-bolder"
-                                                  style={{ color: "white" }}
-                                             >
-                                                  {
-                                                       filterData().filter((item) => item.status === "DROPPED")
-                                                            .length
-                                                  }
-                                             </div>
-                                        </button>
-                                        <button
-                                             className="col shadow p-3 m-3 rounded"
-                                             style={{
-                                                  background:
-                                                       "linear-gradient(25deg, #13517a 6% , #2A5298 50%)",
-                                                  textAlign: "left",
-                                             }}
-                                             onClick={() => setSelectedStatus("INITIATED")}
-                                        >
-                                             <div className="text-light font-bold fs-5">INITIATED</div>
-                                             <div
-                                                  className="count fs-1 text-light fw-bolder"
-                                                  style={{ color: "white" }}
-                                             >
-                                                  {
-                                                       filterData().filter((item) => item.status === "INITIATED")
-                                                            .length
-                                                  }
-                                             </div>
-                                        </button>
-                                        <button
-                                             className="col shadow p-3 m-3 rounded"
-                                             style={{
-                                                  background:
-                                                       "linear-gradient(25deg, orange , #f7e05f )",
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData); // Set the data for ViewModal
+    setIsViewModalOpen(true); // Open the ViewModal
+  };
 
-                                                  textAlign: "left",
-                                                  boxShadow: "0px 10px 20px  black !important",
-                                             }}
-                                             onClick={() => setSelectedStatus("REINITIATED")}
-                                        >
-                                             <div className="text-light font-bold fs-5">REINITIATED</div>
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Product Name", accessor: "productName" },
+    { header: "Chamber ID", accessor: "chamberID" },
+    { header: "Actual Quantity", accessor: "actualQuantity" },
+    { header: "Available Quantity", accessor: "availableQuantity" },
+    { header: "Protocol Type", accessor: "protocolType" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+        </>
+      ),
+    },
+  ];
 
-                                             <div
-                                                  className="count fs-1 text-light fw-bolder"
-                                                  style={{ color: "white" }}
-                                             >
-                                                  {
-                                                       filterData().filter(
-                                                            (item) => item.status === "REINITIATED"
-                                                       ).length
-                                                  }
-                                             </div>
-                                        </button>
-                                        <button
-                                             className="col shadow p-3 m-3 rounded"
-                                             style={{
-                                                  background:
-                                                       "linear-gradient(27deg, green , #0fd850  )",
-                                                  textAlign: "left",
-                                             }}
-                                             onClick={() => setSelectedStatus("APPROVED")}
-                                        >
-                                             <div className="text-light font-bold fs-5">APPROVED</div>
-                                             <div
-                                                  className="count fs-1 text-light fw-bolder"
-                                                  style={{ color: "white", textAlign: "left" }}
-                                             >
-                                                  {
-                                                       filterData().filter((item) => item.status === "APPROVED")
-                                                            .length
-                                                  }
-                                             </div>
-                                        </button>
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-                                        <button
-                                             className="col shadow p-3 m-3 rounded"
-                                             style={{
-                                                  background:
-                                                       "linear-gradient(27deg ,red, #FF719A)",
-                                                  textAlign: "left",
-                                             }}
-                                             onClick={() => setSelectedStatus("REJECTED")}
-                                        >
-                                             <div className="text-light font-bold fs-5">REJECTED</div>
-                                             <div className="count fs-1 text-light fw-bolder">
-                                                  {
-                                                       filterData().filter((item) => item.status === "REJECTED")
-                                                            .length
-                                                  }
-                                             </div>
-                                        </button>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-                    <div>
-                         <CRow className="mb-3">
-                              <CCol sm={4}>
-                                   <CFormInput
-                                        style={{ fontSize: '0.9rem' }}
-                                        type="text"
-                                        placeholder="Search..."
-                                        onChange={(e) => setSearch(e.target.value)}
-                                   />
-                              </CCol>
-                              <CCol sm={3}>
-                                   <CFormSelect
-                                        onChange={(e) => setSelectedStatus(e.target.value)}
-                                        value={selectedStatus}
-                                        style={{ fontSize: '0.9rem' }}
-                                        options={[
-                                             { value: "All", label: "All" },
-                                             { value: "INITIATED", label: "Initiated" },
-                                             { value: "APPROVED", label: "Approved" },
-                                             { value: "REJECTED", label: "Rejected" },
-                                             { value: "REINITIATED", label: "Reinitiated" },
-                                             { value: "DROPPED", label: "Dropped" },
-                                        ]}
-                                   />
-                              </CCol>
-                              <CCol sm={2}></CCol>
-                              <CCol sm={3}>
-                                   <div className="d-flex justify-content-end">
-                                        <CButton
-                                             className=" text-white"
-                                             style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                                             onClick={() => setAddModal(true)}
-                                        >
-                                             Add Sample Storage
-                                        </CButton>
-                                   </div>
-                              </CCol>
-                         </CRow>
-                    </div>
-                    <div
-                         className=" rounded bg-white"
-                         style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                    >          <CTable align="middle" responsive className="mb-0 rounded-lg table-responsive">
-                              <CTableHead>
-                                   <CTableRow>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" className="text-center"><input type="checkbox" /></CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">S NO.</CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Product Name</CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Chamber ID</CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actual Quantity</CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Available Quantity</CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Protocol Type</CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Status</CTableHeaderCell>
-                                        <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
-                                   </CTableRow>
-                              </CTableHead>
-                              <CTableBody>
-                                   {filterData()
-                                        .slice(startIndex, endIndex)
-                                        .filter((item) => {
-                                             return search.toLowerCase() === ""
-                                                  ? item
-                                                  : item.productName.toLowerCase().includes(search.toLowerCase()) ||
-                                                  item.chamberId.toLowerCase().includes(search.toLowerCase()) ||
-                                                  item.protocolId.toLowerCase().includes(search.toLowerCase())
-                                        })
-                                        .map((item, index) => (
-                                             <CTableRow key={item.id}>
-                                                  <CTableHeaderCell scope="row" className="text-center">
-                                                       <input type="checkbox" />
-                                                  </CTableHeaderCell>
-                                                  <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                                                  <CTableDataCell>{item.productName}</CTableDataCell>
-                                                  <CTableDataCell>{item.chamberId}</CTableDataCell>
-                                                  <CTableDataCell>{item.actualQty}</CTableDataCell>
-                                                  <CTableDataCell>{item.availableQty}</CTableDataCell>
-                                                  <CTableDataCell>{item.protocolId}</CTableDataCell>
-                                                  <CTableDataCell>
-                                                       <button
-                                                            className={`py-1 px-3 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "INITIATED"
-                                                                 ? "blue-700"
-                                                                 : item.status === "APPROVED"
-                                                                      ? "green-700"
-                                                                      : item.status === "REJECTED"
-                                                                           ? "red-700"
-                                                                           : item.status === "REINITIATED"
-                                                                                ? "yellow-500"
-                                                                                : item.status === "DROPPED"
-                                                                                     ? "purple-700"
-                                                                                     : "white"
-                                                                 }`} style={{ fontSize: '0.6rem' }}
-                                                       >
-                                                            {item.status}
-                                                       </button>
-                                                  </CTableDataCell>
-                                                  <CTableDataCell>
-                                                       <div className="d-flex gap-3">
-                                                            <Link to="/stability/sampleStorageDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                                                            <div
-                                                                 className="cursor-pointer"
-                                                                 onClick={() => setAddModal(true)}
-                                                            >
-                                                                 <FontAwesomeIcon icon={faPenToSquare} />
-                                                            </div>
-                                                            <div className="cursor-pointer" onClick={() => handleDeleteClick(item.id)}>
-                                                                 <FontAwesomeIcon icon={faTrashCan} />
-                                                            </div>
-                                                       </div>
-                                                  </CTableDataCell>
-                                             </CTableRow>
-                                        ))}
-                              </CTableBody>
-                         </CTable>
-                    </div>
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-                    <div className="d-flex justify-content-end align-items-center mt-4">
-                         <div className="pagination">
-                              <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                   &lt;&lt;
-                              </button>
-                              <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                              <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                                   &gt;&gt;
-                              </button>
-                         </div>
-                    </div>
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
+  };
 
-               </div>
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      productName: item["Product Name"] || "",
+      chamberID: item["Chamber ID"] || "",
+      actualQuantity: item["Actual Quantity"] || "",
+      availableQuantity: item["Available Quantity"] || "",
+      protocolType: item["Protocol Type"] || "",
+      status: item["Status"] || "",
+    }));
 
-               {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-               {deleteModal && (
-                    <DeleteModal
-                         visible={deleteModal}
-                         closeModal={() => setDeleteModal(false)}
-                         confirmDelete={handleDeleteConfirm}
-                         handleDelete={handleDeleteClick}
-                    />
-               )}
-          </>
-     )
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [rows, setRows] = useState([]);
+    const [specificationsID, setSpecificationsID] = useState("");
+    const [protocolID, setProtocolID] = useState("");
+    const [storageCondition, setStorageCondition] = useState("");
+    const [chamberID, setChamberID] = useState("");
+    const [actualStorageQuantity, setActualStorageQuantity] = useState("");
+    const [availableStorageQuantity, setAvailableStorageQuantity] =
+      useState("");
+    const [numberOfStoragePosition, setNumberOfStoragePosition] = useState("");
+    const [chamberDescription, setChamberDescription] = useState("");
+    const [chamberLocation, setChamberLocation] = useState("");
+
+    const handleAddRow = () => {
+      const newRow = {
+        id: rows.length + 1,
+        rackNo: "",
+        shelfNo: "",
+        position: "",
+        quantity: "",
+        remarks: "",
+      };
+      setRows([...rows, newRow]);
+    };
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+    const handleAdd = () => {
+      const newCondition = {
+        productName: "Product",
+        chamberID: chamberID,
+        actualQuantity: actualStorageQuantity,
+        availableQuantity: availableStorageQuantity,
+        protocolType: "protocol-X",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
+
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Sample Storage</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Specification ID"
+              placeholder="Select... "
+              options={[
+                "",
+                { label: "HCL10132%" },
+                { label: "HOS 234" },
+                { label: "CHPOIL001" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={specificationsID}
+              onChange={(e) => setSpecificationsID(e.target.value)}
+            />
+            <CFormInput
+              type="text"
+              label="Product/Material Name"
+              placeholder="Testamine "
+              disabled
+            />
+            <CFormSelect
+              type="text"
+              label="Protocol ID"
+              placeholder="select... "
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={protocolID}
+              onChange={(e) => setProtocolID(e.target.value)}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Storage Conditions"
+              placeholder="select... "
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={storageCondition}
+              onChange={(e) => setStorageCondition(e.target.value)}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Chamber ID"
+              placeholder="select... "
+              value={chamberID}
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              onChange={(e) => setChamberID(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label=" Actual Storage Quantity"
+              placeholder="Actual Storage Quantity "
+              value={actualStorageQuantity}
+              onChange={(e) => setActualStorageQuantity(e.target.value)}
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Available Storage Quantity"
+              placeholder="Available Storage Quantity "
+              value={availableStorageQuantity}
+              onChange={(e) => setAvailableStorageQuantity(e.target.value)}
+            />
+
+            <div className="gap-4">
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Number Of Storage Positions"
+                placeholder="Number Of Positions"
+                value={numberOfStoragePosition}
+                onChange={(e) => setNumberOfStoragePosition(e.target.value)}
+              />
+              <CButton
+                className="bg-primary text-white mb-4"
+                onClick={handleAddRow}
+              >
+                Add Rows
+              </CButton>
+            </div>
+            {rows.length > 0 && (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>S No.</th>
+                    <th>Rack No.</th>
+                    <th>Shelf No.</th>
+                    <th>Position</th>
+                    <th>Quantity (kg)</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, index) => (
+                    <tr key={row.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <select
+                          value={row.rackNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].rackNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          {/* Populate options as needed */}
+                          <option value="">Select..</option>
+                          <option value="rack1">Rack 1</option>
+                          <option value="rack2">Rack 2</option>
+                          {/* Add more options */}
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Shelfs</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Positions</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="border-1 border-gray-500"
+                          value={row.quantity}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].quantity = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={row.remarks}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].remarks = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Description"
+              placeholder=" Chamber Description"
+              value={chamberDescription}
+              onChange={(e) => setChamberDescription(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Location"
+              placeholder=" Chamber Location"
+              value={chamberLocation}
+              onChange={(e) => setChamberLocation(e.target.value)}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleAdd}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [rows, setRows] = useState([]);
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    const handleAddRow = () => {
+      const newRow = {
+        id: rows.length + 1,
+        rackNo: "",
+        shelfNo: "",
+        position: "",
+        quantity: "",
+        remarks: "",
+      };
+      setRows([...rows, newRow]);
+    };
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Sample Storage</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Specification ID"
+              placeholder="Select... "
+              name="specificationsID"
+              options={[
+                "",
+                { label: "HCL10132%" },
+                { label: "HOS 234" },
+                { label: "CHPOIL001" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={formData?.specificationsID || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Product/Material Name"
+              placeholder="Testamine "
+              disabled
+            />
+            <CFormSelect
+              type="text"
+              label="Protocol ID"
+              placeholder="select... "
+              name="protocolID"
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={formData?.protocolID || ""}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Storage Conditions"
+              placeholder="select... "
+              name="storageCondition"
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={formData?.storageCondition || ""}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Chamber ID"
+              placeholder="select... "
+              name="chamberID"
+              value={formData?.chamberID || ""}
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              onChange={(e) => setChamberID(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label=" Actual Storage Quantity"
+              placeholder="Actual Storage Quantity "
+              value={formData?.actualQuantity || ""}
+              onChange={handleChange}
+              name="actualQuantity"
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Available Storage Quantity"
+              placeholder="Available Storage Quantity "
+              value={formData?.availableQuantity || ""}
+              onChange={handleChange}
+              name="availableQuantity"
+            />
+
+            <div className="gap-4">
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Number Of Storage Positions"
+                placeholder="Number Of Positions"
+                value={formData?.numberOfStoragePosition || ""}
+                onChange={handleChange}
+                name="numberOfStoragePosition"
+              />
+              <CButton
+                className="bg-primary text-white mb-4"
+                onClick={handleAddRow}
+              >
+                Add Rows
+              </CButton>
+            </div>
+            {rows.length > 0 && (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>S No.</th>
+                    <th>Rack No.</th>
+                    <th>Shelf No.</th>
+                    <th>Position</th>
+                    <th>Quantity (kg)</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, index) => (
+                    <tr key={row.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <select
+                          value={row.rackNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].rackNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          {/* Populate options as needed */}
+                          <option value="">Select..</option>
+                          <option value="rack1">Rack 1</option>
+                          <option value="rack2">Rack 2</option>
+                          {/* Add more options */}
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Shelfs</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Positions</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="border-1 border-gray-500"
+                          value={row.quantity}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].quantity = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={row.remarks}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].remarks = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Description"
+              placeholder=" Chamber Description"
+              value={formData?.chamberDescription || ""}
+              onChange={handleChange}
+              name="chamberDescription"
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Location"
+              placeholder=" Chamber Location"
+              value={formData?.chamberLocation || ""}
+              onChange={handleChange}
+              name="chamberLocation"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Update
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Sample Storage</h1>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
+          />
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
+            color="blue"
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
+          />
+        </div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Storage.pdf" title="Sample Storage Data" />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Sample Storage"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
+        />
+
+        {isModalOpen && (
+          <StatusModal
+            visible={isModalOpen}
+            closeModal={closeModal}
+            onAdd={addNewStorageCondition}
+          />
+        )}
+
+        {isModalsOpen && (
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
+  );
 }
 
-const StatusModal = (_props) => {
-     return (
-          <>
-
-               <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-                    <CModalHeader>
-                         <CModalTitle>Add Sample Storage</CModalTitle>
-                    </CModalHeader>
-                    <CModalBody>
-
-                         <CFormSelect
-                              className="mb-3"
-                              type="select"
-                              label="Specification ID"
-                              placeholder="Select... "
-                              options={[
-                                   "",
-                                   { label: "HCL10132%" },
-                                   { label: "HOS 234" },
-                                   { label: "CHPOIL001" },
-                                   { label: "MB-PM-001/01" },
-                                   { label: "RPS-TSLV-00" },
-                                   { label: "rest0001" },
-                              ]}
-                         />
-                         <CFormInput
-                              type="text"
-                              label="Product/Material Name"
-                              placeholder="Testamine "
-                              disabled
-                         />
-                         <CFormSelect
-                              type="text"
-                              label="Protocol ID"
-                              placeholder="select... "
-                              options={[
-                                   "select...",
-                                   { label: "asdf3453" },
-                                   { label: "001" },
-                                   { label: "STP132432" },
-                                   { label: "MB-PM-001/01" },
-                                   { label: "RPS-TSLV-00" },
-                                   { label: "rest0001" },
-                              ]}
-                         />
-                         <CFormSelect
-                              className="mb-3"
-                              type="select"
-                              label="Storage Conditions"
-                              placeholder="select... "
-                              options={[
-                                   "select...",
-                                   { label: "asdf3453" },
-                                   { label: "001" },
-                                   { label: "STP132432" },
-                                   { label: "MB-PM-001/01" },
-                                   { label: "RPS-TSLV-00" },
-                                   { label: "rest0001" },
-                              ]}
-                         />
-                         <CFormSelect
-                              className="mb-3"
-                              type="select"
-                              label="Chamber ID"
-                              placeholder="select... "
-                         />
-                         <CFormInput
-                              className="mb-3"
-                              type="text"
-                              label=" Actual Storage Quantity"
-                              placeholder="Actual Storage Quantity "
-                         />
-
-                         <CFormInput
-                              className="mb-3"
-                              type="text"
-                              label="Available Storage Quantity"
-                              placeholder="Available Storage Quantity "
-                         />
-
-                         <CFormInput
-                              className="mb-3"
-                              type="text"
-                              label="Number Of Storage Positions"
-                              placeholder="Number Of Positions"
-                         />
-                         <CFormInput
-                              className="mb-3"
-                              type="text"
-                              label="Chamber Description"
-                              placeholder=" Chamber Description"
-                         />
-                         <CFormInput
-                              className="mb-3"
-                              type="text"
-                              label="Chamber Location"
-                              placeholder=" Chamber Location"
-                         />
-
-                    </CModalBody>
-                    <CModalFooter>
-                         <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                         <CButton className="bg-info text-white">Submit</CButton>
-                    </CModalFooter>
-               </CModal>
-
-          </>
-     )
-}
-
-const DeleteModal = (_props) => {
-     return (
-          <CModal
-               alignment="center"
-               visible={_props.visible}
-               onClose={_props.closeModal}
-               size="lg"
-          >
-               <CModalHeader>
-                    <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-                         Delete Instrument Registration
-                    </CModalTitle>
-               </CModalHeader>
-               <div
-                    className="modal-body"
-                    style={{
-                         fontSize: "1.2rem",
-                         fontWeight: "500",
-                         lineHeight: "1.5",
-                         marginBottom: "1rem",
-                         columnGap: "0px",
-                         border: "0px !important",
-                    }}
-               >
-                    <p>Are you sure you want to delete this { }?</p>
-               </div>
-               <CModalFooter>
-                    <CButton
-                         color="secondary"
-                         onClick={_props.closeModal}
-                         style={{
-                              marginRight: "0.5rem",
-                              fontWeight: "500",
-                         }}
-                    >
-                         Cancel
-                    </CButton>
-                    <CButton
-                         color="danger"
-                         onClick={_props.confirmDelete}
-                         style={{
-                              fontWeight: "500",
-                              color: "white",
-                         }}
-                    >
-                         Delete
-                    </CButton>
-               </CModalFooter>
-          </CModal>
-     );
-};
-
-export default SampleStorage
+export default SampleStorage;

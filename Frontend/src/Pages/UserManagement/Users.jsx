@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
@@ -13,384 +13,448 @@ import {
   CModalHeader,
   CModalTitle,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
 } from "@coreui/react";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
+
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    userId: "USR001",
+    user: "User 1",
+    role: "Role 1",
+    department: "Department 1",
+    joiningDate: "2024-01-01",
+    attachment: "attachment",
+    status: "Active",
+    addedBy: "Admin 1",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    userId: "USR002",
+    user: "User 2",
+    role: "Role 2",
+    department: "Department 2",
+    joiningDate: "2024-01-02",
+    attachment: "attachment",
+    status: "Inactive",
+    addedBy: "Admin 2",
+  },
+  {
+    checkbox: false,
+    sno: 3,
+    userId: "USR003",
+    user: "User 3",
+    role: "Role 3",
+    department: "Department 3",
+    joiningDate: "2024-01-03",
+    attachment: "attachment",
+    status: "Active",
+    addedBy: "Admin 3",
+  },
+];
 
 const Users = () => {
-  const [addModal, setAddModal] = useState(false);
+  const [data, setData] = useState(initialData);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const pageSize = 5; // Number of items per page
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const badgeStyle = { background: "green", color: "white", width: "110px" };
-  const badgeStyle2 = { background: " red", color: "white", width: "110px" };
-
-  const [employees, setEmployees] = useState([
-    {
-      id: "USER-022024-000001",
-      user: "John Doe",
-      role: "admin",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000002",
-      user: "Jane Smith",
-      role: "admin",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000003",
-      user: "John Doe",
-      role: "admin",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000004",
-      user: "Jane Smith",
-      role: "qa",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000005",
-      user: "John Doe",
-      role: "qa",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000006",
-      user: "Jane Smith",
-      role: "qc",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000007",
-      user: "John Doe",
-      role: "analyst",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-000008",
-      user: "Jane Smith",
-      role: "mgr",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-    {
-      id: "USER-022024-000009",
-      user: "John Doe",
-      role: "si",
-      departments: "QC",
-      joiningDate: "2024-05-15",
-      addedBy: "admin",
-      status: "Active",
-    },
-    {
-      id: "USER-022024-0000010",
-      user: "Jane Smith",
-      role: "qa",
-      departments: "QC",
-      joiningDate: "2024-05-16",
-      addedBy: "admin",
-      status: "Inactive",
-    },
-  ]);
-
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.status.toUpperCase() === selectedStatus.toUpperCase()
-  );
-
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, filteredEmployees.length);
-
-  // Function to render table rows for current page
-  const renderRows = () => {
-    return filteredEmployees
-      .slice(startIndex, endIndex)
-      .map((employee, index) => (
-        <tr key={startIndex + index}>
-          <td>{startIndex + index + 1}</td>
-          <td>{employee.id}</td>
-          <td>{employee.user}</td>
-          <td>{employee.role}</td>
-          <td>{employee.departments}</td>
-          <td>{employee.joiningDate}</td>
-          <td>
-            <button
-              style={{
-                background: employee.status === "Active" ? "green" : "red",
-                color: "white",
-                width:'85%',
-                fontSize:'0.8rem',
-                padding:'2px 7px',
-                borderRadius:'7px'
-              }}
-              
-            >
-              {employee.status}
-            </button>
-          </td>
-
-          <td>{employee.addedBy}</td>
-          <td>
-            <div className="d-flex gap-3">
-              <div className="cursor-pointer" onClick={() => setAddModal(true)}>
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </div>
-              <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </div>
-            </div>
-          </td>
-        </tr>
-      ));
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [lastStatus, setLastStatus] = useState("Inactive");
+  const [editModalData, setEditModalData] = useState(null);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
   };
 
-  // Function to handle pagination
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(filteredEmployees.length / pageSize));
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
   };
 
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
+  const filteredData = data.filter((row) => {
+    return (
+      row.user.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "user ID", accessor: "userId" },
+    { header: "User", accessor: "user" },
+    { header: "Role", accessor: "role" },
+    { header: "Department", accessor: "department" },
+    { header: "Joining Date", accessor: "joiningDate" },
+    { header: "Status", accessor: "status" },
+    { header: "Added By", accessor: "addedBy" },
+    { header: "attachment", accessor: "attachment" },
+    {
+      header: "Actions",
+      accessor: "action",
+    },
+  ];
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      userId: item["User Id"] || "",
+      user: item["User"] || "",
+      role: item["Role"] || "",
+      department: item["Department"] || "",
+      joiningDate: item["Joining Date"] || "",
+      reviewDate: item["Review Date"] || "",
+      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
+      addedBy: item["Added By"] || "",
+      status: item["Status"] || "",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+    setIsModalsOpen(false); // Update data state with parsed Excel data
+  };
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+    setData((prevData)=>[
+      ...prevData,
+      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+    ])
+    setLastStatus(nextStatus)
+    setIsModalOpen(false);
+  }
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [name, setName] = useState("");
+    const [contact, setContact] = useState("");
+    const [email, setEmail] = useState("");
+    const [address, setAddress] = useState("");
+    const [plant, setPlant] = useState("");
+    const [department, setDepartment] = useState("");
+    const [role, setRole] = useState("");
+
+    const handleAdd = () => {
+      const newCondition = {
+        userId: "EMP00",
+        user: name,
+        role: role,
+        department: department,
+        addedBy: "Admin",
+        joiningDate: new Date().toISOString().split("T")[0],
+        attachment: "attachment",
+        action: [],
+        status: "Active",
+      };
+      onAdd(newCondition);
+      closeModal();
+    };
+    return (
+      <>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+          <CModalHeader>
+            <CModalTitle>Add User </CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput 
+            type="text"
+             label="User Name" 
+            placeholder="UserName " 
+            value={name}
+            onChange={(e) => setName(e.target.value)} 
+            />
+            <CFormInput
+              type="number"
+              label="Contact Number"
+              placeholder="+91 0000000000 "
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+            />
+            <CFormInput
+              type="email"
+              label="Gmail Address"
+              placeholder=" sample@gmail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <CFormInput
+             type="text" 
+            label="Address"
+             placeholder="Address "
+              value={address} 
+            onChange={(e) => setAddress(e.target.value)} />
+
+            <CFormSelect
+              type="select"
+              label="Plant"
+              placeholder="Select... "
+              value={plant}
+              onChange={(e) => setPlant(e.target.value)}
+              options={[
+                "Select...",
+                { label: "Master", value: "Master" },
+                { label: "win_Master", value: "win_Master" },
+                { label: "plant3", value: "plant3" },
+                { label: "PlantDemo4", value: "PlantDemo4" },
+              ]}
+            />
+            <CFormSelect
+              type="select"
+              label="Department"
+              placeholder="Select Department"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              options={[
+                "Select Department",
+                { label: "Admin", value: "Admin" },
+                { label: "Quality Assurance", value: "Quality Assurance" },
+                { label: "Quality Check", value: "Quality Check" },
+                { label: "Store", value: "Store" },
+              ]}
+            />
+            <CFormSelect
+              type="select"
+              label="Role"
+              placeholder="Select Role "
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              options={[
+                "Select Role",
+                { label: "No Options", value: "No Options" },
+              ]}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+          <CModalHeader>
+            <CModalTitle>Add User </CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput 
+            type="text"
+             label="User Name" 
+            placeholder="UserName " 
+            value={formData?. user||""}
+            onChange={handleChange} 
+            name="user"
+            />
+            <CFormInput
+              type="number"
+              label="Contact Number"
+              placeholder="+91 0000000000 "
+              value={formData?.contact||""}
+              onChange={handleChange}
+              name="contact"
+            />
+            <CFormInput
+              type="email"
+              label="Gmail Address"
+              placeholder=" sample@gmail.com"
+              value={formData?.email||""}
+              onChange={handleChange}
+              name="email"
+            />
+
+            <CFormInput
+             type="text" 
+            label="Address"
+             placeholder="Address "
+              value={formData?.address||""} 
+            onChange={handleChange}
+            name="address" 
+             />
+
+            <CFormSelect
+              type="select"
+              label="Plant"
+              placeholder="Select... "
+              value={formData?.plant||""}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Master", value: "Master" },
+                { label: "win_Master", value: "win_Master" },
+                { label: "plant3", value: "plant3" },
+                { label: "PlantDemo4", value: "PlantDemo4" },
+              ]}
+              name="plant"
+            />
+            <CFormSelect
+              type="select"
+              label="Department"
+              placeholder="Select Department"
+              value={formData?.department||""}
+              onChange={handleChange}
+              options={[
+                "Select Department",
+                { label: "Admin", value: "Admin" },
+                { label: "Quality Assurance", value: "Quality Assurance" },
+                { label: "Quality Check", value: "Quality Check" },
+                { label: "Store", value: "Store" },
+              ]}
+              name="department"
+            />
+            <CFormSelect
+              type="select"
+              label="Role"
+              placeholder="Select Role "
+              value={formData?.role||""}
+              onChange={handleChange}
+              options={[
+                "Select Role",
+                { label: "No Options", value: "No Options" },
+              ]}
+              name="role"
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
 
   return (
     <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">User Management/Users</h4>
-        </div>
-        <CRow className="mt-5 mb-3">
-                         <CCol sm={3}>
-                        <CFormSelect
-                            onChange={(e) => {
-                                setSelectedStatus(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                            value={selectedStatus}
-                            style={{fontSize:'0.9rem'}}
-                        >
-                            <option value="All">All</option>
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
-                        </CFormSelect>
-                      </CCol>
-                      <CCol sm={9}>
-                    <div className="d-flex justify-content-end">
-                        <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add User</CButton>
-                    </div>
-                    </CCol>
-                    </CRow>
-    
-
-      {/* Employee table */}
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-       
-        <table className="table   ">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}}>S.No.</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>User ID</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>User</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Role</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>
-                Departments
-              </th>
-              <th style={{ background: "#5D76A9", color: "white"}}>
-                Joining Date
-              </th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}}>
-                Added By
-              </th>
-              <th style={{ background: "#5D76A9", color: "white"}}>Action</th>
-            </tr>
-          </thead>
-          <tbody>{renderRows()}</tbody>
-        </table>
+      <div className="main-head">
+        <h4 className="fw-bold">User Management/Users</h4>
       </div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="User.pdf" title="User Management Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add User" color="blue" onClick={openModal} />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onDelete={handleDelete}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        openEditModal={openEditModal}
+      />
 
-      {/* Pagination */}
-
-     
-      <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-      {addModal && (
-        <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />
+      {isModalOpen && (
+        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
       )}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+        {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </div>
-  );
-};
-
-const StatusModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Add User </CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput type="text" label="User Name" placeholder="UserName " />
-          <CFormInput
-            type="number"
-            label="Contact Number"
-            placeholder="+91 0000000000 "
-          />
-          <CFormInput
-            type="email"
-            label="Gmail Address"
-            placeholder=" sample@gmail.com"
-          />
-
-          <CFormInput type="text" label="Address" placeholder="Address " />
-
-          <CFormSelect
-            type="select"
-            label="Plant"
-            placeholder="Select... "
-            options={[
-              "Select...",
-              { label: "Master", value: "Master" },
-              { label: "win_Master", value: "win_Master" },
-              { label: "plant3", value: "plant3" },
-              { label: "PlantDemo4", value: "PlantDemo4" },
-            ]}
-          />
-          <CFormSelect
-            type="select"
-            label="Department"
-            placeholder="Select Department"
-            options={[
-              "Select Department",
-              { label: "Admin", value: "Admin" },
-              { label: "Quality Assurance", value: "Quality Assurance" },
-              { label: "Quality Check", value: "Quality Check" },
-              { label: "Store", value: "Store" },
-            ]}
-          />
-          <CFormSelect
-            type="select"
-            label="Role"
-            placeholder="Select Role "
-            options={[
-              "Select Role",
-              { label: "No Options", value: "No Options" },
-            ]}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={_props.closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary">Submit</CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
-
-const DeleteModal = (_props) => {
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={_props.visible}
-        onClose={_props.closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Delete User</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Are you sure you want to delete this user { } ?</p>
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={_props.closeModal}
-            style={{
-              marginRight: "0.5rem",
-              fontWeight: "500",
-            }}
-          >
-            Cancel
-          </CButton>
-          <CButton
-            color="danger"
-            onClick={_props.confirmDelete}
-            style={{
-              fontWeight: "500",
-              color: "white",
-            }}
-          >
-            Delete
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
   );
 };
 

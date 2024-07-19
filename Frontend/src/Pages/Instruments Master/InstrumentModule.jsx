@@ -1,347 +1,466 @@
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import InstrumentModuleModal from "../Modals/InstrumentModuleModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
-function InstrumentModule() {
-    const pageSize = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-    const [addModal, setAddModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
-    const [selectedStatus, setSelectedStatus] = useState("All");
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    Category: "Product 1",
+    Module: "Description 1",
+    ModuleId: "MOD001",
+    Make: "Brand A",
+    Model: "Model X",
+    ManufacturerNo: "MFG12345",
+    SuppliedBy: "Supplier 1",
+    InstallOn: "2024-06-01",
+    ExpiresOn: "2025-06-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    Category: "Product 2",
+    Module: "Description 2",
+    ModuleId: "MOD002",
+    Make: "Brand B",
+    Model: "Model Y",
+    ManufacturerNo: "MFG67890",
+    SuppliedBy: "Supplier 2",
+    InstallOn: "2024-06-02",
+    ExpiresOn: "2025-06-02",
+    status: "Inactive",
+  },
+];
 
-    const [data, setData] = useState([
-        { id: 1, category: 'weighing balance', module: 'Weighing', moduleId: 'wl/wb/m/001', make: 'Chemi Line', model: 'N/A', serialNo: 'N/A', suppliedBy: 'RK', installedOn: 'May 31st 23', expiresOn: 'Nov 17th 24', status: 'Active' },
-        { id: 2, category: 'chromatography', module: 'Weighing', moduleId: 'wl/wb/m/002', make: 'Chemi Line', model: 'N/A', serialNo: 'N/A', suppliedBy: 'RK', installedOn: 'Oct 1st 23', expiresOn: 'June 12th 24', status: 'Active' },
-        { id: 3, category: 'pressure gauge', module: 'Pressure', moduleId: 'pg/pg/m/003', make: 'Gauge Line', model: 'Model A', serialNo: 'SN123', suppliedBy: 'LK', installedOn: 'Mar 15th 23', expiresOn: 'Aug 22nd 24', status: 'Inactive' },
-        { id: 4, category: 'ph meter', module: 'pH Measurement', moduleId: 'ph/ph/m/004', make: 'pH Line', model: 'Model B', serialNo: 'SN124', suppliedBy: 'MK', installedOn: 'Jan 10th 23', expiresOn: 'Sep 30th 24', status: 'Active' },
-        { id: 5, category: 'chromatography', module: 'Balance', moduleId: 'bl/bl/m/005', make: 'Balance Line', model: 'Model C', serialNo: 'SN125', suppliedBy: 'NK', installedOn: 'Feb 20th 23', expiresOn: 'Oct 15th 24', status: 'Inactive' },
-        { id: 6, category: 'scale', module: 'Scale', moduleId: 'sc/sc/m/006', make: 'Scale Line', model: 'Model D', serialNo: 'SN126', suppliedBy: 'OK', installedOn: 'Apr 25th 23', expiresOn: 'Dec 5th 24', status: 'Active' },
-        { id: 7, category: 'thermometer', module: 'Temperature', moduleId: 'th/th/m/007', make: 'Thermo Line', model: 'Model E', serialNo: 'SN127', suppliedBy: 'PK', installedOn: 'May 10th 23', expiresOn: 'Jan 25th 24', status: 'Inactive' },
-        { id: 8, category: 'hygrometer', module: 'Humidity', moduleId: 'hy/hy/m/008', make: 'Hygro Line', model: 'Model F', serialNo: 'SN128', suppliedBy: 'QK', installedOn: 'Jun 15th 23', expiresOn: 'Feb 20th 24', status: 'Active' },
-        { id: 9, category: 'barometer', module: 'Pressure', moduleId: 'ba/ba/m/009', make: 'Baro Line', model: 'Model G', serialNo: 'SN129', suppliedBy: 'RK', installedOn: 'Jul 25th 23', expiresOn: 'Mar 30th 24', status: 'Inactive' },
-        { id: 10, category: 'altimeter', module: 'Altitude', moduleId: 'al/al/m/010', make: 'Alti Line', model: 'Model H', serialNo: 'SN130', suppliedBy: 'SK', installedOn: 'Aug 30th 23', expiresOn: 'Apr 25th 24', status: 'Active' },
-    ]);
+const InstrumentModule = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
 
-    const startIndex = (currentPage - 1) * pageSize;
-    const filteredData = selectedStatus === 'All' ? data : data.filter(item => item.status === selectedStatus);
-    const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+  // *********************Edit ****************************
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
 
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
 
-    const handleDeleteClick = (id) => {
-        setDeleteId(id);
-        setDeleteModal(true);
-    };
-
-    const handleDeleteConfirm = () => {
-        setData(data.filter((item) => item.id !== deleteId));
-        setDeleteModal(false);
-    };
-
-    return (
-        <>
-            <div className="m-5 mt-3">
-                <div className="main-head">
-                    <h4 className="fw-bold">Instrument Module</h4>
-                </div>
-                <div>
-                    <CRow className="mt-5 mb-3">
-                        <CCol sm={3}>
-                            <CFormSelect
-                                options={[{ label: "All" }, { label: "Active" }, { label: "Inactive" }]}
-                                onChange={(e) => setSelectedStatus(e.target.value)}
-                                value={selectedStatus} style={{ fontSize: '0.9rem' }}
-                            />
-                        </CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}></CCol>
-                        <CCol sm={3}>
-                            <div className="d-flex justify-content-end">
-                                <CButton
-                                    className=" text-white"
-                                    style={{ background: "#4B49B6", fontSize: '0.9rem' }}
-                                    onClick={() => setAddModal(true)}
-                                >
-                                    Add Module
-                                </CButton>
-                            </div>
-                        </CCol>
-                    </CRow>
-                </div>
-                <div
-                    className="rounded bg-white"
-                    style={{ fontFamily: 'sans-serif', fontSize: '0.9rem', boxShadow: '5px 5px 20px #5D76A9' }}
-                >
-                    <CTable className="mb-0 table table-responsive" >
-                        <CTableHead>
-                            <CTableRow>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >S NO.</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Category</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Module</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Module Id</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Make</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Model</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Manufacturer No.</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Supplied By</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Install On</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Expires On</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Status</CTableHeaderCell>
-                                <CTableHeaderCell
-                                    style={{ background: "#5D76A9", color: "white" }}
-                                    scope="col"
-                                >Actions</CTableHeaderCell>
-                            </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                            {filteredData.slice(startIndex, endIndex).map((item) => (
-                                <CTableRow key={item.id}>
-                                    <CTableDataCell>{item.id}</CTableDataCell>
-                                    <CTableDataCell>{item.category}</CTableDataCell>
-                                    <CTableDataCell>{item.module}</CTableDataCell>
-                                    <CTableDataCell>{item.moduleId}</CTableDataCell>
-                                    <CTableDataCell>{item.make}</CTableDataCell>
-                                    <CTableDataCell>{item.model}</CTableDataCell>
-                                    <CTableDataCell>{item.serialNo}</CTableDataCell>
-                                    <CTableDataCell>{item.suppliedBy}</CTableDataCell>
-                                    <CTableDataCell>{item.installedOn}</CTableDataCell>
-                                    <CTableDataCell>{item.expiresOn}</CTableDataCell>
-                                    <CTableDataCell >
-                                        <button
-                                            className={`p-1 small w-100 rounded text-light d-flex justify-content-center align-items-center bg-${item.status === "Inactive"
-                                                ? "red-700"
-                                                : item.status === "Active"
-                                                    ? "green-700"
-                                                    : "white"
-                                                }`} style={{ fontSize: '0.6rem' }}
-                                        >
-                                            {item.status}
-                                        </button>
-                                    </CTableDataCell>
-                                    <CTableDataCell>
-                                        <div className="d-flex gap-3">
-                                            <Link to="/instrumentMaster/instrumentModuleDetails"><FontAwesomeIcon icon={faEye} /></Link>
-                                            <div className="cursor-pointer" onClick={() => setAddModal(true)}><FontAwesomeIcon icon={faPenToSquare} /></div>
-                                            <div className="cursor-pointer" onClick={() => handleDeleteClick(item.id)}>
-                                                <FontAwesomeIcon icon={faTrashCan} />
-                                            </div>
-                                        </div>
-                                    </CTableDataCell>
-                                </CTableRow>
-                            ))}
-                        </CTableBody>
-                    </CTable>
-                </div>
-
-                <div className="d-flex justify-content-end align-items-center mt-4">
-                    <div className="pagination">
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                            &lt;&lt;
-                        </button>
-                        <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                        <button style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-                            &gt;&gt;
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-            {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-            {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-        </>
-    )
-}
-
-const StatusModal = (_props) => {
-    return (
-        <>
-            <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-                <CModalHeader>
-                    <CModalTitle>Add Instrument Module</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Add information and Add Instrument Module</p>
-                    <CFormSelect
-                        className="mb-3"
-                        type="text"
-                        label="Instrument (Instrument ID)"
-                        placeholder="Select... "
-                        options={[
-                            "Select...",
-                            { label: "Weighing Balance 2" },
-                            { label: "Pressure Gauge" },
-                            { label: "ARZ ph Meter" },
-                            { label: "Ariz Balance" },
-                            { label: "Weighing Balance-1" },
-                            { label: "Weighing Balance" },
-                        ]}
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="Instruction Category"
-                        placeholder="Weighing Balance"
-                        disabled
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="Module"
-                        placeholder="Module"
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="Module ID"
-                        placeholder="Module ID"
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="Make"
-                        placeholder="Shimadu"
-                        disabled
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="Model"
-                        placeholder="Ser33"
-                        disabled
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="Manufacturer's Serial No."
-                        placeholder="adf3434"
-                        disabled
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="date"
-                        label="Installed On"
-                        placeholder="05/10/2024"
-                        disabled
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="date"
-                        label="Warranty Expires On"
-                        placeholder="05/05/2023"
-                        disabled
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="Supplied By"
-                        placeholder="VidyaGxP"
-                        disabled
-                    />
-                    <CFormInput
-                        className="mb-3"
-                        type="text"
-                        label="SOP No."
-                        placeholder="ASTM6453"
-                        disabled
-                    />
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-                    <CButton color="primary">Submit</CButton>
-                </CModalFooter>
-            </CModal>
-        </>
-    )
-}
-
-
-const DeleteModal = (_props) => {
-    return (
-        <CModal
-            alignment="center"
-            visible={_props.visible}
-            onClose={_props.closeModal}
-            size="lg"
-        >
-            <CModalHeader>
-                <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>
-                    Delete Instrument Module
-                </CModalTitle>
-            </CModalHeader>
-            <div
-                className="modal-body"
-                style={{
-                    fontSize: "1.2rem",
-                    fontWeight: "500",
-                    lineHeight: "1.5",
-                    marginBottom: "1rem",
-                    columnGap: "0px",
-                    border: "0px !important",
-                }}
-            >
-                <p>Are you sure you want to delete this instrument module { }?</p>
-            </div>
-            <CModalFooter>
-                <CButton
-                    color="secondary"
-                    onClick={_props.closeModal}
-                    style={{
-                        marginRight: "0.5rem",
-                        fontWeight: "500",
-                    }}
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="danger"
-                    onClick={_props.confirmDelete}
-                    style={{
-                        fontWeight: "500",
-                        color: "white",
-                    }}
-                >
-                    Delete
-                </CButton>
-            </CModalFooter>
-        </CModal>
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
     );
-};
+    setData(updatedList);
+    closeEditModal();
+  };
 
-export default InstrumentModule
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Instrument Module</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Add information and Add Instrument Module</p>
+          <CFormSelect
+            className="mb-3"
+            label="Instrument (Instrument ID)"
+            placeholder="Select..."
+            name="InstrumentId"
+            options={[
+              "Select...",
+              { label: "Weighing Balance 2" },
+              { label: "Pressure Gauge" },
+              { label: "ARZ ph Meter" },
+              { label: "Ariz Balance" },
+              { label: "Weighing Balance-1" },
+              { label: "Weighing Balance" },
+            ]}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Category"
+            placeholder="Category"
+            name="Category"
+            value={formData?.Category || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Module"
+            name="Module"
+            placeholder="Module"
+            value={formData?.Module || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Module ID"
+            name="ModuleId"
+            placeholder="Module ID"
+            value={formData?.ModuleId || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Make"
+            name="Make"
+            placeholder="Make"
+            value={formData?.Make || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Model"
+            name="Model"
+            placeholder="Ser33"
+            value={formData?.Model || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            name="ManufacturerNo"
+            label="Manufacturer's Serial No."
+            placeholder="adf3434"
+            value={formData?.ManufacturerNo || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Installed On"
+            name="InstallOn"
+            placeholder="05/10/2024"
+            value={formData?.InstallOn || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Warranty Expires On"
+            placeholder="05/05/2023"
+            name="ExpiresOn"
+            value={formData?.ExpiresOn || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Supplied By"
+            placeholder="VidyaGxP"
+            name="SuppliedBy"
+            value={formData?.SuppliedBy || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="SOP No."
+            name="SopNo"
+            placeholder="ASTM6453"
+            value={formData?.SopNo || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  // *********************Edit ****************************
+
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  useEffect(() => {
+    const counts = {
+      Active: 0,
+      Inactive: 0,
+    };
+
+    data.forEach((item) => {
+      if (item.status === "Active") counts.Active++;
+      else if (item.status === "Inactive") counts.Inactive++;
+    });
+  }, [data]);
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.Model.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Category", accessor: "Category" },
+    { header: "Module", accessor: "ModuleId" },
+    { header: "Make", accessor: "Make" },
+    { header: "Model", accessor: "Model" },
+    { header: "Manufacturer No.", accessor: "ManufacturerNo" },
+    { header: "Supplied By", accessor: "SuppliedBy" },
+    { header: "Install On", accessor: "InstallOn" },
+    { header: "Expires On", accessor: "ExpiresOn" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+            onClick={() => handleDelete(row)}
+          />
+        </>
+      ),
+    },
+  ];
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      Category: item["Category"] || "",
+      ModuleId: item["Module"] || "",
+      Make: item["Make"] || "",
+      Model: item["Model"] || "",
+      ManufacturerNo: item["Manufacturer No."] || "",
+      SuppliedBy: item["Supplied By"] || "",
+      InstallOn: item["Install On"] || "",
+      ExpiresOn: item["Expires On"] || "",
+      status: item["Status"] || "",
+    }));
+
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+    setIsModalsOpen(false); // Update data state with parsed Excel data
+  };
+
+  //********************************Fetch data from Modal and added to the new row**************************************************************** */
+  const handleModalSubmit = (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === newInstrument.sno ? newInstrument : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          Category: newInstrument.Category,
+          Module: newInstrument.Module,
+          ModuleId: newInstrument.ModuleId,
+          Make: newInstrument.Make,
+          Model: newInstrument.Model,
+          ManufacturerNo: newInstrument.ManufacturerNo,
+          InstallOn: currentDate,
+          ExpiresOn: newInstrument.ExpiresOn,
+          SuppliedBy: newInstrument.SuppliedBy,
+          SopNo: newInstrument.SopNo,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
+
+  //************************************************************************************************ */
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Instrument Module</h1>
+
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Instrument_Module.pdf" title="Instrument Module Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Instrument Category"
+            color="blue"
+            onClick={openModal}
+          />
+        </div>
+      </div>
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+      />
+      <InstrumentModuleModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
+      />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={() => setIsViewModalOpen(false)}
+          data={viewModalData}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </div>
+  );
+};
+export default InstrumentModule;

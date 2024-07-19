@@ -1,413 +1,324 @@
-import React, { useState } from "react";
-import 'react-toastify/dist/ReactToastify.css';
-import { FaArrowRight } from 'react-icons/fa';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { Link } from "react-router-dom";
-
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import React, { useState, useEffect } from "react";
+import Card from "../../components/ATM components/Card/Card";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CButton, CCol, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CRow, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import TestRegistrationModal from "../Modals/TestRegistrationModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
+const initialData = [
+  {
+    sno: 1,
+    checkbox: "",
+    specId: "HYO",
+    productName: "Sacubitril",
+    testName: "test",
+    testCode: "ARIP0000095",
+    method: "May 18th 24",
+    category: "Aug 18th 24",
+    testType: "APPROVED",
+    status: "APPROVED",
+  },
+  {
+    sno: 2,
+    checkbox: "",
+    specId: "XYZ",
+    productName: "Rivaroxaban",
+    testName: "Sample test",
+    testCode: "ABC123456",
+    method: "June 1st 24",
+    category: "Sep 1st 24",
+    testType: "PENDING",
+    status: "INITIATED",
+  },
+];
 
-export default function TestRegistrations() {
+const TestRegistration = () => {
+  const [data, setData] = useState(initialData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [cardCounts, setCardCounts] = useState({
+    Active: 0,
+    Inactive: 0,
+  });
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
+  useEffect(() => {
+    const counts = {
+      Active: 0,
+      Inactive: 0,
+    };
 
-  const [addModal, setAddModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState('All');
+    data.forEach((item) => {
+      if (item.status === "INITIATED") counts.INITIATED++;
+      else if (item.status === "REINITIATED") counts.REINITIATED++;
+      else if (item.status === "APPROVED") counts.APPROVED++;
+      else if (item.status === "DROPPED") counts.DROPPED++;
+      else if (item.status === "REJECTED") counts.REJECTED++;
+    });
 
-  const badgeStyle = { background: "gray", color: "white", width: "110px" };
-  const badgeStyle2 = { background: "#2A5298", color: "white", width: "110px" };
-  const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-  const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-  const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-  const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
+    setCardCounts(counts);
+  }, [data]);
 
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
 
-  const top100Films = [
-    { label: 'The Shawshank Redemption', year: 1994 },
-    { label: 'The Godfather', year: 1972 },
-    { label: 'The Godfather: Part II', year: 1974 },
-    { label: 'The Dark Knight', year: 2008 },
-    { label: '12 Angry Men', year: 1957 },
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+  const handleOpenModals = () => {
+    setIsModalsOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
+
+  const filteredData = data.filter((row) => {
+    return (
+      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
+  };
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      ScheduleCode: item["Schedule Code"] || "",
+      ScheduleDate: item["Schedule Date"] || "",
+      status: item["Status"] || "INITIATED",
+    }));
+
+    // Concatenate the updated data with existing data
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData); // Update data state with parsed Excel data
+
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
+    { header: "Sr.no.", accessor: "sno" },
+    { header: "Specification ID", accessor: "specId" },
+    { header: "Product Name", accessor: "productName" },
+    { header: "Test Name", accessor: "testName" },
+    { header: "Test Code", accessor: "testCode" },
+    { header: "Method", accessor: "method" },
+    { header: "Category", accessor: "category" },
+    { header: "Test type", accessor: "testType" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            key="delete"
+            className="cursor-pointer"
+          />
+        </>
+      ),
+    },
   ];
 
-  const pageSize = 5;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [employees, setEmployees] = useState([
-    { id: 1, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'APPROVED' },
-    { id: 2, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'INITIATED' },
-    { id: 3, user: 'CHPOIL', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'INITIATED' },
-    { id: 4, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'APPROVED' },
-    { id: 5, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'REINITIATED' },
-    { id: 6, user: 'PM-001', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'REJECTED' },
-    { id: 7, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'APPROVED' },
-    { id: 8, user: 'TSTvl', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'APPROVED' },
-    { id: 9, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'DROPPED' },
-    { id: 10, user: 'HYO', ProdName: 'Sacubitril', SpecificID: 'ARIP0000095', SpecificName: 'test', EffectFrom: 'May 18th 24', ReviewDate: 'Aug 18th 24', Status: 'DROPPED' },
-  ]);
-  const filteredEmployees = employees.filter(employee =>
-    selectedStatus === 'All' ? true : employee.Status.toUpperCase() === selectedStatus.toUpperCase()
-  );
-
-  
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, employees.length);
-
-  const renderRows = () => {
-    return filteredEmployees.slice(startIndex, endIndex).map((employee, index) => (
-      <tr key={startIndex + index}>
-        <td>{startIndex + index + 1}</td>
-        <td>{employee.user}</td>
-        <td>{employee.ProdName}</td>
-        <td>{employee.SpecificID}</td>
-        <td>{employee.SpecificName}</td>
-        <td>{employee.SpecificName}</td>
-        <td>{employee.ProdName}</td>
-        <td>{employee.ProdName}</td>
-        <td>
-        <button  
-                        className={`py-1 px-2 small w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-                          employee.Status === "INITIATED"
-                            ? "blue-700"
-                            : employee.Status === "APPROVED"
-                            ? "green-700"
-                            : employee.Status === "REJECTED"
-                            ? "red-700"
-                            : employee.Status === "REINITIATED"
-                            ? "yellow-500"
-                            : employee.Status === "DROPPED"
-                            ? "purple-700"
-                            : "white"
-                        }`} style={{fontSize:'0.6rem'}}
-                      >
-                        {employee.Status}
-                      </button>
-          </td>
-        <td>
-          <div className="d-flex gap-3">
-            <div>
-              <Link to="/approval/1321">
-                <FontAwesomeIcon icon={faEye} />
-              </Link>
-            </div>
-
-            <div
-              className="cursor-pointer"
-              onClick={() => setAddModal(true)}
-            >
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </div>
-            <div className="cursor-pointer" onClick={() => handleDeleteClick(employee.id)}>
-              <FontAwesomeIcon icon={faTrashCan} />
-            </div>
-
-          </div>
-
-        </td>
-      </tr>
-    ));
-  };
-  const nextPage = () => {
-    setCurrentPage(currentPage + 1);
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const prevPage = () => {
-    setCurrentPage(currentPage - 1);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const nextToLastPage = () => {
-    setCurrentPage(Math.ceil(employees.length / pageSize));
-  };
-  const handleDeleteClick = (id) => {
-    setDeleteId(id);
-    setDeleteModal(true);
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
-  const handleDeleteConfirm = () => {
-    setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== deleteId));
-    setDeleteModal(false);
-
+  const handleCardClick = (status) => {
+    setStatusFilter(status);
   };
 
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
+  };
 
   return (
-    <div className="m-5 mt-3">
-        <div className="main-head">
-        <h4 className="fw-bold">Test Registration</h4>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Test Registration</h1>
+
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+          <Dropdown
+            options={[
+              { value: "Select Type", label: "Select Type" },
+              { value: "raw-material", label: "Raw Material" },
+              { value: "hcl", label: "HCL" },
+              { value: "hydrochloric-acid", label: "Hydrochloric Acid" },
+              { value: "petrochemical", label: "Petrochemical" },
+              { value: "initiated-product", label: "Initiated Product" },
+              { value: "semi-finished", label: "Semi Finished" },
+              { value: "abcd", label: "ABCD" },
+              { value: "h2so4", label: "H2So4" },
+              { value: "att108", label: "ATT108" },
+              { value: "micro-media", label: "Micro Media" },
+              { value: "fg-templage", label: "FG Templage" },
+              { value: "water-type", label: "Water Type" },
+              { value: "sodium", label: "Sodium" },
+              { value: "test-sample-type", label: "Test Sample Type" },
+              {
+                value: "new-product-sample-type",
+                label: "New Product Sample Type",
+              },
+              { value: "packing-material", label: "Packing Material" },
+              { value: "raw-material-1", label: "Raw Material-1" },
+              { value: "finished-product", label: "Finished Product" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+          <Dropdown
+            options={[
+              { value: "Select Client", label: "Select Client" },
+              { value: "MIT Power", label: "MIT Power" },
+              { value: "LIMS", label: "LIMS" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />{" "}
+          <Dropdown
+            options={[
+              { value: "Select Specifications", label: "Select Specs" },
+              {
+                value:
+                  "RMS-TDL-01 - Tadalfil Raw material testing specification",
+                label:
+                  "RMS-TDL-01 - Tadalfil Raw material testing specification",
+              },
+              { value: "DR123 - Resinate02", label: "DR123 - Resinate02" },
+              { value: "DCU-1 - DCU-01", label: "DCU-1 - DCU-01" },
+              { value: "DS-02 - Salts2", label: "DS-02 - Salts2" },
+              {
+                value: "DS02 - Diclofenac Sodium-01",
+                label: "DS02 - Diclofenac Sodium-01",
+              },
+              { value: "DFA-1 - DFA-01", label: "DFA-1 - DFA-01" },
+              { value: "DS2 - DHS-1", label: "DS2 - DHS-1" },
+              { value: "DFD-1 - DFD-01", label: "DFD-1 - DFD-01" },
+              { value: "DVS-1 - DVS-01", label: "DVS-1 - DVS-01" },
+              { value: "MIR1 - Mirabegron1", label: "MIR1 - Mirabegron1" },
+              { value: "CLO-1 - CLO-01", label: "CLO-1 - CLO-01" },
+              { value: "ESZ123 - Eslica12", label: "ESZ123 - Eslica12" },
+              { value: "CTH-1 - CTH-01", label: "CTH-1 - CTH-01" },
+              { value: "HYDRO89 - HydrochL", label: "HYDRO89 - HydrochL" },
+              { value: "LEV2 - Levetiracetam", label: "LEV2 - Levetiracetam" },
+              { value: "CPZ-1 - CPZ-01", label: "CPZ-1 - CPZ-01" },
+              { value: "MM24 - M/M", label: "MM24 - M/M" },
+              { value: "CLB-1 - CBN-01", label: "CLB-1 - CBN-01" },
+              { value: "OM01 - Medoxomil", label: "OM01 - Medoxomil" },
+              {
+                value: "OX12 - Oxcarbazepine1",
+                label: "OX12 - Oxcarbazepine1",
+              },
+              { value: "P101 - Pirfenidone1", label: "P101 - Pirfenidone1" },
+              { value: "RAN124 - Ranolazine", label: "RAN124 - Ranolazine" },
+              { value: "RR12 - Rivaroxaban", label: "RR12 - Rivaroxaban" },
+              {
+                value: "R12 - SOP for Rosuvastatin",
+                label: "R12 - SOP for Rosuvastatin",
+              },
+              { value: "CBN-1 - CBN-01", label: "CBN-1 - CBN-01" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "INITIATED", label: "INITIATED" },
+              { value: "REINITIATED", label: "REINITIATED" },
+              { value: "APPROVED", label: "APPROVED" },
+              { value: "DROPPED", label: "DROPPED" },
+              { value: "REJECTED", label: "REJECTED" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
         </div>
-        <div >
-
-          <CRow className="d-flex justify-content-between mt-5 mb-3">
-            <CCol sm={3}>
-              <CFormSelect
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="">Select Type</option>
-                <option value="raw-material">Raw Material</option><option value="hcl">hcl</option>
-                <option value="hydrochloric-acid">Hydrochloric Acid</option><option value="petrochemical">Petrochemical</option><option value="initiated-product">Initiated Product</option><option value="semi-finished">Semi Finished</option><option value="abcd">ABCD</option><option value="h2so4">H2So4</option><option value="att108">ATT108</option><option value="micro-media">Micro Media </option><option value="fg-templage">FG Templage</option><option value="water-type">water type</option><option value="sodium">Sodium</option><option value="test-sample-type">test sample type</option><option value="new-product-sample-type">New Product Sample Type</option><option value="packing-material">Packing Material</option><option value="raw-material-1">Raw Material-1</option><option value="finished-product">Finished Product</option>
-
-              </CFormSelect>
-            </CCol>
-            <CCol sm={2}>
-              <CFormSelect
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="">Select Client</option>
-                <option value="mit-power">MIT Power</option>
-                <option value="ravi-kandala">Ravi Kandala</option>
-
-
-              </CFormSelect>
-            </CCol>
-            <CCol sm={2}>
-              <CFormSelect
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="">Select Specs</option>
-                <option value="RMS-TDL-01 - Tadalfil Raw material testing specification">RMS-TDL-01 - Tadalfil Raw material testing specification</option>
-                <option value="DR123 - Resinate02">DR123 - Resinate02</option>
-                <option value="DCU-1 - DCU-01">DCU-1 - DCU-01</option>
-                <option value="DS-02 - Salts2">DS-02 - Salts2</option>
-                <option value="DS02 - Diclofenac Sodium-01">DS02 - Diclofenac Sodium-01</option>
-                <option value="DFA-1 - DFA-01">DFA-1 - DFA-01</option>
-                <option value="">DS2 - DHS-1</option><option value="">DFD-1 - DFD-01</option>
-                <option value="">DVS-1 - DVS-01</option><option value="MIR1 - Mirabegron1">MIR1 - Mirabegron1</option>
-                <option value="">CLO-1 - CLO-01</option>
-                <option value="">ESZ123 - Eslica12</option>
-                <option value="">CTH-1 - CTH-01</option>
-                <option value="HYDRO89 - HydrochL">HYDRO89 - HydrochL</option>
-                <option value="LEV2 - Levetiracetam">LEV2 - Levetiracetam</option>
-                <option value="">CPZ-1 - CPZ-01</option>
-                <option value="">MM24 - M/M</option>
-                <option value="">CLB-1 - CBN-01</option>
-                <option value="OM01 - Medoxomil">OM01 - Medoxomil</option>
-                <option value="OX12 - Oxcarbazepine1">OX12 - Oxcarbazepine1</option>
-                <option value="P101 - Pirfenidone1">P101 - Pirfenidone1</option>
-                <option value="RAN124 - Ranolazine">RAN124 - Ranolazine</option>
-                <option value="RR12 - Rivaroxaban">RR12 - Rivaroxaban</option>
-                <option value="R12 - SOP for Rosuvastatin">R12 - SOP for Rosuvastatin</option>
-                <option value="">CBN-1 - CBN-01</option>
-
-
-              </CFormSelect>
-            </CCol>
-            <CCol sm={2}>
-              <CFormSelect
-                onChange={(e) => {
-                  setSelectedStatus(e.target.value);
-                  setCurrentPage(1);
-                }}
-                value={selectedStatus}
-                style={{fontSize:'0.9rem'}}
-              >
-                <option value="All">All</option>
-                <option value="Initiated">Initiated</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-                <option value="Reinitiated">Reinitiated</option>
-                <option value="Dropped">Dropped</option>
-              </CFormSelect>
-            </CCol>
-            <CCol sm={2}>
-              <div className="d-flex justify-content-end">
-                <CButton  style={{fontSize:'0.9rem'}} color="primary" onClick={() => setAddModal(true)}>Add Registration</CButton>
-              </div>
-            </CCol>
-
-          </CRow>
+        <div className="float-right flex gap-4">
+        <PDFDownload columns={columns} data={filteredData} fileName="Test_Registrations.pdf" title="Test Registration Data" />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
+            text="Add Registration"
+            color="blue"
+            onClick={openModal}
+          />
         </div>
-
-     
-
-            <div
-          className=" rounded bg-white"
-          style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-        >
-        <CTable align="middle" responsive className="mb-0    table-responsive">
-          <thead>
-            <tr>
-              <th style={{ background: "#5D76A9", color: "white"}} >Sr.no.</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Specification ID</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Product Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Test Name</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Test Code</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Method</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Category</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Test type</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Status</th>
-              <th style={{ background: "#5D76A9", color: "white"}} >Actions</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows()}
-          </tbody>
-        </CTable>
       </div>
-
-     <div className="d-flex justify-content-end align-items-center mt-4">
-                        <div className="pagination">
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-                                &lt;&lt;
-                            </button>
-                            <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-                            <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= employees.length}>
-                                &gt;&gt;
-                            </button>
-                        </div>
-                       
-                    </div>
-
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} />}
-      {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
-
+      <Table
+        columns={columns}
+        data={filteredData}
+        onCheckboxChange={handleCheckboxChange}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+      />
+      <TestRegistrationModal visible={isModalOpen} closeModal={closeModal} />
+      {isViewModalOpen && (
+        <ViewModal
+          visible={isViewModalOpen}
+          closeModal={closeViewModal}
+          data={viewModalData}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
     </div>
-
-  );
-}
-
-const StatusModal = (_props) => {
-  const top100Films = [
-    { label: "The Shawshank Redemption", year: 1994 },
-    { label: "The Godfather", year: 1972 },
-    { label: "The Godfather: Part II", year: 1974 },
-    { label: "The Dark Knight", year: 2008 },
-    { label: "12 Angry Men", year: 1957 },
-  ];
-
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
-      <CModalHeader>
-        <CModalTitle>Add Test Registration</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-
-        <p className="mb-3" >Add information Test Registration</p>
-
-        <label className="mb-3" htmlFor="">
-          Client
-        </label>
-        <Autocomplete
-          className="mb-3"
-          disablePortal
-          id="combo-box-demo"
-          options={top100Films}
-          renderInput={(params) => <TextField {...params} label="" />}
-        />
-
-        <label className="mb-3" htmlFor="">
-          Specification ID
-        </label>
-        <Autocomplete
-          className="mb-3"
-          disablePortal
-          id="combo-box-demo"
-          options={top100Films}
-          renderInput={(params) => <TextField {...params} label="" />}
-        />
-
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Product/Material Name"
-          placeholder="Product/Material Name"
-        />
-
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Test Name"
-          placeholder="Test Name"
-        />
-
-        <CFormInput
-          className='mb-3'
-          type="text"
-          label="Test Code"
-          placeholder="Test Code"
-        />
-
-
-        <CFormInput
-          className='mb-3'
-          type="date"
-          label="Method No."
-          placeholder="Method No."
-        />
-        <CFormSelect
-          type="select"
-          label="Test Category"
-
-          options={[
-            "Select Test Category",
-            { label: "Apperance", value: "Apperance" },
-
-          ]}
-        />
-        <CFormSelect
-          type="select"
-          label="Test Technique"
-
-          options={[
-            "Select Test Technique",
-            { label: "Default", value: "Default" },
-
-          ]}
-        />
-        <CFormSelect
-          type="select"
-          label="Test Type"
-
-          options={[
-            "Select Test Type",
-            { label: "Qualitative", value: "Qualitative" },
-
-          ]}
-        />
-
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
-        <CButton color="primary">Submit</CButton>
-      </CModalFooter>
-    </CModal>
   );
 };
-
-const DeleteModal = (_props) => {
-  return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete Test Registration</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this Test Registration { }?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={_props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={_props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
+export default TestRegistration;

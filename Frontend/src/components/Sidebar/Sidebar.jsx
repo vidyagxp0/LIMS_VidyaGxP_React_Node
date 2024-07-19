@@ -6,7 +6,7 @@ import {
   cilColumns,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import React from 'react';
+import React from "react";
 import { TfiDashboard } from "react-icons/tfi";
 import { MdOutlineVerified } from "react-icons/md";
 import { AiOutlineContainer } from "react-icons/ai";
@@ -37,13 +37,7 @@ import { AiOutlineClose } from "react-icons/ai";
 
 import "./Sidebar.css";
 
-import {
-  CNavGroup,
-  CNavItem,
-  CSidebar,
-  CSidebarBrand,
-  CSidebarHeader,
-  CSidebarNav,
+import {CNavGroup,CNavItem,CSidebar,CSidebarBrand,CSidebarHeader,CSidebarNav,
 } from "@coreui/react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -231,7 +225,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             toggler={
               <>
                 <MdManageHistory />
-                <span style={{ marginLeft: "18px" }}>Stability</span>
+                <span style={{ marginLeft: "18px" }}>Stability Management</span>
               </>
             }
           >
@@ -283,7 +277,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Chamber Condition Mapping
               </CNavItem>
             </Link>
-            <Link to="/chamberTransfer">
+            {/* <Link to="/chamberTransfer">
               <CNavItem
                 href="#"
                 className={isActive("/chamberTransfer")}
@@ -294,7 +288,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Chamber Transfer
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/stabilityProtocol">
               <CNavItem
                 href="#"
@@ -458,6 +452,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                   <span className="nav-icon-bullet"></span>
                 </span>
                 Specifications
+              </CNavItem>
+            </Link>
+            <Link to="/Masters/SpecificationsTestProcedure">
+              <CNavItem
+                href="#"
+                className={isActive("/Masters/SpecificationsTestProcedure")}
+                style={{ ...isActive("/Masters/SpecificationsTestProcedure") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Specifications Test Procedure (STP)
               </CNavItem>
             </Link>
             <Link to="/Masters/TestCategories">
@@ -2222,6 +2228,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Worksheets
               </CNavItem>
             </Link>
+            <Link to="/settings/worksheetFields">
+              <CNavItem
+                href="#"
+                className={isActive(" /settings/worksheetFields")}
+                style={{ ...isActive("/settings/worksheetFields") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Worksheet Field
+              </CNavItem>
+            </Link>
             <Link to="/settings/groupName">
               <CNavItem
                 href="#"
@@ -2282,7 +2300,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Handling Symbol
               </CNavItem>
             </Link>
-            <Link to="/settings/accessRight">
+            {/* <Link to="/settings/accessRight">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/accessRight")}
@@ -2293,7 +2311,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Access Right
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/settings/projects">
               <CNavItem
                 href="#"
@@ -2414,7 +2432,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Service Provider
               </CNavItem>
             </Link>
-            <Link to="/settings/externalRegistration">
+            {/* <Link to="/settings/externalRegistration">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/externalRegistration")}
@@ -2425,7 +2443,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 External Registration
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/settings/testTechniques">
               <CNavItem
                 href="#"
@@ -2438,7 +2456,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Test Techniques
               </CNavItem>
             </Link>
-            <Link to="/settings/instrumentRegistration">
+            {/* <Link to="/settings/instrumentRegistration">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/instrumentRegistration")}
@@ -2449,7 +2467,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Instrument Regitration
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/settings/stability">
               <CNavItem
                 href="#"
@@ -2486,7 +2504,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Vendor
               </CNavItem>
             </Link>
-            <Link to="/settings/appConfiguration">
+            {/* <Link to="/settings/appConfiguration">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/appConfiguration")}
@@ -2497,7 +2515,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 App Configuration
               </CNavItem>
-            </Link>
+            </Link> */}
           </CNavGroup>
         </CSidebarNav>
       </CSidebar>
