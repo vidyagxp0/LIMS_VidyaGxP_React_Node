@@ -6,8 +6,7 @@
             "password": "root",
             "dialect": "mysql",
             "host": "localhost",
-            "JWT_SECRET": "NAHKNAHRAF",
-            "JWT_ADMIN_SECRET": "ADMINNAHKNAHRAF"
+            "JWT_SECRET": "NAHKNAHRAF"
     },
     "production": {
 

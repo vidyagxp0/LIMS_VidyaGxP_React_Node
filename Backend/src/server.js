@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const http = require("http");
 const cors = require("cors");
 const path = require("path");
+const userRoutes = require('./routes/user.routes');
 
 const app = express();
 const server = http.createServer(app);
@@ -20,6 +21,8 @@ app.use(
 app.get('/', (req, res) => {
     res.send('Welcome to Lims Vidyagxp')
 })
+
+app.use('/user', userRoutes);
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
