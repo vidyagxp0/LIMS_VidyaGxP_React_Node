@@ -13,77 +13,34 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ChemicalRegistrationModal from "../Modals/ChemicalRegistrationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    ChemicalRegeantName: "Chemical 1",
-    ChemicalRegeantUniqueCode: "code1",
+    name: "Chemical 1",
+    uniqueCode: "code1",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    ChemicalRegeantName: "Chemical 2",
-    ChemicalRegeantUniqueCode: "code2",
+    name: "Chemical 2",
+    uniqueCode: "code2",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    ChemicalRegeantName: "Chemical 3",
-    ChemicalRegeantUniqueCode: "code3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ChemicalRegeantName: "Chemical 4",
-    ChemicalRegeantUniqueCode: "code4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ChemicalRegeantName: "Chemical 5",
-    ChemicalRegeantUniqueCode: "code5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    ChemicalRegeantName: "Chemical 6",
-    ChemicalRegeantUniqueCode: "code6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    ChemicalRegeantName: "Chemical 7",
-    ChemicalRegeantUniqueCode: "code7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    ChemicalRegeantName: "Chemical 8",
-    ChemicalRegeantUniqueCode: "code8",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    ChemicalRegeantName: "Chemical 9",
-    ChemicalRegeantUniqueCode: "code9",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    ChemicalRegeantName: "Chemical 10",
-    ChemicalRegeantUniqueCode: "code10",
-    status: "REJECTED",
   },
 ];
 
@@ -123,6 +80,261 @@ const ChemicalRegitration = () => {
     setCardCounts(counts);
   }, [data]);
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Chemicals</CModalTitle>
+          </CModalHeader>
+          <p style={{ marginLeft: "13px" }}>Add information and Add Chemical</p>
+          <CModalBody>
+            <p style={{ fontWeight: "800", fontSize: "20px" }}>
+              Registration Initiation
+            </p>
+
+            <CFormInput
+              type="text"
+              label="Name"
+              placeholder="Name"
+              className="custom-placeholder mb-3"
+              name="name"
+              value={formData?.name || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="Unique Code"
+              placeholder="Unique Code"
+              className="custom-placeholder mb-3"
+              name="uniqueCode"
+              value={formData?.uniqueCode || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="CAS / CAT no."
+              placeholder="Enter CAS"
+              className="custom-placeholder mb-3"
+              name="casNumber"
+              value={formData?.casNumber || ""}
+              onChange={handleChange}
+            />
+
+            <CFormSelect
+              label="Category"
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              name="category"
+              value={formData?.category || ""}
+              onChange={handleChange}
+              options={[
+                { value: "", label: "Select Category" },
+                { value: "Organic Solvent", label: "Organic Solvent" },
+                {
+                  value: "Iron Chelator Substance",
+                  label: "Iron Chelator Substance",
+                },
+                { value: "Solvent", label: "Solvent" },
+                { value: "Organic Acid", label: "Organic Acid" },
+                { value: "Polymers", label: "Polymers" },
+                {
+                  value: "Biochemical Compounds",
+                  label: "Biochemical Compounds",
+                },
+                { value: "Inorganic Compounds", label: "Inorganic Compounds" },
+                { value: "Organic Compounds", label: "Organic Compounds" },
+              ]}
+            />
+
+            <CFormSelect
+              label="Grade"
+              placeholder="Grade"
+              className="custom-placeholder mb-3"
+              name="grade"
+              value={formData?.grade || ""}
+              onChange={handleChange}
+              options={[
+                { value: "", label: "Select Grade" },
+                { value: "Analytical Grade", label: "Analytical Grade" },
+                { value: "HPLC Grade", label: "HPLC Grade" },
+                { value: "Grd-1", label: "Grd-1" },
+              ]}
+            />
+
+            <CFormSelect
+              label="Handling Symbol"
+              placeholder="Select..."
+              className="custom-placeholder mb-3"
+              name="handlingSymbol"
+              value={formData?.handlingSymbol || ""}
+              onChange={handleChange}
+              options={[
+                { value: "", label: "Select Handling Symbol" },
+                { value: "A", label: "A" },
+                { value: "B", label: "B" },
+                { value: "C", label: "C" },
+                { value: "D", label: "D" },
+                { value: "E", label: "E" },
+              ]}
+            />
+
+            <CFormSelect
+              label="Storage Conditions"
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              name="storageConditions"
+              value={formData?.storageConditions || ""}
+              onChange={handleChange}
+              options={[
+                { value: "", label: "Select Storage Conditions" },
+                { value: "Analytical", label: "Analytical" },
+                { value: "HPLC", label: "HPLC" },
+                { value: "Grd-1", label: "Grd-1" },
+              ]}
+            />
+
+            <CFormSelect
+              label="Lot UOM"
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              name="lotUOM"
+              value={formData?.lotUOM || ""}
+              onChange={handleChange}
+              options={[
+                { value: "", label: "Select Lot UOM" },
+                { value: "kg", label: "kg" },
+                { value: "L", label: "L" },
+                { value: "mL", label: "mL" },
+              ]}
+            />
+
+            <CFormInput
+              type="number"
+              label="Usage UOM"
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              name="usageUOM"
+              value={formData?.usageUOM || ""}
+              onChange={handleChange}
+            />
+
+            <CForm className="mb-3">
+              <CFormLabel>Issues Display Order For Usage</CFormLabel>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <CFormCheck
+                  type="radio"
+                  name="issuesDisplayOrder"
+                  id="fifoRadio"
+                  label="FIFO"
+                  value="FIFO"
+                  checked={formData?.issuesDisplayOrder === "FIFO" || ""}
+                  onChange={handleChange}
+                />
+                <CFormCheck
+                  type="radio"
+                  name="issuesDisplayOrder"
+                  id="fefoRadio"
+                  label="FEFO"
+                  value="FEFO"
+                  checked={formData?.issuesDisplayOrder === "FEFO" || ""}
+                  onChange={handleChange}
+                />
+              </div>
+            </CForm>
+
+            <p style={{ fontWeight: "bolder" }}>Inventory Control</p>
+
+            <CFormInput
+              type="number"
+              label="Minimum Qty."
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              name="minimumQty"
+              value={formData?.minimumQty || ""}
+              onChange={handleChange}
+            />
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "column",
+                marginBottom: "1rem",
+              }}
+            >
+              <label>Comments</label>
+              <textarea
+                name="comments"
+                id="comments"
+                className="form-control"
+                value={formData?.comments || ""}
+                onChange={handleChange}
+              ></textarea>
+            </div>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Cancel
+            </CButton>
+            <CButton
+              onClick={handleSave}
+              style={{ background: "#0F93C3", color: "white" }}
+            >
+              Add Chemical
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -143,7 +355,7 @@ const ChemicalRegitration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ChemicalRegeantName.toLowerCase().includes(
+      row.name.toLowerCase().includes(
         searchQuery.toLowerCase()
       ) &&
       (statusFilter === "All" || row.status === statusFilter)
@@ -158,14 +370,14 @@ const ChemicalRegitration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      ChemicalRegeantName: item["Chemical / Regeant Name		"] || "",
-      ChemicalRegeantUniqueCode: item["Chemical / Regeant Unique Code	"] || "",
+      sno: index + 1,
+      name: item["Chemical / Regeant Name		"] || "",
+      uniqueCode: item["Chemical / Regeant Unique Code	"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -177,10 +389,10 @@ const ChemicalRegitration = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Chemical / Regeant Name		", accessor: "ChemicalRegeantName" },
+    { header: "Chemical / Regeant Name		", accessor: "name" },
     {
       header: "Chemical / Regeant Unique Code	",
-      accessor: "ChemicalRegeantUniqueCode",
+      accessor: "uniqueCode",
     },
     { header: "Status", accessor: "status" },
 
@@ -207,6 +419,39 @@ const ChemicalRegitration = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          name: requalification.name,
+          uniqueCode: requalification.uniqueCode,
+          casNumber: requalification.casNumber,
+          category: requalification.category,
+          grade: requalification.grade,
+          handlingSymbol: requalification.handlingSymbol,
+          storageConditions: requalification.storageConditions,
+          lotUOM: requalification.lotUOM,
+          usageUOM: requalification.usageUOM,
+          issuesDisplayOrder: requalification.issuesDisplayOrder,
+          minimumQty: requalification.minimumQty,
+          comments: requalification.comments,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -292,10 +537,12 @@ const ChemicalRegitration = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ChemicalRegistrationModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -305,7 +552,21 @@ const ChemicalRegitration = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

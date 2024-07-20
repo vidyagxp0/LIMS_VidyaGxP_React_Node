@@ -1,3 +1,13 @@
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import React, { useState, useEffect } from "react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -13,49 +23,35 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import LotRegistrationModal from "../Modals/LotRegistrationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    ChemicalRegeantName: "code1",
+    chemicalReagentName: "code1",
     ChemicalRegeantLotNo: "code1",
-    NoofContainers: "material 1",
+    noOfContainers: "material 1",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    ChemicalRegeantName: "code2",
+    chemicalReagentName: "code2",
     ChemicalRegeantLotNo: "lot2",
-    NoofContainers: "material 2",
+    noOfContainers: "material 2",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    ChemicalRegeantName: "code3",
-    ChemicalRegeantLotNo: "lot3",
-    NoofContainers: "material 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ChemicalRegeantName: "code4",
-    ChemicalRegeantLotNo: "lot4",
-    NoofContainers: "material 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ChemicalRegeantName: "code5",
-    ChemicalRegeantLotNo: "lot5",
-    NoofContainers: "material 5",
-    status: "REJECTED",
-  },
 ];
+
+const generateRandomSymbolCode = () => {
+  const characters = "abc0123456789";
+  let result = "	CHL-072024-";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
 
 const LotRegistration = () => {
   const [data, setData] = useState(initialData);
@@ -99,6 +95,270 @@ const LotRegistration = () => {
     setData(newData);
   };
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Lot Registration</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Add information</p>
+            <p style={{ fontWeight: "700", fontSize: "19px" }}>
+              Registration Initiation
+            </p>
+            <CFormSelect
+              label="Chemical / Reagent Name"
+              placeholder="Chemical / Reagent Name"
+              className="custom-placeholder mb-3"
+              name="chemicalReagentName"
+              value={formData?.chemicalReagentName || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="CAS / CAT No"
+              placeholder="CAS / CAT No"
+              className="custom-placeholder mb-3"
+              name="casNumber"
+              value={formData?.casNumber || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="Delivery Receipt No"
+              placeholder="Delivery Receipt No"
+              className="custom-placeholder mb-3"
+              name="deliveryReceiptNo"
+              value={formData?.deliveryReceiptNo || ""}
+              onChange={handleChange}
+            />
+
+            <CFormSelect
+              label="Certificate"
+              placeholder="Certificate"
+              className="custom-placeholder mb-3"
+              name="certificate"
+              value={formData?.certificate || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="number"
+              label="No. Of Containers"
+              placeholder="No. Of Containers"
+              className="custom-placeholder mb-3"
+              name="noOfContainers"
+              value={formData?.noOfContainers || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="number"
+              label="Lot Quantity Received"
+              placeholder="Lot Quantity Received"
+              className="custom-placeholder mb-3"
+              name="lotQuantityReceived"
+              value={formData?.lotQuantityReceived || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="number"
+              label="Usage Quantity"
+              placeholder="Usage Quantity"
+              className="custom-placeholder mb-3"
+              name="usageQuantity"
+              value={formData?.usageQuantity || ""}
+              onChange={handleChange}
+            />
+
+            <CFormSelect
+              label="Received by"
+              placeholder="Received by"
+              className="custom-placeholder mb-3"
+              name="receivedBy"
+              value={formData?.receivedBy || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="date"
+              label="Received On"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+              name="receivedOn"
+              value={formData?.receivedOn || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="number"
+              label="Supplied by"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+              name="suppliedBy"
+              value={formData?.suppliedBy || ""}
+              onChange={handleChange}
+            />
+
+            <CFormSelect
+              label="Manufactured By"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+              name="manufacturedBy"
+              value={formData?.manufacturedBy || ""}
+              onChange={handleChange}
+            />
+
+            <CFormSelect
+              label="Manufacture's Batch No / Lot No."
+              placeholder="select"
+              className="custom-placeholder mb-3"
+              name="manufactureBatchNo"
+              value={formData?.manufactureBatchNo || ""}
+              onChange={handleChange}
+            />
+
+            <CFormSelect
+              label="Storage Location"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+              name="storageLocation"
+              value={formData?.storageLocation || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="date"
+              label="Expiry Date"
+              placeholder="select"
+              className="custom-placeholder mb-3"
+              name="expiryDate"
+              value={formData?.expiryDate || ""}
+              onChange={handleChange}
+            />
+
+            <div className="flex gap-5 items-center justify-center mb-4">
+              <CFormInput
+                type="text"
+                label="Potency"
+                placeholder="select"
+                className="custom-placeholder mb-3"
+                name="potency"
+                value={formData?.potency || ""}
+                onChange={handleChange}
+              />
+              <CFormSelect
+                label="UOM"
+                placeholder="select"
+                className="custom-placeholder mb-3"
+                name="potencyUOM"
+                value={formData?.potencyUOM || ""}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="flex gap-5 items-center justify-center mb-4">
+              <CFormInput
+                type="text"
+                label="Water Content"
+                placeholder="select"
+                className="custom-placeholder mb-3"
+                name="waterContent"
+                value={formData?.waterContent || ""}
+                onChange={handleChange}
+              />
+              <CFormSelect
+                label="UOM"
+                placeholder="select"
+                className="custom-placeholder mb-3"
+                name="waterContentUOM"
+                value={formData?.waterContentUOM || ""}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "column",
+                marginBottom: "1rem",
+              }}
+            >
+              <label>Comments</label>
+              <textarea
+                name="comments"
+                id="comments"
+                className="form-control"
+                value={formData?.comments || ""}
+                onChange={handleChange}
+              ></textarea>
+            </div>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Cancel
+            </CButton>
+            <CButton
+              onClick={handleSave}
+              style={{ background: "#0F93C3", color: "white" }}
+            >
+              Add Lot
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -107,9 +367,9 @@ const LotRegistration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ChemicalRegeantName.toLowerCase().includes(
-        searchQuery.toLowerCase()
-      ) &&
+      row.chemicalReagentName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -128,15 +388,15 @@ const LotRegistration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      ChemicalRegeantName: item["Chemical / Regeant Name"] || "",
+      sno: index + 1,
+      chemicalReagentName: item["Chemical / Regeant Name"] || "",
       ChemicalRegeantLotNo: item["Chemical / Regeant Lot No"] || "",
-      NoofContainers: item["No of Containers"] || "",
+      noOfContainers: item["No of Containers"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -147,9 +407,9 @@ const LotRegistration = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Chemical / Regeant Name", accessor: "ChemicalRegeantName" },
+    { header: "Chemical / Regeant Name", accessor: "chemicalReagentName" },
     { header: "Chemical / Regeant Lot No", accessor: "ChemicalRegeantLotNo" },
-    { header: "No of Containers", accessor: "NoofContainers" },
+    { header: "No of Containers", accessor: "noOfContainers" },
     { header: "Status", accessor: "status" },
 
     {
@@ -175,6 +435,47 @@ const LotRegistration = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    // const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          chemicalReagentName: requalification.chemicalReagentName,
+          casNumber: requalification.casNumber,
+          deliveryReceiptNo: requalification.deliveryReceiptNo,
+          ChemicalRegeantLotNo: generateRandomSymbolCode(),
+          certificate: requalification.certificate,
+          noOfContainers: requalification.noOfContainers,
+          lotQuantityReceived: requalification.lotQuantityReceived,
+          usageQuantity: requalification.usageQuantity,
+          receivedBy: requalification.receivedBy,
+          receivedOn: requalification.receivedOn,
+          suppliedBy: requalification.suppliedBy,
+          manufacturedBy: requalification.manufacturedBy,
+          manufactureBatchNo: requalification.manufactureBatchNo,
+          storageLocation: requalification.storageLocation,
+          expiryDate: requalification.expiryDate,
+          potency: requalification.potency,
+          potencyUOM: requalification.potencyUOM,
+          waterContent: requalification.waterContent,
+          waterContentUOM: requalification.waterContentUOM,
+          comments: requalification.comments,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -250,6 +551,12 @@ const LotRegistration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Group_Name.pdf"
+            title="Group Name Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Lot Registration" color="blue" onClick={openModal} />
         </div>
@@ -260,9 +567,11 @@ const LotRegistration = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <LotRegistrationModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -273,7 +582,21 @@ const LotRegistration = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

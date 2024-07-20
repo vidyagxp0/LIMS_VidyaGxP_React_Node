@@ -13,109 +13,51 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import SolutionStandardizationModal from "../Modals/SolutionStandardizationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    StandardizationCode: "code1",
-    PreparationNo: "code1",
-    SolutionName: "material 1",
-    Type: "dummy desc",
-    Comments: "dummy desc",
+    standardizationCode: "code1",
+    preparationNo: "code1",
+    solutionName: "material 1",
+    type: "dummy desc",
+    comments: "dummy desc",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    StandardizationCode: "code2",
-    PreparationNo: "prep2",
-    SolutionName: "solution 2",
-    Type: "type 2",
-    Comments: "description 2",
+    standardizationCode: "code2",
+    preparationNo: "prep2",
+    solutionName: "solution 2",
+    type: "type 2",
+    comments: "description 2",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    StandardizationCode: "code3",
-    PreparationNo: "prep3",
-    SolutionName: "solution 3",
-    Type: "type 3",
-    Comments: "description 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    StandardizationCode: "code4",
-    PreparationNo: "prep4",
-    SolutionName: "solution 4",
-    Type: "type 4",
-    Comments: "description 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    StandardizationCode: "code5",
-    PreparationNo: "prep5",
-    SolutionName: "solution 5",
-    Type: "type 5",
-    Comments: "description 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    StandardizationCode: "code6",
-    PreparationNo: "prep6",
-    SolutionName: "solution 6",
-    Type: "type 6",
-    Comments: "description 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    StandardizationCode: "code7",
-    PreparationNo: "prep7",
-    SolutionName: "solution 7",
-    Type: "type 7",
-    Comments: "description 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    StandardizationCode: "code8",
-    PreparationNo: "prep8",
-    SolutionName: "solution 8",
-    Type: "type 8",
-    Comments: "description 8",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    StandardizationCode: "code9",
-    PreparationNo: "prep9",
-    SolutionName: "solution 9",
-    Type: "type 9",
-    Comments: "description 9",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    StandardizationCode: "code10",
-    PreparationNo: "prep10",
-    SolutionName: "solution 10",
-    Type: "type 10",
-    Comments: "description 10",
-    status: "REJECTED",
   },
 ];
+const generateRandomSymbolCode = () => {
+  const characters = "0123456789";
+  let result = "STD-072024-00";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
 
 const SolutionStandardization = () => {
   const [data, setData] = useState(initialData);
@@ -159,6 +101,208 @@ const SolutionStandardization = () => {
     setData(newData);
   };
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Standardization</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormSelect
+              label="Preparation No."
+              className="custom-placeholder mb-3"
+              options={[
+                { value: "prep001", label: "Preparation 001" },
+                { value: "prep002", label: "Preparation 002" },
+                { value: "prep003", label: "Preparation 003" },
+                { value: "prep004", label: "Preparation 004" },
+              ]}
+              value={formData?.preparationNo || ""}
+              name="preparationNo"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Solution Name"
+              placeholder="Solution Name"
+              className="custom-placeholder mb-3"
+              value={formData?.solutionName || ""}
+              name="solutionName"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Volumetric Solution Name"
+              placeholder="Volumetric Solution Name"
+              className="custom-placeholder mb-3"
+              value={formData?.volumentricSolutionName || ""}
+              name="volumentricSolutionName"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Solution Expiry Period"
+              placeholder="Solution Expiry Period"
+              className="custom-placeholder mb-3"
+              value={formData?.solutionExpiryPeriod || ""}
+              name="solutionExpiryPeriod"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Solution Quantity"
+              placeholder="Solution Quantity"
+              className="custom-placeholder mb-3"
+              value={formData?.solutionQuantity || ""}
+              name="solutionQuantity"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="number"
+              label="Standardization Schedule"
+              placeholder="Standardization Schedule"
+              className="custom-placeholder mb-3"
+              value={formData?.standardizationSchedule || ""}
+              name="standardizationSchedule"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="number"
+              label="Batch No"
+              placeholder="Batch No"
+              className="mb-3"
+              value={formData?.batchNo || ""}
+              name="batchNo"
+              onChange={handleChange}
+            />
+            <CForm className="mb-3">
+              <CFormLabel>Type</CFormLabel>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <CFormCheck
+                  type="radio"
+                  name="type"
+                  id="new"
+                  label="New"
+                  value="New"
+                  checked={formData?.type === "New" || ""}
+                  onChange={handleChange}
+                />
+                <CFormCheck
+                  type="radio"
+                  name="type"
+                  id="dilution"
+                  label="Dilution"
+                  value="Dilution"
+                  checked={formData?.type === "Dilution" || ""}
+                  onChange={handleChange}
+                />
+                <CFormCheck
+                  type="radio"
+                  name="type"
+                  id="readyMade"
+                  label="Ready Made"
+                  value="Ready Made"
+                  checked={formData?.type === "Ready Made" || ""}
+                  onChange={handleChange}
+                />
+              </div>
+            </CForm>
+            <CFormInput
+              type="text"
+              label="Documents if any"
+              placeholder="Documents if any"
+              className="custom-placeholder mb-3"
+              value={formData?.documents || ""}
+              name="documents"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Average Value"
+              placeholder="Average Value"
+              className="custom-placeholder mb-3"
+              value={formData?.averageValue || ""}
+              name="averageValue"
+              onChange={handleChange}
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "column",
+                marginBottom: "1rem",
+              }}
+            >
+              <label>Comments</label>
+              <textarea
+                className="form-control"
+                value={formData?.comments || ""}
+                name="comments"
+                onChange={handleChange}
+              ></textarea>
+            </div>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Cancel
+            </CButton>
+            <CButton
+              onClick={handleSave}
+              style={{ background: "#0F93C3", color: "white" }}
+            >
+              Add Standardization
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -175,7 +319,7 @@ const SolutionStandardization = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.SolutionName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.solutionName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -188,17 +332,17 @@ const SolutionStandardization = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      StandardizationCode: item["Standardization Code"] || "",
-      PreparationNo: item["Preparation No."] || "",
-      SolutionName: item["Solution Name"] || "",
-      Type: item["Type"] || "",
-      comments: item["Comments"] || "",
+      sno: index + 1,
+      standardizationCode: item["Standardization Code"] || "",
+      preparationNo: item["Preparation No."] || "",
+      solutionName: item["Solution Name"] || "",
+      type: item["Type"] || "",
+      comments: item["comments"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -210,11 +354,11 @@ const SolutionStandardization = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Standardization Code", accessor: "StandardizationCode" },
-    { header: "Preparation No.", accessor: "PreparationNo" },
-    { header: "Solution Name", accessor: "SolutionName" },
-    { header: "Type", accessor: "Type" },
-    { header: "Comments", accessor: "Comments" },
+    { header: "Standardization Code", accessor: "standardizationCode" },
+    { header: "Preparation No.", accessor: "preparationNo" },
+    { header: "Solution Name", accessor: "solutionName" },
+    { header: "Type", accessor: "type" },
+    { header: "comments", accessor: "comments" },
     { header: "Status", accessor: "status" },
 
     {
@@ -240,6 +384,38 @@ const SolutionStandardization = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    // const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          preparationNo: requalification.preparationNo,
+          standardizationCode: generateRandomSymbolCode(),
+          solutionName: requalification.solutionName,
+          volumentricSolutionName: requalification.volumentricSolutionName,
+          solutionExpiryPeriod: requalification.solutionExpiryPeriod,
+          solutionQuantity: requalification.solutionQuantity,
+          standardizationSchedule: requalification.standardizationSchedule,
+          batchNo: requalification.batchNo,
+          type: requalification.type,
+          averageValue: requalification.averageValue,
+          comments: requalification.comments,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -315,8 +491,14 @@ const SolutionStandardization = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Group_Name.pdf"
+            title="Group Name Data"
+          />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
             text="Add Standardization"
             color="blue"
             onClick={openModal}
@@ -329,10 +511,12 @@ const SolutionStandardization = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <SolutionStandardizationModal
         visible={isModalOpen}
         closeModal={closeModal}
+        handleSubmit={handleModalSubmit}
       />
       {isViewModalOpen && (
         <ViewModal
@@ -342,7 +526,21 @@ const SolutionStandardization = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

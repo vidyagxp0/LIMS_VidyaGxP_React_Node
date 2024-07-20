@@ -13,57 +13,37 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ChemicalIssueModal from "../Modals/ChemicalIssueModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    ChemicalRegeantName: "code1",
-    ChemicalRegeantLotNo: "code1",
-    quantityIssued: "material 1",
-    IssuedBy: "John Doe",
-    IssuedOn: "20-06-2024",
+    chemicalReagentName: "code1",
+    chemicalRegeantLotNo: "code1",
+    quantityIssuedNow: "material 1",
+    issuedBy: "John Doe",
+    issuedOn: "20-06-2024",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    ChemicalRegeantName: "Chemical 2",
-    ChemicalRegeantLotNo: "lot2",
-    quantityIssued: "material 2",
-    IssuedBy: "Jane Smith",
-    IssuedOn: "21-06-2024",
+    chemicalReagentName: "Chemical 2",
+    chemicalRegeantLotNo: "lot2",
+    quantityIssuedNow: "material 2",
+    issuedBy: "Jane Smith",
+    issuedOn: "21-06-2024",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    ChemicalRegeantName: "Chemical 3",
-    ChemicalRegeantLotNo: "lot3",
-    quantityIssued: "material 3",
-    IssuedBy: "Alice Johnson",
-    IssuedOn: "22-06-2024",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    ChemicalRegeantName: "Chemical 4",
-    ChemicalRegeantLotNo: "lot4",
-    quantityIssued: "material 4",
-    IssuedBy: "Bob Brown",
-    IssuedOn: "23-06-2024",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    ChemicalRegeantName: "Chemical 5",
-    ChemicalRegeantLotNo: "lot5",
-    quantityIssued: "material 5",
-    IssuedBy: "Charlie Davis",
-    IssuedOn: "24-06-2024",
-    status: "REJECTED",
   },
 ];
 
@@ -117,6 +97,188 @@ const ChemicalIssues = () => {
     setData(newData);
   };
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Chemicals</CModalTitle>
+          </CModalHeader>
+          <p style={{ marginLeft: "13px" }}>Add information and Add Chemical</p>
+          <CModalBody>
+            <p style={{ fontWeight: "bolder" }}>Registration Initiation</p>
+            <CFormSelect
+              type="text"
+              label="Chemical / Regeant Lot No."
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              options={[
+                { value: "CHL-052024-0000002", label: "CHL-052024-0000002" },
+                { value: "CHL-052024-0000001", label: "CHL-052024-0000001" },
+              ]}
+              name="chemicalRegeantLotNo"
+              value={formData?.chemicalRegeantLotNo || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Chemical / Reagent Name"
+              placeholder="Name"
+              className="custom-placeholder mb-3"
+              name="chemicalReagentName"
+              value={formData?.chemicalReagentName || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="Batch No."
+              placeholder="Batch No."
+              className="custom-placeholder mb-3"
+              name="batchNo"
+              value={formData?.batchNo || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="date"
+              label="Lot Received On"
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              name="lotReceivedOn"
+              value={formData?.lotReceivedOn || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Lot Quantity Received"
+              placeholder="Lot Quantity Received"
+              className="custom-placeholder mb-3"
+              name="lotQuantityReceived"
+              value={formData?.lotQuantityReceived || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="number"
+              label="Available Qty. In This Lot"
+              placeholder="Available Qty. In This Lot"
+              className="custom-placeholder mb-3"
+              name="availableQty"
+              value={formData?.availableQty || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="date"
+              label="Expiry Date"
+              placeholder="Select"
+              className="mb-3"
+              name="expiryDate"
+              value={formData?.expiryDate || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Quantity Issued Now"
+              placeholder="Select"
+              className="custom-placeholder mb-3"
+              name="quantityIssuedNow"
+              value={formData?.quantityIssuedNow || ""}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              type="text"
+              label="Issued By"
+              placeholder="Select"
+              className="mb-3"
+              name="issuedBy"
+              value={formData?.issuedBy || ""}
+              onChange={handleChange}
+              options={[
+                { value: "Initiator", label: "Initiator" },
+                { value: "Manager", label: "Manager" },
+              ]}
+            />
+            <CFormInput
+              type="number"
+              label="Valid Upto"
+              placeholder="Select"
+              className="mb-3"
+              name="validUpto"
+              value={formData?.validUpto || ""}
+              onChange={handleChange}
+            />
+
+            <div>
+              <p>Remarks</p>
+              <textarea
+                style={{ width: "400px" }}
+                className="form-control mb-3"
+                name="remarks"
+                value={formData?.remarks || ""}
+                onChange={handleChange}
+              ></textarea>
+            </div>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Cancel
+            </CButton>
+            <CButton
+              onClick={handleSave}
+              style={{ background: "#0F93C3", color: "white" }}
+            >
+              Add Chemical Issue
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -125,9 +287,9 @@ const ChemicalIssues = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ChemicalRegeantName.toLowerCase().includes(
-        searchQuery.toLowerCase()
-      ) &&
+      row.chemicalReagentName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -140,17 +302,17 @@ const ChemicalIssues = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      ChemicalRegeantName: item["Chemical / Regeant Name"] || "",
-      ChemicalRegeantLotNo: item["Chemical / Regeant Lot No."] || "",
-      quantityIssued: item["quantity Issued"] || "",
-      IssuedBy: item["Issued By"] || "",
-      IssuedOn: item["Issued On"] || "",
+      sno: index + 1,
+      chemicalReagentName: item["Chemical / Regeant Name"] || "",
+      chemicalRegeantLotNo: item["Chemical / Regeant Lot No."] || "",
+      quantityIssuedNow: item["quantity Issued"] || "",
+      issuedBy: item["Issued By"] || "",
+      issuedOn: item["Issued On"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -162,11 +324,11 @@ const ChemicalIssues = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Chemical / Regeant Name", accessor: "ChemicalRegeantName" },
-    { header: "Chemical / Regeant Lot No.", accessor: "ChemicalRegeantLotNo" },
-    { header: "quantity Issued", accessor: "quantityIssued" },
-    { header: "Issued By", accessor: "IssuedBy" },
-    { header: "Issued On", accessor: "IssuedOn" },
+    { header: "Chemical / Regeant Name", accessor: "chemicalReagentName" },
+    { header: "Chemical / Regeant Lot No.", accessor: "chemicalRegeantLotNo" },
+    { header: "quantity Issued", accessor: "quantityIssuedNow" },
+    { header: "Issued By", accessor: "issuedBy" },
+    { header: "Issued On", accessor: "issuedOn" },
     { header: "Status", accessor: "status" },
 
     {
@@ -192,6 +354,39 @@ const ChemicalIssues = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          chemicalRegeantLotNo: requalification.chemicalRegeantLotNo,
+          chemicalReagentName: requalification.chemicalReagentName,
+          batchNo: requalification.batchNo,
+          issuedOn: currentDate,
+          lotReceivedOn: requalification.lotReceivedOn,
+          lotQuantityReceived: requalification.lotQuantityReceived,
+          availableQty: requalification.availableQty,
+          expiryDate: requalification.expiryDate,
+          quantityIssuedNow: requalification.quantityIssuedNow,
+          issuedBy: requalification.issuedBy,
+          validUpto: requalification.validUpto,
+          remarks: requalification.remarks,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -281,9 +476,11 @@ const ChemicalIssues = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <ChemicalIssueModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -294,7 +491,21 @@ const ChemicalIssues = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

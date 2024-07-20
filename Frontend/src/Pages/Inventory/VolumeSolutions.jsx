@@ -13,6 +13,17 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import VolumeSolutionModal from "../Modals/VolumeSolutionModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CFormInput,
+  CFormTextarea,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
@@ -20,9 +31,9 @@ const initialData = [
     sno: 1,
     name: "code1",
     prefix: "code1",
-    TheoreticalStrength: "material 1",
-    SolutionExpiryPeriod: "dummy desc",
-    PreparationMethod: "dummy desc",
+    theoreticalStrength: "material 1",
+    solutionExpiryPeriod: "dummy desc",
+    preparationMethod: "dummy desc",
     comments: "dummy desc",
     status: "DROPPED",
   },
@@ -31,99 +42,11 @@ const initialData = [
     sno: 2,
     name: "code2",
     prefix: "code2",
-    TheoreticalStrength: "material 2",
-    SolutionExpiryPeriod: "description 2",
-    PreparationMethod: "description 2",
+    theoreticalStrength: "material 2",
+    solutionExpiryPeriod: "description 2",
+    preparationMethod: "description 2",
     comments: "description 2",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    name: "code3",
-    prefix: "code3",
-    TheoreticalStrength: "material 3",
-    SolutionExpiryPeriod: "description 3",
-    PreparationMethod: "description 3",
-    comments: "description 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    name: "code4",
-    prefix: "code4",
-    TheoreticalStrength: "material 4",
-    SolutionExpiryPeriod: "description 4",
-    PreparationMethod: "description 4",
-    comments: "description 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    name: "code5",
-    prefix: "code5",
-    TheoreticalStrength: "material 5",
-    SolutionExpiryPeriod: "description 5",
-    PreparationMethod: "description 5",
-    comments: "description 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    name: "code6",
-    prefix: "code6",
-    TheoreticalStrength: "material 6",
-    SolutionExpiryPeriod: "description 6",
-    PreparationMethod: "description 6",
-    comments: "description 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    name: "code7",
-    prefix: "code7",
-    TheoreticalStrength: "material 7",
-    SolutionExpiryPeriod: "description 7",
-    PreparationMethod: "description 7",
-    comments: "description 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    name: "code8",
-    prefix: "code8",
-    TheoreticalStrength: "material 8",
-    SolutionExpiryPeriod: "description 8",
-    PreparationMethod: "description 8",
-    comments: "description 8",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    name: "code9",
-    prefix: "code9",
-    TheoreticalStrength: "material 9",
-    SolutionExpiryPeriod: "description 9",
-    PreparationMethod: "description 9",
-    comments: "description 9",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    name: "code10",
-    prefix: "code10",
-    TheoreticalStrength: "material 10",
-    SolutionExpiryPeriod: "description 10",
-    PreparationMethod: "description 10",
-    comments: "description 10",
-    status: "REJECTED",
   },
 ];
 
@@ -134,6 +57,152 @@ const VolumeSolution = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Solutions</CModalTitle>
+          </CModalHeader>
+          <p style={{ marginLeft: "15px" }}>
+            Add information and Add Solutions
+          </p>
+          <CModalBody>
+            <CFormInput
+              type="text"
+              label="Name"
+              placeholder=""
+              className="custom-placeholder mb-3"
+              name="name"
+              value={formData?.name || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Prefix"
+              placeholder="Bottle / vial"
+              className="custom-placeholder mb-3"
+              value={formData?.prefix || ""}
+              name="prefix"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="text"
+              label="Theoretical Strength"
+              placeholder="Theoretical Strength"
+              value={formData?.theoreticalStrength || ""}
+              className="custom-placeholder mb-3"
+              name="theoreticalStrength"
+              onChange={handleChange}
+            />
+            <CFormInput
+              type="number"
+              label="UOM"
+              placeholder="UOM"
+              className="custom-placeholder mb-3"
+              name="uom"
+              value={formData?.uom || ""}
+              onChange={handleChange}
+            />
+            <CFormTextarea
+              type="text"
+              label="Solution Expiry Period"
+              placeholder="Solution Expiry Period"
+              value={formData?.solutionExpiryPeriod || ""}
+              name="solutionExpiryPeriod"
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              type="text"
+              label="Standardization Schedule"
+              placeholder="Lot Quantity"
+              value={formData?.standardizationSchedule || ""}
+              onChange={handleChange}
+              name="standardizationSchedule"
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              type="date"
+              label="Preparation Method"
+              placeholder=""
+              value={formData?.preparationMethod || ""}
+              onChange={handleChange}
+              name="preparationMethod"
+              className="custom-placeholder mb-3"
+            />
+
+            <CFormInput
+              type="text"
+              label="Comments"
+              placeholder="Comments"
+              value={formData?.comments || ""}
+              className="mb-3"
+              name="comments"
+              onChange={handleChange}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Cancel
+            </CButton>
+            <CButton
+              onClick={handleSave}
+              style={{ background: "#0F93C3", color: "white" }}
+            >
+              Add Solution
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
@@ -198,23 +267,22 @@ const VolumeSolution = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       name: item["Name"] || "",
       prefix: item["Prefix"] || "",
-      TheoreticalStrength: item["Theoretical Strength"] || "",
-      SolutionExpiryPeriod: item["Solution Expiry Period"] || "",
-      PreparationMethod: item["Preparation Method"] || "",
+      theoreticalStrength: item["Theoretical Strength"] || "",
+      solutionExpiryPeriod: item["Solution Expiry Period"] || "",
+      preparationMethod: item["Preparation Method"] || "",
       comments: item["Comments"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
   };
-
 
   const columns = [
     {
@@ -224,9 +292,9 @@ const VolumeSolution = () => {
     { header: "SrNo.", accessor: "sno" },
     { header: "Name	", accessor: "name" },
     { header: "Prefix	", accessor: "prefix" },
-    { header: "Theoretical Strength	", accessor: "TheoreticalStrength" },
-    { header: "Solution Expiry Period	", accessor: "SolutionExpiryPeriod" },
-    { header: "Preparation Method	", accessor: "PreparationMethod" },
+    { header: "Theoretical Strength	", accessor: "theoreticalStrength" },
+    { header: "Solution Expiry Period	", accessor: "solutionExpiryPeriod" },
+    { header: "Preparation Method	", accessor: "preparationMethod" },
     { header: "Comments", accessor: "comments" },
     { header: "Status", accessor: "status" },
 
@@ -253,6 +321,35 @@ const VolumeSolution = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    // const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          name: requalification.name,
+          prefix: requalification.prefix,
+          theoreticalStrength: requalification.theoreticalStrength,
+          uom: requalification.uom,
+          solutionExpiryPeriod: requalification.solutionExpiryPeriod,
+          standardizationSchedule: requalification.standardizationSchedule,
+          preparationMethod: requalification.preparationMethod,
+          comments: requalification.comments,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -328,6 +425,12 @@ const VolumeSolution = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Group_Name.pdf"
+            title="Group Name Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Solutions" color="blue" onClick={openModal} />
         </div>
@@ -338,9 +441,11 @@ const VolumeSolution = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <VolumeSolutionModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -351,7 +456,21 @@ const VolumeSolution = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );
