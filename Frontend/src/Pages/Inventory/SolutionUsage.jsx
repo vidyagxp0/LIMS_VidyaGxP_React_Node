@@ -13,87 +13,37 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import SolutionUsageModal from "../Modals/SolutionUsageModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    VolumetricSolutionName: "code1",
-    UsedOn: "code1",
-    ModeOfUsage: "material 1",
+    volumetricSolutionName: "code1",
+    usedOn: "code1",
+    modeOfUsage: "material 1",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    VolumetricSolutionName: "solution 2",
-    UsedOn: "2024-07-01",
-    ModeOfUsage: "usage 2",
+    volumetricSolutionName: "solution 2",
+    usedOn: "2024-07-01",
+    modeOfUsage: "usage 2",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    VolumetricSolutionName: "solution 3",
-    UsedOn: "2024-07-02",
-    ModeOfUsage: "usage 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    VolumetricSolutionName: "solution 4",
-    UsedOn: "2024-07-03",
-    ModeOfUsage: "usage 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    VolumetricSolutionName: "solution 5",
-    UsedOn: "2024-07-04",
-    ModeOfUsage: "usage 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    VolumetricSolutionName: "solution 6",
-    UsedOn: "2024-07-05",
-    ModeOfUsage: "usage 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    VolumetricSolutionName: "solution 7",
-    UsedOn: "2024-07-06",
-    ModeOfUsage: "usage 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    VolumetricSolutionName: "solution 8",
-    UsedOn: "2024-07-07",
-    ModeOfUsage: "usage 8",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    VolumetricSolutionName: "solution 9",
-    UsedOn: "2024-07-08",
-    ModeOfUsage: "usage 9",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    VolumetricSolutionName: "solution 10",
-    UsedOn: "2024-07-09",
-    ModeOfUsage: "usage 10",
-    status: "REJECTED",
   },
 ];
 
@@ -145,6 +95,222 @@ const SolutionUsage = () => {
     setData(newData);
   };
 
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="xl"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Solution</CModalTitle>
+          </CModalHeader>
+          <p style={{ marginLeft: "13px" }}>
+            Add information and Add new usage.
+          </p>
+          <CModalBody>
+            <CFormSelect
+              name="standardizationNo"
+              label="Standardization No."
+              placeholder=" "
+              value={formData?.standardizationNo || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+              options={[
+                { value: "select", label: "select" },
+                { value: "test", label: "test" },
+              ]}
+            />
+            <CFormInput
+              name="volumetricSolutionName"
+              type="text"
+              label="Volumetric Solution Name"
+              placeholder="Volumetric Solution Name"
+              value={formData?.volumetricSolutionName || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              name="preparationNo"
+              type="text"
+              label="Preparation No."
+              placeholder="Preparation No."
+              value={formData?.preparationNo || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              name="usedOn"
+              type="date"
+              label="Used On"
+              placeholder="Solution Expiry Period"
+              value={formData?.usedOn || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              name="preparationDate"
+              type="date"
+              label="Preparation Date"
+              placeholder="Solution Quantity"
+              value={formData?.preparationDate || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              name="standardizationDate"
+              type="date"
+              label="Standardization Date"
+              placeholder="Standardization Schedule"
+              value={formData?.standardizationDate || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              name="usedBy"
+              type="text"
+              label="Used By"
+              placeholder="Batch No"
+              value={formData?.usedBy || ""}
+              onChange={handleChange}
+              className="mb-3"
+            />
+            <CForm className="mb-3">
+              <CFormLabel>Mode of Usage</CFormLabel>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <CFormCheck
+                  type="radio"
+                  name="modeOfUsage"
+                  id="sampleAnalysis"
+                  label="Sample Analysis"
+                  value="Sample Analysis"
+                  checked={formData?.modeOfUsage === "Sample Analysis" || ""}
+                  onChange={handleChange}
+                />
+                <CFormCheck
+                  type="radio"
+                  name="modeOfUsage"
+                  id="miscellaneous"
+                  label="Miscellaneous"
+                  value="Miscellaneous"
+                  checked={formData?.modeOfUsage === "Miscellaneous" || ""}
+                  onChange={handleChange}
+                />
+              </div>
+            </CForm>
+            <CFormSelect
+              name="productMaterial"
+              label="Product / Material"
+              placeholder="select"
+              value={formData?.productMaterial || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+              options={[
+                { value: "select", label: "select" },
+                { value: "AAT-062024-00000106", label: "AAT-062024-00000106" },
+              ]}
+            />
+            <CFormInput
+              name="arNos"
+              type="number"
+              label="A.R. No's"
+              placeholder="select"
+              value={formData?.arNos || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              name="testName"
+              type="text"
+              label="Test Name"
+              placeholder="select"
+              value={formData?.testName || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <CFormInput
+              name="commentsIfAny"
+              type="text"
+              label="Comments If Any"
+              placeholder="select"
+              value={formData?.commentsIfAny || ""}
+              onChange={handleChange}
+              className="custom-placeholder mb-3"
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "1rem",
+              }}
+            >
+              <label>Comments</label>
+              <textarea
+                name="comments"
+                id="comments"
+                className="form-control"
+                value={formData?.comments}
+                onChange={handleChange}
+              ></textarea>
+            </div>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Cancel
+            </CButton>
+            <CButton
+              onClick={handleSave}
+              style={{ background: "#0F93C3", color: "white" }}
+            >
+              Add Solution
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -155,9 +321,9 @@ const SolutionUsage = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.VolumetricSolutionName.toLowerCase().includes(
-        searchQuery.toLowerCase()
-      ) &&
+      row.volumetricSolutionName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -170,15 +336,15 @@ const SolutionUsage = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      VolumetricSolutionName: item["Volumetric Solution Name"] || "",
-      UsedOn: item["Used On"] || "",
-      ModeOfUsage: item["Mode of Usage"] || "",
+      sno: index + 1,
+      volumetricSolutionName: item["Volumetric Solution Name"] || "",
+      usedOn: item["Used On"] || "",
+      modeOfUsage: item["Mode of Usage"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
@@ -190,9 +356,9 @@ const SolutionUsage = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "Volumetric Solution Name	", accessor: "VolumetricSolutionName" },
-    { header: "Used On", accessor: "UsedOn" },
-    { header: "Mode of Usage", accessor: "ModeOfUsage" },
+    { header: "Volumetric Solution Name	", accessor: "volumetricSolutionName" },
+    { header: "Used On", accessor: "usedOn" },
+    { header: "Mode of Usage", accessor: "modeOfUsage" },
     { header: "Status", accessor: "status" },
 
     {
@@ -218,6 +384,40 @@ const SolutionUsage = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          standardizationNo: requalification.standardizationNo,
+          volumetricSolutionName: requalification.volumetricSolutionName,
+          preparationNo: requalification.preparationNo,
+          usedOn: requalification.usedOn,
+          preparationDate: requalification.preparationDate,
+          standardizationDate: requalification.standardizationDate,
+          usedBy: requalification.usedBy,
+          modeOfUsage: requalification.modeOfUsage,
+          productMaterial: requalification.productMaterial,
+          arNos: requalification.arNos,
+          testName: requalification.testName,
+          commentsIfAny: requalification.commentsIfAny,
+          comments: requalification.comments,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -293,6 +493,12 @@ const SolutionUsage = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Group_Name.pdf"
+            title="Group Name Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Add Usage" color="blue" onClick={openModal} />
         </div>
@@ -303,9 +509,11 @@ const SolutionUsage = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <SolutionUsageModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -316,7 +524,21 @@ const SolutionUsage = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

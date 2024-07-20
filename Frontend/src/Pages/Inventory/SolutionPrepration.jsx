@@ -13,107 +13,40 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import SolutionPreparationModal from "../Modals/SolutionPreparationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
-    SolutionPreparationCode: "code1",
-    SolutionName: "code1",
-    Methodno: "material 1",
-    Type: "dummy desc",
-    BatchNo: "dummy desc",
+    methodNo: "code1",
+    volumetricSolutionName: "code1",
+    methodNo: "material 1",
+    type: "dummy desc",
+    batchNo: "dummy desc",
     status: "DROPPED",
   },
   {
     checkbox: false,
     sno: 2,
-    SolutionPreparationCode: "code2",
-    SolutionName: "solution 2",
-    Methodno: "method 2",
-    Type: "type 2",
-    BatchNo: "batch 2",
+    methodNo: "code2",
+    volumetricSolutionName: "solution 2",
+    methodNo: "method 2",
+    type: "type 2",
+    batchNo: "batch 2",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    SolutionPreparationCode: "code3",
-    SolutionName: "solution 3",
-    Methodno: "method 3",
-    Type: "type 3",
-    BatchNo: "batch 3",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    SolutionPreparationCode: "code4",
-    SolutionName: "solution 4",
-    Methodno: "method 4",
-    Type: "type 4",
-    BatchNo: "batch 4",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    SolutionPreparationCode: "code5",
-    SolutionName: "solution 5",
-    Methodno: "method 5",
-    Type: "type 5",
-    BatchNo: "batch 5",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    SolutionPreparationCode: "code6",
-    SolutionName: "solution 6",
-    Methodno: "method 6",
-    Type: "type 6",
-    BatchNo: "batch 6",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    SolutionPreparationCode: "code7",
-    SolutionName: "solution 7",
-    Methodno: "method 7",
-    Type: "type 7",
-    BatchNo: "batch 7",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    SolutionPreparationCode: "code8",
-    SolutionName: "solution 8",
-    Methodno: "method 8",
-    Type: "type 8",
-    BatchNo: "batch 8",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    SolutionPreparationCode: "code9",
-    SolutionName: "solution 9",
-    Methodno: "method 9",
-    Type: "type 9",
-    BatchNo: "batch 9",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 10,
-    SolutionPreparationCode: "code10",
-    SolutionName: "solution 10",
-    Methodno: "method 10",
-    Type: "type 10",
-    BatchNo: "batch 10",
-    status: "REJECTED",
   },
 ];
 
@@ -175,7 +108,7 @@ const SolutionPrepration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.SolutionName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row.methodNo.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -188,21 +121,191 @@ const SolutionPrepration = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
-      SolutionPreparationCode: item["Solution Preparation Code"] || "",
-      SolutionName: item["Solution Name"] || "",
-      Methodno: item["Method no."] || "",
-      Type: item["Type"] || "",
-      BatchNo: item["Batch No."] || "",
+      sno: index + 1,
+      methodNo: item["Solution Preparation Code"] || "",
+      volumetricSolutionName: item["Solution Name"] || "",
+      methodNo: item["Method no."] || "",
+      type: item["Type"] || "",
+      batchNo: item["Batch No."] || "",
       status: item["Status"] || "INITIATED",
     }));
 
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData); // Update data state with parsed Excel data
 
     setIsModalsOpen(false); // Close the import modal after data upload
   };
+
+  // ************************************************************************************************
+  const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <div>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>New Solution Preparation</CModalTitle>
+          </CModalHeader>
+          <p style={{ marginLeft: "16px" }}>
+            Add information and add new Solution Preparation.
+          </p>
+          <CModalBody>
+            <CFormSelect
+              label="Volumetric Solution Name"
+              className="custom-placeholder mb-3"
+              value={formData.volumetricSolutionName || ""}
+              name="volumetricSolutionName"
+              onChange={handleChange}
+            >
+              <option value="">Select Solution Name</option>
+              <option value="S1">S1</option>
+              <option value="Tadalfil">Tadalfil</option>
+              <option value="xcvn">xcvn</option>
+              <option value="Aspirin (Asetylselic Acid)">
+                Aspirin (Asetylselic Acid)
+              </option>
+            </CFormSelect>
+
+            <CFormInput
+              type="text"
+              label="Preparation Method"
+              placeholder="Preparation Method"
+              className="custom-placeholder mb-3"
+              value={formData.methodNo || ""}
+              name="methodNo"
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="Solution Quantity"
+              placeholder="Enter Solution Quantity"
+              className="custom-placeholder mb-3"
+              value={formData.solutionQuantity || ""}
+              name="solutionQuantity"
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="text"
+              label="Batch No"
+              placeholder="Batch No"
+              className="custom-placeholder mb-3"
+              value={formData.batchNo || ""}
+              name="batchNo"
+              onChange={handleChange}
+            />
+
+            <CForm className="mb-3">
+              <CFormLabel>Type</CFormLabel>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                <CFormCheck
+                  type="radio"
+                  name="sampleRadio"
+                  id="newRadio"
+                  label="New"
+                  value="New"
+                  checked={formData.type === "New" || ""}
+                  onChange={handleChange}
+                />
+                <CFormCheck
+                  type="radio"
+                  name="sampleRadio"
+                  id="dilutionRadio"
+                  label="Dilution"
+                  value="Dilution"
+                  checked={formData.type === "Dilution" || ""}
+                  onChange={handleChange}
+                />
+                <CFormCheck
+                  type="radio"
+                  name="sampleRadio"
+                  id="readyMadeRadio"
+                  label="Ready Made"
+                  value="Ready Made"
+                  checked={formData.type === "Ready Made" || ""}
+                  onChange={handleChange}
+                />
+              </div>
+            </CForm>
+
+            <CFormInput
+              type="text"
+              label="Documents if Any"
+              placeholder="Documents if Any"
+              className="custom-placeholder mb-3"
+              value={formData.documents || ""}
+              name="documents"
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              type="number"
+              label="Comments"
+              placeholder="Comments"
+              className="custom-placeholder mb-3"
+              value={formData.comments || ""}
+              name="comments"
+              onChange={handleChange}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Cancel
+            </CButton>
+            <CButton
+              onClick={handleSave}
+              style={{ background: "#0F93C3", color: "white" }}
+            >
+              Add
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </div>
+    );
+  };
+
+  // ************************************************************************************************
 
   const columns = [
     {
@@ -212,12 +315,12 @@ const SolutionPrepration = () => {
     { header: "SrNo.", accessor: "sno" },
     {
       header: "Solution Preparation Code",
-      accessor: "SolutionPreparationCode",
+      accessor: "methodNo",
     },
-    { header: "Solution Name", accessor: "SolutionName" },
-    { header: "Method no.", accessor: "Methodno" },
-    { header: "Type", accessor: "Type" },
-    { header: "Batch No.", accessor: "BatchNo" },
+    { header: "Solution Name", accessor: "volumetricSolutionName" },
+    { header: "Method no.", accessor: "methodNo" },
+    { header: "Type", accessor: "type" },
+    { header: "Batch No.", accessor: "batchNo" },
     { header: "Status", accessor: "status" },
 
     {
@@ -243,6 +346,34 @@ const SolutionPrepration = () => {
       ),
     },
   ];
+
+  const handleModalSubmit = (requalification) => {
+    // const currentDate = new Date().toISOString().split("T")[0];
+
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === requalification.sno ? requalification : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          volumetricSolutionName: requalification.volumetricSolutionName,
+          methodNo: requalification.methodNo,
+          solutionQuantity: requalification.solutionQuantity,
+          batchNo: requalification.batchNo,
+          type: requalification.type,
+          documents: requalification.documents,
+          comments: requalification.comments,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -318,8 +449,8 @@ const SolutionPrepration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton
             text="Add Solution Preparation"
             color="blue"
             onClick={openModal}
@@ -332,9 +463,11 @@ const SolutionPrepration = () => {
         onCheckboxChange={handleCheckboxChange}
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
+        openEditModal={openEditModal}
       />
       <SolutionPreparationModal
         visible={isModalOpen}
+        handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
       {isViewModalOpen && (
@@ -345,7 +478,21 @@ const SolutionPrepration = () => {
         />
       )}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}{" "}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

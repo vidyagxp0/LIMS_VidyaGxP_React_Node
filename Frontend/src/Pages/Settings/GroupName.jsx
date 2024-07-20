@@ -363,7 +363,12 @@ const GroupName = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Group_Name.pdf" title="Group Name Data" />
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Group_Name.pdf"
+            title="Group Name Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Group Name" color="blue" onClick={openModal} />
