@@ -80,7 +80,7 @@ function AdminPanel(props) {
           >
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center">
-                <img src="/login.png" width={"300px"} />
+                <img src="https://connexo.io/assets/img/logo/logo.png" width={"300px"} />
               </div>
               <h2 className="text-3xl font-bold text-center text-dark">
                 Welcome To Admin Console

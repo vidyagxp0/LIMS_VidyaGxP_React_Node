@@ -61,7 +61,7 @@ function Login(props) {
           >
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center mb-6">
-                <img src="/login.png" width={"200px"} className="md:w-300px" />
+                <img src="https://connexo.io/assets/img/logo/logo.png" width={"200px"} className="md:w-300px" />
               </div>
               <h2 className="text-xl md:text-3xl md:text-white font-bold text-center ">
                 Welcome To Laboratory Information Management System.
