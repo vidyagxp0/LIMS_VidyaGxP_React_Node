@@ -14,6 +14,7 @@ import BUsinessAssociateModal from "../Modals/BUsinessAssociateModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 
+
 const initialData = [
   {
     checkbox: false,
@@ -37,83 +38,8 @@ const initialData = [
     ZipCode: "23456",
     status: "INITIATED",
   },
-  {
-    checkbox: false,
-    sno: 3,
-    BusinessAssociateName: "Associate 3",
-    UniqueCode: "BA-003",
-    City: "City C",
-    State: "State C",
-    Country: "Country C",
-    ZipCode: "34567",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    BusinessAssociateName: "Associate 4",
-    UniqueCode: "BA-004",
-    City: "City D",
-    State: "State D",
-    Country: "Country D",
-    ZipCode: "45678",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    BusinessAssociateName: "Associate 5",
-    UniqueCode: "BA-005",
-    City: "City E",
-    State: "State E",
-    Country: "Country E",
-    ZipCode: "56789",
-    status: "REJECTED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    BusinessAssociateName: "Associate 6",
-    UniqueCode: "BA-006",
-    City: "City F",
-    State: "State F",
-    Country: "Country F",
-    ZipCode: "67890",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    BusinessAssociateName: "Associate 7",
-    UniqueCode: "BA-007",
-    City: "City G",
-    State: "State G",
-    Country: "Country G",
-    ZipCode: "78901",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    BusinessAssociateName: "Associate 8",
-    UniqueCode: "BA-008",
-    City: "City H",
-    State: "State H",
-    Country: "Country H",
-    ZipCode: "89012",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 9,
-    BusinessAssociateName: "Associate 9",
-    UniqueCode: "BA-009",
-    City: "City I",
-    State: "State I",
-    Country: "Country I",
-    ZipCode: "90123",
-    status: "APPROVED",
-  },
+  
+  
 ];
 
 const BussinessAssociate = () => {
@@ -130,7 +56,8 @@ const BussinessAssociate = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
+   const [editModalData, setEditModalData] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -140,6 +67,31 @@ const BussinessAssociate = () => {
       REJECTED: 0,
     };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+
+  
+
+
+  
     data.forEach((item) => {
       if (item.status === "DROPPED") counts.DROPPED++;
       else if (item.status === "INITIATED") counts.INITIATED++;
@@ -263,6 +215,40 @@ const BussinessAssociate = () => {
     console.log("Deleted item:", item);
   };
 
+
+  const handleModalSubmit = (bussiness) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>
+        item.sno === bussiness.sno ? bussiness : item
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sno: prevData.length + 1,
+          BusinessAssociateName: bussiness.businessAssociateName,
+          UniqueCode: bussiness.uniqueCode,
+          CategoryOfBusinessAssociate:bussiness.categoryOfBusinessAssociate,
+          ContactPerson:bussiness.contactPerson,
+          Location:bussiness.location,
+          City: bussiness.city,
+          State:bussiness.state,
+          Country: bussiness.country,
+          ZipCode:bussiness.zipPin,
+          Phone:bussiness.phone,
+          fax:bussiness.fax,
+          email:bussiness.email,
+          status: "Active",
+        },
+      ]);
+    }
+    closeModal();
+  }
+
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Business Associate</h1>
@@ -326,7 +312,8 @@ const BussinessAssociate = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <BUsinessAssociateModal visible={isModalOpen} closeModal={closeModal} />
+      <BUsinessAssociateModal visible={isModalOpen} closeModal={closeModal}
+       handleSubmit={handleModalSubmit} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -345,5 +332,6 @@ const BussinessAssociate = () => {
     </div>
   );
 };
+
 
 export default BussinessAssociate;

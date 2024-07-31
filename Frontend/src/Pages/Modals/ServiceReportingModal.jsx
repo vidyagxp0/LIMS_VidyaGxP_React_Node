@@ -20,6 +20,7 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
     problemInDetail: "",
     jobDetails: ""
    });
+   
    const handleInputChange = (field, value) => {
     const updatedData = { ...serviceReporting, [field]: value };
     setServiceReporting(updatedData);
@@ -136,3 +137,4 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
 };
 
 export default ServiceReportingModal;
+
