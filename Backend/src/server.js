@@ -10,7 +10,7 @@ const config = require("./config/config.json");
 const app = express();
 const server = http.createServer(app);
 
-// Middleware setup
+// Middleware setup...
 app.use(express.json());
 app.use(
   helmet({
