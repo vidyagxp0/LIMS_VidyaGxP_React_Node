@@ -10,6 +10,7 @@ const config = require("./config/config.json");
 const app = express();
 const server = http.createServer(app);
 
+// Middleware setup
 app.use(express.json());
 app.use(
   helmet({
@@ -17,16 +18,16 @@ app.use(
     crossOriginEmbedderPolicy: false,
   })
 );
-
-app.get('/', (req, res) => {
-  res.send('Welcome to Lims Vidyagxp');
-});
-
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "documents")));
+app.use(express.static(path.join(__dirname, "../public")));
 
-// Define the manual headers
+// Set up EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Define headers
 const predefinedHeaders = [
   "STP ID",
   "Product Name",
@@ -46,14 +47,16 @@ const predefinedHeaders = [
   "File_Name"
 ];
 
-// Ensure error and process folders exist
+// Ensure directories exist
 const errorFolder = path.join(__dirname, 'error');
 const processFolder = path.join(__dirname, 'process');
 fs.ensureDirSync(errorFolder);
 fs.ensureDirSync(processFolder);
 
-// Set to keep track of processed STP IDs
+// Track processed files
 const processedSTPIDs = new Set();
+const processFiles = new Map();
+const errorFiles = new Map();
 
 // Function to extract data from PDF using pdf-parse
 const extractDataFromPDF = async (pdfFilePath) => {
@@ -65,13 +68,13 @@ const extractDataFromPDF = async (pdfFilePath) => {
     const dataBuffer = fs.readFileSync(pdfFilePath);
     const data = await pdfParse(dataBuffer);
 
-    const extractedData = {};
-    predefinedHeaders.forEach(header => {
-      extractedData[header] = '';
-    });
+    const extractedData = predefinedHeaders.reduce((acc, header) => {
+      acc[header] = '';
+      return acc;
+    }, {});
     extractedData['File_Name'] = path.basename(pdfFilePath);
 
-    const text = data.text;
+    const text = data.text || '';
     console.log(`Text extracted from ${pdfFilePath} using pdf-parse:`, text);
 
     if (!text) {
@@ -79,11 +82,9 @@ const extractDataFromPDF = async (pdfFilePath) => {
       return extractDataUsingPdfJs(pdfFilePath);
     }
 
-    // Normalize and clean the text
     const normalizedText = text.replace(/\s+/g, ' ').trim();
     console.log(`Normalized Text:`, normalizedText);
 
-    // Improved key-value extraction pattern
     const keyValuePattern = new RegExp(
       `(${predefinedHeaders.join('|').replace(/ /g, '\\s*')})\\s*[:]?\\s*(.*?)(?=\\s*(${predefinedHeaders.join('|').replace(/ /g, '\\s*')})\\s*[:]?|$)`,
       'gi'
@@ -124,10 +125,10 @@ const extractDataUsingPdfJs = async (pdfFilePath) => {
     const pdfDocument = await loadingTask.promise;
     const numPages = pdfDocument.numPages;
 
-    const extractedData = {};
-    predefinedHeaders.forEach(header => {
-      extractedData[header] = '';
-    });
+    const extractedData = predefinedHeaders.reduce((acc, header) => {
+      acc[header] = '';
+      return acc;
+    }, {});
     extractedData['File_Name'] = path.basename(pdfFilePath);
 
     let textContent = '';
@@ -207,6 +208,16 @@ const processPDFs = async (pdfFilePaths, outputExcelPath) => {
       console.log(`Processing file: ${pdfFilePath}`);
       const extractedData = await extractDataFromPDF(pdfFilePath);
 
+      // Check if no data was extracted
+      if (Object.values(extractedData).every(value => !value)) {
+        console.warn(`No data extracted from PDF: ${pdfFilePath}. Moving file to error folder.`);
+        const destinationPath = path.join(errorFolder, path.basename(pdfFilePath));
+        fs.moveSync(pdfFilePath, destinationPath, { overwrite: true });
+        console.log(`Moved ${pdfFilePath} to ${errorFolder}`);
+        errorFiles.set(pdfFilePath, 'No data extracted');
+        continue;
+      }
+
       // Check for duplicates based on STP ID
       const stpId = extractedData["STP ID"];
       if (stpId && processedSTPIDs.has(stpId)) {
@@ -214,28 +225,25 @@ const processPDFs = async (pdfFilePaths, outputExcelPath) => {
         const destinationPath = path.join(errorFolder, path.basename(pdfFilePath));
         fs.moveSync(pdfFilePath, destinationPath, { overwrite: true });
         console.log(`Moved ${pdfFilePath} to ${errorFolder}`);
-      } else {
-        if (stpId) {
-          processedSTPIDs.add(stpId);
-        }
-        if (Object.keys(extractedData).length === 0) {
-          console.warn(`No data extracted from file: ${pdfFilePath}`);
-          const destinationPath = path.join(errorFolder, path.basename(pdfFilePath));
-          fs.moveSync(pdfFilePath, destinationPath, { overwrite: true });
-          console.log(`Moved ${pdfFilePath} to ${errorFolder}`);
-        } else {
-          console.log("Extracted Data: ", extractedData);
-          allExtractedData.push(extractedData);
-          const destinationPath = path.join(processFolder, path.basename(pdfFilePath));
-          fs.moveSync(pdfFilePath, destinationPath, { overwrite: true });
-          console.log(`Moved ${pdfFilePath} to ${processFolder}`);
-        }
+        errorFiles.set(pdfFilePath, 'Duplicate STP ID');
+        continue;
       }
+      processedSTPIDs.add(stpId);
+
+      allExtractedData.push(extractedData);
+      processFiles.set(pdfFilePath, {
+        status: 'Processed',
+        content: JSON.stringify(extractedData, null, 2), // Store JSON string of the data
+      });
+      const destinationPath = path.join(processFolder, path.basename(pdfFilePath));
+      fs.moveSync(pdfFilePath, destinationPath, { overwrite: true });
+      console.log(`Moved ${pdfFilePath} to ${processFolder}`);
     } catch (error) {
       console.error(`Error processing file ${pdfFilePath}: ${error.message}`);
       const destinationPath = path.join(errorFolder, path.basename(pdfFilePath));
       fs.moveSync(pdfFilePath, destinationPath, { overwrite: true });
       console.log(`Moved ${pdfFilePath} to ${errorFolder}`);
+      errorFiles.set(pdfFilePath, `Error: ${error.message}`);
     }
   }
 
@@ -243,11 +251,18 @@ const processPDFs = async (pdfFilePaths, outputExcelPath) => {
   saveDataToExcel(allExtractedData, predefinedHeaders, outputExcelPath);
 };
 
+// Endpoint to get file processing status
+app.get('/status', (req, res) => {
+  res.render('status', {
+    processedFiles: Array.from(processFiles.entries()),
+    errorFiles: Array.from(errorFiles.entries()),
+  });
+});
+
 // Paths to PDF files and output Excel file
 const pdfFilePaths = [
-   'C:\\Users\\ritik\\Documents\\GitHub\\LIMS_VidyaGxP_React_Node\\Backend\\src\\form_4.pdf',
+  'C:\\Users\\ritik\\Documents\\GitHub\\LIMS_VidyaGxP_React_Node\\Backend\\src\\form_4.pdf',
   'C:\\Users\\ritik\\Documents\\GitHub\\LIMS_VidyaGxP_React_Node\\Backend\\src\\form_6.pdf',
-  'C:\\Users\\ritik\\Documents\\GitHub\\LIMS_VidyaGxP_React_Node\\Backend\\src\\form_7.pdf',
 ];
 
 const outputExcelPath = 'C:\\Users\\ritik\\Documents\\GitHub\\LIMS_VidyaGxP_React_Node\\Backend\\combined_data.xlsx';
