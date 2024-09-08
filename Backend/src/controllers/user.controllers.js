@@ -217,8 +217,6 @@ exports.editUser = async (req, res) => {
     const userdetails = {
       name: req.body.name,
       email: req.body.email,
-      age: req.body.age,
-      gender: req.body.gender,
       profile_pic: getFileUrl(req?.file),
     };
 
@@ -283,12 +281,15 @@ exports.deleteUser = async (req, res) => {
       });
     }
 
-    await UserRole.destroy(
-      { where: { user_id: req.params.id } },
-      { transaction }
+    await User.update(
+      { isActive: false },
+      {
+        where: {
+          user_id: req.params.id,
+        },
+      }
     );
 
-    await User.destroy({ where: { user_id: req.params.id } }, { transaction });
     await transaction.commit();
     res.json({
       error: false,
@@ -305,6 +306,9 @@ exports.deleteUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   User.findAll({
+    where: {
+      isActive: true,
+    },
     include: {
       model: UserRole,
     },

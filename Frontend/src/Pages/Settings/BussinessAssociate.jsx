@@ -13,8 +13,8 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import BUsinessAssociateModal from "../Modals/BUsinessAssociateModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-import { CButton, CFormCheck, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import PDFDownload from "../PDFComponent/PDFDownload "
+
+
 const initialData = [
   {
     checkbox: false,
@@ -38,6 +38,8 @@ const initialData = [
     ZipCode: "23456",
     status: "INITIATED",
   },
+  
+  
 ];
 
 const BussinessAssociate = () => {
@@ -54,11 +56,8 @@ const BussinessAssociate = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
-  const [editModalData, setEditModalData] = useState(null);
+   const [editModalData, setEditModalData] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
-
-
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -68,6 +67,31 @@ const BussinessAssociate = () => {
       REJECTED: 0,
     };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+
+  const handleEditSave = (updatedData) => {
+    const updatedList = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+
+  
+
+
+  
     data.forEach((item) => {
       if (item.status === "DROPPED") counts.DROPPED++;
       else if (item.status === "INITIATED") counts.INITIATED++;
@@ -191,11 +215,12 @@ const BussinessAssociate = () => {
     console.log("Deleted item:", item);
   };
 
-  const handleModalSubmit = (bussinessAssociate) => {
+
+  const handleModalSubmit = (bussiness) => {
     const currentDate = new Date().toISOString().split("T")[0];
     if (editModalData) {
       const updatedList = data.map((item) =>
-        item.sno === bussinessAssociate.sno ? bussinessAssociate : item
+        item.sno === bussiness.sno ? bussiness : item
       );
       setData(updatedList);
     } else {
@@ -204,310 +229,25 @@ const BussinessAssociate = () => {
         {
           checkbox: false,
           sno: prevData.length + 1,
-          BusinessAssociateName: bussinessAssociate.BusinessAssociateName,
-          UniqueCode: bussinessAssociate.UniqueCode,
-          City: bussinessAssociate.City,
-          State: bussinessAssociate.State,
-          Country: bussinessAssociate.Country,
-          ZipCode: bussinessAssociate.ZipCode, 
-          status: "DROPPED",
+          BusinessAssociateName: bussiness.businessAssociateName,
+          UniqueCode: bussiness.uniqueCode,
+          CategoryOfBusinessAssociate:bussiness.categoryOfBusinessAssociate,
+          ContactPerson:bussiness.contactPerson,
+          Location:bussiness.location,
+          City: bussiness.city,
+          State:bussiness.state,
+          Country: bussiness.country,
+          ZipCode:bussiness.zipPin,
+          Phone:bussiness.phone,
+          fax:bussiness.fax,
+          email:bussiness.email,
+          status: "Active",
         },
       ]);
     }
     closeModal();
-  };
-
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-    setEditModalOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setEditModalOpen(false);
-    setEditModalData(null);
-  };
-
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
-  };
-
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [formData, setFormData] = useState(data);
-
-    useEffect(() => {
-      setFormData(data);
-    }, [data]);
-
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSave = () => {
-      onSave(formData);
-    };
-    return (
-      <div>
-      <CModal
-   alignment="center"
-   visible={visible}
-   onClose={closeModal}
-   size="lg"
- >
-   <CModalHeader>
-     <CModalTitle>Add Business Associate</CModalTitle>
-   </CModalHeader>
-   <CModalBody>
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Business Associate Name <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Business Associate Name"
-       value={formData?.BusinessAssociateName||""}
-       onChange={handleChange}
-       name="BusinessAssociateName"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Unique Code <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Unique Code"
-       value={formData?.UniqueCode||""}
-       onChange={handleChange}
-       name="UniqueCode"
-       required
-     />
-
-     <label className="mb-2">
-       Category Of Business Associate <span style={{ color: "red" }}>*</span>
-     </label>
-
-     <CFormCheck
-className="mb-3"
-type="checkbox"
-id="checkbox1"
-label="Customer"
-checked={formData?.CategoryOfBussinessAssociate||""}
-onChange={handleChange}
-name="CategoryOfBussinessAssociate"
-/>
-<CFormCheck
-className="mb-3"
-type="checkbox"
-id="checkbox2"
-label="Supplier"
-checked={formData?.CategoryOfBussinessAssociate||""}
-onChange={handleChange}
-name="CategoryOfBussinessAssociate"
-/>
-<CFormCheck
-className="mb-3"
-type="checkbox"
-id="checkbox3"
-label="Manufacturer"
-checked={formData.CategoryOfBussinessAssociate||""}
-onChange={handleChange}
-name="CategoryOfBussinessAssociate"
-/>
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Contact Person <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Contact Person"
-       value={formData?.ContactPerson||""}
-       onChange={handleChange}
-       name="ContactPerson"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Location <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Location"
-       value={formData?.Location||""}
-       onChange={handleChange}
-       name="Location"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Address : Line 1 <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Address : Line 1"
-       value={formData?.AddressLine1}
-       onChange={handleChange}
-       name="AddressLine1"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={<>Address : Line 2</>}
-       placeholder="Address : Line 2"
-       value={formData?.AddressLine2}
-       onChange={handleChange}
-       name="AddressLine2"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={<>Address : Line 3</>}
-       placeholder="Address : Line 3"
-       value={formData?.AddressLine3}
-       onChange={handleChange}
-       name="AddressLine3"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           City <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="City"
-       value={formData?.City||""}
-       onChange={handleChange}
-       name="City"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           State <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="State"
-       value={formData?.State||""}
-       onChange={handleChange}
-       name="State"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Country <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Country"
-       value={formData?.Country||""}
-       onChange={handleChange}
-       name="Country"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           ZIP / PIN <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="ZIP / PIN"
-       value={formData?.ZipCode||""}
-       onChange={handleChange}
-       name="ZipCode"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Phone <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       
-       placeholder="Phone"
-       value={formData?.Phone}
-       onChange={handleChange}
-       name="Phone"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Fax <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Fax"
-       value={formData.Fax}
-       onChange={handleChange}
-       name="Fax"
-       required
-     />
-
-     <CFormInput
-       className="mb-3"
-       type="text"
-       label={
-         <>
-           Email <span style={{ color: "red" }}>*</span>
-         </>
-       }
-       placeholder="Email"
-       value={formData?.Email}
-       onChange={handleChange}
-       name="Email"
-       required
-     />
-   </CModalBody>
-   <CModalFooter>
-     <CButton color="light" onClick={closeModal}>
-       Back
-     </CButton>
-     <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
-   </CModalFooter>
- </CModal>
-   
- </div>
-    )
   }
+
 
   return (
     <div className="p-4">
@@ -574,11 +314,8 @@ name="CategoryOfBussinessAssociate"
         onDelete={handleDelete}
         openEditModal={openEditModal}
       />
-      <BUsinessAssociateModal
-       visible={isModalOpen}
-       closeModal={closeModal}
-       handleSubmit={handleModalSubmit}
-        />
+      <BUsinessAssociateModal visible={isModalOpen} closeModal={closeModal}
+       handleSubmit={handleModalSubmit} />
       {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
@@ -605,5 +342,6 @@ name="CategoryOfBussinessAssociate"
     </div>
   );
 };
+
 
 export default BussinessAssociate;
