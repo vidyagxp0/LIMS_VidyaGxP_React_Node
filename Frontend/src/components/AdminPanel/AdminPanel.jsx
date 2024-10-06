@@ -84,7 +84,7 @@ function AdminPanel(props) {
               </div>
               <h2 className="text-3xl font-bold text-center text-dark">
                 Welcome To Admin Console
-              </h2>
+              </h2> 
 
               {/* <div className="text-center text-lg text-gray-700 mb-6"> <p>Enter your credentials to access the LIMS Software.</p></div> */}
             </div>

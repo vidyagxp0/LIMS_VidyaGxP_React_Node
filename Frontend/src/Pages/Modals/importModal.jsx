@@ -16,17 +16,24 @@ const ImportModal = ({
 
   const handleCreateExcel = () => {
     const wb = XLSX.utils.book_new();
-    const headerRow = columns.map((column) => column.header);
-    const dataRows = initialData.map((data) =>
-      columns.map((column) => data[column.accessor])
-    );
-
+    
+    // Ensure columns are mapped correctly for the header row
+    const headerRow = columns.map(column => column.header);
+    
+    // Make sure initialData is properly handled to map rows
+    const dataRows = Array.isArray(initialData) && initialData.length > 0
+      ? initialData.map(data => columns.map(column => data[column.accessor] || ''))
+      : [['No Data Available']]; // If no data is available, we add this placeholder row
+  
+    // Combine header and data rows
     const ws = XLSX.utils.aoa_to_sheet([headerRow, ...dataRows]);
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, "sample.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    
+    // Export the workbook
+    XLSX.writeFile(wb, 'sample.xlsx');
   };
-
-  const handleFileUpload = (event) => {
+  
+  const handleFileUpload = event => {
     const file = event.target.files[0];
     const reader = new FileReader();
 

@@ -463,7 +463,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
-                Specifications Test Procedure (STP)
+                Standart Test Procedure (STP)
               </CNavItem>
             </Link>
             <Link to="/Masters/TestCategories">
