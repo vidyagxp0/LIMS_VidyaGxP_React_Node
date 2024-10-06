@@ -771,7 +771,7 @@ function TestPlan() {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="lg"
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Add Test Plan</CModalTitle>
