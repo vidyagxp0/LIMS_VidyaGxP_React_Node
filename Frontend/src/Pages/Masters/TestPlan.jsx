@@ -342,7 +342,16 @@ function TestPlan() {
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [selectedSpecId, setSelectedSpecId] = useState("");
-    const [availableTests, setAvailableTests] = useState([]);
+    const [availableTests, setAvailableTests] = useState([
+      "Description",
+      "Weight of 20 Tablets",
+      "Average Weight ( mg )",
+      "Thickness",
+      "Disintigration  Time",
+      "Hardness",
+      "Diameter",
+      "Friability",
+    ]);
     const [selectedTests, setSelectedTests] = useState([]);
     const [refreshedTests, setRefreshedTests] = useState([]);
     const [testPlan, setTestPlan] = useState({
@@ -841,7 +850,9 @@ function TestPlan() {
               <h5>Available Tests</h5>
               <div className="list-container">
                 <ul>
-                  {availableTests.map((data) => (
+                  {availableTests.map((data) =>
+                  {
+                  return (
                     <li key={data}>
                       <input
                         type="checkbox"
@@ -855,7 +866,8 @@ function TestPlan() {
                         {data}
                       </label>
                     </li>
-                  ))}
+                  )
+                 })}
                 </ul>
               </div>
             </div>
