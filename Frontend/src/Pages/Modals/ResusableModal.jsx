@@ -14,9 +14,13 @@ import {
   CTableRow,
 } from "@coreui/react";
 
-const ReusableModal = ({ visible, closeModal, data, fields, title }) => {
+const ReusableModal = ({ visible, closeModal, data, fields, title,updateStatus }) => {
   const [statusModal, setStatusModal] = useState(false);
-
+  const handleStatusChange = (newStatus) => {
+    updateStatus(data.sampleType, newStatus); // Update status in the parent component
+    setStatusModal(false); // Close status modal
+    closeModal(); // Close view modal
+  };
   return (
     <>
       <CModal
@@ -83,6 +87,7 @@ const ReusableModal = ({ visible, closeModal, data, fields, title }) => {
           <StatusModal
             visible={statusModal}
             closeModal={() => setStatusModal(false)}
+            onUpdateStatus={handleStatusChange}
           />
         )}
       </CModal>
@@ -90,29 +95,43 @@ const ReusableModal = ({ visible, closeModal, data, fields, title }) => {
   );
 };
 
-const StatusModal = ({ visible, closeModal }) => (
-  <CModal alignment="center" visible={visible} onClose={closeModal}>
-    <CModalHeader>
-      <CModalTitle>Update Status</CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-      <CFormSelect
-        label="Status"
-        options={[
-          { label: "Update Status", value: "" },
-          { label: "Approve", value: "approve" },
-          { label: "Drop", value: "drop" },
-          { label: "Reject", value: "reject" },
-        ]}
-      />
-    </CModalBody>
-    <CModalFooter>
-      <CButton color="light" onClick={closeModal}>
-        Cancel
-      </CButton>
-      <CButton color="dark">Update</CButton>
-    </CModalFooter>
-  </CModal>
-);
+const StatusModal = ({ visible, closeModal,onUpdateStatus }) => {
+  const [selectedStatus, setSelectedStatus] = useState("");
+
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
+  };
+
+  const handleUpdate = () => {
+    onUpdateStatus(selectedStatus); // Call parent function to update the status
+    closeModal(); // Close the modal
+  };
+  return (
+    <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModalHeader>
+        <CModalTitle>Update Status</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CFormSelect
+          label="Status"
+          value={selectedStatus}
+        onChange={handleStatusChange}
+          options={[
+            { label: "Select Status", value: "" },
+          { label: "Approve", value: "APPROVED" },
+          { label: "Drop", value: "DROPPED" },
+          { label: "Reject", value: "REJECTED" },
+          ]}
+        />
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={closeModal}>
+          Cancel
+        </CButton>
+        <CButton color="dark" onClick={handleUpdate} >Update</CButton>
+      </CModalFooter>
+    </CModal>
+  );
+}
 
 export default ReusableModal;

@@ -143,7 +143,7 @@ const ViewModal = ({ visible, closeModal, data, updateStatus }) => {
             <StatusModal
               visible={statusModal}
               closeModal={() => setStatusModal(false)}
-              onUpdateStatus={handleStatusChange} // Pass handleStatusChange
+              onUpdateStatus={handleStatusChange}
             />
           )}
       </CModal>

@@ -125,6 +125,8 @@ function TestPlan() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+
+ 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -329,6 +331,13 @@ function TestPlan() {
     ]);
     setLastStatus(nextStatus);
     setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -766,6 +775,7 @@ function TestPlan() {
       setRefreshedTests(selectedTests);
     };
 
+    
     return (
       <CModal
         alignment="center"
@@ -1099,6 +1109,7 @@ function TestPlan() {
           data={viewModalData}
           fields={fields}
           title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
       {editModalData && (

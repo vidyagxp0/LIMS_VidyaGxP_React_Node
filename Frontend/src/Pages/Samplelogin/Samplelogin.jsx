@@ -130,8 +130,13 @@ const [isEditModal , setIsEditModal] = useState(false)
   });
 
   const handleStatusUpdate = (sampleType, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.sampleType === sampleType ? { ...item, status: newStatus } : item
+    const updatedData = data.map((item) =>{
+      console.log(item, "iiiiiiiiii")
+      return(
+        item.sampleType === sampleType ? { ...item, status: newStatus } : item
+      )
+    }
+    
     );
     setData(updatedData);
   };
@@ -281,7 +286,7 @@ const [isEditModal , setIsEditModal] = useState(false)
           visible={isViewModalOpen}
           closeModal={() => setIsViewModalOpen(false)}
           data={viewModalData}
-          updateStatus={handleStatusUpdate} // Pass the status update function
+          updateStatus={handleStatusUpdate} 
         />
       )}
       {isModalsOpen && (
