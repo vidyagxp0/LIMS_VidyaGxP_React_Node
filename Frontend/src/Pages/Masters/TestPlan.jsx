@@ -624,7 +624,13 @@ function TestPlan() {
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [selectedSpecId, setSelectedSpecId] = useState("");
-    const [availableTests, setAvailableTests] = useState([]);
+    const [availableTests, setAvailableTests] = useState([
+      "Blood Test",
+      "Urine Test",
+      "X-Ray",
+      "MRI",
+      "CT Scan",
+    ]);
     const [selectedTests, setSelectedTests] = useState([]);
     const [refreshedTests, setRefreshedTests] = useState([]);
 

@@ -72,12 +72,19 @@ const SampleLogin = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
+const [isEditModal , setIsEditModal] = useState(false)
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null); // State to hold the selected row data
+  const openEditModal = (rowData) => {
+    setSelectedRowData(rowData); // Set the selected row data
+    setIsModalOpen(true); // Open the modal
+  };
+
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
+
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
@@ -179,6 +186,7 @@ const SampleLogin = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
@@ -196,10 +204,16 @@ const SampleLogin = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setIsViewModalOpen(false);
   };
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
+  };
+
+  const onRowClick = (rowData) => {
+    setSelectedRowData(rowData);
+    setIsEditModal(true); // Open the modal when row is clicked
   };
 
   const handleDelete = (item) => {
@@ -251,6 +265,7 @@ const SampleLogin = () => {
           <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />
         </div>
       </div>
+      
       <Table
         columns={columns}
         data={filteredData}
@@ -258,7 +273,9 @@ const SampleLogin = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
       />
-      <SampleLogin2Modal visible={isModalOpen} closeModal={closeModal} />
+      <SampleLogin2Modal visible={isModalOpen} 
+        closeModal={closeModal} 
+        rowData={selectedRowData} />
       {viewModalData && (
         <ViewModal
           visible={isViewModalOpen}
