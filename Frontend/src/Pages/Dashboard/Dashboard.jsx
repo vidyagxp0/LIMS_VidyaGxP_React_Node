@@ -21,12 +21,12 @@ import Chart9 from "./Chart9";
 import Chart10 from "./Chart10";
 
 function Dashboard(props) {
-  useEffect(() => {
-    if (props.show) {
-      toast.success("Login successfully");
-      props.setToast(false);
-    }
-  }, [props.show]);
+  // useEffect(() => {
+  //   if (props.show) {
+  //     toast.success("Login successfully");
+  //     props.setToast(false);
+  //   }
+  // }, [props.show]);
 
   const latestProducts = [
     "Apixaban",
