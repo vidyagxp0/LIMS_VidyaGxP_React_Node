@@ -23,6 +23,8 @@ const initialData = [
     genericName: "Generic 1",
     specificationCode: "Spec 001",
     attachment: "attachment",
+    analyst:"Mayank",
+    analysisDate:"27-09-2024",
     status: "INITIATED",
   
   },
@@ -35,6 +37,8 @@ const initialData = [
     genericName: "Generic 2",
     specificationCode: "Spec 002",
     attachment: "attachment",
+    analyst:"Pankaj",
+    analysisDate:"30-09-2024",
     status: "APPROVED",
   
   },
@@ -47,6 +51,8 @@ const initialData = [
     genericName: "Generic 3",
     specificationCode: "Spec 003",
     attachment: "attachment",
+    analyst:"Gaurav",
+    analysisDate:"21-09-2024",
     status: "REJECTED",
   
   },
@@ -116,11 +122,17 @@ const SampleLogin = () => {
     );
   });
 
+  const handleStatusUpdate = (sampleType, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.sampleType === sampleType ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
+
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
     setIsViewModalOpen(true);
   };
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -150,8 +162,10 @@ const SampleLogin = () => {
     { header: "A.R. No.", accessor: "createdAt" },
     { header: "Generic Name", accessor: "createdAt" },
     { header: "Specification Code", accessor: "createdAt" },
-    { header: "attachment", accessor: "attachment" },
     { header: "Status", accessor: "status" },
+    { header: "Analyst", accessor: "analyst" },
+    { header: "Analysis Date", accessor: "analysisDate" },
+    { header: "attachment", accessor: "attachment" },
     {
       header: "Actions",
       accessor: "action",
@@ -245,11 +259,12 @@ const SampleLogin = () => {
         onDelete={handleDelete}
       />
       <SampleLogin2Modal visible={isModalOpen} closeModal={closeModal} />
-      {isViewModalOpen && (
+      {viewModalData && (
         <ViewModal
           visible={isViewModalOpen}
-          closeModal={closeViewModal}
+          closeModal={() => setIsViewModalOpen(false)}
           data={viewModalData}
+          updateStatus={handleStatusUpdate} // Pass the status update function
         />
       )}
       {isModalsOpen && (

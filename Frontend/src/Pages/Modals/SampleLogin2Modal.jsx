@@ -252,6 +252,22 @@ const SampleLogin2Modal = (_props) => {
             disabled
           />
 
+<CFormInput
+            type="text"
+            className="mb-3"
+            label="Analyst"
+            placeholder=""
+            
+          />
+
+<CFormInput
+            type="date"
+            className="mb-3"
+            label="Analysis Date"
+            placeholder=""
+            
+          />
+
           {showAdditionalFields && (
             <>
               <CFormInput
