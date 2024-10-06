@@ -39,13 +39,14 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
 
 const initialData = [
   {
     checkbox: false,
     sno: 1,
     specificationId: "SP001",
-    productName: "Product 1",
+    productName: "Dolo 650",
     tests: "Test A, Test B",
     initiatedAt: "2024-01-01",
     status: "INITIATED",
@@ -54,11 +55,65 @@ const initialData = [
     checkbox: false,
     sno: 2,
     specificationId: "SP002",
-    productName: "Product 2",
+    productName: "Paracetamol 250mg",
     tests: "Test C, Test D",
     initiatedAt: "2024-01-02",
     status: "APPROVED",
   },
+  {
+    checkbox: false,
+    sno: 3,
+    specificationId: "SP003",
+    productName: "Paracetamol 500mg",
+    tests: "Test E, Test F",
+    initiatedAt: "2024-01-03",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 4,
+    specificationId: "SP004",
+    productName: "Ibuprofen 200mg",
+    tests: "Test G, Test H",
+    initiatedAt: "2024-01-04",
+    status: "INITIATED",
+  },
+  {
+    checkbox: false,
+    sno: 5,
+    specificationId: "SP005",
+    productName: "Amoxicillin 500mg",
+    tests: "Test I, Test J",
+    initiatedAt: "2024-01-05",
+    status: "APPROVED",
+  },
+  {
+    checkbox: false,
+    sno: 6,
+    specificationId: "SP006",
+    productName: "Aspirin 100mg",
+    tests: "Test K, Test L",
+    initiatedAt: "2024-01-06",
+    status: "IN PROGRESS",
+  },
+  {
+    checkbox: false,
+    sno: 7,
+    specificationId: "SP007",
+    productName: "Cetirizine 10mg",
+    tests: "Test M, Test N",
+    initiatedAt: "2024-01-07",
+    status: "INITIATED",
+  },
+];
+
+const fields = [
+  { label: "S.No", key: "sno" },
+  { label: "Specification ID", key: "specificationId" },
+  { label: "Product Name", key: "productName" },
+  { label: "Tests", key: "tests" },
+  { label: "Initiated At", key: "initiatedAt" },
+  { label: "Status", key: "status" },
 ];
 
 function TestPlan() {
@@ -218,6 +273,15 @@ function TestPlan() {
     },
   ];
 
+  const fields = [
+    { label: "Specification ID", key: "specificationId" },
+    { label: "Product Name", key: "productName" },
+    { label: "Tests", key: "tests" },
+    { label: "Initiated At", key: "initiatedAt" },
+    { label: "Status", key: "status" },
+  ];
+
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -243,7 +307,7 @@ function TestPlan() {
   };
 
   const closeViewModal = () => {
-    setViewModalData(false);
+    setViewModalData(null);
   };
 
   const handleDelete = (item) => {
@@ -293,14 +357,18 @@ function TestPlan() {
     };
 
     const specTestsMap = {
-      "ACC-00-QC-01": ["Test 1", "Test 2", "Test 3"],
-      SPC001: ["Test A", "Test B"],
-      "WBL/STPF/FG/0493/02": ["Test X", "Test Y", "Test Z"],
-      "QC-002": ["Test M", "Test N"],
-      "LAB-03-A01": ["Test C", "Test D"],
-      "MFG-PLT-009": ["Test P", "Test Q"],
-      "FG-TEST-123": ["Test L", "Test O"],
-      "BATCH-789": ["Test G", "Test H"],
+      "MED-001": ["Blood Test", "X-Ray", "MRI Scan", "CT Scan"],
+      "MED-002": ["Liver Function Test", "Blood Pressure Test", "Urine Test"],
+      "MED-003": ["COVID-19 Test", "Flu Test", "Allergy Test"],
+      "MED-004": ["Thyroid Test", "Cholesterol Test", "Blood Sugar Test"],
+      "MED-005": ["ECG", "Echocardiogram", "Cardiac Stress Test"],
+      "MED-006": [
+        "Kidney Function Test",
+        "Bone Density Test",
+        "Vitamin D Test",
+      ],
+      "MED-007": ["Complete Blood Count", "Hemoglobin Test", "Platelet Count"],
+      "MED-008": ["Antibody Test", "Blood Clot Test", "Lung Function Test"],
     };
 
     const handleSpecIdChange = (e) => {
@@ -645,14 +713,18 @@ function TestPlan() {
     };
 
     const specTestsMap = {
-      "ACC-00-QC-01": ["Test 1", "Test 2", "Test 3"],
-      SPC001: ["Test A", "Test B"],
-      "WBL/STPF/FG/0493/02": ["Test X", "Test Y", "Test Z"],
-      "QC-002": ["Test M", "Test N"],
-      "LAB-03-A01": ["Test C", "Test D"],
-      "MFG-PLT-009": ["Test P", "Test Q"],
-      "FG-TEST-123": ["Test L", "Test O"],
-      "BATCH-789": ["Test G", "Test H"],
+      "MED-001": ["Blood Test", "X-Ray", "MRI Scan", "CT Scan"],
+      "MED-002": ["Liver Function Test", "Blood Pressure Test", "Urine Test"],
+      "MED-003": ["COVID-19 Test", "Flu Test", "Allergy Test"],
+      "MED-004": ["Thyroid Test", "Cholesterol Test", "Blood Sugar Test"],
+      "MED-005": ["ECG", "Echocardiogram", "Cardiac Stress Test"],
+      "MED-006": [
+        "Kidney Function Test",
+        "Bone Density Test",
+        "Vitamin D Test",
+      ],
+      "MED-007": ["Complete Blood Count", "Hemoglobin Test", "Platelet Count"],
+      "MED-008": ["Antibody Test", "Blood Clot Test", "Lung Function Test"],
     };
 
     const handleSpecIdChange = (e) => {
@@ -970,7 +1042,12 @@ function TestPlan() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Test_plan.pdf" title="Test Plan Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Test_plan.pdf"
+              title="Test Plan Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Test Categories"
@@ -996,9 +1073,7 @@ function TestPlan() {
           onAdd={addNewStorageCondition}
         />
       )}
-      {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
-      )}
+
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -1006,6 +1081,15 @@ function TestPlan() {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
         />
       )}
       {editModalData && (

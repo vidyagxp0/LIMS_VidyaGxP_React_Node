@@ -692,7 +692,12 @@ function SampleType() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Type.pdf" title="Sample Type Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Sample_Type.pdf"
+              title="Sample Type Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Sample Type"
