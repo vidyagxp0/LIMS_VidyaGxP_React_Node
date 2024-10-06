@@ -61,7 +61,7 @@ function Login(props) {
           >
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center mb-6">
-                <img src="https://connexo.io/assets/img/logo/logo.png" width={"200px"} className="md:w-300px" />
+                <img src="login.png" width={"200px"} className="md:w-300px" />
               </div>
               <h2 className="text-xl md:text-3xl md:text-white font-bold text-center ">
                 Welcome To Laboratory Information Management System.
@@ -77,7 +77,7 @@ function Login(props) {
                   className="p-3 rounded-full w-full bg-white border border-gray-400 "
                 />
               </div>
-              <div className="mb-4 md:text-white  relative">
+              <div className="mb-4 md:text-white relative">
                 <div className="relative">
                   <CFormInput
                     type={showPassword ? "text" : "password"}
