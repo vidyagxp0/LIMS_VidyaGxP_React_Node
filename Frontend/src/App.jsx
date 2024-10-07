@@ -210,6 +210,7 @@ import TestHistory from "./Pages/Settings/TestHistory.jsx";
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx";
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx";
 import ControlSample from "./Pages/Control Sample/ControlSample.jsx";
+import SpecificationSpec from "./Pages/SpecificationSpec.jsx";
 
 import AdminPanel from "./components/AdminPanel/AdminPanel.jsx";
 import AdminMainPanel from "./components/AdminPanel/AdminMainPanel.jsx";
@@ -243,6 +244,7 @@ function App() {
             <Route path="/storage-location" element={<StorageLocation />} />
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/control-sample" element={<ControlSample />} />
+            <Route path="/specificationSpec" element={<SpecificationSpec />} />
 
             <Route path="/department" element={<Department />} />
             <Route path="/department/admin" element={<Admin />} />

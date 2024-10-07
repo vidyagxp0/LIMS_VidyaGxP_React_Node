@@ -22,39 +22,17 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import ReusableModal from "../Modals/ResusableModal.jsx";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    InstrumentID: "Product 1",
-    InstrumentCategory: "Description 1",
-    UsageCode: "MOD001",
-    ProductName: "Brand A",
-    ARNO: "Model X",
-    UsedFor: "MFG12345",
-    UsedBy: "Supplier 1",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    InstrumentID: "Product 2",
-    InstrumentCategory: "Description 2",
-    UsageCode: "MOD002",
-    ProductName: "Brand B",
-    ARNO: "Model Y",
-    UsedFor: "MFG67890",
-    UsedBy: "Supplier 2",
-    status: "Inactive",
-  },
-];
+const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
+
 
 const InstrumentUsage = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rows, setRows] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
 
@@ -262,7 +240,7 @@ const InstrumentUsage = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ARNO.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row?.ARNO?.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -311,6 +289,25 @@ const InstrumentUsage = () => {
       ),
     },
   ];
+
+  const fields = [
+    { label: "InstrumentID", key: "InstrumentID" },
+    { label: "InstrumentCategory", key: "InstrumentCategory" },
+    { label: "UsageCode", key: "UsageCode" },
+    { label: "ProductName", key: "ProductName" },
+    { label: "ARNO", key: "ARNO" },
+    { label: "UsedFor", key: "UsedFor" },
+    { label: "UsedBy", key: "UsedBy" },
+    { label: "status", key: "status" },
+  ];
+
+  const handleStatusUpdate = (sampleType, newStatus) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.sampleType === sampleType ? { ...row, status: newStatus } : row
+      )
+    );
+  };
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -399,7 +396,12 @@ const InstrumentUsage = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Instrument_Usage.pdf" title="Instrument Usage Data" />
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Instrument_Usage.pdf"
+            title="Instrument Usage Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton text="Instrument Usage" color="blue" onClick={openModal} />
         </div>
@@ -417,11 +419,14 @@ const InstrumentUsage = () => {
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
       />
-      {isViewModalOpen && (
-        <ViewModal
+      {viewModalData && (
+        <ReusableModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+          fields={fields}
+          title="InstrumentMasterReg."
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (

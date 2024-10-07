@@ -93,10 +93,21 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
     console.log(updatedData);
   };
 
+  // !+++++++++++++++++++++++
   const handleFormSubmit = () => {
-    handleSubmit({ ...instrumentData, fields });
+    const instrumentDetails = { ...instrumentData, fields };
+    
+    const existingInstruments = JSON.parse(localStorage.getItem("instruments")) || [];
+    const updatedInstruments = [...existingInstruments, instrumentDetails];
+    localStorage.setItem("instruments", JSON.stringify(updatedInstruments));
+  
+    handleSubmit(instrumentDetails);
+    
     closeModal();
   };
+  // !+++++++++++++++++++++++
+
+  
 
   return (
     <div>
