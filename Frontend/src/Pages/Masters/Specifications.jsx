@@ -27,34 +27,21 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    productCode: "P001",
-    productName: "Product 1",
-    specificationID: "S001",
-    specificationName: "Specification 1",
-    effectFrom: "2024-01-01",
-    reviewDate: "2024-06-01",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    productCode: "P002",
-    productName: "Product 2",
-    specificationID: "S002",
-    specificationName: "Specification 2",
-    effectFrom: "2024-01-02",
-    reviewDate: "2024-06-02",
-    status: "APPROVED",
-  },
+const initialData = JSON.parse(localStorage.getItem("data")) || "";
+
+const fields = [
+  { label: "Product Name", key: "productName" },
+  { label: "Specification ID", key: "specificationID" },
+  { label: "Specification Name", key: "specificationName" },
+  { label: "Effect From", key: "effectFrom" },
+  { label: "Review Date", key: "reviewDate" },
+  { label: "Status", key: "status" },
 ];
 
 function Specifications() {
-  const [data, setData] = useState(initialData);
+  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,6 +49,15 @@ function Specifications() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("specificationTypes");
+    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+  });
+
+  useEffect(() => {
+    localStorage.setItem("specificationTypes", JSON.stringify(data));
+  }, [data]);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -77,12 +73,14 @@ function Specifications() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        return (
+          row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : []; // Fallback to an empty array if data is not an array
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -165,17 +163,31 @@ function Specifications() {
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
+    const newData = [
+      ...data,
       {
         ...newCondition,
-        sno: prevData.length + 1,
+        sno: data.length + 1,
         checkbox: false,
         status: nextStatus,
       },
-    ]);
+    ];
+
+    // Update the state with new data
+    setData(newData);
+
+    // Store the new data in local storage
+    //  localStorage.setItem("specificationTypes", JSON.stringify(newData));
+
     setLastStatus(nextStatus);
     setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -636,7 +648,12 @@ function Specifications() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Specification.pdf" title="Specification Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Specification.pdf"
+              title="Specification Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Specification"
@@ -662,9 +679,6 @@ function Specifications() {
           onAdd={addNewStorageCondition}
         />
       )}
-      {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
-      )}
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -672,6 +686,16 @@ function Specifications() {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
       {editModalData && (

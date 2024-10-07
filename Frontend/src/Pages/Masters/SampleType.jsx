@@ -31,28 +31,19 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    sampleTypeName: "Type 1",
-    addDate: "2024-01-01",
-    daysToComplete: 10,
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    sampleTypeName: "Type 2",
-    addDate: "2024-01-02",
-    daysToComplete: 20,
-    status: "INITIATED",
-  },
+const initialData = JSON.parse(localStorage.getItem("data")) || "";
+
+const fields = [
+  { label: "Sample Type Name", key: "sampleTypeName" },
+  { label: "Add Date", key: "addDate" },
+  { label: "Days to Complete", key: "daysToComplete" },
+  { label: "Status", key: "status" },
 ];
 
 function SampleType() {
-  const [data, setData] = useState(initialData);
+  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,6 +51,16 @@ function SampleType() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null);
+
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("specificationTypes");
+    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+  });
+
+  useEffect(() => {
+    localStorage.setItem("sampletypes", JSON.stringify(data));
+  }, [data]);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -72,13 +73,15 @@ function SampleType() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        const productName = row.productName || ""; // Fallback to an empty string if productName is undefined
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
@@ -102,6 +105,13 @@ function SampleType() {
     ]);
     setLastStatus(nextStatus);
     setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -732,7 +742,14 @@ function SampleType() {
         />
       )}
       {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
       )}
       {editModalData && (
         <EditModal

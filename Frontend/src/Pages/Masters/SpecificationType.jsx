@@ -24,6 +24,7 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
 
 const initialData = [
   {
@@ -39,7 +40,14 @@ const initialData = [
     specificationType: "Type 2",
     addedOn: "2024-01-02",
     status: "Inactive",
-  }
+  },
+];
+
+const fields = [
+  { label: "Specification Type", key: "specificationType" },
+  { label: "Added On", key: "addedOn" },
+
+  { label: "Status", key: "status" },
 ];
 
 function SpecificationType() {
@@ -117,11 +125,7 @@ function SpecificationType() {
       }
     };
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>Update specification type</CModalTitle>
         </CModalHeader>
@@ -134,7 +138,16 @@ function SpecificationType() {
             label="Specification Type Name"
             placeholder="Specification Type Name"
             name="specificationType"
-            value={formData.specificationType||""}
+            value={formData.specificationType || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="ADDED ON"
+            placeholder="Specification Type Name"
+            name="specificationType"
+            value={formData.specificationType || ""}
             onChange={handleChange}
           />
         </CModalBody>
@@ -142,7 +155,9 @@ function SpecificationType() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -206,6 +221,27 @@ function SpecificationType() {
     setData(newData);
     console.log("Deleted item:", item);
   };
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
 
   return (
     <>
@@ -228,8 +264,14 @@ function SpecificationType() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Specification_Type.pdf" title="Specification Type Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Specification_Type.pdf"
+              title="Specification Type Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add" color="pink" onClick={openModal} />
             {/* <ATMButton
               text="Add Specifications Type"
               color="blue"
@@ -255,16 +297,23 @@ function SpecificationType() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-{editModalData && (
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+      {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
           closeModal={closeEditModal}
           data={editModalData}
           onSave={handleEditSave}
         />
-      )}
-      {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
     </>
   );

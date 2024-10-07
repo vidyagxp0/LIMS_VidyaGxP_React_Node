@@ -126,7 +126,6 @@ function TestPlan() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
- 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -282,7 +281,6 @@ function TestPlan() {
     { label: "Initiated At", key: "initiatedAt" },
     { label: "Status", key: "status" },
   ];
-
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -784,7 +782,6 @@ function TestPlan() {
       setRefreshedTests(selectedTests);
     };
 
-    
     return (
       <CModal
         alignment="center"
@@ -850,24 +847,23 @@ function TestPlan() {
               <h5>Available Tests</h5>
               <div className="list-container">
                 <ul>
-                  {availableTests.map((data) =>
-                  {
-                  return (
-                    <li key={data}>
-                      <input
-                        type="checkbox"
-                        value={data}
-                        id={data}
-                        className="check-left"
-                        onChange={() => handleTestSelect(data)}
-                        checked={selectedTests.includes(data)}
-                      />
-                      <label className="labels" htmlFor={data}>
-                        {data}
-                      </label>
-                    </li>
-                  )
-                 })}
+                  {availableTests.map((data) => {
+                    return (
+                      <li key={data}>
+                        <input
+                          type="checkbox"
+                          value={data}
+                          id={data}
+                          className="check-left"
+                          onChange={() => handleTestSelect(data)}
+                          checked={selectedTests.includes(data)}
+                        />
+                        <label className="labels" htmlFor={data}>
+                          {data}
+                        </label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
