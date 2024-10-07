@@ -120,6 +120,16 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Storage Condition
             </CNavItem>
           </Link>
+          <Link to="/specificationSpec">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/specificationSpec"), gap: "18px" }}
+              className={isActive("/specificationSpec")}
+            >
+              <AiOutlineContainer />
+              Specification Spec
+            </CNavItem>
+          </Link>
           <Link to="/storage-location">
             <CNavItem
               href="#"
@@ -140,6 +150,17 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Analyst Personal Information
             </CNavItem>
           </Link>
+          <Link to="/control-sample">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/control-sample"), gap: "18px" }}
+              className={isActive("/control-sample")}
+            >
+              <TbCurrentLocation />
+             Control Sample Management
+            </CNavItem>
+          </Link>
+         
           <CNavGroup
             className={isActive("/department")}
             toggler={
@@ -204,6 +225,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                   <span className="nav-icon-bullet"></span>
                 </span>
                 Sample Login
+              </CNavItem>
+            </Link>
+            <Link to="/sample-planning">
+              <CNavItem
+                href="#"
+                className={isActive("/sample-planning")}
+                style={{ ...isActive("/sample-planning") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Sample Planning & Analysis
               </CNavItem>
             </Link>
             <Link to="/investigationl1">
@@ -473,7 +506,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
-                Standart Test Procedure (STP)
+                Standard Test Procedure (STP)
               </CNavItem>
             </Link>
             <Link to="/Masters/TestCategories">
