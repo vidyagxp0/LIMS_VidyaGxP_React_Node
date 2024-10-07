@@ -37,7 +37,13 @@ import { AiOutlineClose } from "react-icons/ai";
 
 import "./Sidebar.css";
 
-import {CNavGroup,CNavItem,CSidebar,CSidebarBrand,CSidebarHeader,CSidebarNav,
+import {
+  CNavGroup,
+  CNavItem,
+  CSidebar,
+  CSidebarBrand,
+  CSidebarHeader,
+  CSidebarNav,
 } from "@coreui/react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -67,10 +73,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
       >
         <CSidebarHeader className="border-bottom ">
           <CSidebarBrand>
-            <Link
-              to="/dashboard"
-              className="logo w-[200px] d-flex align-items-center"
-            >
+            <Link to="/dashboard" className="logo w-[200px] d-flex align-items-center">
               <img
                 src="/images/vidhyaGxp.png"
                 alt="..."
@@ -80,9 +83,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               />
             </Link>
             <button
-              className={`close-button ${
-                isSidebarVisible ? "block" : "hidden"
-              }`}
+              className={`close-button ${isSidebarVisible ? "block" : "hidden"}`}
               onClick={toggleSidebarClass}
             >
               <AiOutlineClose className="text-orange-400 text-2xl absolute left-[210px] top-[25px]" />
@@ -140,6 +141,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Storage Location
             </CNavItem>
           </Link>
+
+          <Link to="/stp">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/stp"), gap: "18px" }}
+              className={isActive("/stp")}
+            >
+              <TbCurrentLocation />
+              STP
+            </CNavItem>
+          </Link>
+
           <Link to="/control-sample">
             <CNavItem
               href="#"
@@ -147,19 +160,10 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               className={isActive("/control-sample")}
             >
               <TbCurrentLocation />
-             Control Sample Management
+              Control Sample Management
             </CNavItem>
           </Link>
-          {/* <Link to="/control-sample">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/control-sample"), gap: "18px" }}
-              className={isActive("/control-sample")}
-            >
-              <TbCurrentLocation />
-             Control Sample Management
-            </CNavItem>
-          </Link> */}
+         
           <CNavGroup
             className={isActive("/department")}
             toggler={
@@ -182,11 +186,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/users">
-              <CNavItem
-                href="#"
-                className={isActive("/users")}
-                style={{ ...isActive("/users") }}
-              >
+              <CNavItem href="#" className={isActive("/users")} style={{ ...isActive("/users") }}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -194,11 +194,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/roles">
-              <CNavItem
-                href="#"
-                className={isActive("/roles")}
-                style={{ ...isActive("/roles") }}
-              >
+              <CNavItem href="#" className={isActive("/roles")} style={{ ...isActive("/roles") }}>
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -652,9 +648,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <FaNetworkWired
-                        style={{ position: "absolute", left: "-41px" }}
-                      />
+                      <FaNetworkWired style={{ position: "absolute", left: "-41px" }} />
 
                       <p
                         style={{
@@ -729,10 +723,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ marginLeft: "23px" }}
               toggler={
                 <>
-                  <Link
-                    to="/Inventory/VolumeSolutions"
-                    style={{ color: "white" }}
-                  >
+                  <Link to="/Inventory/VolumeSolutions" style={{ color: "white" }}>
                     <span
                       className="nav-icon"
                       style={{
@@ -741,10 +732,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <CIcon
-                        style={{ position: "absolute", left: "-41px" }}
-                        icon={cibStatuspage}
-                      />
+                      <CIcon style={{ position: "absolute", left: "-41px" }} icon={cibStatuspage} />
 
                       <p
                         style={{
@@ -853,10 +841,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ marginLeft: "23px" }}
               toggler={
                 <>
-                  <Link
-                    to="/Inventory/ChemicalRegistration"
-                    style={{ color: "white" }}
-                  >
+                  <Link to="/Inventory/ChemicalRegistration" style={{ color: "white" }}>
                     <span
                       className="nav-icon"
                       style={{
@@ -865,10 +850,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <CIcon
-                        style={{ position: "absolute", left: "-41px" }}
-                        icon={cilWarning}
-                      />
+                      <CIcon style={{ position: "absolute", left: "-41px" }} icon={cilWarning} />
 
                       <p
                         style={{
@@ -983,10 +965,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ marginLeft: "23px" }}
               toggler={
                 <>
-                  <Link
-                    to="/Inventory/ColumnApplication"
-                    style={{ color: "white" }}
-                  >
+                  <Link to="/Inventory/ColumnApplication" style={{ color: "white" }}>
                     <span
                       className="nav-icon"
                       style={{
@@ -995,10 +974,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <CIcon
-                        style={{ position: "absolute", left: "-41px" }}
-                        icon={cilColumns}
-                      />
+                      <CIcon style={{ position: "absolute", left: "-41px" }} icon={cilColumns} />
 
                       <p
                         style={{
@@ -1128,10 +1104,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ marginLeft: "23px" }}
               toggler={
                 <>
-                  <Link
-                    to="/Inventory/StandardRegistration"
-                    style={{ color: "white" }}
-                  >
+                  <Link to="/Inventory/StandardRegistration" style={{ color: "white" }}>
                     <span
                       className="nav-icon"
                       style={{
@@ -1140,9 +1113,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <FaPerson
-                        style={{ position: "absolute", left: "-41px" }}
-                      />
+                      <FaPerson style={{ position: "absolute", left: "-41px" }} />
 
                       <p
                         style={{
@@ -1211,10 +1182,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ marginLeft: "23px" }}
               toggler={
                 <>
-                  <Link
-                    to="/Inventory/CultureRegistration"
-                    style={{ color: "white" }}
-                  >
+                  <Link to="/Inventory/CultureRegistration" style={{ color: "white" }}>
                     <span
                       className="nav-icon"
                       style={{
@@ -1223,9 +1191,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <FaPeopleRoof
-                        style={{ position: "absolute", left: "-41px" }}
-                      />
+                      <FaPeopleRoof style={{ position: "absolute", left: "-41px" }} />
 
                       <p
                         style={{
@@ -1276,9 +1242,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <Link to="/Inventory/CultureTemplateConfiguration">
                 <CNavItem
                   href="#"
-                  className={isActive(
-                    "/Inventory/CultureTemplateConfiguration"
-                  )}
+                  className={isActive("/Inventory/CultureTemplateConfiguration")}
                   style={{
                     ...isActive("/Inventory/CultureTemplateConfiguration"),
                     fontSize: "14px",
@@ -1328,10 +1292,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ marginLeft: "23px" }}
               toggler={
                 <>
-                  <Link
-                    to="/Inventory/MediaOnboarding"
-                    style={{ color: "white" }}
-                  >
+                  <Link to="/Inventory/MediaOnboarding" style={{ color: "white" }}>
                     <span
                       className="nav-icon"
                       style={{
@@ -1340,9 +1301,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <TfiLayoutMediaOverlay
-                        style={{ position: "absolute", left: "-41px" }}
-                      />
+                      <TfiLayoutMediaOverlay style={{ position: "absolute", left: "-41px" }} />
 
                       <p
                         style={{
@@ -1478,9 +1437,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <FaWater
-                        style={{ position: "absolute", left: "-41px" }}
-                      />
+                      <FaWater style={{ position: "absolute", left: "-41px" }} />
 
                       <p
                         style={{
@@ -1605,9 +1562,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                         left: "33px",
                       }}
                     >
-                      <VscServerEnvironment
-                        style={{ position: "absolute", left: "-41px" }}
-                      />
+                      <VscServerEnvironment style={{ position: "absolute", left: "-41px" }} />
 
                       <p
                         style={{
@@ -2080,9 +2035,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             toggler={
               <>
                 <GrCertificate />
-                <span style={{ marginLeft: "18px" }}>
-                  Reports / Certificate
-                </span>
+                <span style={{ marginLeft: "18px" }}>Reports / Certificate</span>
               </>
             }
           >
@@ -2173,21 +2126,13 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </CNavItem>
           </Link>
           <Link to="/clients">
-            <CNavItem
-              href="#"
-              className={isActive("/clients")}
-              style={{ ...isActive("/clients") }}
-            >
+            <CNavItem href="#" className={isActive("/clients")} style={{ ...isActive("/clients") }}>
               <FaPeopleLine />
               <span style={{ marginLeft: "21px" }}>Clients</span>
             </CNavItem>
           </Link>
           <Link to="/plants">
-            <CNavItem
-              href="#"
-              className={isActive(" /plants")}
-              style={{ ...isActive("/plants") }}
-            >
+            <CNavItem href="#" className={isActive(" /plants")} style={{ ...isActive("/plants") }}>
               <PiNuclearPlant />
               <span style={{ marginLeft: "21px" }}>Plants</span>
             </CNavItem>
