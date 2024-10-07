@@ -55,7 +55,7 @@ const ReusableModal = ({ visible, closeModal, data, fields, title,updateStatus }
                 </CTable>
               </div>
             </div>
-            <div className="block">
+            {/* <div className="block">
               <div className="main-head">
                 <h4 className="fw-bold mb-4 mt-3">History</h4>
               </div>
@@ -79,7 +79,7 @@ const ReusableModal = ({ visible, closeModal, data, fields, title,updateStatus }
                   </CTableBody>
                 </CTable>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
