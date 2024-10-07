@@ -34,6 +34,7 @@ const initialData = [
     noOfContainers: 10,
     samplingConclusion: "Conclusion 1",
     status: "INITIATED",
+  
   },
   {
     checkbox: false,
@@ -44,6 +45,7 @@ const initialData = [
     noOfContainers: 8,
     samplingConclusion: "Conclusion 2",
     status: "APPROVED",
+   
   },
 ];
 
@@ -99,6 +101,21 @@ const ESampling = () => {
     { header: "Added On", accessor: "addedOn" },
     { header: "No of Containers", accessor: "noOfContainers" },
     { header: "Sampling Conclusion", accessor: "samplingConclusion" },
+    {
+      header: "Sample BarCode",
+      accessor: "sampleBarcode",
+      Cell: ({ row }) => (
+        <img
+          src={row.original.sampleBarcode} 
+          alt={`Barcode for ${row.original.productMaterialName}`} 
+          style={{ height: "40px", width: "40px", objectFit: "contain" }} 
+          onError={(e) => {
+            e.target.onerror = null; 
+            e.target.src = "https://via.placeholder.com/40";
+          }}
+        />
+      ),
+    },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
