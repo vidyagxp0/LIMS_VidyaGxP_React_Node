@@ -130,6 +130,16 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Storage Location
             </CNavItem>
           </Link>
+          <Link to="/control-sample">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/control-sample"), gap: "18px" }}
+              className={isActive("/control-sample")}
+            >
+              <TbCurrentLocation />
+             Control Sample
+            </CNavItem>
+          </Link>
           <CNavGroup
             className={isActive("/department")}
             toggler={
@@ -463,7 +473,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
-                Standart Test Procedure (STP)
+                Standard Test Procedure (STP)
               </CNavItem>
             </Link>
             <Link to="/Masters/TestCategories">
