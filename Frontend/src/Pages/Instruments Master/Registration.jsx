@@ -11,44 +11,28 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InstrumentMasterModal from "../Modals/InstrumentMasterModal.jsx";
-import ViewModal from "../Modals/ViewModal";
+
 import ImportModal from "../Modals/importModal";
-import {CButton,CCol,CFormCheck,CFormInput,CFormSelect,CModal,CModalBody,CModalFooter,CModalHeader,CModalTitle,CRow,} from "@coreui/react";
+import {
+  CButton,
+  CCol,
+  CFormCheck,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
+} from "@coreui/react";
 import { Button } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa6";
 import ReactQuill from "react-quill";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import ReusableModal from "../Modals/ResusableModal.jsx";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    Category: "Product 1",
-    InstrumentId: "Seq 1",
-    Instrument: "Info 1",
-    Made: "Start 1",
-    Model: "Model 1",
-    ManuNo: "Manu 1",
-    InstalledAt: "Location 1",
-    ExpiryOn: "2024-12-31",
-    status: "DROPPED",
-    CalibrationStatus: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    Category: "Product 2",
-    InstrumentId: "Seq 2",
-    Instrument: "Info 2",
-    Made: "Start 2",
-    Model: "Model 2",
-    ManuNo: "Manu 2",
-    InstalledAt: "Location 2",
-    ExpiryOn: "2025-01-15",
-    status: "INITIATED",
-    CalibrationStatus: "Inactive",
-  },
-];
+const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
 
 const Registration = () => {
   const [data, setData] = useState(initialData);
@@ -57,6 +41,7 @@ const Registration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -393,16 +378,15 @@ const Registration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.Category.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row?.Category?.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-    setIsViewModalOpen(true);
+    setIsViewModalOpen(true); // This should open the modal
   };
-
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -462,6 +446,26 @@ const Registration = () => {
       ),
     },
   ];
+
+  const fields = [
+    { label: "Category", key: "Category" },
+    { label: "InstrumentId", key: "InstrumentId" },
+    { label: "Instrument", key: "Instrument" },
+    { label: "Made", key: "Made" },
+    { label: "Model", key: "Model" },
+    { label: "ManuNo", key: "ManuNo" },
+    { label: "InstalledAt", key: "InstalledAt" },
+    { label: "ExpiryOn", key: "ExpiryOn" },
+    { label: "status", key: "status" },
+    { label: "CalibrationStatus", key: "CalibrationStatus" },
+  ];
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -484,11 +488,12 @@ const Registration = () => {
   };
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
   const handleModalSubmit = (newInstrument) => {
-    setData((prevData) => [
-      ...prevData,
+    // Update data state
+    const updatedData = [
+      ...data,
       {
         checkbox: false,
-        sno: prevData.length + 1,
+        sno: data.length + 1,
         Category: newInstrument.Category,
         InstrumentId: newInstrument.InstrumentId,
         Instrument: newInstrument.Instrument,
@@ -500,7 +505,11 @@ const Registration = () => {
         status: "INITIATED",
         CalibrationStatus: "Active",
       },
-    ]);
+    ];
+
+    localStorage.setItem("instruments", JSON.stringify(updatedData));
+
+    setData(updatedData);
   };
   //************************************************************************************************ */
 
@@ -513,7 +522,8 @@ const Registration = () => {
   };
 
   const closeViewModal = () => {
-    setIsViewModalOpen(false);
+    setViewModalData(null);
+    setIsViewModalOpen(false); // This should reset the modal state
   };
 
   const handleDelete = (item) => {
@@ -567,7 +577,12 @@ const Registration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Instrument_Master.pdf" title="Instrument Master Data" />
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Instrument_Master.pdf"
+            title="Instrument Master Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
             text="Instrument Registration"
@@ -589,13 +604,7 @@ const Registration = () => {
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
       />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
+
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -605,11 +614,14 @@ const Registration = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isViewModalOpen && (
-        <ViewModal
+      {viewModalData && (
+        <ReusableModal
           visible={isViewModalOpen}
-          closeModal={() => setIsViewModalOpen(false)}
+          closeModal={closeViewModal}
           data={viewModalData}
+          fields={fields}
+          title="InstrumentMasterReg."
+          updateStatus={handleStatusUpdate}
         />
       )}
       {editModalOpen && (

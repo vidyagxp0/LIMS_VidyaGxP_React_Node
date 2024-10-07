@@ -17,17 +17,21 @@ import {
 import "react-quill/dist/quill.snow.css";
 
 const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
+
   const [instrumentCategoryData, setInstrumentCategoryData] = useState({
-    CategoryName: " ",
-    Description: " ",
-    AddedOn: " ",
+    CategoryName: "",
+    Description: "",
+    AddedOn: "", // Initialize as empty string
+    Status: "",  // Add Status field
   });
+  const [fields, setFields] = useState([]);
 
   const resetForm = () => {
     setInstrumentCategoryData({
-      CategoryName: " ",
-      Description: " ",
-      AddedOn: " ",
+      CategoryName: "",
+      Description: "",
+      AddedOn: "",
+      Status: "", // Reset Status
     });
   };
 
@@ -44,7 +48,18 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
   };
 
   const handleFormSubmit = () => {
-    handleSubmit({ ...instrumentCategoryData });
+    const instrumentDetails = { 
+      ...instrumentCategoryData, 
+      AddedOn: new Date().toISOString(),
+      fields 
+    };
+
+    const existingInstruments = JSON.parse(localStorage.getItem("instruments")) || [];
+    const updatedInstruments = [...existingInstruments, instrumentDetails];
+    localStorage.setItem("instruments", JSON.stringify(updatedInstruments));
+  
+    handleSubmit(instrumentDetails);
+    
     closeModal();
   };
 
@@ -77,6 +92,14 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
             value={instrumentCategoryData.Description}
             onChange={(e) => handleInputChange("Description", e.target.value)}
           />
+          {/* <CFormInput
+            className="mb-3"
+            type="text"
+            label="Status" // Add a field for Status
+            placeholder="Status"
+            value={instrumentCategoryData.Status}
+            onChange={(e) => handleInputChange("Status", e.target.value)}
+          /> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>

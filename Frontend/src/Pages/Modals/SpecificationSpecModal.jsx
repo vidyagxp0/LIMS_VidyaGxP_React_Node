@@ -10,7 +10,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 
-const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
+const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
   const [fields, setFields] = useState([]);
 
   const [usageData, setUsagedata] = useState({
@@ -213,4 +213,4 @@ const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
   );
 };
 
-export default InstrumentUsageModal;
+export default SpecificationSpecModal;
