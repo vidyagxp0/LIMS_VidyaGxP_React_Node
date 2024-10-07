@@ -150,16 +150,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
              Control Sample Management
             </CNavItem>
           </Link>
-          {/* <Link to="/control-sample">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/control-sample"), gap: "18px" }}
-              className={isActive("/control-sample")}
-            >
-              <TbCurrentLocation />
-             Control Sample Management
-            </CNavItem>
-          </Link> */}
+         
           <CNavGroup
             className={isActive("/department")}
             toggler={
