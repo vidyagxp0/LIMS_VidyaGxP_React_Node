@@ -14,6 +14,7 @@ import TestRegistrationModal from "../Modals/TestRegistrationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import ReusableModal from "../Modals/ResusableModal";
 
 const initialData = [
   {
@@ -40,6 +41,18 @@ const initialData = [
     testType: "PENDING",
     status: "INITIATED",
   },
+];
+
+const fields = [
+  { label: "Product Name", key: "productName" },
+  { label: "Specification ID", key: "specId" },
+  { label: "Product Name", key: "productName" },
+  { label: "Test Name", key: "testName" },
+  { label: "Test Code", key: "testCode" },
+  { label: "Method", key: "method" },
+  { label: "Category", key: "category" },
+  { label: "Test type", key: "testType" },
+  { label: "Status", key: "status" },
 ];
 
 const TestRegistration = () => {
@@ -181,6 +194,13 @@ const TestRegistration = () => {
     console.log("Deleted item:", item);
   };
 
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
+
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Test Registration</h1>
@@ -285,13 +305,14 @@ const TestRegistration = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Test_Registrations.pdf" title="Test Registration Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Add Registration"
-            color="blue"
-            onClick={openModal}
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Test_Registrations.pdf"
+            title="Test Registration Data"
           />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add Registration" color="blue" onClick={openModal} />
         </div>
       </div>
       <Table
@@ -302,11 +323,22 @@ const TestRegistration = () => {
         onDelete={handleDelete}
       />
       <TestRegistrationModal visible={isModalOpen} closeModal={closeModal} />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
       {isModalsOpen && (

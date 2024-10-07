@@ -13,7 +13,7 @@ const Table = ({
   onCheckboxChange,
   onViewDetails,
   onDelete,
-  openEditModal
+  openEditModal,
 }) => {
   const pageSize = 5;
   const [currentPage, setCurrentPage] = useState(1);

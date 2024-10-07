@@ -31,34 +31,22 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    categoryName: "Category 1",
-    uniqueCode: "UC001",
-    description: "Description 1",
-    addedOn: "2024-01-01",
-    effectFrom: "2024-01-01",
-    reviewDate: "2024-06-01",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    categoryName: "Category 2",
-    uniqueCode: "UC002",
-    description: "Description 2",
-    addedOn: "2024-01-02",
-    effectFrom: "2024-01-02",
-    reviewDate: "2024-06-02",
-    status: "APPROVED",
-  },
+const initialData = JSON.parse(localStorage.getItem("data")) || "";
+
+const fields = [
+  { label: "Category Name", key: "categoryName" },
+  { label: "	Unique Code", key: "uniqueCode" },
+  { label: "Description", key: "description" },
+  { label: "Added On", key: "addedOn" },
+  { label: "Effect From", key: "effectFrom" },
+  { label: "Review Date", key: "reviewDate" },
+  { label: "Status", key: "status" },
 ];
 
 function Specifications() {
-  const [data, setData] = useState(initialData);
+  //const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,6 +54,15 @@ function Specifications() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("specificationTypes");
+    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+  });
+
+  useEffect(() => {
+    localStorage.setItem("testcategories", JSON.stringify(data));
+  }, [data]);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -79,12 +76,15 @@ function Specifications() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        const productName = row.productName || ""; // Fallback to an empty string if productName is undefined
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -95,8 +95,6 @@ function Specifications() {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
-
- 
 
   const columns = [
     {
@@ -177,6 +175,13 @@ function Specifications() {
     ]);
     setLastStatus(nextStatus);
     setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -264,7 +269,6 @@ function Specifications() {
     );
   };
 
-
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
@@ -299,8 +303,6 @@ function Specifications() {
 
     const currentDate = new Date().toISOString().split("T")[0];
 
-  
-
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
@@ -315,7 +317,7 @@ function Specifications() {
             label="Name"
             placeholder="Category Name"
             name="categoryName"
-            value={formData?.categoryName||""}
+            value={formData?.categoryName || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -324,7 +326,7 @@ function Specifications() {
             label="Unique Code"
             placeholder="Unique Code "
             name="uniqueCode"
-            value={formData?.uniqueCode||""}
+            value={formData?.uniqueCode || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -333,7 +335,7 @@ function Specifications() {
             label="Description"
             placeholder="Description"
             name="description"
-            value={formData?.description||""}
+            value={formData?.description || ""}
             onChange={handleChange}
           />
         </CModalBody>
@@ -373,7 +375,12 @@ function Specifications() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="test_categories.pdf" title="Test Categories Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="test_categories.pdf"
+              title="Test Categories Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Test Categories"
@@ -408,10 +415,16 @@ function Specifications() {
         />
       )}
       {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
       )}
-
-{editModalData && (
+      {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
           closeModal={closeEditModal}

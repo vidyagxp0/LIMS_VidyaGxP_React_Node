@@ -23,7 +23,6 @@ const ViewModal = ({ visible, closeModal, data, updateStatus }) => {
     closeModal(); // Close view modal
   };
 
-
   return (
     <>
       <CModal
@@ -140,12 +139,12 @@ const ViewModal = ({ visible, closeModal, data, updateStatus }) => {
         </div>
 
         {statusModal && (
-            <StatusModal
-              visible={statusModal}
-              closeModal={() => setStatusModal(false)}
-              onUpdateStatus={handleStatusChange}
-            />
-          )}
+          <StatusModal
+            visible={statusModal}
+            closeModal={() => setStatusModal(false)}
+            onUpdateStatus={handleStatusChange}
+          />
+        )}
       </CModal>
     </>
   );
@@ -164,31 +163,31 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   };
   return (
     <CModal alignment="center" visible={visible} onClose={closeModal}>
-    <CModalHeader>
-      <CModalTitle>Update Status</CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-      <CFormSelect
-        label="Status"
-        value={selectedStatus}
-        onChange={handleStatusChange}
-        options={[
-          { label: "Select Status", value: "" },
-          { label: "Approve", value: "APPROVED" },
-          { label: "Drop", value: "DROPPED" },
-          { label: "Reject", value: "REJECTED" },
-        ]}
-      />
-    </CModalBody>
-    <CModalFooter>
-      <CButton color="light" onClick={closeModal}>
-        Cancel
-      </CButton>
-      <CButton color="dark" onClick={handleUpdate}>
-        Update
-      </CButton>
-    </CModalFooter>
-  </CModal>
+      <CModalHeader>
+        <CModalTitle>Update Status</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CFormSelect
+          label="Status"
+          value={selectedStatus}
+          onChange={handleStatusChange}
+          options={[
+            { label: "Select Status", value: "" },
+            { label: "Approve", value: "APPROVED" },
+            { label: "Drop", value: "DROPPED" },
+            { label: "Reject", value: "REJECTED" },
+          ]}
+        />
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="light" onClick={closeModal}>
+          Cancel
+        </CButton>
+        <CButton color="dark" onClick={handleUpdate}>
+          Update
+        </CButton>
+      </CModalFooter>
+    </CModal>
   );
 };
 
