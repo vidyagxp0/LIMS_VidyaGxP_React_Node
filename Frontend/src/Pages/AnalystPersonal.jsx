@@ -2,16 +2,13 @@ import React, { useState, useEffect } from "react";
 import Dropdown from "../components/ATM components/Dropdown/Dropdown.jsx";
 import Table from "../components/ATM components/Table/Table.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../components/ATM components/Button/ATMButton.jsx";
 import ReusableModal from "./Modals/ResusableModal.jsx";
 import ImportModal from "./Modals/importModal.jsx";
 import PDFDownload from "./PDFComponent/PDFDownload .jsx";
 import AnalystPersonalModal from "./Modals/AnalystPersonalModal.jsx";
+import LaunchQMS from "../components/ReusableButtons/LaunchQMS.jsx";
 
 const AnalystPersonal = () => {
   const [data, setData] = useState([]);
@@ -27,7 +24,6 @@ const AnalystPersonal = () => {
     setData(storedData);
   }, []);
 
-
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -35,7 +31,7 @@ const AnalystPersonal = () => {
   const handleCloseImportModal = () => setIsImportModalOpen(false);
 
   const handleAnalystSubmit = (newAnalyst) => {
-    setData(prevData => [...prevData, { ...newAnalyst, sno: prevData.length + 1 }]);
+    setData((prevData) => [...prevData, { ...newAnalyst, sno: prevData.length + 1 }]);
     localStorage.setItem("AnalystPersonal", JSON.stringify([...data, newAnalyst]));
     closeModal();
   };
@@ -59,16 +55,16 @@ const AnalystPersonal = () => {
   const closeViewModal = () => setIsViewModalOpen(false);
 
   const handleDelete = (item) => {
-    const newData = data.filter(d => d !== item);
+    const newData = data.filter((d) => d !== item);
     setData(newData);
     localStorage.setItem("AnalystPersonal", JSON.stringify(newData));
   };
 
-  const filteredData = data.filter(row => 
-    row.FullName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-    (statusFilter === "All" || row.QualificationStatus === statusFilter)
+  const filteredData = data.filter(
+    (row) =>
+      row.FullName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.QualificationStatus === statusFilter)
   );
-
 
   const columns = [
     { header: "SrNo.", accessor: "sno" },
@@ -131,13 +127,18 @@ const AnalystPersonal = () => {
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" onClick={() => {/* Handle edit */}} />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => {
+              /* Handle edit */
+            }}
+          />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row)} />
         </>
       ),
     },
   ];
-
 
   const fields = [
     { label: "Analyst ID", key: "AnalystID" },
@@ -195,9 +196,10 @@ const AnalystPersonal = () => {
     { label: "Change Description", key: "ChangeDescription" },
   ];
 
-
   return (
     <div className="p-4">
+      <LaunchQMS />
+
       <h1 className="text-2xl font-bold mb-4">Analyst Personal</h1>
 
       <div className="flex items-center justify-between mb-4">
@@ -224,18 +226,9 @@ const AnalystPersonal = () => {
         </div>
       </div>
 
-      <Table
-        columns={columns}
-        data={filteredData}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-      />
+      <Table columns={columns} data={filteredData} onViewDetails={onViewDetails} onDelete={handleDelete} />
 
-      <AnalystPersonalModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleAnalystSubmit}
-      />
+      <AnalystPersonalModal visible={isModalOpen} closeModal={closeModal} handleSubmit={handleAnalystSubmit} />
 
       {viewModalData && (
         <ReusableModal

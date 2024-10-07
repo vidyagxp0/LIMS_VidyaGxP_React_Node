@@ -27,36 +27,23 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    productCode: "P001",
-    productName: "Product 1",
-    specificationID: "S001",
-    specificationName: "Specification 1",
-    effectFrom: "2024-01-01",
-    reviewDate: "2024-06-01",
-    attachment: "attachment",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    productCode: "P002",
-    productName: "Product 2",
-    specificationID: "S002",
-    specificationName: "Specification 2",
-    effectFrom: "2024-01-02",
-    reviewDate: "2024-06-02",
-    attachment: "attachment",
-    status: "APPROVED",
-  },
+const initialData = JSON.parse(localStorage.getItem("data")) || "";
+
+const fields = [
+  { label: "Product Code", key: "productCode" },
+  { label: "Product Name", key: "productName" },
+  { label: "Specification ID", key: "specificationID" },
+  { label: "Specification Name", key: "specificationName" },
+  { label: "Effect From", key: "effectFrom" },
+  { label: "Review Date", key: "reviewDate" },
+  // { label: "attachment", key: "attachment" },
+  { label: "Status", key: "status" },
 ];
-
 function SpecificationsTestProcedure() {
-  const [data, setData] = useState(initialData);
+  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,7 +51,14 @@ function SpecificationsTestProcedure() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("specificationtestprocedure");
+    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+  });
 
+  useEffect(() => {
+    localStorage.setItem("specificationtestprocedure", JSON.stringify(data));
+  }, [data]);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -77,13 +71,14 @@ function SpecificationsTestProcedure() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-  const filteredData = data.filter((row) => {
-    return (
-      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        return (
+          row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -94,7 +89,6 @@ function SpecificationsTestProcedure() {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
-
 
   const columns = [
     {
@@ -161,12 +155,11 @@ function SpecificationsTestProcedure() {
       attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
       status: item["Status"] || "",
     }));
-  
+
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
-  
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
 
   const addNewStorageCondition = (newCondition) => {
@@ -184,8 +177,14 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     setIsModalOpen(false);
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
 
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [specificationData, setSpecificationData] = useState({
       productCode: [],
       productName: "",
@@ -221,11 +220,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     ];
 
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>
         </CModalHeader>
@@ -300,7 +295,6 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
                 sampleType: e.target.value,
               })
             }
-
             options={[
               "Select Sample Type",
               { label: "Raw Material", value: "Raw Material" },
@@ -410,12 +404,13 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Add Specifications</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Add Specifications
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
-  
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -463,11 +458,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     ];
 
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>
         </CModalHeader>
@@ -608,7 +599,9 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary"  onClick={handleSave}>Update Specifications</CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Update Specifications
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -616,6 +609,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Standard Test Procedure</h4>
@@ -638,18 +633,14 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Specification_Test_Procedure.pdf" title="Specification Test Procedure Data" />
-          <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
-            <ATMButton
-              text="Add Test Procedure"
-              color="blue"
-              onClick={openModal}
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Specification_Test_Procedure.pdf"
+              title="Specification Test Procedure Data"
             />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Test Procedure" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -662,16 +653,28 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
       {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
       )}
-       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
-      )}
-       {editModalData && (
+      {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
           closeModal={closeEditModal}

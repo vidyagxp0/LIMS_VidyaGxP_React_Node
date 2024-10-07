@@ -1,20 +1,8 @@
-import { useState ,useEffect } from "react";
-import {
-  CButton,
-  CFormInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-} from "@coreui/react";
+import { useState, useEffect } from "react";
+import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
 import React from "react";
 
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./StorageCondition.css";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -24,6 +12,7 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -53,8 +42,6 @@ const initialData = [
     attachment: "attachment",
     status: "Active",
   },
-  
-  
 ];
 
 function StorageLocation() {
@@ -64,7 +51,7 @@ function StorageLocation() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -95,7 +82,7 @@ function StorageLocation() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-  
+
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -112,21 +99,13 @@ function StorageLocation() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-          />
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
       ),
     },
   ];
-
 
   const filteredData = data.filter((row) => {
     return (
@@ -156,20 +135,17 @@ function StorageLocation() {
       attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
       status: item["Status"] || "Active",
     }));
-  
+
     // Concatenate the updated data with existing data
-    const concatenatedData = [ ...updatedData];
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data
-  
-     // Close the import modal after data upload
+    setIsModalsOpen(false); // Update data state with parsed Excel data
+
+    // Close the import modal after data upload
   };
 
   const addNewStorageCondition = (newCondition) => {
-    setData((prevData) => [
-      ...prevData,
-      { ...newCondition, sno: prevData.length + 1, checkbox: false },
-    ]);
+    setData((prevData) => [...prevData, { ...newCondition, sno: prevData.length + 1, checkbox: false }]);
     setIsModalOpen(false); // Close the modal after adding new condition
   };
 
@@ -188,104 +164,102 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
     };
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
-      <CModalHeader>
-        <CModalTitle>New Storage Condition</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          type="text"
-          label="Name"
-          placeholder="Storage Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={closeModal}>
-          Cancel
-        </CButton>
-        <CButton color="primary" onClick={handleAdd}>
-          Add
-        </CButton>
-      </CModalFooter>
-    </CModal>
+        <CModalHeader>
+          <CModalTitle>New Storage Condition</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            label="Name"
+            placeholder="Storage Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
     );
   };
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
   const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
+    const newData = data.map((item) => (item.sno === updatedData.sno ? updatedData : item));
     setData(newData);
     setEditModalData(null);
   };
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
-  
+
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
         setInputValue(value);
       }
     };
-  
+
     const addRows = () => {
       setNumRows(inputValue);
     };
-    
+
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
-  
+
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     };
-  
+
     const handleSave = () => {
       onSave(formData);
     };
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
-      <CModalHeader>
-        <CModalTitle>New Storage Condition</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          type="text"
-          label="Name"
-          placeholder="Storage Name"
-          value={formData?.conditionCode || ""}
-          onChange={handleChange}
-          name="conditionCode"
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={closeModal}>
-          Cancel
-        </CButton>
-        <CButton color="primary" onClick={handleSave}>
-          Add
-        </CButton>
-      </CModalFooter>
-    </CModal>
+        <CModalHeader>
+          <CModalTitle>New Storage Condition</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            label="Name"
+            placeholder="Storage Name"
+            value={formData?.conditionCode || ""}
+            onChange={handleChange}
+            name="conditionCode"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
     );
   };
-  
+
   return (
     <>
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Storage Conditions</h4>
@@ -305,17 +279,14 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Storage_Condition.pdf" title="Storage Condition Data" />
-          <ATMButton
-              text="Import"
-              color="pink"
-              onClick={handleOpenModals}
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Storage_Condition.pdf"
+              title="Storage Condition Data"
             />
-            <ATMButton
-              text="Add Storage Condition"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Storage Condition" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -328,16 +299,18 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal}   onAdd={addNewStorageCondition}/>
-      )}
-      {isViewModalOpen && (
-        <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+      {isViewModalOpen && <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} />}
       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
-       <EditModal
+      <EditModal
         visible={Boolean(editModalData)}
         closeModal={closeEditModal}
         data={editModalData}

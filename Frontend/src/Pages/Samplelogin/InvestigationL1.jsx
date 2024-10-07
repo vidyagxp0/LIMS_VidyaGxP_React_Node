@@ -24,6 +24,7 @@ import {
   CRow,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -234,6 +235,8 @@ const InvestigationL1 = () => {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Investigation L1</h4>
@@ -244,7 +247,12 @@ const InvestigationL1 = () => {
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="InvestigationL1.pdf" title="Investigation L1 Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="InvestigationL1.pdf"
+              title="Investigation L1 Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             {/* <ATMButton text="Add investigation L1 In" color="blue" onClick={openModal} /> */}
           </div>

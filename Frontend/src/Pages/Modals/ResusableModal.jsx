@@ -62,6 +62,31 @@ const ReusableModal = ({
                 </CTable>
               </div>
             </div>
+            {/*<div className="block">
+              <div className="main-head">
+                <h4 className="fw-bold mb-4 mt-3">History</h4>
+              </div>
+              <div className="bg-white px-5 py-3">
+                <CTable align="middle" className="mb-0" small bordered>
+                  <CTableBody>
+                    <CTableRow color="warning">
+                      <CTableDataCell>Revision</CTableDataCell>
+                      <CTableDataCell>{data?.revision || "N/A"}</CTableDataCell>
+                    </CTableRow>
+                    {fields?.map((field, index) => (
+                      <CTableRow key={index}>
+                        <CTableDataCell color="info">
+                          {field.label}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          {data ? data[field.key] : field.default}
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
+                  </CTableBody>
+                </CTable>
+              </div>
+            </div>*/}
           </div>
         </div>
 

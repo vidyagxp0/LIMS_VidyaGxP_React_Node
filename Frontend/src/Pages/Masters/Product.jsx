@@ -26,32 +26,22 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    uniqueCode: "UC001",
-    productName: "Product 1",
-    genericName: "Generic 1",
-    reTestingPeriod: "2024-06-01",
-    addDate: "2024-01-01",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    uniqueCode: "UC002",
-    productName: "Product 2",
-    genericName: "Generic 2",
-    reTestingPeriod: "2024-06-02",
-    addDate: "2024-01-02",
-    status: "INITIATED",
-  },
+const initialData = JSON.parse(localStorage.getItem("data")) || "";
+
+const fields = [
+  { label: "S.No", key: "sno" },
+  { label: "Product Name", key: "productName" },
+  { label: "Unique Code", key: "uniqueCode" },
+  { label: "Generic Name", key: "genericName" },
+  { label: "Re-Testing Period ", key: "reTestingPeriod" },
+  { label: "Status", key: "status" },
 ];
 
 function Product() {
-  const [data, setData] = useState(initialData);
+  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,6 +50,14 @@ function Product() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("product");
+    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+  });
+
+  useEffect(() => {
+    localStorage.setItem("product", JSON.stringify(data));
+  }, [data]);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -73,12 +71,14 @@ function Product() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        return (
+          row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : []; // Fallback to an empty array if data is not an array
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -166,8 +166,16 @@ function Product() {
         status: nextStatus,
       },
     ]);
+    setData(newData);
     setLastStatus(nextStatus);
     setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [productName, setProductName] = useState("");
@@ -263,7 +271,7 @@ function Product() {
     setEditModalData(null);
   };
 
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
@@ -300,7 +308,7 @@ function Product() {
             label="Name"
             placeholder="Product Name"
             name="productName"
-            value={formData?.productName||""}
+            value={formData?.productName || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -309,7 +317,7 @@ function Product() {
             label="Unique Code"
             placeholder="Product Code "
             name="uniqueCode"
-            value={formData?.uniqueCode||""}
+            value={formData?.uniqueCode || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -318,7 +326,7 @@ function Product() {
             label="Generic Name"
             placeholder="Generic Name"
             name="genericName"
-            value={formData?.genericName||""}
+            value={formData?.genericName || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -327,7 +335,7 @@ function Product() {
             label="Re-testing Period"
             placeholder="Re-testing Period "
             name="reTestingPeriod"
-            value={formData?.reTestingPeriod||""}
+            value={formData?.reTestingPeriod || ""}
             onChange={handleChange}
           />
         </CModalBody>
@@ -345,6 +353,8 @@ function Product() {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Master/Product</h4>
@@ -364,13 +374,14 @@ function Product() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Master_Product.pdf" title="Master Product Data" />
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Master/Product"
-              color="blue"
-              onClick={openModal}
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Master_Product.pdf"
+              title="Master Product Data"
             />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Master/Product" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -383,23 +394,15 @@ function Product() {
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          onAdd={addNewStorageCondition}
-        />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
       {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={initialData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-          onDataUpload={handleExcelDataUpload}
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
       {editModalData && (

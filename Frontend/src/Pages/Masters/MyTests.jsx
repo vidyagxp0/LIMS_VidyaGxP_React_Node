@@ -14,6 +14,7 @@ import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -213,6 +214,7 @@ function MyTests() {
 
   return (
     <>
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">My Test</h4>
@@ -220,12 +222,7 @@ function MyTests() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4"></div>
           <div className="float-right flex gap-4">
-            <PDFDownload
-              columns={columns}
-              data={filteredData}
-              fileName="My_Test.pdf"
-              title="My Test Data"
-            />
+            <PDFDownload columns={columns} data={filteredData} fileName="My_Test.pdf" title="My Test Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           </div>
         </div>
@@ -237,9 +234,7 @@ function MyTests() {
           onDelete={handleDelete}
         />
 
-        {viewModalData && (
-          <ViewModal visible={viewModalData} closeModal={closeViewModal} />
-        )}
+        {viewModalData && <ViewModal visible={viewModalData} closeModal={closeViewModal} />}
         {isModalsOpen && (
           <ImportModal
             initialData={filteredData}
