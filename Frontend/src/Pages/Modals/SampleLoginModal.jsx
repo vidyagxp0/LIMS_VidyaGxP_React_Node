@@ -6,7 +6,8 @@ const SampleLoginModal = (_props) => {
     <div>
          <CModal
         alignment="center"
-        visible={_props.visible}
+        visiAdd Sample login
+ble={_props.visible}
         onClose={_props.closeModal}
       >
         <CModalHeader className="p-3">

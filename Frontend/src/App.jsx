@@ -220,6 +220,7 @@ import ProcessManagement from "./components/AdminPanel/Process-Management/Proces
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import STP from "./Pages/STP/STP.jsx";
+import AnalystPersonal from "./Pages/AnalystPersonal.jsx";
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -245,6 +246,7 @@ function App() {
             <Route path="/approval" element={<Approval />} />
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />
+            <Route path="/analyst-personal" element={<AnalystPersonal />} />
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/control-sample" element={<ControlSample />} />
             <Route path="/specificationSpec" element={<SpecificationSpec />} />

@@ -106,166 +106,65 @@ const SampleLogin2Modal = (_props) => {
           <CFormSelect
             type="text"
             className="mb-3"
-            label="Client"
+            label="Sample Type"
             placeholder="Select..."
             options={[
               {
-                value: "client1",
-                label: "Client 1",
+                value: "USR001",
+                label: "USR001",
               },
-              { value: "client2", label: "Client 2" },
-            ]}
-          />
-          <CFormSelect
-            type="text"
-            className="mb-3"
-            label="Test Plan / Revision No."
-            placeholder="Select..."
-            onChange={handleTestPlanChange}
-            options={[
-              {
-                value: "selectPlan",
-                label: "Select Plan",
-              },
-              {
-                value: "TP-acc2/ACC-00-QC-01-0000052",
-                label: "TP-acc2/ACC-00-QC-01-0000052",
-              },
-              {
-                value: "TP-undw2/WBL/STP/FG/0493-02-0000051",
-                label: "TP-undw2/WBL/STP/FG/0493-02-0000051",
-              },
-              {
-                value: "TP-01-ep/54321-0000050",
-                label: "TP-01-ep/54321-0000050",
-              },
-              {
-                value: "TP-ae-(a)/SPE/FP/002-0000048",
-                label: "TP-ae-(a)/SPE/FP/002-0000048",
-              },
-              {
-                value: "TP-ae-(a)/SPE/FP/002-0000047",
-                label: "TP-ae-(a)/SPE/FP/002-0000047",
-              },
-              {
-                value: "TP-ae-(a)/SPE/FP/002-0000046",
-                label: "TP-ae-(a)/SPE/FP/002-0000046",
-              },
-              {
-                value: "TP-undw2/WBL/STP/FG/0493-02-0000044",
-                label: "TP-undw2/WBL/STP/FG/0493-02-0000044",
-              },
-              {
-                value: "TP-fgtab000d2857/WBL/FPS/FG/2893-02-0000043",
-                label: "TP-fgtab000d2857/WBL/FPS/FG/2893-02-0000043",
-              },
-              {
-                value: "TP-fgtab000d2857/WBL/FPS/FG/2893-02-0000042",
-                label: "TP-fgtab000d2857/WBL/FPS/FG/2893-02-0000042",
-              },
-              {
-                value: "TP-dcf/DPE234-0000041",
-                label: "TP-dcf/DPE234-0000041",
-              },
-              {
-                value: "TP-dcf/DPE234-0000040",
-                label: "TP-dcf/DPE234-0000040",
-              },
-              {
-                value: "TP-dcf/DPE234-0000039",
-                label: "TP-dcf/DPE234-0000039",
-              },
-              {
-                value: "TP-chpoil/CHPOIL001-0000038",
-                label: "TP-chpoil/CHPOIL001-0000038",
-              },
-              {
-                value: "TP-tsvl1/RPS-TSLV-00-0000037",
-                label: "TP-tsvl1/RPS-TSLV-00-0000037",
-              },
-              {
-                value: "TP-pm-001/MB-PM-001/00-0000036",
-                label: "TP-pm-001/MB-PM-001/00-0000036",
-              },
-              {
-                value: "TP-fgtab000d2857/WBL/FPS/FG/2893-03-0000035",
-                label: "TP-fgtab000d2857/WBL/FPS/FG/2893-03-0000035",
-              },
-              {
-                value: "TP-vad/FP 00055-0000034",
-                label: "TP-vad/FP 00055-0000034",
-              },
-              {
-                value: "TP-pc/PC1-0000033",
-                label: "TP-pc/PC1-0000033",
-              },
-              {
-                value: "TP-pc/PC1-0000032",
-                label: "TP-pc/PC1-0000032",
-              },
-              {
-                value: "TP-vad/FP-0055-0000031",
-                label: "TP-vad/FP-0055-0000031",
-              },
+              { value: "USR002", label: "USR002" },
+              { value: "USR003", label: "USR003" },
             ]}
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Product / Material"
-            placeholder="Prefix"
-            disabled
+            placeholder=""
           />
           <CFormInput
             type="text"
             className="mb-3"
-            label="Product / Material Code"
+            label="A.R. No."
             placeholder=""
-            disabled
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Generic Name"
             placeholder=""
-            disabled
           />
           <CFormInput
             type="text"
             className="mb-3"
-            label="Specification ID"
+            label="Specification Code"
             placeholder=""
-            disabled
           />
           <CFormSelect
             type="text"
             className="mb-3"
-            label="Copy Sample from"
-            placeholder="select..."
-            options={[{ value: "Select", label: "Select Sample" }]}
+            label="Status"
+            placeholder=""
           />
           <CFormInput
             type="text"
             className="mb-3"
-            label="Sample Type"
-            placeholder=""
-            disabled
-          />
-
-<CFormInput
-            type="text"
-            className="mb-3"
             label="Analyst"
             placeholder=""
-            
           />
 
-<CFormInput
+          <CFormInput
             type="date"
             className="mb-3"
             label="Analysis Date"
             placeholder=""
-            
+          />
+          <CFormInput
+            type="file"
+            className="mb-3"
+            label="Attachement"
+            placeholder=""
           />
 
           {showAdditionalFields && (
@@ -371,13 +270,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               {/* Table with 4 columns */}
               <table className="table">
                 <thead>
@@ -442,13 +341,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               {/* Table with 4 columns */}
               <table className="table">
                 <thead>
@@ -500,13 +399,13 @@ const SampleLogin2Modal = (_props) => {
                 placeholder=""
               />
 
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               {/* Table with 4 columns */}
               <table className="table">
                 <thead>
@@ -587,13 +486,13 @@ const SampleLogin2Modal = (_props) => {
                 label="manufacturing date"
                 placeholder=""
               />
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="table">
                 <thead>
                   <tr>
@@ -691,13 +590,13 @@ const SampleLogin2Modal = (_props) => {
                 label="manufacturing date"
                 placeholder=""
               />
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -960,13 +859,13 @@ const SampleLogin2Modal = (_props) => {
                 label="manufacturing date"
                 placeholder=""
               />
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1199,13 +1098,13 @@ const SampleLogin2Modal = (_props) => {
                 label="sampling quantity"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1284,13 +1183,13 @@ const SampleLogin2Modal = (_props) => {
                 label="sampling quantity"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1361,13 +1260,13 @@ const SampleLogin2Modal = (_props) => {
                 label="sampling quantity"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1478,13 +1377,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1587,13 +1486,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1710,13 +1609,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
             </>
           ) : (
             ""
@@ -1759,13 +1658,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1848,13 +1747,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -1953,13 +1852,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -2050,13 +1949,13 @@ const SampleLogin2Modal = (_props) => {
                 label="Manufacturing Date"
                 placeholder=""
               />{" "}
-              <CFormSelect
+              {/* <CFormSelect
                 type="text"
                 className="mb-3"
                 label="Certificates (If any)"
                 placeholder=""
                 options={[{ value: "Select", label: "Select" }]}
-              />
+              /> */}
               <table className="w-full mb-4">
                 <thead className="w-full">
                   <tr>
@@ -2109,14 +2008,14 @@ const SampleLogin2Modal = (_props) => {
           ) : (
             ""
           )}
-
+          {/* 
           <CFormSelect
             type="text"
             className="mb-3 "
             label="Certificates (If any)"
             placeholder=""
             options={[{ value: "Select", label: "Select" }]}
-          />
+          /> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>

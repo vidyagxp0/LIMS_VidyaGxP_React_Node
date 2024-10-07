@@ -153,6 +153,16 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </CNavItem>
           </Link>
 
+          <Link to="/analyst-personal">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/analyst-personal"), gap: "18px" }}
+              className={isActive("/analyst-personal")}
+            >
+              <TbCurrentLocation />
+              Analyst Personal Information
+            </CNavItem>
+          </Link>
           <Link to="/control-sample">
             <CNavItem
               href="#"

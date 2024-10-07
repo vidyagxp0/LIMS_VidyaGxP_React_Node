@@ -267,6 +267,7 @@ function TestPlan() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={()=>openEditModal(row)}
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
