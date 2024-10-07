@@ -22,6 +22,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -284,6 +285,7 @@ function Storage_Condition() {
 
   return (
     <>
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Storage Conditions</h4>
@@ -302,13 +304,14 @@ function Storage_Condition() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Storage_Condition.pdf" title="Storage Condition Data" />
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Storage Condition"
-              color="blue"
-              onClick={openModal}
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Storage_Condition.pdf"
+              title="Storage Condition Data"
             />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Storage Condition" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -320,10 +323,7 @@ function Storage_Condition() {
           openEditModal={openEditModal}
         />
       </div>
-
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}

@@ -28,6 +28,7 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
@@ -608,6 +609,8 @@ function SpecificationsTestProcedure() {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Standard Test Procedure</h4>
@@ -637,11 +640,7 @@ function SpecificationsTestProcedure() {
               title="Specification Test Procedure Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Test Procedure"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Add Test Procedure" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -654,13 +653,7 @@ function SpecificationsTestProcedure() {
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          onAdd={addNewStorageCondition}
-        />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
 
       {isModalsOpen && (
         <ImportModal

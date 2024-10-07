@@ -5,10 +5,12 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import { randomData } from "./demoStp";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const STP = () => {
   return (
     <div>
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold ">STP</h4>
