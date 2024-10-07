@@ -14,7 +14,14 @@ import {
   CTableRow,
 } from "@coreui/react";
 
-const ReusableModal = ({ visible, closeModal, data, fields, title,updateStatus }) => {
+const ReusableModal = ({
+  visible,
+  closeModal,
+  data,
+  fields,
+  title,
+  updateStatus,
+}) => {
   const [statusModal, setStatusModal] = useState(false);
   const handleStatusChange = (newStatus) => {
     updateStatus(data.sampleType, newStatus); // Update status in the parent component
@@ -55,31 +62,6 @@ const ReusableModal = ({ visible, closeModal, data, fields, title,updateStatus }
                 </CTable>
               </div>
             </div>
-            <div className="block">
-              <div className="main-head">
-                <h4 className="fw-bold mb-4 mt-3">History</h4>
-              </div>
-              <div className="bg-white px-5 py-3">
-                <CTable align="middle" className="mb-0" small bordered>
-                  <CTableBody>
-                    <CTableRow color="warning">
-                      <CTableDataCell>Revision</CTableDataCell>
-                      <CTableDataCell>{data?.revision || "N/A"}</CTableDataCell>
-                    </CTableRow>
-                    {fields?.map((field, index) => (
-                      <CTableRow key={index}>
-                        <CTableDataCell color="info">
-                          {field.label}
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          {data ? data[field.key] : field.default}
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
-                  </CTableBody>
-                </CTable>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -95,7 +77,7 @@ const ReusableModal = ({ visible, closeModal, data, fields, title,updateStatus }
   );
 };
 
-const StatusModal = ({ visible, closeModal,onUpdateStatus }) => {
+const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const handleStatusChange = (e) => {
@@ -115,12 +97,12 @@ const StatusModal = ({ visible, closeModal,onUpdateStatus }) => {
         <CFormSelect
           label="Status"
           value={selectedStatus}
-        onChange={handleStatusChange}
+          onChange={handleStatusChange}
           options={[
             { label: "Select Status", value: "" },
-          { label: "Approve", value: "APPROVED" },
-          { label: "Drop", value: "DROPPED" },
-          { label: "Reject", value: "REJECTED" },
+            { label: "Approve", value: "APPROVED" },
+            { label: "Drop", value: "DROPPED" },
+            { label: "Reject", value: "REJECTED" },
           ]}
         />
       </CModalBody>
@@ -128,10 +110,12 @@ const StatusModal = ({ visible, closeModal,onUpdateStatus }) => {
         <CButton color="light" onClick={closeModal}>
           Cancel
         </CButton>
-        <CButton color="dark" onClick={handleUpdate} >Update</CButton>
+        <CButton color="dark" onClick={handleUpdate}>
+          Update
+        </CButton>
       </CModalFooter>
     </CModal>
   );
-}
+};
 
 export default ReusableModal;

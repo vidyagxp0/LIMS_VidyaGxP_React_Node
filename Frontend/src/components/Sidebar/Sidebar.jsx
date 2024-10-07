@@ -120,6 +120,16 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Storage Condition
             </CNavItem>
           </Link>
+          <Link to="/specificationSpec">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/specificationSpec"), gap: "18px" }}
+              className={isActive("/specificationSpec")}
+            >
+              <AiOutlineContainer />
+              Specification Spec
+            </CNavItem>
+          </Link>
           <Link to="/storage-location">
             <CNavItem
               href="#"

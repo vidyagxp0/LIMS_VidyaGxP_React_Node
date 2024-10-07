@@ -11,6 +11,8 @@ import {
 } from "@coreui/react";
 
 const InstrumentModuleModal = ({ visible, closeModal, handleSubmit }) => {
+  const [fields, setFields] = useState([]);
+
   const [moduleData, setModuleData] = useState({
     sno: "",
     InstrumentId: "",
@@ -56,7 +58,14 @@ const InstrumentModuleModal = ({ visible, closeModal, handleSubmit }) => {
   };
 
   const handleFormSubmit = () => {
-    handleSubmit({ ...moduleData });
+    const instrumentDetails = { ...moduleData, fields };
+
+    const existingInstruments = JSON.parse(localStorage.getItem("instruments")) || [];
+    const updatedInstruments = [...existingInstruments, instrumentDetails];
+    localStorage.setItem("instruments", JSON.stringify(updatedInstruments));
+  
+    handleSubmit(instrumentDetails);
+    
     closeModal();
   };
 
