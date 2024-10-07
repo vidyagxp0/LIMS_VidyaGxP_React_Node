@@ -137,7 +137,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               className={isActive("/analyst-personal")}
             >
               <TbCurrentLocation />
-              Analyst Personal Information
+              Analyst Personal Info
             </CNavItem>
           </Link>
           <CNavGroup
