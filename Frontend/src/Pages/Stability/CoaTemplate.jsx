@@ -637,7 +637,7 @@ function CoaTemplate() {
   return (
     <>
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Coa Template</h1>
+        <h1 className="text-2xl font-bold mb-4">COA Template</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
           <Card
             title="DROPPED"
@@ -687,6 +687,7 @@ function CoaTemplate() {
             />
           </div>
           <div className="float-right flex gap-4">
+          <ATMButton text="Print" color="red" onClick={handleOpenModals} />
           <PDFDownload columns={columns} data={filteredData} fileName="Coa_Template.pdf" title="Coa Template Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton

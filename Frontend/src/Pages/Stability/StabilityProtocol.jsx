@@ -145,6 +145,7 @@ function StabilityProtocol() {
     { header: "Protocol Type", accessor: "protocolType" },
     { header: "Protocol ID", accessor: "protocolID" },
     { header: "Added on", accessor: "addedOn" },
+    { header: "Attachment", accessor: "attachment" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",

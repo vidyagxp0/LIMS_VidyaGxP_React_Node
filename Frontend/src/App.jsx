@@ -22,6 +22,7 @@ import SampleLoginDetails from "./Pages/Samplelogin/SampleloginView/SampleLoginD
 import TestResultsDetails from "./Pages/Samplelogin/SampleloginView/TestResultsDetails.jsx";
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1";
 import InvestigationL2 from "./Pages/Samplelogin/InvestigationL2";
+import SamplePlanning from "./Pages/Samplelogin/SamplePlanning.jsx";
 
 import Storage_Condition from "./Pages/Stability/Storage_Condition";
 import ChamberConditionMapping from "./Pages/Stability/ChamberConditionMapping";
@@ -208,6 +209,8 @@ import SettingStability from "./Pages/Settings/SettingStability.jsx";
 import TestHistory from "./Pages/Settings/TestHistory.jsx";
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx";
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx";
+import ControlSample from "./Pages/Control Sample/ControlSample.jsx";
+import SpecificationSpec from "./Pages/SpecificationSpec.jsx";
 
 import AdminPanel from "./components/AdminPanel/AdminPanel.jsx";
 import AdminMainPanel from "./components/AdminPanel/AdminMainPanel.jsx";
@@ -242,6 +245,8 @@ function App() {
             <Route path="/storage-location" element={<StorageLocation />} />
             <Route path="/analyst-personal" element={<AnalystPersonal />} />
             <Route path="/stCondition" element={<StorageCondition />} />
+            <Route path="/control-sample" element={<ControlSample />} />
+            <Route path="/specificationSpec" element={<SpecificationSpec />} />
 
             <Route path="/department" element={<Department />} />
             <Route path="/department/admin" element={<Admin />} />
@@ -262,6 +267,7 @@ function App() {
             />
             <Route path="/investigationl1" element={<InvestigationL1 />} />
             <Route path="/investigationl2" element={<InvestigationL2 />} />
+            <Route path="/sample-planning" element={<SamplePlanning />} />
 
             <Route
               path="/storageCondition1321"
