@@ -23,25 +23,10 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import ReusableModal from "../Modals/ResusableModal.jsx";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    CategoryName: "Product 1",
-    Description: "Description 1",
-    AddedOn: "2024-06-01",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    CategoryName: "Product 2",
-    Description: "Description 2",
-    AddedOn: "2024-06-02",
-    status: "Inactive",
-  },
-];
+const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
+
 
 const Registration = () => {
   const [data, setData] = useState(initialData);
@@ -185,7 +170,7 @@ const Registration = () => {
   };
   const filteredData = data.filter((row) => {
     return (
-      row.CategoryName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      row?.Description?.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -225,6 +210,20 @@ const Registration = () => {
       ),
     },
   ];
+
+  const fields = [
+    { label: "Category Name", key: "CategoryName" },
+    { label: "Description", key: "Description" },
+    { label: "Added On", key: "AddedOn" },
+    { label: "Status", key: "status" },
+  ];
+
+  const handleStatusUpdate = (instrumentCat, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.instrumentCat === instrumentCat ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -329,14 +328,7 @@ const Registration = () => {
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
       />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-          onDataUpload={handleExcelDataUpload}
-        />
-      )}
+     
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -346,11 +338,14 @@ const Registration = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={() => setIsViewModalOpen(false)}
-          data={viewModalData}
+       {viewModalData && (
+        <ReusableModal
+          visible={isViewModalOpen} 
+          closeModal={closeViewModal} 
+          data={viewModalData} 
+          fields={fields} 
+          title="InstrumentMasterReg."
+          updateStatus={handleStatusUpdate}
         />
       )}
       {editModalOpen && (
