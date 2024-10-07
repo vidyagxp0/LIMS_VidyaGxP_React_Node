@@ -26,6 +26,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -636,6 +637,7 @@ function CoaTemplate() {
 
   return (
     <>
+    <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">COA Template</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">

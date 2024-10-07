@@ -19,6 +19,7 @@ import Table3 from "../../components/ATM components/Table/Table3.jsx";
 import ChamberConditionMappingModal from "../Modals/ChamberConditionMappingModal.jsx";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -235,6 +236,7 @@ function ChamberConditionMapping() {
 
   return (
     <>
+    <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Chamber Condition Mapping</h4>
