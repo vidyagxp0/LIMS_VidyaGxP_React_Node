@@ -12,6 +12,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import WorkingStandardIssueModal from "../Modals/WorkingStandardIssueModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import ReusableModal from "../Modals/ResusableModal.jsx";
 
 const initialData = [
   {
@@ -60,7 +61,6 @@ const WorkingStandardIssue = () => {
       if (item.status === "Active") counts.DROPPED++;
       else if (item.status === "Inactive") counts.INITIATED++;
     });
-
   }, [data]);
 
   const handleOpenModals = () => {
@@ -97,6 +97,27 @@ const WorkingStandardIssue = () => {
     setIsViewModalOpen(true);
   };
 
+  const fields = [
+    { label: "Sno", key: "sno" },
+    { label: "WorkingContainerNo", key: "WorkingContainerNo" },
+    { label: "ContainerQty", key: "ContainerQty" },
+    { label: "ContainerValidityPeriodDay", key: "ContainerValidityPeriodDay" },
+    { label: "ContainerValidUpto", key: "ContainerValidUpto" },
+    { label: "LotValidUpto", key: "LotValidUpto" },
+    { label: "AddedOn", key: "AddedOn" },
+    { label: "Status", key: "status" }
+    
+    
+  ];
+
+  const handleStatusUpdate = (workingStd, newStatus) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.workingStd === workingStd ? { ...row, status: newStatus } : row
+      )
+    );
+  };
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -111,11 +132,10 @@ const WorkingStandardIssue = () => {
       status: item["Status"] || "INITIATED",
     }));
 
-    // Concatenate the updated data with existing data
     const concatenatedData = [...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
+    setData(concatenatedData);
 
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setIsModalsOpen(false);
   };
 
   const columns = [
@@ -214,11 +234,14 @@ const WorkingStandardIssue = () => {
         visible={isModalOpen}
         closeModal={closeModal}
       />
-      {isViewModalOpen && (
-        <ViewModal
+      {viewModalData && (
+        <ReusableModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+          fields={fields}
+          title="InstrumentMasterReg."
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (
