@@ -57,13 +57,14 @@ function Specifications() {
   const [editModalData, setEditModalData] = useState(null);
 
   const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("specificationTypes");
+    const storedData = localStorage.getItem("testcategories"); // consistent key
     return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
   });
 
   useEffect(() => {
-    localStorage.setItem("testcategories", JSON.stringify(data));
+    localStorage.setItem("testcategories", JSON.stringify(data)); // consistent key
   }, [data]);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -385,7 +386,11 @@ function Specifications() {
               title="Test Categories Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Test Categories" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Test Categories"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -406,7 +411,13 @@ function Specifications() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
+      )}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}

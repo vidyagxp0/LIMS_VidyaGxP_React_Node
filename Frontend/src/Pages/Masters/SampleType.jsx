@@ -34,7 +34,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
+const initialData = JSON.parse(localStorage.getItem("sampletypes")) || [];
 
 const fields = [
   { label: "Sample Type Name", key: "sampleTypeName" },
@@ -44,7 +44,7 @@ const fields = [
 ];
 
 function SampleType() {
-  // const [data, setData] = useState(initialData);
+  const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,11 +53,7 @@ function SampleType() {
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null);
 
-  const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("specificationTypes");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
-  });
-
+  // Save data to localStorage whenever data changes
   useEffect(() => {
     localStorage.setItem("sampletypes", JSON.stringify(data));
   }, [data]);
@@ -76,16 +72,17 @@ function SampleType() {
 
   const filteredData = Array.isArray(data)
     ? data.filter((row) => {
-        const productName = row.productName || ""; // Fallback to an empty string if productName is undefined
+        const sampleTypeName = row.sampleTypeName || ""; // Fallback to an empty string if sampleTypeName is undefined
         return (
-          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
           (statusFilter === "All" || row.status === statusFilter)
         );
       })
     : [];
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-  };
+
+    const onViewDetails = (rowData) => {
+      setViewModalData(rowData);
+    };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -705,9 +702,18 @@ function SampleType() {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload columns={columns} data={filteredData} fileName="Sample_Type.pdf" title="Sample Type Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Sample_Type.pdf"
+              title="Sample Type Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Sample Type" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Sample Type"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -728,7 +734,13 @@ function SampleType() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isModalOpen && <StatusModal onAdd={addNewStorageCondition} visible={isModalOpen} closeModal={closeModal} />}
+      {isModalOpen && (
+        <StatusModal
+          onAdd={addNewStorageCondition}
+          visible={isModalOpen}
+          closeModal={closeModal}
+        />
+      )}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}

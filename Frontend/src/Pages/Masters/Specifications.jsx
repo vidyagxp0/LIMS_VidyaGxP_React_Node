@@ -658,7 +658,11 @@ function Specifications() {
               title="Specification Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Specification" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Specification"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -671,7 +675,13 @@ function Specifications() {
         />
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
+      )}
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
