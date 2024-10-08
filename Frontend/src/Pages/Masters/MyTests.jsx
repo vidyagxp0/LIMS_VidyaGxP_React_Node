@@ -48,7 +48,7 @@ const staticData = [
     sampleIncharge: "Jane Smith",
     assignedOn: "2023-09-02",
     sampleType: "Type 2",
-    status: "COMPLETED",
+    status: "INITIATED",
     sno: 2,
     checkbox: false,
   },
@@ -57,6 +57,15 @@ const staticData = [
 
 // Initial dynamic data from local storage
 const initialData = JSON.parse(localStorage.getItem("mytest")) || [];
+
+const fields = [
+  { label: "A.R No.", key: "ARNo" },
+  { label: "Product Name", key: "productName" },
+  { label: "Sample Incharge", key: "sampleIncharge" },
+  { label: "Assigned On", key: "assignedOn" },
+  { label: "Sample Type", key: "sampleType" },
+  { label: "Status", key: "status" },
+];
 
 function Mytests() {
   const [searchQuery, setSearchQuery] = useState("");
