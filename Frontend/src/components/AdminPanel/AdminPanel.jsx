@@ -43,7 +43,7 @@ function AdminPanel(props) {
       if (response.data.token) {
         localStorage.setItem("adminToken", response.data.token);
         toast.success("Login Successful");
-        navigate("/admin-panel/userManagement");
+        navigate("/admin-login/userManagement");
         props.show(true);
       } else {
         toast.error("Login failed. Please try again.");
