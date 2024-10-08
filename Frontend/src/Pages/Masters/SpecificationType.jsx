@@ -25,6 +25,7 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -245,6 +246,8 @@ function SpecificationType() {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Specifications Type</h4>

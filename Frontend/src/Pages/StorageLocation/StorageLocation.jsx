@@ -1,42 +1,40 @@
-import {
-  CButton,
-  CFormInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-} from "@coreui/react";
-import React from 'react';
+import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
+import React from "react";
 
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import ViewModal from "../Modals/ViewModal";
-import PDFDownload from '../PDFComponent/PDFDownload '
+import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
-    checkbox: false, sno: 1, storageCode: "SC001", storageName: "Storage 1", attachment: "attachment", status: "Active", 
+    checkbox: false,
+    sno: 1,
+    storageCode: "SC001",
+    storageName: "Storage 1",
+    attachment: "attachment",
+    status: "Active",
   },
   {
-    checkbox: false, sno: 2, storageCode: "SC002", storageName: "Storage 2", attachment: "attachment", status: "Inactive", 
+    checkbox: false,
+    sno: 2,
+    storageCode: "SC002",
+    storageName: "Storage 2",
+    attachment: "attachment",
+    status: "Inactive",
   },
-  
 ];
 
 function StorageLocation() {
   const [data, setData] = useState(initialData);
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,7 +44,7 @@ function StorageLocation() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [openDelModal, setOpenDelModal] = useState(false);
   const [lastStatus, setLastStatus] = useState("Inactive");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -56,13 +54,11 @@ function StorageLocation() {
     setIsModalsOpen(false);
   };
 
-
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
-
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -73,7 +69,7 @@ function StorageLocation() {
   const filteredData = data.filter((row) => {
     return (
       row.storageName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === 'All' || row.status === statusFilter)
+      (statusFilter === "All" || row.status === statusFilter)
     );
   });
 
@@ -82,17 +78,16 @@ function StorageLocation() {
     setIsViewModalOpen(true);
   };
 
-
   const columns = [
-    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: 'checkbox' },
-    { header: 'SrNo.', accessor: 'sno' },
-    { header: 'Storage Code', accessor: 'storageCode' },
-    { header: 'Storage Name', accessor: 'storageName' },
+    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Storage Code", accessor: "storageCode" },
+    { header: "Storage Name", accessor: "storageName" },
     { header: "attachment", accessor: "attachment" },
-    { header: 'Status', accessor: 'status' },
+    { header: "Status", accessor: "status" },
     {
-      header: 'Actions',
-      accessor: 'action',
+      header: "Actions",
+      accessor: "action",
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
@@ -118,7 +113,7 @@ function StorageLocation() {
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log('Deleted item:', item);
+    console.log("Deleted item:", item);
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -134,8 +129,7 @@ function StorageLocation() {
     // Concatenate the updated data with existing data
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false);; // Update data state with parsed Excel data
-
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
   const addNewStorageCondition = (newCondition) => {
     setData((prevData) => [
@@ -150,7 +144,7 @@ function StorageLocation() {
 
     const handleAdd = () => {
       const newCondition = {
-        storageCode:"",
+        storageCode: "",
         storageName: name,
         createdAt: new Date().toISOString().split("T")[0], // Current date
         attachment: "attachment",
@@ -158,25 +152,28 @@ function StorageLocation() {
       };
 
       onAdd(newCondition);
-    }
+    };
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>New Storage Location</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput type="text" label="Name" placeholder="Location Name" value={name}
-            onChange={(e) => setName(e.target.value)} />
+          <CFormInput
+            type="text"
+            label="Name"
+            placeholder="Location Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Cancel
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Add</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Add
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -185,19 +182,17 @@ function StorageLocation() {
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
   const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
+    const newData = data.map((item) => (item.sno === updatedData.sno ? updatedData : item));
     setData(newData);
     setEditModalData(null);
   };
 
-  const EditModal = ({ visible, closeModal,data, onSave}) => {
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
@@ -217,7 +212,6 @@ function StorageLocation() {
       if (data) {
         setFormData(data);
       }
-
     }, [data]);
 
     const handleChange = (e) => {
@@ -229,12 +223,7 @@ function StorageLocation() {
       onSave(formData);
     };
     return (
-      
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>New Storage Location</CModalTitle>
         </CModalHeader>
@@ -245,13 +234,16 @@ function StorageLocation() {
             placeholder="Location Name"
             value={formData?.storageName || ""}
             onChange={handleChange}
-            name="storageName" />
+            name="storageName"
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Cancel
           </CButton>
-          <CButton color="primary" onClick={handleSave}>Add</CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Add
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -260,6 +252,8 @@ function StorageLocation() {
   return (
     <>
       <div className="m-5 mt-3">
+        <LaunchQMS />
+
         <div className="main-head">
           <h4 className="fw-bold ">Storage Location</h4>
         </div>
@@ -268,31 +262,45 @@ function StorageLocation() {
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
             <Dropdown
               options={[
-                { value: 'All', label: 'All' },
-                { value: 'Active', label: 'Active' },
-                { value: 'Inactive', label: 'Inactive' },
-
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
               ]}
               value={statusFilter}
               onChange={setStatusFilter}
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload columns={columns} data={filteredData} title="Storage Location" fileName="Storage_Location.pdf"/>
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              title="Storage Location"
+              fileName="Storage_Location.pdf"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add Storage Location" color="blue" onClick={openModal} />
           </div>
         </div>
-        <Table columns={columns} data={filteredData} onDelete={handleDelete} onCheckboxChange={handleCheckboxChange} onViewDetails={onViewDetails} openEditModal={openEditModal} />
-
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
+        />
       </div>
 
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
       {isViewModalOpen && <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} />}
       {isModalsOpen && (
-        <ImportModal initialData={initialData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
       )}
       <EditModal
         visible={Boolean(editModalData)}
@@ -300,12 +308,9 @@ function StorageLocation() {
         data={editModalData}
         onSave={handleEditSave}
       />
-       
     </>
   );
 }
-
-
 
 const RemoveModal = (props) => {
   return (
@@ -341,6 +346,5 @@ const RemoveModal = (props) => {
     </CModal>
   );
 };
-
 
 export default StorageLocation;

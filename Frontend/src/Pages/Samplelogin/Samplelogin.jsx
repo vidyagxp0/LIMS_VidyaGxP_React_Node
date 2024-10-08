@@ -13,6 +13,7 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import ReusableModal from "../Modals/ResusableModal.jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -456,6 +457,8 @@ const [isEditModal , setIsEditModal] = useState(false)
 
   return (
     <div className="p-4">
+      <LaunchQMS />
+
       <h1 className="text-2xl font-bold mb-4">Sample Login</h1>
       <div className="flex items-center justify-between mb-4">
         <div className="flex space-x-4">
@@ -491,13 +494,13 @@ const [isEditModal , setIsEditModal] = useState(false)
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="sampleLogin.pdf" title="Sample LogIn Data" />
+          <PDFDownload columns={columns} data={filteredData} fileName="sampleLogin.pdf" title="Sample LogIn Data" />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />
         </div>
       </div>
-      
+
       <Table
         columns={columns}
         data={filteredData}
@@ -506,16 +509,14 @@ const [isEditModal , setIsEditModal] = useState(false)
         onDelete={handleDelete}
         openEditModal={openEditModal}
       />
-      <SampleLogin2Modal visible={isModalOpen} 
-        closeModal={closeModal} 
-        rowData={selectedRowData} />
+      <SampleLogin2Modal visible={isModalOpen} closeModal={closeModal} rowData={selectedRowData} />
       {viewModalData && (
         <ReusableModal
-          visible={isViewModalOpen !==null}
+          visible={isViewModalOpen !== null}
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}
-          updateStatus={handleStatusUpdate} 
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (
