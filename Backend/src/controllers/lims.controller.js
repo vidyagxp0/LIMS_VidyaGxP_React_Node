@@ -1,13 +1,10 @@
 import { LIMS } from "../models/lims.model.js";
-import gridRef from "../models/gridRef.model.js";
 import { sequelize } from "../config/db.js";
-import { getImageUrl } from "../middleware/authentication.js";
-import { FormAuditTrail } from "../models/formAuditTrail.js";
 import { Division } from "../models/division.model.js";
 import { Department } from "../models/department.model.js";
 
 const commonFeilds = [
-  "approval",
+  // "approval", //list
   "storageCondition",
   "specification",
   "storageLocation",
@@ -20,13 +17,13 @@ const commonFeilds = [
   "departmentStore",
   "users",
   "sL",
-  "sLSampleP&A",
-  "sLInvestigationL1",
-  "sLInvestigationL2",
+  "sLSamplePA",
+  // "sLInvestigationL1",//list
+  // "sLInvestigationL2",//list
   "sMStorageCondition",
   "sMStandardProtocol",
   "sMStorageChamber",
-  "sMChamberConditionMapping",
+  // "sMChamberConditionMapping",//list
   "sMStabilityProtocol",
   "sMSampleStorage",
   "sMCOATemplate",
@@ -35,15 +32,15 @@ const commonFeilds = [
   "sMSummaryReportHeader",
   "sMSampleAcceptanceTemplate",
   "sMSampleLogin",
-  "smSampleAcceptance",
-  "masterProduct",
+  // "smSampleAcceptance",//list
+  "mmasterProduct",
   "mSampleType",
   "mSpecificationType",
   "mSpecifications",
   "mStandardTestProcedure",
   "mTestCategories",
   "mTestPlan",
-  "mMyTest",
+  // "mMyTest",//list
   "sSamplingConfiguration",
   "sSamplingRule",
   "sESampling",
@@ -75,74 +72,96 @@ const commonFeilds = [
   "iCMRegistration",
   "iCMReferenceCulture",
   "iCMCultureTemplateC",
-
-
+  "iCMRefrenceCultureLot",
+  "iCMCultureLotAcceptance",
+  "iMediaOnboarding",
+  "iMediaContainerType",
+  "iMediaTemplateConfiguration",
+  "iMediaLot",
+  "iMediaLotContainerIssue",
+  "iMediaLotAcceptance",
+  "iMediaLotUsage",
+  "iWMSampleArea",
+  "iWMProcessingSystem",
+  "iWMSchedule",
+  "iWMUnschedule",
+  "iWMAcknowledgement",
+  "iWMSheduleTermination",
+  "iEFacility",
+  "iELocation",
+  "iEMonitoringDetails",
+  "iECOATemplate",
+  "iEOOATemplate",
+  "iELocationSample",
+  "iESamplingSchedule",
+  "iEBatchSample",
+  "iESampleLogin",
+  "iEAcknowledgementSample",
+  "iEBatchSampleAllotment",
+  "iEBatchTestList",
+  "iMRegistration",
+  "iMInstrumentCategory",
+  "iMInstrumentModule",
+  "iMInstrumentUsage",
+  // "sMStockVerification",//list
+  "sMStockOnboarding",
+  "sMMaterial",
+  "sMInvetory",
+  "cCalibrationType",
+  "cCalibrationFrequency",
+  "cCalibrationDataSheet",
+  "cSampleLoginTemplate",
+  "cCalibrationSchedule",
+  // "cCalibrationRecord",//list
+  "cCalibrationSampleLogin",
+  // "cCalibrationCalendar",
+  "rCProblemReporting",
+  "rCServiceReporting",
+  "rCCoaTemplate",
+  // "rCReleasedCoa",//list
+  // "rCInvestigationCoa",//list
+  "vendor",
+  "client",
+  "plant",
+  "worlFlow",
+  "auditTrail",
+  "sBusinessAssociate",
+  "sLabelManagement",
+  "sFunctionalGrouping",
+  "sWorksheet",
+  "sWorksheetField",
+  "sGroupName",
+  // "sInvestigationTemplate",//list
+  "sChemicalCategory",
+  "sGrade",
+  "sHandlingSymbol",
+  "sProject",
+  "sAnalystTemplate",
+  "sTrainingConfirmation",
+  "sProposal",
+  "sNomination",
+  "sReQualificationRequest",
+  "sResource",
+  "sTypeOfSection",
+  "sWOSTest",
+  "sServiceProvider",
+  "sTestTechnique",
+  "sVendor",
 ];
 
 export const createLIMS = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const {
-      reviewers,
-      approvers,
-      division_id,
-      department_id,
-      productName,
-      genericName,
-    } = req.body;
-
     const newLIMS = await LIMS.create(
       {
-        reviewers: reviewers || [],
-        approvers: approvers || [],
-        division_id: division_id || 1,
-        department_id: department_id || 1,
-        stage: 1,
-        status: "Under Initiation",
-        productName: productName,
-        genericName: genericName,
+        ...req.body,
       },
       { transaction: t }
     );
 
-    const grids = commonFeilds;
-    const gridData = [];
-
-    for (let i = 0; i < grids.length; i++) {
-      const gridName = grids[i];
-      const gridInfo = req.body[gridName];
-
-      if (gridInfo) {
-        let filePath = null;
-        const files = req.files
-          ? req.files.filter((f) => f.fieldname === gridName)
-          : [];
-
-        if (files && files.length > 0) {
-          filePath = files.map((file) => ({
-            fileName: file.originalname,
-            fileUrl: getImageUrl(file),
-          }));
-        }
-
-        const newGridRef = await gridRef.create(
-          {
-            limsId: newLIMS.limsId,
-            primaryKey: gridName,
-            data: gridInfo, // Assuming JSON string is passed in request
-            fileAttachment: filePath ? filePath : null, // Store file URL if uploaded
-          },
-          { transaction: t }
-        );
-
-        gridData.push(newGridRef);
-      }
-    }
-
     await t.commit();
     return res.status(200).json({
       newLIMS,
-      gridData,
     });
   } catch (error) {
     await t.rollback();
@@ -153,11 +172,29 @@ export const createLIMS = async (req, res) => {
 
 export const getAllLIMSData = async (req, res) => {
   try {
-    const limsData = await LIMS.findAll({});
-    if (limsData.length === 0) {
-      return res.status(404).json({ error: true, message: "Data not found" });
-    }
-    res.status(200).json(limsData);
+      const limsData = await LIMS.findAll({
+        attributes: commonFeilds, // Specify the fields to include
+      });
+
+      if (limsData.length === 0) {
+        return res.status(404).json({ error: true, message: "Data not found" });
+      }
+
+      // Filter out fields with empty arrays
+      const filteredLimsData = limsData.map((data) => {
+        const filteredData = {};
+
+        // Loop through each field and only include it if it's not an empty array
+        Object.keys(data.toJSON()).forEach((key) => {
+          if (!(Array.isArray(data[key]) && data[key].length === 0)) {
+            filteredData[key] = data[key];
+          }
+        });
+
+        return filteredData;
+      });
+
+      res.status(200).json(filteredLimsData);
   } catch (error) {
     console.error("Error fetching LIMS data:", error);
     res.status(500).json({
@@ -169,117 +206,109 @@ export const getAllLIMSData = async (req, res) => {
 
 export const getLIMSById = async (req, res) => {
   try {
-    const alimsId = req.params.id;
-    const limsData = await LIMS.findOne({
-      where: { limsId: alimsId },
-    });
+    const { id } = req.params;
+    const limsRecord = await LIMS.findByPk(id);
 
-    if (!limsData) {
-      return res.status(404).json({ error: true, message: "Data not found" });
+    if (!limsRecord) {
+      return res.status(404).json({ error: "LIMS record not found" });
     }
 
-    let gridDatas = {};
-    const grids = commonFeilds;
-
-    for (let i = 0; i < grids.length; i++) {
-      let gridData = await gridRef.findOne({
-        where: { limsId: alimsId, primaryKey: grids[i] },
-      });
-      gridDatas[grids[i]] = gridData;
-    }
-
-    let resObject = {
-      limsData,
-      gridDatas,
-    };
-
-    res.status(200).json(resObject);
+    return res.status(200).json(limsRecord);
   } catch (error) {
-    console.error("Error fetching LIMS data by ID:", error);
-    res.status(500).json({
-      error: true,
-      message: "Failed to fetch LIMS data",
-    });
+    console.error("Error fetching LIMS:", error);
+    return res.status(500).json({ error: error.message });
   }
 };
 
-export const updateLIMSById = async (req, res) => {
+export const updateFieldBySno = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const alimsId = req.params.id;
-    const { userId } = req.body.pQRData;
+    const { id, sno, fieldName } = req.params;
+    const updateData = req.body; //(e.g., `conditionCode`, `ssCondition`)
 
-    const existingLIMS = await LIMS.findOne({
-      where: { limsId: alimsId },
-      include: [
-        {
-          model: gridRef,
-        },
-      ],
-    });
-
-    if (!existingLIMS) {
-      return res.status(404).json({ error: true, message: "LIMS not found" });
+    const limsRecord = await LIMS.findByPk(id);
+    if (!limsRecord) {
+      return res.status(404).json({ error: "LIMS record not found" });
     }
-    const updateData = {
-      userId: userId || existingLIMS.userId,
+
+    if (!commonFeilds.includes(fieldName)) {
+      return res.status(400).json({ error: "Invalid field name" });
+    }
+
+    let fieldArray = limsRecord[fieldName];
+
+    const fieldIndex = fieldArray.findIndex((item) => item["s.no"] == sno);
+
+    if (fieldIndex === -1) {
+      return res
+        .status(404)
+        .json({ error: `${fieldName} with s.no ${sno} not found` });
+    }
+
+    fieldArray[fieldIndex] = {
+      ...fieldArray[fieldIndex],
+      ...updateData, // This will update only the fields provided in the request body
     };
+    // Mark the field as changed (important for JSON fields)
+    limsRecord[fieldName] = fieldArray;
+    limsRecord.changed(fieldName, true); // Explicitly mark the field as changed
 
-    // Update LIMS data
-    await existingLIMS.update(updateData, { transaction: t });
-
-    const grids = commonFeilds;
-
-    for (let i = 0; i < grids.length; i++) {
-      const gridKey = grids[i];
-
-      if (req.body.gridDatas[gridKey]) {
-        const newGridData = req.body.gridDatas[gridKey];
-        const existingGridRef = await gridRef.findOne({
-          where: {
-            limsId: alimsId,
-            primaryKey: gridKey,
-          },
-          transaction: t,
-        });
-
-        if (existingGridRef) {
-          const oldGridData = existingGridRef.data;
-
-          if (JSON.stringify(newGridData) !== JSON.stringify(oldGridData)) {
-            await existingGridRef.update(
-              { data: newGridData },
-              { transaction: t }
-            );
-          }
-        } else {
-          await gridRef.create(
-            {
-              limsId: alimsId,
-              primaryKey: grids[i],
-              data: newGridData,
-            },
-            { transaction: t }
-          );
-        }
-      }
-    }
-
-    // Insert all audit trail entries in bulk
-    if (auditTrailEntries.length > 0) {
-      await FormAuditTrail.bulkCreate(auditTrailEntries, {
-        transaction: t,
-      });
-    }
+    const updatedLIMS = await limsRecord.save({ transaction: t });
 
     await t.commit();
-    res.status(200).json({ message: "LIMS updated successfully" });
+    return res
+      .status(200)
+      .json({ message: `${fieldName} updated successfully`, updatedLIMS });
   } catch (error) {
-    if (!t.finished) {
-      await t.rollback();
+    await t.rollback();
+    console.error("Error updating field:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteStorageConditionById = async (req, res) => {
+  const t = await sequelize.transaction();
+  try {
+    const { id, sno } = req.params; // `id` for LIMS, `sno` for storageCondition identifier
+
+    // Find the LIMS record
+    const limsRecord = await LIMS.findByPk(id);
+
+    if (!limsRecord) {
+      return res.status(404).json({ error: "LIMS record not found" });
     }
-    console.error("Error updating LIMS:", error);
-    res.status(500).json({ error: error.message });
+
+    let storageConditions = limsRecord.storageCondition;
+
+    // Find the object by s.no in the storageCondition array
+    const conditionIndex = storageConditions.findIndex(
+      (cond) => cond["s.no"] == sno
+    );
+
+    if (conditionIndex === -1) {
+      return res.status(404).json({ error: "Storage condition not found" });
+    }
+
+    // Remove the specific object
+    storageConditions.splice(conditionIndex, 1);
+
+    // Mark the field as changed (important for JSON fields)
+    limsRecord.storageCondition = storageConditions;
+    limsRecord.changed("storageCondition", true); // Explicitly mark the field as changed
+
+    // Save the updated record in the database
+    const updatedLIMS = await limsRecord.save({ transaction: t });
+
+    // Commit the transaction
+    await t.commit();
+
+    return res
+      .status(200)
+      .json({ message: "Storage condition deleted successfully", updatedLIMS });
+  } catch (error) {
+    await t.rollback();
+    console.error("Error deleting storage condition:", error);
+    return res.status(500).json({ error: error.message });
   }
 };
 
