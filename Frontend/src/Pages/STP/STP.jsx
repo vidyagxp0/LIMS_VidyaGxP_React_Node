@@ -11,7 +11,7 @@ const STP = () => {
   return (
     <div>
       <LaunchQMS />
-      <div className="m-5 mt-3">
+      <div className="m-5 mt-3 " >
         <div className="main-head">
           <h4 className="fw-bold ">STP</h4>
         </div>
