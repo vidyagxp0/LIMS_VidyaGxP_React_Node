@@ -52,7 +52,7 @@ const SpecificationSpec = () => {
           </div>
         </div>
 
-        <table className="min-w-full bg-white border border-gray-200 shadow-lg ">
+        <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-5">
           <thead>
             <tr className=" text-white text-left">
               <th colSpan="11" className="px-4 py-2 bg-cyan-500">
@@ -78,33 +78,33 @@ const SpecificationSpec = () => {
               </th>
             </tr>
             <tr className="">
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white border  px-4 py-2">
                 Specification ID
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white border  px-4 py-2">
                 Specification Title/Name
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white border  px-4 py-2">
                 Version Number
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">Attachment</td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white border  px-4 py-2">Attachment</td>
+              <td className="bg-gray-800 text-white border  px-4 py-2">
                 Effective Date
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white  border px-4 py-2">
                 Creation Date
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">Approved By</td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white border  px-4 py-2">Approved By</td>
+              <td className="bg-gray-800 text-white border  px-4 py-2">
                 Product Name
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white border  px-4 py-2">
                 Batch/Lot Number
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white  border px-4 py-2">
                 Product Category
               </td>
-              <td className="bg-gray-800 text-white  px-4 py-2">
+              <td className="bg-gray-800 text-white border  px-4 py-2">
                 Manufacturer/Supplier
               </td>
               <td className="bg-gray-800 text-white border px-4 py-2">
