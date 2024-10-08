@@ -30,6 +30,22 @@ import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
 
+const staticData = [
+  {
+    sno: 1,
+    specificationType: "Product ",
+    addedOn: "2024-01-01",
+    status: "Active",
+  },
+  {
+    sno: 2,
+    specificationType: "Product ",
+    addedOn: "2024-01-01",
+    status: "Active",
+  },
+  // Add more static entries as needed
+];
+
 const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
 const fields = [
@@ -49,14 +65,19 @@ function specficationtype() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
+  // Combine static data with dynamic data from local storage
   const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("specficationtype");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+    return [...staticData, ...initialData]; // Merge static data with local storage data
   });
 
   useEffect(() => {
-    localStorage.setItem("specficationtype", JSON.stringify(data));
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "mytest",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
   }, [data]);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };

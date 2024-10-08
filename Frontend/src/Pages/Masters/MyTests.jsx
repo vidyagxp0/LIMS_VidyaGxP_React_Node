@@ -30,20 +30,35 @@ import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
-
-const fields = [
-  { label: "A.R No.", key: "ARNo" },
-  { label: "Product Name", key: "productName" },
-  { label: "Sample Incharge", key: "sampleIncharge" },
-  { label: "Assigned On", key: "assignedOn" },
-  { label: "Sample Type", key: "sampleType" },
-  { label: "Status", key: "status" },
-  ,
+// Dummy static data
+const staticData = [
+  {
+    ARNo: "AR001",
+    productName: "Product A",
+    sampleIncharge: "John Doe",
+    assignedOn: "2023-09-01",
+    sampleType: "Type 1",
+    status: "INITIATED",
+    sno: 1,
+    checkbox: false,
+  },
+  {
+    ARNo: "AR002",
+    productName: "Product B",
+    sampleIncharge: "Jane Smith",
+    assignedOn: "2023-09-02",
+    sampleType: "Type 2",
+    status: "COMPLETED",
+    sno: 2,
+    checkbox: false,
+  },
+  // Add more static entries as needed
 ];
 
+// Initial dynamic data from local storage
+const initialData = JSON.parse(localStorage.getItem("mytest")) || [];
+
 function Mytests() {
-  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,14 +67,19 @@ function Mytests() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
+  // Combine static data with dynamic data from local storage
   const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("mytest");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+    return [...staticData, ...initialData]; // Merge static data with local storage data
   });
 
   useEffect(() => {
-    localStorage.setItem("mytest", JSON.stringify(data));
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "mytest",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
   }, [data]);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };

@@ -34,6 +34,24 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
+const staticData = [
+  {
+    sno: "1",
+    sampleTypeName: "Blood Sample",
+    addDate: "2024-01-01",
+    daysToComplete: 5,
+    status: "Active",
+  },
+  {
+    sno: "2",
+    sampleTypeName: "Urine Sample",
+    addDate: "2024-01-02",
+    daysToComplete: 3,
+    status: "Inactive",
+  },
+  // Add more static entries as needed
+];
+
 const initialData = JSON.parse(localStorage.getItem("sampletypes")) || [];
 
 const fields = [
@@ -44,7 +62,7 @@ const fields = [
 ];
 
 function SampleType() {
-  const [data, setData] = useState(initialData);
+  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,9 +71,17 @@ function SampleType() {
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null);
 
-  // Save data to localStorage whenever data changes
+  // Combine static data with dynamic data from local storage
+  const [data, setData] = useState(() => {
+    return [...staticData, ...initialData]; // Merge static data with local storage data
+  });
+
   useEffect(() => {
-    localStorage.setItem("sampletypes", JSON.stringify(data));
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "sampletype",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
   }, [data]);
 
   const handleOpenModals = () => {
@@ -80,9 +106,9 @@ function SampleType() {
       })
     : [];
 
-    const onViewDetails = (rowData) => {
-      setViewModalData(rowData);
-    };
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+  };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];

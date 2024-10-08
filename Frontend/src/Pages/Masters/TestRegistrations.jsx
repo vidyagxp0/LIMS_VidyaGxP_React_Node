@@ -30,7 +30,33 @@ import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
+const staticData = [
+  {
+    sno: 1,
+    productName: "Product 1",
+    SpecificationID: "Spec 1",
+    testName: "Test 1",
+    testCode: "TC 1",
+    method: "Method 1",
+    category: "Category 1",
+    testType: "Type 1",
+    status: "INITIATED",
+  },
+
+  {
+    sno: 2,
+    productName: "Product 2",
+    SpecificationID: "Spec 2",
+    testName: "Test 2",
+    testCode: "TC 2",
+    method: "Method 2",
+    category: "Category 2",
+    testType: "Type ",
+    status: "INITIATED",
+  },
+];
+
+const initialData = JSON.parse(localStorage.getItem("testregistration")) || "";
 
 const fields = [
   { label: "Product Name", key: "productName" },
@@ -54,13 +80,17 @@ function Testregistration() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
+  // Combine static data with dynamic data from local storage
   const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("testregestrion");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+    return [...staticData, ...initialData]; // Merge static data with local storage data
   });
 
   useEffect(() => {
-    localStorage.setItem("testregestrion", JSON.stringify(data));
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "testregistration",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
   }, [data]);
   const handleOpenModals = () => {
     setIsModalsOpen(true);

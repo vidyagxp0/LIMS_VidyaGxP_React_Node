@@ -34,7 +34,24 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
+const staticData = [
+  {
+    sno: 1,
+    categoryName: "new cat",
+    uniqueCode: "AT-002",
+    description: "vhnds jjsw ",
+    addedOn: "2024-10-08",
+  },
+  {
+    sno: 2,
+    categoryName: "new cat",
+    uniqueCode: "AT-002",
+    description: "vhnds jjsw ",
+    addedOn: "2024-10-08",
+  },
+];
+
+const initialData = JSON.parse(localStorage.getItem("testcategories")) || "";
 
 const fields = [
   { label: "Category Name", key: "categoryName" },
@@ -56,13 +73,17 @@ function Testcategories() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
+  // Combine static data with dynamic data from local storage
   const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("testcategories"); // consistent key
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+    return [...staticData, ...initialData]; // Merge static data with local storage data
   });
 
   useEffect(() => {
-    localStorage.setItem("testcategories", JSON.stringify(data)); // consistent key
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "testcategories",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
   }, [data]);
 
   const handleOpenModals = () => {
