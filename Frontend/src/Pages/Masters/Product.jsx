@@ -31,7 +31,6 @@ import ReusableModal from "../Modals/ResusableModal";
 const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
 const fields = [
-  { label: "S.No", key: "sno" },
   { label: "Product Name", key: "productName" },
   { label: "Unique Code", key: "uniqueCode" },
   { label: "Generic Name", key: "genericName" },
