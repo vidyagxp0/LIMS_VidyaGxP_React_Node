@@ -42,71 +42,27 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const initialData = [
+const staticData = [
   {
-    checkbox: false,
     sno: 1,
     specificationId: "SP001",
-    productName: "Dolo 650",
-    tests: "Test A, Test B",
-    initiatedAt: "2024-01-01",
+    productName: "Product A",
+    tests: ["Test 1", "Test 2", "Test 3"],
+    initiatedAt: "2022-01-01",
     status: "INITIATED",
   },
+
   {
-    checkbox: false,
     sno: 2,
     specificationId: "SP002",
-    productName: "Paracetamol 250mg",
-    tests: "Test C, Test D",
-    initiatedAt: "2024-01-02",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    specificationId: "SP003",
-    productName: "Paracetamol 500mg",
-    tests: "Test E, Test F",
-    initiatedAt: "2024-01-03",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    specificationId: "SP004",
-    productName: "Ibuprofen 200mg",
-    tests: "Test G, Test H",
-    initiatedAt: "2024-01-04",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    specificationId: "SP005",
-    productName: "Amoxicillin 500mg",
-    tests: "Test I, Test J",
-    initiatedAt: "2024-01-05",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    specificationId: "SP006",
-    productName: "Aspirin 100mg",
-    tests: "Test K, Test L",
-    initiatedAt: "2024-01-06",
-    status: "IN PROGRESS",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    specificationId: "SP007",
-    productName: "Cetirizine 10mg",
-    tests: "Test M, Test N",
-    initiatedAt: "2024-01-07",
+    productName: "Product B",
+    tests: ["Test 1", "Test 2", "Test 3"],
+    initiatedAt: "2022-01-01",
     status: "INITIATED",
   },
 ];
+
+const initialData = JSON.parse(localStorage.getItem("testplan")) || "";
 
 const fields = [
   { label: "S.No", key: "sno" },
@@ -118,7 +74,7 @@ const fields = [
 ];
 
 function TestPlan() {
-  const [data, setData] = useState(initialData);
+  //const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,6 +82,19 @@ function TestPlan() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+
+  // Combine static data with dynamic data from local storage
+  const [data, setData] = useState(() => {
+    return [...staticData, ...initialData]; // Merge static data with local storage data
+  });
+
+  useEffect(() => {
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "testplan",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
+  }, [data]);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -140,12 +109,16 @@ function TestPlan() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -268,7 +241,7 @@ function TestPlan() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
-            onClick={()=>openEditModal(row)}
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
@@ -341,7 +314,7 @@ function TestPlan() {
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [selectedSpecId, setSelectedSpecId] = useState("");
+    const [specificationId, setspecificationId] = useState("");
     const [availableTests, setAvailableTests] = useState([
       "Description",
       "Weight of 20 Tablets",
@@ -391,7 +364,7 @@ function TestPlan() {
 
     const handleSpecIdChange = (e) => {
       const specId = e.target.value;
-      setSelectedSpecId(specId);
+      setspecificationId(specId);
       setAvailableTests(specTestsMap[specId] || []);
       setSelectedTests([]);
       setRefreshedTests([]);
@@ -446,9 +419,9 @@ function TestPlan() {
               { label: "FG-TEST-123", value: "FG-TEST-123" },
               { label: "BATCH-789", value: "BATCH-789" },
             ]}
-            value={testPlan.selectedSpecId}
+            value={testPlan.specificationId}
             onChange={(e) =>
-              setTestPlan({ ...testPlan, selectedSpecId: e.target.value })
+              setTestPlan({ ...testPlan, specificationId: e.target.value })
             }
           />
           <CFormInput
@@ -709,7 +682,7 @@ function TestPlan() {
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [selectedSpecId, setSelectedSpecId] = useState("");
+    const [specificationId, setspecificationId] = useState("");
     const [availableTests, setAvailableTests] = useState([
       "Description",
       "Weight of 20 Tablets",
@@ -756,7 +729,7 @@ function TestPlan() {
 
     const handleSpecIdChange = (e) => {
       const specId = e.target.value;
-      setSelectedSpecId(specId);
+      setspecificationId(specId);
       setAvailableTests(specTestsMap[specId] || []);
       setSelectedTests([]);
       setRefreshedTests([]);
@@ -811,7 +784,7 @@ function TestPlan() {
               { label: "FG-TEST-123", value: "FG-TEST-123" },
               { label: "BATCH-789", value: "BATCH-789" },
             ]}
-            value={formData?.selectedSpecId | ""}
+            value={formData?.specificationId | ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -1073,9 +1046,18 @@ function TestPlan() {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload columns={columns} data={filteredData} fileName="Test_plan.pdf" title="Test Plan Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Test_plan.pdf"
+              title="Test Plan Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Test Categories" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Test Categories"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -1088,7 +1070,13 @@ function TestPlan() {
         />
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
+      )}
 
       {isModalsOpen && (
         <ImportModal

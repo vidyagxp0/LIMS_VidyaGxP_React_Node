@@ -34,7 +34,25 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
+const staticData = [
+  {
+    sno: "1",
+    sampleTypeName: "Blood Sample",
+    addDate: "2024-01-01",
+    daysToComplete: 5,
+    status: "Active",
+  },
+  {
+    sno: "2",
+    sampleTypeName: "Urine Sample",
+    addDate: "2024-01-02",
+    daysToComplete: 3,
+    status: "Inactive",
+  },
+  // Add more static entries as needed
+];
+
+const initialData = JSON.parse(localStorage.getItem("sampletypes")) || [];
 
 const fields = [
   { label: "Sample Type Name", key: "sampleTypeName" },
@@ -53,13 +71,17 @@ function SampleType() {
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null);
 
+  // Combine static data with dynamic data from local storage
   const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("specificationTypes");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+    return [...staticData, ...initialData]; // Merge static data with local storage data
   });
 
   useEffect(() => {
-    localStorage.setItem("sampletypes", JSON.stringify(data));
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "sampletype",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
   }, [data]);
 
   const handleOpenModals = () => {
@@ -76,13 +98,14 @@ function SampleType() {
 
   const filteredData = Array.isArray(data)
     ? data.filter((row) => {
-        const productName = row.productName || ""; // Fallback to an empty string if productName is undefined
+        const sampleTypeName = row.sampleTypeName || ""; // Fallback to an empty string if sampleTypeName is undefined
         return (
-          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
           (statusFilter === "All" || row.status === statusFilter)
         );
       })
     : [];
+
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
@@ -705,9 +728,18 @@ function SampleType() {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload columns={columns} data={filteredData} fileName="Sample_Type.pdf" title="Sample Type Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Sample_Type.pdf"
+              title="Sample Type Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Sample Type" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Sample Type"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -728,7 +760,13 @@ function SampleType() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isModalOpen && <StatusModal onAdd={addNewStorageCondition} visible={isModalOpen} closeModal={closeModal} />}
+      {isModalOpen && (
+        <StatusModal
+          onAdd={addNewStorageCondition}
+          visible={isModalOpen}
+          closeModal={closeModal}
+        />
+      )}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}

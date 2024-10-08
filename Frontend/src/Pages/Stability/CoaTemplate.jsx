@@ -27,6 +27,7 @@ import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import CoaModal from "../Modals/CoaModal";
 
 const initialData = [
   {
@@ -67,9 +68,18 @@ function CoaTemplate() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [coaModal , setCoaModal] = useState(false);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
+  };
+
+  const handleCoaOpenModals = () => {
+    setCoaModal(true);
+  };
+
+  const handleCoaCloseModals = () => {
+    setCoaModal(false);
   };
 
   const handleCloseModals = () => {
@@ -689,7 +699,7 @@ function CoaTemplate() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <ATMButton text="Print" color="red" onClick={handleOpenModals} />
+          <ATMButton text="Print" color="red" onClick={handleCoaOpenModals} />
           <PDFDownload columns={columns} data={filteredData} fileName="Coa_Template.pdf" title="Coa Template Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
@@ -733,6 +743,14 @@ function CoaTemplate() {
             onSave={handleEditSave}
           />
         )}
+
+        {
+          coaModal && (
+            <CoaModal  isOpen={coaModal}
+            onClose={handleCoaCloseModals}
+            />
+          )
+        }
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ATMButton =  ({ color, text, onClick }) => {
+const ATMButton =  ({ color, text, onClick , src }) => {
     let bgColor = '';
     switch (color) {
       case 'green':
@@ -25,6 +25,7 @@ const ATMButton =  ({ color, text, onClick }) => {
     <button
     className={`px-4 py-2 rounded-md text-white ${bgColor}flex justify-center focus:outline-none`}
     onClick={onClick}
+    src={src}
   >
     {text}
   </button>

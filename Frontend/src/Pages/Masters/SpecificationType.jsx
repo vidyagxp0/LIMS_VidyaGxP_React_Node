@@ -16,6 +16,8 @@ import {
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
 import "../../Pages/StorageCondition/StorageCondition.css";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -26,23 +28,25 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import Specifications from "./TestCategories.jsx";
 
-const initialData = [
+const staticData = [
   {
-    checkbox: false,
     sno: 1,
-    specificationType: "Type 1",
+    specificationType: "Product ",
     addedOn: "2024-01-01",
     status: "Active",
   },
   {
-    checkbox: false,
     sno: 2,
-    specificationType: "Type 2",
-    addedOn: "2024-01-02",
-    status: "Inactive",
+    specificationType: "Product ",
+    addedOn: "2024-01-01",
+    status: "Active",
   },
+  // Add more static entries as needed
 ];
+
+const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
 const fields = [
   { label: "Specification Type", key: "specificationType" },
@@ -51,33 +55,54 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function SpecificationType() {
-  const [data, setData] = useState(initialData);
+function specficationtype() {
+  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Active");
+  const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+
+  // Combine static data with dynamic data from local storage
+  const [data, setData] = useState(() => {
+    return [...staticData, ...initialData]; // Merge static data with local storage data
+  });
+
+  useEffect(() => {
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "mytest",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
+  }, [data]);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.specificationType.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+  console.log("Data:", data);
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
+  // Fallback to an empty array if data is not an array
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -88,81 +113,6 @@ function SpecificationType() {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
-
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-  };
-
-  const closeEditModal = () => {
-    setEditModalData(null);
-  };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
-  };
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [formData, setFormData] = useState(data);
-    useEffect(() => {
-      if (data) {
-        setFormData(data);
-      }
-    }, [data]);
-
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSave = () => {
-      onSave(formData);
-    };
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-    return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
-        <CModalHeader>
-          <CModalTitle>Update specification type</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Update information and add new specification type</p>
-
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Specification Type Name"
-            placeholder="Specification Type Name"
-            name="specificationType"
-            value={formData.specificationType || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="ADDED ON"
-            placeholder="Specification Type Name"
-            name="specificationType"
-            value={formData.specificationType || ""}
-            onChange={handleChange}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary" onClick={handleSave}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
-  };
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -172,6 +122,7 @@ function SpecificationType() {
     { header: "Specification Type", accessor: "specificationType" },
     { header: "Added On", accessor: "addedOn" },
     { header: "Status", accessor: "status" },
+
     {
       header: "Actions",
       accessor: "action",
@@ -195,8 +146,9 @@ function SpecificationType() {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
       sno: index + 1,
-      specificationType: item["Specification Type"] || "",
+      specificationType: item[" Specification Type"] || "",
       addedOn: item["Added On"] || "",
+
       status: item["Status"] || "",
     }));
 
@@ -204,7 +156,6 @@ function SpecificationType() {
     setData(concatenatedData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
-
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -222,6 +173,7 @@ function SpecificationType() {
     setData(newData);
     console.log("Deleted item:", item);
   };
+
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
     setData((prevData) => [
@@ -233,6 +185,7 @@ function SpecificationType() {
         status: nextStatus,
       },
     ]);
+    setData(newData);
     setLastStatus(nextStatus);
     setIsModalOpen(false);
   };
@@ -243,6 +196,141 @@ function SpecificationType() {
     );
     setData(updatedData);
   };
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [specificationType, setspecificationType] = useState("");
+    const [addedOn, setaddedOn] = useState("");
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const handleAdd = () => {
+      const newCondition = {
+        specificationType: specificationType,
+        addedOn: addedOn,
+
+        action: [],
+      };
+      closeModal();
+      onAdd(newCondition);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Specification Type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Specification Type"
+            placeholder=" Specification Type"
+            name="specificationType"
+            value={specificationType}
+            onChange={(e) => setspecificationType(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Add On"
+            placeholder="Add On "
+            name="addedOn"
+            value={addedOn}
+            onChange={(e) => setaddedOn(e.target.value)}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Specification Type</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Specification Type"
+            placeholder=" Specification Type"
+            name="specificationType"
+            value={formData?.specificationType || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Add On"
+            placeholder="Add On "
+            name="addedOn"
+            value={formData.addedOn || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
   return (
     <>
@@ -250,7 +338,7 @@ function SpecificationType() {
 
       <div className="m-5 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Specifications Type</h4>
+          <h4 className="fw-bold">Specification Type</h4>
         </div>
 
         <div className="flex items-center justify-between mb-4">
@@ -270,16 +358,15 @@ function SpecificationType() {
             <PDFDownload
               columns={columns}
               data={filteredData}
-              fileName="Specification_Type.pdf"
-              title="Specification Type Data"
+              fileName="Master_Product.pdf"
+              title="Master Product Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add" color="pink" onClick={openModal} />
-            {/* <ATMButton
-              text="Add Specifications Type"
+            <ATMButton
+              text="Add Test Registrion"
               color="blue"
-              
-            /> */}
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -291,13 +378,12 @@ function SpecificationType() {
           openEditModal={openEditModal}
         />
       </div>
-      {isModalsOpen && (
-        <ImportModal
-          initialData={initialData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-          onDataUpload={handleExcelDataUpload}
+
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
         />
       )}
       {viewModalData && (
@@ -322,4 +408,4 @@ function SpecificationType() {
   );
 }
 
-export default SpecificationType;
+export default specficationtype;

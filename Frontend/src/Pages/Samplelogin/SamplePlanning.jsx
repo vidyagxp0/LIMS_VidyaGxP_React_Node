@@ -391,58 +391,58 @@ const filteredData = data.filter((row) => {
       const updatedData = excelData.map((item, index) => ({
         checkbox: false, // Assuming no data for this, so defaulting to false
         samplePlan: index + 1, // Assign sample plan based on index
-        sampleId: item["Sample ID"] || "", // Map from Excel data (replace with correct field)
-        sampleName: item["Sample Name"] || "", // Map from Excel data (replace with correct field)
-        sampleType: item["Sample Type"] || "", // Map from Excel data (replace with correct field)
-        batchNumber: item["Batch Number"] || "", // Map from Excel data (replace with correct field)
-        sampleSource: item["Sample Source"] || "", // Map from Excel data (replace with correct field)
-        plannedDate: item["Planned Date"] || "", // Map from Excel data (replace with correct field)
-        samplePriority: item["Sample Priority"] || "", // Map from Excel data (replace with correct field)
-        sampleQuantity: item["Sample Quantity"] || "", // Map from Excel data (replace with correct field)
+        sampleId: item["Sample ID"] || "",
+        sampleName: item["Sample Name"] || "",
+        sampleType: item["Sample Type"] || "",
+        batchNumber: item["Batch Number"] || "",
+        sampleSource: item["Sample Source"] || "",
+        plannedDate: item["Planned Date"] || "",
+        samplePriority: item["Sample Priority"] || "",
+        sampleQuantity: item["Sample Quantity"] || "",
         tests: item["Tests"] ? item["Tests"].split(",") : [], // Map tests and split if comma-separated
-        specificationId: item["Specification ID"] || "", // Map from Excel data (replace with correct field)
-        specificationAttachment: item["Specification Attachment"] || "", // Map from Excel data (replace with correct field)
-        sTPId: item["STP ID"] || "", // Map from Excel data (replace with correct field)
-        sTPAttachment: item["STP Attachment"] || "", // Map from Excel data (replace with correct field)
-        testName: item["Test Name"] || "", // Map from Excel data (replace with correct field)
-        testMethod: item["Test Method"] || "", // Map from Excel data (replace with correct field)
-        testParameters: item["Test Parameters"] || "", // Map from Excel data (replace with correct field)
-        testingFrequency: item["Testing Frequency"] || "", // Map from Excel data (replace with correct field)
-        testingLocation: item["Testing Location"] || "", // Map from Excel data (replace with correct field)
-        requiredInstruments: item["Required Instruments"] || "", // Map from Excel data (replace with correct field)
-        testGrouping: item["Test Grouping"] || "", // Map from Excel data (replace with correct field)
-        expectedResults: item["Expected Results"] || "", // Map from Excel data (replace with correct field)
-        testingDeadline: item["Testing Deadline"] || "", // Map from Excel data (replace with correct field)
-        plannerName: item["Planner Name"] || "", // Map from Excel data (replace with correct field)
-        labTechnician: item["Lab Technician"] || "", // Map from Excel data (replace with correct field)
-        reviewerApprover: item["Reviewer Approver"] || "", // Map from Excel data (replace with correct field)
-        assignedDepartment: item["Assigned Department"] || "", // Map from Excel data (replace with correct field)
-        sampleCollectionDate: item["Sample Collection Date"] || "", // Map from Excel data (replace with correct field)
-        testingStartDate: item["Testing Start Date"] || "", // Map from Excel data (replace with correct field)
-        testingEndDate: item["Testing End Date"] || "", // Map from Excel data (replace with correct field)
-        testPlanID: item["Test Plan ID"] || "", // Map from Excel data (replace with correct field)
-        turnaroundTime: item["Turnaround Time"] || "", // Map from Excel data (replace with correct field)
-        sampleRetestingDate: item["Sample Retesting Date"] || "", // Map from Excel data (replace with correct field)
-        reviewDate: item["Review Date"] || "", // Map from Excel data (replace with correct field)
-        sampleStorageLocation: item["Sample Storage Location"] || "", // Map from Excel data (replace with correct field)
-        transportationMethod: item["Transportation Method"] || "", // Map from Excel data (replace with correct field)
-        samplePreparationMethod: item["Sample Preparation Method"] || "", // Map from Excel data (replace with correct field)
-        samplePackagingDetails: item["Sample Packaging Details"] || "", // Map from Excel data (replace with correct field)
-        sampleLabel: item["Sample Label"] || "", // Map from Excel data (replace with correct field)
-        regulatoryRequirements: item["Regulatory Requirements"] || "", // Map from Excel data (replace with correct field)
-        qualityControlChecks: item["Quality Control Checks"] || "", // Map from Excel data (replace with correct field)
-        controlSampleReference: item["Control Sample Reference"] || "", // Map from Excel data (replace with correct field)
-        sampleIntegrityStatus: item["Sample Integrity Status"] || "", // Map from Excel data (replace with correct field)
-        riskAssessment: item["Risk Assessment"] || "", // Map from Excel data (replace with correct field)
-        supervisor: item["Supervisor"] || "", // Map from Excel data (replace with correct field)
-        sampleMovementHistory: item["Sample Movement History"] || "", // Map from Excel data (replace with correct field)
-        testingProgress: item["Testing Progress"] || "", // Map from Excel data (replace with correct field)
-        alertsNotifications: item["Alerts Notifications"] || "", // Map from Excel data (replace with correct field)
-        deviationLogs: item["Deviation Logs"] || "", // Map from Excel data (replace with correct field)
-        commentsNotes: item["Comments Notes"] || "", // Map from Excel data (replace with correct field)
-        attachments: item["Attachments"] || "", // Map from Excel data (replace with correct field)
-        samplingFrequency: item["Sampling Frequency"] || "", // Map from Excel data (replace with correct field)
-        sampleDisposition: item["Sample Disposition"] || "", // Map from Excel data (replace with correct field)
+        specificationId: item["Specification ID"] || "",
+        specificationAttachment: item["Specification Attachment"] || "",
+        sTPId: item["STP ID"] || "",
+        sTPAttachment: item["STP Attachment"] || "",
+        testName: item["Test Name"] || "",
+        testMethod: item["Test Method"] || "",
+        testParameters: item["Test Parameters"] || "",
+        testingFrequency: item["Testing Frequency"] || "",
+        testingLocation: item["Testing Location"] || "",
+        requiredInstruments: item["Required Instruments"] || "",
+        testGrouping: item["Test Grouping"] || "",
+        expectedResults: item["Expected Results"] || "",
+        testingDeadline: item["Testing Deadline"] || "",
+        plannerName: item["Planner Name"] || "",
+        labTechnician: item["Lab Technician"] || "",
+        reviewerApprover: item["Reviewer Approver"] || "",
+        assignedDepartment: item["Assigned Department"] || "",
+        sampleCollectionDate: item["Sample Collection Date"] || "",
+        testingStartDate: item["Testing Start Date"] || "",
+        testingEndDate: item["Testing End Date"] || "",
+        testPlanID: item["Test Plan ID"] || "",
+        turnaroundTime: item["Turnaround Time"] || "",
+        sampleRetestingDate: item["Sample Retesting Date"] || "",
+        reviewDate: item["Review Date"] || "",
+        sampleStorageLocation: item["Sample Storage Location"] || "",
+        transportationMethod: item["Transportation Method"] || "",
+        samplePreparationMethod: item["Sample Preparation Method"] || "", 
+        samplePackagingDetails: item["Sample Packaging Details"] || "", 
+        sampleLabel: item["Sample Label"] || "", 
+        regulatoryRequirements: item["Regulatory Requirements"] || "", 
+        qualityControlChecks: item["Quality Control Checks"] || "", 
+        controlSampleReference: item["Control Sample Reference"] || "", 
+        sampleIntegrityStatus: item["Sample Integrity Status"] || "", 
+        riskAssessment: item["Risk Assessment"] || "", 
+        supervisor: item["Supervisor"] || "", 
+        sampleMovementHistory: item["Sample Movement History"] || "", 
+        testingProgress: item["Testing Progress"] || "", 
+        alertsNotifications: item["Alerts Notifications"] || "", 
+        deviationLogs: item["Deviation Logs"] || "", 
+        commentsNotes: item["Comments Notes"] || "", 
+        attachments: item["Attachments"] || "", 
+        samplingFrequency: item["Sampling Frequency"] || "", 
+        sampleDisposition: item["Sample Disposition"] || "", 
       }));
       
   
