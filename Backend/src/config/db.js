@@ -1,5 +1,5 @@
-const { Sequelize } = require("sequelize");
-const config = require("../config/config.json");
+import { Sequelize } from "sequelize";
+import config from "./config.json" assert { type: "json" };
 
 const sequelize = new Sequelize(
   config.development.dbName,
@@ -8,18 +8,29 @@ const sequelize = new Sequelize(
   {
     dialect: config.development.dialect,
     host: config.development.host,
+    logging: false,
+    dialectOptions: {
+      connectTimeout: 30000,
+    },
   }
 );
 
 const connectToDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log("Successfully connected to DB");
-    return sequelize; // Return the Sequelize instance after successful authentication
-  } catch (e) {
-    console.error("Unable to connect to the database:", e);
-    throw e; // Propagate the error upwards if needed
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
   }
 };
 
-module.exports = { sequelize, connectToDB };
+sequelize
+  .sync({ alter: true })
+  .then(() => {
+    console.log("Tables synchronized");
+  })
+  .catch((error) => {
+    console.error("Error synchronizing tables:", error);
+  });
+
+export { sequelize, connectToDB };
