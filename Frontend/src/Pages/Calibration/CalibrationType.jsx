@@ -22,6 +22,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -271,6 +272,8 @@ setData(concatenateData ); // Update data state with parsed Excel data
     );
   };
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Calibration Type</h1>
 
@@ -334,7 +337,7 @@ handleSubmit={handleModalSubmit}
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
     
   );
 };

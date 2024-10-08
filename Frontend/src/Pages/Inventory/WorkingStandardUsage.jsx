@@ -27,6 +27,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -485,6 +486,8 @@ const WorkingStandardUsage = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Working Standard Lot Usage</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
@@ -585,7 +588,7 @@ const WorkingStandardUsage = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

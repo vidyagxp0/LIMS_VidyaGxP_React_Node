@@ -26,6 +26,7 @@ import {
 } from "@coreui/react";
 import { FormControl, FormLabel } from "react-bootstrap";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -428,6 +429,8 @@ const CalibrationSchedule = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Calibration Schedule</h1>
 
@@ -496,7 +499,7 @@ const CalibrationSchedule = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

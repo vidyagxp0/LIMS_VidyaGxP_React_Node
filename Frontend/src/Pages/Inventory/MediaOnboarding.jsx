@@ -15,6 +15,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import MediaOnboardingModal from "../Modals/MediaOnboardingModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -234,6 +235,8 @@ const MediaOnboarding = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Media Onboarding</h1>
 
@@ -276,7 +279,7 @@ const MediaOnboarding = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

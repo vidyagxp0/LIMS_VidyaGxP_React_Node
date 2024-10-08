@@ -15,6 +15,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ScheduleTerminationModal from "../Modals/ScheduleTerminationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -201,6 +202,8 @@ const ScheduleTermination = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Schedule Termination</h1>
 
@@ -247,7 +250,7 @@ const ScheduleTermination = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 export default ScheduleTermination;

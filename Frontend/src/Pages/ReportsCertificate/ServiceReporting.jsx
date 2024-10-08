@@ -24,6 +24,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 const initialData = [
   {
     checkbox: false,
@@ -352,10 +353,10 @@ const ServiceReporting = () => {
           ProblemId: serviceReporting.problemId,
           InstrumentId: serviceReporting.instrumentID,
           ModuleId: serviceReporting.moduleId,
-          ProblemInDetails:serviceReporting.problemInDetail,
+          ProblemInDetails: serviceReporting.problemInDetail,
           ProblemInBrief: serviceReporting.problemInBrief,
           JobDetails: serviceReporting.jobDetails,
-          ExpectedClosureDate:currentDate,
+          ExpectedClosureDate: currentDate,
           AddedOn: currentDate,
           status: "Active",
         },
@@ -365,73 +366,76 @@ const ServiceReporting = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Service Reporting</h1>
+    <>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Service Reporting</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              title="Service Reporting"
+              fileName="ServiceReporting.pdf"
+            />
+
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Service" color="blue" onClick={openModal} />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-
-        <PDFDownload columns={columns} data = {filteredData} title="Service Reporting" fileName="ServiceReporting.pdf" />
-
-          <ATMButton
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-          />
-          <ATMButton text="Add Service" color="blue" onClick={openModal} />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <ServiceReportingModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
+        <ServiceReportingModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
+        />
+        {isViewModalOpen && (
+          <ViewModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
 
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-    </div>
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default ServiceReporting;

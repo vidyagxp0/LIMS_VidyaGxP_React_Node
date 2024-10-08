@@ -27,6 +27,7 @@ import ChemicalUsageModal from "../Modals/ChemicalUsageModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -563,6 +564,8 @@ const ChemicalUsage = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Chemical Usage</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
@@ -665,7 +668,7 @@ const ChemicalUsage = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

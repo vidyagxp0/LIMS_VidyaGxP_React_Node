@@ -3,7 +3,7 @@ import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons"; // Changed to solid icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -56,13 +56,22 @@ const initialData = [
 ];
 
 const InvestigationL2 = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("investigationL2");
+    return storedData ? JSON.parse(storedData) : initialData;
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem("investigationL2", JSON.stringify(data));
+  }, [data]);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -70,8 +79,6 @@ const InvestigationL2 = () => {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-
-  const navigate = useNavigate();
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -110,28 +117,47 @@ const InvestigationL2 = () => {
     { header: "attachment", accessor: "attachment" },
     {
       header: "Actions",
-      accessor: "action",
+      accessor: "actions",
       Cell: ({ row }) => (
-        <>
+        <div className="flex items-center space-x-2">
           <FontAwesomeIcon
             icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => {
-              onViewDetails(row), navigate("/testResultsDetails");
-            }}
+            className="cursor-pointer text-blue-500 hover:text-blue-700"
+            onClick={() => onViewDetails(row.original)}
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
+            className="cursor-pointer text-green-500 hover:text-green-700"
+            onClick={() => openEditModal(row.original)}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
-        </>
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer text-red-500 hover:text-red-700"
+            onClick={() => handleDelete(row.original)}
+          />
+        </div>
       ),
     },
   ];
 
   const openModal = () => {
     setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const addNewInvestigation = (newInvestigation) => {
+    const nextSno = data.length > 0 ? Math.max(...data.map(item => item.sno)) + 1 : 1;
+    const newData = {
+      ...newInvestigation,
+      sno: nextSno,
+      checkbox: false,
+      status: "INITIATED",
+    };
+    setData([...data, newData]);
+    closeModal();
   };
 
   const handleDelete = (item) => {
@@ -235,6 +261,83 @@ const InvestigationL2 = () => {
     );
   };
 
+  const InvestigationModal = ({ visible, closeModal, onAdd }) => {
+    const [formData, setFormData] = useState({
+      testName: "",
+      testCode: "",
+      testType: "",
+      addedOn: new Date().toISOString().split('T')[0],
+      attachment: "",
+    });
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onAdd(formData);
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add New Investigation L2</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Name"
+            name="testName"
+            value={formData.testName}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Code"
+            name="testCode"
+            value={formData.testCode}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Type"
+            name="testType"
+            value={formData.testType}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Added On"
+            name="addedOn"
+            value={formData.addedOn}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Attachment"
+            name="attachment"
+            value={formData.attachment}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Add Investigation
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
   return (
     <>
       <LaunchQMS />
@@ -250,8 +353,8 @@ const InvestigationL2 = () => {
             <Dropdown
               options={[
                 { value: "All", label: "All" },
-                { value: "Active", label: "Active" },
-                { value: "Inactive", label: "Inactive" },
+                { value: "INITIATED", label: "Initiated" },
+                { value: "DROPPED", label: "Dropped" },
               ]}
               value={statusFilter}
               onChange={setStatusFilter}
@@ -265,7 +368,7 @@ const InvestigationL2 = () => {
               title="Investigation L2 Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            {/* <ATMButton text="Add investigation L2 In" color="blue" onClick={openModal} /> */}
+            <ATMButton text="Add Investigation L2" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -276,6 +379,13 @@ const InvestigationL2 = () => {
           onViewDetails={onViewDetails}
           openEditModal={openEditModal}
         />
+        {isModalOpen && (
+          <InvestigationModal
+            visible={isModalOpen}
+            closeModal={closeModal}
+            onAdd={addNewInvestigation}
+          />
+        )}
         {isModalsOpen && (
           <ImportModal
             initialData={filteredData}
