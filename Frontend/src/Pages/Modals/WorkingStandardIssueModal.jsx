@@ -2,6 +2,7 @@ import { CButton, CModal, CModalBody, CModalFooter } from "@coreui/react";
 import React, { useState } from "react";
 
 const WorkingStandardIssueModal = ({ visible, closeModal, handleSubmit }) => {
+
   const initialData = [
     {
       id: 1,
@@ -95,6 +96,7 @@ const WorkingStandardIssueModal = ({ visible, closeModal, handleSubmit }) => {
     },
   ];
 
+
   const [tableData, setTableData] = useState(initialData);
 
   const handleCheckboxChange = (id) => {
@@ -108,6 +110,14 @@ const WorkingStandardIssueModal = ({ visible, closeModal, handleSubmit }) => {
     setTableData(updatedData);
     return [tableData, setTableData];
   };
+
+  const handleFormSubmit = () => {
+    const selectedData = tableData.filter(row => row.selected);
+    handleSubmit(selectedData);
+    closeModal();
+  };
+  
+
 
   return (
     <div>
@@ -171,7 +181,7 @@ const WorkingStandardIssueModal = ({ visible, closeModal, handleSubmit }) => {
           <CButton color="light" onClick={closeModal}>
             Cancel
           </CButton>
-          <CButton style={{ background: "#0F93C3", color: "white" }}>
+          <CButton style={{ background: "#0F93C3", color: "white" }} onClick={handleFormSubmit}>
             Submit
           </CButton>
         </CModalFooter>
