@@ -27,6 +27,7 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
@@ -351,6 +352,8 @@ function Product() {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Master/Product</h4>
@@ -377,11 +380,7 @@ function Product() {
               title="Master Product Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Master/Product"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Add Master/Product" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -394,13 +393,7 @@ function Product() {
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          onAdd={addNewStorageCondition}
-        />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}

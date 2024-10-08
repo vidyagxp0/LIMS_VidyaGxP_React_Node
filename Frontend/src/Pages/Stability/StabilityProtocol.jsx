@@ -34,6 +34,7 @@ import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -1107,6 +1108,7 @@ function StabilityProtocol() {
 
   return (
     <>
+    <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">

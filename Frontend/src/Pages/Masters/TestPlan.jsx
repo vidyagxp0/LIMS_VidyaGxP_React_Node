@@ -40,6 +40,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -1048,6 +1049,8 @@ function TestPlan() {
   };
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Test plan</h4>
@@ -1070,18 +1073,9 @@ function TestPlan() {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload
-              columns={columns}
-              data={filteredData}
-              fileName="Test_plan.pdf"
-              title="Test Plan Data"
-            />
+            <PDFDownload columns={columns} data={filteredData} fileName="Test_plan.pdf" title="Test Plan Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Test Categories"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Add Test Categories" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -1094,13 +1088,7 @@ function TestPlan() {
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          onAdd={addNewStorageCondition}
-        />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
 
       {isModalsOpen && (
         <ImportModal

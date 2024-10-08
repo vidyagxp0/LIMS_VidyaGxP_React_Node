@@ -24,6 +24,7 @@ import {
   CRow,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 const initialData = [
   {
     checkbox: false,
@@ -236,6 +237,8 @@ const InvestigationL2 = () => {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Investigation L2</h4>
@@ -255,7 +258,12 @@ const InvestigationL2 = () => {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="InvestigationL2.pdf" title="Investigation L2 Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="InvestigationL2.pdf"
+              title="Investigation L2 Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             {/* <ATMButton text="Add investigation L2 In" color="blue" onClick={openModal} /> */}
           </div>
@@ -277,7 +285,7 @@ const InvestigationL2 = () => {
             onDataUpload={handleExcelDataUpload}
           />
         )}
-         {editModalData && (
+        {editModalData && (
           <EditModal
             visible={Boolean(editModalData)}
             closeModal={closeEditModal}

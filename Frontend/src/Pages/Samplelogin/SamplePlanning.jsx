@@ -10,6 +10,7 @@ import { faEye, faPenToSquare, faTrashCan } from '@fortawesome/free-regular-svg-
 import Table from '../../components/ATM components/Table/Table';
 import { useNavigate } from 'react-router-dom';
 import { randomSampleData } from './SamplePlanningFunction';
+import LaunchQMS from '../../components/ReusableButtons/LaunchQMS';
 
 
 const initialData = [
@@ -454,201 +455,226 @@ const filteredData = data.filter((row) => {
 
   return (
     <div className="m-5 mt-3">
-    <div className="main-head">
-      <h4 className="fw-bold">Sample Planning & Analytics</h4>
-    </div>
+      <LaunchQMS />
 
-    <div className="flex items-center justify-between mb-4">
-      <div className="flex space-x-4">
-        <SearchBar value={searchQuery} onChange={setSearchQuery} />
-        <Dropdown
-          options={[
-            { value: "All", label: "All" },
-            { value: "Active", label: "Active" },
-            { value: "Inactive", label: "Inactive" },
-          ]}
-          value={statusFilter}
-          onChange={setStatusFilter}
+      <div className="main-head">
+        <h4 className="fw-bold">Sample Planning & Analytics</h4>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex space-x-4">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={statusFilter}
+            onChange={setStatusFilter}
+          />
+        </div>
+        <div className="float-right flex gap-4">
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="InvestigationL2.pdf"
+            title="Investigation L2 Data"
+          />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <ATMButton text="Add Sample Planning & Analytics" color="blue" onClick={openModal} />
+        </div>
+      </div>
+      <table className="min-w-full bg-white border border-gray-200 shadow-lg">
+        <thead>
+          <tr className="bg-yellow-600 text-white text-left">
+            <th colSpan="9" className="px-4 py-2 bg-yellow-600">
+              Sample Planning Information
+            </th>
+            <th colSpan="10" className="px-4 py-2 bg-green-600">
+              Testing Requirements
+            </th>
+            <th colSpan="5" className="px-4 py-2 bg-brown-600">
+              Personnel and Roles
+            </th>
+            <th colSpan="11" className="px-4 py-2 bg-violet-600">
+              Schedule and Timeline
+            </th>
+            <th colSpan="5" className="px-4 py-2 bg-red-600">
+              Logistics and Sample Handling
+            </th>
+            <th colSpan="5" className="px-4 py-2 bg-blue-600">
+              Quality and Compliance
+            </th>
+            <th colSpan="4" className="px-4 py-2 bg-orange-600">
+              Resource Allocation
+            </th>
+            <th colSpan="4" className="px-4 py-2 bg-green-300">
+              Tracking and Monitoring
+            </th>
+            <th colSpan="4" className="px-4 py-2 bg-violet-500">
+              Miscellaneous
+            </th>
+          </tr>
+          <tr className="bg-slate-600 text-white">
+            <td className="border px-4 py-2">Sample Plan ID</td>
+            <td className="border px-4 py-2">Sample ID</td>
+            <td className="border px-4 py-2">Sample Name</td>
+            <td className="border px-4 py-2">Sample Type</td>
+            <td className="border px-4 py-2">Batch/Lot Number</td>
+            <td className="border px-4 py-2">Sample Source</td>
+            <td className="border px-4 py-2">Planned Date</td>
+            <td className="border px-4 py-2">Sample Priority</td>
+            <td className="border px-4 py-2">Sample Quantity</td>
+
+            <td className="border px-4 py-2">Tests</td>
+            <td className="border px-4 py-2">Specification ID</td>
+            <td className="border px-4 py-2">Specification Attachment</td>
+            <td className="border px-4 py-2">STP ID</td>
+            <td className="border px-4 py-2">STP Attachment</td>
+            <td className="border px-4 py-2">Test Plan ID</td>
+            <td className="border px-4 py-2">Test Name</td>
+            <td className="border px-4 py-2">Test Method</td>
+            <td className="border px-4 py-2">Test Parameters</td>
+            <td className="border px-4 py-2">Testing Frequency</td>
+            <td className="border px-4 py-2">Testing Location</td>
+            <td className="border px-4 py-2">Required Instruments</td>
+            <td className="border px-4 py-2">Test Grouping</td>
+            <td className="border px-4 py-2">Expected Results</td>
+            <td className="border px-4 py-2">Testing Deadline</td>
+
+            <td className="border px-4 py-2">Planner Name</td>
+            <td className="border px-4 py-2">Lab Technician</td>
+            <td className="border px-4 py-2">Reviewer/Approver</td>
+            <td className="border px-4 py-2">Assigned Department</td>
+            <td className="border px-4 py-2">Supervisor</td>
+
+            <td className="border px-4 py-2">Sample Collection Date</td>
+            <td className="border px-4 py-2">Testing Start Date</td>
+            <td className="border px-4 py-2">Testing End Date</td>
+            <td className="border px-4 py-2">Turnaround Time (TAT)</td>
+            <td className="border px-4 py-2">Sample Retesting Date</td>
+            <td className="border px-4 py-2">Review Date</td>
+
+            <td className="border px-4 py-2">Sample Storage Location</td>
+            <td className="border px-4 py-2">Transportation Method</td>
+            <td className="border px-4 py-2">Sample Preparation Method</td>
+            <td className="border px-4 py-2">Sample Packaging Details</td>
+            <td className="border px-4 py-2">Sample Label</td>
+
+            <td className="border px-4 py-2">Regulatory Requirements</td>
+            <td className="border px-4 py-2">Quality Control Checks</td>
+            <td className="border px-4 py-2">Control Sample Reference</td>
+            <td className="border px-4 py-2">Sample Integrity Status</td>
+            <td className="border px-4 py-2">Risk Assessment</td>
+
+            <td className="border px-4 py-2">Instruments Reserved</td>
+            <td className="border px-4 py-2">Lab Availability</td>
+            <td className="border px-4 py-2">Sample Cost Estimation</td>
+            <td className="border px-4 py-2">Resource Utilization</td>
+
+            <td className="border px-4 py-2">Sample Movement History</td>
+            <td className="border px-4 py-2">Testing Progress</td>
+            <td className="border px-4 py-2">Alerts/Notifications</td>
+            <td className="border px-4 py-2">Deviation Logs</td>
+
+            <td className="border px-4 py-2">Comments/Notes</td>
+            <td className="border px-4 py-2">Attachments</td>
+            <td className="border px-4 py-2">Sampling Frequency</td>
+            <td className="border px-4 py-2">Sample Disposition</td>
+          </tr>
+        </thead>
+        <tbody>
+          {randomSampleData.map((data, index) => (
+            <tr key={index} className="hover:bg-gray-100">
+              <td className="border px-4 py-2">{data.samplePlanId}</td>
+              <td className="border px-4 py-2">{data.sampleId}</td>
+              <td className="border px-4 py-2">{data.sampleName}</td>
+              <td className="border px-4 py-2">{data.sampleType}</td>
+              <td className="border px-4 py-2">{data.batchLotNumber}</td>
+              <td className="border px-4 py-2">{data.sampleSource}</td>
+              <td className="border px-4 py-2">{data.plannedDate}</td>
+              <td className="border px-4 py-2">{data.samplePriority}</td>
+              <td className="border px-4 py-2">{data.sampleQuantity}</td>
+
+              <td className="border px-4 py-2">{data.tests}</td>
+              <td className="border px-4 py-2">{data.specificationId}</td>
+              <td className="border px-4 py-2">{data.specificationAttachment}</td>
+              <td className="border px-4 py-2">{data.stpId}</td>
+              <td className="border px-4 py-2">{data.stpAttachment}</td>
+              <td className="border px-4 py-2">{data.testPlanId}</td>
+              <td className="border px-4 py-2">{data.testName}</td>
+              <td className="border px-4 py-2">{data.testMethod}</td>
+              <td className="border px-4 py-2">{data.testParameters}</td>
+              <td className="border px-4 py-2">{data.testingFrequency}</td>
+              <td className="border px-4 py-2">{data.testingLocation}</td>
+              <td className="border px-4 py-2">{data.requiredInstruments}</td>
+              <td className="border px-4 py-2">{data.testGrouping}</td>
+              <td className="border px-4 py-2">{data.expectedResults}</td>
+              <td className="border px-4 py-2">{data.testingDeadline}</td>
+
+              <td className="border px-4 py-2">{data.plannerName}</td>
+              <td className="border px-4 py-2">{data.labTechnician}</td>
+              <td className="border px-4 py-2">{data.reviewer}</td>
+              <td className="border px-4 py-2">{data.assignedDepartment}</td>
+              <td className="border px-4 py-2">{data.supervisor}</td>
+
+              <td className="border px-4 py-2">{data.sampleCollectionDate}</td>
+              <td className="border px-4 py-2">{data.testingStartDate}</td>
+              <td className="border px-4 py-2">{data.testingEndDate}</td>
+              <td className="border px-4 py-2">{data.turnaroundTime}</td>
+              <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
+              <td className="border px-4 py-2">{data.reviewDate}</td>
+
+              <td className="border px-4 py-2">{data.sampleStorageLocation}</td>
+              <td className="border px-4 py-2">{data.transportationMethod}</td>
+              <td className="border px-4 py-2">{data.samplePreparationMethod}</td>
+              <td className="border px-4 py-2">{data.samplePackagingDetails}</td>
+              <td className="border px-4 py-2">{data.sampleLabel}</td>
+
+              <td className="border px-4 py-2">{data.regulatoryRequirements}</td>
+              <td className="border px-4 py-2">{data.qualityControlChecks}</td>
+              <td className="border px-4 py-2">{data.controlSampleReference}</td>
+              <td className="border px-4 py-2">{data.sampleIntegrityStatus}</td>
+              <td className="border px-4 py-2">{data.riskAssessment}</td>
+
+              <td className="border px-4 py-2">{data.instrumentsReserved}</td>
+              <td className="border px-4 py-2">{data.labAvailability}</td>
+              <td className="border px-4 py-2">{data.sampleCostEstimation}</td>
+              <td className="border px-4 py-2">{data.resourceUtilization}</td>
+
+              <td className="border px-4 py-2">{data.sampleMovementHistory}</td>
+              <td className="border px-4 py-2">{data.testingProgress}</td>
+              <td className="border px-4 py-2">{data.alertsNotifications}</td>
+              <td className="border px-4 py-2">{data.deviationLogs}</td>
+
+              <td className="border px-4 py-2">{data.comments}</td>
+              <td className="border px-4 py-2">{data.attachments}</td>
+              <td className="border px-4 py-2">{data.samplingFrequency}</td>
+              <td className="border px-4 py-2">{data.sampleDisposition}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
         />
-      </div>
-      <div className="float-right flex gap-4">
-      <PDFDownload columns={columns} data={filteredData} fileName="InvestigationL2.pdf" title="Investigation L2 Data" />
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-        <ATMButton text="Add Sample Planning & Analytics" color="blue" onClick={openModal} />
-      </div>
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </div>
-    <table className="min-w-full bg-white border border-gray-200 shadow-lg">
-            <thead>
-                <tr className="bg-yellow-600 text-white text-left">
-                    <th colSpan="9" className="px-4 py-2 bg-yellow-600">Sample Planning Information</th>
-                    <th colSpan="10" className="px-4 py-2 bg-green-600">Testing Requirements</th>
-                    <th colSpan="5" className="px-4 py-2 bg-brown-600">Personnel and Roles</th>
-                    <th colSpan="11" className="px-4 py-2 bg-violet-600">Schedule and Timeline</th>
-                    <th colSpan="5" className="px-4 py-2 bg-red-600">Logistics and Sample Handling</th>
-                    <th colSpan="5" className="px-4 py-2 bg-blue-600" >Quality and Compliance</th>
-                    <th colSpan="4" className="px-4 py-2 bg-orange-600">Resource Allocation</th>
-                    <th colSpan="4" className="px-4 py-2 bg-green-300">Tracking and Monitoring</th>
-                    <th colSpan="4" className="px-4 py-2 bg-violet-500">Miscellaneous</th>
-                </tr>
-                <tr className="bg-slate-600 text-white">
-                    <td className="border px-4 py-2">Sample Plan ID</td>
-                    <td className="border px-4 py-2">Sample ID</td>
-                    <td className="border px-4 py-2">Sample Name</td>
-                    <td className="border px-4 py-2">Sample Type</td>
-                    <td className="border px-4 py-2">Batch/Lot Number</td>
-                    <td className="border px-4 py-2">Sample Source</td>
-                    <td className="border px-4 py-2">Planned Date</td>
-                    <td className="border px-4 py-2">Sample Priority</td>
-                    <td className="border px-4 py-2">Sample Quantity</td>
-
-                    <td className="border px-4 py-2">Tests</td>
-                    <td className="border px-4 py-2">Specification ID</td>
-                    <td className="border px-4 py-2">Specification Attachment</td>
-                    <td className="border px-4 py-2">STP ID</td>
-                    <td className="border px-4 py-2">STP Attachment</td>
-                    <td className="border px-4 py-2">Test Plan ID</td>
-                    <td className="border px-4 py-2">Test Name</td>
-                    <td className="border px-4 py-2">Test Method</td>
-                    <td className="border px-4 py-2">Test Parameters</td>
-                    <td className="border px-4 py-2">Testing Frequency</td>
-                    <td className="border px-4 py-2">Testing Location</td>
-                    <td className="border px-4 py-2">Required Instruments</td>
-                    <td className="border px-4 py-2">Test Grouping</td>
-                    <td className="border px-4 py-2">Expected Results</td>
-                    <td className="border px-4 py-2">Testing Deadline</td>
-
-                    <td className="border px-4 py-2">Planner Name</td>
-                    <td className="border px-4 py-2">Lab Technician</td>
-                    <td className="border px-4 py-2">Reviewer/Approver</td>
-                    <td className="border px-4 py-2">Assigned Department</td>
-                    <td className="border px-4 py-2">Supervisor</td>
-
-                    <td className="border px-4 py-2">Sample Collection Date</td>
-                    <td className="border px-4 py-2">Testing Start Date</td>
-                    <td className="border px-4 py-2">Testing End Date</td>
-                    <td className="border px-4 py-2">Turnaround Time (TAT)</td>
-                    <td className="border px-4 py-2">Sample Retesting Date</td>
-                    <td className="border px-4 py-2">Review Date</td>
-
-                    <td className="border px-4 py-2">Sample Storage Location</td>
-                    <td className="border px-4 py-2">Transportation Method</td>
-                    <td className="border px-4 py-2">Sample Preparation Method</td>
-                    <td className="border px-4 py-2">Sample Packaging Details</td>
-                    <td className="border px-4 py-2">Sample Label</td>
-
-                    <td className="border px-4 py-2">Regulatory Requirements</td>
-                    <td className="border px-4 py-2">Quality Control Checks</td>
-                    <td className="border px-4 py-2">Control Sample Reference</td>
-                    <td className="border px-4 py-2">Sample Integrity Status</td>
-                    <td className="border px-4 py-2">Risk Assessment</td>
-
-                    <td className="border px-4 py-2">Instruments Reserved</td>
-                    <td className="border px-4 py-2">Lab Availability</td>
-                    <td className="border px-4 py-2">Sample Cost Estimation</td>
-                    <td className="border px-4 py-2">Resource Utilization</td>
-
-                    <td className="border px-4 py-2">Sample Movement History</td>
-                    <td className="border px-4 py-2">Testing Progress</td>
-                    <td className="border px-4 py-2">Alerts/Notifications</td>
-                    <td className="border px-4 py-2">Deviation Logs</td>
-
-                    <td className="border px-4 py-2">Comments/Notes</td>
-                    <td className="border px-4 py-2">Attachments</td>
-                    <td className="border px-4 py-2">Sampling Frequency</td>
-                    <td className="border px-4 py-2">Sample Disposition</td>
-                </tr>
-            </thead>
-            <tbody>
-                {randomSampleData.map((data, index) => (
-                    <tr key={index} className="hover:bg-gray-100">
-                        <td className="border px-4 py-2">{data.samplePlanId}</td>
-                        <td className="border px-4 py-2">{data.sampleId}</td>
-                        <td className="border px-4 py-2">{data.sampleName}</td>
-                        <td className="border px-4 py-2">{data.sampleType}</td>
-                        <td className="border px-4 py-2">{data.batchLotNumber}</td>
-                        <td className="border px-4 py-2">{data.sampleSource}</td>
-                        <td className="border px-4 py-2">{data.plannedDate}</td>
-                        <td className="border px-4 py-2">{data.samplePriority}</td>
-                        <td className="border px-4 py-2">{data.sampleQuantity}</td>
-
-                        <td className="border px-4 py-2">{data.tests}</td>
-                        <td className="border px-4 py-2">{data.specificationId}</td>
-                        <td className="border px-4 py-2">{data.specificationAttachment}</td>
-                        <td className="border px-4 py-2">{data.stpId}</td>
-                        <td className="border px-4 py-2">{data.stpAttachment}</td>
-                        <td className="border px-4 py-2">{data.testPlanId}</td>
-                        <td className="border px-4 py-2">{data.testName}</td>
-                        <td className="border px-4 py-2">{data.testMethod}</td>
-                        <td className="border px-4 py-2">{data.testParameters}</td>
-                        <td className="border px-4 py-2">{data.testingFrequency}</td>
-                        <td className="border px-4 py-2">{data.testingLocation}</td>
-                        <td className="border px-4 py-2">{data.requiredInstruments}</td>
-                        <td className="border px-4 py-2">{data.testGrouping}</td>
-                        <td className="border px-4 py-2">{data.expectedResults}</td>
-                        <td className="border px-4 py-2">{data.testingDeadline}</td>
-
-                        <td className="border px-4 py-2">{data.plannerName}</td>
-                        <td className="border px-4 py-2">{data.labTechnician}</td>
-                        <td className="border px-4 py-2">{data.reviewer}</td>
-                        <td className="border px-4 py-2">{data.assignedDepartment}</td>
-                        <td className="border px-4 py-2">{data.supervisor}</td>
-
-                        <td className="border px-4 py-2">{data.sampleCollectionDate}</td>
-                        <td className="border px-4 py-2">{data.testingStartDate}</td>
-                        <td className="border px-4 py-2">{data.testingEndDate}</td>
-                        <td className="border px-4 py-2">{data.turnaroundTime}</td>
-                        <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
-                        <td className="border px-4 py-2">{data.reviewDate}</td>
-
-                        <td className="border px-4 py-2">{data.sampleStorageLocation}</td>
-                        <td className="border px-4 py-2">{data.transportationMethod}</td>
-                        <td className="border px-4 py-2">{data.samplePreparationMethod}</td>
-                        <td className="border px-4 py-2">{data.samplePackagingDetails}</td>
-                        <td className="border px-4 py-2">{data.sampleLabel}</td>
-
-                        <td className="border px-4 py-2">{data.regulatoryRequirements}</td>
-                        <td className="border px-4 py-2">{data.qualityControlChecks}</td>
-                        <td className="border px-4 py-2">{data.controlSampleReference}</td>
-                        <td className="border px-4 py-2">{data.sampleIntegrityStatus}</td>
-                        <td className="border px-4 py-2">{data.riskAssessment}</td>
-
-                        <td className="border px-4 py-2">{data.instrumentsReserved}</td>
-                        <td className="border px-4 py-2">{data.labAvailability}</td>
-                        <td className="border px-4 py-2">{data.sampleCostEstimation}</td>
-                        <td className="border px-4 py-2">{data.resourceUtilization}</td>
-
-                        <td className="border px-4 py-2">{data.sampleMovementHistory}</td>
-                        <td className="border px-4 py-2">{data.testingProgress}</td>
-                        <td className="border px-4 py-2">{data.alertsNotifications}</td>
-                        <td className="border px-4 py-2">{data.deviationLogs}</td>
-
-                        <td className="border px-4 py-2">{data.comments}</td>
-                        <td className="border px-4 py-2">{data.attachments}</td>
-                        <td className="border px-4 py-2">{data.samplingFrequency}</td>
-                        <td className="border px-4 py-2">{data.sampleDisposition}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    {isModalsOpen && (
-      <ImportModal
-        initialData={filteredData}
-        isOpen={isModalsOpen}
-        onClose={handleCloseModals}
-        columns={columns}
-        onDataUpload={handleExcelDataUpload}
-      />
-    )}
-     {editModalData && (
-      <EditModal
-        visible={Boolean(editModalData)}
-        closeModal={closeEditModal}
-        data={editModalData}
-        onSave={handleEditSave}
-      />
-    )}
-  </div>
-  )
+  );
   }
 
 export default SamplePlanning

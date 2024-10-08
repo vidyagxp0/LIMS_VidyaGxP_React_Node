@@ -110,11 +110,11 @@ const SampleLogin2Modal = (_props) => {
             placeholder="Select..."
             options={[
               {
-                value: "USR001",
-                label: "USR001",
+                value: "Sample 1",
+                label: "Sample1",
               },
-              { value: "USR002", label: "USR002" },
-              { value: "USR003", label: "USR003" },
+              { value: "Sample 3", label: "Sample2" },
+              { value: "Sample 3", label: "Sample3" },
             ]}
           />
           <CFormInput
@@ -141,19 +141,12 @@ const SampleLogin2Modal = (_props) => {
             label="Specification Code"
             placeholder=""
           />
-          <CFormSelect
-            type="text"
-            className="mb-3"
-            label="Status"
-            placeholder=""
-          />
           <CFormInput
             type="text"
             className="mb-3"
             label="Analyst"
             placeholder=""
           />
-
           <CFormInput
             type="date"
             className="mb-3"
@@ -166,7 +159,6 @@ const SampleLogin2Modal = (_props) => {
             label="Attachement"
             placeholder=""
           />
-
           {showAdditionalFields && (
             <>
               <CFormInput
@@ -2019,7 +2011,7 @@ const SampleLogin2Modal = (_props) => {
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={_props.closeModal}>
-            Back
+            Cancel
           </CButton>
           <CButton color="primary">Add Sample</CButton>
         </CModalFooter>

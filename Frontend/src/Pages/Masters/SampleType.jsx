@@ -32,6 +32,7 @@ import FormLabel from "@mui/material/FormLabel";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
@@ -680,6 +681,8 @@ function SampleType() {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Sample Type</h4>
@@ -702,18 +705,9 @@ function SampleType() {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload
-              columns={columns}
-              data={filteredData}
-              fileName="Sample_Type.pdf"
-              title="Sample Type Data"
-            />
+            <PDFDownload columns={columns} data={filteredData} fileName="Sample_Type.pdf" title="Sample Type Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Sample Type"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Add Sample Type" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -734,13 +728,7 @@ function SampleType() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isModalOpen && (
-        <StatusModal
-          onAdd={addNewStorageCondition}
-          visible={isModalOpen}
-          closeModal={closeModal}
-        />
-      )}
+      {isModalOpen && <StatusModal onAdd={addNewStorageCondition} visible={isModalOpen} closeModal={closeModal} />}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}

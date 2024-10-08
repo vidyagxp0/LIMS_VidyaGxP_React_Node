@@ -15,6 +15,7 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -203,6 +204,8 @@ const TestRegistration = () => {
 
   return (
     <div className="p-4">
+      <LaunchQMS />
+
       <h1 className="text-2xl font-bold mb-4">Test Registration</h1>
 
       <div className="flex items-center justify-between mb-4">
@@ -249,10 +252,8 @@ const TestRegistration = () => {
             options={[
               { value: "Select Specifications", label: "Select Specs" },
               {
-                value:
-                  "RMS-TDL-01 - Tadalfil Raw material testing specification",
-                label:
-                  "RMS-TDL-01 - Tadalfil Raw material testing specification",
+                value: "RMS-TDL-01 - Tadalfil Raw material testing specification",
+                label: "RMS-TDL-01 - Tadalfil Raw material testing specification",
               },
               { value: "DR123 - Resinate02", label: "DR123 - Resinate02" },
               { value: "DCU-1 - DCU-01", label: "DCU-1 - DCU-01" },
