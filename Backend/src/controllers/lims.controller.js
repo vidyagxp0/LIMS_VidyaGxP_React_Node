@@ -172,29 +172,27 @@ export const createLIMS = async (req, res) => {
 
 export const getAllLIMSData = async (req, res) => {
   try {
-      const limsData = await LIMS.findAll({
-        attributes: commonFeilds, // Specify the fields to include
+    const limsData = await LIMS.findAll({});
+
+    if (limsData.length === 0) {
+      return res.status(404).json({ error: true, message: "Data not found" });
+    }
+
+    // Filter out fields with empty arrays
+    const filteredLimsData = limsData.map((data) => {
+      const filteredData = {};
+
+      // Loop through each field and only include it if it's not an empty array
+      Object.keys(data.toJSON()).forEach((key) => {
+        if (!(Array.isArray(data[key]) && data[key].length === 0)) {
+          filteredData[key] = data[key];
+        }
       });
 
-      if (limsData.length === 0) {
-        return res.status(404).json({ error: true, message: "Data not found" });
-      }
+      return filteredData;
+    });
 
-      // Filter out fields with empty arrays
-      const filteredLimsData = limsData.map((data) => {
-        const filteredData = {};
-
-        // Loop through each field and only include it if it's not an empty array
-        Object.keys(data.toJSON()).forEach((key) => {
-          if (!(Array.isArray(data[key]) && data[key].length === 0)) {
-            filteredData[key] = data[key];
-          }
-        });
-
-        return filteredData;
-      });
-
-      res.status(200).json(filteredLimsData);
+    res.status(200).json(filteredLimsData);
   } catch (error) {
     console.error("Error fetching LIMS data:", error);
     res.status(500).json({
