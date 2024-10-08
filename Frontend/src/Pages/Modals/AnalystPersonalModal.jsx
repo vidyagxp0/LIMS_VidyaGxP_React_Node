@@ -677,6 +677,26 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit }) => {
     handleInputChange("Specializations", e.target.value);
   }}
   />
+  <CFormInput
+  className="mb-3"
+  type="text"
+  label="Approval Date"
+  placeholder=""
+  value={usageData.ApprovalDate}
+  onChange={(e) => {
+    handleInputChange("ApprovalDate", e.target.value);
+  }}
+  />
+   <CFormInput
+  className="mb-3"
+  type="text"
+  label="Approval's Name"
+  placeholder=""
+  value={usageData.ApprovalsName}
+  onChange={(e) => {
+    handleInputChange("ApprovalsName", e.target.value);
+  }}
+  />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>

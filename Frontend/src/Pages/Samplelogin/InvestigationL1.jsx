@@ -1,16 +1,4 @@
-import React, { useEffect, useState } from "react";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
-import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
-import ATMButton from "../../components/ATM components/Button/ATMButton";
-import Table from "../../components/ATM components/Table/Table";
-import { useNavigate } from "react-router-dom";
-import ImportModal from "../Modals/importModal";
+import { useEffect, useState } from "react";
 import {
   CButton,
   CFormInput,
@@ -20,27 +8,35 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import React from "react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Table from "../../components/ATM components/Table/Table";
+import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    testName: "Test Name 1",
-    testCode: "T001",
-    testType: "Type A",
-    addedOn: "2024-01-01",
-    attachment: "attachment",
-    status: "INITIATED",
-  },
+const initialData = JSON.parse(localStorage.getItem("InvestigationL1")) || [];
+
+const fields = [
+  { label: "S.No", key: "sno" },
+  { label: "Test Name", key: "testName" },
+  { label: "Test Code", key: "testCode" },
+  { label: "Test Type", key: "testType" },
+  { label: "Added On", key: "addedOn" },
+  { label: "Status", key: "status" },
 ];
 
-const InvestigationL1 = () => {
-  const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("investigationL1");
-    return storedData ? JSON.parse(storedData) : initialData;
-  });
+function InvestigationL1() {
+  const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,10 +44,9 @@ const InvestigationL1 = () => {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [lastStatus, setLastStatus] = useState("INITIATED");
-  const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem("investigationL1", JSON.stringify(data));
+    localStorage.setItem("InvestigationL1", JSON.stringify(data));
   }, [data]);
 
   const handleOpenModals = () => setIsModalsOpen(true);
@@ -63,6 +58,7 @@ const InvestigationL1 = () => {
     setData(newData);
   };
 
+
   const filteredData = data.filter((row) => {
     return (
       row.testName.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -70,9 +66,7 @@ const InvestigationL1 = () => {
     );
   });
 
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-  };
+  const onViewDetails = (rowData) => setViewModalData(rowData);
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -84,68 +78,61 @@ const InvestigationL1 = () => {
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
-      Cell: ({ row }) => (
-        <input
-          type="checkbox"
-          checked={row.original.checkbox || false}
-          onChange={() => handleCheckboxChange(row.index)}
-        />
-      ),
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Test Name", accessor: "testName" },
     { header: "Test Code", accessor: "testCode" },
     { header: "Test Type", accessor: "testType" },
     { header: "Added On", accessor: "addedOn" },
-    { header: "Attachment", accessor: "attachment" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
-      accessor: "actions",
+      accessor: "action",
       Cell: ({ row }) => (
-        <div className="flex items-center space-x-2">
+        <>
           <FontAwesomeIcon
             icon={faEye}
-            className="cursor-pointer text-blue-500 hover:text-blue-700"
-            onClick={() => onViewDetails(row.original)}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
-            className="cursor-pointer text-green-500 hover:text-green-700"
-            onClick={() => openEditModal(row.original)}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
-            className="cursor-pointer text-red-500 hover:text-red-700"
-            onClick={() => handleDelete(row.original)}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row)}
           />
-        </div>
+        </>
       ),
     },
   ];
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-  };
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: data.length + index + 1,
+      sno: index + 1,
       testName: item["Test Name"] || "",
       testCode: item["Test Code"] || "",
       testType: item["Test Type"] || "",
       addedOn: item["Added On"] || "",
-      attachment: item["Attachment"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
-    setData((prevData) => [...prevData, ...updatedData]);
+    const concatenatedData = [...data, ...updatedData];
+    setData(concatenatedData);
     setIsModalsOpen(false);
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const closeViewModal = () => setViewModalData(null);
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
   };
 
   const openEditModal = (rowData) => setEditModalData(rowData);
@@ -159,6 +146,13 @@ const InvestigationL1 = () => {
     closeEditModal();
   };
 
+  const handleStatusUpdate = (testName, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testName === testName ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
+
   const addNewInvestigation = (newInvestigation) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
     setData((prevData) => [
@@ -168,84 +162,11 @@ const InvestigationL1 = () => {
         sno: prevData.length + 1,
         checkbox: false,
         status: nextStatus,
+        addedOn: new Date().toISOString().split('T')[0],
       },
     ]);
     setLastStatus(nextStatus);
     setIsModalOpen(false);
-  };
-
-  const handleStatusUpdate = (testCode, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.testCode === testCode ? { ...item, status: newStatus } : item
-    );
-    setData(updatedData);
-  };
-
-  const InvestigationModal = ({ visible, closeModal, onAdd }) => {
-    const [testName, setTestName] = useState("");
-    const [testCode, setTestCode] = useState("");
-    const [testType, setTestType] = useState("");
-    const [addedOn, setAddedOn] = useState("");
-
-    const handleAdd = () => {
-      const newInvestigation = {
-        testName,
-        testCode,
-        testType,
-        addedOn,
-        attachment: "",
-      };
-      onAdd(newInvestigation);
-    };
-
-    return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
-        <CModalHeader>
-          <CModalTitle>Add Investigation L1</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Name"
-            placeholder="Test Name"
-            value={testName}
-            onChange={(e) => setTestName(e.target.value)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Code"
-            placeholder="Test Code"
-            value={testCode}
-            onChange={(e) => setTestCode(e.target.value)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Type"
-            placeholder="Test Type"
-            value={testType}
-            onChange={(e) => setTestType(e.target.value)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="date"
-            label="Added On"
-            value={addedOn}
-            onChange={(e) => setAddedOn(e.target.value)}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary" onClick={handleAdd}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -269,7 +190,7 @@ const InvestigationL1 = () => {
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>Edit Investigation L1</CModalTitle>
+          <CModalTitle>{data.sno ? "Edit" : "Add"} Investigation L1</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -277,7 +198,7 @@ const InvestigationL1 = () => {
             type="text"
             label="Test Name"
             name="testName"
-            value={formData?.testName || ""}
+            value={formData.testName || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -285,7 +206,7 @@ const InvestigationL1 = () => {
             type="text"
             label="Test Code"
             name="testCode"
-            value={formData?.testCode || ""}
+            value={formData.testCode || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -293,21 +214,13 @@ const InvestigationL1 = () => {
             type="text"
             label="Test Type"
             name="testType"
-            value={formData?.testType || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            className="mb-3"
-            type="date"
-            label="Added On"
-            name="addedOn"
-            value={formData?.addedOn || ""}
+            value={formData.testType || ""}
             onChange={handleChange}
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
           </CButton>
           <CButton color="primary" onClick={handleSave}>
             Save Changes
@@ -331,6 +244,7 @@ const InvestigationL1 = () => {
               options={[
                 { value: "All", label: "All" },
                 { value: "INITIATED", label: "Initiated" },
+                { value: "COMPLETED", label: "Completed" },
                 { value: "DROPPED", label: "Dropped" },
               ]}
               value={statusFilter}
@@ -358,24 +272,27 @@ const InvestigationL1 = () => {
         />
       </div>
 
-      <InvestigationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        onAdd={addNewInvestigation}
-      />
+      {isModalOpen && (
+        <EditModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          data={{}}
+          onSave={addNewInvestigation}
+        />
+      )}
       {viewModalData && (
         <ReusableModal
-          visible={true}
-          closeModal={() => setViewModalData(null)}
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
           data={viewModalData}
-          fields={columns.map(col => ({ label: col.header, key: col.accessor }))}
+          fields={fields}
           title="Investigation L1 Details"
           updateStatus={handleStatusUpdate}
         />
       )}
       {editModalData && (
         <EditModal
-          visible={true}
+          visible={Boolean(editModalData)}
           closeModal={closeEditModal}
           data={editModalData}
           onSave={handleEditSave}
@@ -391,6 +308,6 @@ const InvestigationL1 = () => {
       )}
     </>
   );
-};
+}
 
 export default InvestigationL1;
