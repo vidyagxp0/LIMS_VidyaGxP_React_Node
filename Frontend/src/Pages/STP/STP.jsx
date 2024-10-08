@@ -42,7 +42,7 @@ const STP = () => {
       </div>
 
       <div>
-        <table className="min-w-full bg-white border border-gray-200 shadow-lg">
+        <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-5">
           <thead>
             <tr className=" text-white text-left">
               <th colSpan="10" className="px-4 py-2 bg-yellow-600">
