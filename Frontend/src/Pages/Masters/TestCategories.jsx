@@ -46,7 +46,7 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function Specifications() {
+function Testcategories() {
   //const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -440,4 +440,4 @@ function Specifications() {
   );
 }
 
-export default Specifications;
+export default Testcategories;

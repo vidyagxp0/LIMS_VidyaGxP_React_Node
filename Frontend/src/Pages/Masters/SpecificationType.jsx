@@ -39,7 +39,7 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function Testregistration() {
+function specficationtype() {
   // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -387,4 +387,4 @@ function Testregistration() {
   );
 }
 
-export default Testregistration;
+export default specficationtype;
