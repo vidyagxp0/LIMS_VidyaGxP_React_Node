@@ -27,27 +27,10 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import ReusableModal from "../Modals/ResusableModal.jsx";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    refStdlotNo: "code1",
-    quantityUsedNow: "code1",
-    usedOn: "material 1",
-    usedBy: "dummy desc",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    refStdlotNo: "code2",
-    quantityUsedNow: "code2",
-    usedOn: "material 2",
-    usedBy: "description 2",
-    status: "INITIATED",
-  },
-];
+const initialData = JSON.parse(localStorage.getItem("workinStdUsage")) || [];
+
 
 const WorkingStandardUsage = () => {
   const [data, setData] = useState(initialData);
@@ -57,6 +40,10 @@ const WorkingStandardUsage = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("workinStdUsage", JSON.stringify(data));
+  }, [data]);
 
   // ************************************************************************************************
   const [editModalData, setEditModalData] = useState(null);
@@ -384,6 +371,28 @@ const WorkingStandardUsage = () => {
     setIsViewModalOpen(true);
   };
 
+
+
+  const fields = [
+    { label: "sno", key: "sno" },
+    { label: "refStdlotNo", key: "refStdlotNo" },
+    { label: "quantityUsedNow", key: "quantityUsedNow" },
+    { label: "usedOn", key: "usedOn" },
+    { label: "usedBy", key: "usedBy" },
+    { label: "status", key: "status" }
+    
+    
+  ];
+
+  const handleStatusUpdate = (workingStdUsage, newStatus) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.workingStdUsage === workingStdUsage ? { ...row, status: newStatus } : row
+      )
+    );
+  };
+
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -553,11 +562,14 @@ const WorkingStandardUsage = () => {
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
       />
-      {isViewModalOpen && (
-        <ViewModal
+     {viewModalData && (
+        <ReusableModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+          fields={fields}
+          title="InstrumentMasterReg."
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (

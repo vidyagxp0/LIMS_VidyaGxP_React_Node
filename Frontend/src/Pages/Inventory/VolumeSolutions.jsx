@@ -24,31 +24,10 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import ReusableModal from "../Modals/ResusableModal.jsx";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    name: "code1",
-    prefix: "code1",
-    theoreticalStrength: "material 1",
-    solutionExpiryPeriod: "dummy desc",
-    preparationMethod: "dummy desc",
-    comments: "dummy desc",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    name: "code2",
-    prefix: "code2",
-    theoreticalStrength: "material 2",
-    solutionExpiryPeriod: "description 2",
-    preparationMethod: "description 2",
-    comments: "description 2",
-    status: "INITIATED",
-  },
-];
+const initialData = JSON.parse(localStorage.getItem("internalRegistration")) || [];
+
 
 const VolumeSolution = () => {
   const [data, setData] = useState(initialData);
@@ -58,6 +37,10 @@ const VolumeSolution = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
 
+  useEffect(() => {
+    localStorage.setItem("internalRegistration", JSON.stringify(data));
+  }, [data]);
+  
   // ************************************************************************************************
   const [editModalData, setEditModalData] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -264,6 +247,27 @@ const VolumeSolution = () => {
     setIsViewModalOpen(true);
   };
 
+  const fields = [
+    { label: "sno", key: "sno" },
+    { label: "name", key: "name" },
+    { label: "prefix", key: "prefix" },
+    { label: "theoreticalStrength", key: "theoreticalStrength" },
+    { label: "solutionExpiryPeriod", key: "solutionExpiryPeriod" },
+    { label: "preparationMethod", key: "preparationMethod" },
+    { label: "comments", key: "comments" },
+    { label: "status", key: "status" }
+    
+    
+  ];
+
+  const handleStatusUpdate = (volumeSolution, newStatus) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.volumeSolution === volumeSolution ? { ...row, status: newStatus } : row
+      )
+    );
+  };
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -448,11 +452,14 @@ const VolumeSolution = () => {
         handleSubmit={handleModalSubmit}
         closeModal={closeModal}
       />
-      {isViewModalOpen && (
-        <ViewModal
+       {viewModalData && (
+        <ReusableModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
+          fields={fields}
+          title="InstrumentMasterReg."
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (

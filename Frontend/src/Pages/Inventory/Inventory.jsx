@@ -112,6 +112,7 @@ const Inventory = () => {
             icon={faEye}
             className="mr-2 cursor-pointer"
             onClick={() => onViewDetails(row)}
+
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
