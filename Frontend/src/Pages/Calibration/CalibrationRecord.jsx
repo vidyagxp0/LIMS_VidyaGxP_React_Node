@@ -75,6 +75,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -320,6 +321,8 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Calibration Records</h1>
       <div className="flex items-center justify-between mb-4">
@@ -356,7 +359,7 @@ setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the
 {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

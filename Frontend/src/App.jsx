@@ -66,7 +66,7 @@ import MyTests from "./Pages/Masters/MyTests";
 
 import Registration from "./Pages/Instruments Master/Registration";
 import InstrumentCategory from "./Pages/Instruments Master/InstrumentCategory";
-import InstrumentModule from "./Pages/Instruments Master/InstrumentModule";
+// import InstrumentModule from "./Pages/Instruments Master/InstrumentModule";
 import InstrumentUsage from "./Pages/Instruments Master/InstrumentUsage";
 import MasterProductDetail from "./Pages/Masters/MasterProductDetail.jsx";
 
@@ -379,7 +379,7 @@ function App() {
 
             <Route path="/instrumentMaster/registration" element={<Registration />} />
             <Route path="/instrumentMaster/instrumentCategory" element={<InstrumentCategory />} />
-            <Route path="/instrumentMaster/instrumentModule" element={<InstrumentModule />} />
+            {/* <Route path="/instrumentMaster/instrumentModule" element={<InstrumentModule />} /> */}
             <Route path="/instrumentMaster/instrumentUsage" element={<InstrumentUsage />} />
 
             <Route path="/instrumentMaster/registrationDetails" element={<RegistrationDetails />} />
@@ -519,7 +519,7 @@ function App() {
           <Route path="/admin-login" element={<AdminPanel show={checkLoggedIn} />} />
           <Route path="" element={<AdminMainPanel />}>
             <Route
-              path="/admin-login/userManagement"
+              path="/admin-panel/userManagement"
               element={<UserMgnt setToast={checkLoggedIn} show={isLoggedIn} />}
             />
             <Route path="/admin-login/site-management" element={<SiteManagement />} />

@@ -16,6 +16,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import InvRegistrationModal from "../Modals/InvRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -237,6 +238,8 @@ const InvlotRegistration = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">
         Reference Standard Lot Registration
@@ -319,7 +322,7 @@ const InvlotRegistration = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

@@ -31,6 +31,7 @@ import { FaTrash } from "react-icons/fa6";
 import ReactQuill from "react-quill";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import ReusableModal from "../Modals/ResusableModal.jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
 
@@ -548,6 +549,8 @@ const Registration = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Instrument Registration</h1>
 
@@ -632,7 +635,7 @@ const Registration = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

@@ -14,6 +14,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import MediaContainerTypeModal from "../Modals/MediaContainerTypeModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -205,6 +206,8 @@ const MediaContainerType = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Media Container Type</h1>
 
@@ -248,7 +251,7 @@ const MediaContainerType = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

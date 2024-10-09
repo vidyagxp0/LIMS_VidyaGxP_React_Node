@@ -13,6 +13,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import CultureaTemplateConfigurationModal from "../Modals/CultureaTemplateConfigurationModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -221,6 +222,8 @@ const CultureTemplateConfiguration = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">
         Culture Template Configuration
@@ -278,7 +281,7 @@ const CultureTemplateConfiguration = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

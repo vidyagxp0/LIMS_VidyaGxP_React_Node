@@ -1,8 +1,8 @@
-const { sequelize } = require("../config/db");
-const { DataTypes } = require("sequelize");
-const bcrypt = require("bcrypt");
+import { sequelize } from "../config/db.js";
+import { DataTypes } from "sequelize";
+import { genSalt, hash } from "bcrypt";
 
-const User = sequelize.define("User", {
+export const User = sequelize.define("User", {
   user_id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -12,10 +12,17 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  designation: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  gender: {
+    type: DataTypes.ENUM("Male", "Female", "Other"),
+    allowNull: true,
+  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
     validate: {
       isEmail: true,
     },
@@ -32,21 +39,26 @@ const User = sequelize.define("User", {
   },
   profile_pic: {
     type: DataTypes.STRING,
+    allowNull: true,
   },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+  
 });
 
 User.addHook("afterSync", async () => {
   try {
     const processesCount = await User.count();
-    const salt = await bcrypt.genSalt(10);
-    const hashpass = await bcrypt.hash("Amit@121", salt);
+    const salt = await genSalt(10);
+    const hashpass = await hash("Amit@121", salt);
+    const commonPass = await hash("lims@123", salt);
     if (processesCount === 0) {
       await User.bulkCreate([
         { name: "Admin", email: "admin@vidyagxp.com", password: hashpass },
+        { name: "Amit", email: "amit@gmail.com", password: commonPass },
+        { name: "User", email: "user@gmail.com", password: commonPass },
       ]);
       console.log("Admin User created");
     } else {
@@ -56,5 +68,3 @@ User.addHook("afterSync", async () => {
     console.error("Error creating Admin User:", error);
   }
 });
-
-module.exports = User;

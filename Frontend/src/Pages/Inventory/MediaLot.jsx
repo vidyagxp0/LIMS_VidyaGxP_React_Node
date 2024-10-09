@@ -15,6 +15,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import MediaLotModal from "../Modals/MediaLotModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -230,6 +231,8 @@ const MediaLot = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Media Lot</h1>
 
@@ -272,7 +275,7 @@ const MediaLot = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

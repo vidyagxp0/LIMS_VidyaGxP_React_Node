@@ -24,6 +24,7 @@ import {
 } from "@coreui/react";
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 const initialData = [
   {
     checkbox: false,
@@ -349,6 +350,8 @@ const CalibrationSampleLogin = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Calibartion Sample Login</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
@@ -442,7 +445,7 @@ const CalibrationSampleLogin = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

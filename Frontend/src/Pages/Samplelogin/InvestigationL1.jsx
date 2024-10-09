@@ -1,75 +1,63 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
-import { useNavigate } from "react-router-dom";
 import ImportModal from "../Modals/importModal";
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-} from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    testName: "Test Name 1",
-    testCode: "T001",
-    testType: "Type A",
-    addedOn: "2024-01-01",
-    attachment: "attachment",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    testName: "Test Name 2",
-    testCode: "T002",
-    testType: "Type B",
-    addedOn: "2024-01-02",
-    attachment: "attachment",
-  },
+const initialData = JSON.parse(localStorage.getItem("InvestigationL1")) || [];
+
+const fields = [
+  { label: "S.No", key: "sno" },
+  { label: "Test Name", key: "testName" },
+  { label: "Test Code", key: "testCode" },
+  { label: "Test Type", key: "testType" },
+  { label: "Added On", key: "addedOn" },
+  { label: "Status", key: "status" },
 ];
 
-const InvestigationL1 = () => {
+function InvestigationL1() {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
-  const navigate = useNavigate();
+  const [lastStatus, setLastStatus] = useState("INITIATED");
 
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
+  useEffect(() => {
+    localStorage.setItem("InvestigationL1", JSON.stringify(data));
+  }, [data]);
 
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
-  };
+  const handleOpenModals = () => setIsModalsOpen(true);
+  const handleCloseModals = () => setIsModalsOpen(false);
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
+
 
   const filteredData = data.filter((row) => {
     return (
@@ -78,10 +66,7 @@ const InvestigationL1 = () => {
     );
   });
 
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    navigate("/testResultsDetails");
-  };
+  const onViewDetails = (rowData) => setViewModalData(rowData);
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -95,27 +80,25 @@ const InvestigationL1 = () => {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
-    { header: "test Name", accessor: "testName" },
+    { header: "Test Name", accessor: "testName" },
     { header: "Test Code", accessor: "testCode" },
     { header: "Test Type", accessor: "testType" },
     { header: "Added On", accessor: "addedOn" },
-    { header: "attachment", accessor: "attachment" },
+    { header: "Status", accessor: "status" },
     {
       header: "Actions",
       accessor: "action",
-
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon
             icon={faEye}
             className="mr-2 cursor-pointer"
-            onClick={() => {
-              onViewDetails(row), navigate("/testResultsDetails");
-            }}
+            onClick={() => onViewDetails(row)}
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
@@ -127,16 +110,6 @@ const InvestigationL1 = () => {
     },
   ];
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -145,33 +118,60 @@ const InvestigationL1 = () => {
       testCode: item["Test Code"] || "",
       testType: item["Test Type"] || "",
       addedOn: item["Added On"] || "",
-      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
-      status: item["Status"] || "",
+      status: item["Status"] || "INITIATED",
     }));
 
-    // Concatenate the updated data with existing data
-    const concatenatedData = [...updatedData];
+    const concatenatedData = [...data, ...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Update data state with parsed Excel data
+    setIsModalsOpen(false);
   };
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const closeViewModal = () => setViewModalData(null);
+
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
   };
 
-  const closeEditModal = () => {
-    setEditModalData(null);
-  };
+  const openEditModal = (rowData) => setEditModalData(rowData);
+  const closeEditModal = () => setEditModalData(null);
+
   const handleEditSave = (updatedData) => {
     const newData = data.map((item) =>
       item.sno === updatedData.sno ? updatedData : item
     );
     setData(newData);
-    setEditModalData(null);
+    closeEditModal();
+  };
+
+  const handleStatusUpdate = (testName, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testName === testName ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
+
+  const addNewInvestigation = (newInvestigation) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newInvestigation,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+        addedOn: new Date().toISOString().split('T')[0],
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
+
     useEffect(() => {
       if (data) {
         setFormData(data);
@@ -190,43 +190,40 @@ const InvestigationL1 = () => {
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>Update User</CModalTitle>
+          <CModalTitle>{data.sno ? "Edit" : "Add"} Investigation L1</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
             className="mb-3"
             type="text"
-            label="test Name"
-            placeholder="Test Name "
-            value={formData?.testName || ""}
-            onChange={handleChange}
+            label="Test Name"
             name="testName"
+            value={formData.testName || ""}
+            onChange={handleChange}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Test Code"
-            placeholder="Test Code"
-            value={formData?.testCode || ""}
-            onChange={handleChange}
             name="testCode"
+            value={formData.testCode || ""}
+            onChange={handleChange}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Test Type"
-            placeholder="Test Type "
-            value={formData?.testType || ""}
-            onChange={handleChange}
             name="testType"
+            value={formData.testType || ""}
+            onChange={handleChange}
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Submit
+            Save Changes
           </CButton>
         </CModalFooter>
       </CModal>
@@ -236,15 +233,23 @@ const InvestigationL1 = () => {
   return (
     <>
       <LaunchQMS />
-
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Investigation L1</h4>
         </div>
-
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "INITIATED", label: "Initiated" },
+                { value: "COMPLETED", label: "Completed" },
+                { value: "DROPPED", label: "Dropped" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
           </div>
           <div className="float-right flex gap-4">
             <PDFDownload
@@ -254,36 +259,55 @@ const InvestigationL1 = () => {
               title="Investigation L1 Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            {/* <ATMButton text="Add investigation L1 In" color="blue" onClick={openModal} /> */}
+            <ATMButton text="Add Investigation L1" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
           columns={columns}
           data={filteredData}
-          onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          onDelete={handleDelete}
           openEditModal={openEditModal}
         />
-        {isModalsOpen && (
-          <ImportModal
-            initialData={filteredData}
-            isOpen={isModalsOpen}
-            onClose={handleCloseModals}
-            columns={columns}
-            onDataUpload={handleExcelDataUpload}
-          />
-        )}
-        {editModalData && (
-          <EditModal
-            visible={Boolean(editModalData)}
-            closeModal={closeEditModal}
-            data={editModalData}
-            onSave={handleEditSave}
-          />
-        )}
       </div>
+
+      {isModalOpen && (
+        <EditModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          data={{}}
+          onSave={addNewInvestigation}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Investigation L1 Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
     </>
   );
-};
+}
+
 export default InvestigationL1;

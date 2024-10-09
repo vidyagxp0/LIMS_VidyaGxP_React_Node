@@ -73,6 +73,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import BathSampleModal from "../Modals/BathSampleModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -258,6 +259,8 @@ const BatchSample = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Batch Sample</h1>
 
@@ -300,7 +303,7 @@ const BatchSample = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 export default BatchSample;

@@ -23,6 +23,7 @@ import {
 } from "@coreui/react";
 import { Autocomplete, TextField } from "@mui/material";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -358,6 +359,8 @@ const StockInventory = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">
         Inventory/Inventory Registration
@@ -423,7 +426,7 @@ const StockInventory = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 export default StockInventory;

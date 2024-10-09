@@ -14,6 +14,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import LocationModal from "../Modals/LocationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -235,6 +236,8 @@ const Location = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Locations</h1>
 
@@ -280,7 +283,7 @@ const Location = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-    </div>
+    </div></>
   );
 };
 export default Location;

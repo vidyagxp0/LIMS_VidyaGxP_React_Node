@@ -8,6 +8,7 @@ import ATMButton from '../../components/ATM components/Button/ATMButton';
 import Table from '../../components/ATM components/Table/Table';
 import ImportModal from '../Modals/importModal';
 import PDFDownload from '../PDFComponent/PDFDownload ';
+import LaunchQMS from '../../components/ReusableButtons/LaunchQMS';
 
 const initialData = [
     {
@@ -288,6 +289,7 @@ const handleEditSave = (updatedData) => {
 }
     return (
         <>
+        <LaunchQMS/>
             <div className="m-5 mt-3">
                 <div className="main-head">
                     <h4 className="fw-bold">Sampling Field</h4>
