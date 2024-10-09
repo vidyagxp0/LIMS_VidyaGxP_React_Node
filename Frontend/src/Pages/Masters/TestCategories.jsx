@@ -34,7 +34,24 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
+const staticData = [
+  {
+    sno: 1,
+    categoryName: "new cat",
+    uniqueCode: "AT-002",
+    description: "vhnds jjsw ",
+    addedOn: "2024-10-08",
+  },
+  {
+    sno: 2,
+    categoryName: "new cat",
+    uniqueCode: "AT-002",
+    description: "vhnds jjsw ",
+    addedOn: "2024-10-08",
+  },
+];
+
+const initialData = JSON.parse(localStorage.getItem("testcategories")) || "";
 
 const fields = [
   { label: "Category Name", key: "categoryName" },
@@ -46,7 +63,7 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function Specifications() {
+function Testcategories() {
   //const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -56,14 +73,19 @@ function Specifications() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
+  // Combine static data with dynamic data from local storage
   const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("specificationTypes");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
+    return [...staticData, ...initialData]; // Merge static data with local storage data
   });
 
   useEffect(() => {
-    localStorage.setItem("testcategories", JSON.stringify(data));
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "testcategories",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
   }, [data]);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -385,7 +407,11 @@ function Specifications() {
               title="Test Categories Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Test Categories" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Test Categories"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -406,7 +432,13 @@ function Specifications() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageCondition}
+        />
+      )}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}
@@ -429,4 +461,4 @@ function Specifications() {
   );
 }
 
-export default Specifications;
+export default Testcategories;

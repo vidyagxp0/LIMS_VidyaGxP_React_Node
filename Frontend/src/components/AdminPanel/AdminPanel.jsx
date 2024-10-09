@@ -32,13 +32,13 @@ function AdminPanel(props) {
   //     toast.warning("Enter required credentials");
   //     return;
   //   }
-    
+
   //   try {
   //     const response = await axios.post("http://localhost:9000/admin/login", {
   //       email,
   //       password: passwd,
   //     });
-  
+
   //     if (response.data.token) {
   //       localStorage.setItem("adminToken", response.data.token);
   //       navigate("/admin-panel/userManagement");
@@ -80,11 +80,14 @@ function AdminPanel(props) {
           >
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center">
-                <img src="https://connexo.io/assets/img/logo/logo.png" width={"300px"} />
+                <img
+                  src="https://connexo.io/assets/img/logo/logo.png"
+                  width={"300px"}
+                />
               </div>
               <h2 className="text-3xl font-bold text-center text-dark">
                 Welcome To Admin Console
-              </h2> 
+              </h2>
 
               {/* <div className="text-center text-lg text-gray-700 mb-6"> <p>Enter your credentials to access the LIMS Software.</p></div> */}
             </div>

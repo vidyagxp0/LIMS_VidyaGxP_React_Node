@@ -13,6 +13,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import BUsinessAssociateModal from "../Modals/BUsinessAssociateModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
 
 
 const initialData = [
@@ -67,16 +68,7 @@ const BussinessAssociate = () => {
       REJECTED: 0,
     };
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-    setEditModalOpen(true);
-  };
-
-
-  const closeEditModal = () => {
-    setEditModalOpen(false);
-    setEditModalData(null);
-  };
+ 
 
 
   const handleEditSave = (updatedData) => {
@@ -138,6 +130,16 @@ const BussinessAssociate = () => {
     setIsModalsOpen(false);
   };
 
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -164,6 +166,8 @@ const BussinessAssociate = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row)}
+
           />
           <FontAwesomeIcon
             icon={faTrashCan}

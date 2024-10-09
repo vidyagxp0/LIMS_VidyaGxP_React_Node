@@ -28,29 +28,10 @@ import {
 } from "@coreui/react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    name: "Product 1",
-    sequence: "Seq 1",
-    additionalPuritiesInformation: "Info 1",
-    containerStartingNo: "Start 1",
-    sampleReferenceNo: "Ref 1",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    name: "Product 2",
-    sequence: "Seq 2",
-    additionalPuritiesInformation: "Info 2",
-    containerStartingNo: "Start 2",
-    sampleReferenceNo: "Ref 2",
-    status: "DROPPED",
-  },
-];
+const initialData = JSON.parse(localStorage.getItem("internalRegistration")) || [];
+
 
 const generateRandomSymbolCode = () => {
   const characters =
@@ -69,6 +50,11 @@ const InternalRegistration = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+
+
+  useEffect(() => {
+    localStorage.setItem("internalRegistration", JSON.stringify(data));
+  }, [data]);
 
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -91,6 +77,7 @@ const InternalRegistration = () => {
     setData(updatedList);
     closeEditModal();
   };
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -495,7 +482,7 @@ const InternalRegistration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.additionalPuritiesInformation
+      row?.additionalPuritiesInformation
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
@@ -619,6 +606,26 @@ const InternalRegistration = () => {
     console.log("Deleted item:", item);
   };
 
+  const fields = [
+    { label: "Sno", key: "sno" },
+    { label: "Name", key: "name" },
+    { label: "Sequence", key: "sequence" },
+    { label: "Additional Purities Information", key: "additionalPuritiesInformation" },
+    { label: "Container Starting No", key: "containerStartingNo" },
+    { label: "Sample Reference No", key: "sampleReferenceNo" },
+    { label: "Status", key: "status" }
+    
+  ];
+  a
+
+  const handleStatusUpdate = (internalReg, newStatus) => {
+    setRows((prevRows) =>
+      prevRows.map((row) =>
+        row.internalReg === internalReg ? { ...row, status: newStatus } : row
+      )
+    );
+  };
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -708,27 +715,24 @@ const InternalRegistration = () => {
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
       />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
+      
       {isModalsOpen && (
         <ImportModal
-          initialData={initialData}
+          initialData={filteredData}
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      {isViewModalOpen && (
-        <ViewModal
+     {viewModalData && (
+        <ReusableModal
           visible={isViewModalOpen}
-          closeModal={() => setIsViewModalOpen(false)}
+          closeModal={closeViewModal}
           data={viewModalData}
+          fields={fields}
+          title="InstrumentMasterReg."
+          updateStatus={handleStatusUpdate}
         />
       )}
       {editModalOpen && (

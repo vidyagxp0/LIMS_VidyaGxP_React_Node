@@ -9,7 +9,6 @@ import {
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 
@@ -29,54 +28,6 @@ const initialData = [
     materialname: "material 1",
     description: "dummy desc",
     status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    uniquecode: "code3",
-    materialname: "material 1",
-    description: "dummy desc",
-    status: "REINITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 4,
-    uniquecode: "code4",
-    materialname: "material 1",
-    description: "dummy desc",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 5,
-    uniquecode: "code5",
-    materialname: "material 1",
-    description: "dummy desc",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 6,
-    uniquecode: "code6",
-    materialname: "material 1",
-    description: "dummy desc",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    uniquecode: "code7",
-    materialname: "material 1",
-    description: "dummy desc",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 8,
-    uniquecode: "code8",
-    materialname: "material 1",
-    description: "dummy desc",
-    status: "DROPPED",
   },
 ];
 
@@ -161,6 +112,7 @@ const Inventory = () => {
             icon={faEye}
             className="mr-2 cursor-pointer"
             onClick={() => onViewDetails(row)}
+
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
@@ -191,8 +143,6 @@ const Inventory = () => {
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
-
-
 
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
@@ -250,9 +200,6 @@ const Inventory = () => {
             onChange={setStatusFilter}
           />
         </div>
-        {/* <div className="float-right">
-          <ATMButton text="Add Internal" color="blue" onClick={openModal} />
-        </div> */}
       </div>
       <Table
         columns={columns}

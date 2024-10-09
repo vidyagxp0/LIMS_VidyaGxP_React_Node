@@ -219,8 +219,8 @@ import SiteManagement from "./components/AdminPanel/Site-Management/SiteManageme
 import ProcessManagement from "./components/AdminPanel/Process-Management/ProcessManagement.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import STP from "./Pages/STP/STP.jsx";
 import AnalystPersonal from "./Pages/AnalystPersonal.jsx";
+import STP from "./Pages/STP/STP.jsx";
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
