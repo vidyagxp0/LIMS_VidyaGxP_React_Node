@@ -1,97 +1,82 @@
 import React from "react";
+import {
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableRow,
+} from "@coreui/react";
 
-export const STPAddModal = ({ isOpen, onClose, onSubmit, newStorageLocation, handleInputChange }) => {
+const STPViewModal = ({
+  visible,
+  closeModal,
+  data,
+  fields,
+  title,
+  updateStatus,
+}) => {
+  const fieldGroups = [
+    {
+      name: "General Information",
+      color: "bg-yellow-600",
+      fields: fields.slice(0, 10),
+    },
+    {
+      name: "Test Methodology",
+      color: "bg-green-500",
+      fields: fields.slice(10, 22),
+    },
+    {
+      name: "Calculations and Interpretation",
+      color: "bg-red-500",
+      fields: fields.slice(22, 27),
+    },
+    {
+      name: "Reporting and Documentation",
+      color: "bg-violet-500",
+      fields: fields.slice(27, 33),
+    },
+    { name: "Miscellaneous", color: "bg-orange-500", fields: fields.slice(33) },
+  ];
+
   return (
-    isOpen && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-y-auto">
-        <div className="bg-white rounded-lg p-6 w-full max-w-4xl shadow-lg overflow-y-auto h-screen">
-          <h3 className="text-lg font-bold mb-6">Add Storage Location</h3>
-          <form onSubmit={onSubmit}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {Object.entries(newStorageLocation).map(([key, value]) => (
-                <div key={key}>
-                  <label htmlFor={key} className="block text-sm font-medium text-gray-700">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </label>
-                  <input
-                    type="text"
-                    id={key}
-                    name={key}
-                    value={value}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2"
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md shadow-sm"
-              >
-                Close
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    )
+    <CModal visible={visible} onClose={closeModal} size="xl">
+      <CModalHeader>
+        <CModalTitle>{title}</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        {fieldGroups.map((group, groupIndex) => (
+          <div key={groupIndex} className="mb-4">
+            <h3 className={`text-white px-4 py-2 ${group.color}`}>
+              {group.name}
+            </h3>
+            <CTable bordered responsive>
+              <CTableBody>
+                {group.fields.map((field, fieldIndex) => (
+                  <CTableRow key={fieldIndex}>
+                    <CTableDataCell
+                      className="font-weight-bold"
+                      style={{ width: "30%" }}
+                    >
+                      {field.charAt(0).toUpperCase() +
+                        field
+                          .slice(1)
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()}
+                    </CTableDataCell>
+                    <CTableDataCell>{data[field]}</CTableDataCell>
+                  </CTableRow>
+                ))}
+              </CTableBody>
+            </CTable>
+          </div>
+        ))}
+      </CModalBody>
+    </CModal>
   );
 };
 
-
-export const STPEditModal = ({ isOpen, onClose, onSubmit, newStorageLocation, handleInputChange }) => {
-  return (
-    isOpen && (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 overflow-y-auto">
-        <div className="bg-white rounded-lg p-6 w-full max-w-4xl shadow-lg overflow-y-auto h-screen">
-          <h3 className="text-lg font-bold mb-6">Edit Storage Location</h3>
-          <form onSubmit={onSubmit}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {Object.entries(newStorageLocation).map(([key, value]) => (
-                <div key={key}>
-                  <label htmlFor={key} className="block text-sm font-medium text-gray-700">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </label>
-                  <input
-                    type="text"
-                    id={key}
-                    name={key}
-                    value={value}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2"
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md shadow-sm"
-              >
-                Close
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    )
-  );
-};
-
-
-
+export default STPViewModal;
