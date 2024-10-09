@@ -22,6 +22,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -797,6 +798,8 @@ const ColumnApplication = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Column Application </h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
@@ -890,7 +893,7 @@ const ColumnApplication = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

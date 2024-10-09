@@ -5,7 +5,6 @@ function InstrumentModuleDetails() {
 
     return (
         <>
-
             <div id="worksheetHeaderPage" className="py-3 bg-light h-100">
                 <div className="container-fluid">
                     <div className="block mb-3">

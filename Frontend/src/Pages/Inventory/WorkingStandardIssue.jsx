@@ -13,6 +13,7 @@ import WorkingStandardIssueModal from "../Modals/WorkingStandardIssueModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import ReusableModal from "../Modals/ResusableModal.jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -198,6 +199,8 @@ const WorkingStandardIssue = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Media Lot Containers Issue</h1>
 
@@ -253,7 +256,7 @@ const WorkingStandardIssue = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

@@ -1731,7 +1731,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Instrument Category
               </CNavItem>
             </Link>
-            <Link to="/instrumentMaster/instrumentModule">
+            {/* <Link to="/instrumentMaster/instrumentModule">
               <CNavItem
                 href="#"
                 className={isActive("/ instrumentMaster/instrumentModule")}
@@ -1745,7 +1745,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Instrument Module
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/instrumentMaster/instrumentUsage">
               <CNavItem
                 href="#"

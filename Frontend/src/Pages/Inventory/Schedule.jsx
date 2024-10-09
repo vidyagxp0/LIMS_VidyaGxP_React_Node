@@ -13,6 +13,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import SchedulaModal from "../Modals/SchedulaModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -208,6 +209,8 @@ const Schedule = () => {
   };
 
   return (
+    <>
+  <LaunchQMS/>  
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Schedule Registration</h1>
 
@@ -251,7 +254,7 @@ const Schedule = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 export default Schedule;
