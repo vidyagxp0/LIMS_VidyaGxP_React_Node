@@ -3,18 +3,17 @@ import {
   getLIMSById,
   getAllLIMSData,
   getDivision,
-  createLIMS,
+  manageLIMS,
   deleteStorageConditionById,
-  updateFieldBySno,
 } from "../controllers/lims.controller.js";
 const limsRouter = express.Router();
 import { upload } from "../utils/multer.js";
 
-limsRouter.post("/create-lims", upload.any(), createLIMS);
-limsRouter.get("/get-all-lims", getAllLIMSData);
+limsRouter.get("/get-all-lims/:fieldName", getAllLIMSData);
 limsRouter.get("/get-lims/:id", getLIMSById);
-limsRouter.put("/update-lims/:id/:fieldName/:sno", updateFieldBySno);
-limsRouter.delete("/delete-lims/:id/:sno", deleteStorageConditionById);
+limsRouter.post("/manage-lims/:add/:fieldName", manageLIMS);
+limsRouter.put("/manage-lims/:update/:fieldName/:sno", manageLIMS);
+limsRouter.delete("/delete-lims/:fieldName/:sno", deleteStorageConditionById);
 limsRouter.get("/get-division", getDivision);
 
 export default limsRouter;

@@ -2,7 +2,6 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
 const commonFields = [
-  // "approval", //list
   "storageCondition",
   "specification",
   "storageLocation",
@@ -16,12 +15,9 @@ const commonFields = [
   "users",
   "sL",
   "sLSamplePA",
-  // "sLInvestigationL1",//list
-  // "sLInvestigationL2",//list
   "sMStorageCondition",
   "sMStandardProtocol",
   "sMStorageChamber",
-  // "sMChamberConditionMapping",//list
   "sMStabilityProtocol",
   "sMSampleStorage",
   "sMCOATemplate",
@@ -30,7 +26,6 @@ const commonFields = [
   "sMSummaryReportHeader",
   "sMSampleAcceptanceTemplate",
   "sMSampleLogin",
-  // "smSampleAcceptance",//list
   "mmasterProduct",
   "mSampleType",
   "mSpecificationType",
@@ -38,7 +33,6 @@ const commonFields = [
   "mStandardTestProcedure",
   "mTestCategories",
   "mTestPlan",
-  // "mMyTest",//list
   "sSamplingConfiguration",
   "sSamplingRule",
   "sESampling",
@@ -101,7 +95,6 @@ const commonFields = [
   "iMInstrumentCategory",
   "iMInstrumentModule",
   "iMInstrumentUsage",
-  // "sMStockVerification",//list
   "sMStockOnboarding",
   "sMMaterial",
   "sMInvetory",
@@ -110,14 +103,10 @@ const commonFields = [
   "cCalibrationDataSheet",
   "cSampleLoginTemplate",
   "cCalibrationSchedule",
-  // "cCalibrationRecord",//list
   "cCalibrationSampleLogin",
-  // "cCalibrationCalendar",
   "rCProblemReporting",
   "rCServiceReporting",
   "rCCoaTemplate",
-  // "rCReleasedCoa",//list
-  // "rCInvestigationCoa",//list
   "vendor",
   "client",
   "plant",
@@ -129,7 +118,6 @@ const commonFields = [
   "sWorksheet",
   "sWorksheetField",
   "sGroupName",
-  // "sInvestigationTemplate",//list
   "sChemicalCategory",
   "sGrade",
   "sHandlingSymbol",
@@ -152,7 +140,7 @@ const generateAttributes = (fields) => {
 
   attributes.limsId = {
     type: DataTypes.INTEGER,
-    autoIncrement: true, 
+    autoIncrement: true,
     primaryKey: true,
   };
 
@@ -170,6 +158,27 @@ const generateAttributes = (fields) => {
 export const LIMS = sequelize.define("LIMS", generateAttributes(commonFields), {
   tableName: "ALL_LIMS",
   timestamps: false,
+});
+
+LIMS.addHook("afterSync", async () => {
+  try {
+    const lims_Counts = await LIMS.count();
+    if (lims_Counts === 0) {
+      // Create a default record with empty fields or initial data
+      const defaultLIMS = {};
+      commonFields.forEach((field) => {
+        defaultLIMS[field] = [];
+      });
+      await LIMS.create({
+        defaultLIMS,
+      });
+      console.log("Lims structure genrated");
+    } else {
+      console.log("Lims structure exist");
+    }
+  } catch (error) {
+    console.error("Error in Lims structure genrating:", error);
+  }
 });
 
 // export const LIMS = sequelize.define("ALL_LIMS", {
