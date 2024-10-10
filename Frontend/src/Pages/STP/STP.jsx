@@ -31,6 +31,7 @@ const STP = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
+  const [dataChanged,setDataChanged]=useState(false);
   // const [data, setData] = useState(() => {
   //   return [...randomData, ...initialData];
   // });
@@ -141,7 +142,7 @@ const STP = () => {
   };
   useEffect(() => {
     fetchSTPs();
-  }, []);
+  }, [dataChanged]);
  
 
    // POST API - Add new STP
@@ -151,6 +152,7 @@ const STP = () => {
       const addedSTP = response.data.updatedLIMS?.stp[0];
       if (addedSTP) {
         setData(prevData => [...prevData, addedSTP]);
+        setDataChanged(true);
       }
       closeAddModal();
     } catch (err) {
@@ -165,6 +167,7 @@ const STP = () => {
       const updatedSTP = response.data.updatedLIMS?.stp[0];
       if (updatedSTP) {
         setData(prevData => prevData.map(item => item.stpId === updatedSTP.stpId ? updatedSTP : item));
+        setDataChanged(false);
       }
       setEditModalData(null);
     } catch (err) {
@@ -638,6 +641,7 @@ const STP = () => {
       (dataItem) => dataItem.stpId !== item.stpId
     );
     setData(updatedData);
+    setDataChanged(false);
   };
 
   const handleInputChange = (e) => {
