@@ -1,3 +1,4 @@
+import { getFileUrl } from "../middleware/authentication.js";
 import { LIMS } from "../models/lims.model.js";
 
 export const createNewLIMS = async (data, transaction) => {
@@ -13,21 +14,32 @@ export const updateLIMSField = async (
   fieldName,
   sno,
   updateData,
+  filename,
   transaction
 ) => {
   const fieldArray = limsRecord[fieldName];
   if (!Array.isArray(fieldArray)) {
     throw new Error(`${fieldName} is not an array or does not exist`);
   }
-  const fieldIndex = fieldArray.findIndex((item) => item["s.no"] == sno);
+  const fieldIndex = fieldArray.findIndex(
+    (item) => item && item["sno"] == sno
+  );
 
   if (fieldIndex === -1) {
-    throw new Error(`${fieldName} with s.no ${sno} not found`);
+    throw new Error(`${fieldName} with sno ${sno} not found`);
+  }
+
+  const existingItem = fieldArray[fieldIndex];
+  if (typeof existingItem !== "object" || existingItem === null) {
+    throw new Error(
+      `Invalid item found at index ${fieldIndex} in ${fieldName}`
+    );
   }
 
   fieldArray[fieldIndex] = {
     ...fieldArray[fieldIndex],
     ...updateData,
+    filename: getFileUrl(filename),
   };
 
   limsRecord[fieldName] = fieldArray;
@@ -40,6 +52,7 @@ export const addLIMSField = async (
   limsRecord,
   fieldName,
   newData,
+  filename,
   transaction
 ) => {
   let fieldArray = limsRecord[fieldName];
@@ -49,8 +62,7 @@ export const addLIMSField = async (
     fieldArray = [];
   }
 
-  fieldArray.push(newData);
-
+  fieldArray.push({ ...newData, filename: getFileUrl(filename) });
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
 

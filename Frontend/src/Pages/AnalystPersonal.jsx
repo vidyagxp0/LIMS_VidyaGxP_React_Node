@@ -9,7 +9,6 @@ import ImportModal from "./Modals/importModal.jsx";
 import PDFDownload from "./PDFComponent/PDFDownload .jsx";
 import AnalystPersonalModal from "./Modals/AnalystPersonalModal.jsx";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS.jsx";
-import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
 
 const AnalystPersonal = () => {
   const [data, setData] = useState([]);
@@ -19,7 +18,6 @@ const AnalystPersonal = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const [editModalData, setEditModalData] = useState(null);
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("AnalystPersonal")) || [];
@@ -44,6 +42,7 @@ const AnalystPersonal = () => {
     const updatedData = excelData.map((item, index) => ({
       ...item,
       sno: data.length + index + 1,
+      // Fill in missing data for last 7 rows
       ApprovalDate: item.ApprovalDate || "",
       ApproversName: item.ApproversName || "",
       ApproversSignature: item.ApproversSignature || "",
@@ -69,24 +68,6 @@ const AnalystPersonal = () => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
     localStorage.setItem("AnalystPersonal", JSON.stringify(newData));
-  };
-
-  const openEditModal = (rowData) => {
-    console.log("Opening edit modal for:", rowData);
-    setEditModalData(rowData);
-  };
-
-  const closeEditModal = () => {
-    setEditModalData(null);
-  };
-
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    localStorage.setItem("AnalystPersonal", JSON.stringify(newData));
-    closeEditModal();
   };
 
   const filteredData = data.filter(
@@ -155,13 +136,15 @@ const AnalystPersonal = () => {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row.original)} />
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row.original)}
+            onClick={() => {
+              /* Handle edit */
+            }}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row)} />
         </>
       ),
     },
@@ -223,51 +206,6 @@ const AnalystPersonal = () => {
     { label: "Change Description", key: "ChangeDescription" },
   ];
 
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [formData, setFormData] = useState(data);
-
-    useEffect(() => {
-      if (data) {
-        setFormData(data);
-      }
-    }, [data]);
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
-    const handleSave = () => {
-      onSave(formData);
-    };
-    return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
-        <CModalHeader>
-          <CModalTitle>Edit Analyst Personal Details</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          {fields.map((field) => (
-            <CFormInput
-              key={field.key}
-              type="text"
-              className="mb-3"
-              label={field.label}
-              name={field.key}
-              value={formData?.[field.key] || ""}
-              onChange={handleChange}
-            />
-          ))}
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={closeModal}>
-            Cancel
-          </CButton>
-          <CButton color="primary" onClick={handleSave}>
-            Save Changes
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
-  };
-
   return (
     <div className="p-4">
       <LaunchQMS />
@@ -298,13 +236,7 @@ const AnalystPersonal = () => {
         </div>
       </div>
 
-      <Table 
-        columns={columns} 
-        data={filteredData} 
-        onViewDetails={onViewDetails} 
-        onDelete={handleDelete}
-        onEdit={openEditModal}
-      />
+      <Table columns={columns} data={filteredData} onViewDetails={onViewDetails} onDelete={handleDelete} />
 
       <AnalystPersonalModal visible={isModalOpen} closeModal={closeModal} handleSubmit={handleAnalystSubmit} />
 
@@ -324,15 +256,6 @@ const AnalystPersonal = () => {
           onClose={handleCloseImportModal}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
-        />
-      )}
-
-      {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
         />
       )}
     </div>
