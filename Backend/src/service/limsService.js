@@ -21,9 +21,9 @@ export const updateLIMSField = async (
   }
   const fieldIndex = fieldArray.findIndex((item) => item["s.no"] == sno);
 
-  if (fieldIndex === -1) {
-    throw new Error(`${fieldName} with s.no ${sno} not found`);
-  }
+  // if (fieldIndex === -1) {
+  //   throw new Error(`${fieldName} with s.no ${sno} not found`);
+  // }
 
   fieldArray[fieldIndex] = {
     ...fieldArray[fieldIndex],

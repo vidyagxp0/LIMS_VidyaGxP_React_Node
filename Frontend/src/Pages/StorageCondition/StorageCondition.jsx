@@ -214,17 +214,12 @@ function StorageLocation() {
     },
   ];
 
-  const storageConditions = data.flatMap((item) => item.storageCondition || []);
+  const storageConditions = data.flatMap((item) => item.storageCondition || []); // Flatten the nested structure
 
-  const filteredData = storageConditions.length > 0 ? storageConditions : [];
+  // Now 'storageConditions' contains all the storage conditions
+  const filteredData = storageConditions.length > 0 ? storageConditions : []; // Fallback to empty array if no data available
 
-  // Adding srno (serial number) to each storage condition
-  const storageConditionsWithSrno = filteredData.map((condition, index) => ({
-    sno: index + 1,
-    ...condition, // Spreading the rest of the storage condition fields
-  }));
-
-  console.log("All Storage Conditions with Srno:", storageConditionsWithSrno);
+  console.log("All Storage Conditions:", filteredData); // Log all storage conditions to debug
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -247,7 +242,6 @@ function StorageLocation() {
       attachment: item["Attachment"] || "",
       status: item["Status"] || "Active",
     }));
-    console.log("tfgyhjk");
 
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
@@ -264,7 +258,9 @@ function StorageLocation() {
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/storageCondition`,
         {
-          storageCondition: conditionsArray.map((condition) => ({
+          storageCondition: conditionsArray.map((condition, index) => ({
+            sno: data.length + index + 1, // Increment based on existing data length
+
             name: condition.name,
             conditionCode: condition.conditionCode,
             storageCondition: condition.storageCondition,
@@ -370,13 +366,39 @@ function StorageLocation() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData, sno) => {
+    try {
+      // API call to update storage condition by sno
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/storageCondition/${updatedData.sno}`, // Targeting the sno in the URL
+
+        {
+          name: updatedData.name,
+          conditionCode: updatedData.conditionCode,
+          storageCondition: updatedData.storageCondition,
+          createdAt: updatedData.createdAt,
+          attachment: updatedData.attachment || null,
+          status: updatedData.status,
+        }
+      );
+      console.log(response);
+      console.log("Update Response:", response.data);
+
+      if (response.status === 200) {
+        // If update is successful, update the state locally
+        const newData = data.map(
+          (item) => (item.sno === updatedData.sno ? updatedData : item) // Match by sno
+        );
+        setData(newData);
+        setEditModalData(null); // Close the edit modal
+      } else {
+        console.error("Failed to update storage condition:", response.data);
+      }
+    } catch (error) {
+      console.error("Error updating storage condition:", error);
+    }
   };
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
@@ -491,7 +513,6 @@ function StorageLocation() {
             columns={columns}
             data={filteredData.map((row, index) => ({
               ...row,
-              sno: row.sno || index + 1,
 
               name: row.name || "No Name",
               conditionCode: row.conditionCode || "No Code",
