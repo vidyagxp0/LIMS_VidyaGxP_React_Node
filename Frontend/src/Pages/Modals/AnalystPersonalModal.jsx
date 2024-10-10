@@ -143,7 +143,6 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit }) => {
    // !+++++++++++++++++++++++
    const handleFormSubmit = () => {
     const analystDetails = { ...usageData, fields };
-    
     const existingAnalyst = JSON.parse(localStorage.getItem("AnalystPersonal")) || [];
     const updatedAnalyst = [...existingAnalyst, analystDetails];
     localStorage.setItem("AnalystPersonal", JSON.stringify(updatedAnalyst));

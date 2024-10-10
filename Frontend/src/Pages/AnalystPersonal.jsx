@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Dropdown from "../components/ATM components/Dropdown/Dropdown.jsx";
 import Table from "../components/ATM components/Table/Table.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../components/ATM components/Button/ATMButton.jsx";
 import ReusableModal from "./Modals/ResusableModal.jsx";
 import ImportModal from "./Modals/importModal.jsx";
 import PDFDownload from "./PDFComponent/PDFDownload .jsx";
 import AnalystPersonalModal from "./Modals/AnalystPersonalModal.jsx";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS.jsx";
+import { BASE_URL } from "../config.json";
 
 const AnalystPersonal = () => {
   const [data, setData] = useState([]);
@@ -18,11 +24,35 @@ const AnalystPersonal = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const [dataChanged, setDataChanged] = useState(false);
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("AnalystPersonal")) || [];
-    setData(storedData);
-  }, []);
+    fetchAnalysts();
+  }, [dataChanged]);
+
+  const fetchAnalysts = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/analystPersonal`
+      );
+      console.log("API Response:", response.data);
+
+      const formattedData = response.data.map((item, index) => {
+        return (
+          item.analystPersonal?.map((analyst, i) => ({
+            ...analyst,
+            sno: analyst.sno || index + i + 1,
+          })) || []
+        );
+      });
+
+      setData(formattedData);
+      setDataChanged(false);
+    } catch (error) {
+      console.error("Error fetching analysts:", error);
+    }
+  };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -30,31 +60,53 @@ const AnalystPersonal = () => {
   const handleOpenImportModal = () => setIsImportModalOpen(true);
   const handleCloseImportModal = () => setIsImportModalOpen(false);
 
-  const handleAnalystSubmit = (newAnalyst) => {
-    const updatedAnalyst = { ...newAnalyst, sno: data.length + 1 };
-    const updatedData = [...data, updatedAnalyst];
-    setData(updatedData);
-    localStorage.setItem("AnalystPersonal", JSON.stringify(updatedData));
-    closeModal();
+  const handleAnalystSubmit = async (newAnalyst) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/analystPersonal`,
+        data
+      );
+      console.log("Response received:", response.data);
+
+      const addedAnalyst = response.data.updatedLIMS?.analystPersonal[0];
+      if (addedAnalyst) {
+        setData((prevData) => [
+          ...prevData,
+          { ...addedAnalyst, sno: prevData.length + 1 },
+        ]);
+        setDataChanged(true);
+      }
+      closeModal();
+    } catch (error) {
+      console.error("Error adding analyst:", error);
+    }
   };
 
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      ...item,
-      sno: data.length + index + 1,
-      // Fill in missing data for last 7 rows
-      ApprovalDate: item.ApprovalDate || "",
-      ApproversName: item.ApproversName || "",
-      ApproversSignature: item.ApproversSignature || "",
-      CommentsNotes: item.CommentsNotes || "",
-      ModificationDate: item.ModificationDate || "",
-      ModifiedBy: item.ModifiedBy || "",
-      ChangeDescription: item.ChangeDescription || "",
-    }));
-    const newData = [...data, ...updatedData];
-    setData(newData);
-    localStorage.setItem("AnalystPersonal", JSON.stringify(newData));
-    handleCloseImportModal();
+  const handleExcelDataUpload = async (excelData) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/analystPersonal`,
+        {
+          analystPersonal: excelData,
+        }
+      );
+      console.log("Response received:", response.data);
+
+      const addedAnalysts = response.data.updatedLIMS?.analystPersonal || [];
+      if (addedAnalysts.length > 0) {
+        setData((prevData) => [
+          ...prevData,
+          ...addedAnalysts.map((analyst, index) => ({
+            ...analyst,
+            sno: prevData.length + index + 1,
+          })),
+        ]);
+        setDataChanged(true);
+      }
+      handleCloseImportModal();
+    } catch (error) {
+      console.error("Error uploading excel data:", error);
+    }
   };
 
   const onViewDetails = (rowData) => {
@@ -64,10 +116,47 @@ const AnalystPersonal = () => {
 
   const closeViewModal = () => setIsViewModalOpen(false);
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    localStorage.setItem("AnalystPersonal", JSON.stringify(newData));
+  const handleDelete = async (item) => {
+    try {
+      await axios.delete(
+        `${BASE_URL}/manage-lims/delete/analystPersonal/${item.AnalystID}`
+      );
+      setData((prevData) =>
+        prevData.filter((dataItem) => dataItem.AnalystID !== item.AnalystID)
+      );
+      setDataChanged(true);
+    } catch (error) {
+      console.error("Error deleting analyst:", error);
+    }
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/analystPersonal/${updatedData.AnalystID}`,
+        updatedData
+      );
+      const updatedAnalyst = response.data.updatedLIMS?.analystPersonal[0];
+      if (updatedAnalyst) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.AnalystID === updatedAnalyst.AnalystID ? updatedAnalyst : item
+          )
+        );
+        setDataChanged(true);
+      }
+      setEditModalData(null);
+    } catch (error) {
+      console.error("Error updating analyst:", error);
+    }
   };
 
   const filteredData = data.filter(
@@ -95,11 +184,20 @@ const AnalystPersonal = () => {
     { header: "Training Program Name", accessor: "TrainingProgramName" },
     { header: "Training Start Date", accessor: "TrainingStartDate" },
     { header: "Training Completion Date", accessor: "TrainingCompletionDate" },
-    { header: "Training Completion Status", accessor: "TrainingCompletionStatus" },
-    { header: "Certification Name/Number", accessor: "CertificationNameNumber" },
+    {
+      header: "Training Completion Status",
+      accessor: "TrainingCompletionStatus",
+    },
+    {
+      header: "Certification Name/Number",
+      accessor: "CertificationNameNumber",
+    },
     { header: "Certification Body", accessor: "CertificationBody" },
     { header: "Certification Date", accessor: "CertificationDate" },
-    { header: "Next Recertification Date", accessor: "NextRecertificationDate" },
+    {
+      header: "Next Recertification Date",
+      accessor: "NextRecertificationDate",
+    },
     { header: "Competency Test Name", accessor: "CompetencyTestName" },
     { header: "Test Date", accessor: "TestDate" },
     { header: "Test Results", accessor: "TestResults" },
@@ -118,7 +216,10 @@ const AnalystPersonal = () => {
     { header: "Method Validation Date", accessor: "MethodValidationDate" },
     { header: "SOP Name/ID", accessor: "SOPNameID" },
     { header: "SOP Version", accessor: "SOPVersion" },
-    { header: "Date Acknowledged/Reviewed", accessor: "DateAcknowledgedReviewed" },
+    {
+      header: "Date Acknowledged/Reviewed",
+      accessor: "DateAcknowledgedReviewed",
+    },
     { header: "Revision Due Date", accessor: "RevisionDueDate" },
     { header: "Years of Experience", accessor: "YearsOfExperience" },
     { header: "Previous Job Roles", accessor: "PreviousJobRoles" },
@@ -136,7 +237,11 @@ const AnalystPersonal = () => {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
@@ -144,7 +249,11 @@ const AnalystPersonal = () => {
               /* Handle edit */
             }}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row)} />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row)}
+          />
         </>
       ),
     },
@@ -231,14 +340,28 @@ const AnalystPersonal = () => {
             fileName="Analyst_Personal.pdf"
             title="Analyst Personal Data"
           />
-          <ATMButton text="Import" color="pink" onClick={handleOpenImportModal} />
+          <ATMButton
+            text="Import"
+            color="pink"
+            onClick={handleOpenImportModal}
+          />
           <ATMButton text="Add Analyst" color="blue" onClick={openModal} />
         </div>
       </div>
 
-      <Table columns={columns} data={filteredData} onViewDetails={onViewDetails} onDelete={handleDelete} />
+      <Table
+        columns={columns}
+        data={filteredData}
+        onViewDetails={onViewDetails}
+        onDelete={handleDelete}
+        openEditModal={openEditModal}
+      />
 
-      <AnalystPersonalModal visible={isModalOpen} closeModal={closeModal} handleSubmit={handleAnalystSubmit} />
+      <AnalystPersonalModal
+        visible={isModalOpen}
+        closeModal={closeModal}
+        handleSubmit={handleAnalystSubmit}
+      />
 
       {viewModalData && (
         <ReusableModal
@@ -256,6 +379,16 @@ const AnalystPersonal = () => {
           onClose={handleCloseImportModal}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+
+      {editModalData && (
+        <AnalystPersonalModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          handleSubmit={handleEditSave}
+          isEditing={true}
         />
       )}
     </div>

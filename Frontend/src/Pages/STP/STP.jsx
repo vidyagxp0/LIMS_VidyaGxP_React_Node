@@ -6,7 +6,7 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import { randomData } from "./demoStp";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from 'axios';
+import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import {
   faEye,
@@ -31,7 +31,7 @@ const STP = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
-  const [dataChanged,setDataChanged]=useState(false);
+  const [dataChanged, setDataChanged] = useState(false);
   // const [data, setData] = useState(() => {
   //   return [...randomData, ...initialData];
   // });
@@ -78,63 +78,68 @@ const STP = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-   // GET API - Fetch all STPs
-   const fetchSTPs = async () => {
+  // GET API - Fetch all STPs
+  const fetchSTPs = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`${BASE_URL}/get-all-lims/STP`);
       console.log(response.data, "response");
-  
+
       const stpData = response.data[0]?.STP || [];
-  
+
       const filteredData = stpData.map((item, index) => ({
         sno: index + 1, // Adding serial number
-        stpId: item.stpId || "No STP ID", 
-        title: item.title || "No Title", 
-        attachment: item.attachment || "No Attachment", 
-        version: item.version || "No Version", 
+        stpId: item.stpId || "No STP ID",
+        title: item.title || "No Title",
+        attachment: item.attachment || "No Attachment",
+        version: item.version || "No Version",
         effectiveDate: item.effectiveDate
           ? new Date(item.effectiveDate).toISOString().split("T")[0]
-          : "No Effective Date", 
+          : "No Effective Date",
         creationDate: item.creationDate
           ? new Date(item.creationDate).toISOString().split("T")[0]
-          : "No Creation Date", 
-        reviewedBy: item.reviewedBy || "No Reviewer", 
-        approvedBy: item.approvedBy || "No Approver", 
-        department: item.department || "No Department", 
-        objective: item.objective || "No Objective", 
-        testProcedureDescription: item.testProcedureDescription || "No Procedure Description", 
-        testType: item.testType || "No Test Type", 
-        testMethodReference: item.testMethodReference || "No Method Reference", 
-        samplePreparation: item.samplePreparation || "No Sample Preparation", 
-        reagents: item.reagents || "No Reagents", 
-        equipment: item.equipment || "No Equipment", 
-        calibration: item.calibration || "No Calibration", 
-        environmental: item.environmental || "No Environmental Info", 
-        controlSample: item.controlSample || "No Control Sample", 
-        testParameters: item.testParameters || "No Test Parameters", 
-        safetyPrecautions: item.safetyPrecautions || "No Safety Precautions", 
-        validationRequirements: item.validationRequirements || "No Validation Requirements", 
-        calculationFormula: item.calculationFormula || "No Calculation Formula", 
-        lsl: item.lsl || "No LSL", 
-        usl: item.usl || "No USL", 
-        resultInterpretation: item.resultInterpretation || "No Result Interpretation", 
-        expectedResults: item.expectedResults || "No Expected Results", 
-        reportTemplate: item.reportTemplate || "No Report Template", 
-        dataRecording: item.dataRecording || "No Data Recording", 
-        testFrequency: item.testFrequency || "No Test Frequency", 
-        testReportSubmission: item.testReportSubmission || "No Report Submission", 
-        deviationHandling: item.deviationHandling || "No Deviation Handling", 
-        auditTrail: item.auditTrail || "No Audit Trail", 
-        revisionHistory: item.revisionHistory || "No Revision History", 
-        attachments: item.attachments || "No Attachments", 
-        remarks: item.remarks || "No Remarks", 
+          : "No Creation Date",
+        reviewedBy: item.reviewedBy || "No Reviewer",
+        approvedBy: item.approvedBy || "No Approver",
+        department: item.department || "No Department",
+        objective: item.objective || "No Objective",
+        testProcedureDescription:
+          item.testProcedureDescription || "No Procedure Description",
+        testType: item.testType || "No Test Type",
+        testMethodReference: item.testMethodReference || "No Method Reference",
+        samplePreparation: item.samplePreparation || "No Sample Preparation",
+        reagents: item.reagents || "No Reagents",
+        equipment: item.equipment || "No Equipment",
+        calibration: item.calibration || "No Calibration",
+        environmental: item.environmental || "No Environmental Info",
+        controlSample: item.controlSample || "No Control Sample",
+        testParameters: item.testParameters || "No Test Parameters",
+        safetyPrecautions: item.safetyPrecautions || "No Safety Precautions",
+        validationRequirements:
+          item.validationRequirements || "No Validation Requirements",
+        calculationFormula: item.calculationFormula || "No Calculation Formula",
+        lsl: item.lsl || "No LSL",
+        usl: item.usl || "No USL",
+        resultInterpretation:
+          item.resultInterpretation || "No Result Interpretation",
+        expectedResults: item.expectedResults || "No Expected Results",
+        reportTemplate: item.reportTemplate || "No Report Template",
+        dataRecording: item.dataRecording || "No Data Recording",
+        testFrequency: item.testFrequency || "No Test Frequency",
+        testReportSubmission:
+          item.testReportSubmission || "No Report Submission",
+        deviationHandling: item.deviationHandling || "No Deviation Handling",
+        auditTrail: item.auditTrail || "No Audit Trail",
+        revisionHistory: item.revisionHistory || "No Revision History",
+        attachments: item.attachments || "No Attachments",
+        remarks: item.remarks || "No Remarks",
       }));
-  
+
       console.log(filteredData, "Filtered STP Data");
-  
+
       setData(filteredData);
       setLoading(false);
+      setDataChanged(false);
     } catch (err) {
       setError("Error fetching STPs");
       setLoading(false);
@@ -143,35 +148,44 @@ const STP = () => {
   useEffect(() => {
     fetchSTPs();
   }, [dataChanged]);
- 
 
-   // POST API - Add new STP
-   const handleAddSTP = async (newSTP) => {
+  // POST API - Add new STP
+  const handleAddSTP = async (newSTP) => {
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTP);
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/STP`,
+        newSTP
+      );
       const addedSTP = response.data.updatedLIMS?.stp[0];
       if (addedSTP) {
-        setData(prevData => [...prevData, addedSTP]);
+        setData((prevData) => [...prevData, addedSTP]);
         setDataChanged(true);
       }
       closeAddModal();
     } catch (err) {
-      setError('Error adding STP');
+      setError("Error adding STP");
     }
   };
 
-   // PUT API - Update existing STP
-   const handleEditSave = async (updatedData) => {
+  // PUT API - Update existing STP
+  const handleEditSave = async (updatedData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`, updatedData);
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`,
+        updatedData
+      );
       const updatedSTP = response.data.updatedLIMS?.stp[0];
       if (updatedSTP) {
-        setData(prevData => prevData.map(item => item.stpId === updatedSTP.stpId ? updatedSTP : item));
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.stpId === updatedSTP.stpId ? updatedSTP : item
+          )
+        );
         setDataChanged(false);
       }
       setEditModalData(null);
     } catch (err) {
-      setError('Error updating STP');
+      setError("Error updating STP");
     }
   };
 
@@ -611,7 +625,6 @@ const STP = () => {
     );
   };
 
-
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
@@ -641,7 +654,7 @@ const STP = () => {
       (dataItem) => dataItem.stpId !== item.stpId
     );
     setData(updatedData);
-    setDataChanged(false);
+    setDataChanged(true);
   };
 
   const handleInputChange = (e) => {
@@ -752,167 +765,169 @@ const STP = () => {
 
   return (
     <div>
-    <LaunchQMS />
-    <div className="m-5 mt-3">
-      <div className="main-head mb-6">
-        <h4 className="font-bold text-xl">STP</h4>
-      </div>
-      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
-        <div className="flex flex-grow space-x-10">
-          <SearchBar
-            value={""}
-            onChange={""}
-            className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-          />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={""}
-            onChange={""}
-            className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-          />
+      <LaunchQMS />
+      <div className="m-5 mt-3">
+        <div className="main-head mb-6">
+          <h4 className="font-bold text-xl">STP</h4>
         </div>
-  
-        <div className="flex justify-end space-x-4 text-nowrap">
-          <PDFDownload
-            columns={"'columns'"}
-            data={"filteredData"}
-            title="STP"
-            fileName="STP.pdf"
-            className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 transition"
-          />
-          <ATMButton
-            text="Import"
-            color="pink"
-            onClick={"handleOpenModals"}
-            className="px-4 py-2 bg-pink-500 text-white rounded-md shadow hover:bg-pink-600 transition"
-          />
-          <ATMButton
-            text="Add STP"
-            color="blue"
-            onClick={openAddModal}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition"
-          />
+        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+          <div className="flex flex-grow space-x-10">
+            <SearchBar
+              value={""}
+              onChange={""}
+              className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={""}
+              onChange={""}
+              className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
+
+          <div className="flex justify-end space-x-4 text-nowrap">
+            <PDFDownload
+              columns={"'columns'"}
+              data={"filteredData"}
+              title="STP"
+              fileName="STP.pdf"
+              className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 transition"
+            />
+            <ATMButton
+              text="Import"
+              color="pink"
+              onClick={"handleOpenModals"}
+              className="px-4 py-2 bg-pink-500 text-white rounded-md shadow hover:bg-pink-600 transition"
+            />
+            <ATMButton
+              text="Add STP"
+              color="blue"
+              onClick={openAddModal}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition"
+            />
+          </div>
         </div>
       </div>
-    </div>
-  
-    <div className="relative">
-      <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-10">
-        <thead className="sticky top-[86px]">
-          <tr className=" text-white text-left">
-            <th colSpan="11" className="px-4 py-2 bg-yellow-600">
-              General Information
-            </th>
-            <th colSpan="12" className="px-4 py-2 bg-green-500">
-              Test Methodology
-            </th>
-            <th colSpan="5" className="px-4 py-2 bg-red-500">
-              Calculations and Interpretation
-            </th>
-            <th colSpan="6" className="px-4 py-2 bg-violet-500">
-              Reporting and Documentation
-            </th>
-            <th colSpan="5" className="px-4 py-2 bg-orange-500">
-              Miscellaneous
-            </th>
-          </tr>
-          <tr className="bg-slate-800 text-white sticky top-[126px]">
-            {headers.map((header, index) => (
-              <td key={index} className="border px-4 py-2">
-                {header}
-              </td>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {currentData.map((item, index) => (
-            <tr key={index}>
-              <td className="border px-4 py-2 text-center">
-                {startIndex + index + 1}
-              </td>
-              {fields.map((field, fieldIndex) => (
-                <td
-                  key={fieldIndex}
-                  className="border px-4 py-2 min-w-[100px]"
-                >
-                  {item[field]}
+
+      <div className="relative">
+        <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-10">
+          <thead className="sticky top-[86px]">
+            <tr className=" text-white text-left">
+              <th colSpan="11" className="px-4 py-2 bg-yellow-600">
+                General Information
+              </th>
+              <th colSpan="12" className="px-4 py-2 bg-green-500">
+                Test Methodology
+              </th>
+              <th colSpan="5" className="px-4 py-2 bg-red-500">
+                Calculations and Interpretation
+              </th>
+              <th colSpan="6" className="px-4 py-2 bg-violet-500">
+                Reporting and Documentation
+              </th>
+              <th colSpan="5" className="px-4 py-2 bg-orange-500">
+                Miscellaneous
+              </th>
+            </tr>
+            <tr className="bg-slate-800 text-white sticky top-[126px]">
+              {headers.map((header, index) => (
+                <td key={index} className="border px-4 py-2">
+                  {header}
                 </td>
               ))}
-              <td className="border px-4 py-2">
-                <div className="flex gap-2">
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    className="mr-2 cursor-pointer"
-                    onClick={() => onViewDetails(item)}
-                  />
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    className="mr-2 cursor-pointer"
-                    onClick={() => openEditModal(item)}
-                  />
-                  <FontAwesomeIcon
-                    icon={faTrashCan}
-                    className="cursor-pointer"
-                    onClick={() => handleDelete(item)}
-                  />
-                </div>
-              </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
-  
-      <div className="mt-6 flex justify-end">
-        <nav
-          className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-          aria-label="Pagination"
-        >
-          <button
-            onClick={() =>
-              handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
-            }
-            className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-              currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-            }`}
-            disabled={currentPage === 1}
+          </thead>
+          <tbody>
+            {currentData.map((item, index) => (
+              <tr key={index}>
+                <td className="border px-4 py-2 text-center">
+                  {startIndex + index + 1}
+                </td>
+                {fields.map((field, fieldIndex) => (
+                  <td
+                    key={fieldIndex}
+                    className="border px-4 py-2 min-w-[100px]"
+                  >
+                    {item[field]}
+                  </td>
+                ))}
+                <td className="border px-4 py-2">
+                  <div className="flex gap-2">
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => onViewDetails(item)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => openEditModal(item)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className="cursor-pointer"
+                      onClick={() => handleDelete(item)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="mt-6 flex justify-end">
+          <nav
+            className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+            aria-label="Pagination"
           >
-            Previous
-          </button>
-          {Array.from({ length: totalPageCount }, (_, index) => (
             <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
-                currentPage === index + 1
-                  ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                  : "hover:text-blue-500"
+              onClick={() =>
+                handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
+              }
+              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+                currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
               }`}
+              disabled={currentPage === 1}
             >
-              {index + 1}
+              Previous
             </button>
-          ))}
-          <button
-            onClick={() =>
-              handlePageChange(
-                currentPage < totalPageCount ? currentPage + 1 : totalPageCount
-              )
-            }
-            className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-              currentPage === totalPageCount
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
-            }`}
-            disabled={currentPage === totalPageCount}
-          >
-            Next
-          </button>
-        </nav>
+            {Array.from({ length: totalPageCount }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
+                  currentPage === index + 1
+                    ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                    : "hover:text-blue-500"
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              onClick={() =>
+                handlePageChange(
+                  currentPage < totalPageCount
+                    ? currentPage + 1
+                    : totalPageCount
+                )
+              }
+              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+                currentPage === totalPageCount
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
+              disabled={currentPage === totalPageCount}
+            >
+              Next
+            </button>
+          </nav>
+        </div>
       </div>
-    </div>  
       {viewModalData && (
         <STPViewModal
           visible={viewModalData !== null}
