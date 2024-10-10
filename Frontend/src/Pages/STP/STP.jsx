@@ -648,168 +648,167 @@ const STP = () => {
 
   return (
     <div>
-      <LaunchQMS />
-      <div className="m-5 mt-3">
-        <div className="main-head mb-6">
-          <h4 className="font-bold text-xl">STP</h4>
+    <LaunchQMS />
+    <div className="m-5 mt-3">
+      <div className="main-head mb-6">
+        <h4 className="font-bold text-xl">STP</h4>
+      </div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+        <div className="flex flex-grow space-x-10">
+          <SearchBar
+            value={""}
+            onChange={""}
+            className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          />
+          <Dropdown
+            options={[
+              { value: "All", label: "All" },
+              { value: "Active", label: "Active" },
+              { value: "Inactive", label: "Inactive" },
+            ]}
+            value={""}
+            onChange={""}
+            className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          />
         </div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
-          <div className="flex flex-grow space-x-4">
-            <SearchBar
-              value={""}
-              onChange={""}
-              className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            />
-            <Dropdown
-              options={[
-                { value: "All", label: "All" },
-                { value: "Active", label: "Active" },
-                { value: "Inactive", label: "Inactive" },
-              ]}
-              value={""}
-              onChange={""}
-              className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            />
-          </div>
-
-          <div className="flex justify-end space-x-4">
-            <PDFDownload
-              columns={"'columns'"}
-              data={"filteredData"}
-              title="STP"
-              fileName="STP.pdf"
-              className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 transition"
-            />
-            <ATMButton
-              text="Import"
-              color="pink"
-              onClick={"handleOpenModals"}
-              className="px-4 py-2 bg-pink-500 text-white rounded-md shadow hover:bg-pink-600 transition"
-            />
-            <ATMButton
-              text="Add STP"
-              color="blue"
-              onClick={openAddModal}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition"
-            />
-          </div>
+  
+        <div className="flex justify-end space-x-4 text-nowrap">
+          <PDFDownload
+            columns={"'columns'"}
+            data={"filteredData"}
+            title="STP"
+            fileName="STP.pdf"
+            className="px-4 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 transition"
+          />
+          <ATMButton
+            text="Import"
+            color="pink"
+            onClick={"handleOpenModals"}
+            className="px-4 py-2 bg-pink-500 text-white rounded-md shadow hover:bg-pink-600 transition"
+          />
+          <ATMButton
+            text="Add STP"
+            color="blue"
+            onClick={openAddModal}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition"
+          />
         </div>
       </div>
-
-      <div>
-        <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2">
-          <thead>
-            <tr className=" text-white text-left">
-              <th colSpan="10" className="px-4 py-2 bg-yellow-600">
-                General Information
-              </th>
-              <th colSpan="12" className="px-4 py-2 bg-green-500">
-                Test Methodology
-              </th>
-              <th colSpan="5" className="px-4 py-2 bg-red-500">
-                Calculations and Interpretation
-              </th>
-              <th colSpan="6" className="px-4 py-2 bg-violet-500">
-                Reporting and Documentation
-              </th>
-              <th colSpan="4" className="px-4 py-2 bg-orange-500">
-                Miscellaneous
-              </th>
-            </tr>
-            <tr className="bg-slate-800 text-white">
-              {headers.map((header, index) => (
-                <td key={index} className="border px-4 py-2">
-                  {header}
+    </div>
+  
+    <div className="relative">
+      <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-10">
+        <thead className="sticky top-[86px]">
+          <tr className=" text-white text-left">
+            <th colSpan="11" className="px-4 py-2 bg-yellow-600">
+              General Information
+            </th>
+            <th colSpan="12" className="px-4 py-2 bg-green-500">
+              Test Methodology
+            </th>
+            <th colSpan="5" className="px-4 py-2 bg-red-500">
+              Calculations and Interpretation
+            </th>
+            <th colSpan="6" className="px-4 py-2 bg-violet-500">
+              Reporting and Documentation
+            </th>
+            <th colSpan="5" className="px-4 py-2 bg-orange-500">
+              Miscellaneous
+            </th>
+          </tr>
+          <tr className="bg-slate-800 text-white sticky top-[126px]">
+            {headers.map((header, index) => (
+              <td key={index} className="border px-4 py-2">
+                {header}
+              </td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {currentData.map((item, index) => (
+            <tr key={index}>
+              <td className="border px-4 py-2 text-center">
+                {startIndex + index + 1}
+              </td>
+              {fields.map((field, fieldIndex) => (
+                <td
+                  key={fieldIndex}
+                  className="border px-4 py-2 min-w-[100px]"
+                >
+                  {item[field]}
                 </td>
               ))}
+              <td className="border px-4 py-2">
+                <div className="flex gap-2">
+                  <FontAwesomeIcon
+                    icon={faEye}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => onViewDetails(item)}
+                  />
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => openEditModal(item)}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className="cursor-pointer"
+                    onClick={() => handleDelete(item)}
+                  />
+                </div>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {currentData.map((item, index) => (
-              <tr key={index}>
-                <td className="border px-4 py-2 text-center">
-                  {startIndex + index + 1}
-                </td>
-                {fields.map((field, fieldIndex) => (
-                  <td
-                    key={fieldIndex}
-                    className="border px-4 py-2 min-w-[100px]"
-                  >
-                    {item[field]}
-                  </td>
-                ))}
-                <td className="border px-4 py-2">
-                  <div className="flex gap-2">
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => onViewDetails(item)}
-                    />
-                    <FontAwesomeIcon
-                      icon={faPenToSquare}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => openEditModal(item)}
-                    />
-                    <FontAwesomeIcon
-                      icon={faTrashCan}
-                      className="cursor-pointer"
-                      onClick={() => handleDelete(item)}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="mt-4 flex justify-end">
-          <nav
-            className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-            aria-label="Pagination"
+          ))}
+        </tbody>
+      </table>
+  
+      <div className="mt-6 flex justify-end">
+        <nav
+          className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+          aria-label="Pagination"
+        >
+          <button
+            onClick={() =>
+              handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
+            }
+            className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+              currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            disabled={currentPage === 1}
           >
+            Previous
+          </button>
+          {Array.from({ length: totalPageCount }, (_, index) => (
             <button
-              onClick={() =>
-                handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
-              }
-              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-                currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
+                currentPage === index + 1
+                  ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                  : "hover:text-blue-500"
               }`}
-              disabled={currentPage === 1}
             >
-              Previous
+              {index + 1}
             </button>
-            {Array.from({ length: totalPageCount }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
-                  currentPage === index + 1
-                    ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                    : "hover:text-blue-500"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() =>
-                handlePageChange(
-                  currentPage < totalPageCount
-                    ? currentPage + 1
-                    : totalPageCount
-                )
-              }
-              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-                currentPage === totalPageCount
-                  ? "cursor-not-allowed"
-                  : "cursor-pointer"
-              }`}
-              disabled={currentPage === totalPageCount}
-            >
-              Next
-            </button>
-          </nav>
-        </div>
+          ))}
+          <button
+            onClick={() =>
+              handlePageChange(
+                currentPage < totalPageCount ? currentPage + 1 : totalPageCount
+              )
+            }
+            className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+              currentPage === totalPageCount
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+            disabled={currentPage === totalPageCount}
+          >
+            Next
+          </button>
+        </nav>
       </div>
+    </div>  
       {viewModalData && (
         <STPViewModal
           visible={viewModalData !== null}
