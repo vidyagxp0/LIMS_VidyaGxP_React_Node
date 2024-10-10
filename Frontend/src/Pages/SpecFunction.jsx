@@ -40,6 +40,7 @@ export const randomSpecData = [
         comments: "Review annually.",
         reviewFrequency: "Every year",
         expiryDate: "01/01/2026",
+        status: "Active",
     },
     {
         specId: "SPEC-2",
@@ -82,6 +83,7 @@ export const randomSpecData = [
         comments: "Check for environmental conditions.",
         reviewFrequency: "Every six months",
         expiryDate: "01/15/2027",
+        status: "Active",
     },
     {
         specId: "SPEC-3",
@@ -124,6 +126,7 @@ export const randomSpecData = [
         comments: "Ensure proper storage conditions.",
         reviewFrequency: "Every two years",
         expiryDate: "N/A",
+        status: "Active",
     },
     {
         specId: "SPEC-4",
@@ -166,6 +169,7 @@ export const randomSpecData = [
         comments: "Ensure proper calibration of equipment.",
         reviewFrequency: "Every year",
         expiryDate: "01/30/2026",
+        status: "Active",
     },
     {
         specId: "SPEC-5",
@@ -208,6 +212,7 @@ export const randomSpecData = [
         comments: "Verify caps and seals before use.",
         reviewFrequency: "Every year",
         expiryDate: "02/15/2025",
+        status: "Active",
     },
     {
         specId: "SPEC-6",
@@ -250,6 +255,7 @@ export const randomSpecData = [
         comments: "Ensure proper ventilation during storage.",
         reviewFrequency: "Every year",
         expiryDate: "N/A",
+        status: "Active",
     },
     {
         specId: "SPEC-7",
@@ -292,6 +298,7 @@ export const randomSpecData = [
         comments: "Check equipment calibration regularly.",
         reviewFrequency: "Every six months",
         expiryDate: "02/10/2025",
+        status: "Active",
     },
     {
         specId: "SPEC-8",
@@ -334,6 +341,7 @@ export const randomSpecData = [
         comments: "Ensure all surfaces are reachable.",
         reviewFrequency: "Every year",
         expiryDate: "N/A",
+        status: "Active",
     },
     {
         specId: "SPEC-9",
@@ -376,6 +384,7 @@ export const randomSpecData = [
         comments: "Ensure reagents are fresh.",
         reviewFrequency: "Every year",
         expiryDate: "N/A",
+        status: "Active",
     },
     {
         specId: "SPEC-10",
@@ -418,5 +427,6 @@ export const randomSpecData = [
         comments: "Ensure all cleaning agents are used according to SOP.",
         reviewFrequency: "Every year",
         expiryDate: "03/15/2026",
+        status: "Active",
     }
 ];

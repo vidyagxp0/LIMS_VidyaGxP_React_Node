@@ -5,10 +5,100 @@ import { Dropdown } from "react-bootstrap";
 import PDFDownload from "./PDFComponent/PDFDownload ";
 import ATMButton from "../components/ATM components/Button/ATMButton";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import SpecificationSpecModal from "./Modals/SpecificationSpecModal";
 
 randomSpecData;
 
 const SpecificationSpec = () => {
+  const [data , setData] = useState(randomSpecData)
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const closeSpecificationModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const openSpecificationModal = () => {
+    setIsModalOpen(true);
+  };
+
+
+  const handleModalSubmit = (newControlSample) => {
+    console.log(newControlSample,"newControlSample")
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>{
+        console.log(item , "ittteeemmm")
+        return (
+          item.productName === newControlSample.productName ? newControlSample : item
+        )
+      }
+       
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          specId:newControlSample?.specId,
+          title:newControlSample.title,
+          version:newControlSample.version ,
+          attachment:newControlSample.attachment,
+          effectiveDate:newControlSample.effectiveDate,
+          creationDate:newControlSample.creationDate,
+          approvedBy:newControlSample.approvedBy,
+          productName:newControlSample.productName,
+          batchLotNumber:newControlSample.batchLotNumber,
+          productCategory:newControlSample.productCategory,
+          manufacturer:newControlSample.manufacturer,
+          description:newControlSample.description,
+          materialGrade:newControlSample.materialGrade,
+          molecularFormula:newControlSample.molecularFormula,
+          packagingRequirements:newControlSample.packagingRequirements,
+          storageConditions:newControlSample.storageConditions,
+          shelfLife:newControlSample.shelfLife,
+          labelingRequirements:newControlSample.labelingRequirements,
+          testParameter:newControlSample.testParameter,
+          testMethod:newControlSample.testMethod,
+          acceptanceCriteria:newControlSample.acceptanceCriteria,
+          unitsOfMeasurement:newControlSample.unitsOfMeasurement,
+          testFrequency:newControlSample.testFrequency,
+          controlSampleReference:newControlSample.controlSampleReference,
+          samplingPlan:newControlSample.samplingPlan,
+          testMethodValidation:newControlSample.testMethodValidation,
+          referenceStandards:newControlSample.referenceStandards,
+          resultInterpretation:newControlSample.resultInterpretation,
+          stabilityCriteria:newControlSample.stabilityCriteria,
+          reTestingInterval:newControlSample.reTestingInterval,
+          regulatoryRequirements:newControlSample.regulatoryRequirements,
+          certification:newControlSample.certification,
+          deviationHandling:newControlSample.deviationHandling,
+          auditTrail:newControlSample.auditTrail,
+          documentReference:newControlSample.documentReference,
+          revisionHistory:newControlSample.revisionHistory,
+          attachments:newControlSample.attachments,
+          comments:newControlSample.comments,
+          reviewFrequency:newControlSample.reviewFrequency,
+          expiryDate:newControlSample.expiryDate,
+        },
+      ]);
+    }
+    closeSpecificationModal();
+  };
+  
   return (
     <>
       <LaunchQMS />
@@ -44,9 +134,9 @@ const SpecificationSpec = () => {
                 onClick={"handleOpenModals"}
               />
               <ATMButton
-                text="Add Storage Location"
+                text="Add Specification"
                 color="blue"
-                onClick={"openModal"}
+                onClick={openSpecificationModal}
               />
             </div>
           </div>
@@ -75,6 +165,9 @@ const SpecificationSpec = () => {
               </th>
               <th colSpan="2" className="px-4 py-2  bg-blue-500">
                 Miscellaneous
+              </th>
+              <th colSpan="1" className="px-4 py-2  bg-green-500">
+                Action
               </th>
             </tr>
             <tr className="">
@@ -194,10 +287,13 @@ const SpecificationSpec = () => {
               <td className="bg-gray-800 text-white border px-4 py-2">
                 Specification Expiry
               </td>
+              <td className="bg-gray-800 text-white border px-4 py-2">
+                Action
+              </td>
             </tr>
           </thead>
           <tbody>
-            {randomSpecData.map((data, index) => (
+            {data.map((data, index) => (
               <tr key={index} className="hover:bg-gray-100">
                 <td className="border px-4 py-2">{data.specId}</td>
                 <td className="border px-4 py-2">{data.title}</td>
@@ -257,11 +353,24 @@ const SpecificationSpec = () => {
 
                 <td className="border px-4 py-2">{data.reviewFrequency}</td>
                 <td className="border px-4 py-2">{data.expiryDate}</td>
+                <td className="border px-4 py-2">
+                <>
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" onClick={() => openEditModal(row)} />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)} />
+                </>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <SpecificationSpecModal 
+       visible={isModalOpen}
+       closeModal={closeSpecificationModal}
+       handleSubmit={handleModalSubmit}
+        />
     </>
   );
 };
