@@ -24,7 +24,7 @@ const commonFeilds = [
   "sL",
   "sLSamplePA",
   // "sLInvestigationL1",//list
-  // "sLInvestigationL2",//list
+  "sLInvestigationL2",//list
   "sMStorageCondition",
   "sMStandardProtocol",
   "sMStorageChamber",
