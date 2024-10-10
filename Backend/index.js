@@ -65,6 +65,12 @@ app.get('/images/:filename', (req, res) => {
   res.sendFile(filePath);
 });
 
+app.get('/documents/:filename', (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(__dirname, 'src/public/documents', filename);
+  res.sendFile(filePath);
+});
+
 const PORT = config.development.PORT || 9000;
 app.listen(PORT, "0.0.0.0", async () => {
   try {
