@@ -247,6 +247,7 @@ function StorageLocation() {
       attachment: item["Attachment"] || "",
       status: item["Status"] || "Active",
     }));
+    console.log("tfgyhjk");
 
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
