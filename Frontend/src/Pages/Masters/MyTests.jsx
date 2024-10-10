@@ -478,6 +478,15 @@ function Mytests() {
           onSave={handleEditSave}
         />
       )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
     </>
   );
 }
