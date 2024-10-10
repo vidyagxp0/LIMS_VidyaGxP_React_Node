@@ -14,6 +14,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import RefrenceCultureLotModal from "../Modals/RefrenceCultureLotModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -245,6 +246,8 @@ const RefrenceCultureLot = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Reference Culture Lot</h1>
 
@@ -290,7 +293,7 @@ const RefrenceCultureLot = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

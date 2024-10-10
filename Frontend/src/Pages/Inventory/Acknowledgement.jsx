@@ -75,6 +75,7 @@ import AcknowledgeSampleModal from "../Modals/AcknowledgeSampleModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import AcknowledgementModal from "../Modals/AcknowledgementModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -260,6 +261,8 @@ const Acknowledgement = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Acknowledgement</h1>
 
@@ -302,7 +305,7 @@ const Acknowledgement = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 export default Acknowledgement;

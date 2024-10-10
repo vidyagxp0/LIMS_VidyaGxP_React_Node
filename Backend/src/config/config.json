@@ -1,14 +1,14 @@
 {
-    "development" : {
-            "PORT": 9000,
-            "dbName": "lims_vidyagxp",
-            "username": "root",
-            "password": "127804",
-            "dialect": "mysql",
-            "host": "localhost",
-            "JWT_SECRET": "NAHKNAHRAF"
-    },
-    "production": {
-
-    }
+  "development": {
+    "PORT": 9000,
+    "dbName": "lims_vidyagxp",
+    "username": "root",
+    "password": "root",
+    "dialect": "mysql",
+    "host": "localhost",
+    "JWT_SECRET": "LIMSVidyagxp",
+    "JWT_ADMIN_SECRET": "LIMSVidyagxpAdmin",
+    "URL": "http://localhost"
+  },
+  "production": {}
 }

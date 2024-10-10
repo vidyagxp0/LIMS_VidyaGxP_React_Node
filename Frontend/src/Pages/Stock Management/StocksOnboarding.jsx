@@ -14,6 +14,7 @@ import StocksOnboardingModal from "../Modals/StocksOnboardingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -198,6 +199,8 @@ const StocksOnboarding = () => {
   
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Stock Registration</h1>
 
@@ -245,7 +248,7 @@ const StocksOnboarding = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-    </div>
+    </div></>
   );
 };
 export default StocksOnboarding;

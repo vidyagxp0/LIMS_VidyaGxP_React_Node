@@ -11,6 +11,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import BatchTestListModal from "../Modals/BatchTestListModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -192,6 +193,8 @@ const BatchTestslist = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Batch Test List</h1>
 
@@ -238,7 +241,7 @@ const BatchTestslist = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-    </div>
+    </div></>
   );
 };
 export default BatchTestslist;

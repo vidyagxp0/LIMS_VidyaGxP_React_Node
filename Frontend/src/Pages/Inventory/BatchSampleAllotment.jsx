@@ -75,6 +75,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import BatchSampleAllotmentModal from "../Modals/BatchSampleAllotmentModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -260,6 +261,8 @@ const BatchSampleAllotment = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Batch Sample Allotment</h1>
 
@@ -306,7 +309,7 @@ const BatchSampleAllotment = () => {
        {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 export default BatchSampleAllotment;

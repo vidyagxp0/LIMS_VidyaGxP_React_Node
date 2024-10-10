@@ -23,6 +23,7 @@ import {
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import ReusableModal from "../Modals/ResusableModal.jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
 
@@ -379,6 +380,8 @@ const InstrumentUsage = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Instrument Usage</h1>
 
@@ -446,7 +449,7 @@ const InstrumentUsage = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 export default InstrumentUsage;

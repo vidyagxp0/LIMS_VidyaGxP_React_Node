@@ -74,6 +74,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import EmMoniteringDetailsModal from "../Modals/EmMoniteringDetailsModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -268,6 +269,8 @@ const EMMoniteringDetails = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Monitoring Details</h1>
 
@@ -314,7 +317,7 @@ const EMMoniteringDetails = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 export default EMMoniteringDetails;

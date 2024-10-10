@@ -15,6 +15,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import StandardRegistrationModal from "../Modals/StandardRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -210,7 +211,8 @@ const StandardRegistration = () => {
   };
 
   return (
-    <div className="p-4">
+    <>
+    <LaunchQMS/><div className="p-4">
       <h1 className="text-2xl font-bold mb-4">
         Reference Standard Registration
       </h1>
@@ -288,7 +290,7 @@ const StandardRegistration = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

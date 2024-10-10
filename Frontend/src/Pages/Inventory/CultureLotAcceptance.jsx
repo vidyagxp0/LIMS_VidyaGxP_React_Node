@@ -16,6 +16,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import CultureLotAcceptanceModal from "../Modals/CultureLotAcceptanceModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -223,6 +224,8 @@ const
     };
 
     return (
+      <>
+      <LaunchQMS/>
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Culture Lot Acceptance</h1>
 
@@ -272,7 +275,7 @@ const
         {isModalsOpen && (
           <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
         )}
-      </div>
+      </div></>
     );
   };
 

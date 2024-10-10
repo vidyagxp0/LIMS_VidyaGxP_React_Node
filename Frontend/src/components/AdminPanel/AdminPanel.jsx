@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../Pages/Login/Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import axios from "axios"; // Import axios
 
 function AdminPanel(props) {
   const [email, setEmail] = useState("");
@@ -17,37 +18,41 @@ function AdminPanel(props) {
     setter(data.target.value);
   };
 
-  const handleLogin = () => {
-    if (email === "Amit" && passwd === "Amit@121") {
-      navigate("/admin-login/userManagement");
-      props.show(true);
-    } else if (email === "" || passwd === "") {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (email === "" || passwd === "") {
       toast.warning("Enter required credentials");
-    } else {
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/admin/admin-login",
+        {
+          email,
+          password: passwd,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.token) {
+        localStorage.setItem("adminToken", response.data.token);
+        toast.success("Login Successful");
+        navigate("/admin-panel/userManagement");
+        props.show(true);
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       toast.error("Invalid Credentials");
     }
   };
-  // const handleLogin = async () => {
-  //   if (email === "" || passwd === "") {
-  //     toast.warning("Enter required credentials");
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post("http://localhost:9000/admin/login", {
-  //       email,
-  //       password: passwd,
-  //     });
-
-  //     if (response.data.token) {
-  //       localStorage.setItem("adminToken", response.data.token);
-  //       navigate("/admin-panel/userManagement");
-  //       props.show(true);
-  //     }
-  //   } catch (error) {
-  //     toast.error("Invalid Credentials");
-  //   }
-  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -80,16 +85,9 @@ function AdminPanel(props) {
           >
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center">
-                <img
-                  src="https://connexo.io/assets/img/logo/logo.png"
-                  width={"300px"}
-                />
+                <img src="https://connexo.io/assets/img/logo/logo.png" width={"300px"} />
               </div>
-              <h2 className="text-3xl font-bold text-center text-dark">
-                Welcome To Admin Console
-              </h2>
-
-              {/* <div className="text-center text-lg text-gray-700 mb-6"> <p>Enter your credentials to access the LIMS Software.</p></div> */}
+              <h2 className="text-3xl font-bold text-center text-dark">Welcome To Admin Console</h2>
             </div>
             <CForm>
               <div className="mb-4 text-gray-200">
