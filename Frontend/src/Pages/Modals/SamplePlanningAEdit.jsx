@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+
+
+
+
+import React, { useState, useEffect } from "react";
 import {
   CButton,
   CModal,
@@ -9,162 +13,48 @@ import {
   CForm,
   CFormInput,
   CFormTextarea,
-  CFormSelect,
-  CFormCheck,
 } from "@coreui/react";
 import axios from 'axios';
-import BASE_URL from "../../config.json"
+import BASE_URL from "../../config.json";
 
+const SamplePlanningAEdit = ({ open, handleClose, data, updateRow }) => {
+  const [formData, setFormData] = useState(data);
 
-const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
-  const [formData, setFormData] = useState({
-    samplePlanId: "",
-    sampleId: "",
-    sampleName: "",
-    sampleType: "",
-    batchLotNumber: "",
-    sampleSource: "",
-    plannedDate: "",
-    samplePriority: "",
-    sampleQuantity: "",
-    tests: "",
-    specificationId: "",
-    specificationAttachment: "",
-    stpId: "",
-    stpAttachment: "",
-    testPlanId: "",
-    testName: "",
-    testMethod: "",
-    testParameters: "",
-    testingFrequency: "",
-    testingLocation: "",
-    requiredInstruments: "",
-    testGrouping: "",
-    expectedResults: "",
-    testingDeadline: "",
-    plannerName: "",
-    labTechnician: "",
-    reviewer: "",
-    assignedDepartment: "",
-    supervisor: "",
-    sampleCollectionDate: "",
-    testingStartDate: "",
-    testingEndDate: "",
-    turnaroundTime: "",
-    sampleRetestingDate: "",
-    reviewDate: "",
-    sampleStorageLocation: "",
-    transportationMethod: "",
-    samplePreparationMethod: "",
-    samplePackagingDetails: "",
-    sampleLabel: "",
-    regulatoryRequirements: "",
-    qualityControlChecks: "",
-    controlSampleReference: "",
-    sampleIntegrityStatus: "",
-    riskAssessment: "",
-    instrumentsReserved: "",
-    labAvailability: "",
-    sampleCostEstimation: "",
-    resourceUtilization: "",
-    sampleMovementHistory: "",
-    testingProgress: "",
-    alertsNotifications: "",
-    deviationLogs: "",
-    comments: "",
-    attachments: "",
-    samplingFrequency: "",
-    sampleDisposition: "",
-  });
+  useEffect(() => {
+      setFormData(data );
+  }, [data]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
+  
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
+    e.preventDefault(); // Prevent default form submission behavior
     axios
-      .post(`http://localhost:9000/manage-lims/add/sLSamplePA`, formData) 
+      .put(`http://localhost:9000/manage-lims/update/sLSamplePA/${formData.sno}`, formData)
       .then((response) => {
-        addRow(formData); 
-        handleClose();
+        console.log("Data updated successfully:", response.data);
+        updateRow(formData); // Update the UI
+        handleClose(); // Close the modal
       })
       .catch((error) => {
-        console.error("There was an error submitting the data:", error);
+        console.error("There was an error updating the data:", error);
       });
-
-    // Reset the form after submission
-    setFormData({
-      samplePlanId: "",
-      sampleId: "",
-      sampleName: "",
-      sampleType: "",
-      batchLotNumber: "",
-      sampleSource: "",
-      plannedDate: "",
-      samplePriority: "",
-      sampleQuantity: "",
-      tests: "",
-      specificationId: "",
-      specificationAttachment: "",
-      stpId: "",
-      stpAttachment: "",
-      testPlanId: "",
-      testName: "",
-      testMethod: "",
-      testParameters: "",
-      testingFrequency: "",
-      testingLocation: "",
-      requiredInstruments: "",
-      testGrouping: "",
-      expectedResults: "",
-      testingDeadline: "",
-      plannerName: "",
-      labTechnician: "",
-      reviewer: "",
-      assignedDepartment: "",
-      supervisor: "",
-      sampleCollectionDate: "",
-      testingStartDate: "",
-      testingEndDate: "",
-      turnaroundTime: "",
-      sampleRetestingDate: "",
-      reviewDate: "",
-      sampleStorageLocation: "",
-      transportationMethod: "",
-      samplePreparationMethod: "",
-      samplePackagingDetails: "",
-      sampleLabel: "",
-      regulatoryRequirements: "",
-      qualityControlChecks: "",
-      controlSampleReference: "",
-      sampleIntegrityStatus: "",
-      riskAssessment: "",
-      instrumentsReserved: "",
-      labAvailability: "",
-      sampleCostEstimation: "",
-      resourceUtilization: "",
-      sampleMovementHistory: "",
-      testingProgress: "",
-      alertsNotifications: "",
-      deviationLogs: "",
-      comments: "",
-      attachments: "",
-      samplingFrequency: "",
-      sampleDisposition: "",
-    });
   };
-
 
   return (
     <CModal alignment="center" visible={open} onClose={handleClose} size="lg">
       <CModalHeader>
-        <CModalTitle>Add Sample Planning and Analytics</CModalTitle>
+        <CModalTitle>Edit Sample Planning and Analytics</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <CForm onSubmit={handleSubmit}>
+      <CForm onSubmit={handleSubmit}>
           <CFormInput
             name="samplePlanId"
             label="Sample Plan ID"
@@ -582,7 +472,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
           />
 
           <CButton type="submit" color="primary" style={{ marginTop: "1rem" }}>
-            Add Sample
+          Update
           </CButton>
         </CForm>
       </CModalBody>
@@ -595,4 +485,4 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
   );
 };
 
-export default SamplePlanningAndAnalytics;
+export default SamplePlanningAEdit;

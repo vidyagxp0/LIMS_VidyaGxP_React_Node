@@ -1,5 +1,5 @@
 import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader } from '@coreui/react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchBar from '../../components/ATM components/SearchBar/SearchBar';
 import Dropdown from '../../components/ATM components/Dropdown/Dropdown';
 import PDFDownload from '../PDFComponent/PDFDownload ';
@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { randomSampleData } from './SamplePlanningFunction';
 import LaunchQMS from '../../components/ReusableButtons/LaunchQMS';
 import SamplePlanningAndAnalytics from '../Modals/SamplePlanningAndAnalytics';
+import axios from 'axios';
+import SamplePlanningAEdit from '../Modals/SamplePlanningAEdit';
 
 
 const initialData = [
@@ -247,24 +249,58 @@ const initialData = [
 ];
 
   const SamplePlanning = () => {
-    const [data, setData] = useState([...randomSampleData]);
+    // const [data, setData] = useState([...randomSampleData]);
+    const [data, setData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState("All");
-    const [viewModalData, setViewModalData] = useState(null);
     const [isModalsOpen, setIsModalsOpen] = useState(false);
-    const [editModalData, setEditModalData] = useState(null);
+    const [editModalData, setEditModalData] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null)
 const navigate = useNavigate()
+
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:9000/get-all-lims/sLSamplePA`);
+
+      const fetchedData= response?.data[0]?.sLSamplePA || [] ;
+
+      const UpdatedData = fetchedData.map((item, index)=>({
+        ...item, sno:index+1,
+      }))
+      setData(UpdatedData);
+      console.log(UpdatedData)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchData(); // Call the fetch function
+}, []);
 
 const filteredData = data.filter((row) => {
   return (
-    row.sampleName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+    row?.sampleName?.toLowerCase()?.includes(searchQuery.toLowerCase()) 
+    &&
     (statusFilter === 'All' || row.status === statusFilter)
   );
 });
 
+const openEditModal = (data,index) => {
+  console.log(data)
+  setSelectedRow(data,index);
+  setEditModalData(true); 
+};
+
 const addRow = (newRow) => {
-  setData([...data, newRow]); // Add new row to table
+  setData([...data, newRow]); 
+};
+const handleUpdate = (updatedRow) => {
+  // Logic to update the table with the new data
+  console.log("Updated row data:", updatedRow);
+  // Update the rows here (if using state or Redux for state management)
 };
 
     const columns = [
@@ -272,6 +308,7 @@ const addRow = (newRow) => {
         header: <input type="checkbox"  />,
         accessor: "checkbox",
       },
+      { header: "SNo.", accessor: "sno" },
       { header: "Sample Plan ID.", accessor: "samplePlan" },
       { header: "Sample ID", accessor: "sampleId" },
       { header: "Sample Name", accessor: "sampleName" },
@@ -359,18 +396,20 @@ const addRow = (newRow) => {
       setIsAddModalOpen(true);
     };
   
-    // const closeModal = () => {
-    //   setIsModalOpen(false);
-    // };
+ 
   
-    const closeViewModal = () => {
-      setIsViewModalOpen(false);
-    };
+   
   
     const handleDelete = (item) => {
-      const newData = data.filter((d) => d !== item);
-      setData(newData);
-      console.log('Deleted item:', item);
+      axios
+      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.sno}`)
+      .then((response) => {
+        console.log(response.data.message);
+       
+      })
+      .catch((error) => {
+        console.error("There was an error deleting the record:", error);
+      });
     };
 
     const handleCheckboxChange = (index) => {
@@ -379,17 +418,11 @@ const addRow = (newRow) => {
       setData(newData);
     };
 
-    const onViewDetails = (rowData) => {
-      setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    };
+   
   
-    const openEditModal = (rowData) => {
-      setEditModalData(rowData);
-    };
     
     const closeEditModal = () => {
-      setEditModalData(null);
+      setEditModalData(false);
     };
 
     const handleExcelDataUpload = (excelData) => {
@@ -517,11 +550,12 @@ const addRow = (newRow) => {
             <th colSpan="4" className="px-4 py-2 bg-green-300">
               Tracking and Monitoring
             </th>
-            <th colSpan="4" className="px-4 py-2 bg-violet-500">
+            <th colSpan="5" className="px-4 py-2 bg-violet-500">
               Miscellaneous
             </th>
           </tr>
           <tr className="bg-slate-600 text-white">
+            <td className="border px-4 py-2">S.No</td>
             <td className="border px-4 py-2">Sample Plan ID</td>
             <td className="border px-4 py-2">Sample ID</td>
             <td className="border px-4 py-2">Sample Name</td>
@@ -587,11 +621,13 @@ const addRow = (newRow) => {
             <td className="border px-4 py-2">Attachments</td>
             <td className="border px-4 py-2">Sampling Frequency</td>
             <td className="border px-4 py-2">Sample Disposition</td>
+            <td className="border px-4 py-2">Actions</td>
           </tr>
         </thead>
         <tbody>
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100">
+              <td className="border px-4 py-2">{data.sno}</td>
               <td className="border px-4 py-2">{data.samplePlanId}</td>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
@@ -657,6 +693,23 @@ const addRow = (newRow) => {
               <td className="border px-4 py-2">{data.attachments}</td>
               <td className="border px-4 py-2">{data.samplingFrequency}</td>
               <td className="border px-4 py-2">{data.sampleDisposition}</td>
+              <td className="border px-4 py-2"> <div className='flex gap-2'>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(data)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(data,index)}
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(data)}
+          />
+        </div></td>
             </tr>
           ))}
         </tbody>
@@ -671,11 +724,12 @@ const addRow = (newRow) => {
         />
       )}
       {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        <SamplePlanningAEdit
+        open={editModalData}
+        handleClose={closeEditModal}
+        // rowData={selectedRow} 
+        onUpdate={handleUpdate}
+        data={selectedRow}
         />
       )}
 
