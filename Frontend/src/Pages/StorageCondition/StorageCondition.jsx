@@ -27,6 +27,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
 
 const initialData = [
   {
@@ -59,6 +60,15 @@ const initialData = [
     attachment: "attachment",
     status: "Active",
   },
+];
+
+const fields = [
+  { label: "Storage Name.", key: "name" },
+  { label: "Condition Code", key: "conditionCode" },
+  { label: "Stability Storage Condition", key: "storageCondition" },
+  { label: "Created At", key: "createdAt" },
+  { label: "Attachment", key: "attachment" },
+  { label: "Status", key: "status" },
 ];
 
 function StorageLocation() {
@@ -150,10 +160,6 @@ function StorageLocation() {
     {
       header: "SrNo.",
       accessor: "sno",
-      Cell: ({ row }) => {
-        console.log("Row Data:", row.original);
-        return row.original.sno || "No Condition";
-      },
     },
 
     { header: "Storage Name", accessor: "name" },
@@ -241,6 +247,7 @@ function StorageLocation() {
       attachment: item["Attachment"] || "",
       status: item["Status"] || "Active",
     }));
+    console.log("tfgyhjk");
 
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
@@ -284,13 +291,19 @@ function StorageLocation() {
           status: condition.status,
         }));
 
-        setData((prevData) => [...prevData, ...newConditionData]); // Add new data to the existing data
+        setData((prevData) => [...prevData, ...newConditionData]);
       } else {
         console.error("No storage conditions returned from the API.");
       }
     } catch (error) {
       console.error("Error creating storage condition:", error);
     }
+  };
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -476,15 +489,16 @@ function StorageLocation() {
         {filteredData && filteredData.length > 0 ? (
           <Table
             columns={columns}
-            data={filteredData.map((row) => ({
+            data={filteredData.map((row, index) => ({
               ...row,
+              sno: row.sno || index + 1,
 
               name: row.name || "No Name",
               conditionCode: row.conditionCode || "No Code",
               storageCondition:
                 typeof row.storageCondition === "string"
                   ? row.storageCondition
-                  : "No Condition", // Handle non-string conditions
+                  : "No Condition",
               createdAt: row.createdAt || "No Date",
               attachment: row.attachment || "No Attachment",
               status: row.status || "Inactive",
@@ -506,8 +520,23 @@ function StorageLocation() {
           onAdd={addNewStorageCondition}
         />
       )}
-      {isViewModalOpen && (
-        <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} />
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
       )}
       {isModalsOpen && (
         <ImportModal
@@ -518,12 +547,6 @@ function StorageLocation() {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      <EditModal
-        visible={Boolean(editModalData)}
-        closeModal={closeEditModal}
-        data={editModalData}
-        onSave={handleEditSave}
-      />
     </>
   );
 }

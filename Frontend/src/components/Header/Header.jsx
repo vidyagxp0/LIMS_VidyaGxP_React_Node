@@ -147,7 +147,7 @@ function Header({ toggleSidebarClass }) {
                 <span className="mr-3">♣</span> About
               </div>
               {/* <Link
-                to="/admin-login/userManagement"
+                to="/admin-panel/userManagement"
                 className="block py-2 px-4 hover:bg-gray-100"
               >
                 <span className="mr-3">◘</span> Admin Panel
