@@ -27,34 +27,12 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const staticData = [
-  {
-    sno: 1,
-    uniqueCode: "P001",
-    productName: "Product A",
-    genericName: "Generic A",
-    reTestingPeriod: "30 days",
-    addDate: "2024-01-01",
-    status: "Active",
-    checkbox: false,
-  },
-  {
-    sno: 2,
-    uniqueCode: "P002",
-    productName: "Product B",
-    genericName: "Generic B",
-    reTestingPeriod: "60 days",
-    addDate: "2024-01-02",
-    status: "Inactive",
-    checkbox: false,
-  },
-  // Add more static entries as needed
-];
-
-const initialData = JSON.parse(localStorage.getItem("product")) || "";
+const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
 const fields = [
+  { label: "S.No", key: "sno" },
   { label: "Product Name", key: "productName" },
   { label: "Unique Code", key: "uniqueCode" },
   { label: "Generic Name", key: "genericName" },
@@ -72,17 +50,13 @@ function Product() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
-  // Combine static data with dynamic data from local storage
   const [data, setData] = useState(() => {
-    return [...staticData, ...initialData]; // Merge static data with local storage data
+    const storedData = localStorage.getItem("product");
+    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
   });
 
   useEffect(() => {
-    // Store dynamic data back to local storage
-    localStorage.setItem(
-      "product",
-      JSON.stringify(data.filter((row) => !staticData.includes(row)))
-    );
+    localStorage.setItem("product", JSON.stringify(data));
   }, [data]);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -224,8 +198,6 @@ function Product() {
         addDate: "2020-02-02",
         action: [],
       };
-      closeModal();
-
       onAdd(newCondition);
     };
 
@@ -381,6 +353,8 @@ function Product() {
 
   return (
     <>
+      <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Master/Product</h4>
@@ -407,11 +381,7 @@ function Product() {
               title="Master Product Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Master/Product"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Add Master/Product" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
@@ -424,13 +394,7 @@ function Product() {
         />
       </div>
 
-      {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          onAdd={addNewStorageCondition}
-        />
-      )}
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}
