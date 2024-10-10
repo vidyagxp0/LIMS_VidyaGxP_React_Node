@@ -11,6 +11,7 @@ import Table from '../../components/ATM components/Table/Table';
 import { useNavigate } from 'react-router-dom';
 import { randomSampleData } from './SamplePlanningFunction';
 import LaunchQMS from '../../components/ReusableButtons/LaunchQMS';
+import SamplePlanningAndAnalytics from '../Modals/SamplePlanningAndAnalytics';
 
 
 const initialData = [
@@ -246,9 +247,9 @@ const initialData = [
 ];
 
   const SamplePlanning = () => {
-    const [data, setData] = useState(initialData);
+    const [data, setData] = useState([...randomSampleData]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState("All");
     const [viewModalData, setViewModalData] = useState(null);
     const [isModalsOpen, setIsModalsOpen] = useState(false);
@@ -261,6 +262,10 @@ const filteredData = data.filter((row) => {
     (statusFilter === 'All' || row.status === statusFilter)
   );
 });
+
+const addRow = (newRow) => {
+  setData([...data, newRow]); // Add new row to table
+};
 
     const columns = [
       {
@@ -351,12 +356,12 @@ const filteredData = data.filter((row) => {
     };
 
     const openModal = () => {
-      setIsModalOpen(true);
+      setIsAddModalOpen(true);
     };
   
-    const closeModal = () => {
-      setIsModalOpen(false);
-    };
+    // const closeModal = () => {
+    //   setIsModalOpen(false);
+    // };
   
     const closeViewModal = () => {
       setIsViewModalOpen(false);
@@ -458,7 +463,7 @@ const filteredData = data.filter((row) => {
       <LaunchQMS />
 
       <div className="main-head">
-        <h4 className="fw-bold">Sample Planning & Analytics</h4>
+        <h2 className="fw-bold">Sample Planning & Analytics</h2>
       </div>
 
       <div className="flex items-center justify-between mb-4">
@@ -585,7 +590,7 @@ const filteredData = data.filter((row) => {
           </tr>
         </thead>
         <tbody>
-          {randomSampleData.map((data, index) => (
+          {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100">
               <td className="border px-4 py-2">{data.samplePlanId}</td>
               <td className="border px-4 py-2">{data.sampleId}</td>
@@ -672,6 +677,14 @@ const filteredData = data.filter((row) => {
           data={editModalData}
           onSave={handleEditSave}
         />
+      )}
+
+      {isAddModalOpen &&(
+       <SamplePlanningAndAnalytics
+       open={isAddModalOpen}
+       handleClose={()=>setIsAddModalOpen(false)}
+       addRow={addRow}
+       />
       )}
     </div>
   );

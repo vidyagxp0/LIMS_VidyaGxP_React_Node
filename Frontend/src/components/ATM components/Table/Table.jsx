@@ -74,7 +74,7 @@ const Table = ({
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-[#6187d4] text-white">
             <tr>
-              {columns.map((column) => (
+              {columns?.map((column) => (
                 <th
                   key={column.accessor}
                   scope="col"
@@ -86,9 +86,9 @@ const Table = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {currentData.map((row, rowIndex) => (
+            {currentData?.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                {columns.map((column) => (
+                {columns?.map((column) => (
                   <td
                     key={column.accessor}
                     className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
