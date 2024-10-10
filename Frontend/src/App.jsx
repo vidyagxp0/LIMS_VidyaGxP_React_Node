@@ -519,7 +519,7 @@ function App() {
           <Route path="/admin-login" element={<AdminPanel show={checkLoggedIn} />} />
           <Route path="" element={<AdminMainPanel />}>
             <Route
-              path="/admin-panel/userManagement"
+              path="/admin-login/userManagement"
               element={<UserMgnt setToast={checkLoggedIn} show={isLoggedIn} />}
             />
             <Route path="/admin-login/site-management" element={<SiteManagement />} />
