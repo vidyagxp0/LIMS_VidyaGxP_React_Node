@@ -4,7 +4,6 @@ import { Division } from "../models/division.model.js";
 import { Department } from "../models/department.model.js";
 import {
   findLIMSById,
-  createNewLIMS,
   updateLIMSField,
   addLIMSField,
 } from "../service/limsService.js";
@@ -168,6 +167,9 @@ const withTransaction = async (callback) => {
 };
 
 export const manageLIMS = async (req, res) => {
+  const filename =
+    req?.files?.map((file) => file?.filename)[0] || req?.filename;
+
   const { fieldName, sno, add, update } = req.params;
   try {
     await withTransaction(async (t) => {
@@ -183,10 +185,11 @@ export const manageLIMS = async (req, res) => {
           existingLIMS,
           fieldName,
           req.body,
+          filename,
           t
         );
         return res.status(200).json({
-          message: `${fieldName} updated successfully`,
+          message: `${fieldName} added successfully`,
           updatedLIMS,
         });
       }
@@ -196,8 +199,10 @@ export const manageLIMS = async (req, res) => {
           fieldName,
           sno,
           req.body,
+          filename,
           t
         );
+
         return res.status(200).json({
           message: `${fieldName} updated successfully`,
           updatedLIMS,
@@ -288,11 +293,11 @@ export const deleteStorageConditionById = async (req, res) => {
         .json({ error: `Field ${fieldName} is not valid or not an array` });
     }
 
-    const conditionIndex = field.findIndex((item) => item["s.no"] == sno);
+    const conditionIndex = field.findIndex((item) => item["sno"] == sno);
     if (conditionIndex === -1) {
       return res
         .status(404)
-        .json({ error: `${fieldName} with s.no ${sno} not found` });
+        .json({ error: `${fieldName} with sno ${sno} not found` });
     }
 
     field.splice(conditionIndex, 1);

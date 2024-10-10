@@ -7,9 +7,9 @@ const __dirname = dirname(__filename);
 const imageBaseUrl = "../public/images/";
 const imageFilePath = join(__dirname, imageBaseUrl);
 const imageFullfilePath = join(imageFilePath, "/");
-// const documentBaseUrl = "../public/documents/";
-// const documentFilePath = join(__dirname, documentBaseUrl);
-// const documentFullfilePath = join(documentFilePath, "/");
+const documentBaseUrl = "../public/documents/";
+const documentFilePath = join(__dirname, documentBaseUrl);
+const documentFullfilePath = join(documentFilePath, "/");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
     ) {
       cb(null, imageFullfilePath);
     } else {
-      cb(null, imageFullfilePath);
+      cb(null, documentFullfilePath);
     }
   },
   filename: function (req, file, cb) {
