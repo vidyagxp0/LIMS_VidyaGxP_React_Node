@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AtmTab from "../../components/ATM components/AtmTab/AtmTab";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -9,6 +9,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import ImportModal from "../Modals/importModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import ControlSampleModal from "../Modals/ControlSampleModal";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+
+const storedData = JSON.parse(localStorage.getItem("controlSample")) || [];
 
 const initialData = [
   {
@@ -95,16 +107,19 @@ const initialData = [
     remarks: "Requires follow-up",
     status: "Active",
   },
+  ...storedData // Add the data from localStorage (if any) at the end
 ];
+
 
 const ControlSample = () => {
   const [data, setData] = useState(initialData);
-  const [activeTab, setActiveTab] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const filteredData = data.filter((row) => {
     return (
@@ -124,6 +139,13 @@ const ControlSample = () => {
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
+  };
+  const openControlModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeControlModal = () => {
+    setIsModalOpen(false);
   };
   const columns = [
     { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
@@ -158,7 +180,7 @@ const ControlSample = () => {
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" onClick={() => openEditModal(row)} />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)} />
         </>
       ),
@@ -188,13 +210,6 @@ const ControlSample = () => {
     setIsViewModalOpen(true);
   };
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-  };
-
-  const closeEditModal = () => {
-    setEditModalData(null);
-  };
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -230,6 +245,334 @@ const ControlSample = () => {
     setData(updatedData);
     setIsModalsOpen(false); // Close the modal after data upload
   };
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  const handleModalSubmit = (newControlSample) => {
+    console.log(newControlSample,"newControlSample")
+    const currentDate = new Date().toISOString().split("T")[0];
+    if (editModalData) {
+      const updatedList = data.map((item) =>{
+        console.log(item , "ittteeemmm")
+        return (
+          item.productName === newControlSample.productName ? newControlSample : item
+        )
+      }
+       
+      );
+      setData(updatedList);
+    } else {
+      setData((prevData) => [
+        ...prevData,
+        {
+          checkbox: false,
+          sampleId: newControlSample?.sampleId,
+          productName: newControlSample.productName,
+          productCode: newControlSample.productCode,
+          sampleType: newControlSample.sampleType,
+          market: newControlSample.market,
+          arNo: newControlSample.arNo,
+          batchNo: newControlSample.batchNo,
+          mfgDate: newControlSample.mfgDate,
+          expiryDate: newControlSample.expiryDate,
+          quantity: newControlSample.quantity,
+          quantityWithdrawn: newControlSample.quantityWithdrawn,
+          currentQuantity: newControlSample.currentQuantity,
+          uom: newControlSample.uom,
+          storageLocation: newControlSample.storageLocation,
+          storageCondition: newControlSample.storageCondition,
+          visualInspectionScheduledOn: newControlSample.visualInspectionScheduledOn,
+          visualInspectionPerformedBy: newControlSample.visualInspectionPerformedBy,
+          abnormalObservation: newControlSample.abnormalObservation,
+          observationDate: newControlSample.observationDate,
+          destructionDueOn: newControlSample.destructionDueOn,
+          destroyedBy: newControlSample.destroyedBy,
+          neutralizingAgent: newControlSample.neutralizingAgent,
+          destructionDate: newControlSample.destructionDate,
+          remarks: newControlSample.remarks,
+          status: "Active"
+        },
+      ]);
+    }
+    closeControlModal();
+  };
+
+
+
+  const handleEditSave = (updatedData) => {
+    console.log(updatedData,"updatedData")
+    const updatedList = data.map((item) =>
+      item.productName === updatedData.productName ? updatedData : item
+    );
+    setData(updatedList);
+    closeEditModal();
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Add Instrument</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p>Edit information and register new Control Sample</p>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sample Id"
+            placeholder="Sample Id"
+            value={formData?.sampleId || ""}
+            onChange={handleChange}
+            name="sampleId"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product Name"
+            placeholder="Product Name"
+            value={formData?.productName || ""}
+            onChange={handleChange}
+            name="productName"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product Code"
+            placeholder="Product Code"
+            value={formData?.productCode || ""}
+            onChange={handleChange}
+            name="productCode"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sample Type"
+            placeholder="Sample Type"
+            value={formData?.sampleType || ""}
+            onChange={handleChange}
+            name="sampleType"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Market"
+            placeholder="Market"
+            value={formData?.market || ""}
+            onChange={handleChange}
+            name="market"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Batch No"
+            placeholder="Batch No"
+            value={formData?.batchNo || ""}
+            onChange={handleChange}
+            name="batchNo"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="AR No"
+            placeholder="AR No"
+            value={formData?.arNo || ""}
+            onChange={handleChange}
+            name="arNo"
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Mfg Date"
+            placeholder="Mfg Date"
+            value={formData?.mfgDate || ""}
+            onChange={handleChange}
+            name="mfgDate"
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Expiry Date"
+            placeholder="Expiry Date"
+            value={formData?.expiryDate || ""}
+            onChange={handleChange}
+            name="expiryDate"
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Quantity"
+            placeholder="Quantity"
+            value={formData?.quantity || ""}
+            onChange={handleChange}
+            name="quantity"
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Quantity Withdrawn"
+            placeholder="Quantity Withdrawn"
+            value={formData?.quantityWithdrawn || ""}
+            onChange={handleChange}
+            name="quantityWithdrawn"
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Current Quantity"
+            placeholder="Current Quantity"
+            value={formData?.currentQuantity || ""}
+            onChange={handleChange}
+            name="currentQuantity"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="UOM"
+            placeholder="UOM"
+            value={formData?.uom || ""}
+            onChange={handleChange}
+            name="uom"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Storage Location"
+            placeholder="Storage Location"
+            value={formData?.storageLocation || ""}
+            onChange={handleChange}
+            name="storageLocation"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Storage Condition"
+            placeholder="Storage Condition"
+            value={formData?.storageCondition || ""}
+            onChange={handleChange}
+            name="storageCondition"
+          />
+            <CFormInput
+            className="mb-3"
+            type="date"
+            label="Visual Inspection Scheduled On"
+            placeholder="Visual Inspection Scheduled On"
+            value={formData?.visualInspectionScheduledOn || ""}
+            onChange={handleChange}
+            name="visualInspectionScheduledOn"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Visual Inspection Performed By"
+            placeholder="Visual Inspection Performed By"
+            value={formData?.visualInspectionPerformedBy || ""}
+            onChange={handleChange}
+            name="visualInspectionPerformedBy"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Abnormal Observation"
+            placeholder="Abnormal Observation"
+            value={formData?.abnormalObservation || ""}
+            onChange={handleChange}
+            name="abnormalObservation"
+          />
+            <CFormInput
+            className="mb-3"
+            type="date"
+            label="Observation Date"
+            placeholder="Observation Date"
+            value={formData?.observationDate || ""}
+            onChange={handleChange}
+            name="observationDate"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Destruction Due On"
+            placeholder="Destruction Due On"
+            value={formData?.destructionDueOn || ""}
+            onChange={handleChange}
+            name="destructionDueOn"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Destroyed By"
+            placeholder="Destroyed By"
+            value={formData?.destroyedBy || ""}
+            onChange={handleChange}
+            name="destroyedBy"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Neutralizing Agent"
+            placeholder="Neutralizing Agent"
+            value={formData?.neutralizingAgent || ""}
+            onChange={handleChange}
+            name="neutralizingAgent"
+          />
+            <CFormInput
+            className="mb-3"
+            type="date"
+            label="Destruction Date"
+            placeholder="Destruction Date"
+            value={formData?.destructionDate || ""}
+            onChange={handleChange}
+            name="destructionDate"
+          />
+            <CFormInput
+            className="mb-3"
+            type="text"
+            label="Remarks"
+            placeholder="Remarks"
+            value={formData?.remarks || ""}
+            onChange={handleChange}
+            name="remarks"
+          />
+            
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Close
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Save changes
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
 
   return (
     <>
@@ -260,7 +603,7 @@ const ControlSample = () => {
               fileName="Storage_Location.pdf"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Control Sample" color="blue" onClick={openModal} />
+            <ATMButton text="Add Control Sample" color="blue" onClick={openControlModal} />
           </div>
         </div>
         <Table
@@ -281,7 +624,22 @@ const ControlSample = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
+
+      <ControlSampleModal 
+       visible={isModalOpen}
+        closeModal={closeControlModal}
+        handleSubmit={handleModalSubmit}/>
+
+{editModalOpen && (
+  <EditModal
+    visible={editModalOpen}
+    closeModal={closeEditModal}
+    data={editModalData}
+    onSave={handleEditSave}
+  />
+)}
     </>
+
   );
 };
 
