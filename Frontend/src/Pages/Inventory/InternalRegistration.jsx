@@ -27,6 +27,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ReusableModal from "../Modals/ResusableModal";
 
 const initialData = JSON.parse(localStorage.getItem("internalRegistration")) || [];
@@ -644,6 +645,8 @@ const InternalRegistration = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Working Standard Internal</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
@@ -740,7 +743,7 @@ const InternalRegistration = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 

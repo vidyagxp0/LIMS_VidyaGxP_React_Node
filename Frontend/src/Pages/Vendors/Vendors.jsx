@@ -22,6 +22,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -332,6 +333,8 @@ const Vendors = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Approved Vendors</h1>
 
@@ -398,7 +401,7 @@ const Vendors = () => {
           onSave={handleEditSave}
         />
       )}
-    </div>
+    </div></>
   );
 };
 export default Vendors;

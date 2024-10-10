@@ -12,6 +12,7 @@ import WorkFlowModal from "../Modals/WorkFlowModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -166,6 +167,8 @@ const WorkFlow = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Work Flows</h1>
 
@@ -211,7 +214,7 @@ const WorkFlow = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-    </div>
+    </div></>
   );
 };
 export default WorkFlow;

@@ -15,6 +15,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import QualificationModal from "../Modals/QualificationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -210,8 +211,10 @@ const Qualification = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Column Assignment</h1>
+      <h1 className="text-2xl font-bold mb-4">Column Qualification</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
         <Card
           title="DROPPED"
@@ -286,7 +289,7 @@ const Qualification = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

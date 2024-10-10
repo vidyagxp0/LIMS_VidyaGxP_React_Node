@@ -14,6 +14,7 @@ import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ProcessingSystemModal from "../Modals/ProcessingSystemModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = [
   {
@@ -208,6 +209,8 @@ const ProcessingSystem = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Processing System</h1>
 
@@ -254,7 +257,7 @@ const ProcessingSystem = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 

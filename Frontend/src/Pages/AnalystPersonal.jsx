@@ -31,8 +31,10 @@ const AnalystPersonal = () => {
   const handleCloseImportModal = () => setIsImportModalOpen(false);
 
   const handleAnalystSubmit = (newAnalyst) => {
-    setData((prevData) => [...prevData, { ...newAnalyst, sno: prevData.length + 1 }]);
-    localStorage.setItem("AnalystPersonal", JSON.stringify([...data, newAnalyst]));
+    const updatedAnalyst = { ...newAnalyst, sno: data.length + 1 };
+    const updatedData = [...data, updatedAnalyst];
+    setData(updatedData);
+    localStorage.setItem("AnalystPersonal", JSON.stringify(updatedData));
     closeModal();
   };
 
@@ -40,6 +42,14 @@ const AnalystPersonal = () => {
     const updatedData = excelData.map((item, index) => ({
       ...item,
       sno: data.length + index + 1,
+      // Fill in missing data for last 7 rows
+      ApprovalDate: item.ApprovalDate || "",
+      ApproversName: item.ApproversName || "",
+      ApproversSignature: item.ApproversSignature || "",
+      CommentsNotes: item.CommentsNotes || "",
+      ModificationDate: item.ModificationDate || "",
+      ModifiedBy: item.ModifiedBy || "",
+      ChangeDescription: item.ChangeDescription || "",
     }));
     const newData = [...data, ...updatedData];
     setData(newData);

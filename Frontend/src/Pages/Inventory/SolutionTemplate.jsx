@@ -13,6 +13,7 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import SolutionTemplateModal from "../Modals/SolutionTemplateModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
 const initialData = [
   {
@@ -276,6 +277,8 @@ const SolutionTemplate = () => {
   };
 
   return (
+    <>
+    <LaunchQMS/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Solution Template</h1>
       <div className="grid grid-cols-5 gap-4 mb-4">
@@ -361,7 +364,7 @@ const SolutionTemplate = () => {
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
-    </div>
+    </div></>
   );
 };
 
