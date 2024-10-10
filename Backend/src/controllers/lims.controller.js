@@ -293,11 +293,11 @@ export const deleteStorageConditionById = async (req, res) => {
         .json({ error: `Field ${fieldName} is not valid or not an array` });
     }
 
-    const conditionIndex = field.findIndex((item) => item["s.no"] == sno);
+    const conditionIndex = field.findIndex((item) => item["sno"] == sno);
     if (conditionIndex === -1) {
       return res
         .status(404)
-        .json({ error: `${fieldName} with s.no ${sno} not found` });
+        .json({ error: `${fieldName} with sno ${sno} not found` });
     }
 
     field.splice(conditionIndex, 1);

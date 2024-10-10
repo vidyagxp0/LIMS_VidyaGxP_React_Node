@@ -22,11 +22,11 @@ export const updateLIMSField = async (
     throw new Error(`${fieldName} is not an array or does not exist`);
   }
   const fieldIndex = fieldArray.findIndex(
-    (item) => item && item["s.no"] == sno
+    (item) => item && item["sno"] == sno
   );
 
   if (fieldIndex === -1) {
-    throw new Error(`${fieldName} with s.no ${sno} not found`);
+    throw new Error(`${fieldName} with sno ${sno} not found`);
   }
 
   const existingItem = fieldArray[fieldIndex];
