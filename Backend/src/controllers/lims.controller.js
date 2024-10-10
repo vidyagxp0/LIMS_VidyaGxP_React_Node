@@ -4,6 +4,7 @@ import { Division } from "../models/division.model.js";
 import { Department } from "../models/department.model.js";
 import {
   findLIMSById,
+  createNewLIMS,
   updateLIMSField,
   addLIMSField,
 } from "../service/limsService.js";
@@ -167,10 +168,8 @@ const withTransaction = async (callback) => {
 };
 
 export const manageLIMS = async (req, res) => {
-  const filename =
-    req?.files?.map((file) => file?.filename)[0] || req?.filename;
-
   const { fieldName, sno, add, update } = req.params;
+
   try {
     await withTransaction(async (t) => {
       const existingLIMS = await findLIMSById("1");
@@ -180,29 +179,28 @@ export const manageLIMS = async (req, res) => {
       if (!commonFeilds.includes(fieldName)) {
         return res.status(400).json({ error: "Invalid field name" });
       }
-      if (add === "add") {
+      if (add == "add") {
         const updatedLIMS = await addLIMSField(
           existingLIMS,
           fieldName,
           req.body,
-          filename,
           t
         );
         return res.status(200).json({
-          message: `${fieldName} added successfully`,
+          message: `${fieldName} updated successfully`,
           updatedLIMS,
         });
       }
-      if (update === "update") {
+      if (update == "update") {
+
         const updatedLIMS = await updateLIMSField(
           existingLIMS,
           fieldName,
           sno,
           req.body,
-          filename,
           t
         );
-
+        
         return res.status(200).json({
           message: `${fieldName} updated successfully`,
           updatedLIMS,

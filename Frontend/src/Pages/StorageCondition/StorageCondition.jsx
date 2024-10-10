@@ -366,7 +366,7 @@ function StorageLocation() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = async (updatedData, sno) => {
+  const handleEditSave = async (updatedData) => {
     try {
       // API call to update storage condition by sno
       const response = await axios.put(
