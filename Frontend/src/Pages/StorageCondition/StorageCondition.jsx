@@ -240,8 +240,15 @@ function StorageCondition() {
     : [];
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      // If the modal is already open for the same item, close it
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      // Otherwise, open it with the new data
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
