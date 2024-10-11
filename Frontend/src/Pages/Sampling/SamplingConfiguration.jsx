@@ -9,6 +9,7 @@ import Table from '../../components/ATM components/Table/Table';
 import ImportModal from '../Modals/importModal';
 import PDFDownload from '../PDFComponent/PDFDownload ';
 import LaunchQMS from '../../components/ReusableButtons/LaunchQMS';
+import ReusableModal from '../Modals/ResusableModal';
 
 const initialData = [
   {
@@ -46,6 +47,7 @@ const SamplingConfiguration = () => {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null);
+  const [isViewModalOpen,setIsViewModalOpen]= useState(false);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -68,6 +70,7 @@ const SamplingConfiguration = () => {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
   const handleCheckboxChange = (index) => {
@@ -75,6 +78,18 @@ const SamplingConfiguration = () => {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
+
+  const fields=[
+    { label: "SrNo.", key: "sno" },
+    { label: "Sampling ID", key: "samplingID" },
+    { label: "Specification ID", key: "specificationID" },
+    { label: "Sample Type", key: "sampleType" },
+    { label: "Product Name", key: "productName" },
+    { label: "Test Plan", key: "testPlan" },
+    { label: "Sample Template", key: "sampleTemplate" },
+    { label: "Sample Rule", key: "sampleRule" },
+    { label: "Status", key: "status" },
+  ]
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -98,7 +113,7 @@ const SamplingConfiguration = () => {
             icon={faEye}
             className="mr-2 cursor-pointer"
             onClick={() => {
-              onViewDetails(row), navigate("/testResultsDetails");
+              onViewDetails(row)
             }}
           />
           <FontAwesomeIcon
@@ -143,6 +158,9 @@ const SamplingConfiguration = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "Avtive" ? "Inactive" : "Active";
@@ -158,6 +176,12 @@ const SamplingConfiguration = () => {
     setLastStatus(nextStatus);
     setIsModalOpen(false);
 
+  };
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
 
@@ -228,20 +252,13 @@ const SamplingConfiguration = () => {
             ]}
           />
 
-          <CFormSelect
+          <CFormInput
             className='mb-3'
             type="text"
             label="Product/Material Name"
             placeholder="Product/Material Name"
             value={samplingConfigurationData.productName}
             onChange={(e) => setSamplingConfigurationData({ ...samplingConfigurationData, productName: e.target.value })}
-            options={[
-              "Select...",
-              { label: "TP-010110", value: "TP-010110" },
-              { label: "TP-010111", value: "TP-010111" },
-              { label: "TP-010112", value: "TP-010112" },
-              { label: "TP-010113", value: "TP-010113" }
-            ]}
           />
           <CFormSelect
             className='mb-3'
@@ -307,7 +324,7 @@ const SamplingConfiguration = () => {
             label="Sampling Test"
             options={[
               "Select...",
-              { label: "No Options", value: "No Options" },
+              { label: "Test", value: "Test" },
 
             ]}
             value={samplingConfigurationData.samplingTest}
@@ -568,6 +585,16 @@ const SamplingConfiguration = () => {
         />
       </div>
 
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Sample Configuration"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
       {isModalOpen && (
         <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
       )}

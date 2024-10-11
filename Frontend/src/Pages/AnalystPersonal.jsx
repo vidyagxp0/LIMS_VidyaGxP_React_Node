@@ -34,13 +34,13 @@ const AnalystPersonal = () => {
           sno: index + 1,
         }));
         setData(updatedData);
+        console.log(updatedData);
       } catch (error) {
         console.error("Error fetching analysts:", error);
-        alert("Failed to fetch data. Please try again later."); // User feedback on error
       }
     };
     fetchData();
-  }, []); // No additional dependencies needed for initial data fetch
+  }, []);
 
   const filteredData = data.filter((row) => {
     const fullNameLower = row.FullName?.toLowerCase() || "";
@@ -131,7 +131,6 @@ const AnalystPersonal = () => {
       closeModal();
     } catch (error) {
       console.error("Error deleting analyst:", error);
-      alert("Failed to delete analyst. Please try again."); // User feedback on error
     }
   };
 

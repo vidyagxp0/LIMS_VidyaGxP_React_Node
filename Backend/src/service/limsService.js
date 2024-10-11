@@ -66,6 +66,8 @@ export const addLIMSField = async (
   fieldArray.push({ ...newData, filename: getFileUrl(filename) });
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
+  // console.log(fieldArray,"fieldArray");
+  
 
   return await limsRecord.save({ transaction });
 };
