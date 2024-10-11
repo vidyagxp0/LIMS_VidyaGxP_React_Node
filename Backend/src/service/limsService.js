@@ -17,10 +17,7 @@ export const updateLIMSField = async (
   filename,
   transaction
 ) => {
-  console.log(updateData,"llllllllllllll");
   const fieldArray = limsRecord[fieldName];
-// console.log(fieldArray,"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-
   if (!Array.isArray(fieldArray)) {
     throw new Error(`${fieldName} is not an array or does not exist`);
   }
@@ -45,7 +42,7 @@ export const updateLIMSField = async (
 
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
-
+  
   return await limsRecord.save({ transaction });
 };
 
@@ -63,10 +60,16 @@ export const addLIMSField = async (
     fieldArray = [];
   }
 
-  fieldArray.push({ ...newData, filename: getFileUrl(filename) });
+  // Generate a unique sno by finding the highest existing sno and adding 1
+  let newSno = 1;
+  if (fieldArray.length > 0) {
+    const maxSno = Math.max(...fieldArray.map((item) => item.sno || 0));
+    newSno = maxSno + 1;
+  }
+
+  fieldArray.push({ ...newData, sno: newSno, filename: getFileUrl(filename) });
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
-  console.log(fieldArray,"fieldArrayfieldArray");
 
   return await limsRecord.save({ transaction });
 };

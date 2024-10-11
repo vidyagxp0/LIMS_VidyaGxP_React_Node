@@ -10,7 +10,6 @@ import {
 } from "../service/limsService.js";
 
 const commonFeilds = [
-  // "approval", //list
   "specification",
   "storageCondition",
   "storageLocation",
@@ -24,12 +23,12 @@ const commonFeilds = [
   "users",
   "sL",
   "sLSamplePA",
-  // "sLInvestigationL1",//list
-  // "sLInvestigationL2",//list
+  "sLInvestigationL1",
+  "sLInvestigationL2",
   "sMStorageCondition",
   "sMStandardProtocol",
   "sMStorageChamber",
-  // "sMChamberConditionMapping",//list
+  "sMChamberConditionMapping",
   "sMStabilityProtocol",
   "sMSampleStorage",
   "sMCOATemplate",
@@ -38,7 +37,7 @@ const commonFeilds = [
   "sMSummaryReportHeader",
   "sMSampleAcceptanceTemplate",
   "sMSampleLogin",
-  // "smSampleAcceptance",//list
+  "smSampleAcceptance",
   "mmasterProduct",
   "mSampleType",
   "mSpecificationType",
@@ -46,7 +45,7 @@ const commonFeilds = [
   "mStandardTestProcedure",
   "mTestCategories",
   "mTestPlan",
-  // "mMyTest",//list
+  "mMyTest",
   "sSamplingConfiguration",
   "sSamplingRule",
   "sESampling",
@@ -109,7 +108,7 @@ const commonFeilds = [
   "iMInstrumentCategory",
   "iMInstrumentModule",
   "iMInstrumentUsage",
-  // "sMStockVerification",//list
+  "sMStockVerification",
   "sMStockOnboarding",
   "sMMaterial",
   "sMInvetory",
@@ -118,14 +117,14 @@ const commonFeilds = [
   "cCalibrationDataSheet",
   "cSampleLoginTemplate",
   "cCalibrationSchedule",
-  // "cCalibrationRecord",//list
+  "cCalibrationRecord",
   "cCalibrationSampleLogin",
-  // "cCalibrationCalendar",
+  "cCalibrationCalendar",
   "rCProblemReporting",
   "rCServiceReporting",
   "rCCoaTemplate",
-  // "rCReleasedCoa",//list
-  // "rCInvestigationCoa",//list
+  "rCReleasedCoa",
+  "rCInvestigationCoa",
   "vendor",
   "client",
   "plant",
@@ -137,7 +136,7 @@ const commonFeilds = [
   "sWorksheet",
   "sWorksheetField",
   "sGroupName",
-  // "sInvestigationTemplate",//list
+  "sInvestigationTemplate",
   "sChemicalCategory",
   "sGrade",
   "sHandlingSymbol",
@@ -168,8 +167,9 @@ const withTransaction = async (callback) => {
 };
 
 export const manageLIMS = async (req, res) => {
+  const filename =
+    req?.files?.map((file) => file?.filename)[0] || req?.filename;
   const { fieldName, sno, add, update } = req.params;
-
   try {
     await withTransaction(async (t) => {
       const existingLIMS = await findLIMSById("1");
@@ -184,6 +184,7 @@ export const manageLIMS = async (req, res) => {
           existingLIMS,
           fieldName,
           req.body,
+          filename,
           t
         );
         return res.status(200).json({
@@ -192,15 +193,15 @@ export const manageLIMS = async (req, res) => {
         });
       }
       if (update == "update") {
-
         const updatedLIMS = await updateLIMSField(
           existingLIMS,
           fieldName,
           sno,
           req.body,
+          filename,
           t
         );
-        
+
         return res.status(200).json({
           message: `${fieldName} updated successfully`,
           updatedLIMS,
