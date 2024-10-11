@@ -23,14 +23,15 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
 
 const fields = [
-  { label: "Storage Name.", key: "name" },
-  { label: "Condition Code", key: "conditionCode" },
-  { label: "Stability Storage Condition", key: "storageCondition" },
-  { label: "Created At", key: "createdAt" },
-  { label: "Attachment", key: "attachment" },
-  { label: "Status", key: "status" },
+  { label: "SrNo.", key: "uniqueId" },
+  { label: "Unique Code", key: "uniqueCode" },
+  { label: "Description", key: "description" },
+  { label: "Number of Ranges", key: "numberofRanges" },
+  { label: "Updated At", key: "updatedAt" },
+  { label: "Status", key: "status" }
 ];
 
 function SamplingRule() {
@@ -484,7 +485,7 @@ function SamplingRule() {
         <>
           {console.log("Rendering EditModal")}
           <EditModal
-            visible={true} // Set this back to the dynamic state once confirmed working
+            visible={Boolean(editModalData)} // Set this back to the dynamic state once confirmed working
             closeModal={closeEditModal}
             data={editModalData}
             onSave={handleEditSave}

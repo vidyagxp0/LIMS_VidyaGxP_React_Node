@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import {
   CButton,
-  CFormInput,
-  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CForm,
+  CFormInput,
+  CFormSelect,
 } from "@coreui/react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import { BASE_URL } from "../../config.json";
 
-const SamplingConfiguration = () => {
+function SamplingConfiguration() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -35,13 +33,13 @@ const SamplingConfiguration = () => {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
+  useEffect(() => {
+    fetchSamplingConfigurations();
+  }, []);
+
   const fetchSamplingConfigurations = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/get-all-lims/sSamplingConfiguration`
-      );
-      console.log(response, "response");
-
+      const response = await axios.get(`${BASE_URL}/get-all-lims/sSamplingConfiguration`);
       const formattedData = response?.data[0]?.samplingConfiguration || [];
       const updatedData = formattedData.map((item, index) => ({
         ...item,
@@ -55,33 +53,29 @@ const SamplingConfiguration = () => {
     }
   };
 
-  useEffect(() => {
-    fetchSamplingConfigurations();
-  }, []);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sSamplingConfiguration/${item.sno}`
+      );
 
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
-
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        toast.success("Sampling configuration deleted successfully");
+      } else {
+        console.error("Failed to delete sampling configuration:", response.data);
+        toast.error("Failed to delete sampling configuration");
+      }
+    } catch (error) {
+      console.error("Error deleting sampling configuration:", error);
+      toast.error("Error deleting sampling configuration");
+    }
   };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
-  };
-
-  const filteredData = data.filter((row) => {
-    return (
-      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+    setData(data.map((row) => ({ ...row, checkbox: checked })));
   };
 
   const handleCheckboxChange = (index) => {
@@ -90,12 +84,33 @@ const SamplingConfiguration = () => {
     setData(newData);
   };
 
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+  };
+
+  const closeViewModal = () => {
+    setViewModalData(null);
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleOpenModals = () => setIsModalsOpen(true);
+  const handleCloseModals = () => setIsModalsOpen(false);
+
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
+      Cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.original.checkbox}
+          onChange={() => handleCheckboxChange(row.index)}
+        />
+      ),
     },
-    { header: "SrNo.", accessor: "sno" },
+    { header: "Sr No.", accessor: "sno" },
     { header: "Sampling ID", accessor: "samplingID" },
     { header: "Specification ID", accessor: "specificationID" },
     { header: "Sample Type", accessor: "sampleType" },
@@ -129,30 +144,22 @@ const SamplingConfiguration = () => {
     },
   ];
 
+  const filteredData = data.filter((row) => {
+    const testPlanLower = row.testPlan?.toLowerCase() || "";
+    return (
+      testPlanLower.includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
+      ...item,
       sno: index + 1,
-      samplingID: item["Sampling ID"] || "",
-      specificationID: item["Specification ID"] || "",
-      sampleType: item["Sample Type"] || "",
-      productName: item["Product Name"] || "",
-      testPlan: item["Test Plan"] || "",
-      sampleTemplate: item["Sample Template"] || "",
-      sampleRule: item["Sample Rule"] || "",
-      status: item["Status"] || "",
+      checkbox: false,
     }));
-
     setData(updatedData);
     setIsModalsOpen(false);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   const addNewSamplingConfiguration = async (newConfiguration) => {
@@ -197,19 +204,11 @@ const SamplingConfiguration = () => {
     setEditModalData(null);
   };
 
-  const handleDelete = async (item) => {
-    try {
-      const response = await axios.delete(
-        `${BASE_URL}/manage-lims/delete/sSamplingConfiguration/${item.sno}`
-      );
-      if (response.status === 200) {
-        toast.success("Sampling configuration deleted successfully");
-        fetchSamplingConfigurations();
-      }
-    } catch (error) {
-      console.error("Error deleting sampling configuration:", error);
-      toast.error("Failed to delete sampling configuration");
-    }
+  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.samplingID === samplingConfiguration.samplingID ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -221,8 +220,6 @@ const SamplingConfiguration = () => {
       testPlan: "",
       sampleTemplate: "",
       sampleRule: "",
-      samplingTest: "",
-      Comment: "",
       status: "Active",
     });
 
@@ -236,157 +233,91 @@ const SamplingConfiguration = () => {
     };
 
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="xl"
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
         <CModalHeader>
           <CModalTitle>Add Sampling Configuration</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Test Plan / Revision No."
-            options={[
-              "Select...",
-              { label: "TP-010110", value: "TP-010110" },
-              { label: "TP-010111", value: "TP-010111" },
-              { label: "TP-010112", value: "TP-010112" },
-              { label: "TP-010113", value: "TP-010113" },
-            ]}
-            name="testPlan"
-            value={formData.testPlan}
-            onChange={handleChange}
-          />
-
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Specification ID"
-            options={[
-              "Select...",
-              { label: "TP-010110", value: "TP-010110" },
-              { label: "TP-010111", value: "TP-010111" },
-              { label: "TP-010112", value: "TP-010112" },
-              { label: "TP-010113", value: "TP-010113" },
-            ]}
-            name="specificationID"
-            value={formData.specificationID}
-            onChange={handleChange}
-          />
-
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Product/Material Name"
-            options={[
-              "Select...",
-              { label: "TP-010110", value: "TP-010110" },
-              { label: "TP-010111", value: "TP-010111" },
-              { label: "TP-010112", value: "TP-010112" },
-              { label: "TP-010113", value: "TP-010113" },
-            ]}
-            name="productName"
-            value={formData.productName}
-            onChange={handleChange}
-          />
-
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Product/Material Code"
-            options={[
-              "Select...",
-              { label: "TP-010110", value: "TP-010110" },
-              { label: "TP-010111", value: "TP-010111" },
-              { label: "TP-010112", value: "TP-010112" },
-              { label: "TP-010113", value: "TP-010113" },
-            ]}
-            name="productMaterialCode"
-            value={formData.productMaterialCode}
-            onChange={handleChange}
-          />
-
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Sample Type"
-            options={[
-              "Select...",
-              { label: "TP-010110", value: "TP-010110" },
-              { label: "TP-010111", value: "TP-010111" },
-              { label: "TP-010112", value: "TP-010112" },
-              { label: "TP-010113", value: "TP-010113" },
-            ]}
-            name="sampleType"
-            value={formData.sampleType}
-            onChange={handleChange}
-          />
-
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Sampling Template"
-            options={[
-              "Select Test Category",
-              { label: "Raw Sampling", value: "Raw Sampling" },
-              { label: "Test Temp1", value: "Test Temp1" },
-              { label: "Test Temp2", value: "Test Temp2" },
-              { label: "Test Temp3", value: "Test Temp3" },
-            ]}
-            name="sampleTemplate"
-            value={formData.sampleTemplate}
-            onChange={handleChange}
-          />
-
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Sampling Rule"
-            options={[
-              "Select Sampling Rule",
-              { label: "C2", value: "C2" },
-              { label: "Raw sample", value: "Raw sample" },
-              { label: "Sample C1", value: "Sample C1" },
-              { label: "Sample C2", value: "Sample C2" },
-            ]}
-            name="sampleRule"
-            value={formData.sampleRule}
-            onChange={handleChange}
-          />
-
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Sampling Test"
-            options={[
-              "Select...",
-              { label: "No Options", value: "No Options" },
-            ]}
-            name="samplingTest"
-            value={formData.samplingTest}
-            onChange={handleChange}
-          />
-
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Comment"
-            placeholder="Comment"
-            name="Comment"
-            value={formData.Comment}
-            onChange={handleChange}
-          />
+          <CForm>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Sampling ID"
+              name="samplingID"
+              value={formData.samplingID}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Specification ID"
+              name="specificationID"
+              value={formData.specificationID}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              label="Sample Type"
+              name="sampleType"
+              value={formData.sampleType}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Type 1", value: "Type 1" },
+                { label: "Type 2", value: "Type 2" },
+                { label: "Type 3", value: "Type 3" },
+              ]}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Product Name"
+              name="productName"
+              value={formData.productName}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Test Plan"
+              name="testPlan"
+              value={formData.testPlan}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              label="Sample Template"
+              name="sampleTemplate"
+              value={formData.sampleTemplate}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Template 1", value: "Template 1" },
+                { label: "Template 2", value: "Template 2" },
+                { label: "Template 3", value: "Template 3" },
+              ]}
+            />
+            <CFormSelect
+              className="mb-3"
+              label="Sample Rule"
+              name="sampleRule"
+              value={formData.sampleRule}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Rule 1", value: "Rule 1" },
+                { label: "Rule 2", value: "Rule 2" },
+                { label: "Rule 3", value: "Rule 3" },
+              ]}
+            />
+          </CForm>
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
+          <CButton color="secondary" onClick={closeModal}>
+            Close
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Submit
+            Save
           </CButton>
         </CModalFooter>
       </CModal>
@@ -395,6 +326,12 @@ const SamplingConfiguration = () => {
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
 
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -406,39 +343,91 @@ const SamplingConfiguration = () => {
     };
 
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="xl"
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
         <CModalHeader>
           <CModalTitle>Edit Sampling Configuration</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Test Plan / Revision No."
-            options={[
-              "Select...",
-              { label: "TP-010110", value: "TP-010110" },
-              { label: "TP-010111", value: "TP-010111" },
-              { label: "TP-010112", value: "TP-010112" },
-              { label: "TP-010113", value: "TP-010113" },
-            ]}
-            name="testPlan"
-            value={formData.testPlan}
-            onChange={handleChange}
-          />
-          {/* Add other form fields here */}
+          <CForm>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Sampling ID"
+              name="samplingID"
+              value={formData.samplingID}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Specification ID"
+              name="specificationID"
+              value={formData.specificationID}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              label="Sample Type"
+              name="sampleType"
+              value={formData.sampleType}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Type 1", value: "Type 1" },
+                { label: "Type 2", value: "Type 2" },
+                { label: "Type 3", value: "Type 3" },
+              ]}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Product Name"
+              name="productName"
+              value={formData.productName}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Test Plan"
+              name="testPlan"
+              value={formData.testPlan}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              label="Sample Template"
+              name="sampleTemplate"
+              value={formData.sampleTemplate}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Template 1", value: "Template 1" },
+                { label: "Template 2", value: "Template 2" },
+                { label: "Template 3", value: "Template 3" },
+              ]}
+            />
+            <CFormSelect
+              className="mb-3"
+              label="Sample Rule"
+              name="sampleRule"
+              value={formData.sampleRule}
+              onChange={handleChange}
+              options={[
+                "Select...",
+                { label: "Rule 1", value: "Rule 1" },
+                { label: "Rule 2", value: "Rule 2" },
+                { label: "Rule 3", value: "Rule 3" },
+              ]}
+            />
+          </CForm>
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
+          <CButton color="secondary" onClick={closeModal}>
+            Close
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Submit
+            Save Changes
           </CButton>
         </CModalFooter>
       </CModal>
@@ -448,7 +437,7 @@ const SamplingConfiguration = () => {
   return (
     <>
       <LaunchQMS />
-      <div className="m-5 mt-3 ">
+      <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Sampling Configuration</h4>
         </div>
@@ -490,6 +479,17 @@ const SamplingConfiguration = () => {
         />
       </div>
 
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action' && field.key !== 'checkbox')}
+          title="Sampling Configuration Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+
       {isModalOpen && (
         <StatusModal
           visible={isModalOpen}
@@ -500,7 +500,7 @@ const SamplingConfiguration = () => {
 
       {isModalsOpen && (
         <ImportModal
-          initialData={data}
+          initialData={filteredData}
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
@@ -518,6 +518,6 @@ const SamplingConfiguration = () => {
       )}
     </>
   );
-};
+}
 
 export default SamplingConfiguration;
