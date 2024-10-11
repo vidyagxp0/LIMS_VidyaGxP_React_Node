@@ -14,7 +14,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-const AnalystPersonalModal = ({ visible, closeModal, addRow=[] }) => {
+const AnalystPersonalModal = ({ visible, closeModal, handleSubmit,data}) => {
   const [analystData, setAnalystData] = useState({
     AnalystID: "",
     FullName: "",

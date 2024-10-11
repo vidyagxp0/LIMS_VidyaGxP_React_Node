@@ -30,6 +30,7 @@ const AnalystPersonal = () => {
 
         const formattedData = response?.data[0]?.analystPersonal || [];
         const updatedData = formattedData.map((item, index) => ({
+          sno:item.uniqueId,
           ...item,
         }));
         setData(updatedData);
@@ -145,24 +146,36 @@ const AnalystPersonal = () => {
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
-    openModal();
+    setIsModalOpen(true);
   };
 
-  const handleModalSubmit = (newAnalyst) => {
-    if (editModalData) {
-      // Update existing analyst
-      setData(data.map((item) =>
-        item.AnalystID === newAnalyst.AnalystID ? newAnalyst : item
-      ));
-    } else {
-      // Add new analyst
-      setData((prevData) => [
-        ...prevData,
-        {...newAnalyst }, // Ensure unique sno
-      ]);
+  const handleModalSubmit = async (updatedAnalyst) => {
+    try {
+      if (editModalData) {
+        // Edit existing analyst
+        const response = await axios.put(
+          `${BASE_URL}/manage-lims/update/analystPersonal/${updatedAnalyst.sno}`,
+          updatedAnalyst
+        );
+        if (response.status === 200) {
+          setData(prevData =>
+            prevData.map(item => item.sno === updatedAnalyst.sno ? updatedAnalyst : item)
+          );
+          toast.success("Analyst updated successfully!");
+        } else {
+          toast.error("Failed to update analyst.");
+        }
+      } else {
+        // Add new analyst
+        setData(prevData => [...prevData, updatedAnalyst]);
+        toast.success("Analyst added successfully!");
+      }
+      closeModal();
+      setEditModalData(null);
+    } catch (error) {
+      console.error("Error updating analyst:", error);
+      toast.error("Error updating analyst: " + (error.response?.data?.message || error.message));
     }
-
-    closeModal();
   };
 
   return (
@@ -209,7 +222,6 @@ const AnalystPersonal = () => {
         />
       )}
 
-      {/* Modal for adding/editing analysts */}
       <AnalystPersonalModal
         visible={isModalOpen}
         closeModal={closeModal}

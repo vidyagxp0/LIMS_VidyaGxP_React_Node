@@ -78,7 +78,6 @@ export const addLIMSField = async (
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
   console.log(fieldArray,"fieldArray");
-  
 
   await limsRecord.save({ transaction });
   return newEntry;
