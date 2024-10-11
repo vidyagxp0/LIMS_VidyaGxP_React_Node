@@ -29,32 +29,9 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
+import axios from "axios";
 
-const staticData = [
-  {
-    sno: 1,
-    productName: "Product 1",
-    SpecificationID: "Spec 1",
-    testName: "Test 1",
-    testCode: "TC 1",
-    method: "Method 1",
-    category: "Category 1",
-    testType: "Type 1",
-    status: "INITIATED",
-  },
 
-  {
-    sno: 2,
-    productName: "Product 2",
-    SpecificationID: "Spec 2",
-    testName: "Test 2",
-    testCode: "TC 2",
-    method: "Method 2",
-    category: "Category 2",
-    testType: "Type ",
-    status: "INITIATED",
-  },
-];
 
 const initialData = JSON.parse(localStorage.getItem("testregistration")) || "";
 
@@ -81,17 +58,31 @@ function Testregistration() {
   const [editModalData, setEditModalData] = useState(null);
 
   // Combine static data with dynamic data from local storage
-  const [data, setData] = useState(() => {
-    return [...staticData, ...initialData]; // Merge static data with local storage data
-  });
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Store dynamic data back to local storage
-    localStorage.setItem(
-      "testregistration",
-      JSON.stringify(data.filter((row) => !staticData.includes(row)))
-    );
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/mTestCategories`
+        );
+        const fetchedData = response?.data[0]?.mTestCategories || [];
+
+        const updatedData = fetchedData.map((item, index) => ({
+          ...item,
+          sno: item?.sno || index + 1,
+        }));
+
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -106,18 +97,19 @@ function Testregistration() {
   };
 
   console.log("Data:", data);
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        console.log("Row:", row); // Log each row to see its structure
-        const productName = row.productName || "";
-        return (
-          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
-        );
-      })
-    : [];
-  // Fallback to an empty array if data is not an array
+  const filteredData = data
+    .filter((row) => {
+      return (
+        row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (statusFilter === "All" || row.status === statusFilter)
+      );
+    })
+    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
 
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
@@ -232,21 +224,37 @@ function Testregistration() {
       }
     };
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
+      // const currentDate = new Date().toISOString().split("T")[0];
       const newCondition = {
-        SpecificationID: SpecificationID,
-        productName: productName,
-        testName: testName,
-        testCode: testCode,
-        method: method,
-        category: category,
-        testType: testType,
+        SpecificationID:SpecificationID,
+        productName:productName,
+        testName:testName,
+        testCode:testCode,
+        method:method,
+        category:category,
+        testType:testType,
+        status: "Active",
         action: [],
       };
-      closeModal();
-      onAdd(newCondition);
-    };
 
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/manage-lims/add/mTestCategories",
+          newCondition
+        );
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("Product added successfully:", response.data);
+          closeModal();
+          onAdd(newCondition);
+        } else {
+          console.error("Failed to add product:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error adding product:", error);
+      }
+    };
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
@@ -510,6 +518,7 @@ function Testregistration() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
+          onAdd={onAdd}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
