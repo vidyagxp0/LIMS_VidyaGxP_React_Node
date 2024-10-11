@@ -13,22 +13,11 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-import {
-  CButton,
-  CForm,
-  CFormCheck,
-  CFormInput,
-  CFormLabel,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-} from "@coreui/react";
+import {CButton,CForm,CFormCheck,CFormInput,CFormLabel,CFormSelect,CModal,CModalBody,CModalFooter,CModalHeader,CModalTitle,} from "@coreui/react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ReusableModal from "../Modals/ResusableModal";
+import axios from "axios";
 
 const initialData = JSON.parse(localStorage.getItem("internalRegistration")) || [];
 
@@ -53,8 +42,28 @@ const InternalRegistration = () => {
 
 
   useEffect(() => {
-    localStorage.setItem("internalRegistration", JSON.stringify(data));
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/iWSInternalRegistration`
+        );
+        const fetchData = response?.data[0]?.iWSInternalRegistration || [];
+        const updatedData = fetchData?.map((item, index) => ({
+          ...item,
+          sno: index + 1,
+        }));
+        setData(updatedData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  
+  const addRow = (newRow) => {
+    setData([...data, newRow]);
+  };
 
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -482,9 +491,7 @@ const InternalRegistration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row?.additionalPuritiesInformation
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) &&
+      row?.additionalPuritiesInformation?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -616,7 +623,6 @@ const InternalRegistration = () => {
     { label: "Status", key: "status" }
     
   ];
-  a
 
   const handleStatusUpdate = (internalReg, newStatus) => {
     setRows((prevRows) =>
@@ -714,6 +720,7 @@ const InternalRegistration = () => {
         visible={isModalOpen}
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
+        addRow={addRow}
       />
       
       {isModalsOpen && (
