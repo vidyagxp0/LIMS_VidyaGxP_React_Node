@@ -4,7 +4,6 @@ import { Division } from "../models/division.model.js";
 import { Department } from "../models/department.model.js";
 import {
   findLIMSById,
-  createNewLIMS,
   updateLIMSField,
   addLIMSField,
 } from "../service/limsService.js";
@@ -180,7 +179,7 @@ export const manageLIMS = async (req, res) => {
         return res.status(400).json({ error: "Invalid field name" });
       }
       if (add == "add") {
-        const updatedLIMS = await addLIMSField(
+        const addLIMS = await addLIMSField(
           existingLIMS,
           fieldName,
           req.body,
@@ -188,8 +187,8 @@ export const manageLIMS = async (req, res) => {
           t
         );
         return res.status(200).json({
-          message: `${fieldName} updated successfully`,
-          updatedLIMS,
+          message: `${fieldName} added successfully`,
+          addLIMS,
         });
       }
       if (update == "update") {
