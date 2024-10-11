@@ -26,6 +26,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
 
 const initialData = [
   {
@@ -61,10 +62,10 @@ const initialData = [
 ];
 
 const fields = [
-  { header: "Storage Code", accessor: "storageCode" },
-  { header: "Storage Name", accessor: "storageName" },
-  { header: "attachment", accessor: "attachment" },
-  { header: "Status", accessor: "status" },
+  { label: "Storage Code", key: "storageCode" },
+  { label: "Storage Name", key: "storageName" },
+  { label: "attachment", key: "attachment" },
+  { label: "Status", key: "status" },
 ];
 
 function StorageCondition() {
@@ -88,20 +89,19 @@ function StorageCondition() {
       );
       console.log("API Response:", response.data);
 
-      const formattedData = response.data.flatMap((item, index) => {
+      const formattedData = response.data.flatMap((item) => {
         return (
-          item.storageCondition?.map((condition, i) => ({
+          item.storageLocation?.map((location) => ({
             checkbox: false,
-            sno: condition.uniqueId,
-            storageName: condition.storageName || "No Name",
-            StorageCode: condition.StorageCode || "No Code",
-            attachment: condition.attachment || "No Attachment",
-            status: condition.status || "Active",
+            sno: location.uniqueId,
+            storageName: location.storageName || "No Name",
+            storageCode: location.storageCode || "No Code",
+            attachment: location.attachment || "No attachment",
+            status: location.status || "Active",
           })) || []
         );
       });
 
-      // console.log("Formatted Data:", formattedData);
       setData(formattedData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -214,7 +214,7 @@ function StorageCondition() {
       sno: index + 1,
       storageName: item["Storage Name"] || "",
       StorageCode: item["Storage Code"] || "",
-      attachment: item["Attachment"] || "",
+      attachment: item["attachment"] || "",
       status: item["Status"] || "Active",
     }));
 
@@ -291,8 +291,8 @@ function StorageCondition() {
 
           <CFormInput
             type="file"
-            label="Attachment"
-            placeholder="Attachment"
+            label="attachment"
+            placeholder="attachment"
             value={attachment}
             onChange={(e) => setattachment(e.target.value)}
           />
@@ -316,25 +316,26 @@ function StorageCondition() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
+
   const handleEditSave = async (updatedData) => {
     try {
-      // API call to update storage condition by sno
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/storageCondition/${updatedData.sno}`, // Targeting the sno in the URL
-
+        `${BASE_URL}/manage-lims/update/storageLocation/${updatedData.sno}`,
         {
-          name: updatedData.name,
-          conditionCode: updatedData.conditionCode,
-          storageCondition: updatedData.storageCondition,
+          storageName: updatedData.storageName,
+          storageCode: updatedData.storageCode,
         }
       );
-      console.log(response);
-      console.log("Update Response:", response.data);
 
       if (response.status === 200) {
-        // If update is successful, update the state locally
-        const newData = data.map(
-          (item) => (item.sno === updatedData.sno ? updatedData : item) // Match by sno
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno
+            ? {
+                ...item,
+                storageName: updatedData.storageName,
+                storageCode: updatedData.storageCode,
+              }
+            : item
         );
         setData(newData);
         setEditModalData(null); // Close the edit modal
@@ -384,27 +385,19 @@ function StorageCondition() {
         <CModalBody>
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage Name"
             placeholder="Storage Name"
-            value={formData?.name || ""}
+            value={formData?.storageName}
             onChange={handleChange}
-            name="name"
+            name="storageName"
           />
           <CFormInput
             type="text"
-            label="Condition Code"
-            placeholder="Condition Code"
-            value={formData?.conditionCode || ""}
+            label="Storage Code"
+            placeholder="Storage Code"
+            value={formData?.storageCode}
             onChange={handleChange}
-            name="conditionCode"
-          />
-          <CFormInput
-            type="text"
-            label="Name"
-            placeholder="Storage condition"
-            value={formData?.storageCondition || ""}
-            onChange={handleChange}
-            name="storageCondition"
+            name="storageCode"
           />
         </CModalBody>
         <CModalFooter>
@@ -444,7 +437,7 @@ function StorageCondition() {
             <PDFDownload
               columns={columns}
               data={filteredData}
-              fileName="Storage_Condition.pdf"
+              attachment="Storage_Condition.pdf"
               title="Storage Condition Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
@@ -468,7 +461,7 @@ function StorageCondition() {
                   ? row.storageCondition
                   : "No Condition",
               createdAt: row.createdAt || "No Date",
-              attachment: row.attachment || "No Attachment",
+              attachment: row.attachment || "No attachment",
               status: row.status || "Inactive",
             }))}
             onCheckboxChange={handleCheckboxChange}

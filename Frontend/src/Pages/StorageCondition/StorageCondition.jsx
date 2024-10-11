@@ -294,7 +294,9 @@ function StorageCondition() {
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
-      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+      item.storageCondition === storageCondition
+        ? { ...item, status: newStatus }
+        : item
     );
     setData(updatedData);
   };
