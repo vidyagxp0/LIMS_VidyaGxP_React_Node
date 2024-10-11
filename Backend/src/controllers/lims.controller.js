@@ -46,7 +46,7 @@ const commonFeilds = [
   "mStandardTestProcedure",
   "mTestCategories",
   "mTestPlan",
-  // "mMyTest",//list
+  "mMyTest",
   "sSamplingConfiguration",
   "sSamplingRule",
   "sESampling",

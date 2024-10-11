@@ -17,14 +17,15 @@ export const updateLIMSField = async (
   filename,
   transaction
 ) => {
-  console.log(updateData,"llllllllllllll");
+  console.log(updateData, "llllllllllllll");
   const fieldArray = limsRecord[fieldName];
-// console.log(fieldArray,"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
-
+  console.log(fieldArray);
   if (!Array.isArray(fieldArray)) {
     throw new Error(`${fieldName} is not an array or does not exist`);
   }
-  const fieldIndex = fieldArray.findIndex((item) => item && item["sno"] === sno);
+  const fieldIndex = fieldArray.findIndex(
+    (item) => item && item["sno"] === sno
+  );
 
   if (fieldIndex === -1) {
     throw new Error(`${fieldName} with sno ${sno} not found`);
@@ -57,7 +58,7 @@ export const addLIMSField = async (
   transaction
 ) => {
   let fieldArray = limsRecord[fieldName];
-
+  console.log(fieldArray);
   // If the field does not exist or is not an array, initialize it
   if (!Array.isArray(fieldArray)) {
     fieldArray = [];
@@ -66,7 +67,7 @@ export const addLIMSField = async (
   fieldArray.push({ ...newData, filename: getFileUrl(filename) });
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
-  console.log(fieldArray,"fieldArrayfieldArray");
+  console.log(fieldArray, "fieldArrayfieldArray");
 
   return await limsRecord.save({ transaction });
 };

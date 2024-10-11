@@ -29,6 +29,8 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 // Dummy static data
 const staticData = [
@@ -212,32 +214,40 @@ function Mytests() {
     );
     setData(updatedData);
   };
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [ARNo, setARNo] = useState("");
-    const [productName, setproductName] = useState("");
-    const [sampleIncharge, setsampleIncharge] = useState("");
-    const [assignedOn, setassignedOn] = useState("");
-    const [sampleType, setsampleType] = useState("");
+  const StatusModal = ({ visible, closeModal, onAdd, addRow }) => {
+    const [myTestData, setmyTestData] = useState({
+      ARNo: "",
+      productName:"",
+      sampleIncharge:"",
+      assignedOn:"",
+      sampleType:"",
+    });
 
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
+    const handleSpecificationTypeSubmit = (e) => {
+      e.preventDefault();
+
+      axios
+        .post(
+          `http://localhost:9000/manage-lims/add/mMyTest`,
+          myTestData
+        )
+        .then((response) => {
+          toast.success(
+            response.data.message || "Specification Type added successfully!"
+          );
+          addRow(myTestData);
+          addNewItem(myTestData);
+          closeModal();
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("Specification Type Already Registered");
+        });
     };
 
-    const handleAdd = () => {
-      const newCondition = {
-        ARNo: ARNo,
-        productName: productName,
-        sampleIncharge: sampleIncharge,
-        assignedOn: assignedOn,
-        sampleType: sampleType,
-
-        action: [],
-      };
-      closeModal();
-      onAdd(newCondition);
+    const handleInputChange = (field, value) => {
+      const updatedData = { ...myTestData, [field]: value };
+      setmyTestData(updatedData);
     };
 
     return (
@@ -276,7 +286,7 @@ function Mytests() {
 
           <CFormInput
             className="mb-3"
-            type="text"
+            type="date"
             label="Assigned On"
             placeholder="Assigned On "
             name="assignedOn"
