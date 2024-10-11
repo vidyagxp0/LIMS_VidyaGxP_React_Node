@@ -56,6 +56,7 @@ const commonFields = [
   "iColumnPerformanceTest",
   "iColumnAssignment",
   "sLInvestigationL2",
+  "sLInvestigationL1",
   "iColumnQualification",
   "iColumnUsage",
   "iColumnBatchAssignment",
