@@ -22,6 +22,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import axios from "axios";
 
 const initialData = JSON.parse(localStorage.getItem("InvestigationL2")) || [];
 
@@ -36,7 +37,7 @@ const fields = [
 ];
 
 function InvestigationL2() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,8 +47,26 @@ function InvestigationL2() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
 
   useEffect(() => {
-    localStorage.setItem("InvestigationL2", JSON.stringify(data));
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/sLInvestigationL2`
+        );
+        const fetchedData = response?.data[0]?.sLInvestigationL2 || [];
+
+        const updatedData = fetchedData.map((item, index) => ({
+          ...item,
+          sno: item?.sno || index + 1,
+        }));
+
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => setIsModalsOpen(true);
   const handleCloseModals = () => setIsModalsOpen(false);
@@ -117,12 +136,12 @@ function InvestigationL2() {
       testName: item["Test Name"] || "",
       testCode: item["Test Code"] || "",
       testType: item["Test Type"] || "",
-      addedOn: item["Added On"] || new Date().toISOString().split('T')[0],
+      addedOn: item["Added On"] || new Date().toISOString().split("T")[0],
       attachment: item["Attachment"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
-    setData(prevData => [...prevData, ...updatedData]);
+    setData((prevData) => [...prevData, ...updatedData]);
     setIsModalsOpen(false);
   };
 
@@ -153,20 +172,33 @@ function InvestigationL2() {
     setData(updatedData);
   };
 
-  const addNewInvestigation = (newInvestigation) => {
+  const addNewInvestigation = async (newInvestigation) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newInvestigation,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-        addedOn: new Date().toISOString().split('T')[0],
-      },
-    ]);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    const investigationData = {
+      ...newInvestigation,
+      sno: data.length + 1,
+      status: nextStatus,
+      addedOn: currentDate,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/manage-lims/add/sLInvestigationL2",
+        investigationData
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        setData((prevData) => [...prevData, investigationData]);
+        setLastStatus(nextStatus);
+        setIsModalOpen(false);
+      } else {
+        console.error("Failed to add investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding investigation:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -190,7 +222,9 @@ function InvestigationL2() {
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>{data.sno ? "Edit" : "Add"} Investigation L2</CModalTitle>
+          <CModalTitle>
+            {data.sno ? "Edit" : "Add"} Investigation L2
+          </CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -266,7 +300,11 @@ function InvestigationL2() {
               title="Investigation L2 Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Investigation L2" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Investigation L2"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table

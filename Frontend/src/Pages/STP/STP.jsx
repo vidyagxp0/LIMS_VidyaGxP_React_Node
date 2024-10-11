@@ -31,6 +31,7 @@ const STP = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
+  const [dataChanged,setDataChanged]=useState(false);
   // const [data, setData] = useState(() => {
   //   return [...randomData, ...initialData];
   // });
@@ -82,19 +83,67 @@ const STP = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${BASE_URL}/get-all-lims/STP`);
-      console.log(response.data,"response");
-      
-      setData(response.data.stp || []);
+      console.log(response.data, "response");
+  
+      const stpData = response.data[0]?.STP || [];
+  
+      const filteredData = stpData.map((item, index) => ({
+        sno: index + 1, // Adding serial number
+        stpId: item.stpId || "No STP ID", 
+        title: item.title || "No Title", 
+        attachment: item.attachment || "No Attachment", 
+        version: item.version || "No Version", 
+        effectiveDate: item.effectiveDate
+          ? new Date(item.effectiveDate).toISOString().split("T")[0]
+          : "No Effective Date", 
+        creationDate: item.creationDate
+          ? new Date(item.creationDate).toISOString().split("T")[0]
+          : "No Creation Date", 
+        reviewedBy: item.reviewedBy || "No Reviewer", 
+        approvedBy: item.approvedBy || "No Approver", 
+        department: item.department || "No Department", 
+        objective: item.objective || "No Objective", 
+        testProcedureDescription: item.testProcedureDescription || "No Procedure Description", 
+        testType: item.testType || "No Test Type", 
+        testMethodReference: item.testMethodReference || "No Method Reference", 
+        samplePreparation: item.samplePreparation || "No Sample Preparation", 
+        reagents: item.reagents || "No Reagents", 
+        equipment: item.equipment || "No Equipment", 
+        calibration: item.calibration || "No Calibration", 
+        environmental: item.environmental || "No Environmental Info", 
+        controlSample: item.controlSample || "No Control Sample", 
+        testParameters: item.testParameters || "No Test Parameters", 
+        safetyPrecautions: item.safetyPrecautions || "No Safety Precautions", 
+        validationRequirements: item.validationRequirements || "No Validation Requirements", 
+        calculationFormula: item.calculationFormula || "No Calculation Formula", 
+        lsl: item.lsl || "No LSL", 
+        usl: item.usl || "No USL", 
+        resultInterpretation: item.resultInterpretation || "No Result Interpretation", 
+        expectedResults: item.expectedResults || "No Expected Results", 
+        reportTemplate: item.reportTemplate || "No Report Template", 
+        dataRecording: item.dataRecording || "No Data Recording", 
+        testFrequency: item.testFrequency || "No Test Frequency", 
+        testReportSubmission: item.testReportSubmission || "No Report Submission", 
+        deviationHandling: item.deviationHandling || "No Deviation Handling", 
+        auditTrail: item.auditTrail || "No Audit Trail", 
+        revisionHistory: item.revisionHistory || "No Revision History", 
+        attachments: item.attachments || "No Attachments", 
+        remarks: item.remarks || "No Remarks", 
+      }));
+  
+      console.log(filteredData, "Filtered STP Data");
+  
+      setData(filteredData);
       setLoading(false);
     } catch (err) {
-      setError('Error fetching STPs');
+      setError("Error fetching STPs");
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchSTPs();
-  }, []);
+  }, [dataChanged]);
+ 
 
    // POST API - Add new STP
    const handleAddSTP = async (newSTP) => {
@@ -103,6 +152,7 @@ const STP = () => {
       const addedSTP = response.data.updatedLIMS?.stp[0];
       if (addedSTP) {
         setData(prevData => [...prevData, addedSTP]);
+        setDataChanged(true);
       }
       closeAddModal();
     } catch (err) {
@@ -113,10 +163,11 @@ const STP = () => {
    // PUT API - Update existing STP
    const handleEditSave = async (updatedData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/stp/${updatedData.stpId}`, updatedData);
+      const response = await axios.put(`${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`, updatedData);
       const updatedSTP = response.data.updatedLIMS?.stp[0];
       if (updatedSTP) {
         setData(prevData => prevData.map(item => item.stpId === updatedSTP.stpId ? updatedSTP : item));
+        setDataChanged(false);
       }
       setEditModalData(null);
     } catch (err) {
@@ -590,6 +641,7 @@ const STP = () => {
       (dataItem) => dataItem.stpId !== item.stpId
     );
     setData(updatedData);
+    setDataChanged(false);
   };
 
   const handleInputChange = (e) => {
