@@ -71,7 +71,7 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function StorageLocation() {
+function StorageCondition() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -214,12 +214,16 @@ function StorageLocation() {
     },
   ];
 
-  const storageConditions = data.flatMap((item) => item.storageCondition || []); // Flatten the nested structure
-
-  // Now 'storageConditions' contains all the storage conditions
-  const filteredData = storageConditions.length > 0 ? storageConditions : []; // Fallback to empty array if no data available
-
-  console.log("All Storage Conditions:", filteredData); // Log all storage conditions to debug
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -249,52 +253,30 @@ function StorageLocation() {
   };
 
   // Function to add a new storage condition
-  const addNewStorageCondition = async (newConditions) => {
+  const addNewStorageCondition = async (newCondition) => {
     try {
-      const conditionsArray = Array.isArray(newConditions)
-        ? newConditions
-        : [newConditions];
+      // Prepare the new condition object (not an array)
+      const conditionData = {
+        name: newCondition.name,
+        conditionCode: newCondition.conditionCode,
+        storageCondition: newCondition.storageCondition,
+        createdAt: new Date().toISOString(), // Current date as createdAt
+        attachment: newCondition.attachment || null,
+        status: newCondition.status || "Active",
+      };
 
+      // Send the POST request with a single object (not an array)
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/storageCondition`,
-        {
-          storageCondition: conditionsArray.map((condition, index) => ({
-            sno: data.length + index + 1, // Increment based on existing data length
-
-            name: condition.name,
-            conditionCode: condition.conditionCode,
-            storageCondition: condition.storageCondition,
-            createdAt: new Date().toISOString(),
-            attachment: condition.attachment || null,
-            status: condition.status || "Active",
-          })),
-        }
+        conditionData // Send as a single object
       );
 
       console.log("Response received:", response.data);
-
-      const storageConditions =
-        response.data.updatedLIMS?.storageCondition || [];
-      if (Array.isArray(storageConditions) && storageConditions.length > 0) {
-        const newConditionData = storageConditions.map((condition, index) => ({
-          checkbox: false,
-          sno: data.length + index + 1,
-          name: condition.name,
-          conditionCode: condition.conditionCode,
-          storageCondition: condition.storageCondition,
-          createdAt: condition.createdAt,
-          attachment: condition.attachment,
-          status: condition.status,
-        }));
-
-        setData((prevData) => [...prevData, ...newConditionData]);
-      } else {
-        console.error("No storage conditions returned from the API.");
-      }
     } catch (error) {
       console.error("Error creating storage condition:", error);
     }
   };
+
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
       item.testPlan === testPlan ? { ...item, status: newStatus } : item
@@ -376,9 +358,6 @@ function StorageLocation() {
           name: updatedData.name,
           conditionCode: updatedData.conditionCode,
           storageCondition: updatedData.storageCondition,
-          createdAt: updatedData.createdAt,
-          attachment: updatedData.attachment || null,
-          status: updatedData.status,
         }
       );
       console.log(response);
@@ -572,4 +551,4 @@ function StorageLocation() {
   );
 }
 
-export default StorageLocation;
+export default StorageCondition;
