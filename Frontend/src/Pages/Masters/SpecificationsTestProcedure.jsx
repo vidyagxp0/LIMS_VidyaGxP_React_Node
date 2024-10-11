@@ -161,12 +161,12 @@ function SpecificationsTestProcedure() {
       if (response?.status === 200) {
         const newData = data.filter((d) => d.sno !== item.sno);
         setData(newData);
-        console.log("Product deleted successfully:", response.data);
+        console.log("Specification Test Procedure  deleted successfully:", response.data);
       } else {
-        console.error("Failed to delete product:", response.statusText);
+        console.error("Failed to delete Specification Test Procedure:", response.statusText);
       }
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error deleting Specification Test Procedure:", error);
     }
   };
 

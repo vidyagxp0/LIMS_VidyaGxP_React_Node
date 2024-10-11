@@ -31,8 +31,6 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
 import axios from "axios";
 
-
-
 const initialData = JSON.parse(localStorage.getItem("testregistration")) || "";
 
 const fields = [
@@ -59,6 +57,7 @@ function Testregistration() {
 
   // Combine static data with dynamic data from local storage
   const [data, setData] = useState([]);
+  console.log(data,"00000000000")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,13 +66,16 @@ function Testregistration() {
           `http://localhost:9000/get-all-lims/mTestCategories`
         );
         const fetchedData = response?.data[0]?.mTestCategories || [];
+        const uniqueIds = response?.data[0]?.mTestCategories.map(
+          (category) => category.uniqueId
+        );
 
         const updatedData = fetchedData.map((item, index) => ({
           ...item,
           sno: item?.sno || index + 1,
         }));
 
-        setData(updatedData);
+        setData(updatedData,uniqueIds);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -81,7 +83,6 @@ function Testregistration() {
 
     fetchData();
   }, []);
-
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -95,8 +96,6 @@ function Testregistration() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-
-  console.log("Data:", data);
   const filteredData = data
     .filter((row) => {
       return (
@@ -181,10 +180,21 @@ function Testregistration() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mTestCategories/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Test Category deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete Test Category :", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting Test Category:", error);
+    }
   };
 
   const addNewStorageCondition = (newCondition) => {
@@ -227,13 +237,13 @@ function Testregistration() {
     const handleAdd = async () => {
       // const currentDate = new Date().toISOString().split("T")[0];
       const newCondition = {
-        SpecificationID:SpecificationID,
-        productName:productName,
-        testName:testName,
-        testCode:testCode,
-        method:method,
-        category:category,
-        testType:testType,
+        SpecificationID: SpecificationID,
+        productName: productName,
+        testName: testName,
+        testCode: testCode,
+        method: method,
+        category: category,
+        testType: testType,
         status: "Active",
         action: [],
       };
@@ -344,12 +354,26 @@ function Testregistration() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    console.log("UniqueId for edit:", updatedData.uniqueId);
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mTestCategories/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log("Product updated successfully:", response.data);
+      } else {
+        console.error("Failed to update product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {

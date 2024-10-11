@@ -171,6 +171,10 @@ function Product() {
   };
 
   const handleDelete = async (item) => {
+    if (!item?.sno) {
+      console.error("Error: 'sno' not found for deletion");
+      return;
+    }
     try {
       const response = await axios.delete(
         `http://localhost:9000/delete-lims/mmasterProduct/${item.uniqueId}`
@@ -186,6 +190,9 @@ function Product() {
       console.error("Error deleting product:", error);
     }
   };
+  
+  
+  
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
@@ -225,9 +232,11 @@ function Product() {
         );
 
         if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data);
+          console.log("Product added successfully:", response.data.updatedLIMS.
+            mmasterProduct
+            );
           closeModal();
-          onAdd(newCondition);
+          onAdd(response.data);
         } else {
           console.error("Failed to add product:", response.statusText);
         }
@@ -428,11 +437,7 @@ function Product() {
               title="Master Product Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Master/Product"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Add Master/Product" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table

@@ -55,7 +55,6 @@ function SampleType() {
   const [editModalData, setEditModalData] = useState(null);
   const [data, setData] = useState([]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -165,14 +164,14 @@ function SampleType() {
 
       try {
         const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mSampleType", 
+          "http://localhost:9000/manage-lims/add/mSampleType",
           newCondition
         );
 
         if (response.status === 200 || response.status === 201) {
           console.log("Sample type added successfully:", response.data);
           closeModal();
-          onAdd(newCondition);
+          onAdd(response.data);
         } else {
           console.error("Failed to add sample type:", response.statusText);
         }
@@ -432,7 +431,6 @@ function SampleType() {
       console.error("Error updating Sample Type:", error);
     }
   };
-  
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
@@ -732,8 +730,8 @@ function SampleType() {
   };
 
   const handleDelete = async (item) => {
-    console.log(item,"<><><><><><><><><><><><><><><><><><><><")
-   
+    console.log(item, "<><><><><><><><><><><><><><><><><><><><");
+
     try {
       const response = await axios.delete(
         `http://localhost:9000/delete-lims/mSampleType/${item.uniqueId}`
