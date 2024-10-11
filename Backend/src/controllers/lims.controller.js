@@ -169,7 +169,7 @@ const withTransaction = async (callback) => {
 export const manageLIMS = async (req, res) => {
   const filename =
     req?.files?.map((file) => file?.filename)[0] || req?.filename;
-  const { fieldName, sno, add, update } = req.params;
+  const { fieldName, uniqueId, add, update } = req.params;
   try {
     await withTransaction(async (t) => {
       const existingLIMS = await findLIMSById("1");
@@ -196,7 +196,7 @@ export const manageLIMS = async (req, res) => {
         const updatedLIMS = await updateLIMSField(
           existingLIMS,
           fieldName,
-          sno,
+          uniqueId,
           req.body,
           filename,
           t
@@ -279,7 +279,7 @@ export const getLIMSById = async (req, res) => {
 export const deleteStorageConditionById = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const { fieldName, sno } = req.params;
+    const { fieldName, uniqueId } = req.params;
     const existingLIMS = await findLIMSById("1");
     if (!existingLIMS) {
       return res.status(404).json({ error: "LIMS record not found" });
@@ -292,11 +292,11 @@ export const deleteStorageConditionById = async (req, res) => {
         .json({ error: `Field ${fieldName} is not valid or not an array` });
     }
 
-    const conditionIndex = field.findIndex((item) => item["sno"] == sno);
+    const conditionIndex = field.findIndex((item) => item["uniqueId"] == uniqueId);
     if (conditionIndex === -1) {
       return res
         .status(404)
-        .json({ error: `${fieldName} with sno ${sno} not found` });
+        .json({ error: `${fieldName} with uniqueId ${uniqueId} not found` });
     }
 
     field.splice(conditionIndex, 1);

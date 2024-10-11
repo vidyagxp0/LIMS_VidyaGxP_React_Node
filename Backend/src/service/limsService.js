@@ -12,7 +12,7 @@ export const findLIMSById = async (id) => {
 export const updateLIMSField = async (
   limsRecord,
   fieldName,
-  sno,
+  uniqueId,
   updateData,
   filename,
   transaction
@@ -21,10 +21,10 @@ export const updateLIMSField = async (
   if (!Array.isArray(fieldArray)) {
     throw new Error(`${fieldName} is not an array or does not exist`);
   }
-  const fieldIndex = fieldArray.findIndex((item) => item && item["sno"] === sno);
+  const fieldIndex = fieldArray.findIndex((item) => item && item["uniqueId"] == uniqueId);
 
   if (fieldIndex === -1) {
-    throw new Error(`${fieldName} with sno ${sno} not found`);
+    throw new Error(`${fieldName} with uniqueId ${uniqueId} not found`);
   }
 
   const existingItem = fieldArray[fieldIndex];
@@ -42,7 +42,7 @@ export const updateLIMSField = async (
 
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
-  
+
   return await limsRecord.save({ transaction });
 };
 
@@ -60,14 +60,14 @@ export const addLIMSField = async (
     fieldArray = [];
   }
 
-  // Generate a unique sno by finding the highest existing sno and adding 1
+  // Generate a unique uniqueId by finding the highest existing uniqueId and adding 1
   let newSno = 1;
   if (fieldArray.length > 0) {
-    const maxSno = Math.max(...fieldArray.map((item) => item.sno || 0));
+    const maxSno = Math.max(...fieldArray.map((item) => item.uniqueId || 0));
     newSno = maxSno + 1;
   }
 
-  fieldArray.push({ ...newData, sno: newSno, filename: getFileUrl(filename) });
+  fieldArray.push({ ...newData, uniqueId: newSno, filename: getFileUrl(filename) });
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
 
