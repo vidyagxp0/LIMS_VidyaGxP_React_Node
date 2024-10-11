@@ -96,7 +96,7 @@ function StorageCondition() {
         return (
           item.storageCondition?.map((condition, i) => ({
             checkbox: false,
-            sno: condition.sno,
+            sno: condition.uniqueId,
             name: condition.name || "No Name",
             conditionCode: condition.conditionCode || "No Code",
             createdAt: condition.createdAt
@@ -134,10 +134,24 @@ function StorageCondition() {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      // Make the API call to delete the item
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/storageCondition/${item.sno}`
+      );
+
+      if (response.status === 200) {
+        // If deletion is successful, filter out the deleted item from state
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Deleted item:", item);
+      } else {
+        console.error("Failed to delete storage condition:", response.data);
+      }
+    } catch (error) {
+      console.error("Error deleting storage condition:", error);
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -268,9 +282,10 @@ function StorageCondition() {
       // Send the POST request with a single object (not an array)
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/storageCondition`,
-        conditionData // Send as a single object
+        conditionData
       );
 
+      closeModal();
       console.log("Response received:", response.data);
     } catch (error) {
       console.error("Error creating storage condition:", error);
@@ -490,19 +505,7 @@ function StorageCondition() {
         {filteredData && filteredData.length > 0 ? (
           <Table
             columns={columns}
-            data={filteredData.map((row, index) => ({
-              ...row,
-
-              name: row.name || "No Name",
-              conditionCode: row.conditionCode || "No Code",
-              storageCondition:
-                typeof row.storageCondition === "string"
-                  ? row.storageCondition
-                  : "No Condition",
-              createdAt: row.createdAt || "No Date",
-              attachment: row.attachment || "No Attachment",
-              status: row.status || "Inactive",
-            }))}
+            data={filteredData}
             onCheckboxChange={handleCheckboxChange}
             onViewDetails={onViewDetails}
             onDelete={handleDelete}
