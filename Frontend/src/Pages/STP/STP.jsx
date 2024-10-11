@@ -88,7 +88,7 @@ const STP = () => {
       const stpData = response.data[0]?.STP || [];
 
       const filteredData = stpData.map((item, index) => ({
-        sno: index + 1, // Adding serial number
+        sno:item.uniqueId ,
         stpId: item.stpId || "No STP ID",
         title: item.title || "No Title",
         attachment: item.attachment || "No Attachment",
@@ -170,24 +170,31 @@ const STP = () => {
   // PUT API - Update existing STP
   const handleEditSave = async (updatedData) => {
     try {
+      // Remove 'sno' before sending the data to the backend
+      const {sno,...dataToSend } = updatedData;
+  
+      // Send the rest of the data without 'sno' to the backend
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`,
-        updatedData
+        `${BASE_URL}/manage-lims/update/STP/${updatedData.sno}`,  // Use uniqueId in the URL
+        dataToSend // Only send the necessary data excluding 'sno'
       );
+  
       const updatedSTP = response.data.updatedLIMS?.stp[0];
       if (updatedSTP) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.stpId === updatedSTP.stpId ? updatedSTP : item
+            item.uniqueId === updatedSTP.uniqueId ? updatedSTP : item  // Match by uniqueId
           )
         );
         setDataChanged(false);
       }
-      setEditModalData(null);
+      setEditModalData(null);  // Close the edit modal
     } catch (err) {
+      console.error("Error updating STP:", err);
       setError("Error updating STP");
     }
   };
+  
 
   const AddSTPModal = ({ visible, closeModal, onAdd }) => {
     const [formData, setFormData] = useState({
@@ -539,12 +546,12 @@ const STP = () => {
       </CModal>
     );
   };
-  useEffect(() => {
-    localStorage.setItem(
-      "stp",
-      JSON.stringify(data.filter((row) => !randomData.includes(row)))
-    );
-  }, [data]);
+  // useEffect(() => {
+  //   localStorage.setItem(
+  //     "stp",
+  //     JSON.stringify(data.filter((row) => !randomData.includes(row)))
+  //   );
+  // }, [data]);
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
@@ -575,44 +582,60 @@ const STP = () => {
           <CModalTitle>Edit STP</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {Object.entries(formData).map(([key, value]) => {
-              let inputType;
-              if (key.includes("date")) {
-                inputType = "date";
-              } else if (key.includes("number")) {
-                inputType = "number";
-              } else if (key.includes("file")) {
-                inputType = "file";
-              } else {
-                inputType = "text";
-              }
-
-              return (
-                <div key={key}>
-                  <CFormInput
-                    className="mb-3"
-                    type={inputType}
-                    label={
-                      key.charAt(0).toUpperCase() +
-                      key
-                        .slice(1)
-                        .replace(/([A-Z])/g, " $1")
-                        .trim()
-                    }
-                    name={key}
-                    value={inputType !== "file" ? value : undefined}
-                    onChange={
-                      inputType === "file"
-                        ? (e) => handleChange(e, setFormData, formData)
-                        : handleChange
-                    }
-                  />
-                </div>
-              );
-            })}
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    {Object.entries(formData).map(([key, value]) => {
+      if (key === "sno") {
+        return (
+          <div key={key}>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Sno"
+              name={key}
+              value={value}
+              disabled 
+            />
           </div>
-        </CModalBody>
+        );
+      }
+
+      let inputType;
+      if (key.includes("date")) {
+        inputType = "date";
+      } else if (key.includes("number")) {
+        inputType = "number";
+      } else if (key.includes("file")) {
+        inputType = "file";
+      } else {
+        inputType = "text";
+      }
+
+      return (
+        <div key={key}>
+          <CFormInput
+            className="mb-3"
+            type={inputType}
+            label={
+              key.charAt(0).toUpperCase() +
+              key
+                .slice(1)
+                .replace(/([A-Z])/g, " $1")
+                .trim()
+            }
+            name={key}
+            value={inputType !== "file" ? value : undefined}
+            onChange={
+              inputType === "file"
+                ? (e) => handleChange(e, setFormData, formData)
+                : handleChange
+            }
+          />
+        </div>
+      );
+    })}
+  </div>
+</CModalBody>
+
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
             Close
@@ -649,12 +672,23 @@ const STP = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (item) => {
-    const updatedData = data.filter(
-      (dataItem) => dataItem.stpId !== item.stpId
-    );
-    setData(updatedData);
-    setDataChanged(true);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/delete-lims/STP/${item.sno}`);
+      if (response.status === 200) {
+        const updatedData = data.filter(
+          (dataItem) => dataItem.sno !== item.sno
+        );
+        setData(updatedData);
+        setDataChanged(true);
+        toast.success("STP deleted successfully");
+      } else {
+        toast.error("Failed to delete STP");
+      }
+    } catch (error) {
+      console.error("Error deleting STP:", error);
+      toast.error("Error deleting STP: " + (error.response?.data?.message || error.message));
+    }
   };
 
   const handleInputChange = (e) => {

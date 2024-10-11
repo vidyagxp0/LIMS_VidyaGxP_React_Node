@@ -31,7 +31,6 @@ const AnalystPersonal = () => {
         const formattedData = response?.data[0]?.analystPersonal || [];
         const updatedData = formattedData.map((item, index) => ({
           ...item,
-          sno: index + 1,
         }));
         setData(updatedData);
         console.log(updatedData);
@@ -159,7 +158,7 @@ const AnalystPersonal = () => {
       // Add new analyst
       setData((prevData) => [
         ...prevData,
-        { sno: prevData.length + 1, ...newAnalyst }, // Ensure unique sno
+        {...newAnalyst }, // Ensure unique sno
       ]);
     }
 

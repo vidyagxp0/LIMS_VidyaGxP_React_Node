@@ -71,7 +71,7 @@ export const addLIMSField = async (
   fieldArray.push({ ...newData, uniqueId: newSno, filename: getFileUrl(filename) });
   limsRecord[fieldName] = fieldArray;
   limsRecord.changed(fieldName, true);
-  // console.log(fieldArray,"fieldArray");
+  console.log(fieldArray,"fieldArray");
   
 
   return await limsRecord.save({ transaction });

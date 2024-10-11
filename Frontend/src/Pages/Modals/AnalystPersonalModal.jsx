@@ -146,7 +146,6 @@ const AnalystPersonalModal = ({ visible, closeModal, addRow=[] }) => {
 
     const newAnalyst = {
       ...analystData,
-      sno: addRow.length > 0 ? addRow.length + 1 : 1,
     };
 
     axios
