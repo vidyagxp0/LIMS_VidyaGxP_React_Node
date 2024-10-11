@@ -171,16 +171,13 @@ function Product() {
   };
 
   const handleDelete = async (item) => {
-    if (!item?.sno) {
-      console.error("Error: 'sno' not found for deletion");
-      return;
-    }
+   
     try {
       const response = await axios.delete(
         `http://localhost:9000/delete-lims/mmasterProduct/${item.uniqueId}`
       );
       if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.sno);
+        const newData = data.filter((d) => d.sno !== item.uniqueId);
         setData(newData);
         console.log("Product deleted successfully:", response.data);
       } else {

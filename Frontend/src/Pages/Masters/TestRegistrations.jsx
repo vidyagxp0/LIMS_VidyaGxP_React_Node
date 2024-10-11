@@ -57,7 +57,7 @@ function Testregistration() {
 
   // Combine static data with dynamic data from local storage
   const [data, setData] = useState([]);
-  console.log(data,"00000000000")
+  console.log(data, "00000000000");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,16 +66,13 @@ function Testregistration() {
           `http://localhost:9000/get-all-lims/mTestCategories`
         );
         const fetchedData = response?.data[0]?.mTestCategories || [];
-        const uniqueIds = response?.data[0]?.mTestCategories.map(
-          (category) => category.uniqueId
-        );
 
         const updatedData = fetchedData.map((item, index) => ({
           ...item,
-          sno: item?.sno || index + 1,
+          uniqueId: item?.uniqueId || index + 1,
         }));
 
-        setData(updatedData,uniqueIds);
+        setData(updatedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -103,10 +100,10 @@ function Testregistration() {
         (statusFilter === "All" || row.status === statusFilter)
       );
     })
-    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
+    .map((row, index) => ({ ...row, uniqueId: index + 1 })); // Assign uniqueId based on filtered data
 
   const onAdd = (newRow) => {
-    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    const updatedData = [...data, { ...newRow, uniqueId: data.length + 1 }];
     setData(updatedData);
   };
   const onViewDetails = (rowData) => {
@@ -124,7 +121,7 @@ function Testregistration() {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
     },
-    { header: "Sr.no.", accessor: "sno" },
+    { header: "Sr.no.", accessor: "uniqueId" },
     { header: "Specification ID", accessor: "SpecificationID" },
     { header: "Product Name", accessor: "productName" },
     { header: "Test Name", accessor: "testName" },
@@ -155,7 +152,7 @@ function Testregistration() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: index + 1,
+      uniqueId: index + 1,
       uniqueCode: item["Unique Code"] || "",
       productName: item["Product Name"] || "",
       genericName: item["Generic Name"] || "",
@@ -186,14 +183,14 @@ function Testregistration() {
         `http://localhost:9000/delete-lims/mTestCategories/${item.uniqueId}`
       );
       if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.sno);
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
         setData(newData);
-        console.log("Test Category deleted successfully:", response.data);
+        console.log("Product deleted successfully:", response.data);
       } else {
-        console.error("Failed to delete Test Category :", response.statusText);
+        console.error("Failed to delete product:", response.statusText);
       }
     } catch (error) {
-      console.error("Error deleting Test Category:", error);
+      console.error("Error deleting product:", error);
     }
   };
 
@@ -203,7 +200,7 @@ function Testregistration() {
       ...prevData,
       {
         ...newCondition,
-        sno: prevData.length + 1,
+        uniqueId: prevData.length + 1,
         checkbox: false,
         status: nextStatus,
       },
@@ -355,7 +352,6 @@ function Testregistration() {
     setEditModalData(null);
   };
   const handleEditSave = async (updatedData) => {
-    console.log("UniqueId for edit:", updatedData.uniqueId);
     try {
       const response = await axios.put(
         `http://localhost:9000/manage-lims/update/mTestCategories/${updatedData.uniqueId}`,
@@ -363,7 +359,7 @@ function Testregistration() {
       );
       if (response.status === 200) {
         const newData = data.map((item) =>
-          item.sno === updatedData.sno ? updatedData : item
+          item.uniqueId === updatedData.uniqueId ? updatedData : item
         );
         setData(newData);
         setEditModalData(null);
