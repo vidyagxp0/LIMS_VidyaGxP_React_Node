@@ -220,9 +220,21 @@ function Testcategories() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mTestCategories/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Product deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
 
   const addNewStorageCondition = (newCondition) => {
@@ -363,13 +375,35 @@ function Testcategories() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      if (!updatedData.uniqueId) {
+        const fetchedData = await axios.get(
+          `http://localhost:9000/manage-lims/update/mTestCategories/${updatedData.uniqueId}`
+        );
+        updatedData.uniqueId = fetchedData.data.uniqueId;
+      }
+  
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mTestCategories/${updatedData.uniqueId}`,
+        updatedData
+      );
+  
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log("Test Categories updated successfully:", response.data);
+      } else {
+        console.error("Failed to update Test Categories:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating Test Categories:", error);
+    }
   };
+  
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);

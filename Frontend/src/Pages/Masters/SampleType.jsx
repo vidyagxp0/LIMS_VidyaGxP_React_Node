@@ -55,7 +55,6 @@ function SampleType() {
   const [editModalData, setEditModalData] = useState(null);
   const [data, setData] = useState([]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -165,14 +164,14 @@ function SampleType() {
 
       try {
         const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mSampleType", // Update this endpoint as per your API
+          "http://localhost:9000/manage-lims/add/mSampleType",
           newCondition
         );
 
         if (response.status === 200 || response.status === 201) {
           console.log("Sample type added successfully:", response.data);
           closeModal();
-          onAdd(newCondition);
+          onAdd(response.data);
         } else {
           console.error("Failed to add sample type:", response.statusText);
         }
@@ -410,12 +409,27 @@ function SampleType() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      // Make sure updatedData contains uniqueId before making the API call
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mSampleType/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        // Update the state with the new data
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log("Sample Type updated successfully:", response.data);
+      } else {
+        console.error("Failed to update Sample Type:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating Sample Type:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -715,10 +729,23 @@ function SampleType() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    console.log(item, "<><><><><><><><><><><><><><><><><><><><");
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mSampleType/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Sample Type deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete Sample Type:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting Sample Type:", error);
+    }
   };
 
   return (

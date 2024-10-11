@@ -202,12 +202,25 @@ function specficationtype() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mSpecificationType/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Specification Type deleted successfully:", response.data);
+      } else {
+        console.error(
+          "Failed to delete Specification Type:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting Specification Type:", error);
+    }
   };
-
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
     setData((prevData) => [
@@ -230,7 +243,7 @@ function specficationtype() {
     );
     setData(updatedData);
   };
-  const StatusModal = ({ visible, closeModal, addRow,addNewItem }) => {
+  const StatusModal = ({ visible, closeModal, addRow, addNewItem }) => {
     const [specificationTypeData, setspecificationTypeData] = useState({
       specificationType: "",
       addedOn: new Date().toISOString().split("T")[0],
@@ -263,7 +276,6 @@ function specficationtype() {
       const updatedData = { ...specificationTypeData, [field]: value };
       setspecificationTypeData(updatedData);
     };
-  
 
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
@@ -271,36 +283,37 @@ function specficationtype() {
           <CModalTitle>Specification Type</CModalTitle>
         </CModalHeader>
         <CModalBody>
-        <CForm onSubmit={handleSpecificationTypeSubmit} >
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Specification Type"
-            placeholder=" Specification Type"
-            name="specificationType"
-            value={specificationTypeData.specificationType}
-            onChange={(e) => handleInputChange("specificationType",e.target.value)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Add On"
-            placeholder="Add On "
-            name="addedOn"
-            value={specificationTypeData.addedOn}
-            onChange={(e) => handleInputChange("addedOn",e.target.value)}
-          />
+          <CForm onSubmit={handleSpecificationTypeSubmit}>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Specification Type"
+              placeholder=" Specification Type"
+              name="specificationType"
+              value={specificationTypeData.specificationType}
+              onChange={(e) =>
+                handleInputChange("specificationType", e.target.value)
+              }
+            />
+            <CFormInput
+              className="mb-3"
+              type="date"
+              label="Add On"
+              placeholder="Add On "
+              name="addedOn"
+              value={specificationTypeData.addedOn}
+              onChange={(e) => handleInputChange("addedOn", e.target.value)}
+            />
 
-<CButton color="primary" type="submit">
-            Submit
-          </CButton>
+            <CButton color="primary" type="submit">
+              Submit
+            </CButton>
           </CForm>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-         
         </CModalFooter>
       </CModal>
     );
@@ -313,12 +326,28 @@ function specficationtype() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mSpecificationType/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log("Specification Type updated successfully:", response.data);
+      } else {
+        console.error(
+          "Failed to update Specification Type:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error updating Specification Type:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -363,7 +392,7 @@ function specficationtype() {
           />
           <CFormInput
             className="mb-3"
-            type="text"
+            type="date"
             label="Add On"
             placeholder="Add On "
             name="addedOn"
@@ -435,7 +464,7 @@ function specficationtype() {
           visible={isModalOpen}
           closeModal={closeModal}
           addRow={addRow}
-          addNewItem={ addNewItem }
+          addNewItem={addNewItem}
         />
       )}
       {viewModalData && (

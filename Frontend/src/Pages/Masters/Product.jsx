@@ -28,6 +28,7 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import axios from "axios";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = JSON.parse(localStorage.getItem("product")) || "";
 
@@ -170,16 +171,13 @@ function Product() {
   };
 
   const handleDelete = async (item) => {
-    if (!item?.sno) {
-      console.error("Error: 'sno' not found for deletion");
-      return;
-    }
+   
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mmasterProduct/${item.sno}`
+        `http://localhost:9000/delete-lims/mmasterProduct/${item.uniqueId}`
       );
       if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.sno);
+        const newData = data.filter((d) => d.sno !== item.uniqueId);
         setData(newData);
         console.log("Product deleted successfully:", response.data);
       } else {
@@ -231,9 +229,11 @@ function Product() {
         );
 
         if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data);
+          console.log("Product added successfully:", response.data.updatedLIMS.
+            mmasterProduct
+            );
           closeModal();
-          onAdd(newCondition);
+          onAdd(response.data);
         } else {
           console.error("Failed to add product:", response.statusText);
         }
@@ -307,7 +307,7 @@ function Product() {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mmasterProduct/${updatedData.sno}`,
+        `http://localhost:9000/manage-lims/update/mmasterProduct/${updatedData.uniqueId}`,
         updatedData
       );
       if (response.status === 200) {
@@ -324,7 +324,6 @@ function Product() {
       console.error("Error updating product:", error);
     }
   };
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 

@@ -172,11 +172,23 @@ function Specifications() {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mSpecifications/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Specifications deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete Specifications:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting Specifications:", error);
+    }
   };
+
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
