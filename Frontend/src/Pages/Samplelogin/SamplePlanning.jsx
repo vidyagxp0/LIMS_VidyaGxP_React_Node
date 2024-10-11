@@ -264,14 +264,9 @@ useEffect(() => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`http://localhost:9000/get-all-lims/sLSamplePA`);
-
       const fetchedData= response?.data[0]?.sLSamplePA || [] ;
-
-      const UpdatedData = fetchedData.map((item, index)=>({
-        ...item, sno:index+1,
-      }))
-      setData(UpdatedData);
-      console.log(UpdatedData)
+      setData(fetchedData);
+      console.log(fetchedData,"fetchedData")
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -402,7 +397,7 @@ const handleUpdate = (updatedRow) => {
   
     const handleDelete = (item) => {
       axios
-      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.sno}`)
+      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.uniqueId}`)
       .then((response) => {
         console.log(response.data.message);
        
@@ -526,7 +521,7 @@ const handleUpdate = (updatedRow) => {
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
-            <th colSpan="9" className="px-4 py-2 bg-yellow-600">
+            <th colSpan="10" className="px-4 py-2 bg-yellow-600">
               Sample Planning Information
             </th>
             <th colSpan="10" className="px-4 py-2 bg-green-600">
@@ -550,7 +545,7 @@ const handleUpdate = (updatedRow) => {
             <th colSpan="4" className="px-4 py-2 bg-green-300">
               Tracking and Monitoring
             </th>
-            <th colSpan="5" className="px-4 py-2 bg-violet-500">
+            <th colSpan="6" className="px-4 py-2 bg-violet-500">
               Miscellaneous
             </th>
           </tr>
@@ -627,7 +622,7 @@ const handleUpdate = (updatedRow) => {
         <tbody>
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100">
-              <td className="border px-4 py-2">{data.sno}</td>
+              <td className="border px-4 py-2">{index+1}</td>
               <td className="border px-4 py-2">{data.samplePlanId}</td>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>

@@ -29,6 +29,7 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import axios from "axios";
 
 const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
@@ -39,7 +40,6 @@ const fields = [
   { label: "Specification Name", key: "specificationName" },
   { label: "Effect From", key: "effectFrom" },
   { label: "Review Date", key: "reviewDate" },
-  // { label: "attachment", key: "attachment" },
   { label: "Status", key: "status" },
 ];
 function SpecificationsTestProcedure() {
@@ -51,17 +51,29 @@ function SpecificationsTestProcedure() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-  const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("specificationtestprocedure");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
-  });
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("specificationtestprocedure", JSON.stringify(data));
-  }, [data]);
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/mStandardTestProcedure`
+        );
+        const fetchedData = response?.data[0]?.mStandardTestProcedure || [];
+
+        const updatedData = fetchedData.map((item, index) => ({
+          ...item,
+          sno: item?.sno || index + 1,
+        }));
+
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
@@ -71,14 +83,20 @@ function SpecificationsTestProcedure() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        return (
-          row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
-        );
-      })
-    : [];
+  const filteredData = data
+  .filter((row) => {
+    return (
+      row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  })
+  .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
+
+
+    const onAdd = (newRow) => {
+      const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+      setData(updatedData);
+    };
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -198,17 +216,37 @@ function SpecificationsTestProcedure() {
       standardTestProcedureNo: "",
     });
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
+      const currentDate = new Date().toISOString().split("T")[0];
       const newCondition = {
-        productName: specificationData.productName,
         productCode: specificationData.productCode,
-        specificationID: specificationData.specificationID,
+        productName: specificationData.productName,
         specificationName: specificationData.specificationName,
+        specificationID: specificationData.specificationID,
+        sampleType: specificationData.sampleType,
+        specificationType: specificationData.specificationType,
         effectFrom: specificationData.effectFrom,
         reviewDate: specificationData.reviewDate,
-        action: [],
+        supersedes: specificationData.supersedes,
+        standardTestProcedureNo: specificationData.standardTestProcedureNo,
       };
-      onAdd(newCondition);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/manage-lims/add/mStandardTestProcedure",
+          newCondition
+        );
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("Product added successfully:", response.data);
+          closeModal();
+          onAdd(newCondition);
+        } else {
+          console.error("Failed to add product:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error adding product:", error);
+      }
     };
 
     const top100Films = [
@@ -639,8 +677,12 @@ function SpecificationsTestProcedure() {
               fileName="Specification_Test_Procedure.pdf"
               title="Specification Test Procedure Data"
             />
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Test Procedure" color="blue" onClick={openModal} />
+            {/* <ATMButton text="Import" color="pink" onClick={handleOpenModals} /> */}
+            <ATMButton
+              text="Add Test Procedure"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -653,7 +695,13 @@ function SpecificationsTestProcedure() {
         />
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          onAdd={onAdd}
+          closeModal={closeModal}
+        />
+      )}
 
       {isModalsOpen && (
         <ImportModal
@@ -670,6 +718,7 @@ function SpecificationsTestProcedure() {
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}
+          onAdd={onAdd}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
         />

@@ -27,9 +27,9 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
-import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import axios from "axios";
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
+const initialData = JSON.parse(localStorage.getItem("product")) || "";
 
 const fields = [
   { label: "S.No", key: "sno" },
@@ -49,15 +49,30 @@ function Product() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-
-  const [data, setData] = useState(() => {
-    const storedData = localStorage.getItem("product");
-    return storedData ? JSON.parse(storedData) : initialData; // use local storage data if available
-  });
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("product", JSON.stringify(data));
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/mmasterProduct`
+        );
+        const fetchedData = response?.data[0]?.mmasterProduct || [];
+
+        const updatedData = fetchedData.map((item, index) => ({
+          ...item,
+          sno: item?.sno || index + 1,
+        }));
+
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -71,14 +86,19 @@ function Product() {
     setData(newData);
   };
 
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        return (
-          row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
-        );
-      })
-    : []; // Fallback to an empty array if data is not an array
+  const filteredData = data
+    .filter((row) => {
+      return (
+        row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (statusFilter === "All" || row.status === statusFilter)
+      );
+    })
+    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
+
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -134,8 +154,8 @@ function Product() {
     }));
 
     const concatenatedData = [...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenatedData);
+    setIsModalsOpen(false);
   };
   const openModal = () => {
     setIsModalOpen(true);
@@ -149,27 +169,29 @@ function Product() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    if (!item?.sno) {
+      console.error("Error: 'sno' not found for deletion");
+      return;
+    }
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mmasterProduct/${item.sno}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Product deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
-
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newCondition,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-      },
-    ]);
-    setData(newData);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
-  };
+  
+  
+  
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
@@ -177,7 +199,8 @@ function Product() {
     );
     setData(updatedData);
   };
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
+
+  const StatusModal = ({ visible, closeModal, onAdd, addRow }) => {
     const [productName, setProductName] = useState("");
     const [uniqueCode, setUniqueCode] = useState("");
     const [genericName, setGenericName] = useState("");
@@ -189,16 +212,34 @@ function Product() {
       }
     };
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
+      const currentDate = new Date().toISOString().split("T")[0];
       const newCondition = {
         uniqueCode: uniqueCode,
         productName: productName,
         genericName: genericName,
         reTestingPeriod: reTestingPeriod,
-        addDate: "2020-02-02",
+        addDate: currentDate,
+        status: "Active",
         action: [],
       };
-      onAdd(newCondition);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/manage-lims/add/mmasterProduct",
+          newCondition
+        );
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("Product added successfully:", response.data);
+          closeModal();
+          onAdd(newCondition);
+        } else {
+          console.error("Failed to add product:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error adding product:", error);
+      }
     };
 
     return (
@@ -263,12 +304,25 @@ function Product() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mmasterProduct/${updatedData.sno}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log("Product updated successfully:", response.data);
+      } else {
+        console.error("Failed to update product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -394,12 +448,19 @@ function Product() {
         />
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={onAdd}
+        />
+      )}
       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
+          onAdd={onAdd}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
