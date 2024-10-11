@@ -37,7 +37,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, updateRow }) => {
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     axios
-      .put(`http://localhost:9000/manage-lims/update/sLSamplePA/${formData.sno}`, formData)
+      .put(`http://localhost:9000/manage-lims/update/sLSamplePA/${formData.uniqueId}`, formData)
       .then((response) => {
         console.log("Data updated successfully:", response.data);
         updateRow(formData); // Update the UI
