@@ -28,6 +28,7 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import axios from "axios";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const initialData = JSON.parse(localStorage.getItem("product")) || "";
 
@@ -170,13 +171,9 @@ function Product() {
   };
 
   const handleDelete = async (item) => {
-    if (!item?.sno) {
-      console.error("Error: 'sno' not found for deletion");
-      return;
-    }
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mmasterProduct/${item.sno}`
+        `http://localhost:9000/delete-lims/mmasterProduct/${item.uniqueId}`
       );
       if (response?.status === 200) {
         const newData = data.filter((d) => d.sno !== item.sno);
@@ -189,9 +186,6 @@ function Product() {
       console.error("Error deleting product:", error);
     }
   };
-  
-  
-  
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
@@ -307,7 +301,7 @@ function Product() {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mmasterProduct/${updatedData.sno}`,
+        `http://localhost:9000/manage-lims/update/mmasterProduct/${updatedData.uniqueId}`,
         updatedData
       );
       if (response.status === 200) {
@@ -324,7 +318,6 @@ function Product() {
       console.error("Error updating product:", error);
     }
   };
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -435,7 +428,11 @@ function Product() {
               title="Master Product Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Master/Product" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Master/Product"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table

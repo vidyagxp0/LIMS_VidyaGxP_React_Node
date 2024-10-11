@@ -84,19 +84,18 @@ function SpecificationsTestProcedure() {
     setData(newData);
   };
   const filteredData = data
-  .filter((row) => {
-    return (
-      row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  })
-  .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
+    .filter((row) => {
+      return (
+        row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (statusFilter === "All" || row.status === statusFilter)
+      );
+    })
+    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
 
-
-    const onAdd = (newRow) => {
-      const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
-      setData(updatedData);
-    };
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -154,10 +153,21 @@ function SpecificationsTestProcedure() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mStandardTestProcedure/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Product deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -457,12 +467,31 @@ function SpecificationsTestProcedure() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mStandardTestProcedure/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log(
+          "Standard Test Procedure updated successfully:",
+          response.data
+        );
+      } else {
+        console.error(
+          "Failed to update Standard Test Procedure:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error updating Standard Test Procedure:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
