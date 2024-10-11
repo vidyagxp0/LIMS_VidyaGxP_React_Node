@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CButton,
   CCol,
+  CForm,
   CFormInput,
   CFormSelect,
   CModal,
@@ -33,6 +34,8 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const staticData = [
   {
@@ -41,6 +44,9 @@ const staticData = [
     uniqueCode: "AT-002",
     description: "vhnds jjsw ",
     addedOn: "2024-10-08",
+    effectFrom: "2024-10-15",
+    reviewDate: "2024-10-20",
+    status: "INITIATED",
   },
   {
     sno: 2,
@@ -48,6 +54,9 @@ const staticData = [
     uniqueCode: "AT-002",
     description: "vhnds jjsw ",
     addedOn: "2024-10-08",
+    effectFrom: "2024-10-15",
+    reviewDate: "2024-10-20",
+    status: "INITIATED",
   },
 ];
 
@@ -78,6 +87,37 @@ function Testcategories() {
     return [...staticData, ...initialData]; // Merge static data with local storage data
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/mTestCategories`
+        );
+        const fetchData = response?.data[0]?.mTestCategories || [];
+        const updatedData = fetchData?.map((item, index) => ({
+          ...item,
+          sno: item?.sno || index + 1,
+        }));
+        setData(updatedData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const addNewItem = (newItem) => {
+    const newItemWithSno = {
+      ...newItem,
+      sno: data.length + 1, // Assign sno based on current data length
+    };
+    setData([...data, newItemWithSno]); // Add new item with sno
+  };
+
+  const addRow = (newRow) => {
+    setData([...data, newRow]);
+  };
+  
   useEffect(() => {
     // Store dynamic data back to local storage
     localStorage.setItem(
@@ -207,27 +247,41 @@ function Testcategories() {
     setData(updatedData);
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
+  const StatusModal = ({ visible, closeModal, addRow,addNewItem }) => {
     const [testCategoryData, setTestCategory] = useState({
+      addedOn:new Date().toISOString().split("T")[0],
       categoryName: "",
       uniqueCode: "",
       description: "",
+      effectFrom:"",
+      reviewDate: "",
+      status: "Active",
     });
 
-    const currentDate = new Date().toISOString().split("T")[0];
+    const tempdata=testCategoryData;
+    const handleAddTestCategory = (e) => {
 
-    const handleAdd = () => {
-      const newCondition = {
-        categoryName: testCategoryData.categoryName,
-        uniqueCode: testCategoryData.uniqueCode,
-        description: testCategoryData.description,
-        addedOn: currentDate,
-        effectFrom: currentDate,
-        reviewDate: currentDate,
-        action: [],
-      };
-      onAdd(newCondition);
+      e.preventDefault();
+  
+      axios
+        .post(`http://localhost:9000/manage-lims/add/mTestCategories`,testCategoryData)
+        .then((response) => {
+          toast.success(response.data.message || "Test Category added successfully!")
+          addRow(testCategoryData);
+          addNewItem(testCategoryData);
+          closeModal()
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("Test Category Already Registered");
+        });
     };
+
+    const handleInputChange = (field, value) => {
+      const updatedData = { ...testCategoryData, [field]: value };
+      setTestCategory(updatedData);
+    };
+    
 
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
@@ -236,7 +290,7 @@ function Testcategories() {
         </CModalHeader>
         <CModalBody>
           <p>Add information of Test Category</p>
-
+          <CForm onSubmit={handleAddTestCategory} >
           <CFormInput
             className="mb-3"
             type="text"
@@ -244,12 +298,8 @@ function Testcategories() {
             placeholder="Category Name"
             name="categoryName"
             value={testCategoryData.categoryName}
-            onChange={(e) => {
-              setTestCategory({
-                ...testCategoryData,
-                categoryName: e.target.value,
-              });
-            }}
+            onChange={(e) => handleInputChange("categoryName",e.target.value)
+            }
           />
           <CFormInput
             className="mb-3"
@@ -258,12 +308,8 @@ function Testcategories() {
             placeholder="Unique Code "
             name="uniqueCode"
             value={testCategoryData.uniqueCode}
-            onChange={(e) => {
-              setTestCategory({
-                ...testCategoryData,
-                uniqueCode: e.target.value,
-              });
-            }}
+            onChange={(e) => handleInputChange("uniqueCode",e.target.value)
+            }
           />
           <CFormInput
             className="mb-3"
@@ -272,21 +318,39 @@ function Testcategories() {
             placeholder="Description"
             name="description"
             value={testCategoryData.description}
-            onChange={(e) => {
-              setTestCategory({
-                ...testCategoryData,
-                description: e.target.value,
-              });
-            }}
+            onChange={(e) => handleInputChange("description",e.target.value)
+            }
           />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Effect From"
+            placeholder="Effect From"
+            name="effectFrom"
+            value={testCategoryData.effectFrom}
+            onChange={(e) => handleInputChange("effectFrom",e.target.value)
+            }
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Review Date"
+            placeholder="Review Date"
+            name="Review Date"
+            value={testCategoryData.reviewDate}
+            onChange={(e) => handleInputChange("reviewDate",e.target.value)
+            }
+          />
+          <CButton color="primary" type="submit">
+            Submit
+          </CButton>
+          </CForm>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
-            Submit
-          </CButton>
+          
         </CModalFooter>
       </CModal>
     );
@@ -436,7 +500,8 @@ function Testcategories() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={addNewStorageCondition}
+          addRow={addRow}
+          addNewItem={ addNewItem }
         />
       )}
       {viewModalData && (
