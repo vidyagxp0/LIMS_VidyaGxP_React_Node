@@ -232,7 +232,7 @@ function SamplingConfiguration() {
     };
 
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModal alignment="center" visible={visible} onClose={closeModal} size="md">
         <CModalHeader>
           <CModalTitle>Add Sampling Configuration</CModalTitle>
         </CModalHeader>

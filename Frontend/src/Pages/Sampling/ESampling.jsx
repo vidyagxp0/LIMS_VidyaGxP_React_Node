@@ -46,10 +46,19 @@ function ESampling() {
     try {
       const response = await axios.get(`${BASE_URL}/get-all-lims/sESampling`);
       const formattedData = response?.data[0]?.sESampling || [];
-      const updatedData = formattedData.map((item, index) => ({
+      const updatedData = formattedData.map((item) => ({
         ...item,
-        sno: item.uniqueId,
+        sno: item.uniqueId, // Use uniqueId as sno
         checkbox: false,
+        addedOn: new Date().toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }),
       }));
       setData(updatedData);
     } catch (error) {
@@ -113,7 +122,11 @@ function ESampling() {
         />
       ),
     },
-    { header: "Sr No.", accessor: "sno" },
+    { 
+      header: "Sr No.", 
+      accessor: "uniqueId",
+      Cell: ({ value }) => value
+    },
     { header: "Sampling Configuration", accessor: "samplingConfiguration" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
     { header: "No. of Containers", accessor: "noOfContainers" },
@@ -141,13 +154,11 @@ function ESampling() {
         if (!value) return "N/A";
         const date = new Date(value);
         return date.toLocaleString("en-IN", {
-          timeZone: "Asia/Kolkata",
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
           hour: "2-digit",
           minute: "2-digit",
-          second: "2-digit",
           hour12: true,
         });
       },
@@ -200,25 +211,21 @@ function ESampling() {
 
   const addNewESampling = async (newESampling) => {
     try {
-      const currentDateTime = new Date().toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata",
-      });
-      const eSamplingWithDateTime = {
-        ...newESampling,
-        addedOn: currentDateTime,
-      };
-  
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/sESampling`,
-        eSamplingWithDateTime
+        newESampling
       );
       if (response.status === 200) {
         const addedESampling = response.data;
+        const currentDateTime = new Date().toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata",
+        });
         setData((prevData) => [
           {
             ...addedESampling,
             sno: prevData.length + 1,
             checkbox: false,
+            addedOn: currentDateTime, 
           },
           ...prevData,
         ]);
@@ -258,12 +265,16 @@ function ESampling() {
   };
 
   const handleStatusUpdate = (eSampling, newStatus) => {
+  console.log(eSampling,"eSampling");
+  
     const updatedData = data.map((item) =>
       item.uniqueId === eSampling.uniqueId
         ? { ...item, status: newStatus }
         : item
     );
     setData(updatedData);
+    // console.log(updatedData,"UpdatedData");
+    
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -290,7 +301,7 @@ function ESampling() {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="xl"
+        size="md"
       >
         <CModalHeader>
           <CModalTitle>Add E-Sampling</CModalTitle>
