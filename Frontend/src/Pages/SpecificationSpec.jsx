@@ -181,7 +181,7 @@ const SpecificationSpec = () => {
   const handleAddSPC = async (newSTP) => {
     try {
       const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTP);
-      const addedSTP = response.data.updatedLIMS?.stp[0];
+      const addedSTP = response.data.updatedLIMS?.spc[0];
       if (addedSTP) {
         setData(prevData => [...prevData, addedSTP]);
       }
@@ -194,9 +194,9 @@ const SpecificationSpec = () => {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(`${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`, updatedData);
-      const updatedSTP = response.data.updatedLIMS?.stp[0];
+      const updatedSTP = response.data.updatedLIMS?.spc[0];
       if (updatedSTP) {
-        setData(prevData => prevData.map(item => item.stpId === updatedSTP.stpId ? updatedSTP : item));
+        setData(prevData => prevData.map(item => item.specId === updatedSTP.specId ? updatedSTP : item));
       }
       setEditModalData(null);
     } catch (err) {
@@ -615,7 +615,7 @@ const SpecificationSpec = () => {
   };
   useEffect(() => {
     localStorage.setItem(
-      "stp",
+      "spc",
       JSON.stringify(data.filter((row) => !randomData.includes(row)))
     );
   }, [data]);
