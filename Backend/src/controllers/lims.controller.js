@@ -168,6 +168,8 @@ const withTransaction = async (callback) => {
 export const manageLIMS = async (req, res) => {
   const filename =
     req?.files?.map((file) => file?.filename)[0] || req?.filename;
+    console.log(filename,"FileName");
+    
   const { fieldName, uniqueId, add, update } = req.params;
   try {
     await withTransaction(async (t) => {

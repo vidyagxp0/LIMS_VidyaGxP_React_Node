@@ -22,7 +22,9 @@ import {
   CModalFooter,
   CButton,
   CFormInput,
+  CForm,
 } from "@coreui/react";
+import { toast } from "react-toastify";
 
 const initialData = JSON.parse(localStorage.getItem("stp")) || "";
 
@@ -32,6 +34,7 @@ const STP = () => {
   const [viewModalData, setViewModalData] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
   const [dataChanged, setDataChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // const [data, setData] = useState(() => {
   //   return [...randomData, ...initialData];
   // });
@@ -150,48 +153,47 @@ const STP = () => {
   }, [dataChanged]);
 
   // POST API - Add new STP
-  const handleAddSTP = async (newSTP) => {
+  const handleAddSTP = async (newSTPData) => {
+    setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/STP`,
-        newSTP
-      );
-      const addedSTP = response.data.updatedLIMS?.stp[0];
-      if (addedSTP) {
-        setData((prevData) => [...prevData, addedSTP]);
-        setDataChanged(true);
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTPData);
+      if (response.status === 200 || response.status === 201) {
+        setData(prevData => [...prevData, response.data]);  // Ensure new data is appended
+        toast.success("New STP added successfully!");
+      } else {
+        toast.error("Failed to add new STP. Please try again.");
       }
-      closeAddModal();
-    } catch (err) {
-      setError("Error adding STP");
+    } catch (error) {
+      console.error("Error adding new STP:", error);
+      toast.error("Error adding new STP: " + error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  // PUT API - Update existing STP
   const handleEditSave = async (updatedData) => {
+    const { sno, ...dataToSend } = updatedData;
+    setIsLoading(true);
     try {
-      // Remove 'sno' before sending the data to the backend
-      const {sno,...dataToSend } = updatedData;
-  
-      // Send the rest of the data without 'sno' to the backend
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/STP/${updatedData.sno}`,  // Use uniqueId in the URL
-        dataToSend // Only send the necessary data excluding 'sno'
+        `${BASE_URL}/manage-lims/update/STP/${updatedData.sno}`,
+        dataToSend
       );
-  
-      const updatedSTP = response.data.updatedLIMS?.stp[0];
-      if (updatedSTP) {
+      if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === updatedSTP.uniqueId ? updatedSTP : item  // Match by uniqueId
-          )
+            item.sno === updatedData.sno ? { ...item, ...updatedData } : item
+        )
         );
-        setDataChanged(false);
+        toast.success("STP updated successfully");
+        setEditModalData(null);
+      } else {
+        toast.error("Failed to update STP");
       }
-      setEditModalData(null);  // Close the edit modal
-    } catch (err) {
-      console.error("Error updating STP:", err);
-      setError("Error updating STP");
+    } catch (error) {
+      console.error("Error updating STP:", error);
+      toast.error("Failed to update STP");
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -235,305 +237,67 @@ const STP = () => {
       attachments: "",
       remarks: "",
     });
-    const handleAdd = () => {
-      onAdd(formData);
-      closeModal();
-    };
+    const [errors, setErrors] = useState({});
 
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: null }));
+      }
+    };
+  
+    const validateForm = () => {
+      const newErrors = {};
+      Object.keys(formData).forEach(key => {
+        if (!formData[key] && key !== 'attachment' && key !== 'attachments') {
+          newErrors[key] = "This field is required";
+        }
+      });
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    };
+  
+    const handleAdd = () => {
+      if (validateForm()) {
+        
+        onAdd(formData);
+        closeModal();
+      }
+    };
+  
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModal alignment="center" visible={visible} onClose={closeModal} size="md">
         <CModalHeader>
           <CModalTitle>Add STP</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="STP ID"
-            name="stpId"
-            value={formData.stpId}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="STP Title/Name"
-            name="title"
-            value={formData.title}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="file"
-            label="STP Attachment"
-            name="attachment"
-            value={formData.attachment}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="number"
-            label="Version Number"
-            name="version"
-            value={formData.version}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="date"
-            label="Effective Date"
-            name="effectiveDate"
-            value={formData.effectiveDate}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="date"
-            label="Creation Date"
-            name="creationDate"
-            value={formData.creationDate}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Reviewed By"
-            name="reviewedBy"
-            value={formData.reviewedBy}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Approved By"
-            name="approvedBy"
-            value={formData.approvedBy}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Department"
-            name="department"
-            value={formData.department}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Objective"
-            name="objective"
-            value={formData.objective}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Procedure Description"
-            name="testProcedureDescription"
-            value={formData.testProcedureDescription}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Type"
-            name="testType"
-            value={formData.testType}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Method Reference"
-            name="testMethodReference"
-            value={formData.testMethodReference}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Sample Preparation"
-            name="samplePreparation"
-            value={formData.samplePreparation}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Reagents/Standards Used"
-            name="reagents"
-            value={formData.reagents}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Equipment/Instrument Required"
-            name="equipment"
-            value={formData.equipment}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Calibration Requirements"
-            name="calibration"
-            value={formData.calibration}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Environmental Conditions"
-            name="environmental"
-            value={formData.environmental}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Control Sample Requirements"
-            name="controlSample"
-            value={formData.controlSample}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Parameters"
-            name="testParameters"
-            value={formData.testParameters}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Safety Precautions"
-            name="safetyPrecautions"
-            value={formData.safetyPrecautions}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Validation Requirements"
-            name="validationRequirements"
-            value={formData.validationRequirements}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Calculation Formula"
-            name="calculationFormula"
-            value={formData.calculationFormula}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="LSL"
-            name="lsl"
-            value={formData.lsl}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="USL"
-            name="usl"
-            value={formData.usl}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Result Interpretation"
-            name="resultInterpretation"
-            value={formData.resultInterpretation}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Expected Results"
-            name="expectedResults"
-            value={formData.expectedResults}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Report Template"
-            name="reportTemplate"
-            value={formData.reportTemplate}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Data Recording Procedure"
-            name="dataRecording"
-            value={formData.dataRecording}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Frequency"
-            name="testFrequency"
-            value={formData.testFrequency}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Test Report Submission"
-            name="testReportSubmission"
-            value={formData.testReportSubmission}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Deviation Handling"
-            name="deviationHandling"
-            value={formData.deviationHandling}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Audit Trail"
-            name="auditTrail"
-            value={formData.auditTrail}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Revision History"
-            name="revisionHistory"
-            value={formData.revisionHistory}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="file"
-            label="Attachments"
-            name="attachments"
-            value={formData.attachments}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Remarks"
-            name="remarks"
-            value={formData.remarks}
-            onChange={(e) => handleChange(e, setFormData, formData)}
-          />
+          <CForm>
+            {Object.entries(formData).map(([key, value]) => {
+              let inputType = "text";
+              if (key.includes("date")) {
+                inputType = "date";
+              } else if (key.includes("number") || key === "version") {
+                inputType = "number";
+              } else if (key === "attachment" || key === "attachments") {
+                inputType = "file";
+              }
+  
+              return (
+                <CFormInput
+                  key={key}
+                  className="mb-3"
+                  type={inputType}
+                  label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1").trim()}
+                  name={key}
+                  value={inputType !== "file" ? value : undefined}
+                  onChange={handleChange}
+                  invalid={!!errors[key]}
+                  feedback={errors[key]}
+                />
+              );
+            })}
+          </CForm>
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
@@ -555,93 +319,109 @@ const STP = () => {
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
-
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+  
     useEffect(() => {
       if (data) {
         setFormData(data);
       }
     }, [data]);
-
+  
     const handleChange = (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: null }));
+      }
     };
-
-    const handleSave = () => {
-      onSave(formData);
+  
+    const validateForm = () => {
+      const newErrors = {};
+      Object.keys(formData).forEach(key => {
+        if (!formData[key] && key !== 'uniqueId' && key !== 'sno') {
+          newErrors[key] = "This field is required";
+        }
+      });
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
     };
-
+  
+    const handleSave = async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+  
+      setIsLoading(true);
+      try {
+        await onSave({...formData,sno:formData.sno});
+        closeModal();
+      } catch (error) {
+        console.error("Error updating STP:", error);
+        toast.error("Failed to update STP");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    if (!visible) return null;
+  
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="xl"
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
         <CModalHeader>
           <CModalTitle>Edit STP</CModalTitle>
         </CModalHeader>
         <CModalBody>
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    {Object.entries(formData).map(([key, value]) => {
-      if (key === "sno") {
-        return (
-          <div key={key}>
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Sno"
-              name={key}
-              value={value}
-              disabled 
-            />
-          </div>
-        );
-      }
-
-      let inputType;
-      if (key.includes("date")) {
-        inputType = "date";
-      } else if (key.includes("number")) {
-        inputType = "number";
-      } else if (key.includes("file")) {
-        inputType = "file";
-      } else {
-        inputType = "text";
-      }
-
-      return (
-        <div key={key}>
-          <CFormInput
-            className="mb-3"
-            type={inputType}
-            label={
-              key.charAt(0).toUpperCase() +
-              key
-                .slice(1)
-                .replace(/([A-Z])/g, " $1")
-                .trim()
-            }
-            name={key}
-            value={inputType !== "file" ? value : undefined}
-            onChange={
-              inputType === "file"
-                ? (e) => handleChange(e, setFormData, formData)
-                : handleChange
-            }
-          />
-        </div>
-      );
-    })}
-  </div>
-</CModalBody>
-
+          <CForm>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {Object.entries(formData).map(([key, value]) => {
+                if (key === "sno" || key === "uniqueId") {
+                  return (
+                    <div key={key}>
+                      <CFormInput
+                        className="mb-3"
+                        type="text"
+                        label={key.charAt(0).toUpperCase() + key.slice(1)}
+                        name={key}
+                        value={value}
+                        disabled
+                      />
+                    </div>
+                  );
+                }
+  
+                let inputType = "text";
+                if (key.includes("date")) {
+                  inputType = "date";
+                } else if (key.includes("number") || key === "version") {
+                  inputType = "number";
+                } else if (key === "attachment" || key === "attachments") {
+                  inputType = "file";
+                }
+  
+                return (
+                  <div key={key}>
+                    <CFormInput
+                      className="mb-3"
+                      type={inputType}
+                      label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1").trim()}
+                      name={key}
+                      value={inputType !== "file" ? value : undefined}
+                      onChange={handleChange}
+                      invalid={!!errors[key]}
+                      feedback={errors[key]}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </CForm>
+        </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
             Close
           </CButton>
-          <CButton color="primary" onClick={handleSave}>
-            Save Changes
+          <CButton color="primary" onClick={handleSave} disabled={isLoading}>
+            {isLoading ? "Saving..." : "Save Changes"}
           </CButton>
         </CModalFooter>
       </CModal>
@@ -982,7 +762,7 @@ const STP = () => {
       {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
+          closeModal={() => setEditModalData(null)}
           data={editModalData}
           onSave={handleEditSave}
         />

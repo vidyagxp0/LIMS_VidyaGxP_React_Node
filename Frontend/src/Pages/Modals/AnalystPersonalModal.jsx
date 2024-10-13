@@ -69,112 +69,132 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
     ModificationDate: "",
     ModifiedBy: "",
     ChangeDescription: "",
-    status: "Active",
+    status: "",
   });
 
   useEffect(() => {
-    if (visible) {
-      resetForm();
+    if (data) {
+      setAnalystData(data);
+    } else {
+      setAnalystData({
+        AnalystID: "",
+        FullName: "",
+        DateOfBirth: "",
+        EmailAddress: "",
+        PhoneNumber: "",
+        Department: "",
+        JobTitle: "",
+        SupervisorManagerName: "",
+        QualificationID: "",
+        DateOfQualification: "",
+        QualifiedBy: "",
+        QualificationType: "",
+        ExpirationDate: "",
+        QualificationStatus: "",
+        TrainingProgramName: "",
+        TrainingStartDate: "",
+        TrainingCompletionDate: "",
+        TrainingCompletionStatus: "",
+        CertificationNameNumber: "",
+        CertificationBody: "",
+        CertificationDate: "",
+        NextRecertificationDate: "",
+        CompetencyTestName: "",
+        TestDate: "",
+        TestResults: "",
+        TestScore: "",
+        EvaluatorName: "",
+        EvaluatorComments: "",
+        TechniqueSkillName: "",
+        QualificationDate: "",
+        SkillLevel: "",
+        RequalificationRequired: "",
+        RequalificationDueDate: "",
+        InstrumentNameID: "",
+        MethodNameID: "",
+        QualificationLevel: "",
+        CalibrationDueDate: "",
+        MethodValidationDate: "",
+        SOPNameID: "",
+        SOPVersion: "",
+        DateAcknowledgedReviewed: "",
+        RevisionDueDate: "",
+        YearsOfExperience: "",
+        PreviousJobRoles: "",
+        PreviousLabsWorkedIn: "",
+        Specializations: "",
+        ApprovalDate: "",
+        ApproversName: "",
+        ApproversSignature: "",
+        CommentsNotes: "",
+        ModificationDate: "",
+        ModifiedBy: "",
+        ChangeDescription: "",
+        status: "Active",
+      });
     }
-  }, [visible]);
+  }, [data]);
 
-  const resetForm = () => {
-    setAnalystData({
-      AnalystID: "",
-      FullName: "",
-      DateOfBirth: "",
-      EmailAddress: "",
-      PhoneNumber: "",
-      Department: "",
-      JobTitle: "",
-      SupervisorManagerName: "",
-      QualificationID: "",
-      DateOfQualification: "",
-      QualifiedBy: "",
-      QualificationType: "",
-      ExpirationDate: "",
-      QualificationStatus: "",
-      TrainingProgramName: "",
-      TrainingStartDate: "",
-      TrainingCompletionDate: "",
-      TrainingCompletionStatus: "",
-      CertificationNameNumber: "",
-      CertificationBody: "",
-      CertificationDate: "",
-      NextRecertificationDate: "",
-      CompetencyTestName: "",
-      TestDate: "",
-      TestResults: "",
-      TestScore: "",
-      EvaluatorName: "",
-      EvaluatorComments: "",
-      TechniqueSkillName: "",
-      QualificationDate: "",
-      SkillLevel: "",
-      RequalificationRequired: "",
-      RequalificationDueDate: "",
-      InstrumentNameID: "",
-      MethodNameID: "",
-      QualificationLevel: "",
-      CalibrationDueDate: "",
-      MethodValidationDate: "",
-      SOPNameID: "",
-      SOPVersion: "",
-      DateAcknowledgedReviewed: "",
-      RevisionDueDate: "",
-      YearsOfExperience: "",
-      PreviousJobRoles: "",
-      PreviousLabsWorkedIn: "",
-      Specializations: "",
-      ApprovalDate: "",
-      ApproversName: "",
-      ApproversSignature: "",
-      CommentsNotes: "",
-      ModificationDate: "",
-      ModifiedBy: "",
-      ChangeDescription: "",
-      status: "Active",
-    });
+  const handleInputChange = (key, value) => {
+    setAnalystData((prevData) => ({
+      ...prevData,
+      [key]: value,
+    }));
   };
 
-  const handleInputChange = (field, value) => {
-    setAnalystData({ ...analystData, [field]: value });
-  };
-
-  const handleAddAnalyst = (e) => {
+  const handleSubmitAnalyst = async (e) => {
     e.preventDefault();
 
-    const newAnalyst = {
-      ...analystData,
-    };
+    try {
+      if (data) {
+        // Edit existing analyst
+        const { sno, ...updatedData } = analystData;
+        const response = await axios.put(
+          `${BASE_URL}/manage-lims/update/analystPersonal/${sno}`,
+          updatedData
+        );
 
-    axios
-      .post(`${BASE_URL}/manage-lims/add/analystPersonal`, newAnalyst)
-      .then((response) => {
         if (response.status === 200) {
-          toast.success(response.data.message || "Data added successfully!");
-          addRow(newAnalyst);
+          toast.success("Analyst updated successfully!");
+          handleSubmit(analystData);
           closeModal();
         } else {
-          toast.error("Failed to add data.");
+          toast.error("Failed to update analyst.");
         }
-      })
-      .catch((error) => {
-        console.error(error);
-        if (error.response) {
-          toast.error(error.response.data.message || "Error adding data");
+      } else {
+        // Add new analyst
+        const response = await axios.post(
+          `${BASE_URL}/manage-lims/add/analystPersonal`,
+          analystData
+        );
+
+        if (response.status === 200) {
+          toast.success("Analyst added successfully!");
+          handleSubmit(response.data);
+          closeModal();
         } else {
-          toast.error("Error adding data");
+          toast.error("Failed to add analyst.");
         }
-      });
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response) {
+        toast.error(
+          error.response.data.message || "Error updating/adding analyst"
+        );
+      } else {
+        toast.error("Error updating/adding analyst");
+      }
+    }
   };
+
   return (
-    <CModal alignment="center" visible={visible} onClose={closeModal} size="md">
-      <CModalHeader className="p-3">
-        <CModalTitle>Add Analyst Personal Information</CModalTitle>
+    <CModal visible={visible} onClose={closeModal}>
+      <CModalHeader>
+        <CModalTitle>{data ? "Edit Analyst" : "Add Analyst"}</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <CForm onSubmit={handleAddAnalyst}>
+        <CForm onSubmit={handleSubmitAnalyst}>
           <CFormInput
             className="mb-3"
             type="text"
@@ -195,7 +215,13 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             label="Date of Birth"
             value={analystData.DateOfBirth}
             onChange={(e) => handleInputChange("DateOfBirth", e.target.value)}
+            max={
+              new Date(new Date().setFullYear(new Date().getFullYear() - 22))
+                .toISOString()
+                .split("T")[0]
+            }
           />
+
           <CFormInput
             className="mb-3"
             type="email"
@@ -267,8 +293,8 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             }
             options={[
               "Select...",
-              { label: "Type 1", value: "Type 1" },
-              { label: "Type 2", value: "Type 2" },
+              { label: "Initial", value: "Initial" },
+              { label: "Recertification", value: "Recertification" },
               // Add more options as needed
             ]}
           />
@@ -290,8 +316,10 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             }
             options={[
               "Select...",
-              { label: "Active", value: "Active" },
-              { label: "Inactive", value: "Inactive" },
+              { label: "Qualified", value: "Qualified" },
+              { label: "Pending", value: "Pending" },
+              {label: "Revoked", value: "Revoked"},
+              {label: "Expired", value: "Expired"}
             ]}
           />
           <CFormInput
@@ -330,9 +358,9 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             }
             options={[
               "Select...",
-              { label: "Completed", value: "Completed" },
+              { label: "Pass", value: "Pass" },
+              { label: "Fail", value: "Fail" },
               { label: "In Progress", value: "In Progress" },
-              { label: "Not Completed", value: "Not Completed" },
             ]}
           />
           <CFormInput
@@ -348,6 +376,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             className="mb-3"
             type="text"
             label="Certification Body"
+            placeholder="e.g., ISO, FDA"
             value={analystData.CertificationBody}
             onChange={(e) =>
               handleInputChange("CertificationBody", e.target.value)
@@ -387,12 +416,18 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             value={analystData.TestDate}
             onChange={(e) => handleInputChange("TestDate", e.target.value)}
           />
-          <CFormInput
+          <CFormSelect
             className="mb-3"
             type="text"
             label="Test Results"
             value={analystData.TestResults}
             onChange={(e) => handleInputChange("TestResults", e.target.value)}
+            options={[
+              "Select...",
+              { label: "Passed", value: "Passed" },
+              { label: "Failed", value: "Failed" },
+              { label: "Incomplete", value: "Incomplete" },
+            ]}
           />
           <CFormInput
             className="mb-3"
@@ -494,7 +529,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             }
             options={[
               "Select...",
-              { label: "Level 1", value: "Level 1" },
+              { label: "Operator", value: "Operator" },
               { label: "Level 2", value: "Level 2" },
               // Add more options as needed
             ]}
@@ -580,6 +615,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             className="mb-3"
             type="text"
             label="Specializations"
+            placeholder="e.g., Microbiology, Analytical Chem"
             value={analystData.Specializations}
             onChange={(e) =>
               handleInputChange("Specializations", e.target.value)
@@ -652,7 +688,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
             ]}
           />
           <CButton color="primary" type="submit">
-            Save Project
+            {data ? "Save Changes" : "Add Analyst"}
           </CButton>
         </CForm>
       </CModalBody>

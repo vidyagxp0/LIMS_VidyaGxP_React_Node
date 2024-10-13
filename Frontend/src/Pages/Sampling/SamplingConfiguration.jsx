@@ -32,6 +32,7 @@ function SamplingConfiguration() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);  
 
   useEffect(() => {
     fetchSamplingConfigurations();
@@ -173,6 +174,8 @@ function SamplingConfiguration() {
     } catch (error) {
       console.error("Error adding sampling configuration:", error);
       toast.error("Failed to add sampling configuration");
+    }finally{
+      setIsLoading(false);
     }
     setIsModalOpen(false);
   };
@@ -186,21 +189,31 @@ function SamplingConfiguration() {
   };
 
   const handleEditSave = async (updatedData) => {
-    const { sno, ...dataToSend } = updatedData;
+    const { sno, checkbox, ...dataToSend } = updatedData;
+    setIsLoading(true);
     try {
       const response = await axios.put(
         `${BASE_URL}/manage-lims/update/sSamplingConfiguration/${updatedData.uniqueId}`,
         dataToSend
       );
       if (response.status === 200) {
+        // Update the local state immediately
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === updatedData.uniqueId ? { ...item, ...updatedData } : item
+          )
+        );
         toast.success("Sampling configuration updated successfully");
-        fetchSamplingConfigurations();
+      } else {
+        toast.error("Failed to update sampling configuration");
       }
     } catch (error) {
       console.error("Error updating sampling configuration:", error);
       toast.error("Failed to update sampling configuration");
+    } finally {
+      setIsLoading(false);
+      setEditModalData(null);
     }
-    setEditModalData(null);
   };
 
   const handleStatusUpdate = (samplingConfiguration, newStatus) => {
@@ -221,14 +234,41 @@ function SamplingConfiguration() {
       sampleRule: "",
       status: "Active",
     });
+    const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleAddSamplingConfig = (e) => {
+  
+    const handleAddSamplingConfig = async (e) => {
       e.preventDefault();
-      onAdd(samplingConfigData);
+      const newErrors = {};
+      Object.keys(samplingConfigData).forEach(key => {
+        if (!samplingConfigData[key]) {
+          newErrors[key] = "This field is required";
+        }
+      });
+  
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+  
+      setIsLoading(true);
+      try {
+        await onAdd(samplingConfigData);
+        closeModal();
+      } catch (error) {
+        console.error("Error adding sampling configuration:", error);
+        toast.error("Failed to add sampling configuration");
+      } finally {
+        setIsLoading(false);
+      }
     };
-
+  
     const handleInputChange = (field, value) => {
       setSamplingConfigData({ ...samplingConfigData, [field]: value });
+      if (errors[field]) {
+        setErrors({ ...errors, [field]: null });
+      }
     };
 
     return (
@@ -246,6 +286,8 @@ function SamplingConfiguration() {
               name="samplingID"
               value={samplingConfigData.samplingID}
               onChange={(e) => handleInputChange("samplingID", e.target.value)}
+              invalid={!!errors.samplingID}
+              feedback={errors.samplingID}
             />
             <CFormInput
               className="mb-3"
@@ -254,6 +296,8 @@ function SamplingConfiguration() {
               name="specificationID"
               value={samplingConfigData.specificationID}
               onChange={(e) => handleInputChange("specificationID", e.target.value)}
+              invalid={!!errors.specificationID}
+              feedback={errors.specificationID}
             />
             <CFormSelect
               className="mb-3"
@@ -267,6 +311,8 @@ function SamplingConfiguration() {
                 { label: "Type 2", value: "Type 2" },
                 { label: "Type 3", value: "Type 3" },
               ]}
+              invalid={!!errors.sampleType}
+              feedback={errors.sampleType}
             />
             <CFormInput
               className="mb-3"
@@ -275,6 +321,8 @@ function SamplingConfiguration() {
               name="productName"
               value={samplingConfigData.productName}
               onChange={(e) => handleInputChange("productName", e.target.value)}
+              invalid={!!errors.productName}
+              feedback={errors.productName}
             />
             <CFormInput
               className="mb-3"
@@ -283,6 +331,8 @@ function SamplingConfiguration() {
               name="testPlan"
               value={samplingConfigData.testPlan}
               onChange={(e) => handleInputChange("testPlan", e.target.value)}
+              invalid={!!errors.testPlan}
+              feedback={errors.testPlan}
             />
             <CFormSelect
               className="mb-3"
@@ -296,6 +346,8 @@ function SamplingConfiguration() {
                 { label: "Template 2", value: "Template 2" },
                 { label: "Template 3", value: "Template 3" },
               ]}
+              invalid={!!errors.sampleTemplate}
+              feedback={errors.sampleTemplate}
             />
             <CFormSelect
               className="mb-3"
@@ -309,16 +361,22 @@ function SamplingConfiguration() {
                 { label: "Rule 2", value: "Rule 2" },
                 { label: "Rule 3", value: "Rule 3" },
               ]}
+              invalid={!!errors.sampleRule}
+              feedback={errors.sampleRule}
             />
-            <CButton color="primary" type="submit">
-              Submit
-            </CButton>
           </CForm>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
+          <CButton 
+          color="primary" 
+          onClick={handleAddSamplingConfig} 
+          disabled={isLoading}
+        >
+          {isLoading ? "Adding..." : "Add Sampling Configuration"}
+        </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -356,6 +414,7 @@ function SamplingConfiguration() {
               name="samplingID"
               value={formData?.samplingID || ""}
               onChange={handleChange}
+              
             />
             <CFormInput
               className="mb-3"

@@ -11,6 +11,7 @@ import PDFDownload from "./PDFComponent/PDFDownload .jsx";
 import { BASE_URL } from "../config.json";
 import SearchBar from "../components/ATM components/SearchBar/SearchBar.jsx";
 import AnalystPersonalModal from "./Modals/AnalystPersonalModal.jsx";
+import { toast } from "react-toastify";
 
 const AnalystPersonal = () => {
   const [data, setData] = useState([]);
@@ -59,7 +60,6 @@ const AnalystPersonal = () => {
     setData(data.map((d) => (d === item ? { ...d, checkbox: e.target.checked } : d)));
   };
 
-
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -80,6 +80,30 @@ const AnalystPersonal = () => {
     { header: "Qualification Type", accessor: "QualificationType" },
     { header: "Expiration Date", accessor: "ExpirationDate" },
     { header: "Qualification Status", accessor: "QualificationStatus" },
+    {header: "Training Program Name", accessor: "TrainingProgramName"},
+    {header: "Training Start Date", accessor: "TrainingStartDate"},
+    {header: "Training Completion Date", accessor: "TrainingCompletionDate"},
+    {header: "Training Completion Status", accessor: "TrainingCompletionStatus"},
+    {header: "Certification Name/Number", accessor: "CertificationNameNumber"},
+    {header: "Certification Body", accessor: "CertificationBody"},
+    {header: "Certification Date", accessor: "CertificationDate"},
+    {header: "Next Recertification Date", accessor: "NextRecertificationDate"},
+    {header: "Competency Test Name", accessor: "CompetencyTestName"},
+    {header: "Test Date", accessor: "TestDate"},
+    {header: "Test Results", accessor: "TestResults"},
+    {header: "Test Score", accessor: "TestScore"},
+    {header: "Evaluator Name", accessor: "EvaluatorName"},
+    {header: "Evaluator Comments", accessor: "EvaluatorComments"},
+    {header: "Technique/Skill Name", accessor: "TechniqueSkillName"},
+    {header: "Qualification Date", accessor: "QualificationDate"},
+    {header: "Skill Level", accessor: "SkillLevel"},
+    {header: "Requalification Required", accessor: "RequalificationRequired"},
+    {header: "Requalification Due Date", accessor: "RequalificationDueDate"},
+    {header: "Instrument Name/ID", accessor: "InstrumentNameID"},
+    {header: "Method Name/ID", accessor: "MethodNameID"},
+    {header: "Qualification Level", accessor: "QualificationLevel"},
+    {header: "Qualification Date", accessor: "QualificationDate"},
+    {header: "Calibration Due Date", accessor: "CalibrationDueDate"},
     { header: "Method Validation Date", accessor: "MethodValidationDate" },
     { header: "SOP Name/ID", accessor: "SOPNameID" },
     { header: "SOP Version", accessor: "SOPVersion" },
@@ -121,12 +145,18 @@ const AnalystPersonal = () => {
     },
   ];
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = () => {
+    setEditModalData(null);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditModalData(null);
+  };
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`${BASE_URL}/manage-lims/delete/analystPersonal/${item.sno}`);
+      await axios.delete(`${BASE_URL}/delete-lims/analystPersonal/${item.sno}`);
       setData((prevData) => prevData.filter(dataItem => dataItem.sno !== item.sno));
       closeModal();
     } catch (error) {
@@ -149,33 +179,22 @@ const AnalystPersonal = () => {
     setIsModalOpen(true);
   };
 
-  const handleModalSubmit = async (updatedAnalyst) => {
-    try {
-      if (editModalData) {
-        // Edit existing analyst
-        const response = await axios.put(
-          `${BASE_URL}/manage-lims/update/analystPersonal/${updatedAnalyst.sno}`,
-          updatedAnalyst
-        );
-        if (response.status === 200) {
-          setData(prevData =>
-            prevData.map(item => item.sno === updatedAnalyst.sno ? updatedAnalyst : item)
-          );
-          toast.success("Analyst updated successfully!");
-        } else {
-          toast.error("Failed to update analyst.");
-        }
-      } else {
-        // Add new analyst
-        setData(prevData => [...prevData, updatedAnalyst]);
-        toast.success("Analyst added successfully!");
-      }
-      closeModal();
-      setEditModalData(null);
-    } catch (error) {
-      console.error("Error updating analyst:", error);
-      toast.error("Error updating analyst: " + (error.response?.data?.message || error.message));
+  const handleModalSubmit = (analystData) => {
+    if (editModalData) {
+      // Update existing analyst
+      setData((prevData) =>
+        prevData.map((item) =>
+          item.sno === analystData.sno ? analystData : item
+        )
+      );
+      toast.success("Analyst updated successfully!");
+    } else {
+      // Add new analyst
+      setData((prevData) => [...prevData, analystData]);
+      toast.success("Analyst added successfully!");
     }
+    closeModal();
+    setEditModalData(null);
   };
 
   return (
