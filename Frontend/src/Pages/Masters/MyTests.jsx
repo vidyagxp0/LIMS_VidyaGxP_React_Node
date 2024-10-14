@@ -29,31 +29,10 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-// Dummy static data
-const staticData = [
-  {
-    ARNo: "AR001",
-    productName: "Product A",
-    sampleIncharge: "John Doe",
-    assignedOn: "2023-09-01",
-    sampleType: "Type 1",
-    status: "INITIATED",
-    sno: 1,
-    checkbox: false,
-  },
-  {
-    ARNo: "AR002",
-    productName: "Product B",
-    sampleIncharge: "Jane Smith",
-    assignedOn: "2023-09-02",
-    sampleType: "Type 2",
-    status: "INITIATED",
-    sno: 2,
-    checkbox: false,
-  },
-  // Add more static entries as needed
-];
+
 
 // Initial dynamic data from local storage
 const initialData = JSON.parse(localStorage.getItem("mytest")) || [];
@@ -76,18 +55,29 @@ function Mytests() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
-  // Combine static data with dynamic data from local storage
-  const [data, setData] = useState(() => {
-    return [...staticData, ...initialData]; // Merge static data with local storage data
-  });
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Store dynamic data back to local storage
-    localStorage.setItem(
-      "mytest",
-      JSON.stringify(data.filter((row) => !staticData.includes(row)))
-    );
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/mMyTest`
+        );
+        const fetchedData = response?.data[0]?.mMyTest || [];
+
+        const updatedData = fetchedData.map((item, index) => ({
+          ...item,
+          sno: item?.uniqueId || index + 1,
+        }));
+
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -103,18 +93,19 @@ function Mytests() {
   };
 
   console.log("Data:", data);
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        console.log("Row:", row); // Log each row to see its structure
-        const productName = row.productName || "";
-        return (
-          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
-        );
-      })
-    : [];
-  // Fallback to an empty array if data is not an array
+  const filteredData = data
+  .filter((row) => {
+    return (
+      row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  })
+  .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
 
+const onAdd = (newRow) => {
+  const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+  setData(updatedData);
+};
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
@@ -184,11 +175,24 @@ function Mytests() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+   
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mMyTest/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.uniqueId);
+        setData(newData);
+        console.log("Product deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
+  
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
@@ -213,37 +217,44 @@ function Mytests() {
     setData(updatedData);
   };
   const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [ARNo, setARNo] = useState("");
-    const [productName, setproductName] = useState("");
-    const [sampleIncharge, setsampleIncharge] = useState("");
-    const [assignedOn, setassignedOn] = useState("");
-    const [sampleType, setsampleType] = useState("");
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
+    const [myTestData, setMyTestData] = useState({
+      ARNo: "",
+      productName: "",
+      sampleIncharge: "",
+      assignedOn: "",
+      sampleType: "",
+    });
+  
+    const handleAdd = async () => {
+      const newCondition = { ...myTestData };
+  
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/manage-lims/add/mMyTest",
+          newCondition
+        );
+  
+        if (response.status === 200 || response.status === 201) {
+          console.log("Product added successfully:", response?.data?.updatedLIMS?.mmasterProduct);
+          closeModal();
+          onAdd(response.data);
+        } else {
+          console.error("Failed to add product:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error adding product:", error);
       }
     };
-
-    const handleAdd = () => {
-      const newCondition = {
-        ARNo: ARNo,
-        productName: productName,
-        sampleIncharge: sampleIncharge,
-        assignedOn: assignedOn,
-        sampleType: sampleType,
-
-        action: [],
-      };
-      closeModal();
-      onAdd(newCondition);
+  
+    const handleInputChange = (field, value) => {
+      const updatedData = { ...myTestData, [field]: value };
+      setMyTestData(updatedData);
     };
-
+  
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle></CModalTitle>
+          <CModalTitle>Add New Product</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -252,17 +263,17 @@ function Mytests() {
             label="A.R NO."
             placeholder="A.R NO."
             name="ARNo"
-            value={ARNo}
-            onChange={(e) => setARNo(e.target.value)}
+            value={myTestData.ARNo}
+            onChange={(e) => handleInputChange("ARNo", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Product Name"
-            placeholder="Product Name "
+            placeholder="Product Name"
             name="productName"
-            value={productName}
-            onChange={(e) => setproductName(e.target.value)}
+            value={myTestData.productName}
+            onChange={(e) => handleInputChange("productName", e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -270,27 +281,25 @@ function Mytests() {
             label="Sample Incharge"
             placeholder="Sample Incharge"
             name="sampleIncharge"
-            value={sampleIncharge}
-            onChange={(e) => setsampleIncharge(e.target.value)}
+            value={myTestData.sampleIncharge}
+            onChange={(e) => handleInputChange("sampleIncharge", e.target.value)}
           />
-
           <CFormInput
             className="mb-3"
-            type="text"
+            type="date"
             label="Assigned On"
-            placeholder="Assigned On "
             name="assignedOn"
-            value={assignedOn}
-            onChange={(e) => setassignedOn(e.target.value)}
+            value={myTestData.assignedOn}
+            onChange={(e) => handleInputChange("assignedOn", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label=" Sample Type"
+            label="Sample Type"
             placeholder="Sample Type"
             name="sampleType"
-            value={sampleType}
-            onChange={(e) => setsampleType(e.target.value)}
+            value={myTestData.sampleType}
+            onChange={(e) => handleInputChange("sampleType", e.target.value)}
           />
         </CModalBody>
         <CModalFooter>
@@ -312,43 +321,55 @@ function Mytests() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mMyTest/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log("Product updated successfully:", response.data);
+      } else {
+        console.error("Failed to update product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [formData, setFormData] = useState(data);
-
+    const [formData, setFormData] = useState({
+      ARNo: "",
+      productName: "",
+      sampleIncharge: "",
+      assignedOn: "",
+      sampleType: "",
+    });
+  
     useEffect(() => {
       if (data) {
         setFormData(data);
       }
     }, [data]);
-
+  
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     };
-
+  
     const handleSave = () => {
       onSave(formData);
     };
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-
+  
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>Test Registrion</CModalTitle>
+          <CModalTitle>Edit Test</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -357,16 +378,16 @@ function Mytests() {
             label="A.R NO."
             placeholder="A.R NO."
             name="ARNo"
-            value={formData?.ARNo || ""}
+            value={formData.ARNo}
             onChange={handleChange}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Product Name"
-            placeholder="Product Name "
+            placeholder="Product Name"
             name="productName"
-            value={formData?.productName || ""}
+            value={formData.productName}
             onChange={handleChange}
           />
           <CFormInput
@@ -375,26 +396,24 @@ function Mytests() {
             label="Sample Incharge"
             placeholder="Sample Incharge"
             name="sampleIncharge"
-            value={formData?.sampleIncharge || ""}
+            value={formData.sampleIncharge}
             onChange={handleChange}
           />
-
           <CFormInput
             className="mb-3"
-            type="text"
+            type="date"
             label="Assigned On"
-            placeholder="Assigned On "
             name="assignedOn"
-            value={formData?.assignedOn || ""}
+            value={formData.assignedOn}
             onChange={handleChange}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label=" Sample Type"
+            label="Sample Type"
             placeholder="Sample Type"
             name="sampleType"
-            value={formData?.sampleType || ""}
+            value={formData.sampleType}
             onChange={handleChange}
           />
         </CModalBody>
@@ -403,12 +422,13 @@ function Mytests() {
             Back
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Submit
+            Save
           </CButton>
         </CModalFooter>
       </CModal>
     );
   };
+  
 
   return (
     <>
@@ -457,7 +477,7 @@ function Mytests() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={addNewStorageCondition}
+          onAdd={onAdd}
         />
       )}
       {viewModalData && (
@@ -466,16 +486,17 @@ function Mytests() {
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}
+          onAdd={onAdd}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
         />
       )}
       {editModalData && (
         <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        visible={Boolean(editModalData)}
+        closeModal={closeEditModal}
+        data={editModalData}
+        onSave={handleEditSave}
         />
       )}
       {isModalsOpen && (

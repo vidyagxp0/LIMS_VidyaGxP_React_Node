@@ -19,9 +19,9 @@ const Table = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const totalPageCount = Math.ceil(data.length / pageSize);
+  const totalPageCount = Math?.ceil(data?.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
-  const currentData = data.slice(startIndex, startIndex + pageSize);
+  const currentData = data?.slice(startIndex, startIndex + pageSize);
   const attachmentInput = useRef([]);
 
   const getStatusColor = (status) => {

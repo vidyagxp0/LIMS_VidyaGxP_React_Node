@@ -33,26 +33,9 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import axios from "axios";
 
-const staticData = [
-  {
-    sno: "1",
-    sampleTypeName: "Blood Sample",
-    addDate: "2024-01-01",
-    daysToComplete: 5,
-    status: "Active",
-  },
-  {
-    sno: "2",
-    sampleTypeName: "Urine Sample",
-    addDate: "2024-01-02",
-    daysToComplete: 3,
-    status: "Inactive",
-  },
-  // Add more static entries as needed
-];
-
-const initialData = JSON.parse(localStorage.getItem("sampletypes")) || [];
+// const initialData = JSON.parse(localStorage.getItem("sampletypes")) || [];
 
 const fields = [
   { label: "Sample Type Name", key: "sampleTypeName" },
@@ -70,19 +53,29 @@ function SampleType() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null);
-
-  // Combine static data with dynamic data from local storage
-  const [data, setData] = useState(() => {
-    return [...staticData, ...initialData]; // Merge static data with local storage data
-  });
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Store dynamic data back to local storage
-    localStorage.setItem(
-      "sampletype",
-      JSON.stringify(data.filter((row) => !staticData.includes(row)))
-    );
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/get-all-lims/mSampleType`
+        );
+        const fetchedData = response?.data[0]?.mSampleType || [];
+
+        const updatedData = fetchedData.map((item, index) => ({
+          ...item,
+          sno: item?.sno || index + 1,
+        }));
+
+        setData(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -96,15 +89,21 @@ function SampleType() {
     setData(newData);
   };
 
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        const sampleTypeName = row.sampleTypeName || ""; // Fallback to an empty string if sampleTypeName is undefined
-        return (
-          sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
-        );
-      })
-    : [];
+  const filteredData = data
+    .filter((row) => {
+      return (
+        row?.sampleTypeName
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase()) &&
+        (statusFilter === "All" || row.status === statusFilter)
+      );
+    })
+    .map((row, index) => ({ ...row, sno: index + 1 }));
+
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -145,6 +144,7 @@ function SampleType() {
       prefix: "",
       daysToComplete: 0,
     });
+
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
@@ -152,14 +152,32 @@ function SampleType() {
       }
     };
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
+      const currentDate = new Date().toISOString().split("T")[0];
+
       const newCondition = {
         sampleTypeName: statusData.sampleName,
-        addDate: "2020-02-20",
+        addDate: currentDate,
         daysToComplete: statusData.daysToComplete,
         action: [],
       };
-      onAdd(newCondition);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:9000/manage-lims/add/mSampleType",
+          newCondition
+        );
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("Sample type added successfully:", response.data);
+          closeModal();
+          onAdd(response.data);
+        } else {
+          console.error("Failed to add sample type:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error adding sample type:", error);
+      }
     };
 
     return (
@@ -199,7 +217,7 @@ function SampleType() {
 
           <CFormInput
             className="mb-3"
-            type="text"
+            type="number"
             label="Days To Complete"
             placeholder="Days To Complete"
             name="daysToComplete"
@@ -391,12 +409,27 @@ function SampleType() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      // Make sure updatedData contains uniqueId before making the API call
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/mSampleType/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        // Update the state with the new data
+        const newData = data.map((item) =>
+          item.sno === updatedData.sno ? updatedData : item
+        );
+        setData(newData);
+        setEditModalData(null);
+        console.log("Sample Type updated successfully:", response.data);
+      } else {
+        console.error("Failed to update Sample Type:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating Sample Type:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -696,10 +729,23 @@ function SampleType() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    console.log(item, "<><><><><><><><><><><><><><><><><><><><");
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/mSampleType/${item.uniqueId}`
+      );
+      if (response?.status === 200) {
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Sample Type deleted successfully:", response.data);
+      } else {
+        console.error("Failed to delete Sample Type:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting Sample Type:", error);
+    }
   };
 
   return (
@@ -753,7 +799,7 @@ function SampleType() {
       </div>
       {isModalsOpen && (
         <ImportModal
-          initialData={initialData}
+          // initialData={initialData}
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
@@ -762,7 +808,7 @@ function SampleType() {
       )}
       {isModalOpen && (
         <StatusModal
-          onAdd={addNewStorageCondition}
+          onAdd={onAdd}
           visible={isModalOpen}
           closeModal={closeModal}
         />
@@ -772,6 +818,7 @@ function SampleType() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
+          onAdd={onAdd}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
