@@ -9,7 +9,6 @@ import {
 } from "../service/limsService.js";
 
 const commonFeilds = [
-  // "approval", //list
   "specification",
   "storageCondition",
   "storageLocation",
@@ -23,12 +22,12 @@ const commonFeilds = [
   "users",
   "sL",
   "sLSamplePA",
-  // "sLInvestigationL1",//list
-  // "sLInvestigationL2",//list
+  "sLInvestigationL1",
+  "sLInvestigationL2",
   "sMStorageCondition",
   "sMStandardProtocol",
   "sMStorageChamber",
-  // "sMChamberConditionMapping",//list
+  "sMChamberConditionMapping",
   "sMStabilityProtocol",
   "sMSampleStorage",
   "sMCOATemplate",
@@ -37,7 +36,7 @@ const commonFeilds = [
   "sMSummaryReportHeader",
   "sMSampleAcceptanceTemplate",
   "sMSampleLogin",
-  // "smSampleAcceptance",//list
+  "smSampleAcceptance",
   "mmasterProduct",
   "mSampleType",
   "mSpecificationType",
@@ -45,7 +44,7 @@ const commonFeilds = [
   "mStandardTestProcedure",
   "mTestCategories",
   "mTestPlan",
-  // "mMyTest",//list
+  "mMyTest",
   "sSamplingConfiguration",
   "sSamplingRule",
   "sESampling",
@@ -108,7 +107,7 @@ const commonFeilds = [
   "iMInstrumentCategory",
   "iMInstrumentModule",
   "iMInstrumentUsage",
-  // "sMStockVerification",//list
+  "sMStockVerification",
   "sMStockOnboarding",
   "sMMaterial",
   "sMInvetory",
@@ -117,14 +116,14 @@ const commonFeilds = [
   "cCalibrationDataSheet",
   "cSampleLoginTemplate",
   "cCalibrationSchedule",
-  // "cCalibrationRecord",//list
+  "cCalibrationRecord",
   "cCalibrationSampleLogin",
-  // "cCalibrationCalendar",
+  "cCalibrationCalendar",
   "rCProblemReporting",
   "rCServiceReporting",
   "rCCoaTemplate",
-  // "rCReleasedCoa",//list
-  // "rCInvestigationCoa",//list
+  "rCReleasedCoa",
+  "rCInvestigationCoa",
   "vendor",
   "client",
   "plant",
@@ -136,7 +135,7 @@ const commonFeilds = [
   "sWorksheet",
   "sWorksheetField",
   "sGroupName",
-  // "sInvestigationTemplate",//list
+  "sInvestigationTemplate",
   "sChemicalCategory",
   "sGrade",
   "sHandlingSymbol",
@@ -169,8 +168,9 @@ const withTransaction = async (callback) => {
 export const manageLIMS = async (req, res) => {
   const filename =
     req?.files?.map((file) => file?.filename)[0] || req?.filename;
-
-  const { fieldName, sno, add, update } = req.params;
+    console.log(filename,"FileName");
+    
+  const { fieldName, uniqueId, add, update } = req.params;
   try {
     await withTransaction(async (t) => {
       const existingLIMS = await findLIMSById("1");
@@ -180,8 +180,8 @@ export const manageLIMS = async (req, res) => {
       if (!commonFeilds.includes(fieldName)) {
         return res.status(400).json({ error: "Invalid field name" });
       }
-      if (add === "add") {
-        const updatedLIMS = await addLIMSField(
+      if (add == "add") {
+        const addLIMS = await addLIMSField(
           existingLIMS,
           fieldName,
           req.body,
@@ -190,14 +190,14 @@ export const manageLIMS = async (req, res) => {
         );
         return res.status(200).json({
           message: `${fieldName} added successfully`,
-          updatedLIMS,
+          addLIMS,
         });
       }
-      if (update === "update") {
+      if (update == "update") {
         const updatedLIMS = await updateLIMSField(
           existingLIMS,
           fieldName,
-          sno,
+          uniqueId,
           req.body,
           filename,
           t
@@ -280,7 +280,7 @@ export const getLIMSById = async (req, res) => {
 export const deleteStorageConditionById = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const { fieldName, sno } = req.params;
+    const { fieldName, uniqueId } = req.params;
     const existingLIMS = await findLIMSById("1");
     if (!existingLIMS) {
       return res.status(404).json({ error: "LIMS record not found" });
@@ -293,11 +293,11 @@ export const deleteStorageConditionById = async (req, res) => {
         .json({ error: `Field ${fieldName} is not valid or not an array` });
     }
 
-    const conditionIndex = field.findIndex((item) => item["sno"] == sno);
+    const conditionIndex = field.findIndex((item) => item["uniqueId"] == uniqueId);
     if (conditionIndex === -1) {
       return res
         .status(404)
-        .json({ error: `${fieldName} with sno ${sno} not found` });
+        .json({ error: `${fieldName} with uniqueId ${uniqueId} not found` });
     }
 
     field.splice(conditionIndex, 1);
