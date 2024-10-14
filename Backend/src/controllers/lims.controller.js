@@ -9,6 +9,7 @@ import {
 } from "../service/limsService.js";
 
 const commonFeilds = [
+  "approval",
   "specification",
   "storageCondition",
   "storageLocation",
