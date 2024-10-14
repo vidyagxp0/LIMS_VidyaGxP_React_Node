@@ -1,91 +1,150 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
-import Table from "../../components/ATM components/Table/Table";
-import Details from "./Details";
-import ImportModal from "../Modals/importModal";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CForm, CFormInput, CFormSelect } from "@coreui/react";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import {
-  CButton,
-  CCol,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
-} from "@coreui/react";
+import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
+import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import { BASE_URL } from "../../config.json";
 
-const initialData = [
-  {
-    sno: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    role: "Admin",
-    status: "Active",
-    checkbox: false,
-  },
-  {
-    sno: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
-    role: "User",
-    status: "Inactive",
-    checkbox: false,
-  },
-  {
-    sno: 3,
-    name: "Mike Johnson",
-    email: "mike@example.com",
-    role: "Manager",
-    status: "Active",
-    checkbox: false,
-  },
-];
-
-const Approval = () => {
-  const [data, setData] = useState(initialData);
+function Approval() {
+  const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
-  const [lastStatus, setLastStatus] = useState("Active");
-  const [editModalData, setEditModalData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
-  };
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+  const [editModalData, setEditModalData] = useState(null);
+
+  useEffect(() => {
+    fetchApprovalData();
+  }, []);
+
+  const fetchApprovalData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/approval`);
+      const formattedData = response?.data[0]?.approval || [];
+      const updatedData = formattedData.map((item) => ({
+        ...item,
+        checkbox: false,
+      }));
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching Approval data:", error);
+      toast.error("Failed to fetch Approval data");
+    }
   };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
+    setData((prevData) => prevData.map((row) => ({ ...row, checkbox: checked })));
   };
+
+  const handleCheckboxChange = useCallback((index) => {
+    setData((prevData) =>
+      prevData.map((item, i) => (i === index ? { ...item, checkbox: !item.checkbox } : item))
+    );
+  }, []);
+
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/delete-lims/approval/${item.uniqueId}`);
+      if (response?.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
+        toast.success("Approval data deleted successfully");
+      } else {
+        toast.error("Failed to delete Approval data");
+      }
+    } catch (error) {
+      console.error("Error deleting Approval data:", error);
+      toast.error("Error deleting Approval data");
+    }
+  };
+
+  const handleStatusUpdate = (approval, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.uniqueId === approval.uniqueId ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
+
+  const addNewApproval = async (newApproval) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/approval`, newApproval);
+      if (response.status === 200) {
+        const addedApproval = response.data;
+        setData((prevData) => [
+          {
+            ...addedApproval,
+            checkbox: false,
+          },
+          ...prevData,
+        ]);
+        toast.success("Approval added successfully");
+        fetchApprovalData();
+      }
+    } catch (error) {
+      console.error("Error adding Approval:", error);
+      toast.error("Failed to add Approval");
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${updatedData.uniqueId}`, updatedData);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? updatedData : item))
+        );
+        toast.success("Approval updated successfully");
+      } else {
+        toast.error("Failed to update Approval");
+      }
+    } catch (error) {
+      console.error("Error updating Approval:", error);
+      toast.error("Error updating Approval");
+    }
+    setEditModalData(null);
+  };
+
+
+  const handleExcelDataUpload = useCallback(
+    (excelData) => {
+      const updatedData = excelData.map((item, index) => ({
+        checkbox: false,
+        sno: data.length + index + 1,
+        name: item["Name"] || "",
+        email: item["Email"] || "",
+        role: item["Role"] || "",
+        status: item["Status"] || "",
+      }));
+      setData((prevData) => [...prevData, ...updatedData]);
+      setIsModalsOpen(false);
+    },
+    [data]
+  );
 
   const columns = [
     {
-      header: (
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+      Cell: ({ row }) => (
         <input
           type="checkbox"
-          checked={data.every((row) => row.checkbox)}
-          onChange={handleSelectAll}
+          checked={row.original.checkbox}
+          onChange={() => handleCheckboxChange(row.index)}
         />
       ),
-      accessor: "checkbox",
     },
-    { header: "S No.", accessor: "sno" },
+    { header: "Sr No.", accessor: "uniqueId" },
     { header: "Name", accessor: "name" },
     { header: "Email", accessor: "email" },
     { header: "Role", accessor: "role" },
@@ -98,44 +157,37 @@ const Approval = () => {
           <FontAwesomeIcon
             icon={faEye}
             className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
+            onClick={() => onViewDetails(row.original)}
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
   ];
 
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno: index + 1,
-      name: item["Name"] || "",
-      email: item["Email"] || "",
-      role: item["Role"] || "",
-      status: item["Status"] || "",
-    }));
+  const filteredData = data.filter((row) => {
+    const nameMatch = row.name ? row.name.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+    const emailMatch = row.email ? row.email.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+    const roleMatch = row.role ? row.role.toLowerCase().includes(searchQuery.toLowerCase()) : false;
 
-    const concatenatedData = [...updatedData];
-    setData(concatenatedData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
-  };
+    return (nameMatch || emailMatch || roleMatch) && (statusFilter === "All" || row.status === statusFilter);
+  });
 
-  const closeViewModal = () => {
-    setViewModalData(false);
-  };
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d.sno !== item.sno);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const closeViewModal = () => {
+    setViewModalData(null);
   };
 
   const openEditModal = (rowData) => {
@@ -145,16 +197,84 @@ const Approval = () => {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
+
+   const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [approval, setApproval] = useState({
+      name: "",
+      email: "",
+      role: "",
+    });
+
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setApproval((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onAdd({
+        ...approval,
+        status: "Active", // Set default status as "Active"
+      });
+    };
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Approval</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm onSubmit={handleSubmit}>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Name"
+              name="name"
+              value={approval.name}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="email"
+              label="Email"
+              name="email"
+              value={approval.email}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormSelect
+              className="mb-3"
+              type="text"
+              label="Role"
+              name="role"
+              value={approval.role}
+              onChange={handleInputChange}
+              required
+              options={[
+                "Select..",
+                {label: "Admin", value: "Admin"},
+                { label: "User", value: "User" },
+                {label: "Manager", value: "Manager"}
+              ]}
+
+            />
+            <CModalFooter>
+              <CButton color="secondary" onClick={closeModal}>
+                Cancel
+              </CButton>
+              <CButton color="primary" type="submit">
+                Add Approval
+              </CButton>
+            </CModalFooter>
+          </CForm>
+        </CModalBody>
+      </CModal>
     );
-    setData(newData);
-    setEditModalData(null);
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
+
     useEffect(() => {
       if (data) {
         setFormData(data);
@@ -173,43 +293,47 @@ const Approval = () => {
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>Update User</CModalTitle>
+          <CModalTitle>Edit Approval</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="User Name"
-            placeholder="UserName "
-            value={formData?.name || ""}
-            onChange={handleChange}
-            name="name"
-          />
-          <CFormInput
-            className="mb-3"
-            type="email"
-            label="Gmail Address"
-            placeholder="sample@gmail.com"
-            value={formData?.email || ""}
-            onChange={handleChange}
-            name="email"
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Role"
-            placeholder="Role "
-            value={formData?.role || ""}
-            onChange={handleChange}
-            name="role"
-          />
+          <CForm>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Name"
+              name="name"
+              value={formData?.name || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="email"
+              label="Email"
+              name="email"
+              value={formData?.email || ""}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="text"
+              label="Role"
+              name="role"
+              value={formData?.role || ""}
+              onChange={handleChange}
+              options={[
+                {label: "Admin", value: "Admin"},
+                { label: "User", value: "User" },
+                {label: "Manager", value: "Manager"}
+              ]}
+            />
+          </CForm>
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Submit
+            Save Changes
           </CButton>
         </CModalFooter>
       </CModal>
@@ -218,51 +342,69 @@ const Approval = () => {
 
   return (
     <>
-      <div className="p-4">
-        <h1 className="text-xl font-bold mb-4">User List</h1>
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold">Approval</h4>
+        </div>
         <div className="flex items-center justify-between mb-4">
-          <div className="flex space-x-4"></div>
-          <div className="float-right flex gap-4">
-            <PDFDownload
-              columns={columns}
-              data={initialData}
-              fileName="approval.pdf"
-              title="Approval Data" 
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
             />
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload columns={columns} data={filteredData} fileName="Approval.pdf" title="Approval Data" />
+            <ATMButton text="Import" color="pink" onClick={() => setIsModalsOpen(true)} />
+            <ATMButton text="Add Approval" color="blue" onClick={() => setIsModalOpen(true)} />
           </div>
         </div>
         <Table
           columns={columns}
-          data={data}
-          onCheckboxChange={handleCheckboxChange}
+          data={filteredData}
           onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           openEditModal={openEditModal}
         />
       </div>
+
       {viewModalData && (
-        <Details visible={viewModalData} closeModal={closeViewModal} />
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+          title="Approval Details"
+          updateStatus={handleStatusUpdate}
+        />
       )}
+
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={() => setIsModalOpen(false)} onAdd={addNewApproval} />}
+
       {isModalsOpen && (
         <ImportModal
-          initialData={initialData}
+          initialData={filteredData}
           isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+          onClose={() => setIsModalsOpen(false)}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
         />
       )}
+
       {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
+        <EditModal visible={Boolean(editModalData)} closeModal={closeEditModal} data={editModalData} onSave={handleEditSave} />
       )}
     </>
   );
-};
+}
 
 export default Approval;

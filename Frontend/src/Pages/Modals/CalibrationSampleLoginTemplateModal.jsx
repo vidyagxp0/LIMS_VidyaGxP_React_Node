@@ -13,18 +13,15 @@ const CalibrationSampleLoginTemplateModal = ({
   closeModal,
   handleSubmit,
 }) => {
-  const top100Films = [
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "Pulp Fiction", year: 1994 },
-    { title: "The Dark Knight", year: 2008 },
-    { title: "12 Angry Men", year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: "The Lord of the Rings: The Return of the King", year: 2003 },
-    { title: "Fight Club", year: 1999 },
-    { title: "Star Wars: Episode IV - A" },
+  // Updated to reflect test plans
+  const testPlans = [
+    { title: "TP-2024-01" },
+    { title: "TP-2024-02" },
+    { title: "TP-2024-03" },
+    { title: "TP-2024-04" },
+    { title: "TP-2024-05" },
   ];
+
   const [calibrationSampleLogInTemplate, setCalibrationSampleLogInTemplate] =
     useState({
       sampleLogintemplate: "",
@@ -52,6 +49,7 @@ const CalibrationSampleLoginTemplateModal = ({
     });
     closeModal();
   };
+
   return (
     <div>
       <CModal
@@ -75,18 +73,18 @@ const CalibrationSampleLoginTemplateModal = ({
             }
           />
           <div>
-            <label htmlFor="film-select">Test Plan / Revision No.</label>
+            <label htmlFor="testPlan-select">Test Plan / Revision No.</label>
             <select
-              name="film-select"
-              id="film-select"
+              name="testPlan-select"
+              id="testPlan-select"
               className="mb-3 form-select"
               value={calibrationSampleLogInTemplate.testPlan}
               onChange={(e) => handleChange("testPlan", e.target.value)}
             >
-              <option value="">Select a film</option>
-              {top100Films.map((film, index) => (
-                <option key={index} value={film.title}>
-                  {film.title} ({film.year})
+              <option value="">Select a test plan</option>
+              {testPlans.map((plan, index) => (
+                <option key={index} value={plan.title}>
+                  {plan.title}
                 </option>
               ))}
             </select>

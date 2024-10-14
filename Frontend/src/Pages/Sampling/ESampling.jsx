@@ -122,10 +122,10 @@ function ESampling() {
         />
       ),
     },
-    { 
-      header: "Sr No.", 
+    {
+      header: "Sr No.",
       accessor: "uniqueId",
-      Cell: ({ value }) => value
+      Cell: ({ value }) => value,
     },
     { header: "Sampling Configuration", accessor: "samplingConfiguration" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
@@ -215,6 +215,7 @@ function ESampling() {
         `${BASE_URL}/manage-lims/add/sESampling`,
         newESampling
       );
+      console.log("e res", response);
       if (response.status === 200) {
         const addedESampling = response.data;
         const currentDateTime = new Date().toLocaleString("en-IN", {
@@ -225,11 +226,12 @@ function ESampling() {
             ...addedESampling,
             sno: prevData.length + 1,
             checkbox: false,
-            addedOn: currentDateTime, 
+            addedOn: currentDateTime,
           },
           ...prevData,
         ]);
         toast.success("E-Sampling added successfully");
+        fetchESamplingData();
       }
     } catch (error) {
       console.error("Error adding E-Sampling:", error);
@@ -265,8 +267,8 @@ function ESampling() {
   };
 
   const handleStatusUpdate = (eSampling, newStatus) => {
-  console.log(eSampling,"eSampling");
-  
+    console.log(eSampling, "eSampling");
+
     const updatedData = data.map((item) =>
       item.uniqueId === eSampling.uniqueId
         ? { ...item, status: newStatus }
@@ -274,7 +276,6 @@ function ESampling() {
     );
     setData(updatedData);
     // console.log(updatedData,"UpdatedData");
-    
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {

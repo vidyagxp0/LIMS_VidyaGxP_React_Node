@@ -14,7 +14,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
+const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchData }) => {
   const [analystData, setAnalystData] = useState({
     AnalystID: "",
     FullName: "",
@@ -171,6 +171,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data }) => {
         if (response.status === 200) {
           toast.success("Analyst added successfully!");
           handleSubmit(response.data);
+          fetchData();
           closeModal();
         } else {
           toast.error("Failed to add analyst.");

@@ -137,6 +137,8 @@ function SamplingField() {
           ...prevData, // Add new data at the beginning of the table
         ]);
         toast.success("Sampling Field added successfully");
+        fetchSamplingFieldData();
+
       }
     } catch (error) {
       console.error("Error adding Sampling Field:", error);
