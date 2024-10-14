@@ -23,7 +23,6 @@ const AnalystPersonal = () => {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/get-all-lims/analystPersonal`);
@@ -40,8 +39,10 @@ const AnalystPersonal = () => {
         console.error("Error fetching analysts:", error);
       }
     };
-    fetchData();
-  }, []);
+
+    useEffect(() => {
+      fetchData();
+    }, []);
 
   const filteredData = data.filter((row) => {
     const fullNameLower = row.FullName?.toLowerCase() || "";
@@ -102,7 +103,7 @@ const AnalystPersonal = () => {
     {header: "Instrument Name/ID", accessor: "InstrumentNameID"},
     {header: "Method Name/ID", accessor: "MethodNameID"},
     {header: "Qualification Level", accessor: "QualificationLevel"},
-    {header: "Qualification Date", accessor: "QualificationDate"},
+    // {header: "Qualification Date", accessor: "QualificationDate"},
     {header: "Calibration Due Date", accessor: "CalibrationDueDate"},
     { header: "Method Validation Date", accessor: "MethodValidationDate" },
     { header: "SOP Name/ID", accessor: "SOPNameID" },
@@ -246,6 +247,7 @@ const AnalystPersonal = () => {
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
         data={editModalData}
+        fetchData={fetchData}
       />
 
       {/* View Details Modal */}

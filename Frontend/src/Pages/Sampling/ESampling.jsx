@@ -230,6 +230,7 @@ function ESampling() {
           ...prevData,
         ]);
         toast.success("E-Sampling added successfully");
+        fetchESamplingData();
       }
     } catch (error) {
       console.error("Error adding E-Sampling:", error);
