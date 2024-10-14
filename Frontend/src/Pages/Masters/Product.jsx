@@ -218,7 +218,7 @@ function Product() {
       );
       if (response.status === 200) {
         toast.success("Product added successfully.");
-        fetchProductData(); // Refresh data after adding
+        fetchProductData(); 
         setIsModalOpen(false);
       } else {
         toast.error("Failed to add Product.");

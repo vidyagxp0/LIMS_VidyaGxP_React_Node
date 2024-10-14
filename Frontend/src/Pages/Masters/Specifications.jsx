@@ -519,7 +519,6 @@ function Specifications() {
             type="text"
             label="Product Name"
             placeholder="Product Name"
-            // disabled
             value={formData?.productName || ""}
             onChange={handleChange}
           />
