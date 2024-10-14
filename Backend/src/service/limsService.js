@@ -55,7 +55,8 @@ export const addLIMSField = async (
   transaction
 ) => {
   let fieldArray = limsRecord[fieldName];
-  console.log(fieldArray);
+console.log(fieldArray);
+
   // If the field does not exist or is not an array, initialize it
   if (!Array.isArray(fieldArray)) {
     fieldArray = [];
