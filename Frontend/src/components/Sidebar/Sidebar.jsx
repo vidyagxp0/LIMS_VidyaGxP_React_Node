@@ -557,7 +557,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </Link>
           </CNavGroup>
 
-          <CNavGroup
+          {/* <CNavGroup
             toggler={
               <>
                 <MdOutlineInventory2 style={{ width: "15px" }} />
@@ -1689,9 +1689,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </CNavItem>
               </Link>
             </CNavGroup>
-          </CNavGroup>
+          </CNavGroup> */}
 
-          {/*  */}
+        
 
           <CNavGroup
             toggler={
