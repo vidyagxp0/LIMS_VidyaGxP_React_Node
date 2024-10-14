@@ -8,6 +8,9 @@ import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import SpecificationSpecModal from "./Modals/SpecificationSpecModal";
+import axios from "axios";
+import { BASE_URL } from "../config.json";
+import { toast } from "react-toastify";
 
 randomSpecData;
 
@@ -34,6 +37,30 @@ const SpecificationSpec = () => {
   const openSpecificationModal = () => {
     setIsModalOpen(true);
   };
+  
+  
+          const onDeleteItem = async (data) => {
+            try {
+              const response = await axios.delete(`${BASE_URL}/delete-lims/specification/${data.specId}`);
+              console.log(response.data ,"delete data")
+              if (response.status === 200) {
+                const updataData = data.filter((item) => item.specId !== itemToDelete.specId);
+                setData(updataData)
+                toast.success("Deleted Successfully");
+              } else {
+                toast.error("Failed to delete specification");
+              }
+            } catch (error) {
+              console.error("Error deleting specification:", error);
+              toast.error("Error deleting specification");
+            }
+          }
+        
+       
+      
+  
+  
+
 
 
   const handleModalSubmit = (newControlSample) => {
@@ -145,7 +172,7 @@ const SpecificationSpec = () => {
         <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-5">
           <thead>
             <tr className=" text-white text-left">
-              <th colSpan="11" className="px-4 py-2 bg-cyan-500">
+              <th colSpan="12" className="px-4 py-2 bg-cyan-500">
                 General Information
               </th>
               <th colSpan="7" className="px-4 py-2  bg-green-500">
@@ -171,6 +198,9 @@ const SpecificationSpec = () => {
               </th>
             </tr>
             <tr className="">
+            <td className="bg-gray-800 text-white border  px-4 py-2">
+                SNo
+              </td>
               <td className="bg-gray-800 text-white border  px-4 py-2">
                 Specification ID
               </td>
@@ -295,6 +325,7 @@ const SpecificationSpec = () => {
           <tbody>
             {data.map((data, index) => (
               <tr key={index} className="hover:bg-gray-100">
+                <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{data.specId}</td>
                 <td className="border px-4 py-2">{data.title}</td>
                 <td className="border px-4 py-2">{data.version}</td>
@@ -355,9 +386,20 @@ const SpecificationSpec = () => {
                 <td className="border px-4 py-2">{data.expiryDate}</td>
                 <td className="border px-4 py-2">
                 <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" onClick={() => openEditModal(row)} />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)} />
+          <FontAwesomeIcon 
+          icon={faEye}
+           className="mr-2 cursor-pointer" 
+           onClick={() => onViewDetails(row)}
+            />
+          <FontAwesomeIcon
+           icon={faPenToSquare} 
+           className="mr-2 cursor-pointer" 
+           onClick={() => openEditModal(row)} 
+           />
+          <FontAwesomeIcon
+           icon={faTrashCan} className="cursor-pointer" 
+          onClick={ onDeleteItem}
+           />
                 </>
                 </td>
               </tr>
