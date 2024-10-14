@@ -132,9 +132,9 @@ function SamplingField() {
               hour: "2-digit",
               minute: "2-digit",
               hour12: true,
-            }), // Format it for display as well
+            }), 
           },
-          ...prevData, // Add new data at the beginning of the table
+          ...prevData,
         ]);
         toast.success("Sampling Field added successfully");
         fetchSamplingFieldData();
