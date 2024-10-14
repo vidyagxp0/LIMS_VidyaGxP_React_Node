@@ -23,9 +23,6 @@ function Approval() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
-  useEffect(() => {
-    fetchApprovalData();
-  }, []);
 
   const fetchApprovalData = async () => {
     try {
@@ -42,6 +39,9 @@ function Approval() {
       toast.error("Failed to fetch Approval data");
     }
   };
+  useEffect(() => {
+    fetchApprovalData();
+  }, []);
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
