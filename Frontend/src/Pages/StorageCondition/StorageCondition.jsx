@@ -71,7 +71,7 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function StorageLocation() {
+function StorageCondition() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -96,7 +96,7 @@ function StorageLocation() {
         return (
           item.storageCondition?.map((condition, i) => ({
             checkbox: false,
-            sno: condition.sno,
+            sno: condition.uniqueId,
             name: condition.name || "No Name",
             conditionCode: condition.conditionCode || "No Code",
             createdAt: condition.createdAt
@@ -134,10 +134,24 @@ function StorageLocation() {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      // Make the API call to delete the item
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/storageCondition/${item.sno}`
+      );
+
+      if (response.status === 200) {
+        // If deletion is successful, filter out the deleted item from state
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Deleted item:", item);
+      } else {
+        console.error("Failed to delete storage condition:", response.data);
+      }
+    } catch (error) {
+      console.error("Error deleting storage condition:", error);
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -214,16 +228,27 @@ function StorageLocation() {
     },
   ];
 
-  const storageConditions = data.flatMap((item) => item.storageCondition || []); // Flatten the nested structure
-
-  // Now 'storageConditions' contains all the storage conditions
-  const filteredData = storageConditions.length > 0 ? storageConditions : []; // Fallback to empty array if no data available
-
-  console.log("All Storage Conditions:", filteredData); // Log all storage conditions to debug
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      // If the modal is already open for the same item, close it
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      // Otherwise, open it with the new data
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -249,55 +274,36 @@ function StorageLocation() {
   };
 
   // Function to add a new storage condition
-  const addNewStorageCondition = async (newConditions) => {
+  const addNewStorageCondition = async (newCondition) => {
     try {
-      const conditionsArray = Array.isArray(newConditions)
-        ? newConditions
-        : [newConditions];
+      // Prepare the new condition object (not an array)
+      const conditionData = {
+        name: newCondition.name,
+        conditionCode: newCondition.conditionCode,
+        storageCondition: newCondition.storageCondition,
+        createdAt: new Date().toISOString(), // Current date as createdAt
+        attachment: newCondition.attachment || null,
+        status: newCondition.status || "Active",
+      };
 
+      // Send the POST request with a single object (not an array)
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/storageCondition`,
-        {
-          storageCondition: conditionsArray.map((condition, index) => ({
-            sno: data.length + index + 1, // Increment based on existing data length
-
-            name: condition.name,
-            conditionCode: condition.conditionCode,
-            storageCondition: condition.storageCondition,
-            createdAt: new Date().toISOString(),
-            attachment: condition.attachment || null,
-            status: condition.status || "Active",
-          })),
-        }
+        conditionData
       );
 
+      closeModal();
       console.log("Response received:", response.data);
-
-      const storageConditions =
-        response.data.updatedLIMS?.storageCondition || [];
-      if (Array.isArray(storageConditions) && storageConditions.length > 0) {
-        const newConditionData = storageConditions.map((condition, index) => ({
-          checkbox: false,
-          sno: data.length + index + 1,
-          name: condition.name,
-          conditionCode: condition.conditionCode,
-          storageCondition: condition.storageCondition,
-          createdAt: condition.createdAt,
-          attachment: condition.attachment,
-          status: condition.status,
-        }));
-
-        setData((prevData) => [...prevData, ...newConditionData]);
-      } else {
-        console.error("No storage conditions returned from the API.");
-      }
     } catch (error) {
       console.error("Error creating storage condition:", error);
     }
   };
+
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
-      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+      item.storageCondition === storageCondition
+        ? { ...item, status: newStatus }
+        : item
     );
     setData(updatedData);
   };
@@ -376,9 +382,6 @@ function StorageLocation() {
           name: updatedData.name,
           conditionCode: updatedData.conditionCode,
           storageCondition: updatedData.storageCondition,
-          createdAt: updatedData.createdAt,
-          attachment: updatedData.attachment || null,
-          status: updatedData.status,
         }
       );
       console.log(response);
@@ -437,7 +440,7 @@ function StorageLocation() {
         <CModalBody>
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage Name"
             placeholder="Storage Name"
             value={formData?.name || ""}
             onChange={handleChange}
@@ -453,7 +456,7 @@ function StorageLocation() {
           />
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage condition"
             placeholder="Storage condition"
             value={formData?.storageCondition || ""}
             onChange={handleChange}
@@ -511,19 +514,7 @@ function StorageLocation() {
         {filteredData && filteredData.length > 0 ? (
           <Table
             columns={columns}
-            data={filteredData.map((row, index) => ({
-              ...row,
-
-              name: row.name || "No Name",
-              conditionCode: row.conditionCode || "No Code",
-              storageCondition:
-                typeof row.storageCondition === "string"
-                  ? row.storageCondition
-                  : "No Condition",
-              createdAt: row.createdAt || "No Date",
-              attachment: row.attachment || "No Attachment",
-              status: row.status || "Inactive",
-            }))}
+            data={filteredData}
             onCheckboxChange={handleCheckboxChange}
             onViewDetails={onViewDetails}
             onDelete={handleDelete}
@@ -572,4 +563,4 @@ function StorageLocation() {
   );
 }
 
-export default StorageLocation;
+export default StorageCondition;
