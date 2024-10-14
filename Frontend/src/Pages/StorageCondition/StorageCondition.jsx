@@ -440,7 +440,7 @@ function StorageCondition() {
         <CModalBody>
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage Name"
             placeholder="Storage Name"
             value={formData?.name || ""}
             onChange={handleChange}
@@ -456,7 +456,7 @@ function StorageCondition() {
           />
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage condition"
             placeholder="Storage condition"
             value={formData?.storageCondition || ""}
             onChange={handleChange}
