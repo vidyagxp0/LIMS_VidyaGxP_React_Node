@@ -41,7 +41,6 @@ import {
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
-import axios from "axios";
 
 const staticData = [
   {
@@ -84,29 +83,18 @@ function TestPlan() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
-  const [data, setData] = useState([]);
+  // Combine static data with dynamic data from local storage
+  const [data, setData] = useState(() => {
+    return [...staticData, ...initialData]; // Merge static data with local storage data
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mTestPlan`
-        );
-        const fetchedData = response?.data[0]?.mTestPlan || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "testplan",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
+  }, [data]);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -121,19 +109,16 @@ function TestPlan() {
     setData(newData);
   };
 
-  const filteredData = data
-    .filter((row) => {
-      return (
-        row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        (statusFilter === "All" || row.status === statusFilter)
-      );
-    })
-    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
-
-  const onAdd = (newRow) => {
-    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
-    setData(updatedData);
-  };
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -300,21 +285,10 @@ function TestPlan() {
     setViewModalData(null);
   };
 
-  const handleDelete = async (item) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mTestPlan/${item.uniqueId}`
-      );
-      if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.uniqueId);
-        setData(newData);
-        console.log("Product deleted successfully:", response.data);
-      } else {
-        console.error("Failed to delete product:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
 
   const addNewStorageCondition = (newCondition) => {
@@ -354,44 +328,25 @@ function TestPlan() {
     const [selectedTests, setSelectedTests] = useState([]);
     const [refreshedTests, setRefreshedTests] = useState([]);
     const [testPlan, setTestPlan] = useState({
-      specificationId: "",
+      specificationId: [],
       productName: "",
-      tests: "", 
-      samplingQuantityUOM: "",
-      coaTemplate: "",
+      testPlanComments: "",
+      samplingQuantityUOM: [],
+      coaTemplate: [],
       remarks: "",
     });
-    const handleAdd = async () => {
-      const currentDate = new Date().toISOString().split("T")[0];
+    const currentDate = new Date().toISOString().split("T")[0];
+    const handleAdd = () => {
       const newCondition = {
-        selectedTests,
-        refreshedTests,
         specificationId: testPlan.specificationId,
         productName: testPlan.productName,
-        tests: testPlan.tests,
-        samplingQuantityUOM: testPlan.samplingQuantityUOM,
-        coaTemplate: testPlan.coaTemplate,
-        remarks: testPlan.remarks,
+        tests: testPlan.testPlanComments,
+        initiatedAt: currentDate,
         action: [],
       };
-
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mTestPlan",
-          newCondition
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data);
-          closeModal();
-          onAdd(newCondition);
-        } else {
-          console.error("Failed to add product:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error adding product:", error);
-      }
+      onAdd(newCondition);
     };
+
     const specTestsMap = {
       "MED-001": ["Blood Test", "X-Ray", "MRI Scan", "CT Scan"],
       "MED-002": ["Liver Function Test", "Blood Pressure Test", "Urine Test"],
@@ -718,26 +673,14 @@ function TestPlan() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = async (updatedData) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mTestPlan/${updatedData.uniqueId}`,
-        updatedData
-      );
-      if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId ? updatedData : item
-        );
-        setData(newData);
-        setEditModalData(null);
-        console.log("Product updated successfully:", response.data);
-      } else {
-        console.error("Failed to update product:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error updating product:", error);
-    }
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
   };
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [specificationId, setspecificationId] = useState("");
     const [availableTests, setAvailableTests] = useState([
@@ -1131,7 +1074,7 @@ function TestPlan() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={onAdd}
+          onAdd={addNewStorageCondition}
         />
       )}
 
@@ -1149,7 +1092,6 @@ function TestPlan() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
-          onAdd={onAdd}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}

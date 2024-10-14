@@ -11,16 +11,10 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-const InternalRegistrationModal = ({
-  visible,
-  closeModal,
-  handleSubmit,
-  addRow,
-}) => {
+const InternalRegistrationModal = ({ visible, closeModal, handleSubmit }) => {
   const [internalData, setInternalData] = useState({
     lotType: "",
     sampleLogin: "",
@@ -38,8 +32,6 @@ const InternalRegistrationModal = ({
     directionOfUsage: "",
     sequence: "",
     noOfPurities: "",
-    productname:"",
-    sequenceNo:"",
     uom: "",
     purityDetails: [{ sno: 1, purity: "", valueUom: "" }],
     additionalPuritiesInformation: "",
@@ -64,8 +56,6 @@ const InternalRegistrationModal = ({
       containerType: "",
       storageCondition: "",
       wsBatchQuantity: "",
-      productname:"",
-    sequenceNo:"",
       availableQuantity: "",
       lotQuantity: "",
       wsValidateOn: "",
@@ -101,32 +91,8 @@ const InternalRegistrationModal = ({
   };
 
   const handleFormSubmit = () => {
-    console.log("Submitting Internal Registration Data: ", internalData);
-
-    const newSampleData = {
-      ...internalData,
-      sno: addRow.length > 0 ? addRow.length + 1 : 1,
-    };
-
-    axios
-      .post(
-        `http://localhost:9000/manage-lims/add/iWSInternalRegistration`,
-        newSampleData
-      )
-      .then((response) => {
-        console.log("API Response: ", response.data);
-
-        toast.success(
-          response.data.message || "Internal Registration added successfully!"
-        );
-        addRow(newSampleData);
-        closeModal();
-      })
-      .catch((err) => {
-        console.error("API Error: ", err);
-
-        toast.error("Internal registration Already Registered");
-      });
+    handleSubmit({ ...internalData });
+    closeModal();
   };
 
   return (
@@ -142,20 +108,6 @@ const InternalRegistrationModal = ({
         </CModalHeader>
         <CModalBody>
           <p>Add Information and add new Internal</p>
-          <CFormInput
-            label="Product Name"
-            value={internalData.productname}
-            onChange={(e) => handleInputChange("productname", e.target.value)}
-            className="mb-3"
-           
-          />
-           <CFormInput
-            label="Sequence No."
-            value={internalData.sequenceNo}
-            onChange={(e) => handleInputChange("sequenceNo", e.target.value)}
-            className="mb-3"
-           
-          />
           <CFormSelect
             label="Lot Type"
             value={internalData.lotType}

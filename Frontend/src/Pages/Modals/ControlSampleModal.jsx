@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCol,
-  CForm,
   CFormCheck,
   CFormInput,
   CFormSelect,
@@ -14,73 +13,68 @@ import {
   CRow,
 } from "@coreui/react";
 import "react-quill/dist/quill.snow.css";
-import axios from "axios";
-import { toast } from "react-toastify";
 
-const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
+const ControlSampleModal = ({ visible, closeModal, handleSubmit }) => {
   const [controlSampleData, setControlSapmleData] = useState({
-    sno:"",
-    checkbox: "",
-    sampleId: "",
-    productName: "",
-    productCode: "",
-    sampleType: "",
-    market: "",
-    arNo: "",
-    batchNo: "",
-    mfgDate: "",
-    expiryDate: "",
-    quantity: "",
-    quantityWithdrawn: "",
-    currentQuantity: "",
-    uom: "",
-    storageLocation: "",
-    storageCondition: "",
-    visualInspectionScheduledOn: "",
-    visualInspectionPerformedBy: "",
-    abnormalObservation: "",
-    observationDate: "",
-    destructionDueOn: "",
-    destroyedBy: "",
-    neutralizingAgent: "",
-    destructionDate: "",
-    remarks: "",
-    status: "Active",
+    checkbox:"",
+    sampleId:"",
+    productName:"",
+    productCode:"",
+    sampleType:"",
+    market:"",
+    arNo:"",
+    batchNo:"",
+    mfgDate:"",
+    expiryDate:"",
+    quantity:"",
+    quantityWithdrawn:"",
+    currentQuantity:"",
+    uom:"",
+    storageLocation:"",
+    storageCondition:"",
+    visualInspectionScheduledOn:"",
+    visualInspectionPerformedBy:"",
+    abnormalObservation:"",
+    observationDate:"",
+    destructionDueOn:"",
+    destroyedBy:"",
+    neutralizingAgent:"",
+    destructionDate:"",
+    remarks:"",
+    status:"",
   });
   const [fields, setFields] = useState([]);
 
   const resetForm = () => {
     setControlSapmleData({
-      sno:"",
-      checkbox: "",
-      sampleId: "",
-      productName: "",
-      productCode: "",
-      sampleType: "",
-      market: "",
-      arNo: "",
-      batchNo: "",
-      mfgDate: "",
-      expiryDate: "",
-      quantity: "",
-      quantityWithdrawn: "",
-      currentQuantity: "",
-      uom: "",
-      storageLocation: "",
-      storageCondition: "",
-      visualInspectionScheduledOn: "",
-      visualInspectionPerformedBy: "",
-      abnormalObservation: "",
-      observationDate: "",
-      destructionDueOn: "",
-      destroyedBy: "",
-      neutralizingAgent: "",
-      destructionDate: "",
-      remarks: "",
-      status: "",
+        checkbox:"",
+        sampleId:"",
+        productName:"",
+        productCode:"",
+        sampleType:"",
+        market:"",
+        arNo:"",
+        batchNo:"",
+        mfgDate:"",
+        expiryDate:"",
+        quantity:"",
+        quantityWithdrawn:"",
+        currentQuantity:"",
+        uom:"",
+        storageLocation:"",
+        storageCondition:"",
+        visualInspectionScheduledOn:"",
+        visualInspectionPerformedBy:"",
+        abnormalObservation:"",
+        observationDate:"",
+        destructionDueOn:"",
+        destroyedBy:"",
+        neutralizingAgent:"",
+        destructionDate:"",
+        remarks:"",
+        status:"",
     });
   };
-
   useEffect(() => {
     if (visible) {
       resetForm();
@@ -90,6 +84,7 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
   const handleInputChange = (field, value) => {
     const updatedData = { ...controlSampleData, [field]: value };
     setControlSapmleData(updatedData);
+    console.log(updatedData);
   };
 
   const handleFormSubmit = () => {
@@ -108,28 +103,6 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
 
     closeModal();
   };
-
-  const handleAddControlSample = (e) => {
-
-    e.preventDefault();
-
-    const newSampleData = {
-      ...controlSampleData,
-      sno: addRow.length > 0 ? addRow.length + 1 : 1, 
-    };
-    axios
-      .post(`http://localhost:9000/manage-lims/add/controlSampleManagement`,newSampleData)
-      .then((response) => {
-        toast.success(response.data.message || "Control Sample added successfully!")
-        addRow(newSampleData);
-        closeModal()
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Control Sample Already Registered");
-      });
-  };
-
   return (
     <div>
       <CModal
@@ -143,7 +116,6 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
         </CModalHeader>
         <CModalBody>
           <p>Add information and register new Control Sample</p>
-          <CForm onSubmit={handleAddControlSample} >
           <CFormInput
             className="mb-3"
             type="text"
@@ -230,9 +202,7 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
             label="Quantity Withdrawn"
             placeholder="Quantity Withdrawn"
             value={controlSampleData.quantityWithdrawn}
-            onChange={(e) =>
-              handleInputChange("quantityWithdrawn", e.target.value)
-            }
+            onChange={(e) => handleInputChange("quantityWithdrawn", e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -240,11 +210,9 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
             label="Current Quantity"
             placeholder="Current Quantity"
             value={controlSampleData.currentQuantity}
-            onChange={(e) =>
-              handleInputChange("currentQuantity", e.target.value)
-            }
+            onChange={(e) => handleInputChange("currentQuantity", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="UOM"
@@ -252,77 +220,63 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
             value={controlSampleData.uom}
             onChange={(e) => handleInputChange("uom", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Storage Location"
             placeholder="Storage Location"
             value={controlSampleData.storageLocation}
-            onChange={(e) =>
-              handleInputChange("storageLocation", e.target.value)
-            }
+            onChange={(e) => handleInputChange("storageLocation", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Storage Condition"
             placeholder="Storage Condition"
             value={controlSampleData.storageCondition}
-            onChange={(e) =>
-              handleInputChange("storageCondition", e.target.value)
-            }
+            onChange={(e) => handleInputChange("storageCondition", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="date"
             label="Visual Inspection Scheduled On"
             placeholder="Visual Inspection Scheduled On"
             value={controlSampleData.visualInspectionScheduledOn}
-            onChange={(e) =>
-              handleInputChange("visualInspectionScheduledOn", e.target.value)
-            }
+            onChange={(e) => handleInputChange("visualInspectionScheduledOn", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Visual Inspection Performed By"
             placeholder="Visual Inspection Performed By"
             value={controlSampleData.visualInspectionPerformedBy}
-            onChange={(e) =>
-              handleInputChange("visualInspectionPerformedBy", e.target.value)
-            }
+            onChange={(e) => handleInputChange("visualInspectionPerformedBy", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Abnormal Observation"
             placeholder="Abnormal Observation"
             value={controlSampleData.abnormalObservation}
-            onChange={(e) =>
-              handleInputChange("abnormalObservation", e.target.value)
-            }
+            onChange={(e) => handleInputChange("abnormalObservation", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="date"
             label="Observation Date"
             placeholder="Observation Date"
             value={controlSampleData.observationDate}
-            onChange={(e) =>
-              handleInputChange("observationDate", e.target.value)
-            }
+            onChange={(e) => handleInputChange("observationDate", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Destruction Due On"
             placeholder="Destruction Due On"
             value={controlSampleData.destructionDueOn}
-            onChange={(e) =>
-              handleInputChange("destructionDueOn", e.target.value)
-            }
+            onChange={(e) => handleInputChange("destructionDueOn", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Destroyed By"
@@ -330,27 +284,23 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
             value={controlSampleData.destroyedBy}
             onChange={(e) => handleInputChange("destroyedBy", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Neutralizing Agent"
             placeholder="Neutralizing Agent"
             value={controlSampleData.neutralizingAgent}
-            onChange={(e) =>
-              handleInputChange("neutralizingAgent", e.target.value)
-            }
+            onChange={(e) => handleInputChange("neutralizingAgent", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="date"
             label="Destruction Date"
             placeholder="Destruction Date"
             value={controlSampleData.destructionDate}
-            onChange={(e) =>
-              handleInputChange("destructionDate", e.target.value)
-            }
+            onChange={(e) => handleInputChange("destructionDate", e.target.value)}
           />
-          <CFormInput
+            <CFormInput
             className="mb-3"
             type="text"
             label="Remarks"
@@ -358,16 +308,16 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
             value={controlSampleData.remarks}
             onChange={(e) => handleInputChange("remarks", e.target.value)}
           />
-           <CButton color="primary" type="submit">
-            Save changes
-          </CButton>
-          </CForm>
+            
+
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
             Close
           </CButton>
-         
+          <CButton color="primary" onClick={handleFormSubmit}>
+            Save changes
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

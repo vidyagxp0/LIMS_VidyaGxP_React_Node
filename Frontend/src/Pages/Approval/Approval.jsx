@@ -22,7 +22,6 @@ import {
   CRow,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload ";
-import ReusableModal from "../Modals/ResusableModal";
 
 const initialData = [
   {
@@ -243,9 +242,7 @@ const Approval = () => {
         />
       </div>
       {viewModalData && (
-        // <Details visible={viewModalData} closeModal={closeViewModal} />
-        <ReusableModal visible={viewModalData !== null} closeModal={closeViewModal} data={viewModalData}  fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action' && field.key !== 'checkbox')}
-        title="Approval Details" />
+        <Details visible={viewModalData} closeModal={closeViewModal} />
       )}
       {isModalsOpen && (
         <ImportModal

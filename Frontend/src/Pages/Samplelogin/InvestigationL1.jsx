@@ -23,7 +23,6 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
-import axios from "axios";
 
 const initialData = JSON.parse(localStorage.getItem("InvestigationL1")) || [];
 
@@ -47,26 +46,8 @@ function InvestigationL1() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/sLInvestigationL1`
-        );
-        const fetchedData = response?.data[0]?.sLInvestigationL1 || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    localStorage.setItem("InvestigationL1", JSON.stringify(data));
+  }, [data]);
 
   const handleOpenModals = () => setIsModalsOpen(true);
   const handleCloseModals = () => setIsModalsOpen(false);
@@ -172,33 +153,20 @@ function InvestigationL1() {
     setData(updatedData);
   };
 
-  const addNewInvestigation = async (newInvestigation) => {
+  const addNewInvestigation = (newInvestigation) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    const currentDate = new Date().toISOString().split("T")[0];
-
-    const investigationData = {
-      ...newInvestigation,
-      sno: data.length + 1,
-      status: nextStatus,
-      addedOn: currentDate,
-    };
-
-    try {
-      const response = await axios.post(
-        "http://localhost:9000/manage-lims/add/sLInvestigationL1",
-        investigationData
-      );
-
-      if (response.status === 200 || response.status === 201) {
-        setData((prevData) => [...prevData, investigationData]);
-        setLastStatus(nextStatus);
-        setIsModalOpen(false);
-      } else {
-        console.error("Failed to add investigation:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error adding investigation:", error);
-    }
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newInvestigation,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+        addedOn: new Date().toISOString().split('T')[0],
+      },
+    ]);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {

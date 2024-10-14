@@ -29,9 +29,32 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
-import axios from "axios";
 
-// const initialData = JSON.parse(localStorage.getItem("specific")) || "";
+const staticData = [
+  {
+    sno: 1,
+
+    productName: "Product A",
+    specificationID: "S001",
+    specificationName: "Spec A",
+    effectFrom: "2024-01-01",
+    reviewDate: "2024-01-31",
+    status: "Active",
+  },
+  {
+    sno: 2,
+
+    productName: "Product B",
+    specificationID: "S002",
+    specificationName: "Spec B",
+    effectFrom: "2024-02-01",
+    reviewDate: "2024-02-28",
+    status: "Inactive",
+  },
+  // Add more static entries as needed
+];
+
+const initialData = JSON.parse(localStorage.getItem("specific")) || "";
 
 const fields = [
   { label: "Product Name", key: "productName" },
@@ -52,29 +75,18 @@ function Specifications() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
 
-  const [data, setData] = useState([]);
+  // Combine static data with dynamic data from local storage
+  const [data, setData] = useState(() => {
+    return [...staticData, ...initialData]; // Merge static data with local storage data
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mSpecifications`
-        );
-        const fetchedData = response?.data[0]?.mSpecifications || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "mytest",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
+  }, [data]);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -172,23 +184,11 @@ function Specifications() {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
-  const handleDelete = async (item) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mSpecifications/${item.uniqueId}`
-      );
-      if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.sno);
-        setData(newData);
-        console.log("Specifications deleted successfully:", response.data);
-      } else {
-        console.error("Failed to delete Specifications:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting Specifications:", error);
-    }
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
-
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
@@ -233,38 +233,17 @@ function Specifications() {
       standardTestProcedureNo: "",
     });
 
-    const handleAdd = async () => {
-      const currentDate = new Date().toISOString().split("T")[0];
+    const handleAdd = () => {
       const newCondition = {
-        productCode: specificationData.productCode,
         productName: specificationData.productName,
-        specificationName: specificationData.specificationName,
+        productCode: specificationData.productCode,
         specificationID: specificationData.specificationID,
-        sampleType: specificationData.sampleType,
-        specificationType: specificationData.specificationType,
+        specificationName: specificationData.specificationName,
         effectFrom: specificationData.effectFrom,
-        reviewDate: specificationData.currentDate,
-        supersedes: specificationData.supersedes,
-        standardTestProcedureNo: specificationData.standardTestProcedureNo,
+        reviewDate: specificationData.reviewDate,
         action: [],
       };
-
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mSpecifications",
-          newCondition
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data);
-          closeModal();
-          onAdd(newCondition);
-        } else {
-          console.error("Failed to add product:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error adding product:", error);
-      }
+      onAdd(newCondition);
     };
 
     const top100Films = [
@@ -733,7 +712,7 @@ function Specifications() {
       )}
       {isModalsOpen && (
         <ImportModal
-          // initialData={initialData}
+          initialData={initialData}
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}

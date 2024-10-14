@@ -13,24 +13,35 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-import {CButton,CForm,CFormCheck,CFormInput,CFormLabel,CFormSelect,CModal,CModalBody,CModalFooter,CModalHeader,CModalTitle,} from "@coreui/react";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ReusableModal from "../Modals/ResusableModal";
-import axios from "axios";
 
 const initialData = JSON.parse(localStorage.getItem("internalRegistration")) || [];
 
 
-// const generateRandomSymbolCode = () => {
-//   const characters =
-//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//   let result = "SYM-";
-//   for (let i = 0; i < 6; i++) {
-//     result += characters.charAt(Math.floor(Math.random() * characters.length));
-//   }
-//   return result;
-// };
+const generateRandomSymbolCode = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "SYM-";
+  for (let i = 0; i < 6; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
 
 const InternalRegistration = () => {
   const [data, setData] = useState(initialData);
@@ -42,28 +53,8 @@ const InternalRegistration = () => {
 
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/iWSInternalRegistration`
-        );
-        const fetchData = response?.data[0]?.iWSInternalRegistration || [];
-        const updatedData = fetchData?.map((item, index) => ({
-          ...item,
-          sno: index + 1,
-        }));
-        setData(updatedData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  
-  const addRow = (newRow) => {
-    setData([...data, newRow]);
-  };
+    localStorage.setItem("internalRegistration", JSON.stringify(data));
+  }, [data]);
 
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -115,26 +106,6 @@ const InternalRegistration = () => {
         </CModalHeader>
         <CModalBody>
           <p>Add Information and add new Internal</p>
-          <CFormInput
-                type="text"
-                label="Product Name"
-                placeholder="Product Name"
-                className="custom-placeholder mb-3"
-                disabled
-                value={formData?.productname || ""}
-                name="productName"
-                onChange={handleChange}
-              />
-               <CFormInput
-                type="text"
-                label="Sequence no"
-                placeholder="sequenceNo"
-                className="custom-placeholder mb-3"
-                disabled
-                value={formData?.sequenceNo || ""}
-                name="sequenceNo"
-                onChange={handleChange}
-              />
           <CFormSelect
             label="Lot Type"
             value={formData?.lotType || ""}
@@ -511,7 +482,9 @@ const InternalRegistration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row?.additionalPuritiesInformation?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
+      row?.additionalPuritiesInformation
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -581,12 +554,12 @@ const InternalRegistration = () => {
           wsarNo: newTechnique.wsarNo,
           sampleReferenceNo: newTechnique.sampleReferenceNo,
           containerType: newTechnique.containerType,
-          name: newTechnique.name,
+          name: generateRandomSymbolCode(),
           storageCondition: newTechnique.storageCondition,
           wsBatchQuantity: newTechnique.wsBatchQuantity,
           availableQuantity: newTechnique.availableQuantity,
           lotQuantity: newTechnique.lotQuantity,
-          sequence: newTechnique.sequence,
+          sequence: generateRandomSymbolCode(),
           wsValidateOn: newTechnique.wsValidateOn,
           lotValidUpto: newTechnique.lotValidUpto,
           usageType: newTechnique.usageType,
@@ -643,6 +616,7 @@ const InternalRegistration = () => {
     { label: "Status", key: "status" }
     
   ];
+  a
 
   const handleStatusUpdate = (internalReg, newStatus) => {
     setRows((prevRows) =>
@@ -740,7 +714,6 @@ const InternalRegistration = () => {
         visible={isModalOpen}
         closeModal={closeModal}
         handleSubmit={handleModalSubmit}
-        addRow={addRow}
       />
       
       {isModalsOpen && (

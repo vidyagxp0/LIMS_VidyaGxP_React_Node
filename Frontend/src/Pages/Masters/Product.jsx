@@ -27,13 +27,34 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
-import axios from "axios";
-import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+
+const staticData = [
+  {
+    sno: 1,
+    uniqueCode: "P001",
+    productName: "Product A",
+    genericName: "Generic A",
+    reTestingPeriod: "30 days",
+    addDate: "2024-01-01",
+    status: "Active",
+    checkbox: false,
+  },
+  {
+    sno: 2,
+    uniqueCode: "P002",
+    productName: "Product B",
+    genericName: "Generic B",
+    reTestingPeriod: "60 days",
+    addDate: "2024-01-02",
+    status: "Inactive",
+    checkbox: false,
+  },
+  // Add more static entries as needed
+];
 
 const initialData = JSON.parse(localStorage.getItem("product")) || "";
 
 const fields = [
-  { label: "S.No", key: "sno" },
   { label: "Product Name", key: "productName" },
   { label: "Unique Code", key: "uniqueCode" },
   { label: "Generic Name", key: "genericName" },
@@ -50,30 +71,19 @@ function Product() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-  const [data, setData] = useState([]);
+
+  // Combine static data with dynamic data from local storage
+  const [data, setData] = useState(() => {
+    return [...staticData, ...initialData]; // Merge static data with local storage data
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mmasterProduct`
-        );
-        const fetchedData = response?.data[0]?.mmasterProduct || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+    // Store dynamic data back to local storage
+    localStorage.setItem(
+      "product",
+      JSON.stringify(data.filter((row) => !staticData.includes(row)))
+    );
+  }, [data]);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -87,19 +97,14 @@ function Product() {
     setData(newData);
   };
 
-  const filteredData = data
-    .filter((row) => {
-      return (
-        row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        (statusFilter === "All" || row.status === statusFilter)
-      );
-    })
-    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
-
-  const onAdd = (newRow) => {
-    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
-    setData(updatedData);
-  };
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        return (
+          row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : []; // Fallback to an empty array if data is not an array
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -155,8 +160,8 @@ function Product() {
     }));
 
     const concatenatedData = [...updatedData];
-    setData(concatenatedData);
-    setIsModalsOpen(false);
+    setData(concatenatedData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
   };
   const openModal = () => {
     setIsModalOpen(true);
@@ -170,26 +175,27 @@ function Product() {
     setViewModalData(false);
   };
 
-  const handleDelete = async (item) => {
-   
-    try {
-      const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mmasterProduct/${item.uniqueId}`
-      );
-      if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.uniqueId);
-        setData(newData);
-        console.log("Product deleted successfully:", response.data);
-      } else {
-        console.error("Failed to delete product:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
+  const handleDelete = (item) => {
+    const newData = data.filter((d) => d !== item);
+    setData(newData);
+    console.log("Deleted item:", item);
   };
-  
-  
-  
+
+  const addNewStorageCondition = (newCondition) => {
+    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setData(newData);
+    setLastStatus(nextStatus);
+    setIsModalOpen(false);
+  };
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
@@ -197,8 +203,7 @@ function Product() {
     );
     setData(updatedData);
   };
-
-  const StatusModal = ({ visible, closeModal, onAdd, addRow }) => {
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [productName, setProductName] = useState("");
     const [uniqueCode, setUniqueCode] = useState("");
     const [genericName, setGenericName] = useState("");
@@ -210,36 +215,18 @@ function Product() {
       }
     };
 
-    const handleAdd = async () => {
-      const currentDate = new Date().toISOString().split("T")[0];
+    const handleAdd = () => {
       const newCondition = {
         uniqueCode: uniqueCode,
         productName: productName,
         genericName: genericName,
         reTestingPeriod: reTestingPeriod,
-        addDate: currentDate,
-        status: "Active",
+        addDate: "2020-02-02",
         action: [],
       };
+      closeModal();
 
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mmasterProduct",
-          newCondition
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data.updatedLIMS.
-            mmasterProduct
-            );
-          closeModal();
-          onAdd(response.data);
-        } else {
-          console.error("Failed to add product:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error adding product:", error);
-      }
+      onAdd(newCondition);
     };
 
     return (
@@ -304,26 +291,14 @@ function Product() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = async (updatedData) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mmasterProduct/${updatedData.uniqueId}`,
-        updatedData
-      );
-      if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.sno === updatedData.sno ? updatedData : item
-        );
-        setData(newData);
-        setEditModalData(null);
-        console.log("Product updated successfully:", response.data);
-      } else {
-        console.error("Failed to update product:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error updating product:", error);
-    }
+  const handleEditSave = (updatedData) => {
+    const newData = data.map((item) =>
+      item.sno === updatedData.sno ? updatedData : item
+    );
+    setData(newData);
+    setEditModalData(null);
   };
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -406,8 +381,6 @@ function Product() {
 
   return (
     <>
-      <LaunchQMS />
-
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Master/Product</h4>
@@ -434,7 +407,11 @@ function Product() {
               title="Master Product Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Master/Product" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Master/Product"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -451,7 +428,7 @@ function Product() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={onAdd}
+          onAdd={addNewStorageCondition}
         />
       )}
       {viewModalData && (
@@ -459,7 +436,6 @@ function Product() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
-          onAdd={onAdd}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
