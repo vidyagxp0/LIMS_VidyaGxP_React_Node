@@ -6,6 +6,8 @@ import PDFDownload from "./PDFComponent/PDFDownload ";
 import ATMButton from "../components/ATM components/Button/ATMButton";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import {BASE_URL} from "../config.json"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 // import SpecificationSpecModal from "./Modals/SpecificationSpecModal";
 import SpecificationviewModel from "./SpecificationviewModel";
@@ -23,15 +25,16 @@ randomSpecData;
 
 const SpecificationSpec = () => {
   const [data , setData] = useState(randomSpecData)
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewdata ,setviewdata]=useState(null)
+  const [error , setError] = useState(null);
 
 
   const openEditModal = (data) => {
     setEditModalData(data);
-    setEditModalOpen(true);
+    setEditModalOpen(data);
   };
 
   const closeEditModal = () => {
@@ -47,6 +50,14 @@ const SpecificationSpec = () => {
     setIsModalOpen(true);
   };
 
+  const closeAddModal=()=>{
+    setIsModalOpen(false)
+  }
+  
+  const handleChange = (e, setFormData, formData) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleModalSubmit = (newControlSample) => {
     console.log(newControlSample,"newControlSample")
@@ -181,9 +192,9 @@ const SpecificationSpec = () => {
   const handleAddSPC = async (newSTP) => {
     try {
       const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTP);
-      const addedSTP = response.data.updatedLIMS?.spc[0];
-      if (addedSTP) {
-        setData(prevData => [...prevData, addedSTP]);
+      const addedSPC = response.data.updatedLIMS?.spc[0];
+      if (addedSPC) {
+        setData(prevData => [...prevData, addedSPC]);
       }
       closeAddModal();
     } catch (err) {
@@ -194,9 +205,9 @@ const SpecificationSpec = () => {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(`${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`, updatedData);
-      const updatedSTP = response.data.updatedLIMS?.spc[0];
-      if (updatedSTP) {
-        setData(prevData => prevData.map(item => item.specId === updatedSTP.specId ? updatedSTP : item));
+      const updatedSPC = response.data.updatedLIMS?.spc[0];
+      if (updatedSPC) {
+        setData(prevData => prevData.map(item => item.specId === updatedSPC.specId ? updatedSPC : item));
       }
       setEditModalData(null);
     } catch (err) {
@@ -248,6 +259,7 @@ const SpecificationSpec = () => {
     expiryDat:""
     });
     const handleAdd = () => {
+     
       onAdd(formData);
       closeModal();
     };
@@ -636,6 +648,7 @@ const SpecificationSpec = () => {
     };
 
     const handleSave = () => {
+   
       onSave(formData);
     };
 
