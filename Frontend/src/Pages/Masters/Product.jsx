@@ -32,8 +32,6 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-const initialData = JSON.parse(localStorage.getItem("product")) || "";
-
 const fields = [
   { label: "S.No", key: "sno" },
   { label: "Product Name", key: "productName" },
@@ -63,12 +61,9 @@ function Product() {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/mmasterProduct`
       );
-      console.log("API Response:", response.data);
-
       if (response.data && Array.isArray(response.data)) {
-        const formattedData = response.data.flatMap((item) => {
-          console.log(item, "0000000000000000000");
-          return (
+        const formattedData = response.data.flatMap(
+          (item) =>
             item?.mmasterProduct?.map((condition) => ({
               checkbox: false,
               sno: condition.uniqueId,
@@ -79,16 +74,12 @@ function Product() {
                 condition.reTestingPeriod || "No Re-Testing Period",
               status: condition.status || "Active",
             })) || []
-          );
-        });
+        );
         setData(formattedData);
-      } else {
-        console.error("Unexpected response format:", response.data);
       }
     } catch (error) {
-      console.error(
-        "Error fetching data:",
-        error.response ? error.response.data : error.message
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
       );
     }
   };
@@ -202,52 +193,44 @@ function Product() {
       const response = await axios.delete(
         `${BASE_URL}/delete-lims/mmasterProduct/${item.sno}`
       );
-
       if (response.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.sno);
-        setData(newData);
-        console.log("Deleted item:", item);
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Product deleted successfully.");
       } else {
-        console.error("Failed to delete Product:", response.data);
+        toast.error("Failed to delete Product.");
       }
     } catch (error) {
-      console.error("Error deleting Product:", error);
+      toast.error(
+        "Error deleting Product: " + (error.response?.data || error.message)
+      );
     }
-    await fetchProductData();
   };
 
   const handleAdd = async (newProduct) => {
     try {
-      const currentDate = new Date().toISOString().split("T")[0];
-      const newCondition = {
-        uniqueCode: newProduct.uniqueCode,
-        productName: newProduct.productName,
-        genericName: newProduct.genericName,
-        reTestingPeriod: newProduct.reTestingPeriod,
-        addDate: currentDate,
-        status: newProduct.status || "Active",
-      };
-
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/mmasterProduct`,
-        newCondition
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
       );
-
       if (response.status === 200) {
-        closeModal();
+        toast.success("Product added successfully.");
         fetchProductData(); // Refresh data after adding
+        setIsModalOpen(false);
       } else {
-        console.error("Failed to add Product:", response.data);
+        toast.error("Failed to add Product.");
       }
     } catch (error) {
-      console.error(
-        "Error adding product:",
-        error.response ? error.response.data : error.message
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
       );
     }
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd, addRow }) => {
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [productName, setProductName] = useState("");
     const [uniqueCode, setUniqueCode] = useState("");
     const [genericName, setGenericName] = useState("");
@@ -330,28 +313,23 @@ function Product() {
     try {
       const response = await axios.put(
         `${BASE_URL}/manage-lims/update/mmasterProduct/${updatedData.sno}`,
-
-        {
-          productName: updatedData.productName,
-          uniqueCode: updatedData.uniqueCode,
-          genericName: updatedData.genericName,
-          reTestingPeriod: updatedData.reTestingPeriod,
-        }
+        updatedData
       );
-      console.log(response);
-      console.log("Update Response:", response.data);
-
       if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.sno === updatedData.sno ? updatedData : item
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
         );
-        setData(newData);
+        toast.success("Product updated successfully.");
         setEditModalData(null);
       } else {
-        console.error("Failed to update Product:", response.data);
+        toast.error("Failed to update Product.");
       }
     } catch (error) {
-      console.error("Error updating Product:", error);
+      toast.error(
+        "Error updating Product: " + (error.response?.data || error.message)
+      );
     }
   };
   const handleStatusUpdate = (samplingConfiguration, newStatus) => {
@@ -506,7 +484,6 @@ function Product() {
           onClose={handleCloseModals}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
-          // onDataUpload={handleExcelDataUpload}
         />
       )}
       {editModalData && (

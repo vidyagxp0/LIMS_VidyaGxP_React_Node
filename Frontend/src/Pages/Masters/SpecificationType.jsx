@@ -32,29 +32,13 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
-const staticData = [
-  {
-    sno: 1,
-    specificationType: "Product ",
-    addedOn: "2024-01-01",
-    status: "Active",
-  },
-  {
-    sno: 2,
-    specificationType: "Product ",
-    addedOn: "2024-01-01",
-    status: "Active",
-  },
-  // Add more static entries as needed
-];
 
-const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
 const fields = [
   { label: "Specification Type", key: "specificationType" },
   { label: "Added On", key: "addedOn" },
-
   { label: "Status", key: "status" },
 ];
 
@@ -67,30 +51,39 @@ function specficationtype() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  // Combine static data with dynamic data from local storage
-  const [data, setData] = useState(() => {
-    return [...staticData, ...initialData]; // Merge static data with local storage data
-  });
+
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mSpecificationType`
-        );
-        const fetchData = response?.data[0]?.mSpecificationType || [];
-        const updatedData = fetchData?.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-        setData(updatedData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
+    fetchProductData();
   }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mSpecificationType`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mSpecificationType?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              specificationType: condition.specificationType || "No Specification Type",
+              addedOn: condition.addedOn || "No Date",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const addNewItem = (newItem) => {
     const newItemWithSno = {
@@ -104,13 +97,7 @@ function specficationtype() {
     setData([...data, newRow]);
   };
 
-  useEffect(() => {
-    // Store dynamic data back to local storage
-    localStorage.setItem(
-      "mytest",
-      JSON.stringify(data.filter((row) => !staticData.includes(row)))
-    );
-  }, [data]);
+
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -136,12 +123,15 @@ function specficationtype() {
         );
       })
     : [];
-  // Fallback to an empty array if data is not an array
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-  };
-
+    const onViewDetails = (rowData) => {
+      if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+        setIsViewModalOpen(false);
+        setViewModalData(null);
+      } else {
+        setViewModalData(rowData);
+        setIsViewModalOpen(true);
+      }
+    };
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -197,28 +187,48 @@ function specficationtype() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
   const closeViewModal = () => {
-    setViewModalData(false);
+    setIsViewModalOpen(false);
   };
 
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mSpecificationType/${item.uniqueId}`
+        `${BASE_URL}/delete-lims/mSpecificationType/${item.sno}`
       );
-      if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.sno);
-        setData(newData);
-        console.log("Specification Type deleted successfully:", response.data);
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Specification Type deleted successfully.");
       } else {
-        console.error(
-          "Failed to delete Specification Type:",
-          response.statusText
-        );
+        toast.error("Failed to delete Specification Type.");
       }
     } catch (error) {
-      console.error("Error deleting Specification Type:", error);
+      toast.error(
+        "Error deleting Specification Type: " + (error.response?.data || error.message)
+      );
+    }
+  };
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mSpecificationType`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchProductData(); 
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
     }
   };
   const addNewStorageCondition = (newCondition) => {
@@ -243,57 +253,34 @@ function specficationtype() {
     );
     setData(updatedData);
   };
-  const StatusModal = ({ visible, closeModal, addRow, addNewItem }) => {
-    const [specificationTypeData, setspecificationTypeData] = useState({
-      specificationType: "",
-      addedOn: new Date().toISOString().split("T")[0],
-      status: "Active",
-    });
 
-    const handleSpecificationTypeSubmit = (e) => {
-      e.preventDefault();
 
-      axios
-        .post(
-          `http://localhost:9000/manage-lims/add/mSpecificationType`,
-          specificationTypeData
-        )
-        .then((response) => {
-          toast.success(
-            response.data.message || "Specification Type added successfully!"
-          );
-          addRow(specificationTypeData);
-          addNewItem(specificationTypeData);
-          closeModal();
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Specification Type Already Registered");
-        });
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+   const[specificationType, setSpecificationType]=useState("")
+   const[addedOn, setAddedOn]=useState("")
+    const handleSpecification = () => {
+      const newCondition = {
+        specificationType,
+        addedOn,
+        status: "active",
+      };
+      onAdd(newCondition);
     };
-
-    const handleInputChange = (field, value) => {
-      const updatedData = { ...specificationTypeData, [field]: value };
-      setspecificationTypeData(updatedData);
-    };
-
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>Specification Type</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CForm onSubmit={handleSpecificationTypeSubmit}>
             <CFormInput
               className="mb-3"
               type="text"
               label="Specification Type"
               placeholder=" Specification Type"
               name="specificationType"
-              value={specificationTypeData.specificationType}
-              onChange={(e) =>
-                handleInputChange("specificationType", e.target.value)
-              }
+              value={specificationType}
+              onChange={(e) => setSpecificationType(e.target.value)}
+
             />
             <CFormInput
               className="mb-3"
@@ -301,14 +288,13 @@ function specficationtype() {
               label="Add On"
               placeholder="Add On "
               name="addedOn"
-              value={specificationTypeData.addedOn}
-              onChange={(e) => handleInputChange("addedOn", e.target.value)}
+              value={addedOn}
+              onChange={(e) => setAddedOn( e.target.value)}
             />
 
-            <CButton color="primary" type="submit">
+            <CButton color="primary" onClick={handleSpecification}>
               Submit
             </CButton>
-          </CForm>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
@@ -329,24 +315,24 @@ function specficationtype() {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mSpecificationType/${updatedData.uniqueId}`,
+        `${BASE_URL}/manage-lims/update/mSpecificationType/${updatedData.sno}`,
         updatedData
       );
       if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.sno === updatedData.sno ? updatedData : item
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
         );
-        setData(newData);
+        toast.success("Product updated successfully.");
         setEditModalData(null);
-        console.log("Specification Type updated successfully:", response.data);
       } else {
-        console.error(
-          "Failed to update Specification Type:",
-          response.statusText
-        );
+        toast.error("Failed to update Product.");
       }
     } catch (error) {
-      console.error("Error updating Specification Type:", error);
+      toast.error(
+        "Error updating Product: " + (error.response?.data || error.message)
+      );
     }
   };
 
@@ -461,11 +447,10 @@ function specficationtype() {
 
       {isModalOpen && (
         <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          addRow={addRow}
-          addNewItem={addNewItem}
-        />
+        visible={isModalOpen}
+        closeModal={closeModal}
+        onAdd={handleAdd}
+      />
       )}
       {viewModalData && (
         <ReusableModal
