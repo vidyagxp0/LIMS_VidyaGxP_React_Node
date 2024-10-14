@@ -23,14 +23,15 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
 
 const fields = [
-  { label: "Storage Name.", key: "name" },
-  { label: "Condition Code", key: "conditionCode" },
-  { label: "Stability Storage Condition", key: "storageCondition" },
-  { label: "Created At", key: "createdAt" },
-  { label: "Attachment", key: "attachment" },
-  { label: "Status", key: "status" },
+  { label: "SrNo.", key: "uniqueId" },
+  { label: "Unique Code", key: "uniqueCode" },
+  { label: "Description", key: "description" },
+  { label: "Number of Ranges", key: "numberofRanges" },
+  { label: "Updated At", key: "updatedAt" },
+  { label: "Status", key: "status" }
 ];
 
 function SamplingRule() {
@@ -44,21 +45,35 @@ function SamplingRule() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchData(); // Fetch data on component mount
+    fetchData();
   }, []);
 
+  const convertToIST = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };  
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/sSamplingRule`
       );
-      console.log("Raw API Response:", response.data); // Log raw API response
-
-      // Check if the response contains an array and access sSamplingRule correctly
+      console.log("Raw API Response:", response.data);
       if (Array.isArray(response.data) && response.data.length > 0) {
-        const samplingRuleData = response.data[0].sSamplingRule; // Access the nested sSamplingRule
+        const samplingRuleData = response.data[0].sSamplingRule;
         if (Array.isArray(samplingRuleData)) {
-          setData(samplingRuleData); // Set the state with the actual data
+          const updatedData = samplingRuleData.map((item) => ({
+            ...item,
+            updatedAt: convertToIST(item.updatedAt),
+          }));
+          setData(updatedData);
         } else {
           console.error("sSamplingRule is not an array:", samplingRuleData);
         }
@@ -484,7 +499,7 @@ function SamplingRule() {
         <>
           {console.log("Rendering EditModal")}
           <EditModal
-            visible={true} // Set this back to the dynamic state once confirmed working
+            visible={Boolean(editModalData)}
             closeModal={closeEditModal}
             data={editModalData}
             onSave={handleEditSave}
