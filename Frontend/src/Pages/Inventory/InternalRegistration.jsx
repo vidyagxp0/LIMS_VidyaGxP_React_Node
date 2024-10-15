@@ -22,15 +22,15 @@ import axios from "axios";
 const initialData = JSON.parse(localStorage.getItem("internalRegistration")) || [];
 
 
-const generateRandomSymbolCode = () => {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "SYM-";
-  for (let i = 0; i < 6; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-};
+// const generateRandomSymbolCode = () => {
+//   const characters =
+//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+//   let result = "SYM-";
+//   for (let i = 0; i < 6; i++) {
+//     result += characters.charAt(Math.floor(Math.random() * characters.length));
+//   }
+//   return result;
+// };
 
 const InternalRegistration = () => {
   const [data, setData] = useState(initialData);
@@ -115,6 +115,26 @@ const InternalRegistration = () => {
         </CModalHeader>
         <CModalBody>
           <p>Add Information and add new Internal</p>
+          <CFormInput
+                type="text"
+                label="Product Name"
+                placeholder="Product Name"
+                className="custom-placeholder mb-3"
+                disabled
+                value={formData?.productname || ""}
+                name="productName"
+                onChange={handleChange}
+              />
+               <CFormInput
+                type="text"
+                label="Sequence no"
+                placeholder="sequenceNo"
+                className="custom-placeholder mb-3"
+                disabled
+                value={formData?.sequenceNo || ""}
+                name="sequenceNo"
+                onChange={handleChange}
+              />
           <CFormSelect
             label="Lot Type"
             value={formData?.lotType || ""}
@@ -561,12 +581,12 @@ const InternalRegistration = () => {
           wsarNo: newTechnique.wsarNo,
           sampleReferenceNo: newTechnique.sampleReferenceNo,
           containerType: newTechnique.containerType,
-          name: generateRandomSymbolCode(),
+          name: newTechnique.name,
           storageCondition: newTechnique.storageCondition,
           wsBatchQuantity: newTechnique.wsBatchQuantity,
           availableQuantity: newTechnique.availableQuantity,
           lotQuantity: newTechnique.lotQuantity,
-          sequence: generateRandomSymbolCode(),
+          sequence: newTechnique.sequence,
           wsValidateOn: newTechnique.wsValidateOn,
           lotValidUpto: newTechnique.lotValidUpto,
           usageType: newTechnique.usageType,

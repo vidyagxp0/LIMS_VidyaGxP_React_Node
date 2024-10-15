@@ -27,6 +27,9 @@ import {
 import { FormControl, FormLabel } from "react-bootstrap";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+import { toast } from "react-toastify";
 
 const initialData = [
   {
@@ -54,7 +57,7 @@ const initialData = [
 ];
 
 const CalibrationSchedule = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,6 +72,7 @@ const CalibrationSchedule = () => {
   });
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -430,76 +434,82 @@ const CalibrationSchedule = () => {
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Calibration Schedule</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Calibration Schedule</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <CCol sm={1}></CCol>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Calibration_Schedule.pdf"
+              title="Calibration Schedule Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Calibration Schedule"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
-        <CCol sm={1}></CCol>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Calibration_Schedule.pdf" title="Calibration Schedule Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Calibration Schedule"
-            color="blue"
-            onClick={openModal}
-          />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <CalibrationScheduleModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={initialData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-      {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        <CalibrationScheduleModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
         />
-      )}
-    </div></>
+
+        {isViewModalOpen && (
+          <ViewModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

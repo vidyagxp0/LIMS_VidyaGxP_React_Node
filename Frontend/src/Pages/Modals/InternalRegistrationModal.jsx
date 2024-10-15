@@ -38,6 +38,8 @@ const InternalRegistrationModal = ({
     directionOfUsage: "",
     sequence: "",
     noOfPurities: "",
+    productname:"",
+    sequenceNo:"",
     uom: "",
     purityDetails: [{ sno: 1, purity: "", valueUom: "" }],
     additionalPuritiesInformation: "",
@@ -62,6 +64,8 @@ const InternalRegistrationModal = ({
       containerType: "",
       storageCondition: "",
       wsBatchQuantity: "",
+      productname:"",
+    sequenceNo:"",
       availableQuantity: "",
       lotQuantity: "",
       wsValidateOn: "",
@@ -138,6 +142,20 @@ const InternalRegistrationModal = ({
         </CModalHeader>
         <CModalBody>
           <p>Add Information and add new Internal</p>
+          <CFormInput
+            label="Product Name"
+            value={internalData.productname}
+            onChange={(e) => handleInputChange("productname", e.target.value)}
+            className="mb-3"
+           
+          />
+           <CFormInput
+            label="Sequence No."
+            value={internalData.sequenceNo}
+            onChange={(e) => handleInputChange("sequenceNo", e.target.value)}
+            className="mb-3"
+           
+          />
           <CFormSelect
             label="Lot Type"
             value={internalData.lotType}

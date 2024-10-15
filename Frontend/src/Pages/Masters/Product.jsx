@@ -28,8 +28,9 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import axios from "axios";
-
-const initialData = JSON.parse(localStorage.getItem("product")) || "";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 const fields = [
   { label: "S.No", key: "sno" },
@@ -41,7 +42,6 @@ const fields = [
 ];
 
 function Product() {
-  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,34 +50,56 @@ function Product() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [data, setData] = useState([]);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mmasterProduct`
-        );
-        const fetchedData = response?.data[0]?.mmasterProduct || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchProductData();
   }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mmasterProduct`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mmasterProduct?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              productName: condition.productName || "No Name",
+              uniqueCode: condition.uniqueCode || "No Unique Code",
+              genericName: condition.genericName || "No Generic Name",
+              reTestingPeriod:
+                condition.reTestingPeriod || "No Re-Testing Period",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
   const handleCloseModals = () => {
     setIsModalsOpen(false);
+  };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
   const handleSelectAll = (e) => {
@@ -86,14 +108,16 @@ function Product() {
     setData(newData);
   };
 
-  const filteredData = data
-    .filter((row) => {
-      return (
-        row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        (statusFilter === "All" || row.status === statusFilter)
-      );
-    })
-    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onAdd = (newRow) => {
     const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
@@ -101,7 +125,13 @@ function Product() {
   };
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -157,89 +187,63 @@ function Product() {
     setData(concatenatedData);
     setIsModalsOpen(false);
   };
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const closeViewModal = () => {
-    setViewModalData(false);
-  };
 
   const handleDelete = async (item) => {
-    if (!item?.sno) {
-      console.error("Error: 'sno' not found for deletion");
-      return;
-    }
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mmasterProduct/${item.sno}`
+        `${BASE_URL}/delete-lims/mmasterProduct/${item.sno}`
       );
-      if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.sno);
-        setData(newData);
-        console.log("Product deleted successfully:", response.data);
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Product deleted successfully.");
       } else {
-        console.error("Failed to delete product:", response.statusText);
+        toast.error("Failed to delete Product.");
       }
     } catch (error) {
-      console.error("Error deleting product:", error);
+      toast.error(
+        "Error deleting Product: " + (error.response?.data || error.message)
+      );
     }
   };
-  
-  
-  
 
-  const handleStatusUpdate = (testPlan, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.testPlan === testPlan ? { ...item, status: newStatus } : item
-    );
-    setData(updatedData);
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mmasterProduct`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchProductData(); 
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd, addRow }) => {
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [productName, setProductName] = useState("");
     const [uniqueCode, setUniqueCode] = useState("");
     const [genericName, setGenericName] = useState("");
     const [reTestingPeriod, setReTestingPeriod] = useState("");
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-
-    const handleAdd = async () => {
-      const currentDate = new Date().toISOString().split("T")[0];
+    const handleProduct = () => {
       const newCondition = {
-        uniqueCode: uniqueCode,
-        productName: productName,
-        genericName: genericName,
-        reTestingPeriod: reTestingPeriod,
-        addDate: currentDate,
-        status: "Active",
-        action: [],
+        productName,
+        uniqueCode,
+        genericName,
+        reTestingPeriod,
+        status: "active",
       };
-
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mmasterProduct",
-          newCondition
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data);
-          closeModal();
-          onAdd(newCondition);
-        } else {
-          console.error("Failed to add product:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error adding product:", error);
-      }
+      onAdd(newCondition);
     };
 
     return (
@@ -289,7 +293,7 @@ function Product() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleProduct}>
             Submit
           </CButton>
         </CModalFooter>
@@ -304,25 +308,37 @@ function Product() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
+
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mmasterProduct/${updatedData.sno}`,
+        `${BASE_URL}/manage-lims/update/mmasterProduct/${updatedData.sno}`,
         updatedData
       );
       if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.sno === updatedData.sno ? updatedData : item
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
         );
-        setData(newData);
+        toast.success("Product updated successfully.");
         setEditModalData(null);
-        console.log("Product updated successfully:", response.data);
       } else {
-        console.error("Failed to update product:", response.statusText);
+        toast.error("Failed to update Product.");
       }
     } catch (error) {
-      console.error("Error updating product:", error);
+      toast.error(
+        "Error updating Product: " + (error.response?.data || error.message)
+      );
     }
+  };
+  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.samplingID === samplingConfiguration.samplingID
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -435,7 +451,11 @@ function Product() {
               title="Master Product Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Master/Product" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Master/Product"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -452,7 +472,7 @@ function Product() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={onAdd}
+          onAdd={handleAdd}
         />
       )}
       {viewModalData && (
@@ -460,8 +480,8 @@ function Product() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
-          onAdd={onAdd}
           fields={fields}
+          onClose={handleCloseModals}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
         />
