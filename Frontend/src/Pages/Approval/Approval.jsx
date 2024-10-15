@@ -23,16 +23,14 @@ function Approval() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
-  useEffect(() => {
-    fetchApprovalData();
-  }, []);
 
   const fetchApprovalData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-all-lims/approval`);
       const formattedData = response?.data[0]?.approval || [];
-      const updatedData = formattedData.map((item) => ({
+      const updatedData = formattedData.map((item,index) => ({
         ...item,
+        sno: index+1,
         checkbox: false,
       }));
       setData(updatedData);
@@ -41,6 +39,9 @@ function Approval() {
       toast.error("Failed to fetch Approval data");
     }
   };
+  useEffect(() => {
+    fetchApprovalData();
+  }, []);
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -54,11 +55,14 @@ function Approval() {
   }, []);
 
   const handleDelete = async (item) => {
+    console.log(item);
+    
     try {
       const response = await axios.delete(`${BASE_URL}/delete-lims/approval/${item.uniqueId}`);
       if (response?.status === 200) {
         setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
         toast.success("Approval data deleted successfully");
+        fetchApprovalData();
       } else {
         toast.error("Failed to delete Approval data");
       }
@@ -68,11 +72,29 @@ function Approval() {
     }
   };
 
-  const handleStatusUpdate = (approval, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.uniqueId === approval.uniqueId ? { ...item, status: newStatus } : item
-    );
-    setData(updatedData);
+  const handleStatusUpdate = async (updatedData, newStatus) => {
+    console.log(newStatus, "newStatus");
+  
+    try {
+      const { sno, ...dataToSend } = updatedData;
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${updatedData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === updatedData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
   };
 
   const addNewApproval = async (newApproval) => {
@@ -99,10 +121,11 @@ function Approval() {
 
   const handleEditSave = async (updatedData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${updatedData.uniqueId}`, updatedData);
+      const {sno,...dataToSend}=updatedData;
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${updatedData.uniqueId}`, dataToSend);
       if (response.status === 200) {
         setData((prevData) =>
-          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? updatedData : item))
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
         );
         toast.success("Approval updated successfully");
       } else {
@@ -144,7 +167,7 @@ function Approval() {
         />
       ),
     },
-    { header: "Sr No.", accessor: "uniqueId" },
+    { header: "Sr No.", accessor: "sno" },
     { header: "Name", accessor: "name" },
     { header: "Email", accessor: "email" },
     { header: "Role", accessor: "role" },
@@ -384,7 +407,8 @@ function Approval() {
             .map((col) => ({ key: col.accessor, label: col.header }))
             .filter((field) => field.key !== "action" && field.key !== "checkbox")}
           title="Approval Details"
-          updateStatus={handleStatusUpdate}
+          updateStatus={(newStatus) =>{console.log(newStatus,"newStatus");
+           handleStatusUpdate(viewModalData, newStatus)}}
         />
       )}
 

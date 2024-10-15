@@ -44,7 +44,7 @@ function SamplingConfiguration() {
       const formattedData = response?.data[0]?.sSamplingConfiguration || [];
       const updatedData = formattedData.map((item, index) => ({
         ...item,
-        sno: item.uniqueId,
+        sno: index+1,
         checkbox: false,
       }));
       setData(updatedData);
@@ -63,6 +63,7 @@ function SamplingConfiguration() {
         const newData = data.filter((d) => d.sno !== item.sno);
         setData(newData);
         toast.success("Sampling configuration deleted successfully");
+        fetchSamplingConfigurations();
       } else {
         toast.error("Failed to delete sampling configuration");
       }
