@@ -203,7 +203,7 @@ const CalibrationSampleLoginTemplate = () => {
     { header: "Test Plan", accessor: "testPlan" },
     {
       header: "Genric Name",
-      accessor: "GenricName",
+      accessor: "genericName",
     },
     { header: "Status", accessor: "status" },
     {
