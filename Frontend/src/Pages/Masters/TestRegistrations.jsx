@@ -33,8 +33,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-const initialData = JSON.parse(localStorage.getItem("testregistration")) || "";
-
 const fields = [
   { label: "Product Name", key: "productName" },
   { label: "Specification ID", key: "SpecificationID" },
@@ -55,7 +53,6 @@ function Testregistration() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [data, setData] = useState([]);
   console.log(data, "00000000000");
@@ -70,27 +67,22 @@ function Testregistration() {
         `${BASE_URL}/get-all-lims/mTestRegistration`
       );
       if (response.data && Array.isArray(response.data)) {
-        const formattedData = response.data.flatMap((item) =>
-          item?.mTestRegistration?.map((condition) => ({
-            checkbox: false,
-            sno: null,
-            productName: condition.productName || "No Name",
-            SpecificationID: condition.SpecificationID || "-",
-            testName: condition.testName || "-",
-            testCode: condition.testCode || "-",
-            method: condition.method || "-",
-            category: condition.category || "-",
-            testType: condition.testType || "-",
-            status: condition.status || "Active",
-          })) || []
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mTestRegistration?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              productName: condition.productName || "No Name",
+              SpecificationID: condition.SpecificationID || "-",
+              testName: condition.testName || "-",
+              testCode: condition.testCode || "-",
+              method: condition.method || "-",
+              category: condition.category || "-",
+              testType: condition.testType || "-",
+              status: condition.status || "Active",
+            })) || []
         );
-  
-        const dataWithSno = formattedData.map((item, index) => ({
-          ...item,
-          sno: index + 1, 
-        }));
-  
-        setData(dataWithSno);
+        setData(formattedData);
       }
     } catch (error) {
       toast.error(
@@ -98,7 +90,6 @@ function Testregistration() {
       );
     }
   };
-  
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -148,7 +139,7 @@ function Testregistration() {
       accessor: "checkbox",
     },
     { header: "Sr.no.", accessor: "uniqueId" },
-    { header: "Specification Name", accessor: "SpecificationID" },
+    { header: "Specification ID", accessor: "SpecificationID" },
     { header: "Product Name", accessor: "productName" },
     { header: "Test Name", accessor: "testName" },
     { header: "Test Code", accessor: "testCode" },
@@ -220,21 +211,7 @@ function Testregistration() {
       );
     }
   };
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newCondition,
-        uniqueId: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-      },
-    ]);
-    setData(newData);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
-  };
+
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
@@ -296,8 +273,8 @@ function Testregistration() {
           <CFormInput
             className="mb-3"
             type="number"
-            label="Specification Name"
-            placeholder="Specification Name"
+            label="Specification ID"
+            placeholder="Specification ID"
             name="SpecificationID"
             value={SpecificationID}
             onChange={(e) => setSpecificationID(e.target.value)}
@@ -388,14 +365,15 @@ function Testregistration() {
             item.sno === updatedData.sno ? updatedData : item
           )
         );
-        toast.success("Product updated successfully.");
+        toast.success("Test Registration updated successfully.");
         setEditModalData(null);
       } else {
-        toast.error("Failed to update Product.");
+        toast.error("Failed to update Test Registration.");
       }
     } catch (error) {
       toast.error(
-        "Error updating Product: " + (error.response?.data || error.message)
+        "Error updating Test Registration: " +
+          (error.response?.data || error.message)
       );
     }
   };
@@ -434,8 +412,8 @@ function Testregistration() {
           <CFormInput
             className="mb-3"
             type="number"
-            label="Specification Name"
-            placeholder="Specification Name"
+            label="Specification ID"
+            placeholder="Specification ID"
             name="SpecificationID"
             value={formData?.SpecificationID || ""}
             onChange={handleChange}

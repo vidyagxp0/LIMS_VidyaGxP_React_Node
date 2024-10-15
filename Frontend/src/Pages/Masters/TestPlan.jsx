@@ -42,28 +42,9 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
-const staticData = [
-  {
-    sno: 1,
-    specificationId: "SP001",
-    productName: "Product A",
-    tests: ["Test 1", "Test 2", "Test 3"],
-    initiatedAt: "2022-01-01",
-    status: "INITIATED",
-  },
-
-  {
-    sno: 2,
-    specificationId: "SP002",
-    productName: "Product B",
-    tests: ["Test 1", "Test 2", "Test 3"],
-    initiatedAt: "2022-01-01",
-    status: "INITIATED",
-  },
-];
-
-const initialData = JSON.parse(localStorage.getItem("testplan")) || "";
 
 const fields = [
   { label: "S.No", key: "sno" },
@@ -83,30 +64,40 @@ function TestPlan() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mTestPlan`
-        );
-        const fetchedData = response?.data[0]?.mTestPlan || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchProductData();
   }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mTestPlan`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mTestPlan?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              specificationId: condition.specificationId || "-",
+              productName: condition.productName || "-",
+              tests: condition.tests || "-",
+              initiatedAt: condition.initiatedAt || "-",
+              status: condition.status || "-",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -121,22 +112,29 @@ function TestPlan() {
     setData(newData);
   };
 
-  const filteredData = data
-    .filter((row) => {
-      return (
-        row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        (statusFilter === "All" || row.status === statusFilter)
-      );
-    })
-    .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
-
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
   const onAdd = (newRow) => {
     const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
     setData(updatedData);
   };
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -297,23 +295,24 @@ function TestPlan() {
   };
 
   const closeViewModal = () => {
-    setViewModalData(null);
+    setIsViewModalOpen(null);
   };
 
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mTestPlan/${item.uniqueId}`
+        `${BASE_URL}/delete-lims/mTestPlan/${item.sno}`
       );
-      if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.uniqueId);
-        setData(newData);
-        console.log("Product deleted successfully:", response.data);
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Test Plan deleted successfully.");
       } else {
-        console.error("Failed to delete product:", response.statusText);
+        toast.error("Failed to delete Test Plan.");
       }
     } catch (error) {
-      console.error("Error deleting product:", error);
+      toast.error(
+        "Error deleting Test Plan: " + (error.response?.data || error.message)
+      );
     }
   };
 
@@ -338,83 +337,65 @@ function TestPlan() {
     );
     setData(updatedData);
   };
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mTestPlan`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Test Plan added successfully.");
+        fetchProductData(); 
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Test Plan.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding Test Plan: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [specificationId, setspecificationId] = useState("");
+    const [productName, setProductName] = useState("");
+    const [testPlanComments, setTestPlanComments] = useState("");
+    const [samplingQuantityUOM, setSamplingQuantityUOM] = useState("");
+    const [coaTemplate, setCoaTemplate] = useState("");
+    const [remarks, setRemarks] = useState("");
     const [availableTests, setAvailableTests] = useState([
       "Description",
       "Weight of 20 Tablets",
       "Average Weight ( mg )",
       "Thickness",
-      "Disintigration  Time",
+      "Disintegration Time",
       "Hardness",
       "Diameter",
       "Friability",
     ]);
     const [selectedTests, setSelectedTests] = useState([]);
-    const [refreshedTests, setRefreshedTests] = useState([]);
-    const [testPlan, setTestPlan] = useState({
-      specificationId: "",
-      productName: "",
-      tests: "", 
-      samplingQuantityUOM: "",
-      coaTemplate: "",
-      remarks: "",
-    });
-    const handleAdd = async () => {
+    
+    const handleProduct = () => {
       const currentDate = new Date().toISOString().split("T")[0];
       const newCondition = {
+        specificationId,
+        productName,
+        testPlanComments,
+        samplingQuantityUOM,
+        coaTemplate,
+        initiatedAt: currentDate,
+        remarks,
         selectedTests,
-        refreshedTests,
-        specificationId: testPlan.specificationId,
-        productName: testPlan.productName,
-        tests: testPlan.tests,
-        samplingQuantityUOM: testPlan.samplingQuantityUOM,
-        coaTemplate: testPlan.coaTemplate,
-        remarks: testPlan.remarks,
-        action: [],
+        status: "active",
       };
-
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mTestPlan",
-          newCondition
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data);
-          closeModal();
-          onAdd(newCondition);
-        } else {
-          console.error("Failed to add product:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error adding product:", error);
-      }
+      onAdd(newCondition);
     };
-    const specTestsMap = {
-      "MED-001": ["Blood Test", "X-Ray", "MRI Scan", "CT Scan"],
-      "MED-002": ["Liver Function Test", "Blood Pressure Test", "Urine Test"],
-      "MED-003": ["COVID-19 Test", "Flu Test", "Allergy Test"],
-      "MED-004": ["Thyroid Test", "Cholesterol Test", "Blood Sugar Test"],
-      "MED-005": ["ECG", "Echocardiogram", "Cardiac Stress Test"],
-      "MED-006": [
-        "Kidney Function Test",
-        "Bone Density Test",
-        "Vitamin D Test",
-      ],
-      "MED-007": ["Complete Blood Count", "Hemoglobin Test", "Platelet Count"],
-      "MED-008": ["Antibody Test", "Blood Clot Test", "Lung Function Test"],
-    };
-
-    const handleSpecIdChange = (e) => {
-      const specId = e.target.value;
-      setspecificationId(specId);
-      setAvailableTests(specTestsMap[specId] || []);
-      setSelectedTests([]);
-      setRefreshedTests([]);
-    };
-
+  
     const handleTestSelect = (test) => {
       setSelectedTests((prevSelectedTests) => {
         if (prevSelectedTests.includes(test)) {
@@ -423,7 +404,7 @@ function TestPlan() {
           return [...prevSelectedTests, test];
         }
       });
-
+  
       setAvailableTests((prevAvailableTests) => {
         if (prevAvailableTests.includes(test)) {
           return prevAvailableTests.filter((t) => t !== test);
@@ -432,18 +413,9 @@ function TestPlan() {
         }
       });
     };
-
-    const handleRefresh = () => {
-      setRefreshedTests(selectedTests);
-    };
-
+  
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="lg"
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
         <CModalHeader>
           <CModalTitle>Add Test Plan</CModalTitle>
         </CModalHeader>
@@ -452,8 +424,8 @@ function TestPlan() {
             label="Specification ID"
             className="mb-3"
             name="specificationId"
-            type="text"
-            placeholder=""
+            value={specificationId}
+            onChange={(e) => setspecificationId(e.target.value)}
             options={[
               { label: "ACC-00-QC-01", value: "ACC-00-QC-01" },
               { label: "SPC001", value: "SPC001" },
@@ -464,47 +436,38 @@ function TestPlan() {
               { label: "FG-TEST-123", value: "FG-TEST-123" },
               { label: "BATCH-789", value: "BATCH-789" },
             ]}
-            value={testPlan.specificationId}
-            onChange={(e) =>
-              setTestPlan({ ...testPlan, specificationId: e.target.value })
-            }
           />
+  
           <CFormInput
             label="Product/Material Name"
             className="mb-3"
             type="text"
             placeholder="Product/Material Name"
-            name="productName"
-            value={testPlan.productName}
-            onChange={(e) =>
-              setTestPlan({ ...testPlan, productName: e.target.value })
-            }
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
           />
+  
           <CFormInput
             label="Test Plan Comments"
             className="mb-3"
             type="text"
             placeholder="Test Plan Comments"
-            name="testPlanComments"
-            value={testPlan.testPlanComments}
-            onChange={(e) =>
-              setTestPlan({ ...testPlan, testPlanComments: e.target.value })
-            }
+            value={testPlanComments}
+            onChange={(e) => setTestPlanComments(e.target.value)}
           />
+  
           <CFormSelect
             className="mb-3"
             label="Sampling Quantity UOM"
+            value={samplingQuantityUOM}
+            onChange={(e) => setSamplingQuantityUOM(e.target.value)}
             options={[
-              "Select UOM",
+              { label: "Select UOM", value: "" },
               { label: "gm", value: "gm" },
               { label: "ml", value: "ml" },
             ]}
-            name="samplingQuantityUOM"
-            value={testPlan.samplingQuantityUOM}
-            onChange={(e) =>
-              setTestPlan({ ...testPlan, samplingQuantityUOM: e.target.value })
-            }
           />
+  
           <div className="drag-drop">
             <div className="sub-container">
               <h5>Available Tests</h5>
@@ -528,14 +491,7 @@ function TestPlan() {
                 </ul>
               </div>
             </div>
-            <div className="mid-container">
-              <button className="arrow-button" onClick={() => {}}>
-                <TiArrowRightThick />
-              </button>
-              <button className="arrow-button" onClick={() => {}}>
-                <TiArrowLeftThick />
-              </button>
-            </div>
+  
             <div className="sub-container">
               <h5>Selected</h5>
               <div className="list-container">
@@ -544,7 +500,7 @@ function TestPlan() {
                     <li key={data}>
                       <input
                         type="checkbox"
-                        value={data}
+                        value={selected}
                         id={data}
                         className="check-right"
                         onChange={() => handleTestSelect(data)}
@@ -557,152 +513,38 @@ function TestPlan() {
                   ))}
                 </ul>
               </div>
-              <input type="checkbox" /> <span>Test Grouping Required</span>
-              <button
-                style={{
-                  borderRadius: "5px",
-                  margin: "17px 20px",
-                  padding: "2px 6px",
-                  backgroundColor: "#0f93c3",
-                  border: "1px solid #0f93c3",
-                  color: "white",
-                }}
-                onClick={handleRefresh}
-              >
-                Refresh
-              </button>
             </div>
           </div>
-          {refreshedTests.length > 0 && (
-            <>
-              <table className="border-1 border-black min-w-full divide-y divide-gray-200">
-                <thead className="border-1 border-black">
-                  <tr>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      S No.
-                    </th>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      Tests
-                    </th>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      Pass Limit Description
-                    </th>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      Revision No.
-                    </th>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      Worksheet
-                    </th>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      Display in COA
-                    </th>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      Re-Testing
-                    </th>
-                    <th className="px-6 py-3 bg-blue-200 text-xs font-medium text-gray-900 uppercase tracking-wider text-center">
-                      Reduced Testing
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {refreshedTests.map((test, index) => (
-                    <React.Fragment key={index}>
-                      <tr className="border-1 border-black">
-                        <td
-                          colSpan="9"
-                          className=" px-6 py-4 whitespace-nowrap"
-                        >
-                          <CFormSelect
-                            options={[
-                              "Select Group",
-                              { label: "Group 1", value: "group-1" },
-                              { label: "Group 2", value: "group-2" },
-                              { label: "Group 3", value: "group-3" },
-                            ]}
-                            className="w-full"
-                          />
-                        </td>
-                      </tr>
-                      <tr className="border-1 border-black">
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          {index + 1}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">{test}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">-</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          0
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <CFormSelect
-                            options={[
-                              "Select Worksheet",
-                              { label: "pH Test", value: "ph-test" },
-                              { label: "Assay1", value: "assay1" },
-                              { label: "E.coli", value: "e-coli" },
-                              { label: "Option 4", value: "option-4" },
-                              { label: "Option 5", value: "option-5" },
-                              { label: "Option 6", value: "option-6" },
-                            ]}
-                            className="w-full"
-                          />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                          />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                          />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                          />
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
+  
           <CFormSelect
             className="mb-3"
             label="Coa Template"
+            value={coaTemplate}
+            onChange={(e) => setCoaTemplate(e.target.value)}
             options={[
-              "Select Coa Template",
+              { label: "Select Coa Template", value: "" },
               { label: "Test Coa", value: "test-coa" },
               { label: "Windlas Template", value: "windlas-template" },
             ]}
-            name="coaTemplate"
-            value={testPlan.coaTemplate}
-            onChange={(e) =>
-              setTestPlan({ ...testPlan, coaTemplate: e.target.value })
-            }
           />
+  
           <label className="my-2" htmlFor="">
             Remarks
           </label>
           <br />
           <textarea
-            value={testPlan.remarks}
-            onChange={(e) =>
-              setTestPlan({ ...testPlan, remarks: e.target.value })
-            }
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
             className="line4 w-100 mx-1"
             rows="4"
             cols="50"
           ></textarea>
+  
           <div className="d-flex gap-3 mt-4">
             <CButton color="light w-50" onClick={closeModal}>
               &lt; Back
             </CButton>
-            <CButton color="primary w-50" onClick={handleAdd}>
+            <CButton color="primary w-50" onClick={handleProduct}>
               Submit
             </CButton>
           </div>
@@ -710,6 +552,7 @@ function TestPlan() {
       </CModal>
     );
   };
+  
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -721,21 +564,24 @@ function TestPlan() {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mTestPlan/${updatedData.uniqueId}`,
+        `${BASE_URL}/manage-lims/update/mTestPlan/${updatedData.sno}`,
         updatedData
       );
       if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId ? updatedData : item
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
         );
-        setData(newData);
+        toast.success("Test Plan updated successfully.");
         setEditModalData(null);
-        console.log("Product updated successfully:", response.data);
       } else {
-        console.error("Failed to update product:", response.statusText);
+        toast.error("Failed to update Test Plan.");
       }
     } catch (error) {
-      console.error("Error updating product:", error);
+      toast.error(
+        "Error updating Test Plan: " + (error.response?.data || error.message)
+      );
     }
   };
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -1131,7 +977,7 @@ function TestPlan() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={onAdd}
+          onAdd={handleAdd}
         />
       )}
 
