@@ -123,10 +123,10 @@ function ESampling() {
         />
       ),
     },
-    { 
-      header: "Sr No.", 
-      accessor: "sno",
-      Cell: ({ value }) => value
+    {
+      header: "Sr No.",
+      accessor: "uniqueId",
+      Cell: ({ value }) => value,
     },
     { header: "Sampling Configuration", accessor: "samplingConfiguration" },
     { header: "Product/Material Name", accessor: "productMaterialName" },

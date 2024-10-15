@@ -13,6 +13,7 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
     occurredOn: "",
     reportedOn: "",
     problemInDetails: "",
+    status:"Active"
 
   })
   const handleInputChange = (field, value) => {
@@ -39,6 +40,7 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
       occurredOn: "",
       reportedOn: "",
       problemInDetails: "",
+    
     });
   };
 
