@@ -72,22 +72,33 @@ function Approval() {
     }
   };
 
-  const handleStatusUpdate = async (updatedData, newStatus) => {
-    console.log(newStatus, "newStatus");
-  
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
     try {
-      const { sno, ...dataToSend } = updatedData;
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${updatedData.uniqueId}`, {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === updatedData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
           )
         );
         toast.success("Approval status updated successfully");
+        closeViewModal();
       } else {
         toast.error("Failed to update Approval status");
       }
@@ -237,7 +248,7 @@ function Approval() {
       e.preventDefault();
       onAdd({
         ...approval,
-        status: "Active", // Set default status as "Active"
+        status: "Active",
       });
     };
     return (
@@ -407,8 +418,7 @@ function Approval() {
             .map((col) => ({ key: col.accessor, label: col.header }))
             .filter((field) => field.key !== "action" && field.key !== "checkbox")}
           title="Approval Details"
-          updateStatus={(newStatus) =>{console.log(newStatus,"newStatus");
-           handleStatusUpdate(viewModalData, newStatus)}}
+         updateStatus={handleStatusUpdate}
         />
       )}
 

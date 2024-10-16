@@ -109,6 +109,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
     onUpdateStatus(selectedStatus);
     closeModal();
   };
+
   return (
     <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
       <CModalHeader>
@@ -133,7 +134,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
         <CButton color="light" onClick={closeModal}>
           Cancel
         </CButton>
-        <CButton color="dark" onClick={handleUpdate}>
+        <CButton color="dark" onClick={handleUpdate} disabled={!selectedStatus}>
           Update
         </CButton>
       </CModalFooter>
