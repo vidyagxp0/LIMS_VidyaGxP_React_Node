@@ -23,6 +23,8 @@ import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 const initialData = JSON.parse(localStorage.getItem("InvestigationL2")) || [];
 
@@ -47,26 +49,24 @@ function InvestigationL2() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/sLInvestigationL2`
-        );
-        const fetchedData = response?.data[0]?.sLInvestigationL2 || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/sLInvestigationL2`
+      );
+      const fetchedData = response?.data[0]?.sLInvestigationL2 || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        ...item,
+        sno: item?.sno || index + 1,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+          }
+  };
 
   const handleOpenModals = () => setIsModalsOpen(true);
   const handleCloseModals = () => setIsModalsOpen(false);
@@ -149,20 +149,52 @@ function InvestigationL2() {
   const closeModal = () => setIsModalOpen(false);
   const closeViewModal = () => setViewModalData(null);
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sLInvestigationL2/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        toast.error("Failed to delete data");
+      }
+    } catch (error) {
+      console.error("Error deleting Investigation L2 data:", error);
+      toast.error("Error deleting Investigation L2 data");
+    }
   };
 
   const openEditModal = (rowData) => setEditModalData(rowData);
   const closeEditModal = () => setEditModalData(null);
 
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    closeEditModal();
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataToSend } = updatedData;
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sLInvestigationL2/${updatedData.uniqueId}`,
+        dataToSend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        fetchData();
+        toast.success("Data updated successfully");
+      } else {
+        toast.error("Failed to update Investigation L2 data");
+      }
+    } catch (error) {
+      console.error("Error updating Investigation L2 data:", error);
+      toast.error("Error updating Investigation L2 data");
+    }
   };
 
   const handleStatusUpdate = (testName, newStatus) => {
@@ -178,14 +210,13 @@ function InvestigationL2() {
 
     const investigationData = {
       ...newInvestigation,
-      sno: data.length + 1,
       status: nextStatus,
       addedOn: currentDate,
     };
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/manage-lims/add/sLInvestigationL2",
+        `${BASE_URL}/manage-lims/add/sLInvestigationL2`,
         investigationData
       );
 
@@ -193,6 +224,8 @@ function InvestigationL2() {
         setData((prevData) => [...prevData, investigationData]);
         setLastStatus(nextStatus);
         setIsModalOpen(false);
+        fetchData();
+        toast.success("Data added successfully")
       } else {
         console.error("Failed to add investigation:", response.statusText);
       }
@@ -218,12 +251,16 @@ function InvestigationL2() {
     const handleSave = () => {
       onSave(formData);
     };
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      setFormData({ ...formData, attachment: file });
+    };
 
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>
-            {data.sno ? "Edit" : "Add"} Investigation L2
+            {data.uniqueId ? "Edit" : "Add"} Investigation L2
           </CModalTitle>
         </CModalHeader>
         <CModalBody>
