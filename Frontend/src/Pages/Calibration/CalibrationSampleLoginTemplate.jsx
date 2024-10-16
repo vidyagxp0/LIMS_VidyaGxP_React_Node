@@ -67,6 +67,17 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Sample Login template", key: "sampleLogintemplate" },
+  { label: "Test Plan", key: "testPlan" },
+  {
+    label: "Genric Name",
+    key: "genericName",
+  },
+  { label: "Status", key: "status" },
+];
 
 const initialData = [
   {
@@ -324,6 +335,15 @@ const CalibrationSampleLoginTemplate = () => {
     fetchCalibrationSample();
   }, []);
 
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
+  };
+
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
@@ -526,11 +546,14 @@ const CalibrationSampleLoginTemplate = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

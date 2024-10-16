@@ -72,31 +72,20 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+
 // import "./CalibrationDatasheetModal.css";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    Uniquecode: "Product 1",
-    DataSheetName: "Seq 1",
-    QuantitativeParameters: "Info 1",
-    QualitativeParameters: "Start 1",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    Uniquecode: "Product 2",
-    DataSheetName: "Seq 2",
-    QuantitativeParameters: "Info 2",
-    QualitativeParameters: "Start 2",
-    status: "INITIATED",
-  },
+const fields = [
+  { label: "Unique code", key: "Uniquecode" },
+  { label: "DataSheetName", key: "DataSheetName" },
+  { label: "Quantitative Parameters", key: "QuantitativeParameters" },
+  { label: "Qualitative Parameters", key: "QualitativeParameters" },
+  { label: "Status", key: "status" },
 ];
 
 const CalibrationDataSheet = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -304,6 +293,15 @@ const CalibrationDataSheet = () => {
     }
 
     setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
@@ -715,11 +713,14 @@ const CalibrationDataSheet = () => {
           closeModal={closeModal}
           handleSubmits={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

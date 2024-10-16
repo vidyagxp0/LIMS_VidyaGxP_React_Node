@@ -30,6 +30,18 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Unique Code", key: "uniqueCode" },
+  { label: "CalibrationWorkflow", key: "calibrationWorkflow" },
+  { label: "Schedule Description", key: "scheduleDescription" },
+  { label: "Start Date	", key: "startDate" },
+  { label: "Frequency", key: "frequency" },
+  { label: "Next Calibration Due", key: "nextCalibrationDue" },
+
+  { label: "Status", key: "status" },
+];
 
 const initialData = [
   {
@@ -276,6 +288,15 @@ const CalibrationSchedule = () => {
     }
 
     setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
@@ -566,11 +587,14 @@ const CalibrationSchedule = () => {
           handleSubmit={handleModalSubmit}
         />
 
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

@@ -28,6 +28,17 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Sample Type", key: "sampleType" },
+  { label: "Product / Material", key: "productMaterial" },
+  { label: "Generic Name", key: "genericName" },
+  { label: "Specification Code", key: "specificationCode" },
+
+  { label: "Status", key: "status" },
+];
+
 const initialData = [
   {
     checkbox: false,
@@ -264,6 +275,15 @@ const CalibrationSampleLogin = () => {
   useEffect(() => {
     fetchCalibrationSampleLogin();
   }, []);
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
+  };
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -503,11 +523,14 @@ const CalibrationSampleLogin = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

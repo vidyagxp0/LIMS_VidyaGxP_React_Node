@@ -25,7 +25,16 @@ import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+
 import { toast } from "react-toastify";
+
+const fields = [
+  { label: "Calibration Type", key: "CalibrationType" },
+  { label: "Calibration Prefix", key: "CalibrationPrefix" },
+  { label: "Added On", key: "AddedOn" },
+  { label: "Status", key: "status" },
+];
 
 const initialData = [
   {
@@ -252,6 +261,15 @@ const CalibrationFrequency = () => {
     fetchCalibrationFrequency();
   }, []);
 
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
+  };
+
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
@@ -390,11 +408,14 @@ const CalibrationFrequency = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

@@ -26,6 +26,14 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Calibration Type", key: "CalibrationType" },
+  { label: "Calibration Prefix", key: "CalibrationPrefix" },
+  { label: "Added On", key: "AddedOn" },
+  { label: "Status", key: "status" },
+];
 
 const CalibrationType = () => {
   const [data, setData] = useState([]);
@@ -236,6 +244,15 @@ const CalibrationType = () => {
     fetchCalibrationTypes();
   }, []);
 
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
+  };
+
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
@@ -373,11 +390,14 @@ const CalibrationType = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (
@@ -402,6 +422,5 @@ const CalibrationType = () => {
   );
 };
 export default CalibrationType;
-
 
 // SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions
