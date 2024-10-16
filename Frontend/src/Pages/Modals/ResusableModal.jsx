@@ -24,9 +24,9 @@ const ReusableModal = ({
 }) => {
   const [statusModal, setStatusModal] = useState(false);
   const handleStatusChange = (newStatus) => {
-    updateStatus(data.sampleType, newStatus);
-    setStatusModal(false);
-    closeModal();
+    updateStatus(newStatus); // Update status in the parent component
+    setStatusModal(false); // Close status modal
+    closeModal(); // Close view modal
   };
   return (
     <>
@@ -80,35 +80,22 @@ const ReusableModal = ({
 const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
-  const handleStatusChange = async (newStatus) => {
-    try {
-      const response = await axios.put(
-        `${BASE_URL}/manage-lims/update-status/${data.sampleType}`,
-        {
-          status: newStatus,
-        }
-      );
-
-      if (response.status === 200) {
-        updateStatus(data.sampleType, newStatus);
-        toast.success("Status updated successfully.");
-      } else {
-        toast.error("Failed to update status.");
-      }
-    } catch (error) {
-      toast.error(
-        "Error updating status: " + (error.response?.data || error.message)
-      );
-    } finally {
-      setStatusModal(false);
-      closeModal();
-    }
+  const handleStatusChange = (e) => {
+    const newStatus = e.target.value;
+    setSelectedStatus(newStatus);
+    console.log("Selected status:", newStatus);
   };
 
   const handleUpdate = () => {
-    onUpdateStatus(selectedStatus);
-    closeModal();
+    if (selectedStatus) {
+      console.log("Updating status to:", selectedStatus);
+      onUpdateStatus(selectedStatus);
+      closeModal();
+    } else {
+      console.error("No status selected");
+    }
   };
+
   return (
     <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
       <CModalHeader>
@@ -133,7 +120,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
         <CButton color="light" onClick={closeModal}>
           Cancel
         </CButton>
-        <CButton color="dark" onClick={handleUpdate}>
+        <CButton color="dark" onClick={handleUpdate} disabled={!selectedStatus}>
           Update
         </CButton>
       </CModalFooter>

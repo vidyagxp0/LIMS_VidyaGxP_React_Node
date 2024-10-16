@@ -34,9 +34,6 @@ function SampleLogin() {
   const [editModalData, setEditModalData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    fetchSamples();
-  }, []);
 
   const fetchSamples = async () => {
     try {
@@ -53,6 +50,9 @@ function SampleLogin() {
       toast.error("Failed to fetch samples");
     }
   };
+  useEffect(() => {
+    fetchSamples();
+  }, []);
 
   const handleDelete = async (item) => {
     try {

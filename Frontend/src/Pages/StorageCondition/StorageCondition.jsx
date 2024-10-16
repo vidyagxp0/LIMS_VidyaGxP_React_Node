@@ -257,15 +257,18 @@ function StorageCondition() {
             checkbox: false,
           },
         ]);
+        closeModal();
 
         toast.success("Calibration Type added successfully");
         // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
-        fetchStorageCondition(); // Refresh data (optional)
       }
     } catch (error) {
       console.error("Error adding calibration type:", error);
       toast.error("Failed to add calibration type");
     }
+    useEffect(() => {
+      fetchStorageCondition();
+    }, []);
     setIsModalOpen(false);
   };
 
@@ -535,16 +538,6 @@ function StorageCondition() {
 
 export default StorageCondition;
 
-{
-  /* const columns = [
-    {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
-    { header: "SrNo.", accessor: "sno" },
-    { header: "Calibration Type", accessor: "CalibrationType" },
-    { header: "Calibration Prefix", accessor: "CalibrationPrefix" },
-    { header: "Added On", accessor: "AddedOn" },
-    { header: "Status", accessor: "status" },
-*/
-}
+
+
+// SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions

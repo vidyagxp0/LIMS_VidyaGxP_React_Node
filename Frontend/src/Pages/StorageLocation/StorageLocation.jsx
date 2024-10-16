@@ -78,10 +78,6 @@ function StorageCondition() {
   const [editModalData, setEditModalData] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchData(); // Fetch data on component mount
-  }, []);
-
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -91,9 +87,9 @@ function StorageCondition() {
 
       const formattedData = response.data.flatMap((item) => {
         return (
-          item.storageLocation?.map((location) => ({
+          item.storageLocation?.map((location, index) => ({
             checkbox: false,
-            sno: location.uniqueId,
+            sno: index + 1,
             storageName: location.storageName || "No Name",
             storageCode: location.storageCode || "No Code",
             attachment: location.attachment || "No attachment",
@@ -107,6 +103,10 @@ function StorageCondition() {
       console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -239,6 +239,9 @@ function StorageCondition() {
         `${BASE_URL}/manage-lims/add/storageLocation`,
         conditionData
       );
+      useEffect(() => {
+        fetchData();
+      }, []);
 
       closeModal();
       console.log("Response received:", response.data);

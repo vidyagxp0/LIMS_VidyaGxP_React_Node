@@ -26,6 +26,14 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Calibration Type", key: "CalibrationType" },
+  { label: "Calibration Prefix", key: "CalibrationPrefix" },
+  { label: "Added On", key: "AddedOn" },
+  { label: "Status", key: "status" },
+];
 
 const CalibrationType = () => {
   const [data, setData] = useState([]);
@@ -41,6 +49,10 @@ const CalibrationType = () => {
   const [editModalData, setEditModalData] = useState(null);
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  useEffect(() => {
+    fetchCalibrationTypes();
+  }, []);
 
   const fetchCalibrationTypes = async () => {
     try {
@@ -63,9 +75,6 @@ const CalibrationType = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCalibrationTypes();
-  }, []);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -221,7 +230,6 @@ const CalibrationType = () => {
             checkbox: false,
           },
         ]);
-        fetchCalibrationTypes();
 
         toast.success("Calibration Type added successfully");
       }
@@ -231,6 +239,18 @@ const CalibrationType = () => {
     }
 
     setIsModalOpen(false);
+  };
+  useEffect(() => {
+    fetchCalibrationTypes();
+  }, []);
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
@@ -370,11 +390,14 @@ const CalibrationType = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (
@@ -400,28 +423,4 @@ const CalibrationType = () => {
 };
 export default CalibrationType;
 
-/* const addNewStorageCondition = async (newCondition) => {
-    try {
-      // Prepare the new condition object (not an array)
-      const conditionData = {
-        name: newCondition.name,
-        conditionCode: newCondition.conditionCode,
-        storageCondition: newCondition.storageCondition,
-        createdAt: new Date().toISOString(), // Current date as createdAt
-        attachment: newCondition.attachment || null,
-        status: newCondition.status || "Active",
-      };
-
-      // Send the POST request with a single object (not an array)
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/storageCondition`,
-        conditionData
-      );
-
-      closeModal();
-      console.log("Response received:", response.data);
-      fetchData(); // show data in table without refresh
-    } catch (error) {
-      console.error("Error creating storage condition:", error);
-    }
-  };*/
+// SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions

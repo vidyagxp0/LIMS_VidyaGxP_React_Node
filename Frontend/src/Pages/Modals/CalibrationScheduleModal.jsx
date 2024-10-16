@@ -22,6 +22,7 @@ const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
     startDate: "",
     frequency: "",
     tolerancePeriod: "",
+    uniqueCode: "",
   });
 
   const handleChange = (field, value) => {
@@ -42,6 +43,18 @@ const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
       </CModalHeader>
 
       <CModalBody>
+        <div className="mb-3">
+          <label htmlFor="uniqueCode" className="form-label">
+            Unique Code
+          </label>
+          <CFormInput
+            id="uniqueCode"
+            type="text"
+            placeholder="Enter Unique Code"
+            value={calibrationSchedule.uniqueCode}
+            onChange={(e) => handleChange("uniqueCode", e.target.value)}
+          />
+        </div>
         <CFormSelect
           className="mb-3"
           label="Instrument Category"

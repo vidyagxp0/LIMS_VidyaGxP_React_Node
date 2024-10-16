@@ -1,95 +1,354 @@
-import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CForm, CFormInput, CFormSelect } from "@coreui/react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
-import Table from "../../components/ATM components/Table/Table";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import ServiceReportingModal from "../Modals/ServiceReportingModal.jsx";
-import ViewModal from "../Modals/ViewModal";
-import ImportModal from "../Modals/importModal.jsx";
-import {
-  CButton,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-} from "@coreui/react";
-import PDFDownload from "../PDFComponent/PDFDownload .jsx";
-import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    ProblemId: "PRB-001",
-    InstrumentId: "INST-001",
-    ModuleId: "MOD-001",
-    ProblemInBrief: "Brief description 1",
-    ProblemInDetails: "Detailed description 1",
-    ExpectedClosureDate: "2024-07-01",
-    JobDetails: "Job details 1",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    ProblemId: "PRB-002",
-    InstrumentId: "INST-002",
-    ModuleId: "MOD-002",
-    ProblemInBrief: "Brief description 2",
-    ProblemInDetails: "Detailed description 2",
-    ExpectedClosureDate: "2024-07-02",
-    JobDetails: "Job details 2",
-    status: "Inactive",
-  },
-];
+import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
+import ImportModal from "../Modals/importModal";
+import PDFDownload from "../PDFComponent/PDFDownload ";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import { BASE_URL } from "../../config.json";
 
 const ServiceReporting = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    Active: 0,
-    Inactive: 0,
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("INACTIVE");
   const [editModalData, setEditModalData] = useState(null);
-  const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-    setEditModalOpen(true);
+  
+  useEffect(() => {
+    fetchServiceReportingData();
+  }, []);
+  const fetchServiceReportingData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/rCServiceReporting`);
+      console.log(response,"Response");
+      const formattedData = response?.data[0]?.rCServiceReporting || [];
+      console.log(formattedData,"formattedData");
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+      setData(updatedData);
+      console.log(updatedData);
+      
+    } catch (error) {
+      console.error("Error fetching Service Reporting data:", error);
+      toast.error("Failed to fetch Service Reporting data");
+    }
   };
 
-  const closeEditModal = () => {
-    setEditModalOpen(false);
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    setData((prevData) => prevData.map((row) => ({ ...row, checkbox: checked })));
+  };
+
+  const handleCheckboxChange = useCallback((index) => {
+    setData((prevData) =>
+      prevData.map((item, i) => (i === index ? { ...item, checkbox: !item.checkbox } : item))
+    );
+  }, []);
+
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/delete-lims/rCServiceReporting/${item.uniqueId}`);
+      if (response?.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
+        toast.success("Service Reporting data deleted successfully");
+        fetchServiceReportingData();
+      } else {
+        toast.error("Failed to delete Service Reporting data");
+      }
+    } catch (error) {
+      console.error("Error deleting Service Reporting data:", error);
+      toast.error("Error deleting Service Reporting data");
+    }
+  };
+
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus || !viewModalData) {
+      toast.error("Invalid status update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/rCServiceReporting/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Service Reporting status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Service Reporting status");
+      }
+    } catch (error) {
+      console.error("Error updating Service Reporting status:", error);
+      toast.error("Error updating Service Reporting status");
+    }
+  };
+
+  const addNewServiceReporting = async (newServiceReporting) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/rCServiceReporting`, newServiceReporting);
+      if (response.status === 200) {
+        const addedServiceReporting = response.data;
+        setData((prevData) => [
+          {
+            ...addedServiceReporting,
+            checkbox: false,
+          },
+          ...prevData,
+        ]);
+        toast.success("Service Reporting added successfully");
+        setIsModalOpen(false);
+        fetchServiceReportingData();
+      }else {
+        toast.error("Failed to add Service Reporting");
+      }
+    } catch (error) {
+      console.error("Error adding Service Reporting:", error);
+      toast.error("Failed to add Service Reporting");
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const { sno, ...dataToSend } = updatedData;
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/rCServiceReporting/${updatedData.uniqueId}`, dataToSend);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+        );
+        toast.success("Service Reporting updated successfully");
+      } else {
+        toast.error("Failed to update Service Reporting");
+      }
+    } catch (error) {
+      console.error("Error updating Service Reporting:", error);
+      toast.error("Error updating Service Reporting");
+    }
     setEditModalData(null);
   };
 
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
+  const handleExcelDataUpload = useCallback(
+    (excelData) => {
+      const updatedData = excelData.map((item, index) => ({
+        checkbox: false,
+        sno: data.length + index + 1,
+        ProblemId: item["Problem ID"] || "",
+        InstrumentId: item["Instrument ID"] || "",
+        ModuleId: item["Module ID"] || "",
+        ProblemInBrief: item["Problem In Brief"] || "",
+        ProblemInDetails: item["Problem In Details"] || "",
+        ExpectedClosureDate: item["Expected Closure Date On"] || "",
+        JobDetails: item["Job Details"] || "",
+        status: item["Status"] || "",
+      }));
+      setData((prevData) => [...prevData, ...updatedData]);
+      setIsModalsOpen(false);
+    },
+    [data]
+  );
+
+  const columns = [
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+      Cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.original.checkbox}
+          onChange={() => handleCheckboxChange(row.index)}
+        />
+      ),
+    },
+    { header: "Sr No.", accessor: "sno" },
+    { header: "Problem ID", accessor: "ProblemId" },
+    { header: "Instrument ID", accessor: "InstrumentId" },
+    { header: "Module ID", accessor: "ModuleId" },
+    { header: "Problem In Brief", accessor: "ProblemInBrief" },
+    { header: "Problem In Details", accessor: "ProblemInDetails" },
+    { header: "Expected Closure Date On", accessor: "ExpectedClosureDate" },
+    { header: "Job Details", accessor: "JobDetails" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row.original)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
+        </>
+      ),
+    },
+  ];
+
+  const filteredData = data.filter((row) => {
+    const problemIdMatch = row.ProblemId?.toLowerCase().includes(searchQuery.toLowerCase()) ?? true;
+    const statusMatch = statusFilter === "All" || row.status === statusFilter;
+    return problemIdMatch && statusMatch;
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
   };
+
+  const closeViewModal = () => {
+    setViewModalData(null);
+  };
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+
+  const ServiceReportingModal = ({ visible, closeModal, onAdd }) => {
+    const [serviceReporting, setServiceReporting] = useState({
+      ProblemId: "",
+      InstrumentId: "",
+      ModuleId: "",
+      ProblemInBrief: "",
+      ProblemInDetails: "",
+      ExpectedClosureDate: "",
+      JobDetails: "",
+    });
+
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setServiceReporting((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onAdd({
+        ...serviceReporting,
+        status: "Active",
+      });
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Service Reporting</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm onSubmit={handleSubmit}>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Problem ID"
+              name="ProblemId"
+              value={serviceReporting.ProblemId}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Instrument ID"
+              name="InstrumentId"
+              value={serviceReporting.InstrumentId}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Module ID"
+              name="ModuleId"
+              value={serviceReporting.ModuleId}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Problem In Brief"
+              name="ProblemInBrief"
+              value={serviceReporting.ProblemInBrief}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Problem In Details"
+              name="ProblemInDetails"
+              value={serviceReporting.ProblemInDetails}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="date"
+              label="Expected Closure Date"
+              name="ExpectedClosureDate"
+              value={serviceReporting.ExpectedClosureDate}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Job Details"
+              name="JobDetails"
+              value={serviceReporting.JobDetails}
+              onChange={handleInputChange}
+              required
+            />
+            <CModalFooter>
+              <CButton color="secondary" onClick={closeModal}>
+                Cancel
+              </CButton>
+              <CButton color="primary" type="submit">
+                Add Service Reporting
+              </CButton>
+            </CModalFooter>
+          </CForm>
+        </CModalBody>
+      </CModal>
+    );
+  };
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      setFormData(data);
+      if (data) {
+        setFormData(data);
+      }
     }, [data]);
 
     const handleChange = (e) => {
@@ -102,267 +361,80 @@ const ServiceReporting = () => {
     };
 
     return (
-      <div>
-        <CModal
-          alignment="center"
-          visible={visible}
-          onClose={closeModal}
-          size="lg"
-        >
-          <CModalHeader>
-            <CModalTitle>Add Service Reporting</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <p>Add information and Add Service Reporting</p>
-            <CFormSelect
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Edit Service Reporting</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm>
+            <CFormInput
+              className="mb-3"
               type="text"
               label="Problem ID"
-              className="mb-3"
-              options={["Select...", { label: "SHMDZ" }]}
-              placeholder="Select..."
+              name="ProblemId"
               value={formData?.ProblemId || ""}
               onChange={handleChange}
-              name="ProblemId"
             />
             <CFormInput
+              className="mb-3"
               type="text"
-              label="Instrument (Instrument ID)"
-              placeholder="hplc"
-              disabled
+              label="Instrument ID"
+              name="InstrumentId"
+              value={formData?.InstrumentId || ""}
+              onChange={handleChange}
             />
-            <CFormSelect
+            <CFormInput
+              className="mb-3"
               type="text"
               label="Module ID"
-              className="mb-3"
-              options={["Select...", { label: "wl/wb/m/001" }]}
-              placeholder="Select..."
+              name="ModuleId"
               value={formData?.ModuleId || ""}
               onChange={handleChange}
-              name="ModuleId"
             />
             <CFormInput
-              type="text"
               className="mb-3"
+              type="text"
               label="Problem In Brief"
-              placeholder="Problem In Brief "
+              name="ProblemInBrief"
               value={formData?.ProblemInBrief || ""}
               onChange={handleChange}
-              name="ProblemInBrief"
             />
             <CFormInput
-              type="text"
               className="mb-3"
+              type="text"
               label="Problem In Details"
-              placeholder="Problem In Details"
+              name="ProblemInDetails"
               value={formData?.ProblemInDetails || ""}
               onChange={handleChange}
-              name="ProblemInDetails"
             />
             <CFormInput
-              type="file"
               className="mb-3"
-              label="Reference Document"
-              placeholder=" choose file"
-            />
-            <CFormInput
               type="date"
-              className="mb-3"
-              label="Occurred On"
-              placeholder=" "
-            />
-            <CFormInput
-              type="date"
-              className="mb-3"
-              label="Reported On"
-              placeholder=" "
-            />
-            <CFormInput
-              type="date"
-              className="mb-3"
-              label="Attended On"
-              placeholder=" "
-            />
-            <CFormInput
-              type="date"
-              className="mb-3"
               label="Expected Closure Date"
-              placeholder=" "
+              name="ExpectedClosureDate"
+              value={formData?.ExpectedClosureDate || ""}
+              onChange={handleChange}
             />
             <CFormInput
-              type="text"
               className="mb-3"
+              type="text"
               label="Job Details"
-              placeholder=" Job Details"
+              name="JobDetails"
               value={formData?.JobDetails || ""}
               onChange={handleChange}
-              name="JobDetails"
             />
-          </CModalBody>
-          <CModalFooter>
-            <CButton color="light" onClick={closeModal}>
-              Back
-            </CButton>
-            <CButton color="primary" onClick={handleSave}>
-              Submit
-            </CButton>
-          </CModalFooter>
-        </CModal>
-      </div>
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Save Changes
+          </CButton>
+        </CModalFooter>
+      </CModal>
     );
-  };
-
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
-
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
-  };
-
-  useEffect(() => {
-    const counts = {
-      Active: 0,
-      Inactive: 0,
-    };
-
-    data.forEach((item) => {
-      if (item.status === "Active") counts.Active++;
-      else if (item.status === "Inactive") counts.Inactive++;
-    });
-
-    setCardCounts(counts);
-  }, [data]);
-
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
-  };
-
-  const handleSelectAll = (e) => {
-    const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
-  };
-
-  const filteredData = data.filter((row) => {
-    return (
-      row.ProblemId.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
-  };
-
-  const columns = [
-    {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
-    { header: "SrNo.", accessor: "sno" },
-    { header: "Problem ID", accessor: "ProblemId" },
-    { header: "Instrument ID", accessor: "InstrumentId" },
-    { header: "Module ID", accessor: "ModuleId" },
-    { header: "Problem In Brief", accessor: "ProblemInBrief" },
-    { header: "Problem In Details", accessor: "ProblemInDetails" },
-    { header: "Expected Closure Date On", accessor: "ExpectedClosureDate" },
-    { header: "Job Details", accessor: "JobDetails" },
-    { header: "Status", accessor: "status" },
-
-    {
-      header: "Actions",
-      accessor: "action",
-      Cell: ({ row }) => (
-        <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-          />
-          <FontAwesomeIcon
-            icon={faTrashCan}
-            key="delete"
-            className="cursor-pointer"
-          />
-        </>
-      ),
-    },
-  ];
-
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno: index + 1,
-      ProblemId: item["Problem ID"] || "",
-      InstrumentId: item["Instrument ID"] || "",
-      ModuleId: item["Module ID"] || "",
-      ProblemInBrief: item["Problem In Brief"] || "",
-      ProblemInDetails: item["Problem In Details"] || "",
-      ExpectedClosureDate: item["Expected Closure Date On"] || "",
-      JobDetails: item["Job Details"] || "",
-      status: item["Status"] || "",
-    }));
-
-    const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
-
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
-  };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
-  const handleModalSubmit = (serviceReporting) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === serviceReporting.sno ? serviceReporting : item
-      );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
-        {
-          checkbox: false,
-          sno: prevData.length + 1,
-          ProblemId: serviceReporting.problemId,
-          InstrumentId: serviceReporting.instrumentID,
-          ModuleId: serviceReporting.moduleId,
-          ProblemInDetails: serviceReporting.problemInDetail,
-          ProblemInBrief: serviceReporting.problemInBrief,
-          JobDetails: serviceReporting.jobDetails,
-          ExpectedClosureDate: currentDate,
-          AddedOn: currentDate,
-          status: "Active",
-        },
-      ]);
-    }
-    closeModal();
   };
 
   return (
@@ -370,10 +442,9 @@ const ServiceReporting = () => {
       <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Service Reporting</h1>
-
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
-            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
             <Dropdown
               options={[
                 { value: "All", label: "All" },
@@ -391,9 +462,8 @@ const ServiceReporting = () => {
               title="Service Reporting"
               fileName="ServiceReporting.pdf"
             />
-
-            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Service" color="blue" onClick={openModal} />
+            <ATMButton text="Import" color="pink" onClick={() => setIsModalsOpen(true)} />
+            <ATMButton text="Add Service" color="blue" onClick={() => setIsModalOpen(true)} />
           </div>
         </div>
         <Table
@@ -404,38 +474,49 @@ const ServiceReporting = () => {
           onDelete={handleDelete}
           openEditModal={openEditModal}
         />
+      </div>
+
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+          title="Service Reporting Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+
+      {isModalOpen && (
         <ServiceReportingModal
           visible={isModalOpen}
-          closeModal={closeModal}
-          handleSubmit={handleModalSubmit}
+          closeModal={() => setIsModalOpen(false)}
+          onAdd={addNewServiceReporting}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
-            closeModal={closeViewModal}
-            data={viewModalData}
-          />
-        )}
-        {isModalsOpen && (
-          <ImportModal
-            initialData={filteredData}
-            isOpen={isModalsOpen}
-            onClose={handleCloseModals}
-            columns={columns}
-            onDataUpload={handleExcelDataUpload}
-          />
-        )}
+      )}
 
-        {editModalOpen && (
-          <EditModal
-            visible={editModalOpen}
-            closeModal={closeEditModal}
-            data={editModalData}
-            onSave={handleEditSave}
-          />
-        )}
-      </div>
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={() => setIsModalsOpen(false)}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </>
   );
 };
+
 export default ServiceReporting;
