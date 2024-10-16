@@ -42,6 +42,10 @@ const CalibrationType = () => {
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
+  useEffect(() => {
+    fetchCalibrationTypes();
+  }, []);
+
   const fetchCalibrationTypes = async () => {
     try {
       const response = await axios.get(
@@ -63,9 +67,6 @@ const CalibrationType = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCalibrationTypes();
-  }, []);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -221,7 +222,6 @@ const CalibrationType = () => {
             checkbox: false,
           },
         ]);
-        fetchCalibrationTypes();
 
         toast.success("Calibration Type added successfully");
       }
@@ -229,7 +229,9 @@ const CalibrationType = () => {
       console.error("Error adding calibration type:", error);
       toast.error("Failed to add calibration type");
     }
-
+    useEffect(() => {
+      fetchCalibrationTypes();
+    }, []);
     setIsModalOpen(false);
   };
 
@@ -400,28 +402,19 @@ const CalibrationType = () => {
 };
 export default CalibrationType;
 
-/* const addNewStorageCondition = async (newCondition) => {
-    try {
-      // Prepare the new condition object (not an array)
-      const conditionData = {
-        name: newCondition.name,
-        conditionCode: newCondition.conditionCode,
-        storageCondition: newCondition.storageCondition,
-        createdAt: new Date().toISOString(), // Current date as createdAt
-        attachment: newCondition.attachment || null,
-        status: newCondition.status || "Active",
-      };
+/*  {
+    checkbox: false,
+    sno: 7,
+    CalibrationId: "Product 7",
+    InstrumentId: "Seq 7",
+    ModuleModuleId: "Info 7",
+    CalibrationType: "Type 7",
+    ScheduleDate: "2024-06-07",
+    NextDueDate: "2024-07-07",
+    ToleranceDays: "35",
 
-      // Send the POST request with a single object (not an array)
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/storageCondition`,
-        conditionData
-      );
-
-      closeModal();
-      console.log("Response received:", response.data);
-      fetchData(); // show data in table without refresh
-    } catch (error) {
-      console.error("Error creating storage condition:", error);
-    }
+    status: "INITIATED",
+  },
   };*/
+
+//    CalibrationStatus: "Active",
