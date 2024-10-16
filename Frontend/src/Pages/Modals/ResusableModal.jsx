@@ -24,7 +24,7 @@ const ReusableModal = ({
 }) => {
   const [statusModal, setStatusModal] = useState(false);
   const handleStatusChange = (newStatus) => {
-    updateStatus(data.sampleType, newStatus); // Update status in the parent component
+    updateStatus(newStatus); // Update status in the parent component
     setStatusModal(false); // Close status modal
     closeModal(); // Close view modal
   };
@@ -106,13 +106,21 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const handleStatusChange = (e) => {
-    setSelectedStatus(e.target.value);
+    const newStatus = e.target.value;
+    setSelectedStatus(newStatus);
+    console.log("Selected status:", newStatus);
   };
 
   const handleUpdate = () => {
-    onUpdateStatus(selectedStatus); // Call parent function to update the status
-    closeModal(); // Close the modal
+    if (selectedStatus) {
+      console.log("Updating status to:", selectedStatus);
+      onUpdateStatus(selectedStatus);
+      closeModal();
+    } else {
+      console.error("No status selected");
+    }
   };
+
   return (
     <CModal alignment="center" visible={visible} onClose={closeModal}>
       <CModalHeader>
@@ -135,7 +143,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
         <CButton color="light" onClick={closeModal}>
           Cancel
         </CButton>
-        <CButton color="dark" onClick={handleUpdate}>
+        <CButton color="dark" onClick={handleUpdate} disabled={!selectedStatus}>
           Update
         </CButton>
       </CModalFooter>

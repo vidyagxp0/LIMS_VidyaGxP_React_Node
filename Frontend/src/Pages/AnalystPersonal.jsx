@@ -30,7 +30,7 @@ const AnalystPersonal = () => {
 
         const formattedData = response?.data[0]?.analystPersonal || [];
         const updatedData = formattedData.map((item, index) => ({
-          sno:item.uniqueId,
+          sno:index+1,
           ...item,
         }));
         setData(updatedData);
@@ -157,9 +157,10 @@ const AnalystPersonal = () => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`${BASE_URL}/delete-lims/analystPersonal/${item.sno}`);
-      setData((prevData) => prevData.filter(dataItem => dataItem.sno !== item.sno));
+      await axios.delete(`${BASE_URL}/delete-lims/analystPersonal/${item.uniqueId}`);
+      setData((prevData) => prevData.filter(dataItem => dataItem.uniqueId !== item.uniqueId));
       closeModal();
+      fetchData();
     } catch (error) {
       console.error("Error deleting analyst:", error);
     }

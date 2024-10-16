@@ -47,9 +47,9 @@ function SamplingField() {
         `${BASE_URL}/get-all-lims/sSamplingField`
       );
       const formattedData = response?.data[0]?.sSamplingField || [];
-      const updatedData = formattedData.map((item) => ({
+      const updatedData = formattedData.map((item,index) => ({
         ...item,
-        sno: item.uniqueId,
+        sno: index+1,
         checkbox: false,
         registeredOn: new Date(item.registeredOn).toLocaleString("en-IN", {
           timeZone: "Asia/Kolkata",
@@ -93,6 +93,7 @@ function SamplingField() {
           prevData.filter((d) => d.uniqueId !== item.uniqueId)
         );
         toast.success("Sampling Field data deleted successfully");
+        fetchSamplingFieldData();
       } else {
         toast.error("Failed to delete Sampling Field data");
       }
@@ -132,9 +133,9 @@ function SamplingField() {
               hour: "2-digit",
               minute: "2-digit",
               hour12: true,
-            }), // Format it for display as well
+            }), 
           },
-          ...prevData, // Add new data at the beginning of the table
+          ...prevData,
         ]);
         toast.success("Sampling Field added successfully");
         fetchSamplingFieldData();
@@ -216,7 +217,7 @@ function SamplingField() {
         />
       ),
     },
-    { header: "Sr No.", accessor: "uniqueId" },
+    { header: "Sr No.", accessor: "sno" },
     { header: "Field Name", accessor: "fieldName" },
     { header: "Field Type", accessor: "fieldType" },
     { header: "Registered By", accessor: "registeredBy" },

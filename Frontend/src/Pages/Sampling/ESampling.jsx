@@ -46,9 +46,9 @@ function ESampling() {
     try {
       const response = await axios.get(`${BASE_URL}/get-all-lims/sESampling`);
       const formattedData = response?.data[0]?.sESampling || [];
-      const updatedData = formattedData.map((item) => ({
+      const updatedData = formattedData.map((item,index) => ({
         ...item,
-        sno: item.uniqueId, // Use uniqueId as sno
+        sno: index+1, // Use uniqueId as sno
         checkbox: false,
         addedOn: new Date().toLocaleString("en-IN", {
           timeZone: "Asia/Kolkata",
@@ -76,6 +76,7 @@ function ESampling() {
         const newData = data.filter((d) => d.sno !== item.sno);
         setData(newData);
         toast.success("E-Sampling data deleted successfully");
+        fetchESamplingData();
       } else {
         toast.error("Failed to delete E-Sampling data");
       }
@@ -122,10 +123,10 @@ function ESampling() {
         />
       ),
     },
-    {
-      header: "Sr No.",
-      accessor: "uniqueId",
-      Cell: ({ value }) => value,
+    { 
+      header: "Sr No.", 
+      accessor: "sno",
+      Cell: ({ value }) => value
     },
     { header: "Sampling Configuration", accessor: "samplingConfiguration" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
