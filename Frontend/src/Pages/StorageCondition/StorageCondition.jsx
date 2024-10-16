@@ -28,39 +28,7 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
-
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    name: "New Storage",
-    conditionCode: "CC1",
-    storageCondition: "SC1",
-    createdAt: "2023-01-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    name: "New Storage",
-    conditionCode: "CC2",
-    storageCondition: "SC2",
-    createdAt: "2023-02-01",
-    attachment: "attachment",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    name: "New Storage",
-    conditionCode: "CC3",
-    storageCondition: "SC3",
-    createdAt: "2023-03-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-];
+import { toast } from "react-toastify";
 
 const fields = [
   { label: "Storage Name.", key: "name" },
@@ -81,40 +49,30 @@ function StorageCondition() {
   const [editModalData, setEditModalData] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchData(); // Fetch data on component mount
-  }, []);
-
-  const fetchData = async () => {
+  const fetchStorageCondition = async () => {
     try {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/storageCondition`
       );
-      console.log("API Response:", response.data);
+      console.log(response);
+      const formattedData = response.data[0]?.storageCondition || []; // Adjust this based on your API response structure
 
-      const formattedData = response.data.flatMap((item, index) => {
-        return (
-          item.storageCondition?.map((condition, i) => ({
-            checkbox: false,
-            sno: condition.uniqueId,
-            name: condition.name || "No Name",
-            conditionCode: condition.conditionCode || "No Code",
-            createdAt: condition.createdAt
-              ? new Date(condition.createdAt).toISOString().split("T")[0]
-              : "No Date", // Ensure createdAt exists
-            attachment: condition.attachment || "No Attachment",
-            storageCondition: condition.storageCondition || "No Condition",
-            status: condition.status || "Active",
-          })) || []
-        );
-      });
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
 
-      // console.log("Formatted Data:", formattedData);
-      setData(formattedData);
+      setData(updatedData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching calibration types:", error);
+      toast.error("Failed to fetch calibration types");
     }
   };
+
+  useEffect(() => {
+    fetchStorageCondition();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -276,32 +234,47 @@ function StorageCondition() {
   // Function to add a new storage condition
   const addNewStorageCondition = async (newCondition) => {
     try {
-      // Prepare the new condition object (not an array)
-      const conditionData = {
-        name: newCondition.name,
-        conditionCode: newCondition.conditionCode,
-        storageCondition: newCondition.storageCondition,
-        createdAt: new Date().toISOString(), // Current date as createdAt
-        attachment: newCondition.attachment || null,
-        status: newCondition.status || "Active",
-      };
-
-      // Send the POST request with a single object (not an array)
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/storageCondition`,
-        conditionData
+        {
+          name: newCondition.name,
+          conditionCode: newCondition.conditionCode,
+          storageCondition: newCondition.storageCondition,
+          createdAt: new Date().toISOString(), // Current date as createdAt
+          attachment: newCondition.attachment || null,
+          status: newCondition.status || "Active",
+        }
       );
 
-      closeModal();
-      console.log("Response received:", response.data);
+      if (response.status === 200) {
+        const addedStorageCondition = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedStorageCondition,
+            sno: addedStorageCondition.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+        closeModal();
+
+        toast.success("Calibration Type added successfully");
+        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
+      }
     } catch (error) {
-      console.error("Error creating storage condition:", error);
+      console.error("Error adding calibration type:", error);
+      toast.error("Failed to add calibration type");
     }
+    useEffect(() => {
+      fetchStorageCondition();
+    }, []);
+    setIsModalOpen(false);
   };
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
-      item.storageCondition === storageCondition
+      item.storageCondition === StorageCondition
         ? { ...item, status: newStatus }
         : item
     );
@@ -564,3 +537,7 @@ function StorageCondition() {
 }
 
 export default StorageCondition;
+
+
+
+// SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions

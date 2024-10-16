@@ -502,7 +502,7 @@ const SampleLoginTemplate = () => {
 
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Sample Login Template</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
@@ -554,7 +554,12 @@ const SampleLoginTemplate = () => {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login_Template.pdf" title="Sample Login Template Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Sample_Login_Template.pdf"
+              title="Sample Login Template Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Sample LogIn"
