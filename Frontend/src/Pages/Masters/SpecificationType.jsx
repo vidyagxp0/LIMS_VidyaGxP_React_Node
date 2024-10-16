@@ -56,34 +56,27 @@ function specficationtype() {
 
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetchProductData();
-  }, []);
-
-  const fetchProductData = async () => {
+  const fetchData = async () => {
     try {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/mSpecificationType`
       );
-      if (response.data && Array.isArray(response.data)) {
-        const formattedData = response.data.flatMap(
-          (item) =>
-            item?.mSpecificationType?.map((condition) => ({
-              checkbox: false,
-              sno: condition.uniqueId,
-              specificationType: condition.specificationType || "No Specification Type",
-              addedOn: condition.addedOn || "No Date",
-              status: condition.status || "Active",
-            })) || []
-        );
-        setData(formattedData);
-      }
+      const fetchedData = response?.data[0]?.mSpecificationType || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
     } catch (error) {
-      toast.error(
-        "Error fetching data: " + (error.response?.data || error.message)
-      );
+      console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const addNewItem = (newItem) => {
     const newItemWithSno = {
@@ -109,20 +102,18 @@ function specficationtype() {
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    console.log(newData,"000000000000")
     setData(newData);
   };
 
   console.log("Data:", data);
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        console.log("Row:", row); // Log each row to see its structure
-        const productName = row.productName || "";
-        return (
-          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
-        );
-      })
-    : [];
+
+  const filteredData = data.filter((row) => {
+    return (
+      row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
     const onViewDetails = (rowData) => {
       if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
         setIsViewModalOpen(false);
@@ -192,20 +183,22 @@ function specficationtype() {
   };
 
   const handleDelete = async (item) => {
+    console.log(item);
+
     try {
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/mSpecificationType/${item.sno}`
+        `${BASE_URL}/delete-lims/mSpecificationType/${item.uniqueId}`
       );
       if (response.status === 200) {
-        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
-        toast.success("Specification Type deleted successfully.");
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
       } else {
-        toast.error("Failed to delete Specification Type.");
+        console.error("Failed to delete investigation:", response.statusText);
       }
     } catch (error) {
-      toast.error(
-        "Error deleting Specification Type: " + (error.response?.data || error.message)
-      );
+      console.error("Error deleting investigation:", error);
     }
   };
   const handleAdd = async (newProduct) => {
@@ -220,10 +213,10 @@ function specficationtype() {
       );
       if (response.status === 200) {
         toast.success("Product added successfully.");
-        fetchProductData(); 
+        fetchData();
         setIsModalOpen(false);
       } else {
-        toast.error("Failed to add Product.");
+        toast.error("Failed to adsd Product.");
       }
     } catch (error) {
       toast.error(
@@ -313,29 +306,31 @@ function specficationtype() {
     setEditModalData(null);
   };
   const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/mSpecificationType/${updatedData.sno}`,
-        updatedData
+        `${BASE_URL}/manage-lims/update/mSpecificationType/${updatedData.uniqueId}`,
+        dataTosend
       );
       if (response.status === 200) {
-        setData((prevData) =>
-          prevData.map((item) =>
-            item.sno === updatedData.sno ? updatedData : item
-          )
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
         );
-        toast.success("Product updated successfully.");
-        setEditModalData(null);
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
       } else {
-        toast.error("Failed to update Product.");
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
       }
     } catch (error) {
-      toast.error(
-        "Error updating Product: " + (error.response?.data || error.message)
-      );
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
     }
   };
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
