@@ -169,7 +169,7 @@ const CalibrationSchedule = () => {
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Unique Code", accessor: "uniqueCode" },
-    { header: "CalibrationWorkflow", accessor: "calibrationWorkflow" },
+    { header: "Calibration Workflow", accessor: "calibrationWorkflow" },
     { header: "Schedule Description", accessor: "scheduleDescription" },
     { header: "Start Date	", accessor: "startDate" },
     { header: "Frequency", accessor: "frequency" },
@@ -263,6 +263,7 @@ const CalibrationSchedule = () => {
           startDate: newInstrument.startDate,
           frequency: newInstrument.frequency,
           nextCalibrationDue: "next",
+          tolerancePeriod: newInstrument.tolerancePeriod,
           status: "Active",
         }
       );
