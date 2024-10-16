@@ -31,11 +31,10 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 
 
-// Initial dynamic data from local storage
-const initialData = JSON.parse(localStorage.getItem("mytest")) || [];
 
 const fields = [
   { label: "A.R No.", key: "ARNo" },
@@ -54,30 +53,41 @@ function Mytests() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-
   const [data, setData] = useState([]);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mMyTest`
-        );
-        const fetchedData = response?.data[0]?.mMyTest || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.uniqueId || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchProductData();
   }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mMyTest`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mMyTest?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              ARNo: condition.ARNo || "-",
+              productName: condition.productName || "-",
+              sampleIncharge: condition.sampleIncharge || "-",
+              assignedOn: condition.assignedOn || "-",
+              sampleType: condition.sampleType || "-",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -93,22 +103,29 @@ function Mytests() {
   };
 
   console.log("Data:", data);
-  const filteredData = data
-  .filter((row) => {
-    return (
-      row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  })
-  .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
-
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 const onAdd = (newRow) => {
   const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
   setData(updatedData);
 };
-  const onViewDetails = (rowData) => {
+const onViewDetails = (rowData) => {
+  if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+    setIsViewModalOpen(false);
+    setViewModalData(null);
+  } else {
     setViewModalData(rowData);
-  };
+    setIsViewModalOpen(true);
+  }
+};
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -172,27 +189,26 @@ const onAdd = (newRow) => {
   };
 
   const closeViewModal = () => {
-    setViewModalData(false);
+    setIsModalOpen(false);
   };
 
   const handleDelete = async (item) => {
-   
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/mMyTest/${item.uniqueId}`
+        `${BASE_URL}/delete-lims/mMyTest/${item.sno}`
       );
-      if (response?.status === 200) {
-        const newData = data.filter((d) => d.sno !== item.uniqueId);
-        setData(newData);
-        console.log("Product deleted successfully:", response.data);
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Product deleted successfully.");
       } else {
-        console.error("Failed to delete product:", response.statusText);
+        toast.error("Failed to delete Product.");
       }
     } catch (error) {
-      console.error("Error deleting product:", error);
+      toast.error(
+        "Error deleting Product: " + (error.response?.data || error.message)
+      );
     }
   };
-  
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
@@ -216,34 +232,49 @@ const onAdd = (newRow) => {
     );
     setData(updatedData);
   };
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [myTestData, setMyTestData] = useState({
-      ARNo: "",
-      productName: "",
-      sampleIncharge: "",
-      assignedOn: "",
-      sampleType: "",
-    });
-  
-    const handleAdd = async () => {
-      const newCondition = { ...myTestData };
-  
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mMyTest",
-          newCondition
-        );
-  
-        if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response?.data?.updatedLIMS?.mmasterProduct);
-          closeModal();
-          onAdd(response.data);
-        } else {
-          console.error("Failed to add product:", response.statusText);
+
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mMyTest`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
         }
-      } catch (error) {
-        console.error("Error adding product:", error);
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchProductData(); 
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Product.");
       }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+  const[ARNo, setARNo]=useState("")
+  const[productName, setProductName]=useState("")
+  const[sampleIncharge, setSampleIncharge]=useState("")
+  const[assignedOn, setAssignedOn]=useState("")
+  const[sampleType, setSampleType]=useState("")
+
+    const handleProduct = () => {
+      const currentDate = new Date().toISOString().split("T")[0];
+      const newCondition = {
+        ARNo,
+        productName,
+        sampleIncharge,
+        assignedOn: currentDate,
+        sampleType,
+        status: "active",
+      };
+      onAdd(newCondition);
     };
   
     const handleInputChange = (field, value) => {
@@ -263,8 +294,8 @@ const onAdd = (newRow) => {
             label="A.R NO."
             placeholder="A.R NO."
             name="ARNo"
-            value={myTestData.ARNo}
-            onChange={(e) => handleInputChange("ARNo", e.target.value)}
+            value={ARNo}
+            onChange={(e) => setARNo(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -272,8 +303,8 @@ const onAdd = (newRow) => {
             label="Product Name"
             placeholder="Product Name"
             name="productName"
-            value={myTestData.productName}
-            onChange={(e) => handleInputChange("productName", e.target.value)}
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -281,16 +312,16 @@ const onAdd = (newRow) => {
             label="Sample Incharge"
             placeholder="Sample Incharge"
             name="sampleIncharge"
-            value={myTestData.sampleIncharge}
-            onChange={(e) => handleInputChange("sampleIncharge", e.target.value)}
+            value={sampleIncharge}
+            onChange={(e) => setSampleIncharge(e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="date"
             label="Assigned On"
             name="assignedOn"
-            value={myTestData.assignedOn}
-            onChange={(e) => handleInputChange("assignedOn", e.target.value)}
+            value={assignedOn}
+            onChange={(e) => setAssignedOn(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -298,15 +329,15 @@ const onAdd = (newRow) => {
             label="Sample Type"
             placeholder="Sample Type"
             name="sampleType"
-            value={myTestData.sampleType}
-            onChange={(e) => handleInputChange("sampleType", e.target.value)}
+            value={sampleType}
+            onChange={(e) => setSampleType( e.target.value)}
           />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleProduct}>
             Submit
           </CButton>
         </CModalFooter>
@@ -324,21 +355,24 @@ const onAdd = (newRow) => {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/mMyTest/${updatedData.uniqueId}`,
+        `${BASE_URL}/manage-lims/update/mMyTest/${updatedData.sno}`,
         updatedData
       );
       if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId ? updatedData : item
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
         );
-        setData(newData);
+        toast.success("Product updated successfully.");
         setEditModalData(null);
-        console.log("Product updated successfully:", response.data);
       } else {
-        console.error("Failed to update product:", response.statusText);
+        toast.error("Failed to update Product.");
       }
     } catch (error) {
-      console.error("Error updating product:", error);
+      toast.error(
+        "Error updating Product: " + (error.response?.data || error.message)
+      );
     }
   };
 
@@ -477,7 +511,7 @@ const onAdd = (newRow) => {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={onAdd}
+          onAdd={handleAdd}
         />
       )}
       {viewModalData && (

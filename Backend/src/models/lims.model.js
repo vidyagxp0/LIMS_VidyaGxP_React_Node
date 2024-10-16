@@ -21,6 +21,7 @@ const commonFields = [
   "sMStorageCondition",
   "sMStandardProtocol",
   "sMStorageChamber",
+  "mTestRegistration",
   "sMChamberConditionMapping",
   "sMStabilityProtocol",
   "sMSampleStorage",
