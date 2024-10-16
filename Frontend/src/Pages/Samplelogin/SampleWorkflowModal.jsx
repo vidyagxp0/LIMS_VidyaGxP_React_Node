@@ -17,7 +17,7 @@ import axios from "axios";
 import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
 
-const SampleWorkflowModal = () => {
+const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [formData, setFormData] = useState({
     sampleRegistration: {},
@@ -216,12 +216,17 @@ const SampleWorkflowModal = () => {
                 />
               </CCol>
             </CRow>
-            <CButton
-              color="primary"
-              onClick={() => handleSave("stabilityInformation")}
-            >
-              Save
-            </CButton>
+            <div>
+              <CButton
+                color="primary"
+                onClick={() => handleSave("stabilityInformation")}
+              >
+                Save
+              </CButton>
+              <CButton color="danger" onClick={onClose}>
+                Close
+              </CButton>
+            </div>
           </CForm>
         );
       default:
