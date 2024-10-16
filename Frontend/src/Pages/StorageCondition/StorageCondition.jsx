@@ -540,6 +540,4 @@ export default StorageCondition;
 
 
 
-// { header: "Calibration Type", accessor: "CalibrationType" },
-// { header: "Calibration Prefix", accessor: "CalibrationPrefix" },
-// { header: "Added On", accessor: "AddedOn" },
+// SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions

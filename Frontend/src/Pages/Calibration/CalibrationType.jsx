@@ -229,11 +229,12 @@ const CalibrationType = () => {
       console.error("Error adding calibration type:", error);
       toast.error("Failed to add calibration type");
     }
-    useEffect(() => {
-      fetchCalibrationTypes();
-    }, []);
+
     setIsModalOpen(false);
   };
+  useEffect(() => {
+    fetchCalibrationTypes();
+  }, []);
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -402,19 +403,5 @@ const CalibrationType = () => {
 };
 export default CalibrationType;
 
-/*  {
-    checkbox: false,
-    sno: 7,
-    CalibrationId: "Product 7",
-    InstrumentId: "Seq 7",
-    ModuleModuleId: "Info 7",
-    CalibrationType: "Type 7",
-    ScheduleDate: "2024-06-07",
-    NextDueDate: "2024-07-07",
-    ToleranceDays: "35",
 
-    status: "INITIATED",
-  },
-  };*/
-
-//    CalibrationStatus: "Active",
+// SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions

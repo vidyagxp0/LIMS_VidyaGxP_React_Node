@@ -60,6 +60,10 @@ const CalibrationFrequency = () => {
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
+  useEffect(() => {
+    fetchCalibrationFrequency();
+  }, []);
+
   const fetchCalibrationFrequency = async () => {
     try {
       const response = await axios.get(
@@ -80,10 +84,6 @@ const CalibrationFrequency = () => {
       toast.error("Failed to fetch calibration types");
     }
   };
-
-  useEffect(() => {
-    fetchCalibrationFrequency();
-  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -205,12 +205,12 @@ const CalibrationFrequency = () => {
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId); // Filter out the deleted item
         setData(newData);
-        toast.success("Calibration Type deleted successfully");
+        toast.success("Calibration Frequency deleted successfully");
         console.log("Deleted item:", item);
       }
     } catch (error) {
-      console.error("Error deleting calibration type:", error);
-      toast.error("Failed to delete calibration type");
+      console.error("Error deleting calibration Frequency:", error);
+      toast.error("Failed to delete calibration Frequency");
     }
   };
 
@@ -239,9 +239,7 @@ const CalibrationFrequency = () => {
           },
         ]);
 
-        toast.success("Calibration Type added successfully");
-        // Optionally, you can call fetchCalibrationFrequency() here to refresh the data from the server
-        fetchCalibrationFrequency(); // Refresh data (optional)
+        toast.success("Calibration Frequency added successfully");
       }
     } catch (error) {
       console.error("Error adding calibration type:", error);
@@ -249,6 +247,10 @@ const CalibrationFrequency = () => {
     }
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    fetchCalibrationFrequency();
+  }, []);
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -272,11 +274,11 @@ const CalibrationFrequency = () => {
         );
 
         setData(newData);
-        toast.success("Calibration Type updated successfully");
+        toast.success("Calibration Frequency updated successfully");
       }
     } catch (error) {
-      console.error("Error updating calibration type:", error);
-      toast.error("Failed to update calibration type");
+      console.error("Error updating calibration Frequency:", error);
+      toast.error("Failed to update calibration Frequency");
     } finally {
       setEditModalData(null); // Close the modal after handling the edit
     }
@@ -302,10 +304,10 @@ const CalibrationFrequency = () => {
       <div>
         <CModal alignment="center" visible={visible} onClose={closeModal}>
           <CModalHeader>
-            <CModalTitle> Add Calibration Type</CModalTitle>
+            <CModalTitle> Add Calibration Frequency</CModalTitle>
           </CModalHeader>
           <p className="ms-3 m-2">
-            Add information and add new calibration type
+            Add information and add new calibration Frequency
           </p>
           <CModalBody>
             <CFormInput
@@ -418,18 +420,3 @@ const CalibrationFrequency = () => {
   );
 };
 export default CalibrationFrequency;
-
-
-
-  /*  {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
-    { header: "SrNo.", accessor: "sno" },
-    { header: "Sample Type", accessor: "sampleType" },
-    { header: "Product / Material", accessor: "productMaterial" },
-    { header: "Generic Name", accessor: "genericName" },
-    { header: "Specification Code", accessor: "specificationCode" },
-    { header: "Status", accessor: "status" },
-  
-*/
