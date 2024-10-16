@@ -26,10 +26,8 @@ import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
-import SamplePlanningViewModal from "./SampleloginView/SamplePlanningViewModal";
-import sampleworkflowmodal from "./SampleloginView/SamplePlanningViewModal";
+import SampleWorkflowModal from "./SampleWorkflowModal";
 const SampleWorkFlow = () => {
-  // const [data, setData] = useState([...randomSampleData]);
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -39,6 +37,16 @@ const SampleWorkFlow = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewModalData, setViewModalData] = useState(null);
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+
+  const openWorkflowModal = () => {
+    setShowModal(true); 
+    navigate('/sampleWorkflowModal')
+  };
+
+  const closeWorkflowModal = () => {
+    setShowModal(false); 
+  };
 
   const fetchData = async () => {
     try {
@@ -47,7 +55,6 @@ const SampleWorkFlow = () => {
       );
       const fetchedData = response?.data[0]?.sLSamplePA || [];
       setData(fetchedData);
-      // console.log(fetchedData,"fetchedData")
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -404,7 +411,7 @@ const SampleWorkFlow = () => {
           <ATMButton
             text="Add Sample Workflow"
             color="blue"
-            onClick={sampleworkflowmodal}
+            onClick={openWorkflowModal}
           />
         </div>
       </div>
@@ -651,7 +658,7 @@ const SampleWorkFlow = () => {
         />
       )}
       {viewModalData && (
-        <SamplePlanningViewModal
+        <SampleWorkflowModal
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
@@ -660,6 +667,14 @@ const SampleWorkFlow = () => {
           updateStatus={""}
         />
       )}
+
+
+
+      {showModal && (<SampleWorkflowModal onClose={closeWorkflowModal} />)}
+
+
+
+
       {editModalData && (
         <SamplePlanningAEdit
           open={editModalData}
