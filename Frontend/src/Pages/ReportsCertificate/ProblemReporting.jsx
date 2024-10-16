@@ -3,17 +3,18 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-// import {
-//   CButton,
-//   CModal,
-//   CModalBody,
-//   CModalFooter,
-//   CModalHeader,
-//   CModalTitle,
-//   CForm,
-//   CFormInput,
-//   CFormSelect,
-// } from "@coreui/react";
+
+import {
+  CButton,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CForm,
+  CFormInput,
+  CFormSelect,
+} from "@coreui/react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
@@ -72,6 +73,128 @@ function ProblemReporting() {
       toast.error("Error deleting problem report");
     }
   };
+  
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+      closeModal();
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Edit Problem Reporting</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm>
+            <CFormSelect
+              className="mb-3"
+              label="Instrument ID"
+              onChange={handleChange}
+              name="instrumentId"
+              value={formData.instrumentId}
+              options={[
+                "Select...",
+                { label: "eqi/eng/163", value: "eqi/eng/163" },
+                { label: "arzph001", value: "arzph001" },
+                { label: "arz003", value: "arz003" },
+                { label: "qc/bal/0011", value: "qc/bal/0011" },
+                { label: "hplc", value: "hplc" },
+                { label: "qc/bal/02", value: "qc/bal/02" },
+              ]}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Instrument Category"
+              name="InstrumentCategory"
+              value={formData.InstrumentCategory}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Supplied By"
+              name="suppliedBy"
+              value={formData.suppliedBy}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Problem ID"
+              name="problemId"
+              value={formData.problemId}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Problem In Brief"
+              name="problemInBrief"
+              value={formData.problemInBrief}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Problem In Details"
+              name="problemInDetails"
+              value={formData.problemInDetails}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="date"
+              label="Occurred On"
+              name="occurredOn"
+              value={formData.occurredOn}
+              onChange={handleChange}
+            />
+            <CFormSelect
+              className="mb-3 "
+              label="Status"
+              name="Active"
+              value={formData.Active}
+              onChange={handleChange}
+              options={[
+                {
+                  className:"px-3 py-2 bg-green-500 rounded-md text-stone-50",
+                  label: "Active", value: "Active" },
+                { 
+                  className:"px-3 py-2 bg-red-500 rounded-md text-stone-50",
+                  label: "Inactive", value: "Inactive" },
+              ]}
+            />
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Close
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Save Changes
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+ 
+  
+  
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -287,12 +410,7 @@ function ProblemReporting() {
       )}
       
       {isModalOpen && (
-        // <StatusModal
-        //   visible={isModalOpen}
-        //   closeModal={closeModal}
-        //   onAdd={addNewProblemReport}
-        // />
-        
+ 
       <ProblemReportingModal
       visible={isModalOpen}
       closeModal={closeModal}

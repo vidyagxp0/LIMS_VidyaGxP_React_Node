@@ -9,6 +9,9 @@ import {
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
+
+import ReusableModal from "../Modals/ResusableModal";
+
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
@@ -311,13 +314,20 @@ setData(concatenateData ); // Update data state with parsed Excel data
         visible={isModalOpen}
         closeModal={closeModal}
       />
-      {isViewModalOpen && (
+      {/* {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
         />
-      )}
+      )} */}
+      <ReusableModal
+        visible={isViewModalOpen}
+        closeModal={closeViewModal}
+        data={viewModalData}
+        fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action' && field.key !== 'checkbox')}
+        title="ReleasedCad Details"
+        />
       {isModalsOpen && (
         <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
       )}
