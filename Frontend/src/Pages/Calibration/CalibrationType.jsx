@@ -26,6 +26,14 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Calibration Type", key: "CalibrationType" },
+  { label: "Calibration Prefix", key: "CalibrationPrefix" },
+  { label: "Added On", key: "AddedOn" },
+  { label: "Status", key: "status" },
+];
 
 const CalibrationType = () => {
   const [data, setData] = useState([]);
@@ -229,10 +237,20 @@ const CalibrationType = () => {
       console.error("Error adding calibration type:", error);
       toast.error("Failed to add calibration type");
     }
-    useEffect(() => {
-      fetchCalibrationTypes();
-    }, []);
+
     setIsModalOpen(false);
+  };
+  useEffect(() => {
+    fetchCalibrationTypes();
+  }, []);
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
@@ -372,11 +390,14 @@ const CalibrationType = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (
@@ -402,19 +423,3 @@ const CalibrationType = () => {
 };
 export default CalibrationType;
 
-/*  {
-    checkbox: false,
-    sno: 7,
-    CalibrationId: "Product 7",
-    InstrumentId: "Seq 7",
-    ModuleModuleId: "Info 7",
-    CalibrationType: "Type 7",
-    ScheduleDate: "2024-06-07",
-    NextDueDate: "2024-07-07",
-    ToleranceDays: "35",
-
-    status: "INITIATED",
-  },
-  };*/
-
-//    CalibrationStatus: "Active",

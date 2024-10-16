@@ -50,39 +50,30 @@ function Product() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [data, setData] = useState([]);
+  console.log(data, "datatatatatatata");
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchProductData();
-  }, []);
-
-  const fetchProductData = async () => {
+  const fetchData = async () => {
     try {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/mmasterProduct`
       );
-      if (response.data && Array.isArray(response.data)) {
-        const formattedData = response.data.flatMap(
-          (item) =>
-            item?.mmasterProduct?.map((condition) => ({
-              checkbox: false,
-              sno: condition.uniqueId,
-              productName: condition.productName || "No Name",
-              uniqueCode: condition.uniqueCode || "No Unique Code",
-              genericName: condition.genericName || "No Generic Name",
-              reTestingPeriod:
-                condition.reTestingPeriod || "No Re-Testing Period",
-              status: condition.status || "Active",
-            })) || []
-        );
-        setData(formattedData);
-      }
+      const fetchedData = response?.data[0]?.mmasterProduct || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
     } catch (error) {
-      toast.error(
-        "Error fetching data: " + (error.response?.data || error.message)
-      );
+      console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -108,16 +99,12 @@ function Product() {
     setData(newData);
   };
 
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        console.log("Row:", row);
-        const productName = row.productName || "";
-        return (
-          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
-        );
-      })
-    : [];
+  const filteredData = data.filter((row) => {
+    return (
+      row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
+    );
+  });
 
   const onAdd = (newRow) => {
     const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
@@ -189,20 +176,22 @@ function Product() {
   };
 
   const handleDelete = async (item) => {
+    console.log(item);
+
     try {
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/mmasterProduct/${item.sno}`
+        `${BASE_URL}/delete-lims/mmasterProduct/${item.uniqueId}`
       );
       if (response.status === 200) {
-        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
-        toast.success("Product deleted successfully.");
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
       } else {
-        toast.error("Failed to delete Product.");
+        console.error("Failed to delete investigation:", response.statusText);
       }
     } catch (error) {
-      toast.error(
-        "Error deleting Product: " + (error.response?.data || error.message)
-      );
+      console.error("Error deleting investigation:", error);
     }
   };
 
@@ -218,10 +207,10 @@ function Product() {
       );
       if (response.status === 200) {
         toast.success("Product added successfully.");
-        fetchProductData(); 
+        fetchData();
         setIsModalOpen(false);
       } else {
-        toast.error("Failed to add Product.");
+        toast.error("Failed to adsd Product.");
       }
     } catch (error) {
       toast.error(
@@ -310,26 +299,29 @@ function Product() {
   };
 
   const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/mmasterProduct/${updatedData.sno}`,
-        updatedData
+        `${BASE_URL}/manage-lims/update/mmasterProduct/${updatedData.uniqueId}`,
+        dataTosend
       );
       if (response.status === 200) {
-        setData((prevData) =>
-          prevData.map((item) =>
-            item.sno === updatedData.sno ? updatedData : item
-          )
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
         );
-        toast.success("Product updated successfully.");
-        setEditModalData(null);
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
       } else {
-        toast.error("Failed to update Product.");
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
       }
     } catch (error) {
-      toast.error(
-        "Error updating Product: " + (error.response?.data || error.message)
-      );
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
     }
   };
   const handleStatusUpdate = (samplingConfiguration, newStatus) => {
