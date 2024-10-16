@@ -17,6 +17,10 @@ import {
 import { FaTrash } from "react-icons/fa";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+
 
 const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
   const [fields, setFields] = useState([]);
@@ -94,20 +98,34 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
   };
 
   // !+++++++++++++++++++++++
-  const handleFormSubmit = () => {
-    const instrumentDetails = { ...instrumentData, fields };
-    
-    const existingInstruments = JSON.parse(localStorage.getItem("instruments")) || [];
-    const updatedInstruments = [...existingInstruments, instrumentDetails];
-    localStorage.setItem("instruments", JSON.stringify(updatedInstruments));
-  
-    handleSubmit(instrumentDetails);
-    
-    closeModal();
+  const handleFormSubmit = async () => {
+    const instrumentDetails = {
+      ...instrumentData,
+      fields,
+      addDate: new Date().toISOString().split("T")[0],
+      status: instrumentData.status || "Active",
+    };
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/iMRegistration`,
+        instrumentDetails
+      );
+      console.log(response,"000000000000000000000000000")
+      if (response.status === 200) {
+        toast.success("Instrument added successfully.");
+        fetchProductData();
+        closeModal();
+      } else {
+        toast.error("Failed to add Instrument.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding instrument: " + (error.response?.data || error.message)
+      );
+    }
   };
-  // !+++++++++++++++++++++++
 
-  
+  // !+++++++++++++++++++++++
 
   return (
     <div>

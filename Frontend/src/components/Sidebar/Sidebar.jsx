@@ -196,6 +196,14 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </>
             }
           >
+             <Link to="/sampleWorkflow">
+              <CNavItem href="#" className={isActive("/sampleWorkflow")} style={{ ...isActive("/samplelogin") }}>
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Sample Workflow
+              </CNavItem>
+            </Link>
             <Link to="/samplelogin">
               <CNavItem href="#" className={isActive("/samplelogin")} style={{ ...isActive("/samplelogin") }}>
                 <span className="nav-icon">
@@ -557,7 +565,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </Link>
           </CNavGroup>
 
-          <CNavGroup
+          {/* <CNavGroup
             toggler={
               <>
                 <MdOutlineInventory2 style={{ width: "15px" }} />
@@ -1689,9 +1697,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </CNavItem>
               </Link>
             </CNavGroup>
-          </CNavGroup>
+          </CNavGroup> */}
 
-          {/*  */}
+        
 
           <CNavGroup
             toggler={
