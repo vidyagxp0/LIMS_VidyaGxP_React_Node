@@ -538,17 +538,8 @@ function StorageCondition() {
 
 export default StorageCondition;
 
-{/*/*  {
-    checkbox: false,
-    sno: 7,
-    CalibrationId: "Product 7",
-    InstrumentId: "Seq 7",
-    ModuleModuleId: "Info 7",
-    CalibrationType: "Type 7",
-    ScheduleDate: "2024-06-07",
-    NextDueDate: "2024-07-07",
-    ToleranceDays: "35",
 
-    status: "INITIATED",
-  },
-  };*/}
+
+// { header: "Calibration Type", accessor: "CalibrationType" },
+// { header: "Calibration Prefix", accessor: "CalibrationPrefix" },
+// { header: "Added On", accessor: "AddedOn" },
