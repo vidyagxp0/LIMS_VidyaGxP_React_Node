@@ -212,20 +212,25 @@ const SampleWorkFlow = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false, // Assuming no data for this, so defaulting to false
-      samplePlan: index + 1, // Assign sample plan based on index
+      samplePlanId: index + 1, // Assign sample plan based on index
       sampleId: item["Sample ID"] || "",
       sampleName: item["Sample Name"] || "",
       sampleType: item["Sample Type"] || "",
-      batchNumber: item["Batch Number"] || "",
+      productMaterialName: item["Product/Material Name"] || "", // Updated field name to match the first code
+      batchNumber: item["Batch/Lot Number"] || "", // Updated field name
       sampleSource: item["Sample Source"] || "",
       plannedDate: item["Planned Date"] || "",
       samplePriority: item["Sample Priority"] || "",
       sampleQuantity: item["Sample Quantity"] || "",
-      tests: item["Tests"] ? item["Tests"].split(",") : [], // Map tests and split if comma-separated
+      uom: item["UOM"] || "", // Added UOM field
+      market: item["Market"] || "",
+      sampleBarcode: item["Sample Barcode"] || "", // Added Sample Barcode
+
       specificationId: item["Specification ID"] || "",
       specificationAttachment: item["Specification Attachment"] || "",
       sTPId: item["STP ID"] || "",
       sTPAttachment: item["STP Attachment"] || "",
+      testPlanID: item["Test Plan ID"] || "",
       testName: item["Test Name"] || "",
       testMethod: item["Test Method"] || "",
       testParameters: item["Test Parameters"] || "",
@@ -233,44 +238,77 @@ const SampleWorkFlow = () => {
       testingLocation: item["Testing Location"] || "",
       requiredInstruments: item["Required Instruments"] || "",
       testGrouping: item["Test Grouping"] || "",
-      expectedResults: item["Expected Results"] || "",
+      lsl: item["LSL"] || "", // Added LSL
+      usl: item["USL"] || "", // Added USL
       testingDeadline: item["Testing Deadline"] || "",
+
       plannerName: item["Planner Name"] || "",
       labTechnician: item["Lab Technician"] || "",
-      reviewerApprover: item["Reviewer Approver"] || "",
+      reviewerApprover: item["Reviewer/Approver"] || "",
       assignedDepartment: item["Assigned Department"] || "",
+      supervisor: item["Supervisor"] || "",
+
       sampleCollectionDate: item["Sample Collection Date"] || "",
       testingStartDate: item["Testing Start Date"] || "",
       testingEndDate: item["Testing End Date"] || "",
-      testPlanID: item["Test Plan ID"] || "",
-      turnaroundTime: item["Turnaround Time"] || "",
+      delayJustification: item["Delay Justification"] || "",
+      testingOutcome: item["Testing Outcome"] || "",
+      passFail: item["Pass/Fail?"] || "", // Added Pass/Fail field
+      turnaroundTime: item["Turnaround Time (TAT)"] || "",
       sampleRetestingDate: item["Sample Retesting Date"] || "",
       reviewDate: item["Review Date"] || "",
+
       sampleStorageLocation: item["Sample Storage Location"] || "",
       transportationMethod: item["Transportation Method"] || "",
       samplePreparationMethod: item["Sample Preparation Method"] || "",
       samplePackagingDetails: item["Sample Packaging Details"] || "",
       sampleLabel: item["Sample Label"] || "",
+
       regulatoryRequirements: item["Regulatory Requirements"] || "",
       qualityControlChecks: item["Quality Control Checks"] || "",
       controlSampleReference: item["Control Sample Reference"] || "",
       sampleIntegrityStatus: item["Sample Integrity Status"] || "",
       riskAssessment: item["Risk Assessment"] || "",
-      supervisor: item["Supervisor"] || "",
+
+      instrumentsReserved: item["Instruments Reserved"] || "", // Added Instruments Reserved
+      labAvailability: item["Lab Availability"] || "", // Added Lab Availability
+      sampleCostEstimation: item["Sample Cost Estimation"] || "", // Added Sample Cost Estimation
+      resourceUtilization: item["Resource Utilization"] || "", // Added Resource Utilization
+
       sampleMovementHistory: item["Sample Movement History"] || "",
       testingProgress: item["Testing Progress"] || "",
-      alertsNotifications: item["Alerts Notifications"] || "",
+      alertsNotifications: item["Alerts/Notifications"] || "",
       deviationLogs: item["Deviation Logs"] || "",
-      commentsNotes: item["Comments Notes"] || "",
+
+      commentsNotes: item["Comments/Notes"] || "",
       attachments: item["Attachments"] || "",
       samplingFrequency: item["Sampling Frequency"] || "",
       sampleDisposition: item["Sample Disposition"] || "",
+      stabilityStudyType: item["Stability Study Type"] || "", // Added Stability Study Type
+      stabilityStudyProtocol: item["Stability Study Protocol"] || "", // Added Stability Study Protocol
+      stabilityProtocolApprovalDate:
+        item["Stability Protocol Approval date"] || "", // Added Stability Protocol Approval Date
+      countryOfRegulatorySubmissions:
+        item["Country of Regulatory Submissions"] || "", // Added Country of Regulatory Submissions
+      ichZone: item["ICH Zone"] || "", // Added ICH Zone
+      photostabilityTestingResults:
+        item["Photostability Testing results"] || "", // Added Photostability Testing results
+      reconstitutionStability: item["Reconstitution Stability"] || "", // Added Reconstitution Stability
+      testingIntervalMonths: item["Testing Interval (months)"] || "", // Added Testing Interval (months)
+      shelfLifeRecommendation: item["Shelf life reccommendation"] || "", // Added Shelf life recommendation
+
+      reviewerComment: item["Reviewer Comment"] || "", // Added Reviewer Comment
+      qaReviewerApprover: item["QA Reviewer/Approver"] || "", // Added QA Reviewer/Approver
+      qaReviewerComment: item["QA Reviewer Comment"] || "", // Added QA Reviewer Comment
+      qaReviewDate: item["QA Review Date"] || "", // Added QA Review Date
+
+      actions: item["Actions"] || "", // Added Actions field for future use
     }));
 
     // Concatenate the updated data with existing data
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close modal after data upload
   };
 
   const fields = [
@@ -414,6 +452,7 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Sample Priority</td>
             <td className="border px-4 py-2">Sample Quantity</td>
             <td className="border px-4 py-2">UOM</td>
+            {/* <td className="border px-4 py-2">Test</td> */}
             <td className="border px-4 py-2">Market</td>
             <td className="border px-4 py-2">Sample Barcode</td>
 
