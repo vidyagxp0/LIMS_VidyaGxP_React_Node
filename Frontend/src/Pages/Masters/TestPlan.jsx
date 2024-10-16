@@ -379,6 +379,7 @@ function TestPlan() {
       "Friability",
     ]);
     const [selectedTests, setSelectedTests] = useState([]);
+    console.log(selectedTests,"<><><><><><>?")
     
     const handleProduct = () => {
       const currentDate = new Date().toISOString().split("T")[0];
@@ -388,7 +389,6 @@ function TestPlan() {
         testPlanComments,
         samplingQuantityUOM,
         coaTemplate,
-        initiatedAt: currentDate,
         remarks,
         selectedTests,
         status: "active",
@@ -500,7 +500,7 @@ function TestPlan() {
                     <li key={data}>
                       <input
                         type="checkbox"
-                        value={selected}
+                        value={data}
                         id={data}
                         className="check-right"
                         onChange={() => handleTestSelect(data)}
