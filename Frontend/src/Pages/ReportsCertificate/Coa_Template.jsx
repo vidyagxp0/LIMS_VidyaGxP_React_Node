@@ -16,6 +16,7 @@ import ImportModal from "../Modals/importModal.jsx";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import ReusableModal from "../Modals/ResusableModal.jsx";
 
 const initialData = [
   {
@@ -510,13 +511,20 @@ const Coa_Template = () => {
       />
       <CoaTamplateModal visible={isModalOpen} closeModal={closeModal} handleSubmit={handleModalSubmit} />
 
-      {isViewModalOpen && (
+      {/* {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
         />
-      )}
+      )} */}
+      <ReusableModal
+        visible={isViewModalOpen}
+        closeModal={closeViewModal}
+        data={viewModalData}
+        fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action' && field.key !== 'checkbox')}
+        title="Coa Template Details"
+      />
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}

@@ -67,6 +67,17 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Sample Login template", key: "sampleLogintemplate" },
+  { label: "Test Plan", key: "testPlan" },
+  {
+    label: "Genric Name",
+    key: "genericName",
+  },
+  { label: "Status", key: "status" },
+];
 
 const initialData = [
   {
@@ -105,6 +116,11 @@ const CalibrationSampleLoginTemplate = () => {
   });
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  useEffect(() => {
+    fetchCalibrationSample();
+  }, []);
+
   const fetchCalibrationSample = async () => {
     try {
       const response = await axios.get(
@@ -126,10 +142,6 @@ const CalibrationSampleLoginTemplate = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCalibrationSample();
-  }, []);
-
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -138,14 +150,14 @@ const CalibrationSampleLoginTemplate = () => {
     setIsModalsOpen(false);
   };
 
-  useEffect(() => {
-    const storedData = localStorage.getItem("calibrationData");
-    if (storedData) {
-      setData(JSON.parse(storedData));
-    } else {
-      setData(initialData);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedData = localStorage.getItem("calibrationData");
+  //   if (storedData) {
+  //     setData(JSON.parse(storedData));
+  //   } else {
+  //     setData(initialData);
+  //   }
+  // }, []);
 
   useEffect(() => {
     localStorage.setItem("calibrationData", JSON.stringify(data));
@@ -273,6 +285,7 @@ const CalibrationSampleLoginTemplate = () => {
         console.error("Failed response:", response);
         toast.error("Delete failed: unexpected response");
       }
+      fetchCalibrationSample();
     } catch (error) {
       console.error(
         "Error deleting template:",
@@ -281,9 +294,7 @@ const CalibrationSampleLoginTemplate = () => {
       toast.error("Failed to delete calibration SampleLogin Template");
     }
   };
-
   const handleModalSubmit = async (newInstrument) => {
-    const currentDate = new Date().toISOString().split("T")[0];
     try {
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/cCalibrationSampleLogin`,
@@ -299,26 +310,38 @@ const CalibrationSampleLoginTemplate = () => {
       );
 
       if (response.status === 200) {
-        const addedCalibrationSamplee = response.data.addLIMS; // Accessing the added item from the response
+        const addedCalibrationSample = response.data.addLIMS; // Accessing the added item from the response
 
         setData((prevData) => [
           ...prevData,
           {
-            ...addedCalibrationSamplee,
-            sno: addedCalibrationSamplee.uniqueId, // Using uniqueId as sno
+            ...addedCalibrationSample,
+            sno: addedCalibrationSample.uniqueId, // Using uniqueId as sno
             checkbox: false,
           },
         ]);
-        fetchCalibrationSample();
 
-        toast.success("Calibration Type added successfully");
+        toast.success("Calibration Frequency added successfully");
       }
     } catch (error) {
-      console.error("Error adding calibration type:", error);
-      toast.error("Failed to add calibration type");
+      console.error("Error adding calibration Frequency:", error);
+      toast.error("Failed to add calibration Frequency");
     }
 
     setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    fetchCalibrationSample();
+  }, []);
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
@@ -523,11 +546,14 @@ const CalibrationSampleLoginTemplate = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

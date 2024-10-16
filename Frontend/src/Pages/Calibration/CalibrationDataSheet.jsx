@@ -69,31 +69,23 @@ import {
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+
 // import "./CalibrationDatasheetModal.css";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    Uniquecode: "Product 1",
-    DataSheetName: "Seq 1",
-    QuantitativeParameters: "Info 1",
-    QualitativeParameters: "Start 1",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    Uniquecode: "Product 2",
-    DataSheetName: "Seq 2",
-    QuantitativeParameters: "Info 2",
-    QualitativeParameters: "Start 2",
-    status: "INITIATED",
-  },
+const fields = [
+  { label: "Unique code", key: "Uniquecode" },
+  { label: "DataSheetName", key: "DataSheetName" },
+  { label: "Quantitative Parameters", key: "QuantitativeParameters" },
+  { label: "Qualitative Parameters", key: "QualitativeParameters" },
+  { label: "Status", key: "status" },
 ];
 
 const CalibrationDataSheet = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,6 +100,30 @@ const CalibrationDataSheet = () => {
   });
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  useEffect(() => {
+    fetchDataSheet();
+  }, []);
+
+  const fetchDataSheet = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/cCalibrationDataSheet`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.cCalibrationDataSheet || [];
+
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      toast.error("Failed to fetch datasheet data");
+    }
+  };
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -146,10 +162,10 @@ const CalibrationDataSheet = () => {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-
   const filteredData = data.filter((row) => {
+    const calibrationTypeLower = row.CalibrationType?.toLowerCase() || "";
     return (
-      row.DataSheetName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      calibrationTypeLower.includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -210,10 +226,23 @@ const CalibrationDataSheet = () => {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/cCalibrationDataSheet/${item.uniqueId}` // Update endpoint with uniqueId
+      );
+
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId); // Filter out the deleted item
+        setData(newData);
+        toast.success("Calibration Data Sheet deleted successfully");
+        console.log("Deleted item:", item);
+      }
+      fetchDataSheet();
+    } catch (error) {
+      console.error("Error deleting calibration Data Sheet:", error);
+      toast.error("Failed to delete calibration Data Sheet");
+    }
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -232,28 +261,48 @@ const CalibrationDataSheet = () => {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
-  const handleModalSubmit = (newInstrument) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
-      );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
+  const handleModalSubmit = async (newInstrument) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/cCalibrationDataSheet`,
         {
-          checkbox: false,
-          sno: prevData.length + 1,
           Uniquecode: newInstrument.Uniquecode,
           DataSheetName: newInstrument.DataSheetName,
           QuantitativeParameters: "QuantitativeParameters",
           QualitativeParameters: "QualitativeParameters",
           status: "Active",
-        },
-      ]);
+        }
+      );
+
+      if (response.status === 200) {
+        const addedCalibration = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedCalibration,
+            sno: addedCalibration.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+
+        toast.success("Calibration Data Sheet added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding Data Sheet", error);
+      toast.error("Failed to add Data Sheet");
     }
-    closeModal();
+
+    setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
@@ -263,12 +312,29 @@ const CalibrationDataSheet = () => {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/cCalibrationDataSheet/${updatedData.uniqueId}`, // Update endpoint with uniqueId
+        updatedData // Sending the updated data
+      );
+
+      if (response.status === 200) {
+        // Assuming the response may contain the updated data, you can use it if necessary
+        const newData = data.map(
+          (item) =>
+            item.sno === updatedData.sno ? { ...item, ...updatedData } : item // Update item in state
+        );
+
+        setData(newData);
+        toast.success("Calibration Data Sheet updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating calibration Data Sheet:", error);
+      toast.error("Failed to update calibration Data Sheet", error);
+    } finally {
+      setEditModalData(null); // Close the modal after handling the edit
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -648,11 +714,14 @@ const CalibrationDataSheet = () => {
           closeModal={closeModal}
           handleSubmits={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

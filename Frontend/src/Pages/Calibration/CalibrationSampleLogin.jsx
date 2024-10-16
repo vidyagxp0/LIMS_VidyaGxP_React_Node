@@ -28,26 +28,18 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    sampleType: "Product 1",
-    productMaterial: "Seq 1",
-    genericName: "Info 1",
-    specificationCode: "Start 1",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    sampleType: "Product 2",
-    productMaterial: "Seq 2",
-    genericName: "Info 2",
-    specificationCode: "Start 2",
-    status: "INITIATED",
-  },
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Sample Type", key: "sampleType" },
+  { label: "Product / Material", key: "productMaterial" },
+  { label: "Generic Name", key: "genericName" },
+  { label: "Specification Code", key: "specificationCode" },
+
+  { label: "Status", key: "status" },
 ];
+
+
 
 const CalibrationSampleLogin = () => {
   const [data, setData] = useState([]);
@@ -66,9 +58,6 @@ const CalibrationSampleLogin = () => {
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-  useEffect(() => {
-    fetchCalibrationSampleLogin();
-  }, []);
 
   const fetchCalibrationSampleLogin = async () => {
     try {
@@ -90,6 +79,9 @@ const CalibrationSampleLogin = () => {
       toast.error("Failed to fetch Calibration Sample Login");
     }
   };
+  useEffect(() => {
+    fetchCalibrationSampleLogin();
+  }, []);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -219,13 +211,13 @@ const CalibrationSampleLogin = () => {
         setData(newData);
         toast.success("Calibration Type deleted successfully");
         console.log("Deleted item:", item);
+        fetchCalibrationSampleLogin();
       }
     } catch (error) {
       console.error("Error deleting calibration type:", error);
       toast.error("Failed to delete calibration type");
     }
   };
-  fetchCalibrationSampleLogin();
 
   const handleModalSubmit = async (newInstrument) => {
     try {
@@ -261,12 +253,18 @@ const CalibrationSampleLogin = () => {
 
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    fetchCalibrationSampleLogin();
-  }, []);
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
+  };
 
   const openEditModal = (rowData) => {
-    setEditModalData(rowData);
+    setEditModalData({...rowData});
   };
 
   const closeEditModal = () => {
@@ -280,21 +278,19 @@ const CalibrationSampleLogin = () => {
       );
 
       if (response.status === 200) {
-        // Assuming the response may contain the updated data, you can use it if necessary
-        const newData = data.map(
-          (item) =>
-            item.sno === updatedData.sno ? { ...item, ...updatedData } : item // Update item in state
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId ? { ...item, ...updatedData } : item
         );
 
         setData(newData);
+        fetchCalibrationSampleLogin();
         toast.success("Calibration Sample Login updated successfully");
+        closeEditModal();
       }
     } catch (error) {
       console.error("Error updating calibration Sample Login:", error);
       toast.error("Failed to update calibration Sample Login");
-    } finally {
-      setEditModalData(null); // Close the modal after handling the edit
-    }
+    } 
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -303,7 +299,7 @@ const CalibrationSampleLogin = () => {
       if (data) {
         setFormData(data);
       }
-    }, [data]);
+    }, []);
 
     const handleSave = () => {
       onSave(formData);
@@ -311,7 +307,7 @@ const CalibrationSampleLogin = () => {
 
     const handleChange = (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+      setFormData((prev)=>({ ...formData, [name]: value }));
     };
     return (
       <div>
@@ -322,7 +318,8 @@ const CalibrationSampleLogin = () => {
           size="lg"
         >
           <CModalHeader>
-            <CModalTitle>Add Sample Login</CModalTitle>
+            <CModalTitle></CModalTitle>
+            {data.uniqueId ? "Edit" : "Add}"} Add New Sample Login
           </CModalHeader>
 
           <CModalBody>
@@ -335,7 +332,7 @@ const CalibrationSampleLogin = () => {
               onChange={handleChange}
               name="setCalibrationScheduleampleType"
             />
-            <CFormInput
+            {/* <CFormInput
               label="Test Plan / Revision No."
               className="mb-3"
               type="text"
@@ -343,7 +340,7 @@ const CalibrationSampleLogin = () => {
               value={formData?.testPlan || ""}
               onChange={handleChange}
               name="testPlan"
-            />
+            /> */}
             <CFormInput
               label="Product / Material"
               className="mb-3"
@@ -503,11 +500,14 @@ const CalibrationSampleLogin = () => {
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
         />
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

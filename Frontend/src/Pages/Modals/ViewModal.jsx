@@ -90,7 +90,7 @@ const ViewModal = ({ visible, closeModal, data, updateStatus }) => {
                 </CTable>
               </div>
             </div>
-            <div className="block">
+            {/* <div className="block">
               <div className="main-head">
                 <h4 className="fw-bold mb-4 mt-3">History</h4>
               </div>
@@ -134,7 +134,7 @@ const ViewModal = ({ visible, closeModal, data, updateStatus }) => {
                   </CTableBody>
                 </CTable>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

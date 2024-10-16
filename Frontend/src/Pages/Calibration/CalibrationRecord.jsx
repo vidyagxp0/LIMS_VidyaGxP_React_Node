@@ -65,6 +65,10 @@ function CalibrationRecord() {
   const [editModalData, setEditModalData] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
+  useEffect(() => {
+    fetchCalibrationrecord();
+  }, []);
+
   const fetchCalibrationrecord = async () => {
     try {
       const response = await axios.get(
@@ -85,10 +89,6 @@ function CalibrationRecord() {
       toast.error("Failed to fetch calibration record");
     }
   };
-
-  useEffect(() => {
-    fetchCalibrationrecord();
-  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -268,7 +268,7 @@ function CalibrationRecord() {
         setData((prevData) => [
           ...prevData,
           {
-            ...CalibrationRecord,
+            ...addedCalibrationRecord,
             sno: addedCalibrationRecord.uniqueId, // Using uniqueId as sno
             checkbox: false,
           },
@@ -282,12 +282,11 @@ function CalibrationRecord() {
       toast.error("Failed to add calibration record");
     }
 
-    useEffect(() => {
-      fetchCalibrationrecord();
-    }, []);
-
     setIsModalOpen(false);
   };
+  useEffect(() => {
+    fetchCalibrationrecord();
+  }, []);
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>

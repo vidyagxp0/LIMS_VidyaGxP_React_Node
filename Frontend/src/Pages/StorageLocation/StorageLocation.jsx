@@ -28,39 +28,6 @@ import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    name: "New Storage",
-    conditionCode: "CC1",
-    storageCondition: "SC1",
-    createdAt: "2023-01-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    name: "New Storage",
-    conditionCode: "CC2",
-    storageCondition: "SC2",
-    createdAt: "2023-02-01",
-    attachment: "attachment",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    name: "New Storage",
-    conditionCode: "CC3",
-    storageCondition: "SC3",
-    createdAt: "2023-03-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-];
-
 const fields = [
   { label: "Storage Code", key: "storageCode" },
   { label: "Storage Name", key: "storageName" },
@@ -83,24 +50,19 @@ function StorageCondition() {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/storageLocation`
       );
-      console.log("API Response:", response.data);
+      console.log(response);
+      const formattedData = response.data[0]?.storageLocation || []; // Adjust this based on your API response structure
 
-      const formattedData = response.data.flatMap((item) => {
-        return (
-          item.storageLocation?.map((location, index) => ({
-            checkbox: false,
-            sno: index + 1,
-            storageName: location.storageName || "No Name",
-            storageCode: location.storageCode || "No Code",
-            attachment: location.attachment || "No attachment",
-            status: location.status || "Active",
-          })) || []
-        );
-      });
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
 
-      setData(formattedData);
+      setData(updatedData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching ", error);
+      toast.error("Failed to fetch ");
     }
   };
 
@@ -128,21 +90,20 @@ function StorageCondition() {
 
   const handleDelete = async (item) => {
     try {
-      // Make the API call to delete the item
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/storageLocation/${item.sno}`
+        `${BASE_URL}/delete-lims/storageLocation/${item.uniqueId}`
       );
 
       if (response.status === 200) {
-        // If deletion is successful, filter out the deleted item from state
-        const newData = data.filter((d) => d.sno !== item.sno);
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
         setData(newData);
+        toast.success(" deleted successfully");
+
         console.log("Deleted item:", item);
-      } else {
-        console.error("Failed to delete storage condition:", response.data);
       }
+      fetchData();
     } catch (error) {
-      console.error("Error deleting storage condition:", error);
+      console.error("Error deleting :", error);
     }
   };
 
@@ -220,34 +181,45 @@ function StorageCondition() {
 
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Update data state with parsed Excel data
+    setIsModalsOpen(false);
   };
 
-  // Function to add a new storage condition
-  const addNewStorageCondition = async (newCondition) => {
+  const addNewStorageLocation = async (newCondition) => {
     try {
-      // Prepare the new condition object (not an array)
-      const conditionData = {
-        storageName: newCondition.storageName,
-        storageCode: newCondition.storageCode,
-        attachment: newCondition.attachment || null,
-        status: newCondition.status || "Active",
-      };
-
-      // Send the POST request with a single object (not an array)
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/storageLocation`,
-        conditionData
+        {
+          storageName: newCondition.storageName,
+          storageCode: newCondition.storageCode,
+          attachment: newCondition.attachment || null,
+          status: newCondition.status || "Active",
+        }
       );
-      useEffect(() => {
-        fetchData();
-      }, []);
 
-      closeModal();
-      console.log("Response received:", response.data);
+      if (response.status === 200) {
+        const addedStorageLocation = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedStorageLocation,
+            sno: addedStorageLocation.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+        closeModal();
+
+        toast.success(" added successfully");
+        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
+      }
     } catch (error) {
-      console.error("Error creating storage condition:", error);
+      console.error("Error adding :", error);
+      toast.error("Failed to add ");
     }
+    useEffect(() => {
+      fetchData();
+    }, []);
+    setIsModalOpen(false);
   };
 
   const handleStatusUpdate = (testPlan, newStatus) => {
@@ -323,30 +295,25 @@ function StorageCondition() {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/storageLocation/${updatedData.sno}`,
-        {
-          storageName: updatedData.storageName,
-          storageCode: updatedData.storageCode,
-        }
+        `${BASE_URL}/manage-lims/update/storageLocation/${updatedData.uniqueId}`,
+        updatedData // Sending the updated data
       );
 
       if (response.status === 200) {
         const newData = data.map((item) =>
-          item.sno === updatedData.sno
-            ? {
-                ...item,
-                storageName: updatedData.storageName,
-                storageCode: updatedData.storageCode,
-              }
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...updatedData }
             : item
         );
+
         setData(newData);
-        setEditModalData(null); // Close the edit modal
-      } else {
-        console.error("Failed to update storage condition:", response.data);
+        toast.success(" updated successfully");
       }
     } catch (error) {
-      console.error("Error updating storage condition:", error);
+      console.error("Error updating ", error);
+      toast.error("Failed to update");
+    } finally {
+      setEditModalData(null);
     }
   };
 
@@ -481,7 +448,7 @@ function StorageCondition() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={addNewStorageCondition}
+          onAdd={addNewStorageLocation}
         />
       )}
       {viewModalData && (
