@@ -253,9 +253,6 @@ const CalibrationSampleLogin = () => {
 
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    fetchCalibrationSampleLogin();
-  }, []);
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
@@ -302,7 +299,7 @@ const CalibrationSampleLogin = () => {
       if (data) {
         setFormData(data);
       }
-    }, [data]);
+    }, []);
 
     const handleSave = () => {
       onSave(formData);

@@ -65,8 +65,8 @@ function StorageCondition() {
 
       setData(updatedData);
     } catch (error) {
-      console.error("Error fetching calibration types:", error);
-      toast.error("Failed to fetch calibration types");
+      console.error("Error fetching ", error);
+      toast.error("Failed to fetch ");
     }
   };
 
@@ -94,19 +94,18 @@ function StorageCondition() {
 
   const handleDelete = async (item) => {
     try {
-      // Make the API call to delete the item
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/storageCondition/${item.sno}`
+        `${BASE_URL}/delete-lims/storageCondition/${item.uniqueId}`
       );
 
       if (response.status === 200) {
-        // If deletion is successful, filter out the deleted item from state
-        const newData = data.filter((d) => d.sno !== item.sno);
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
         setData(newData);
+        toast.success(" deleted successfully");
+
         console.log("Deleted item:", item);
-      } else {
-        console.error("Failed to delete storage condition:", response.data);
       }
+      fetchStorageCondition();
     } catch (error) {
       console.error("Error deleting storage condition:", error);
     }
@@ -258,7 +257,7 @@ function StorageCondition() {
           },
         ]);
         closeModal();
-
+        fetchStorageCondition();
         toast.success("Calibration Type added successfully");
         // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
       }
@@ -266,9 +265,7 @@ function StorageCondition() {
       console.error("Error adding calibration type:", error);
       toast.error("Failed to add calibration type");
     }
-    useEffect(() => {
-      fetchStorageCondition();
-    }, []);
+
     setIsModalOpen(false);
   };
 
@@ -347,34 +344,28 @@ function StorageCondition() {
   };
   const handleEditSave = async (updatedData) => {
     try {
-      // API call to update storage condition by sno
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/storageCondition/${updatedData.sno}`, // Targeting the sno in the URL
-
-        {
-          name: updatedData.name,
-          conditionCode: updatedData.conditionCode,
-          storageCondition: updatedData.storageCondition,
-        }
+        `${BASE_URL}/manage-lims/update/storageCondition/${updatedData.uniqueId}`,
+        updatedData // Sending the updated data
       );
-      console.log(response);
-      console.log("Update Response:", response.data);
 
       if (response.status === 200) {
-        // If update is successful, update the state locally
-        const newData = data.map(
-          (item) => (item.sno === updatedData.sno ? updatedData : item) // Match by sno
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...updatedData }
+            : item
         );
+
         setData(newData);
-        setEditModalData(null); // Close the edit modal
-      } else {
-        console.error("Failed to update storage condition:", response.data);
+        toast.success(" updated successfully");
       }
     } catch (error) {
-      console.error("Error updating storage condition:", error);
+      console.error("Error updating ", error);
+      toast.error("Failed to update");
+    } finally {
+      setEditModalData(null);
     }
   };
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
@@ -537,7 +528,3 @@ function StorageCondition() {
 }
 
 export default StorageCondition;
-
-
-
-// SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions
