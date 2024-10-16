@@ -151,7 +151,7 @@ function InvestigationL1() {
 
   const handleDelete = async (item) => {
     console.log(item);
-    
+
     try {
       const response = await axios.delete(
         `${BASE_URL}/delete-lims/sLInvestigationL1/${item.uniqueId}`
@@ -169,11 +169,12 @@ function InvestigationL1() {
     }
   };
 
+
   const openEditModal = (rowData) => setEditModalData(rowData);
   const closeEditModal = () => setEditModalData(null);
 
   const handleEditSave = async (updatedData) => {
-    const { sno, checkbox,...dataTosend } = updatedData;
+    const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
         `${BASE_URL}/manage-lims/update/sLInvestigationL1/${updatedData.uniqueId}`,
@@ -181,7 +182,9 @@ function InvestigationL1() {
       );
       if (response.status === 200) {
         const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId ? { ...item, ...response.data } : item 
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
         );
         setData(newData);
         closeEditModal();

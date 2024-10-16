@@ -24,9 +24,9 @@ const ReusableModal = ({
 }) => {
   const [statusModal, setStatusModal] = useState(false);
   const handleStatusChange = (newStatus) => {
-    updateStatus(newStatus); // Update status in the parent component
-    setStatusModal(false); // Close status modal
-    closeModal(); // Close view modal
+    updateStatus(data.sampleType, newStatus);
+    setStatusModal(false);
+    closeModal();
   };
   return (
     <>
@@ -62,31 +62,6 @@ const ReusableModal = ({
                 </CTable>
               </div>
             </div>
-            {/*<div className="block">
-              <div className="main-head">
-                <h4 className="fw-bold mb-4 mt-3">History</h4>
-              </div>
-              <div className="bg-white px-5 py-3">
-                <CTable align="middle" className="mb-0" small bordered>
-                  <CTableBody>
-                    <CTableRow color="warning">
-                      <CTableDataCell>Revision</CTableDataCell>
-                      <CTableDataCell>{data?.revision || "N/A"}</CTableDataCell>
-                    </CTableRow>
-                    {fields?.map((field, index) => (
-                      <CTableRow key={index}>
-                        <CTableDataCell color="info">
-                          {field.label}
-                        </CTableDataCell>
-                        <CTableDataCell>
-                          {data ? data[field.key] : field.default}
-                        </CTableDataCell>
-                      </CTableRow>
-                    ))}
-                  </CTableBody>
-                </CTable>
-              </div>
-            </div>*/}
           </div>
         </div>
 
@@ -105,24 +80,38 @@ const ReusableModal = ({
 const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
-  const handleStatusChange = (e) => {
-    const newStatus = e.target.value;
-    setSelectedStatus(newStatus);
-    console.log("Selected status:", newStatus);
-  };
+  const handleStatusChange = async (newStatus) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update-status/${data.sampleType}`,
+        {
+          status: newStatus,
+        }
+      );
 
-  const handleUpdate = () => {
-    if (selectedStatus) {
-      console.log("Updating status to:", selectedStatus);
-      onUpdateStatus(selectedStatus);
+      if (response.status === 200) {
+        updateStatus(data.sampleType, newStatus);
+        toast.success("Status updated successfully.");
+      } else {
+        toast.error("Failed to update status.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating status: " + (error.response?.data || error.message)
+      );
+    } finally {
+      setStatusModal(false);
       closeModal();
-    } else {
-      console.error("No status selected");
     }
   };
 
+  const handleUpdate = () => {
+    onUpdateStatus(selectedStatus);
+    closeModal();
+  };
+
   return (
-    <CModal alignment="center" visible={visible} onClose={closeModal}>
+    <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
       <CModalHeader>
         <CModalTitle>Update Status</CModalTitle>
       </CModalHeader>
@@ -136,6 +125,8 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
             { label: "Approve", value: "APPROVED" },
             { label: "Drop", value: "DROPPED" },
             { label: "Reject", value: "REJECTED" },
+            { label: "Active", value: "ACTIVE" },
+            { label: "Inactive", value: "INATCIVE" },
           ]}
         />
       </CModalBody>

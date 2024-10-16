@@ -4,34 +4,33 @@ import React, { useEffect, useState } from "react";
 import {
   CButton,
   CCol,
-  CFormCheck,
   CFormInput,
-  CFormSelect,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CRow,
 } from "@coreui/react";
-import "react-quill/dist/quill.snow.css";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
-const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
-
+const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, fetchProductData }) => {
+  const currentDate = new Date().toISOString().split("T")[0];
   const [instrumentCategoryData, setInstrumentCategoryData] = useState({
     CategoryName: "",
     Description: "",
-    AddedOn: "", // Initialize as empty string
-    Status: "",  // Add Status field
+    AddedOn: currentDate,
+    Status: "",
   });
-  const [fields, setFields] = useState([]);
 
   const resetForm = () => {
+  const currentDate = new Date().toISOString().split("T")[0];
     setInstrumentCategoryData({
       CategoryName: "",
       Description: "",
-      AddedOn: "",
-      Status: "", // Reset Status
+      AddedOn: currentDate,
+      Status: "",
     });
   };
 
@@ -42,25 +41,35 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
   }, [visible]);
 
   const handleInputChange = (field, value) => {
-    const updatedData = { ...instrumentCategoryData, [field]: value };
-    setInstrumentCategoryData(updatedData);
-    console.log(updatedData);
+    setInstrumentCategoryData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
   };
 
-  const handleFormSubmit = () => {
-    const instrumentDetails = { 
-      ...instrumentCategoryData, 
+  const handleFormSubmit = async () => {
+    const instrumentDetails = {
+      ...instrumentCategoryData,
       AddedOn: new Date().toISOString(),
-      fields 
     };
 
-    const existingInstruments = JSON.parse(localStorage.getItem("instruments")) || [];
-    const updatedInstruments = [...existingInstruments, instrumentDetails];
-    localStorage.setItem("instruments", JSON.stringify(updatedInstruments));
-  
-    handleSubmit(instrumentDetails);
-    
-    closeModal();
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/iMInstrumentCategory`,
+        instrumentDetails
+      );
+      if (response.status === 200) {
+        toast.success("Instrument added successfully.");
+        if (fetchProductData) fetchProductData(); // Ensure fetchProductData is passed in props
+        closeModal();
+      } else {
+        toast.error("Failed to add Instrument.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding instrument: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   return (
@@ -80,7 +89,7 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
             className="mb-3"
             type="text"
             label="Category Name"
-            placeholder="categoryName"
+            placeholder="Category Name"
             value={instrumentCategoryData.CategoryName}
             onChange={(e) => handleInputChange("CategoryName", e.target.value)}
           />
@@ -92,14 +101,14 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
             value={instrumentCategoryData.Description}
             onChange={(e) => handleInputChange("Description", e.target.value)}
           />
-          {/* <CFormInput
+          <CFormInput
             className="mb-3"
             type="text"
-            label="Status" // Add a field for Status
+            label="Status"
             placeholder="Status"
             value={instrumentCategoryData.Status}
             onChange={(e) => handleInputChange("Status", e.target.value)}
-          /> */}
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>

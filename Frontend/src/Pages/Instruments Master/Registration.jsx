@@ -14,17 +14,17 @@ import InstrumentMasterModal from "../Modals/InstrumentMasterModal.jsx";
 
 import ImportModal from "../Modals/importModal";
 import {
-  CButton,
-  CCol,
-  CFormCheck,
-  CFormInput,
-  CFormSelect,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CRow,
+CButton,
+CCol,
+CFormCheck,
+CFormInput,           
+CFormSelect,
+CModal,
+CModalBody,
+CModalFooter,
+CModalHeader,
+CModalTitle,
+CRow,
 } from "@coreui/react";
 import { Button } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa6";
@@ -32,17 +32,19 @@ import ReactQuill from "react-quill";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import ReusableModal from "../Modals/ResusableModal.jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
 
-const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
+
 
 const Registration = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -53,26 +55,80 @@ const Registration = () => {
     Inactive: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
+
+
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/iMRegistration`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.iMRegistration?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              Category: condition.Category || "-",
+              InstrumentId: condition.InstrumentId || "",
+              Instrument: condition.Instrument || "",
+              Made: condition.Made || "-",
+              Model: condition.Model || "-",
+              MenuNo: condition.MenuNo || "-",
+              InstalledAt: condition.InstalledAt || "-",
+              ExpiryOn: condition.ExpiryOn || "-",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
-    setEditModalOpen(true);
+    // setEditModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setEditModalOpen(false);
+    // setEditModalOpen(false);
     setEditModalData(null);
   };
 
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/iMRegistration/${updatedData.sno}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("Product updated successfully.");
+        setEditModalData(null);
+        closeModal()
+      } else {
+        toast.error("Failed to update Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating Product: " + (error.response?.data || error.message)
+      );
+    }
   };
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [fields, setFields] = useState([]);
@@ -376,18 +432,27 @@ const Registration = () => {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const Category = row.Category || "";
+        return (
+          Category.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
-  const filteredData = data.filter((row) => {
-    return (
-      row?.Category?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true); // This should open the modal
-  };
+    const onViewDetails = (rowData) => {
+      if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+        setIsViewModalOpen(false);
+        setViewModalData(null);
+      } else {
+        setViewModalData(rowData);
+        setIsViewModalOpen(true);
+      }
+    };
+  
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -399,7 +464,7 @@ const Registration = () => {
     { header: "Instrument", accessor: "Instrument" },
     { header: "Made", accessor: "Made" },
     { header: "Model", accessor: "Model" },
-    { header: "Manu No.", accessor: "ManuNo" },
+    { header: "Menu No.", accessor: "MenuNo" },
     { header: "Installed At", accessor: "InstalledAt" },
     { header: "Expiry On", accessor: "ExpiryOn" },
     { header: "Status", accessor: "status" },
@@ -454,7 +519,7 @@ const Registration = () => {
     { label: "Instrument", key: "Instrument" },
     { label: "Made", key: "Made" },
     { label: "Model", key: "Model" },
-    { label: "ManuNo", key: "ManuNo" },
+    { label: "MenuNo", key: "MenuNo" },
     { label: "InstalledAt", key: "InstalledAt" },
     { label: "ExpiryOn", key: "ExpiryOn" },
     { label: "status", key: "status" },
@@ -476,7 +541,7 @@ const Registration = () => {
       Instrument: item["Instrument"] || "",
       Made: item["Made"] || "",
       Model: item["Model"] || "",
-      ManuNo: item["Manu No."] || "",
+      MenuNo: item["Manu No."] || "",
       InstalledAt: item["Installed At"] || "",
       ExpiryOn: item["Expiry On"] || "",
       status: item["Status"] || "",
@@ -500,7 +565,7 @@ const Registration = () => {
         Instrument: newInstrument.Instrument,
         Made: newInstrument.Made,
         Model: newInstrument.Model,
-        ManuNo: newInstrument.manufacturerSerialNo,
+        MenuNo: newInstrument.manufacturerSerialNo,
         InstalledAt: newInstrument.InstalledAt,
         ExpiryOn: newInstrument.warrantyExpiresOn,
         status: "INITIATED",
@@ -508,7 +573,6 @@ const Registration = () => {
       },
     ];
 
-    localStorage.setItem("instruments", JSON.stringify(updatedData));
 
     setData(updatedData);
   };
@@ -523,14 +587,25 @@ const Registration = () => {
   };
 
   const closeViewModal = () => {
-    setViewModalData(null);
-    setIsViewModalOpen(false); // This should reset the modal state
+    setIsViewModalOpen(false); 
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/iMRegistration/${item.sno}`
+      );
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Registration deleted successfully.");
+      } else {
+        toast.error("Failed to delete Registration.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error deleting Registration: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   const addNewStorageCondition = (newCondition) => {
@@ -627,9 +702,9 @@ const Registration = () => {
           updateStatus={handleStatusUpdate}
         />
       )}
-      {editModalOpen && (
+     {editModalData && (
         <EditModal
-          visible={editModalOpen}
+          visible={Boolean(editModalData)}
           closeModal={closeEditModal}
           data={editModalData}
           onSave={handleEditSave}

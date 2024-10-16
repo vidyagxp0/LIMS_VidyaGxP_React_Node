@@ -27,6 +27,7 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
+import { toast } from "react-toastify";
 
 const fields = [
   { label: "Storage Code", key: "storageCode" },
@@ -35,7 +36,7 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function StorageCondition() {
+function StorageLocation() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -191,7 +192,7 @@ function StorageCondition() {
         {
           storageName: newCondition.storageName,
           storageCode: newCondition.storageCode,
-          attachment: newCondition.attachment || null,
+          attachment: "Attachment",
           status: newCondition.status || "Active",
         }
       );
@@ -208,25 +209,52 @@ function StorageCondition() {
           },
         ]);
         closeModal();
+        fetchData();
 
         toast.success(" added successfully");
-        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
       }
     } catch (error) {
       console.error("Error adding :", error);
       toast.error("Failed to add ");
     }
-    useEffect(() => {
-      fetchData();
-    }, []);
+
     setIsModalOpen(false);
   };
 
-  const handleStatusUpdate = (testPlan, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.testPlan === testPlan ? { ...item, status: newStatus } : item
-    );
-    setData(updatedData);
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/storageLocation/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -264,13 +292,13 @@ function StorageCondition() {
             onChange={(e) => setstorageCode(e.target.value)}
           />
 
-          <CFormInput
+          {/* <CFormInput
             type="file"
             label="attachment"
             placeholder="attachment"
             value={attachment}
             onChange={(e) => setattachment(e.target.value)}
-          />
+          /> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
@@ -389,7 +417,6 @@ function StorageCondition() {
         <div className="main-head">
           <h4 className="fw-bold">Storage Conditions</h4>
         </div>
-
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
@@ -421,19 +448,7 @@ function StorageCondition() {
         {filteredData && filteredData.length > 0 ? (
           <Table
             columns={columns}
-            data={filteredData.map((row, index) => ({
-              ...row,
-
-              name: row.name || "No Name",
-              conditionCode: row.conditionCode || "No Code",
-              storageCondition:
-                typeof row.storageCondition === "string"
-                  ? row.storageCondition
-                  : "No Condition",
-              createdAt: row.createdAt || "No Date",
-              attachment: row.attachment || "No attachment",
-              status: row.status || "Inactive",
-            }))}
+            data={filteredData}
             onCheckboxChange={handleCheckboxChange}
             onViewDetails={onViewDetails}
             onDelete={handleDelete}
@@ -441,7 +456,7 @@ function StorageCondition() {
           />
         ) : (
           <p>No storage conditions available.</p>
-        )}
+        )}{" "}
       </div>
 
       {isModalOpen && (
@@ -451,16 +466,15 @@ function StorageCondition() {
           onAdd={addNewStorageLocation}
         />
       )}
-      {viewModalData && (
+      
         <ReusableModal
-          visible={viewModalData !== null}
+          visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}
         />
-      )}
       {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
@@ -482,4 +496,4 @@ function StorageCondition() {
   );
 }
 
-export default StorageCondition;
+export default StorageLocation;

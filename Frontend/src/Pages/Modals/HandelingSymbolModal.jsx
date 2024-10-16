@@ -7,33 +7,48 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import BASE_URL from "../../config.json";
 
-const HandelingSymbolModal = ({ visible, closeModal, handleSubmit }) => {
+const HandelingSymbolModal = ({ visible, closeModal, handleSubmit,initialData }) => {
   const [symbolData, setSymbolData] = useState({
     name: "",
   });
+  useEffect(() => {
+    if (visible) {
+      if (initialData) {
+        setSymbolData(initialData);
+      } else {
+        resetForm();
+      }
+    }
+  }, [visible, initialData]);
   const resetForm = () => {
     setSymbolData({
       name: "",
     });
   };
 
-  useEffect(() => {
-    if (visible) {
-      resetForm();
-    }
-  }, [visible]);
-
   const handleInputChange = (field, value) => {
-    const updatedData = { ...symbolData, [field]: value };
-    setSymbolData(updatedData);
-    console.log(updatedData);
+    setSymbolData(prevData => ({
+      ...prevData,
+      [field]: value
+    }));
   };
 
+  // const handleFormSubmit = async () => {
+  //   try {
+  //     const response = await axios.post(`${BASE_URL}/manage-lims/add/sHandlingSymbol`, symbolData);
+  //     console.log('Symbol added successfully:', response.data);
+  //     handleSubmit(response.data);
+  //     closeModal();
+  //   } catch (error) {
+  //     console.error('Error adding symbol:', error);
+  //   }
+  // };
   const handleFormSubmit = () => {
-    handleSubmit({ ...symbolData });
-    closeModal();
+    handleSubmit(symbolData);
   };
 
   return (
@@ -45,19 +60,17 @@ const HandelingSymbolModal = ({ visible, closeModal, handleSubmit }) => {
         size="lg"
       >
         <CModalHeader>
-          <CModalTitle>Add Symbols</CModalTitle>
+          <CModalTitle>{initialData ? "Edit Symbol" : "Add Symbol"}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Add a new Grade.</p>
+          <p>{initialData ? "Edit existing symbol." : "Add a new Symbol."}</p>
           <CFormInput
             className="mb-3"
             type="text"
             label="Name"
             placeholder="Name"
             value={symbolData.name}
-            onChange={(e) => {
-              handleInputChange("name", e.target.value);
-            }}
+            onChange={(e) => handleInputChange("name", e.target.value)}
             required
           />
         </CModalBody>
@@ -66,7 +79,7 @@ const HandelingSymbolModal = ({ visible, closeModal, handleSubmit }) => {
             Back
           </CButton>
           <CButton className="bg-info text-white" onClick={handleFormSubmit}>
-            Submit
+            {initialData ? "Update" : "Submit"}
           </CButton>
         </CModalFooter>
       </CModal>
