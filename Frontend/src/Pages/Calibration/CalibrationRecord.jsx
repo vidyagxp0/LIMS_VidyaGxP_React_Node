@@ -1,225 +1,131 @@
+import { useState, useEffect } from "react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
-  // const StatusModal = (_props) => {
-  //   return (
-  //     <CModal
-  //       alignment="center"
-  //       visible={_props.visible}
-  //       onClose={_props.closeModal}
-  //     >
-  //       <CModalHeader>
-  //         <CModalTitle> Add Calibration Record</CModalTitle>
-  //       </CModalHeader>
-  //       <CModalBody>
-  //         <CFormInput
-  //           label="Calibration id"
-  //           className="mb-3"
-  //           type="text"
-  //           placeholder=""
-  //         />
-  //         <CFormInput
-  //           label="Instrument (Instrument ID)"
-  //           className="mb-3"
-  //           type="text"
-  //           placeholder=""
-  //         />
-  //         <CFormInput
-  //           label="Module (Module ID)"
-  //           className="mb-3"
-  //           type="text"
-  //           placeholder=""
-  //         />
-  //         <CFormInput
-  //           label="Calibration Record Template"
-  //           className="mb-3"
-  //           type="text"
-  //           placeholder=""
-  //         />
-
-  //         <CFormInput className="mb-3" label="Certificates" type="file" />
-
-  //         <CFormInput
-  //           label="Calibration Type"
-  //           className="mb-3"
-  //           type="text"
-  //           placeholder=""
-  //         />
-  //         <span>
-  //           <input className="line4" type="checkbox" /> By Pass
-  //         </span>
-
-  //         <div className="d-flex gap-3 mt-4">
-  //           <CButton color="light w-50" onClick={_props.closeModal}>
-  //             &lt; Back
-  //           </CButton>
-  //           <CButton color="primary w-50">Evaluate</CButton>
-  //         </div>
-  //       </CModalBody>
-  //     </CModal>
-  //   );
-  // };
-
-  
-import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
-import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
-import Table from "../../components/ATM components/Table/Table";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
   faPenToSquare,
   faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
+import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+import { toast } from "react-toastify";
 
-const initialData = [
+const fields = [
+  { label: "Calibration Id", key: "CalibrationId" },
+  { label: "Instrument Id", key: "InstrumentId" },
   {
-    checkbox: false,
-    sno: 1,
-    CalibrationId: "Product 1",
-    InstrumentId: "Seq 1",
-    ModuleModuleId: "Info 1",
-    CalibrationType: "Type 1",
-    ScheduleDate: "2024-06-01",
-    NextDueDate: "2024-07-01",
-    ToleranceDays: "5",
-    CalibrationStatus: "Active",
-    status: "DROPPED",
+    label: "Module Id",
+    key: "ModuleModuleId",
   },
   {
-    checkbox: false,
-    sno: 2,
-    CalibrationId: "Product 2",
-    InstrumentId: "Seq 2",
-    ModuleModuleId: "Info 2",
-    CalibrationType: "Type 2",
-    ScheduleDate: "2024-06-02",
-    NextDueDate: "2024-07-02",
-    ToleranceDays: "10",
-    CalibrationStatus: "Inactive",
-    status: "INITIATED",
+    label: "Calibration Type",
+    key: "CalibrationType",
   },
   {
-    checkbox: false,
-    sno: 3,
-    CalibrationId: "Product 3",
-    InstrumentId: "Seq 3",
-    ModuleModuleId: "Info 3",
-    CalibrationType: "Type 3",
-    ScheduleDate: "2024-06-03",
-    NextDueDate: "2024-07-03",
-    ToleranceDays: "15",
-    CalibrationStatus: "Active",
-    status: "REINITIATED",
+    label: "Schedule Date",
+    key: "ScheduleDate",
   },
   {
-    checkbox: false,
-    sno: 4,
-    CalibrationId: "Product 4",
-    InstrumentId: "Seq 4",
-    ModuleModuleId: "Info 4",
-    CalibrationType: "Type 4",
-    ScheduleDate: "2024-06-04",
-    NextDueDate: "2024-07-04",
-    ToleranceDays: "20",
-    CalibrationStatus: "Inactive",
-    status: "APPROVED",
+    label: "Next Due Date",
+    key: "NextDueDate",
   },
   {
-    checkbox: false,
-    sno: 5,
-    CalibrationId: "Product 5",
-    InstrumentId: "Seq 5",
-    ModuleModuleId: "Info 5",
-    CalibrationType: "Type 5",
-    ScheduleDate: "2024-06-05",
-    NextDueDate: "2024-07-05",
-    ToleranceDays: "25",
-    CalibrationStatus: "Active",
-    status: "REJECTED",
+    label: "Tolerance Days",
+    key: "ToleranceDays",
   },
-  {
-    checkbox: false,
-    sno: 6,
-    CalibrationId: "Product 6",
-    InstrumentId: "Seq 6",
-    ModuleModuleId: "Info 6",
-    CalibrationType: "Type 6",
-    ScheduleDate: "2024-06-06",
-    NextDueDate: "2024-07-06",
-    ToleranceDays: "30",
-    CalibrationStatus: "Inactive",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 7,
-    CalibrationId: "Product 7",
-    InstrumentId: "Seq 7",
-    ModuleModuleId: "Info 7",
-    CalibrationType: "Type 7",
-    ScheduleDate: "2024-06-07",
-    NextDueDate: "2024-07-07",
-    ToleranceDays: "35",
-    CalibrationStatus: "Active",
-    status: "INITIATED",
-  },
+  { label: "Status", key: "status" },
 ];
 
-
-
-const CalibrationRecord = () => {
-  const [data, setData] = useState(initialData);
+function CalibrationRecord() {
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
-
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchCalibrationrecord();
+  }, []);
+
+  const fetchCalibrationrecord = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/cCalibrationRecord`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.cCalibrationRecord || []; // Adjust this based on your API response structure
+
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching calibration record:", error);
+      toast.error("Failed to fetch calibration record");
+    }
+  };
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
+
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-  useEffect(() => {
-    const counts = {
-      DROPPED: 0,
-      INITIATED: 0,
-      REINITIATED: 0,
-      APPROVED: 0,
-      REJECTED: 0,
-    };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
 
-    data.forEach((item) => {
-      if (item.status === "DROPPED") counts.DROPPED++;
-      else if (item.status === "INITIATED") counts.INITIATED++;
-      else if (item.status === "REINITIATED") counts.REINITIATED++;
-      else if (item.status === "APPROVED") counts.APPROVED++;
-      else if (item.status === "REJECTED") counts.REJECTED++;
-    });
+  const handleDelete = async (item) => {
+    try {
+      // Make the API call to delete the item
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/cCalibrationRecord/${item.uniqueId}`
+      );
 
-    setCardCounts(counts);
-  }, [data]);
-
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId); // Filter out the deleted item
+        setData(newData);
+        toast.success("Calibration Record deleted successfully");
+        console.log("Deleted item:", item);
+      }
+      fetchCalibrationrecord();
+    } catch (error) {
+      console.error("Error deleting calibration Record:", error);
+      toast.error("Failed to delete calibration Record");
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -227,33 +133,45 @@ const CalibrationRecord = () => {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-
-  const filteredData = data.filter((row) => {
-    return (
-      row.InstrumentId.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
-  };
-
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
+      Cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.original.checkbox}
+          onChange={() => handleCheckboxChange(row.index)}
+        />
+      ),
     },
-    { header: "SrNo.", accessor: "sno" },
+    {
+      header: "SrNo.",
+      accessor: "sno",
+    },
+
     { header: "Calibration Id", accessor: "CalibrationId" },
     { header: "Instrument Id", accessor: "InstrumentId" },
-    { header: "(Module)Module Id", accessor: "ModuleModuleId" },
-    { header: "CalibrationType", accessor: "CalibrationType" },
-    { header: "Schedule Date", accessor: "ScheduleDate" },
-    { header: "Next Due Date", accessor: "NextDueDate" },
-    { header: "Tolerance (Day(s))", accessor: "ToleranceDay" },
-    { header: "Calibration Status", accessor: "CalibrationStatus" },
+    {
+      header: "Module Id",
+      accessor: "ModuleModuleId",
+    },
+    {
+      header: "Calibration Type",
+      accessor: "CalibrationType",
+    },
+    {
+      header: "Schedule Date",
+      accessor: "ScheduleDate",
+    },
+    {
+      header: "Next Due Date",
+      accessor: "NextDueDate",
+    },
+    {
+      header: "Tolerance Days",
+      accessor: "ToleranceDays",
+    },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -268,99 +186,459 @@ const CalibrationRecord = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
-            key="delete"
             className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
           />
         </>
       ),
     },
   ];
+
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
+
+  const onViewDetails = (rowData) => {
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      // If the modal is already open for the same item, close it
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      // Otherwise, open it with the new data
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
+  };
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
+  };
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       CalibrationId: item["Calibration Id"] || "",
       InstrumentId: item["Instrument Id"] || "",
-      ModuleModuleId: item["(Module)Module Id"] || "",
-      CalibrationType: item["CalibrationType"] || "",
+      ModuleModuleId: item["Module Id"] || "",
+      CalibrationType: item["Calibration Type"] || "",
       ScheduleDate: item["Schedule Date"] || "",
       NextDueDate: item["Next Due Date"] || "",
-      ToleranceDay: item["Tolerance (Day(s))"] || "",
-      CalibrationStatus: item["Calibration Status"] || "",
-      status: item["Status"] || "",
+      ToleranceDays: item["Tolerence Days"] || "",
+      status: item["Status"] || "Active",
     }));
-  
-    const concatenatedData = [ ...updatedData];
+
+    const concatenatedData = [...updatedData];
     setData(concatenatedData);
-setIsModalsOpen(false);; // Update data state with parsed Excel data// Close the import modal after data upload
-  };
-  
-  const openModal = () => {
-    setIsModalOpen(true);
+    setIsModalsOpen(false); // Update data state with parsed Excel data
   };
 
-  const closeModal = () => {
+  const addNewRecord = async (newCondition) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/cCalibrationRecord`,
+        {
+          CalibrationId: newCondition.CalibrationId,
+          InstrumentId: newCondition.InstrumentId,
+          ModuleModuleId: newCondition.ModuleModuleId,
+          CalibrationType: newCondition.CalibrationType,
+          ScheduleDate: newCondition.ScheduleDate,
+          NextDueDate: newCondition.NextDueDate,
+          ToleranceDays: newCondition.ToleranceDays,
+          status: newCondition.status || "Active",
+        }
+      );
+
+      if (response.status === 200) {
+        const addedCalibrationRecord = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedCalibrationRecord,
+            sno: addedCalibrationRecord.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+        closeModal();
+
+        toast.success("Calibration Record successfully");
+      }
+    } catch (error) {
+      console.error("Error adding calibration record:", error);
+      toast.error("Failed to add calibration record");
+    }
+
     setIsModalOpen(false);
   };
+  useEffect(() => {
+    fetchCalibrationrecord();
+  }, []);
 
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.CalibrationRecord === CalibrationRecord
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [CalibrationId, setCalibrationId] = useState("");
+    const [InstrumentId, setInstrumentId] = useState("");
+    const [ModuleModuleId, setModuleModuleId] = useState("");
+    const [CalibrationType, setCalibrationType] = useState("");
+    const [ScheduleDate, setScheduleDate] = useState("");
+    const [NextDueDate, setNextDueDate] = useState("");
+    const [ToleranceDays, setToleranceDays] = useState("");
+
+    const handleAdd = () => {
+      const newCondition = {
+        CalibrationId,
+        InstrumentId,
+        ModuleModuleId,
+        CalibrationType,
+        ScheduleDate,
+        NextDueDate,
+        ToleranceDays,
+        status: "active",
+      };
+      onAdd(newCondition);
+    };
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>New Calibration Record</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            label="Calibration Id"
+            className="mb-3"
+            type="text"
+            name="CalibrationId"
+            placeholder="Calibration Id"
+            value={CalibrationId}
+            onChange={(e) => setCalibrationId(e.target.value)}
+          />
+          <CFormInput
+            label="Instrument Id"
+            className="mb-3"
+            type="text"
+            name="InstrumentId"
+            placeholder="Instrument Id"
+            value={InstrumentId}
+            onChange={(e) => setInstrumentId(e.target.value)}
+          />
+          <CFormInput
+            label="Module Id"
+            className="mb-3"
+            type="text"
+            name="ModuleModuleId"
+            placeholder="Module Id"
+            value={ModuleModuleId}
+            onChange={(e) => setModuleModuleId(e.target.value)}
+          />
+          <CFormInput
+            label="Calibration Type"
+            className="mb-3"
+            type="text"
+            name="CalibrationType"
+            placeholder="Calibration Type"
+            value={CalibrationType}
+            onChange={(e) => setCalibrationType(e.target.value)}
+          />
+          <CFormInput
+            label="Schedule Date"
+            className="mb-3"
+            type="date"
+            name="ScheduleDate"
+            placeholder="Schedule Date"
+            value={ScheduleDate}
+            onChange={(e) => setScheduleDate(e.target.value)}
+          />
+          <CFormInput
+            label="NextDue Date"
+            className="mb-3"
+            type="date"
+            name="NextDueDate"
+            placeholder="NextDue Date"
+            value={NextDueDate}
+            onChange={(e) => setNextDueDate(e.target.value)}
+          />
+          <CFormInput
+            label="Tolerance Days"
+            className="mb-3"
+            type="text"
+            name="ToleranceDays"
+            placeholder="Tolerance Days"
+            value={ToleranceDays}
+            onChange={(e) => setToleranceDays(e.target.value)}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/cCalibrationRecord/${updatedData.uniqueId}`, // Targeting the sno in the URL
+
+        {
+          CalibrationId: updatedData.CalibrationId,
+          InstrumentId: updatedData.InstrumentId,
+          ModuleModuleId: updatedData.ModuleModuleId,
+          CalibrationType: updatedData.CalibrationType,
+          ScheduleDate: updatedData.ScheduleDate,
+          NextDueDate: updatedData.NextDueDate,
+          ToleranceDays: updatedData.ToleranceDays,
+        }
+      );
+      console.log(response);
+      console.log("Update Response:", response.data);
+
+      if (response.status === 200) {
+        // If update is successful, update the state locally
+        const newData = data.map(
+          (item) => (item.sno === updatedData.sno ? updatedData : item) // Match by sno
+        );
+        setData(newData);
+        setEditModalData(null); // Close the edit modal
+      } else {
+        console.error("Failed to update Calibration Record :", response.data);
+      }
+    } catch (error) {
+      console.error("Error updating Calibration Record:", error);
+    }
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [formData, setFormData] = useState(data);
+
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
+    };
+
+    const addRows = () => {
+      setNumRows(inputValue);
+    };
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>New Calibration Record</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            label="Calibration Id"
+            className="mb-3"
+            type="text"
+            name="CalibrationId"
+            placeholder="Calibration Id"
+            value={formData?.CalibrationId}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="Instrument Id"
+            className="mb-3"
+            type="text"
+            name="InstrumentId"
+            placeholder="Instrument Id"
+            value={formData?.InstrumentId}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="Module Id"
+            className="mb-3"
+            type="text"
+            name="ModuleModuleId"
+            placeholder="Module Id"
+            value={formData?.ModuleModuleId}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="Calibration Type"
+            className="mb-3"
+            type="text"
+            name="CalibrationType"
+            placeholder="Calibration Type"
+            value={formData?.CalibrationType}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="Schedule Date"
+            className="mb-3"
+            type="date"
+            name="ScheduleDate"
+            placeholder="Schedule Date"
+            value={formData?.ScheduleDate}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="NextDue Date"
+            className="mb-3"
+            type="date"
+            name="NextDueDate"
+            placeholder="NextDue Date"
+            value={formData?.NextDueDate}
+            onChange={handleChange}
+          />
+          <CFormInput
+            label="Tolerance Days"
+            className="mb-3"
+            type="text"
+            name="ToleranceDays"
+            placeholder="Tolerance Days"
+            value={formData?.ToleranceDays}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
   };
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Calibration Records</h1>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
+      <LaunchQMS />
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold">Calibration Record</h4>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={initialData} fileName="Calibration_Record.pdf" title="Calibration Record  Data" />
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-             />
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Calibration_record.pdf"
+              title="Calibration Record Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Calibration Record"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
+        {filteredData && filteredData.length > 0 ? (
+          <Table
+            columns={columns}
+            data={filteredData}
+            onCheckboxChange={handleCheckboxChange}
+            onViewDetails={onViewDetails}
+            onDelete={handleDelete}
+            openEditModal={openEditModal}
+          />
+        ) : (
+          <p>No Calibration Record available.</p>
+        )}
       </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-      />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
+
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewRecord}
         />
       )}
-
-{isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
       )}
-    </div></>
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+    </>
   );
-};
+}
 
 export default CalibrationRecord;

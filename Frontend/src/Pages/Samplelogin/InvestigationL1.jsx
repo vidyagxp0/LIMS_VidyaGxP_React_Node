@@ -27,7 +27,6 @@ import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
 
-const initialData = JSON.parse(localStorage.getItem("InvestigationL1")) || [];
 
 const fields = [
   { label: "S.No", key: "sno" },
@@ -39,7 +38,7 @@ const fields = [
 ];
 
 function InvestigationL1() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);

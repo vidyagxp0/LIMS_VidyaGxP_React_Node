@@ -28,8 +28,20 @@ import { FormControl, FormLabel } from "react-bootstrap";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 import axios from "axios";
-import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Unique Code", key: "uniqueCode" },
+  { label: "CalibrationWorkflow", key: "calibrationWorkflow" },
+  { label: "Schedule Description", key: "scheduleDescription" },
+  { label: "Start Date	", key: "startDate" },
+  { label: "Frequency", key: "frequency" },
+  { label: "Next Calibration Due", key: "nextCalibrationDue" },
+
+  { label: "Status", key: "status" },
+];
 
 const initialData = [
   {
@@ -72,7 +84,32 @@ const CalibrationSchedule = () => {
   });
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  
+
+  useEffect(() => {
+    fetchCalibrationSchedule();
+  }, []);
+
+  const fetchCalibrationSchedule = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/cCalibrationSchedule`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.cCalibrationSchedule || []; // Adjust this based on your API response structure
+
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching Calibration Schedule", error);
+      toast.error("Failed to fetch Calibration Schedule");
+    }
+  };
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -113,8 +150,9 @@ const CalibrationSchedule = () => {
   };
 
   const filteredData = data.filter((row) => {
+    const calibrationTypeLower = row.CalibrationType?.toLowerCase() || "";
     return (
-      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      calibrationTypeLower.includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -195,36 +233,70 @@ const CalibrationSchedule = () => {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/cCalibrationSchedule/${item.uniqueId}` // Update endpoint with uniqueId
+      );
+
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId); // Filter out the deleted item
+        setData(newData);
+        toast.success("Calibration Schedule deleted successfully");
+        console.log("Deleted item:", item);
+        fetchCalibrationSchedule();
+      }
+    } catch (error) {
+      console.error("Error deleting calibration schedule", error);
+      toast.error("Failed to delete calibration schedule");
+    }
   };
 
-  const handleModalSubmit = (newInstrument) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
-      );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
+  const handleModalSubmit = async (newInstrument) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/cCalibrationSchedule`,
         {
-          checkbox: false,
-          sno: prevData.length + 1,
-          uniqueCode: "000",
+          uniqueCode: newInstrument.uniqueCode,
           calibrationWorkflow: newInstrument.calibrationWorkFlow,
           scheduleDescription: newInstrument.scheduleDescription,
           startDate: newInstrument.startDate,
           frequency: newInstrument.frequency,
           nextCalibrationDue: "next",
           status: "Active",
-        },
-      ]);
+        }
+      );
+
+      if (response.status === 200) {
+        const addedCalibration = response.data.addLIMS;
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedCalibration,
+            sno: addedCalibration.uniqueId,
+            checkbox: false,
+          },
+        ]);
+
+        toast.success("Calibration Schedule added successfully");
+        fetchCalibrationSchedule();
+      }
+    } catch (error) {
+      console.error("Error adding Calibration Schedule", error);
+      toast.error("Failed to add Calibration Schedule");
     }
-    closeModal();
+
+    setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
@@ -234,12 +306,30 @@ const CalibrationSchedule = () => {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/cCalibrationSchedule/${updatedData.uniqueId}`, // Update endpoint with uniqueId
+        updatedData // Sending the updated data
+      );
+
+      if (response.status === 200) {
+        // Assuming the response may contain the updated data, you can use it if necessary
+        const newData = data.map(
+          (item) =>
+            item.sno === updatedData.sno ? { ...item, ...updatedData } : item // Update item in state
+        );
+
+        setData(newData);
+        toast.success("Calibration Schedule updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating Calibration Schedule", error);
+      toast.error("Failed to update Calibration Schedule");
+    } finally {
+      setEditModalData(null); // Close the modal after handling the edit
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -346,6 +436,19 @@ const CalibrationSchedule = () => {
                 Sample Login Template
               </label>
             </div>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="uniqueCode" className="form-label">
+              Unique Code
+            </label>
+            <CFormInput
+              id="uniqueCode"
+              type="text"
+              placeholder="Unique Code"
+              value={formData?.uniqueCode || ""}
+              onChange={handleChange}
+              name="uniqueCode"
+            />
           </div>
 
           <CFormSelect
@@ -484,11 +587,14 @@ const CalibrationSchedule = () => {
           handleSubmit={handleModalSubmit}
         />
 
-        {isViewModalOpen && (
-          <ViewModal
-            visible={isViewModalOpen}
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
             closeModal={closeViewModal}
             data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

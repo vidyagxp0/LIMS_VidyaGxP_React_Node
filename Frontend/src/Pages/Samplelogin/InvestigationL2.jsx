@@ -26,8 +26,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-const initialData = JSON.parse(localStorage.getItem("InvestigationL2")) || [];
-
 const fields = [
   { label: "S.No", key: "sno" },
   { label: "Test Name", key: "testName" },
@@ -60,7 +58,7 @@ function InvestigationL2() {
 
       const updatedData = fetchedData.map((item, index) => ({
         ...item,
-        sno: item?.sno || index + 1,
+        sno:index + 1,
       }));
 
       setData(updatedData);
@@ -251,10 +249,10 @@ function InvestigationL2() {
     const handleSave = () => {
       onSave(formData);
     };
-    const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      setFormData({ ...formData, attachment: file });
-    };
+    // const handleFileChange = (e) => {
+    //   const file = e.target.files[0];
+    //   setFormData({ ...formData, attachment: file });
+    // };
 
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
