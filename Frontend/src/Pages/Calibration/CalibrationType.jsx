@@ -423,4 +423,3 @@ const CalibrationType = () => {
 };
 export default CalibrationType;
 
-// SrNo.	Unique code	DataSheetName	Quantitative Parameters	Qualitative Parameters	Status	Actions
