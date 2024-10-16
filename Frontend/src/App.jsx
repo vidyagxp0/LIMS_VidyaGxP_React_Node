@@ -18,7 +18,7 @@ import QualityCheck from "./Pages/UserManagement/Department/QualityCheck";
 import Store from "./Pages/UserManagement/Department/Store";
 import Roles from "./Pages/UserManagement/Roles";
 import Samplelogin from "./Pages/Samplelogin/Samplelogin";
-import SampleWorkflow from "./Pages/Samplelogin/SampleWorkflow.jsx";
+import SampleWorkflow from "./Pages/Samplelogin/SampleWorkflowModal.jsx";
 import SampleLoginDetails from "./Pages/Samplelogin/SampleloginView/SampleLoginDetails.jsx";
 import TestResultsDetails from "./Pages/Samplelogin/SampleloginView/TestResultsDetails.jsx";
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1";

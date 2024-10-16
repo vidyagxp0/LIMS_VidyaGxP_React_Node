@@ -17,7 +17,7 @@ import axios from "axios";
 import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
 
-const SampleWorkflow = () => {
+const SampleWorkflowModal = () => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [formData, setFormData] = useState({
     sampleRegistration: {},
@@ -267,4 +267,4 @@ const SampleWorkflow = () => {
   );
 };
 
-export default SampleWorkflow;
+export default SampleWorkflowModal;
