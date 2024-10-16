@@ -1,389 +1,184 @@
-// import {
-//   CButton,
-//   CCol,
-//   CFormInput,
-//   CFormSelect,
-//   CRow,
-//   CTable,
-//   CTableBody,
-//   CTableDataCell,
-//   CTableHead,
-//   CTableHeaderCell,
-//   CTableRow,
-// } from "@coreui/react";
-// import { faEye } from "@fortawesome/free-regular-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import React,{ useState } from "react";
-// import { FaArrowRight } from "react-icons/fa";
-// import { Link } from "react-router-dom";
-
-// function InvestigationCoa() {
-//   const badgeStyle = { background: "gray", color: "white", width: "110px" };
-//   const badgeStyle2 = { background: " #2A5298", color: "white", width: "110px" };
-//   const badgeStyle3 = { background: "green", color: "white", width: "110px" };
-//   const badgeStyle4 = { background: "red", color: "white", width: "110px" };
-//   const badgeStyle5 = { background: "orange", color: "white", width: "110px" };
-//   const badgeStyle6 = { background: "purple", color: "white", width: "110px" };
-
-//   const [selectedStatus, setSelectedStatus] = useState("All");
-
-//   const pageSize = 5; // Number of items per page
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [data, setData] = useState([
-//     {
-//       id: 1,
-//       sampleType: "Petrochemical",
-//       productMaterial: "Hydraulic Oil",
-//       arNo: "ARPC0000001",
-//       genericName: "hyo",
-//       specificationCode: "HOS 234",
-//       status: "APPROVED",
-//     },
-//     {
-//       id: 2,
-//       sampleType: "Petrochemical",
-//       productMaterial: "Sacubitril",
-//       arNo: "ARPC0000002",
-//       genericName: "Polycaprolactone",
-//       specificationCode: "RPS-TSLV-00",
-//       status: "APPROVED",
-//     },
-//     {
-//       id: 3,
-//       sampleType: "Chemical",
-//       productMaterial: "Ethanol",
-//       arNo: "ARPC0000003",
-//       genericName: "ethyl",
-//       specificationCode: "ETH-123",
-//       status: "INITIATED",
-//     },
-//     {
-//       id: 4,
-//       sampleType: "Pharmaceutical",
-//       productMaterial: "Aspirin",
-//       arNo: "ARPC0000004",
-//       genericName: "acetylsalicylic",
-//       specificationCode: "ASP-567",
-//       status: "REJECTED",
-//     },
-//     {
-//       id: 5,
-//       sampleType: "Polymer",
-//       productMaterial: "Nylon",
-//       arNo: "ARPC0000005",
-//       genericName: "polyamide",
-//       specificationCode: "NYL-890",
-//       status: "APPROVED",
-//     },
-//     {
-//       id: 6,
-//       sampleType: "Metal",
-//       productMaterial: "Steel",
-//       arNo: "ARPC0000006",
-//       genericName: "ferrum",
-//       specificationCode: "STL-101",
-//       status: "REINITIATED",
-//     },
-//   ]);
-
-//   const startIndex = (currentPage - 1) * pageSize;
-//   const filteredData = selectedStatus === 'All' ? data : data.filter(item => item.status === selectedStatus);
-//   const endIndex = Math.min(startIndex + pageSize, filteredData.length);
-//   const nextPage = () => setCurrentPage(currentPage + 1);
-//   const prevPage = () => setCurrentPage(currentPage - 1);
-//   const nextToLastPage = () => setCurrentPage(Math.ceil(filteredData.length / pageSize));
-
-//   return (
-//     <>
-//       <div className="m-5 mt-3">
-//           <div className="main-head">
-//           <h4 className="fw-bold">Investigation Coa</h4>
-//           </div>
-//           <div>
-//             <CRow className="mb-3 mt-5">
-//               <CCol sm={2}>
-//                 <CFormSelect
-//                   options={[
-//                     "Ar No.",
-//                     { label: "ARPC0000001" },
-//                     { label: "ARPC0000002" },
-//                     { label: "ARPC0000003" },
-//                   ]}
-//                   style={{fontSize:'0.9rem'}}
-//                 />
-//               </CCol>
-//               <CCol sm={3}>
-//                 <CFormSelect
-//                   onChange={(e) => setSelectedStatus(e.target.value)}
-//                   value={selectedStatus} style={{fontSize:'0.9rem'}}
-//                   options={[
-//                     "All",
-//                     { label: "Initiated", value: "INITIATED" },
-//                     { label: "Approved", value: "APPROVED" },
-//                     { label: "Rejected", value: "REJECTED" },
-//                     { label: "Reinitiated", value: "REINITIATED" },
-//                     { label: "Dropped", value: "DROPPED" },
-//                   ]}
-//                 />
-//               </CCol>
-//             </CRow>
-//           </div>
-//             <div
-//           className=" rounded bg-white"
-//           style={{fontFamily:'sans-serif', fontSize:'0.9rem' ,boxShadow:'5px 5px 20px #5D76A9'}}
-//         >
-//             <CTable align="middle" responsive className="  ">
-//               <CTableHead>
-//                 <CTableRow>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >S NO.</CTableHeaderCell>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >Sample Type</CTableHeaderCell>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >Product / Material</CTableHeaderCell>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >A.R No.</CTableHeaderCell>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >Generic Name</CTableHeaderCell>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >Specification Code</CTableHeaderCell>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >Status</CTableHeaderCell>
-//                   <CTableHeaderCell
-//                   style={{ background: "#5D76A9", color: "white"}}
-//                   scope="col"
-//                 >Actions</CTableHeaderCell>
-//                 </CTableRow>
-//               </CTableHead>
-//               <CTableBody>
-//                 {filteredData.slice(startIndex, endIndex).map((item) => (
-//                   <CTableRow key={item.id} >
-//                     <CTableDataCell>{item.id}</CTableDataCell>
-//                     <CTableDataCell>{item.sampleType}</CTableDataCell>
-//                     <CTableDataCell>{item.productMaterial}</CTableDataCell>
-//                     <CTableDataCell>{item.arNo}</CTableDataCell>
-//                     <CTableDataCell>{item.genericName}</CTableDataCell>
-//                     <CTableDataCell>{item.specificationCode}</CTableDataCell>
-//                     <CTableDataCell>
-//                     <button
-//                         className={`py-1 px-2 w-75 rounded text-light d-flex justify-content-center align-items-center bg-${
-//                           item.status === "INITIATED"
-//                             ? "blue-700"
-//                             : item.status === "APPROVED"
-//                             ? "green-700"
-//                             : item.status === "REJECTED"
-//                             ? "red-700"
-//                             : item.status === "REINITIATED"
-//                             ? "yellow-500"
-//                             : item.status === "DROPPED"
-//                             ? "purple-700"
-//                             : "white"
-//                         }`} style={{fontSize:'0.6rem'}}
-//                       >
-//                         {item.status}
-//                       </button>
-//                     </CTableDataCell>
-//                     <CTableDataCell>
-//                       <div className="d-flex gap-3">
-//                         <Link to="/stability/sample_LoginDetails">
-//                           <FontAwesomeIcon icon={faEye} />
-//                         </Link>
-//                       </div>
-//                     </CTableDataCell>
-//                   </CTableRow>
-//                 ))}
-//               </CTableBody>
-//             </CTable>
-//           </div>
-
-//           <div className="d-flex justify-content-end align-items-center mt-4">
-//                         <div className="pagination">
-//                             <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-//                                 &lt;&lt;
-//                             </button>
-//                             <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-//                             <button  style={{ background: "#21516a", color: "white" }} className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-//                                 &gt;&gt;
-//                             </button>
-//                         </div>
-
-//                     </div>
-//       </div>
-//     </>
-//   );
-// }
-
-// export default InvestigationCoa;
-
-import React, { useState, useEffect } from "react";
-import Card from "../../components/ATM components/Card/Card";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CForm, CFormInput, CFormSelect } from "@coreui/react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
-import Table from "../../components/ATM components/Table/Table";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
-import ViewModal from "../Modals/ViewModal";
+import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
 import ImportModal from "../Modals/importModal";
-import {
-  CButton,
-  CFormInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-} from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    SampleType: "ST-001",
-    ProductMaterial: "COA-001",
-    ArNo: "Type 1",
-    GenericName: "2024-06-01",
-    SpecificationCode: "CH-001",
-    status: "APPROVED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    SampleType: "ST-002",
-    ProductMaterial: "COA-002",
-    ArNo: "Type 2",
-    GenericName: "2024-06-02",
-    SpecificationCode: "CH-002",
-    status: "REJECTED",
-  },
-  
-];
+import { BASE_URL } from "../../config.json";
 
 const InvestigationCoa = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    DROPPED: 0,
-    REJECTED: 0,
-  });
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("DROPPED");
   const [editModalData, setEditModalData] = useState(null);
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-    setEditModalOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setEditModalOpen(false);
-    setEditModalData(null);
-  };
-
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
-  };
-
-
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
-
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
-  };
-
 
   useEffect(() => {
-    const counts = {
-      INITIATED: 0,
-      REINITIATED: 0,
-      APPROVED: 0,
-      DROPPED: 0,
-      REJECTED: 0,
-    };
+    fetchInvestigationCoaData();
+  }, []);
 
-    data.forEach((item) => {
-      if (item.status === "INITIATED") counts.INITIATED++;
-      else if (item.status === "REINITIATED") counts.REINITIATED++;
-      else if (item.status === "APPROVED") counts.APPROVED++;
-      else if (item.status === "DROPPED") counts.DROPPED++;
-      else if (item.status === "REJECTED") counts.REJECTED++;
-    });
-
-    setCardCounts(counts);
-  }, [data]);
-
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+  const fetchInvestigationCoaData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/rCInvestigationCoa`);
+      const formattedData = response?.data[0]?.rCInvestigationCoa || [];
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching Investigation COA data:", error);
+      toast.error("Failed to fetch Investigation COA data");
+    }
   };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
+    setData((prevData) => prevData.map((row) => ({ ...row, checkbox: checked })));
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.SampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
+  const handleCheckboxChange = useCallback((index) => {
+    setData((prevData) =>
+      prevData.map((item, i) => (i === index ? { ...item, checkbox: !item.checkbox } : item))
     );
-  });
+  }, []);
 
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/delete-lims/rCInvestigationCoa/${item.uniqueId}`);
+      if (response?.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
+        toast.success("Investigation COA data deleted successfully");
+        fetchInvestigationCoaData();
+      } else {
+        toast.error("Failed to delete Investigation COA data");
+      }
+    } catch (error) {
+      console.error("Error deleting Investigation COA data:", error);
+      toast.error("Error deleting Investigation COA data");
+    }
   };
+
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus || !viewModalData) {
+      toast.error("Invalid status update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/rCInvestigationCoa/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Investigation COA status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Investigation COA status");
+      }
+    } catch (error) {
+      console.error("Error updating Investigation COA status:", error);
+      toast.error("Error updating Investigation COA status");
+    }
+  };
+
+  const addNewInvestigationCoa = async (newInvestigationCoa) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/rCInvestigationCoa`, newInvestigationCoa);
+      if (response.status === 200) {
+        const addedInvestigationCoa = response.data;
+        setData((prevData) => [
+          {
+            ...addedInvestigationCoa,
+            checkbox: false,
+          },
+          ...prevData,
+        ]);
+        toast.success("Investigation COA added successfully");
+        setIsModalOpen(false);
+        fetchInvestigationCoaData();
+      } else {
+        toast.error("Failed to add Investigation COA");
+      }
+    } catch (error) {
+      console.error("Error adding Investigation COA:", error);
+      toast.error("Failed to add Investigation COA");
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const { sno, ...dataToSend } = updatedData;
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/rCInvestigationCoa/${updatedData.uniqueId}`, dataToSend);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+        );
+        toast.success("Investigation COA updated successfully");
+      } else {
+        toast.error("Failed to update Investigation COA");
+      }
+    } catch (error) {
+      console.error("Error updating Investigation COA:", error);
+      toast.error("Error updating Investigation COA");
+    }
+    setEditModalData(null);
+  };
+
+  const handleExcelDataUpload = useCallback(
+    (excelData) => {
+      const updatedData = excelData.map((item, index) => ({
+        checkbox: false,
+        sno: data.length + index + 1,
+        SampleType: item["Sample Type"] || "",
+        ProductMaterial: item["Product/Material"] || "",
+        ArNo: item["AR NO."] || "",
+        GenericName: item["Generic Name"] || "",
+        SpecificationCode: item["Specification Code"] || "",
+        status: item["Status"] || "",
+      }));
+      setData((prevData) => [...prevData, ...updatedData]);
+      setIsModalsOpen(false);
+    },
+    [data]
+  );
 
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
+      Cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.original.checkbox}
+          onChange={() => handleCheckboxChange(row.index)}
+        />
+      ),
     },
-    { header: "SrNo.", accessor: "sno" },
+    { header: "Sr No.", accessor: "sno" },
     { header: "Sample Type", accessor: "SampleType" },
     { header: "Product/Material", accessor: "ProductMaterial" },
     { header: "AR NO.", accessor: "ArNo" },
     { header: "Generic Name", accessor: "GenericName" },
     { header: "Specification Code", accessor: "SpecificationCode" },
     { header: "Status", accessor: "status" },
-
     {
       header: "Actions",
       accessor: "action",
@@ -392,189 +187,298 @@ const InvestigationCoa = () => {
           <FontAwesomeIcon
             icon={faEye}
             className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
+            onClick={() => onViewDetails(row.original)}
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
-            key="delete"
             className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
           />
         </>
       ),
     },
   ];
 
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno:  index + 1,
-      SampleType: item["Sample Type"] || "",
-      ProductMaterial: item["Product/Material"] || "",
-      ArNo: item["AR NO."] || "",
-      GenericName: item["Generic Name"] || "",
-      SpecificationCode: item["Specification Code"] || "",
-      status: item["Status"] || "",
-    }));
-  
-    const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
-  };
+  const filteredData = data.filter((row) => {
+    const sampleTypeMatch = row.SampleType?.toLowerCase().includes(searchQuery.toLowerCase()) ?? true;
+    const statusMatch = statusFilter === "All" || row.status === statusFilter;
+    return sampleTypeMatch && statusMatch;
+  });
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
   };
 
   const closeViewModal = () => {
-    setIsViewModalOpen(false);
+    setViewModalData(null);
   };
 
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const closeEditModal = () => {
+    setEditModalData(null);
   };
 
-  const EditModal = ({visible , closeModal,data, onSave}) => {
+  const InvestigationCoaModal = ({ visible, closeModal, onAdd }) => {
+    const [investigationCoa, setInvestigationCoa] = useState({
+      SampleType: "",
+      ProductMaterial: "",
+      ArNo: "",
+      GenericName: "",
+      SpecificationCode: "",
+    });
+
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setInvestigationCoa((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onAdd({
+        ...investigationCoa,
+        status: "Active",
+      });
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Investigation COA</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm onSubmit={handleSubmit}>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Sample Type"
+              name="SampleType"
+              value={investigationCoa.SampleType}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Product/Material"
+              name="ProductMaterial"
+              value={investigationCoa.ProductMaterial}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="AR NO."
+              name="ArNo"
+              value={investigationCoa.ArNo}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Generic Name"
+              name="GenericName"
+              value={investigationCoa.GenericName}
+              onChange={handleInputChange}
+              required
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Specification Code"
+              name="SpecificationCode"
+              value={investigationCoa.SpecificationCode}
+              onChange={handleInputChange}
+              required
+            />
+            <CModalFooter>
+              <CButton color="secondary" onClick={closeModal}>
+                Cancel
+              </CButton>
+              <CButton color="primary" type="submit">
+                Add Investigation COA
+              </CButton>
+            </CModalFooter>
+          </CForm>
+        </CModalBody>
+      </CModal>
+    );
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
-    
     useEffect(() => {
-      if(data){
+      if (data) {
         setFormData(data);
       }
-     
     }, [data]);
-  
+
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     };
-  
+
     const handleSave = () => {
       onSave(formData);
     };
+
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
-      <CModalHeader>
-        <CModalTitle>New Storage Condition</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CFormInput
-          type="text"
-          label="Generic Name"
-          placeholder="Generic Name"
-          value={formData?.GenericName || ""}
-          onChange={handleChange}
-          name="GenericName"
-        />
-         <CFormInput
-          type="text"
-          label="Product Name"
-          placeholder="Product Name"
-          value={formData?.ProductMaterial || ""}
-          onChange={handleChange}
-          name="ProductMaterial"
-        />
-      </CModalBody>
-      <CModalFooter>
-        <CButton color="light" onClick={closeModal}>
-          Cancel
-        </CButton>
-        <CButton color="primary" onClick={handleSave}>
-          Add
-        </CButton>
-      </CModalFooter>
-    </CModal>
+        <CModalHeader>
+          <CModalTitle>Edit Investigation COA</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Sample Type"
+              name="SampleType"
+              value={formData?.SampleType || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Product/Material"
+              name="ProductMaterial"
+              value={formData?.ProductMaterial || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="AR NO."
+              name="ArNo"
+              value={formData?.ArNo || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Generic Name"
+              name="GenericName"
+              value={formData?.GenericName || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Specification Code"
+              name="SpecificationCode"
+              value={formData?.SpecificationCode || ""}
+              onChange={handleChange}
+            />
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Save Changes
+          </CButton>
+        </CModalFooter>
+      </CModal>
     );
   };
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Investigation Coa</h1>
-
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "AR NO.", label: "AR NO." },
-              { value: "Type 1", label: "Type 1." },
-              { value: "Type 2", label: "Type 2" },
-              { value: "Type 3", label: "Type 3" },
-              { value: "Type 4", label: "Type 4" },
-              { value: "Type 5", label: "Type 5" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "APPROVED", label: "APPROVED." },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Investigation COA</h1>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              title="Investigation COA"
+              fileName="InvestigationCOA.pdf"
+            />
+            <ATMButton text="Import" color="pink" onClick={() => setIsModalsOpen(true)} />
+            <ATMButton text="Add Investigation COA" color="blue" onClick={() => setIsModalOpen(true)} />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Investigation_Coa.pdf" title="Investigation Coa Data" />
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
-          {/* <ATMButton text="Add COA Template" color="blue" onClick={openModal} /> */}
-        </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
+
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+          title="Investigation COA Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
-      {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
+
+      {isModalOpen && (
+        <InvestigationCoaModal
+          visible={isModalOpen}
+          closeModal={() => setIsModalOpen(false)}
+          onAdd={addNewInvestigationCoa}
+        />
       )}
-      <EditModal
-        visible={Boolean(editModalData)}
-        closeModal={closeEditModal}
-        data={editModalData}
-        onSave={handleEditSave}
-      />
-    </div></>
+
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={() => setIsModalsOpen(false)}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+    </>
   );
 };
+
 export default InvestigationCoa;
+
+
+
+
+
+
