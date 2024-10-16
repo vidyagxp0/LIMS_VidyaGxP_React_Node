@@ -238,6 +238,7 @@ const CalibrationDataSheet = () => {
         toast.success("Calibration Data Sheet deleted successfully");
         console.log("Deleted item:", item);
       }
+      fetchDataSheet();
     } catch (error) {
       console.error("Error deleting calibration Data Sheet:", error);
       toast.error("Failed to delete calibration Data Sheet");

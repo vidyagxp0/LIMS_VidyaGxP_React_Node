@@ -303,7 +303,9 @@ const CalibrationSampleLogin = () => {
         // Assuming the response may contain the updated data, you can use it if necessary
         const newData = data.map(
           (item) =>
-            item.sno === updatedData.sno ? { ...item, ...updatedData } : item // Update item in state
+            item.uniqueId === updatedData.uniqueId
+              ? { ...item, ...updatedData }
+              : item // Update item in state
         );
 
         setData(newData);
@@ -342,7 +344,8 @@ const CalibrationSampleLogin = () => {
           size="lg"
         >
           <CModalHeader>
-            <CModalTitle>Add Sample Login</CModalTitle>
+            <CModalTitle></CModalTitle>
+            {data.uniqueId ? "Edit" : "Add}"} Add New Sample Login
           </CModalHeader>
 
           <CModalBody>

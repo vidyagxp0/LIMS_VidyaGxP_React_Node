@@ -85,32 +85,30 @@ const CalibrationSchedule = () => {
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-  {
-    useEffect(() => {
-      fetchCalibrationSchedule();
-    }, []);
+  useEffect(() => {
+    fetchCalibrationSchedule();
+  }, []);
 
-    const fetchCalibrationSchedule = async () => {
-      try {
-        const response = await axios.get(
-          `${BASE_URL}/get-all-lims/cCalibrationSchedule`
-        );
-        console.log(response);
-        const formattedData = response.data[0]?.cCalibrationSchedule || []; // Adjust this based on your API response structure
+  const fetchCalibrationSchedule = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/cCalibrationSchedule`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.cCalibrationSchedule || []; // Adjust this based on your API response structure
 
-        const updatedData = formattedData.map((item, index) => ({
-          ...item,
-          sno: index + 1,
-          checkbox: false,
-        }));
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
 
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching Calibration Schedule", error);
-        toast.error("Failed to fetch Calibration Schedule");
-      }
-    };
-  }
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching Calibration Schedule", error);
+      toast.error("Failed to fetch Calibration Schedule");
+    }
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -246,6 +244,7 @@ const CalibrationSchedule = () => {
         setData(newData);
         toast.success("Calibration Schedule deleted successfully");
         console.log("Deleted item:", item);
+        fetchCalibrationSchedule();
       }
     } catch (error) {
       console.error("Error deleting calibration schedule", error);
@@ -281,6 +280,7 @@ const CalibrationSchedule = () => {
         ]);
 
         toast.success("Calibration Schedule added successfully");
+        fetchCalibrationSchedule();
       }
     } catch (error) {
       console.error("Error adding Calibration Schedule", error);

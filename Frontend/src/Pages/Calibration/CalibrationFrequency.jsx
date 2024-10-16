@@ -217,6 +217,7 @@ const CalibrationFrequency = () => {
         toast.success("Calibration Frequency deleted successfully");
         console.log("Deleted item:", item);
       }
+      fetchCalibrationFrequency();
     } catch (error) {
       console.error("Error deleting calibration Frequency:", error);
       toast.error("Failed to delete calibration Frequency");
