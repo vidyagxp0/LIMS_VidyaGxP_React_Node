@@ -124,7 +124,7 @@ const commonFields = [
   "vendor",
   "client",
   "plant",
-  "worlFlow",
+  "workFlow",
   "auditTrail",
   "sBusinessAssociate",
   "sLabelManagement",

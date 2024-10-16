@@ -108,9 +108,9 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
           onChange={handleStatusChange}
           options={[
             { label: "Select Status", value: "" },
-            { label: "Approve", value: "APPROVED" },
-            { label: "Drop", value: "DROPPED" },
-            { label: "Reject", value: "REJECTED" },
+            // { label: "Approve", value: "APPROVED" },
+            // { label: "Drop", value: "DROPPED" },
+            // { label: "Reject", value: "REJECTED" },
             { label: "Active", value: "ACTIVE" },
             { label: "Inactive", value: "INATCIVE" },
           ]}

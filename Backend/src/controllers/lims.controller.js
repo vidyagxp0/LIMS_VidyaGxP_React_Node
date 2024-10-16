@@ -129,7 +129,7 @@ const commonFeilds = [
   "vendor",
   "client",
   "plant",
-  "worlFlow",
+  "workFlow",
   "auditTrail",
   "sBusinessAssociate",
   "sLabelManagement",
@@ -170,7 +170,6 @@ const withTransaction = async (callback) => {
 export const manageLIMS = async (req, res) => {
   const filename =
     req?.files?.map((file) => file?.filename)[0] || req?.filename;
-    console.log(filename,"FileName");
     
   const { fieldName, uniqueId, add, update } = req.params;
   try {
