@@ -23,29 +23,12 @@ import {
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
-
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    CalibrationType: "Plant Configuration",
-    CalibrationPrefix: "PLA-001",
-    AddedOn: "2024-06-01",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    CalibrationType: "Equipment Calibration",
-    CalibrationPrefix: "EQUIP-001",
-    AddedOn: "2024-06-02",
-    status: "Inactive",
-  },
-];
-
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+import { toast } from "react-toastify";
 
 const CalibrationType = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,8 +38,35 @@ const CalibrationType = () => {
     Active: 0,
     Inactive: 0,
   });
-  const [editModalData, setEditModalData] = useState(null); 
+  const [editModalData, setEditModalData] = useState(null);
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  useEffect(() => {
+    fetchCalibrationTypes();
+  }, []);
+
+  const fetchCalibrationTypes = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/cCalibrationType`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.cCalibrationType || []; // Adjust this based on your API response structure
+
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching calibration types:", error);
+      toast.error("Failed to fetch calibration types");
+    }
+  };
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -91,8 +101,9 @@ const CalibrationType = () => {
   };
 
   const filteredData = data.filter((row) => {
+    const calibrationTypeLower = row.CalibrationType?.toLowerCase() || "";
     return (
-      row.CalibrationType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      calibrationTypeLower.includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -140,15 +151,15 @@ const CalibrationType = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       CalibrationType: item["Calibration Type"] || "",
       CalibrationPrefix: item["Calibration Prefix"] || "",
       AddedOn: item["Added On"] || "",
       status: item["Status"] || "",
     }));
-  
+
     const concatenateData = [...updatedData];
-setData(concatenateData ); // Update data state with parsed Excel data
+    setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
@@ -168,35 +179,61 @@ setData(concatenateData ); // Update data state with parsed Excel data
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/cCalibrationType/${item.uniqueId}` // Update endpoint with uniqueId
+      );
+
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId); // Filter out the deleted item
+        setData(newData);
+        toast.success("Calibration Type deleted successfully");
+        console.log("Deleted item:", item);
+      }
+      fetchCalibrationTypes();
+    } catch (error) {
+      console.error("Error deleting calibration type:", error);
+      toast.error("Failed to delete calibration type");
+    }
   };
 
-  const handleModalSubmit = (newInstrument) => {
+  const handleModalSubmit = async (newInstrument) => {
     const currentDate = new Date().toISOString().split("T")[0];
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
-      );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/cCalibrationType`,
         {
-          checkbox: false,
-          sno: prevData.length + 1,
           CalibrationType: newInstrument.CalibrationType,
           CalibrationPrefix: newInstrument.CalibrationPrefix,
-          AddedOn:currentDate,
+          AddedOn: currentDate,
           status: "Active",
-        },
-      ]);
-    }
-    closeModal();
-  };
+        }
+      );
 
+      if (response.status === 200) {
+        const addedCalibration = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedCalibration,
+            sno: addedCalibration.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+
+        toast.success("Calibration Type added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding calibration type:", error);
+      toast.error("Failed to add calibration type");
+    }
+    useEffect(() => {
+      fetchCalibrationTypes();
+    }, []);
+    setIsModalOpen(false);
+  };
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -205,12 +242,29 @@ setData(concatenateData ); // Update data state with parsed Excel data
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/cCalibrationType/${updatedData.uniqueId}`, // Update endpoint with uniqueId
+        updatedData // Sending the updated data
+      );
+
+      if (response.status === 200) {
+        // Assuming the response may contain the updated data, you can use it if necessary
+        const newData = data.map(
+          (item) =>
+            item.sno === updatedData.sno ? { ...item, ...updatedData } : item // Update item in state
+        );
+
+        setData(newData);
+        toast.success("Calibration Type updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating calibration type:", error);
+      toast.error("Failed to update calibration type");
+    } finally {
+      setEditModalData(null); // Close the modal after handling the edit
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -231,15 +285,13 @@ setData(concatenateData ); // Update data state with parsed Excel data
     };
     return (
       <div>
-        <CModal
-          alignment="center"
-          visible={visible}
-          onClose={closeModal}
-        >
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
           <CModalHeader>
             <CModalTitle> Add Calibration Type</CModalTitle>
           </CModalHeader>
-          <p className="ms-3 m-2">Add information and add new calibration type</p>
+          <p className="ms-3 m-2">
+            Add information and add new calibration type
+          </p>
           <CModalBody>
             <CFormInput
               label="Calibration Type"
@@ -247,7 +299,7 @@ setData(concatenateData ); // Update data state with parsed Excel data
               type="text"
               name="CalibrationType"
               placeholder="Calibration Type"
-              value={formData?.CalibrationType||""}
+              value={formData?.CalibrationType || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -256,15 +308,17 @@ setData(concatenateData ); // Update data state with parsed Excel data
               type="text"
               name="CalibrationPrefix"
               placeholder="Calibration Type Prefix"
-              value={formData?.CalibrationPrefix||""}
+              value={formData?.CalibrationPrefix || ""}
               onChange={handleChange}
             />
-  
+
             <div className="d-flex gap-3 mt-4">
               <CButton color="light w-50" onClick={closeModal}>
                 &lt; Back
               </CButton>
-              <CButton color="primary w-50" onClick={handleSave}>Submit</CButton>
+              <CButton color="primary w-50" onClick={handleSave}>
+                Submit
+              </CButton>
             </div>
           </CModalBody>
         </CModal>
@@ -273,72 +327,94 @@ setData(concatenateData ); // Update data state with parsed Excel data
   };
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Calibration Type</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Calibration Type</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Calibration_Type.pdf"
+              title="Calibration Type Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Calibration Type"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Calibration_Type.pdf" title="Calibration Type Data" />
-            <ATMButton 
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-            
-             />
-          <ATMButton text="Calibration Type" color="blue" onClick={openModal} />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <CalibrationTypeModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-handleSubmit={handleModalSubmit}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-       {isModalsOpen && (
-        <ImportModal
-         initialData = {initialData}
-         isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-           onDataUpload={handleExcelDataUpload}/>
-      )}
-      {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-    </div></>
-    
+        <CalibrationTypeModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
+        />
+        {isViewModalOpen && (
+          <ViewModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default CalibrationType;
+
+/*  {
+    checkbox: false,
+    sno: 7,
+    CalibrationId: "Product 7",
+    InstrumentId: "Seq 7",
+    ModuleModuleId: "Info 7",
+    CalibrationType: "Type 7",
+    ScheduleDate: "2024-06-07",
+    NextDueDate: "2024-07-07",
+    ToleranceDays: "35",
+
+    status: "INITIATED",
+  },
+  };*/
+
+//    CalibrationStatus: "Active",

@@ -34,8 +34,8 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
-
-// const initialData = JSON.parse(localStorage.getItem("sampletypes")) || [];
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 const fields = [
   { label: "Sample Type Name", key: "sampleTypeName" },
@@ -45,38 +45,44 @@ const fields = [
 ];
 
 function SampleType() {
-  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Active");
+  const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [data, setData] = useState([]);
-
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mSampleType`
-        );
-        const fetchedData = response?.data[0]?.mSampleType || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchProductData();
   }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/mSampleType`);
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mSampleType?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              sampleTypeName: condition.sampleTypeName || "No Sample Type Name",
+              addDate: condition.addDate || "No Date",
+              daysToComplete: condition.daysToComplete || "No Days to Complete",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+        closeModal();
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -90,24 +96,29 @@ function SampleType() {
     setData(newData);
   };
 
-  const filteredData = data
-    .filter((row) => {
-      return (
-        row?.sampleTypeName
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase()) &&
-        (statusFilter === "All" || row.status === statusFilter)
-      );
-    })
-    .map((row, index) => ({ ...row, sno: index + 1 }));
-
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const sampleTypeName = row.sampleTypeName || "";
+        return (
+          sampleTypeName?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
   const onAdd = (newRow) => {
     const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
     setData(updatedData);
   };
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -138,47 +149,60 @@ function SampleType() {
     setData(updatedData);
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [inputValue, setInputValue] = useState(0);
-    const [statusData, setStatusData] = useState({
-      sampleName: "",
-      prefix: "",
-      daysToComplete: 0,
-    });
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/mSampleType/${item.sno}`
+      );
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Sample deleted successfully.");
+      } else {
+        toast.error("Failed to delete Sample.");
       }
-    };
+    } catch (error) {
+      toast.error(
+        "Error deleting Sample: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
-    const handleAdd = async () => {
-      const currentDate = new Date().toISOString().split("T")[0];
-
-      const newCondition = {
-        sampleTypeName: statusData.sampleName,
-        addDate: currentDate,
-        daysToComplete: statusData.daysToComplete,
-        action: [],
-      };
-
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mSampleType", // Update this endpoint as per your API
-          newCondition
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log("Sample type added successfully:", response.data);
-          closeModal();
-          onAdd(newCondition);
-        } else {
-          console.error("Failed to add sample type:", response.statusText);
+  const handleAdd = async (newSampleType) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mSampleType`,
+        {
+          ...newSampleType,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newSampleType.status || "Active",
         }
-      } catch (error) {
-        console.error("Error adding sample type:", error);
+      );
+      if (response.status === 200) {
+        toast.success("Sample added successfully.");
+        fetchProductData(); // Refresh data after adding
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Sample.");
       }
+    } catch (error) {
+      toast.error(
+        "Error adding Sample: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [sampleTypeName, setSampleTypeName] = useState("");
+    const [addDate, setAddDate] = useState("");
+    const [daysToComplete, setDaysTpComplete] = useState("");
+    const handleSample = () => {
+      const newCondition = {
+        sampleTypeName,
+        addDate,
+        daysToComplete,
+        status: "active",
+      };
+      onAdd(newCondition);
     };
 
     return (
@@ -198,10 +222,8 @@ function SampleType() {
             label="Sample Name"
             placeholder="Sample Name"
             name="sampleName"
-            value={statusData.sampleName}
-            onChange={(e) =>
-              setStatusData({ ...statusData, sampleName: e.target.value })
-            }
+            value={sampleTypeName}
+            onChange={(e) => setSampleTypeName(e.target.value)}
           />
 
           <CFormInput
@@ -210,10 +232,8 @@ function SampleType() {
             label="Prefix"
             placeholder="Prefix"
             name="prefix"
-            value={statusData.prefix}
-            onChange={(e) =>
-              setStatusData({ ...statusData, prefix: e.target.value })
-            }
+            value={addDate}
+            onChange={(e) => setAddDate(e.target.value)}
           />
 
           <CFormInput
@@ -222,13 +242,11 @@ function SampleType() {
             label="Days To Complete"
             placeholder="Days To Complete"
             name="daysToComplete"
-            value={statusData.daysToComplete}
-            onChange={(e) =>
-              setStatusData({ ...statusData, daysToComplete: e.target.value })
-            }
+            value={daysToComplete}
+            onChange={(e) => setDaysTpComplete(e.target.value)}
           />
 
-          <label className="line3" htmlFor="">
+          {/* <label className="line3" htmlFor="">
             Selected Standard Fields Displays At Sample Registration
           </label>
           <FormGroup style={{ marginLeft: "20px" }}>
@@ -267,9 +285,9 @@ function SampleType() {
             />
             <FormControlLabel control={<Checkbox />} label="Storage Location" />
             <FormControlLabel control={<Checkbox />} label="Comments" />
-          </FormGroup>
+          </FormGroup> */}
 
-          <FormControl style={{ margin: "20px" }}>
+          {/* <FormControl style={{ margin: "20px" }}>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Reserve Sample Required
             </FormLabel>
@@ -389,13 +407,13 @@ function SampleType() {
               <FormControlLabel value="yes" control={<Radio />} label="Yes" />
               <FormControlLabel value="no" control={<Radio />} label="No" />
             </RadioGroup>
-          </FormControl>
+          </FormControl> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleSample}>
             Submit
           </CButton>
         </CModalFooter>
@@ -410,14 +428,29 @@ function SampleType() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/mSampleType/${updatedData.sno}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("SampleType updated successfully.");
+        setEditModalData(null);
+      } else {
+        toast.error("Failed to update SampleType.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating SampleType: " + (error.response?.data || error.message)
+      );
+    }
   };
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
@@ -483,10 +516,10 @@ function SampleType() {
             onChange={handleChange}
           />
 
-          <label className="line3" htmlFor="">
+          {/* <label className="line3" htmlFor="">
             Selected Standard Fields Displays At Sample Registration
-          </label>
-          <FormGroup style={{ marginLeft: "20px" }}>
+          </label> */}
+          {/* <FormGroup style={{ marginLeft: "20px" }}>
             <FormControlLabel
               control={<Checkbox />}
               label="Manufacturing Date"
@@ -644,7 +677,7 @@ function SampleType() {
               <FormControlLabel value="yes" control={<Radio />} label="Yes" />
               <FormControlLabel value="no" control={<Radio />} label="No" />
             </RadioGroup>
-          </FormControl>
+          </FormControl> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
@@ -712,13 +745,7 @@ function SampleType() {
   };
 
   const closeViewModal = () => {
-    setViewModalData(false);
-  };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+    setIsViewModalOpen(false);
   };
 
   return (
@@ -781,7 +808,7 @@ function SampleType() {
       )}
       {isModalOpen && (
         <StatusModal
-          onAdd={onAdd}
+          onAdd={handleAdd}
           visible={isModalOpen}
           closeModal={closeModal}
         />

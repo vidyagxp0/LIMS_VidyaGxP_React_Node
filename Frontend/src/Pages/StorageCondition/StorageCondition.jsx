@@ -28,39 +28,7 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
-
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    name: "New Storage",
-    conditionCode: "CC1",
-    storageCondition: "SC1",
-    createdAt: "2023-01-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    name: "New Storage",
-    conditionCode: "CC2",
-    storageCondition: "SC2",
-    createdAt: "2023-02-01",
-    attachment: "attachment",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 3,
-    name: "New Storage",
-    conditionCode: "CC3",
-    storageCondition: "SC3",
-    createdAt: "2023-03-01",
-    attachment: "attachment",
-    status: "Active",
-  },
-];
+import { toast } from "react-toastify";
 
 const fields = [
   { label: "Storage Name.", key: "name" },
@@ -71,7 +39,7 @@ const fields = [
   { label: "Status", key: "status" },
 ];
 
-function StorageLocation() {
+function StorageCondition() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -81,40 +49,30 @@ function StorageLocation() {
   const [editModalData, setEditModalData] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchData(); // Fetch data on component mount
-  }, []);
-
-  const fetchData = async () => {
+  const fetchStorageCondition = async () => {
     try {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/storageCondition`
       );
-      console.log("API Response:", response.data);
+      console.log(response);
+      const formattedData = response.data[0]?.storageCondition || []; // Adjust this based on your API response structure
 
-      const formattedData = response.data.flatMap((item, index) => {
-        return (
-          item.storageCondition?.map((condition, i) => ({
-            checkbox: false,
-            sno: condition.sno,
-            name: condition.name || "No Name",
-            conditionCode: condition.conditionCode || "No Code",
-            createdAt: condition.createdAt
-              ? new Date(condition.createdAt).toISOString().split("T")[0]
-              : "No Date", // Ensure createdAt exists
-            attachment: condition.attachment || "No Attachment",
-            storageCondition: condition.storageCondition || "No Condition",
-            status: condition.status || "Active",
-          })) || []
-        );
-      });
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
 
-      // console.log("Formatted Data:", formattedData);
-      setData(formattedData);
+      setData(updatedData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching calibration types:", error);
+      toast.error("Failed to fetch calibration types");
     }
   };
+
+  useEffect(() => {
+    fetchStorageCondition();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -134,10 +92,24 @@ function StorageLocation() {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      // Make the API call to delete the item
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/storageCondition/${item.sno}`
+      );
+
+      if (response.status === 200) {
+        // If deletion is successful, filter out the deleted item from state
+        const newData = data.filter((d) => d.sno !== item.sno);
+        setData(newData);
+        console.log("Deleted item:", item);
+      } else {
+        console.error("Failed to delete storage condition:", response.data);
+      }
+    } catch (error) {
+      console.error("Error deleting storage condition:", error);
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -214,16 +186,27 @@ function StorageLocation() {
     },
   ];
 
-  const storageConditions = data.flatMap((item) => item.storageCondition || []); // Flatten the nested structure
-
-  // Now 'storageConditions' contains all the storage conditions
-  const filteredData = storageConditions.length > 0 ? storageConditions : []; // Fallback to empty array if no data available
-
-  console.log("All Storage Conditions:", filteredData); // Log all storage conditions to debug
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      // If the modal is already open for the same item, close it
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      // Otherwise, open it with the new data
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -249,55 +232,51 @@ function StorageLocation() {
   };
 
   // Function to add a new storage condition
-  const addNewStorageCondition = async (newConditions) => {
+  const addNewStorageCondition = async (newCondition) => {
     try {
-      const conditionsArray = Array.isArray(newConditions)
-        ? newConditions
-        : [newConditions];
-
       const response = await axios.post(
         `${BASE_URL}/manage-lims/add/storageCondition`,
         {
-          storageCondition: conditionsArray.map((condition, index) => ({
-            sno: data.length + index + 1, // Increment based on existing data length
-
-            name: condition.name,
-            conditionCode: condition.conditionCode,
-            storageCondition: condition.storageCondition,
-            createdAt: new Date().toISOString(),
-            attachment: condition.attachment || null,
-            status: condition.status || "Active",
-          })),
+          name: newCondition.name,
+          conditionCode: newCondition.conditionCode,
+          storageCondition: newCondition.storageCondition,
+          createdAt: new Date().toISOString(), // Current date as createdAt
+          attachment: newCondition.attachment || null,
+          status: newCondition.status || "Active",
         }
       );
 
-      console.log("Response received:", response.data);
+      if (response.status === 200) {
+        const addedStorageCondition = response.data.addLIMS; // Accessing the added item from the response
 
-      const storageConditions =
-        response.data.updatedLIMS?.storageCondition || [];
-      if (Array.isArray(storageConditions) && storageConditions.length > 0) {
-        const newConditionData = storageConditions.map((condition, index) => ({
-          checkbox: false,
-          sno: data.length + index + 1,
-          name: condition.name,
-          conditionCode: condition.conditionCode,
-          storageCondition: condition.storageCondition,
-          createdAt: condition.createdAt,
-          attachment: condition.attachment,
-          status: condition.status,
-        }));
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedStorageCondition,
+            sno: addedStorageCondition.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+        closeModal();
 
-        setData((prevData) => [...prevData, ...newConditionData]);
-      } else {
-        console.error("No storage conditions returned from the API.");
+        toast.success("Calibration Type added successfully");
+        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
       }
     } catch (error) {
-      console.error("Error creating storage condition:", error);
+      console.error("Error adding calibration type:", error);
+      toast.error("Failed to add calibration type");
     }
+    useEffect(() => {
+      fetchStorageCondition();
+    }, []);
+    setIsModalOpen(false);
   };
+
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
-      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
     );
     setData(updatedData);
   };
@@ -376,9 +355,6 @@ function StorageLocation() {
           name: updatedData.name,
           conditionCode: updatedData.conditionCode,
           storageCondition: updatedData.storageCondition,
-          createdAt: updatedData.createdAt,
-          attachment: updatedData.attachment || null,
-          status: updatedData.status,
         }
       );
       console.log(response);
@@ -437,7 +413,7 @@ function StorageLocation() {
         <CModalBody>
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage Name"
             placeholder="Storage Name"
             value={formData?.name || ""}
             onChange={handleChange}
@@ -453,7 +429,7 @@ function StorageLocation() {
           />
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage condition"
             placeholder="Storage condition"
             value={formData?.storageCondition || ""}
             onChange={handleChange}
@@ -511,19 +487,7 @@ function StorageLocation() {
         {filteredData && filteredData.length > 0 ? (
           <Table
             columns={columns}
-            data={filteredData.map((row, index) => ({
-              ...row,
-
-              name: row.name || "No Name",
-              conditionCode: row.conditionCode || "No Code",
-              storageCondition:
-                typeof row.storageCondition === "string"
-                  ? row.storageCondition
-                  : "No Condition",
-              createdAt: row.createdAt || "No Date",
-              attachment: row.attachment || "No Attachment",
-              status: row.status || "Inactive",
-            }))}
+            data={filteredData}
             onCheckboxChange={handleCheckboxChange}
             onViewDetails={onViewDetails}
             onDelete={handleDelete}
@@ -572,4 +536,19 @@ function StorageLocation() {
   );
 }
 
-export default StorageLocation;
+export default StorageCondition;
+
+{/*/*  {
+    checkbox: false,
+    sno: 7,
+    CalibrationId: "Product 7",
+    InstrumentId: "Seq 7",
+    ModuleModuleId: "Info 7",
+    CalibrationType: "Type 7",
+    ScheduleDate: "2024-06-07",
+    NextDueDate: "2024-07-07",
+    ToleranceDays: "35",
+
+    status: "INITIATED",
+  },
+  };*/}

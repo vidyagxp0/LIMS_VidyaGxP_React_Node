@@ -25,12 +25,14 @@ import {
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import ReusableModal from "../Modals/ResusableModal.jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
+import axios from "axios";
 
-const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
 
 
 const Registration = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,26 +48,72 @@ const Registration = () => {
     Inactive: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
+
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/iMInstrumentCategory`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.iMInstrumentCategory?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              categoryName: condition.categoryName || "-",
+              Description: condition.Description || "-",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
-    setEditModalOpen(true);
+    // setEditModalOpen(true);
   };
 
   const closeEditModal = () => {
-    setEditModalOpen(false);
+    // setEditModalOpen(false);
     setEditModalData(null);
   };
 
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/iMInstrumentCategory/${updatedData.sno}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("Instrument Category updated successfully.");
+        setEditModalData(null);
+      } else {
+        toast.error("Failed to update Instrument Category.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating Instrument Category: " + (error.response?.data || error.message)
+      );
+    }
   };
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
@@ -166,15 +214,25 @@ const Registration = () => {
   };
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
-  const filteredData = data.filter((row) => {
-    return (
-      row?.Description?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const Description = row.Description || "";
+        return (
+          Description.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const columns = [
     {
@@ -278,11 +336,22 @@ const Registration = () => {
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/iMInstrumentCategory/${item.sno}`
+      );
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Instrument Category deleted successfully.");
+      } else {
+        toast.error("Failed to delete Instrument Category.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error deleting Instrument Category: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   return (

@@ -16,9 +16,12 @@ import {
 } from "@coreui/react";
 import axios from 'axios';
 import BASE_URL from "../../config.json";
+import { toast } from "react-toastify";
 
-const SamplePlanningAEdit = ({ open, handleClose, data, updateRow }) => {
+const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
   const [formData, setFormData] = useState(data);
+  // console.log(formData);
+  
 
   useEffect(() => {
       setFormData(data );
@@ -39,9 +42,11 @@ const SamplePlanningAEdit = ({ open, handleClose, data, updateRow }) => {
     axios
       .put(`http://localhost:9000/manage-lims/update/sLSamplePA/${formData.uniqueId}`, formData)
       .then((response) => {
-        console.log("Data updated successfully:", response.data);
-        updateRow(formData); // Update the UI
+        // console.log("Data updated successfully:", response.data);
+        // updateRow(formData); 
         handleClose(); // Close the modal
+        toast.success("Data updated successfully");
+        fetchData();
       })
       .catch((error) => {
         console.error("There was an error updating the data:", error);
