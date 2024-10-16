@@ -130,13 +130,14 @@ function StorageCondition() {
     try {
       // Make the API call to delete the item
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/storageLocation/${item.sno}`
+        `${BASE_URL}/delete-lims/storageLocation/${item.uniqueId}`
       );
 
       if (response.status === 200) {
         // If deletion is successful, filter out the deleted item from state
-        const newData = data.filter((d) => d.sno !== item.sno);
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
         setData(newData);
+        fetchData();
         console.log("Deleted item:", item);
       } else {
         console.error("Failed to delete storage condition:", response.data);

@@ -230,13 +230,13 @@ const CalibrationSampleLogin = () => {
         setData(newData);
         toast.success("Calibration Type deleted successfully");
         console.log("Deleted item:", item);
+        fetchCalibrationSampleLogin();
       }
     } catch (error) {
       console.error("Error deleting calibration type:", error);
       toast.error("Failed to delete calibration type");
     }
   };
-  fetchCalibrationSampleLogin();
 
   const handleModalSubmit = async (newInstrument) => {
     try {
@@ -272,9 +272,6 @@ const CalibrationSampleLogin = () => {
 
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    fetchCalibrationSampleLogin();
-  }, []);
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
@@ -325,7 +322,7 @@ const CalibrationSampleLogin = () => {
       if (data) {
         setFormData(data);
       }
-    }, [data]);
+    }, []);
 
     const handleSave = () => {
       onSave(formData);
