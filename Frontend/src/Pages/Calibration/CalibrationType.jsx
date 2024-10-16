@@ -47,6 +47,10 @@ const CalibrationType = () => {
     Inactive: 0,
   });
   const [editModalData, setEditModalData] = useState(null);
+  const [formData, setFormData] = useState({
+    CalibrationType: "",
+    CalibrationPrefix: "",
+  });
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -172,6 +176,7 @@ const CalibrationType = () => {
   };
 
   const openModal = () => {
+    setFormData({ CalibrationType: "", CalibrationPrefix: "" });
     setIsModalOpen(true);
   };
 
@@ -422,4 +427,3 @@ const CalibrationType = () => {
   );
 };
 export default CalibrationType;
-

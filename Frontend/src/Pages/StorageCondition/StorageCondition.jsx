@@ -257,7 +257,7 @@ function StorageCondition() {
           },
         ]);
         closeModal();
-
+        fetchStorageCondition();
         toast.success("Calibration Type added successfully");
         // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
       }
@@ -265,9 +265,7 @@ function StorageCondition() {
       console.error("Error adding calibration type:", error);
       toast.error("Failed to add calibration type");
     }
-    useEffect(() => {
-      fetchStorageCondition();
-    }, []);
+
     setIsModalOpen(false);
   };
 
@@ -530,4 +528,3 @@ function StorageCondition() {
 }
 
 export default StorageCondition;
-
