@@ -91,6 +91,42 @@ const initialData = [
     ccReferences: "Obsolete",
     status: "Inactive",
   },
+
+  {
+    sno: 6,
+    documentName: "Testing",
+    documentType: "SOP",
+    department: "CQA",
+    author: "Admin 1",
+    dueDate: "10-10-2024",
+    effectiveDate: "10-10-2024",
+    ccReferences: "Initiate",
+    status: "Active",
+  },
+
+  {
+    sno: 7,
+    documentName: "Standard Operating Procedure for QMS, DMS",
+    documentType: "SOP",
+    department: "CQA",
+    author: "Admin 1",
+    dueDate: "08-10-2024",
+    effectiveDate: "08-10-2024",
+    ccReferences: "QA Reviewer",
+    status: "Active",
+  },
+
+  {
+    sno: 8,
+    documentName: "Testing",
+    documentType: "BPR",
+    department: "IT",
+    author: "Admin 1",
+    dueDate: "29-10-2024",
+    effectiveDate: "07-10-2024",
+    ccReferences: "Obsolete",
+    status: "Inactive",
+  },
 ];
 
 const fields = [
@@ -235,29 +271,29 @@ function StorageCondition() {
     { header: "Effective Date", accessor: "effectiveDate" },
     { header: "CC References", accessor: "ccReferences" },
     { header: "Status", accessor: "status" },
-    {
-      header: "Actions",
-      accessor: "action",
-      Cell: ({ row }) => (
-        <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row.original)}
-          />
-          <FontAwesomeIcon
-            icon={faTrashCan}
-            className="cursor-pointer"
-            onClick={() => handleDelete(row.original)}
-          />
-        </>
-      ),
-    },
+    // {
+    //   header: "Actions",
+    //   accessor: "action",
+    //   Cell: ({ row }) => (
+    //     <>
+    //       <FontAwesomeIcon
+    //         icon={faEye}
+    //         className="mr-2 cursor-pointer"
+    //         onClick={() => onViewDetails(row)}
+    //       />
+    //       <FontAwesomeIcon
+    //         icon={faPenToSquare}
+    //         className="mr-2 cursor-pointer"
+    //         onClick={() => openEditModal(row.original)}
+    //       />
+    //       <FontAwesomeIcon
+    //         icon={faTrashCan}
+    //         className="cursor-pointer"
+    //         onClick={() => handleDelete(row.original)}
+    //       />
+    //     </>
+    //   ),
+    // },
   ];
 
   const filteredData = Array.isArray(data)
@@ -306,43 +342,43 @@ function StorageCondition() {
   };
 
   // Function to add a new storage condition
-  const addNewStorageCondition = async (newCondition) => {
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/storageCondition`,
-        {
-          name: newCondition.name,
-          conditionCode: newCondition.conditionCode,
-          storageCondition: newCondition.storageCondition,
-          createdAt: new Date().toISOString(), // Current date as createdAt
-          attachment: newCondition.attachment || null,
-          status: newCondition.status || "Active",
-        }
-      );
+  // const addNewStorageCondition = async (newCondition) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${BASE_URL}/manage-lims/add/storageCondition`,
+  //       {
+  //         name: newCondition.name,
+  //         conditionCode: newCondition.conditionCode,
+  //         storageCondition: newCondition.storageCondition,
+  //         createdAt: new Date().toISOString(), // Current date as createdAt
+  //         attachment: newCondition.attachment || null,
+  //         status: newCondition.status || "Active",
+  //       }
+  //     );
 
-      if (response.status === 200) {
-        const addedStorageCondition = response.data.addLIMS; // Accessing the added item from the response
+  //     if (response.status === 200) {
+  //       const addedStorageCondition = response.data.addLIMS; // Accessing the added item from the response
 
-        setData((prevData) => [
-          ...prevData,
-          {
-            ...addedStorageCondition,
-            sno: addedStorageCondition.uniqueId, // Using uniqueId as sno
-            checkbox: false,
-          },
-        ]);
-        closeModal();
-        fetchStorageCondition();
-        toast.success("Calibration Type added successfully");
-        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
-      }
-    } catch (error) {
-      console.error("Error adding calibration type:", error);
-      toast.error("Failed to add calibration type");
-    }
+  //       setData((prevData) => [
+  //         ...prevData,
+  //         {
+  //           ...addedStorageCondition,
+  //           sno: addedStorageCondition.uniqueId, // Using uniqueId as sno
+  //           checkbox: false,
+  //         },
+  //       ]);
+  //       closeModal();
+  //       fetchStorageCondition();
+  //       toast.success("Calibration Type added successfully");
+  //       // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding calibration type:", error);
+  //     toast.error("Failed to add calibration type");
+  //   }
 
-    setIsModalOpen(false);
-  };
+  //   setIsModalOpen(false);
+  // };
 
   const handleStatusUpdate = (testPlan, newStatus) => {
     const updatedData = data.map((item) =>
@@ -522,23 +558,24 @@ function StorageCondition() {
           <h4 className="fw-bold">Specification STP</h4>
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex space-x-4">
+        <div className="flex flex-wrap items-center justify-between mb-6">
+          {/* Print Button */}
+          <div className="flex items-center space-x-4">
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               Print
             </button>
           </div>
-          <div className="flex flex-wrap space-y-4 p-4">
+
+          {/* Form Inputs (Division, Date From, Date To, Select Period) */}
+          <div className="flex items-center space-x-4">
             {/* Division Dropdown */}
-            <div className="flex items-center w-full md:w-auto">
-              <label className="mb-1 text-sm font-semibold text-left mr-4">
-                Division
-              </label>
-              <div className="relative flex-1">
+            <div className="flex items-center space-x-2">
+              <label className="text-sm font-semibold">Division</label>
+              <div className="relative">
                 <select
                   value={division}
                   onChange={handleDivisionChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-50 w-full"
+                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-50"
                 >
                   <option value="" disabled>
                     Select Division
@@ -551,45 +588,39 @@ function StorageCondition() {
             </div>
 
             {/* Date From Input */}
-            <div className="flex items-center w-full md:w-auto">
-              <label className="mb-1 text-sm font-semibold text-left mr-4">
-                Date From
-              </label>
-              <div className="relative flex-1">
+            <div className="flex items-center space-x-2">
+              <label className="text-sm font-semibold">Date From</label>
+              <div className="relative">
                 <input
                   type="date"
                   value={dateFrom}
                   onChange={handleDateFromChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100 w-full"
+                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
                 />
               </div>
             </div>
 
             {/* Date To Input */}
-            <div className="flex items-center w-full md:w-auto">
-              <label className="mb-1 text-sm font-semibold text-left mr-4">
-                Date To
-              </label>
-              <div className="relative flex-1">
+            <div className="flex items-center space-x-2">
+              <label className="text-sm font-semibold">Date To</label>
+              <div className="relative">
                 <input
                   type="date"
                   value={dateTo}
                   onChange={handleDateToChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100 w-full"
+                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
                 />
               </div>
             </div>
 
             {/* Select Period Dropdown */}
-            <div className="flex items-center w-full md:w-auto">
-              <label className="mb-1 text-sm font-semibold text-left mr-4">
-                Select Period
-              </label>
-              <div className="relative flex-1">
+            <div className="flex items-center space-x-2">
+              <label className="text-sm font-semibold">Select Period</label>
+              <div className="relative">
                 <select
                   value={period}
                   onChange={handlePeriodChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100 w-full"
+                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
                 >
                   <option value="" disabled>
                     Select Period
@@ -601,9 +632,8 @@ function StorageCondition() {
               </div>
             </div>
           </div>
-
-          <div className="float-right flex gap-4"></div>
         </div>
+
         {filteredData && filteredData.length > 0 ? (
           <Table
             columns={columns}
