@@ -97,7 +97,6 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
         console.error("There was an error submitting the data:", error);
       });
 
-    // Reset the form after submission
     setFormData({
       samplePlanId: "",
       sampleId: "",
