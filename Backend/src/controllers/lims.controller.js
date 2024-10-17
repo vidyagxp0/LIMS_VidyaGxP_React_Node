@@ -12,6 +12,7 @@ const commonFeilds = [
   "approval",
   "specification",
   "storageCondition",
+  "specificationStp",
   "storageLocation",
   "STP",
   "analystPersonal",

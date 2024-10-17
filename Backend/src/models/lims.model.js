@@ -5,6 +5,7 @@ const commonFields = [
   "approval",
   "specification",
   "storageCondition",
+  "specificationStp",
   "storageLocation",
   "STP",
   "analystPersonal",

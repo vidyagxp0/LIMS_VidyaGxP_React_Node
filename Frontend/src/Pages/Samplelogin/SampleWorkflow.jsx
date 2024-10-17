@@ -27,6 +27,7 @@ import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
+import { BASE_URL } from "../../config.json";
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
   console.log(data,"????????????????????????????")
@@ -49,9 +50,9 @@ const SampleWorkFlow = () => {
     setShowModal(false);
   };
 
-  const fetchData = async () => {
+  const fetchSpecificationStp = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/get-sample`);
+      const response = await axios.get(`${BASE_URL}/get-sample`);
       console.log(response.data); // Check the structure of the response
 
       // Assuming the actual array is nested inside a 'data' property
@@ -71,7 +72,7 @@ const SampleWorkFlow = () => {
     }
   };
   useEffect(() => {
-    fetchData();
+    fetchSpecificationStp();
   }, []);
 
   const filteredData = data.filter((row) => {
@@ -597,11 +598,7 @@ const SampleWorkFlow = () => {
         </thead>
         <tbody>
           {data?.map((data, index) => (
-            <tr
-              key={index}
-              className="hover:bg-gray-100 cursor-pointer"
-              onClick={() => handleRowClick(item?.sampleId)}
-            >
+            <tr key={index} className="hover:bg-gray-100">
               <td className="border px-4 py-2">{index + 1}</td>
               <td className="border px-4 py-2">{data.samplePlanId}</td>
               <td className="border px-4 py-2">{data.sampleId}</td>
