@@ -29,8 +29,8 @@ const storage = multer.diskStorage({
       file.originalname,
       extname(file.originalname)
     );
-    // const sanitizedOriginalName = originalName.replace(/[^a-zA-Z0-9]/g, "_"); // Sanitize the original name if necessary
-    const newFilename = `${uniqueSuffix}-${originalName}${extname(
+    const sanitizedOriginalName = originalName.replace(/\s+/g, "_");
+    const newFilename = `${uniqueSuffix}-${sanitizedOriginalName}${extname(
       file.originalname
     )}`;
     cb(null, newFilename);

@@ -25,6 +25,10 @@ import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+
 
 const initialData = [
   {
@@ -44,7 +48,7 @@ const initialData = [
 ];
 
 function SummaryReportHeader() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,6 +65,31 @@ function SummaryReportHeader() {
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
+   const fetchSummarReportHeaderData = async () => {
+     try {
+       const response = await axios.get(
+         `${BASE_URL}/get-all-lims/sMSummaryReportHeader`
+       );
+       if (response.data && Array.isArray(response.data)) {
+         const formattedData = response.data.flatMap(
+           (item) =>
+             item?.sMSummaryReportHeader?.map((condition, i) => ({
+               checkbox: false,
+               uniqueId: condition.uniqueId,
+               sno: i + 1,
+               productCaption: condition.productCaption,
+               reportTitle: condition.reportTitle,
+               status: condition.status,
+             })) || []
+         );
+         setData(formattedData);
+       }
+     } catch (error) {
+       toast.error(
+         "Error fetching data: " + (error.response?.data || error.message)
+       );
+     }
+   };
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -165,7 +194,7 @@ function SummaryReportHeader() {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
 
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       productCaption: item["Product Caption"] || "",
       reportTitle: item["Report Title"] || "",
       status: item["Status"] || "",
@@ -176,20 +205,43 @@ function SummaryReportHeader() {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newCondition,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-      },
-    ]);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
-  };
+   const handleModalSubmit = async (newProduct) => {
+     try {
+       const response = await axios.post(
+         `${BASE_URL}/manage-lims/add/sMSummaryReportHeader`,
+         {
+           ...newProduct,
+           status: newProduct.status || "INITIATED",
+         }
+       );
+       if (response.status === 200) {
+         toast.success("Summary Report Header added successfully.");
+         setIsModalOpen(false);
+         fetchSummarReportHeaderData();
+       } else {
+         toast.error("Failed to add Summary Report Header.");
+       }
+     } catch (error) {
+       toast.error(
+         "Error adding Summary Report Header: " +
+           (error.response?.data || error.message)
+       );
+     }
+   };
+  // const addNewStorageCondition = (newCondition) => {
+  //   const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
+  //   setData((prevData) => [
+  //     ...prevData,
+  //     {
+  //       ...newCondition,
+  //       sno: prevData.length + 1,
+  //       checkbox: false,
+  //       status: nextStatus,
+  //     },
+  //   ]);
+  //   setLastStatus(nextStatus);
+  //   setIsModalOpen(false);
+  // };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [headerRows, setHeaderRows] = useState(0);
@@ -568,7 +620,7 @@ function SummaryReportHeader() {
 
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Summary Report Header</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
@@ -620,7 +672,12 @@ function SummaryReportHeader() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Summary_Report_Header.pdf" title="Summary Report Header Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Summary_Report_Header.pdf"
+              title="Summary Report Header Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Summary Report"
@@ -642,12 +699,12 @@ function SummaryReportHeader() {
           <StatusModal
             visible={isModalOpen}
             closeModal={closeModal}
-            onAdd={addNewStorageCondition}
+            onAdd={handleModalSubmit}
           />
         )}
         {isModalsOpen && (
           <ImportModal
-            initialData={initialData}
+            initialData={data}
             isOpen={isModalsOpen}
             onClose={handleCloseModals}
             columns={columns}

@@ -22,33 +22,24 @@ import {
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    ClientName: "Client 1",
-    EmailAddress: "client1@example.com",
-    phone: "1234567890",
-    Address: "Address 1",
-    AddedOn: "2024-06-01",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    ClientName: "Client 2",
-    EmailAddress: "client2@example.com",
-    phone: "2345678901",
-    Address: "Address 2",
-    AddedOn: "2024-06-02",
-    status: "Active",
-  },
+
+const fields = [
+  { label: "S.No", key: "sno" },
+  { label: "Client Name", key: "ClientName" },
+  { label: "Email Address", key: "EmailAddress" },
+  { label: "Contact Number", key: "phone" },
+  { label: "Address", key: "Address" },
+  { label: "Added On", key: "AddedOn" },
+  { label: "Status", key: "status" },
 ];
 
 const Clients = () => {
-  const [data, setData] = useState(initialData);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [data, setData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -57,6 +48,37 @@ const Clients = () => {
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+
+   useEffect(() => {
+     fetchClientData();
+   }, []);
+  const fetchClientData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/client`);
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.client?.map((condition,i) => ({
+              checkbox: false,
+              uniqueId: condition.uniqueId,
+              sno: i+1,
+              ClientName: condition.ClientName,
+              EmailAddress: condition.EmailAddress,
+              phone: condition.phone,
+              Address: condition.Address,
+              AddedOn: condition.AddedOn,
+              status: condition.status,
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
+ 
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -67,14 +89,34 @@ const Clients = () => {
     setEditModalOpen(false);
     setEditModalData(null);
   };
-
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
+  
+  const handleEditSave = async (updatedData) => {
+    try {
+      // const {sno,...datatosend}=updatedData;
+      console.log(updatedData,"unnnn");
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/client/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("Client updated successfully.");
+        setEditModalData(null);
+        closeModal();
+      } else {
+        toast.error("Failed to update Client.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating Client: " + (error.response?.data || error.message)
+      );
+    }
   };
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -89,6 +131,7 @@ const Clients = () => {
 
     const handleSave = () => {
       onSave(formData);
+      closeModal();
     };
 
     return (
@@ -99,10 +142,10 @@ const Clients = () => {
         size="lg"
       >
         <CModalHeader>
-          <CModalTitle>Add Client</CModalTitle>
+          <CModalTitle>Update Client</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p className="mb-3 fw-bold">Add information and add new Client</p>
+          <p className="mb-3 fw-bold">Update information</p>
           <CFormInput
             type="text"
             className="mb-3"
@@ -217,7 +260,7 @@ const Clients = () => {
             Back
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Add
+            Update
           </CButton>
         </CModalFooter>
       </CModal>
@@ -263,8 +306,8 @@ const Clients = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.ClientName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
+      // row.ClientName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      statusFilter === "All" || row.status === statusFilter
     );
   });
 
@@ -299,6 +342,7 @@ const Clients = () => {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
@@ -328,41 +372,67 @@ const Clients = () => {
   };
 
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
-  const handleModalSubmit = (newInstrument) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
+  const handleModalSubmit = async (newProduct) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/client`, {
+        ...newProduct,
+        AddedOn: new Date().toISOString().split("T")[0],
+        status: newProduct.status || "Active",
+      });
+      if (response.status === 200) {
+        toast.success("Client added successfully.");
+        setIsModalOpen(false);
+        fetchClientData();
+      } else {
+        toast.error("Failed to add Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
       );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
-        {
-          checkbox: false,
-          sno: prevData.length + 1,
-          ClientName: newInstrument.ClientName,
-          alternateName: newInstrument.alternateName,
-          EmailAddress: newInstrument.EmailAddress,
-          phone: newInstrument.phone,
-          Address: newInstrument.Address,
-          contactPerson: newInstrument.contactPerson,
-          contactPersonNumber: newInstrument.contactPersonNumber,
-          taxNumber: newInstrument.taxNumber,
-          fax: newInstrument.fax,
-          website: newInstrument.website,
-          AddedOn: currentDate,
-          name: newInstrument.name,
-          plantCode: newInstrument.plantCode,
-          status: "Active",
-        },
-      ]);
     }
-    closeModal();
   };
 
-  //
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/client/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Client status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Client status");
+      }
+    } catch (error) {
+      console.error("Error updating Client status:", error);
+      toast.error("Error updating Client status");
+    }
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -376,75 +446,98 @@ const Clients = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/client/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
+        toast.success("Client deleted successfully.");
+        fetchClientData();
+      } else {
+        toast.error("Failed to delete Client.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error deleting Client: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Clients</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Clients</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Clients.pdf"
+              title="Clients Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Clients" color="blue" onClick={openModal} />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Clients.pdf" title="Clients Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Add Clients" color="blue" onClick={openModal} />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <ClientsModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        <ClientsModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
         />
-      )}
-    </div></>
+        {isViewModalOpen && (
+          <ReusableModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            onClose={handleCloseModals}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default Clients;

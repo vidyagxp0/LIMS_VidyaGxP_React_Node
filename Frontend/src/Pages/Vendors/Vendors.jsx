@@ -9,7 +9,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import VendorModal from "../Modals/VendorModal.jsx";
-import ViewModal from "../Modals/ViewModal";
+import ReusableModal from "../Modals/ResusableModal";
+// import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import {
   CButton,
@@ -23,32 +24,12 @@ import {
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
-
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    productName: "Product 1",
-    UniqueCode: "UC-001",
-    vendorName: "Vendor A",
-    QualificationCriteria: "Criteria 1",
-    Comments: "Comment 1",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    productName: "Product 2",
-    UniqueCode: "UC-002",
-    vendorName: "Vendor B",
-    QualificationCriteria: "Criteria 2",
-    Comments: "Comment 2",
-    status: "INITIATED",
-  },
-];
+import { toast } from "react-toastify";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
 
 const Vendors = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,6 +39,46 @@ const Vendors = () => {
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+
+  const fields = [
+    { label: "S.No", key: "sno" },
+    { label: "Product Name", key: "productName" },
+    { label: "Unique Code", key: "UniqueCode" },
+    { label: "Vendor Name", key: "vendorName" },
+    { label: "Qualification Criteria", key: "QualificationCriteria" },
+    { label: "Comments", key: "Comments" },
+    { label: "Status", key: "status" },
+  ];
+
+  useEffect(() => {
+    fetchVendorData();
+  }, []);
+  const fetchVendorData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/vendor`);
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.vendor?.map((condition, i) => ({
+              checkbox: false,
+              uniqueId: condition.uniqueId,
+              sno: i + 1,
+              productName: condition.productName,
+              UniqueCode: condition.UniqueCode,
+              vendorName: condition.vendorName,
+              QualificationCriteria: condition.QualificationCriteria,
+              Comments: condition.Comments,
+              status: condition.status,
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
     setEditModalOpen(true);
@@ -68,12 +89,30 @@ const Vendors = () => {
     setEditModalData(null);
   };
 
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/vendor/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("vendor updated successfully.");
+        setEditModalData(null);
+        closeEditModal();
+        // setIsModalOpen(false);
+      } else {
+        toast.error("Failed to update vendor.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating vendor: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -201,8 +240,7 @@ const Vendors = () => {
     };
 
     data.forEach((item) => {
-      if (item.status === "Active") counts.Active++;
-      else if (item.status === "Inactive") counts.Inactive++;
+      if (item.status === "INITIATED") counts.INITIATED++;
     });
   }, [data]);
 
@@ -220,8 +258,8 @@ const Vendors = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.UniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
+      // row.UniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      statusFilter === "All" || row.status === statusFilter
     );
   });
 
@@ -287,32 +325,88 @@ const Vendors = () => {
   };
 
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
-  const handleModalSubmit = (newInstrument) => {
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
+  const handleModalSubmit = async (newVendor) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/vendor`, {
+        ...newVendor,
+        status: newVendor.status || "INITIATED",
+      });
+      if (response.status === 200) {
+        toast.success("Vendor added successfully.");
+        setIsModalOpen(false);
+        fetchVendorData();
+      } else {
+        toast.error("Failed to add Vendor.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding Vendor: " + (error.response?.data || error.message)
       );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
-        {
-          checkbox: false,
-          sno: prevData.length + 1,
-          ProductCode: newInstrument.ProductCode,
-          UniqueCode: newInstrument.UniqueCode,
-          vendorName: newInstrument.vendorName,
-          productName:newInstrument.productName,
-          QualificationCriteria: newInstrument.QualificationCriteria,
-          Comments: newInstrument.Comments,
-          status: "Active",
-        },
-      ]);
     }
-    closeModal();
   };
 
+   const handleDelete = async (item) => {
+     try {
+       const response = await axios.delete(
+         `${BASE_URL}/delete-lims/vendor/${item.uniqueId}`
+       );
+       if (response.status === 200) {
+         setData((prevData) =>
+           prevData.filter((d) => d.uniqueId !== item.uniqueId)
+         );
+         toast.success("vendor deleted successfully.");
+         fetchVendorData();
+       } else {
+         toast.error("Failed to delete vendor.");
+       }
+     } catch (error) {
+       toast.error(
+         "Error deleting vendor: " + (error.response?.data || error.message)
+       );
+     }
+   };
   //************************************************************************************************ */
+
+   const handleStatusUpdate = async (newStatus) => {
+     if (!newStatus) {
+       console.error("New status is undefined");
+       toast.error("Invalid Status update");
+       return;
+     }
+     if (!viewModalData) {
+       console.error("No data selected for update");
+       toast.error("No data selected for update");
+       return;
+     }
+     try {
+       const { sno, ...dataToSend } = viewModalData;
+       console.log(viewModalData);
+
+       const response = await axios.put(
+         `${BASE_URL}/manage-lims/update/vendor/${viewModalData.uniqueId}`,
+         {
+           ...dataToSend,
+           status: newStatus,
+         }
+       );
+       if (response.status === 200) {
+         setData((prevData) =>
+           prevData.map((item) =>
+             item.uniqueId === viewModalData.uniqueId
+               ? { ...item, status: newStatus }
+               : item
+           )
+         );
+         toast.success("Vendor status updated successfully");
+         closeViewModal();
+       } else {
+         toast.error("Failed to update Vendor status");
+       }
+     } catch (error) {
+       console.error("Error updating Vendor status:", error);
+       toast.error("Error updating Vendor status");
+     }
+   };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -326,82 +420,84 @@ const Vendors = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Approved Vendors</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Approved Vendors</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "REJECTED", label: "REJECTED" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "APPROVED", label: "APPROVED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "REJECTED", label: "REJECTED" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "APPROVED", label: "APPROVED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Vendors.pdf"
+              title="Vendors Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Approved Vendors"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Vendors.pdf" title="Vendors Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Add Approved Vendors"
-            color="blue"
-            onClick={openModal}
-          />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <VendorModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        <VendorModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
         />
-      )}
-    </div></>
+        {isViewModalOpen && (
+          <ReusableModal
+            visible={isViewModalOpen}
+            fields={fields}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            updateStatus={handleStatusUpdate}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default Vendors;
