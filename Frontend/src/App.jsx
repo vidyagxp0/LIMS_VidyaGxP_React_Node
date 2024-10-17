@@ -212,6 +212,7 @@ import TestHistory from "./Pages/Settings/TestHistory.jsx";
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx";
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx";
 import ControlSample from "./Pages/Control Sample/ControlSample.jsx";
+import SpecificationStp from "./Pages/SpecificationStp/SpecificationStp.jsx";
 import SpecificationSpec from "./Pages/SpecificationSpec.jsx";
 
 import AdminPanel from "./components/AdminPanel/AdminPanel.jsx";
@@ -251,6 +252,7 @@ function App() {
             <Route path="/analyst-personal" element={<AnalystPersonal />} />
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/control-sample" element={<ControlSample />} />
+            <Route path="/SpecificationStp" element={<SpecificationStp />} />
             <Route path="/specificationSpec" element={<SpecificationSpec />} />
 
             <Route path="/department" element={<Department />} />
@@ -266,7 +268,10 @@ function App() {
 
             <Route path="/samplelogin" element={<Samplelogin />} />
             <Route path="/sampleWorkflow" element={<SampleWorkflow />} />
-            <Route path="/sampleWorkflowModal" element={<SampleWorkflowModal />} />
+            <Route
+              path="/sampleWorkflowModal"
+              element={<SampleWorkflowModal />}
+            />
             <Route path="/viewDetails" element={<SampleLoginDetails />} />
             <Route
               path="/testResultsDetails"
