@@ -31,7 +31,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     batchLotNumber: "",
     samplePriority: "",
     sampleQuantity: "",
-    uom: "",
+    UOM: "",
     market: "",
     sampleBarCode: "",
     specificationId: "",
@@ -63,7 +63,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     delayJustification: "",
     testingOutcome: "",
     testPlanId: "",
-    turnaroundTime: "",
+    turnAroundTime: "",
     sampleRetestingDate: "",
     reviewDate: "",
     sampleStorageLocation: "",
@@ -81,10 +81,10 @@ const SampleWorkflowModal = ({ onClose }) => {
     supervisor: "",
     sampleMovementHistory: "",
     testingProgress: "",
-    alertsNotifications: "",
+    alertNotification: "",
     deviationLogs: "",
     commentsNotes: "",
-    attachments: null,
+    attachment: null,
     samplingFrequency: "",
     sampleDisposition: "",
 
@@ -101,9 +101,9 @@ const SampleWorkflowModal = ({ onClose }) => {
     reviewerApprover: "",
     reviewerComment: "",
     reviewDate: "",
-    qaReviewerApprover: "",
-    qaReviewerComment: "",
-    qaReviewDate: "",
+    QaReviewerApprover: "",
+    QaReviewerComment: "",
+    QaReviewDate: "",
   });
   console.log(formData, "<><><><><>?<>?<>?<>?<>?<>?");
 
@@ -230,9 +230,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="uom"
+                  name="UOM"
                   label="UOM"
-                  value={formData.uom || ""}
+                  value={formData.UOM || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -549,9 +549,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="number"
-                  name="turnaroundTime"
+                  name="turnAroundTime"
                   label="Turnaround Time (TAT)"
-                  value={formData.turnaroundTime || ""}
+                  value={formData.turnAroundTime || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -725,9 +725,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="alertsNotifications"
+                  name="alertNotification"
                   label="Alerts/Notifications"
-                  value={formData.alertsNotifications || ""}
+                  value={formData.alertNotification || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -752,8 +752,8 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="file"
-                  name="attachments"
-                  label="Attachments"
+                  name="attachment"
+                  label="attachment"
                   onChange={handleInputChange}
                   multiple
                 />
@@ -940,9 +940,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
-                  name="qaReviewDate"
+                  name="QaReviewDate"
                   label="QA Review Date"
-                  value={formData?.qaReviewDate || ""}
+                  value={formData?.QaReviewDate || ""}
                   onChange={handleInputChange}
                 />
               </CCol>

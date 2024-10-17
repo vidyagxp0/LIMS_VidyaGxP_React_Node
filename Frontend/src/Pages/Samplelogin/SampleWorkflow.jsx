@@ -141,10 +141,7 @@ const SampleWorkFlow = () => {
     { header: "Review Date", accessor: "reviewDate" },
     { header: "Sample Storage Location", accessor: "sampleStorageLocation" },
     { header: "Transportation Method", accessor: "transportationMethod" },
-    {
-      header: "Sample Preparation Method",
-      accessor: "samplePreparationMethod",
-    },
+    {header: "Sample Preparation Method",accessor: "samplePreparationMethod",},
     { header: "Sample Packaging Details", accessor: "samplePackagingDetails" },
     { header: "Sample Label", accessor: "sampleLabel" },
     { header: "Regulatory Requirements", accessor: "regulatoryRequirements" },
@@ -163,10 +160,7 @@ const SampleWorkFlow = () => {
     { header: "Sample Disposition", accessor: "sampleDisposition" },
     { header: "Stability Study Type", accessor: "stabilityStudyType" },
     { header: "Stability Study Protocol", accessor: "stabilityStudyProtocol" },
-    {
-      header: "Stability Protocol Approval Date",
-      accessor: "stabilityProtocolApprovalDate",
-    },
+    {header: "Stability Protocol Approval Date",accessor: "stabilityProtocolApprovalDate",},
     {
       header: "Country of Regulatory Submissions",
       accessor: "countryOfRegulatorySubmissions",
@@ -488,7 +482,7 @@ const SampleWorkFlow = () => {
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
-            <th colSpan="10" className="px-4 py-2 bg-yellow-600">
+            <th colSpan="32" className="px-4 py-2 bg-yellow-600">
               Sample Planning Information
             </th>
             <th colSpan="10" className="px-4 py-2 bg-green-600">
@@ -512,7 +506,7 @@ const SampleWorkFlow = () => {
             <th colSpan="4" className="px-4 py-2 bg-green-300">
               Tracking and Monitoring
             </th>
-            <th colSpan="6" className="px-4 py-2 bg-violet-500">
+            <th colSpan="16" className="px-4 py-2 bg-violet-500">
               Miscellaneous
             </th>
           </tr>
@@ -527,6 +521,7 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Sample Source</td>
             <td className="border px-4 py-2">Planned Date</td>
             <td className="border px-4 py-2">Sample Priority</td>
+
             <td className="border px-4 py-2">Sample Quantity</td>
             <td className="border px-4 py-2">UOM</td>
             {/* <td className="border px-4 py-2">Test</td> */}
