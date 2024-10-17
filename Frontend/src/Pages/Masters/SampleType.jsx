@@ -33,26 +33,9 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
-
-const staticData = [
-  {
-    sno: "1",
-    sampleTypeName: "Blood Sample",
-    addDate: "2024-01-01",
-    daysToComplete: 5,
-    status: "Active",
-  },
-  {
-    sno: "2",
-    sampleTypeName: "Urine Sample",
-    addDate: "2024-01-02",
-    daysToComplete: 3,
-    status: "Inactive",
-  },
-  // Add more static entries as needed
-];
-
-const initialData = JSON.parse(localStorage.getItem("sampletypes")) || [];
+import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 const fields = [
   { label: "Sample Type Name", key: "sampleTypeName" },
@@ -62,27 +45,37 @@ const fields = [
 ];
 
 function SampleType() {
-  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Active");
+  const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
+  const [data, setData] = useState([]);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  // Combine static data with dynamic data from local storage
-  const [data, setData] = useState(() => {
-    return [...staticData, ...initialData]; // Merge static data with local storage data
-  });
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mSampleType`
+      );
+      const fetchedData = response?.data[0]?.mSampleType || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
-    // Store dynamic data back to local storage
-    localStorage.setItem(
-      "sampletype",
-      JSON.stringify(data.filter((row) => !staticData.includes(row)))
-    );
-  }, [data]);
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -98,16 +91,27 @@ function SampleType() {
 
   const filteredData = Array.isArray(data)
     ? data.filter((row) => {
-        const sampleTypeName = row.sampleTypeName || ""; // Fallback to an empty string if sampleTypeName is undefined
+        console.log("Row:", row);
+        const sampleTypeName = row.sampleTypeName || "";
         return (
-          sampleTypeName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          sampleTypeName?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
           (statusFilter === "All" || row.status === statusFilter)
         );
       })
     : [];
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -138,26 +142,60 @@ function SampleType() {
     setData(updatedData);
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [inputValue, setInputValue] = useState(0);
-    const [statusData, setStatusData] = useState({
-      sampleName: "",
-      prefix: "",
-      daysToComplete: 0,
-    });
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
+  const handleDelete = async (item) => {
+    console.log(item);
 
-    const handleAdd = () => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/mSampleType/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
+  };
+
+  const handleAdd = async (newSampleType) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mSampleType`,
+        {
+          ...newSampleType,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newSampleType.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Sample added successfully.");
+        fetchData(); // Refresh data after adding
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Sample.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding Sample: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [sampleTypeName, setSampleTypeName] = useState("");
+    const [addDate, setAddDate] = useState("");
+    const [daysToComplete, setDaysTpComplete] = useState("");
+    const handleSample = () => {
       const newCondition = {
-        sampleTypeName: statusData.sampleName,
-        addDate: "2020-02-20",
-        daysToComplete: statusData.daysToComplete,
-        action: [],
+        sampleTypeName,
+        addDate,
+        daysToComplete,
+        status: "active",
       };
       onAdd(newCondition);
     };
@@ -179,10 +217,8 @@ function SampleType() {
             label="Sample Name"
             placeholder="Sample Name"
             name="sampleName"
-            value={statusData.sampleName}
-            onChange={(e) =>
-              setStatusData({ ...statusData, sampleName: e.target.value })
-            }
+            value={sampleTypeName}
+            onChange={(e) => setSampleTypeName(e.target.value)}
           />
 
           <CFormInput
@@ -191,25 +227,21 @@ function SampleType() {
             label="Prefix"
             placeholder="Prefix"
             name="prefix"
-            value={statusData.prefix}
-            onChange={(e) =>
-              setStatusData({ ...statusData, prefix: e.target.value })
-            }
+            value={addDate}
+            onChange={(e) => setAddDate(e.target.value)}
           />
 
           <CFormInput
             className="mb-3"
-            type="text"
+            type="number"
             label="Days To Complete"
             placeholder="Days To Complete"
             name="daysToComplete"
-            value={statusData.daysToComplete}
-            onChange={(e) =>
-              setStatusData({ ...statusData, daysToComplete: e.target.value })
-            }
+            value={daysToComplete}
+            onChange={(e) => setDaysTpComplete(e.target.value)}
           />
 
-          <label className="line3" htmlFor="">
+          {/* <label className="line3" htmlFor="">
             Selected Standard Fields Displays At Sample Registration
           </label>
           <FormGroup style={{ marginLeft: "20px" }}>
@@ -248,9 +280,9 @@ function SampleType() {
             />
             <FormControlLabel control={<Checkbox />} label="Storage Location" />
             <FormControlLabel control={<Checkbox />} label="Comments" />
-          </FormGroup>
+          </FormGroup> */}
 
-          <FormControl style={{ margin: "20px" }}>
+          {/* <FormControl style={{ margin: "20px" }}>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Reserve Sample Required
             </FormLabel>
@@ -370,13 +402,13 @@ function SampleType() {
               <FormControlLabel value="yes" control={<Radio />} label="Yes" />
               <FormControlLabel value="no" control={<Radio />} label="No" />
             </RadioGroup>
-          </FormControl>
+          </FormControl> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleSample}>
             Submit
           </CButton>
         </CModalFooter>
@@ -391,14 +423,32 @@ function SampleType() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/mSampleType/${updatedData.uniqueId}`,
+        dataTosend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
+      } else {
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
+      }
+    } catch (error) {
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
+    }
   };
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
@@ -464,10 +514,10 @@ function SampleType() {
             onChange={handleChange}
           />
 
-          <label className="line3" htmlFor="">
+          {/* <label className="line3" htmlFor="">
             Selected Standard Fields Displays At Sample Registration
-          </label>
-          <FormGroup style={{ marginLeft: "20px" }}>
+          </label> */}
+          {/* <FormGroup style={{ marginLeft: "20px" }}>
             <FormControlLabel
               control={<Checkbox />}
               label="Manufacturing Date"
@@ -625,7 +675,7 @@ function SampleType() {
               <FormControlLabel value="yes" control={<Radio />} label="Yes" />
               <FormControlLabel value="no" control={<Radio />} label="No" />
             </RadioGroup>
-          </FormControl>
+          </FormControl> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
@@ -693,13 +743,7 @@ function SampleType() {
   };
 
   const closeViewModal = () => {
-    setViewModalData(false);
-  };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+    setIsViewModalOpen(false);
   };
 
   return (
@@ -753,7 +797,7 @@ function SampleType() {
       </div>
       {isModalsOpen && (
         <ImportModal
-          initialData={initialData}
+          // initialData={initialData}
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
@@ -762,7 +806,7 @@ function SampleType() {
       )}
       {isModalOpen && (
         <StatusModal
-          onAdd={addNewStorageCondition}
+          onAdd={handleAdd}
           visible={isModalOpen}
           closeModal={closeModal}
         />
@@ -772,6 +816,7 @@ function SampleType() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
+          onAdd={onAdd}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}

@@ -22,8 +22,9 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
-
-const initialData = JSON.parse(localStorage.getItem("InvestigationL2")) || [];
+import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 const fields = [
   { label: "S.No", key: "sno" },
@@ -36,7 +37,7 @@ const fields = [
 ];
 
 function InvestigationL2() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,8 +47,24 @@ function InvestigationL2() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
 
   useEffect(() => {
-    localStorage.setItem("InvestigationL2", JSON.stringify(data));
-  }, [data]);
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/sLInvestigationL2`
+      );
+      const fetchedData = response?.data[0]?.sLInvestigationL2 || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        ...item,
+        sno:index + 1,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+          }
+  };
 
   const handleOpenModals = () => setIsModalsOpen(true);
   const handleCloseModals = () => setIsModalsOpen(false);
@@ -117,12 +134,12 @@ function InvestigationL2() {
       testName: item["Test Name"] || "",
       testCode: item["Test Code"] || "",
       testType: item["Test Type"] || "",
-      addedOn: item["Added On"] || new Date().toISOString().split('T')[0],
+      addedOn: item["Added On"] || new Date().toISOString().split("T")[0],
       attachment: item["Attachment"] || "",
       status: item["Status"] || "INITIATED",
     }));
 
-    setData(prevData => [...prevData, ...updatedData]);
+    setData((prevData) => [...prevData, ...updatedData]);
     setIsModalsOpen(false);
   };
 
@@ -130,20 +147,52 @@ function InvestigationL2() {
   const closeModal = () => setIsModalOpen(false);
   const closeViewModal = () => setViewModalData(null);
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sLInvestigationL2/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        toast.error("Failed to delete data");
+      }
+    } catch (error) {
+      console.error("Error deleting Investigation L2 data:", error);
+      toast.error("Error deleting Investigation L2 data");
+    }
   };
 
   const openEditModal = (rowData) => setEditModalData(rowData);
   const closeEditModal = () => setEditModalData(null);
 
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    closeEditModal();
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataToSend } = updatedData;
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sLInvestigationL2/${updatedData.uniqueId}`,
+        dataToSend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        fetchData();
+        toast.success("Data updated successfully");
+      } else {
+        toast.error("Failed to update Investigation L2 data");
+      }
+    } catch (error) {
+      console.error("Error updating Investigation L2 data:", error);
+      toast.error("Error updating Investigation L2 data");
+    }
   };
 
   const handleStatusUpdate = (testName, newStatus) => {
@@ -153,20 +202,34 @@ function InvestigationL2() {
     setData(updatedData);
   };
 
-  const addNewInvestigation = (newInvestigation) => {
+  const addNewInvestigation = async (newInvestigation) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newInvestigation,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-        addedOn: new Date().toISOString().split('T')[0],
-      },
-    ]);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    const investigationData = {
+      ...newInvestigation,
+      status: nextStatus,
+      addedOn: currentDate,
+    };
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/sLInvestigationL2`,
+        investigationData
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        setData((prevData) => [...prevData, investigationData]);
+        setLastStatus(nextStatus);
+        setIsModalOpen(false);
+        fetchData();
+        toast.success("Data added successfully")
+      } else {
+        console.error("Failed to add investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding investigation:", error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -186,11 +249,17 @@ function InvestigationL2() {
     const handleSave = () => {
       onSave(formData);
     };
+    // const handleFileChange = (e) => {
+    //   const file = e.target.files[0];
+    //   setFormData({ ...formData, attachment: file });
+    // };
 
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>{data.sno ? "Edit" : "Add"} Investigation L2</CModalTitle>
+          <CModalTitle>
+            {data.uniqueId ? "Edit" : "Add"} Investigation L2
+          </CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -266,7 +335,11 @@ function InvestigationL2() {
               title="Investigation L2 Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Investigation L2" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Investigation L2"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table

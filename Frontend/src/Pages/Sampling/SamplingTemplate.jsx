@@ -12,6 +12,8 @@ import {
 } from "@coreui/react";
 import "./SamplingTemplate.css";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { TiArrowRightThick } from "react-icons/ti";
 import { TiArrowLeftThick } from "react-icons/ti";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,30 +31,32 @@ import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import {BASE_URL} from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    templateName: "Template 1",
-    uniqueCode: "UC001",
-    sampleType: "Type A",
-    addedOn: "2024-07-01",
-    status: "INITIATED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    templateName: "Template 2",
-    uniqueCode: "UC002",
-    sampleType: "Type B",
-    addedOn: "2024-06-30",
-    status: "APPROVED",
-  },
-];
+// const initialData = [
+//   {
+//     checkbox: false,
+//     sno: 1,
+//     templateName: "Template 1",
+//     uniqueCode: "UC001",
+//     sampleType: "Type A",
+//     addedOn: "2024-07-01",
+//     status: "INITIATED",
+//   },
+//   {
+//     checkbox: false,
+//     sno: 2,
+//     templateName: "Template 2",
+//     uniqueCode: "UC002",
+//     sampleType: "Type B",
+//     addedOn: "2024-06-30",
+//     status: "APPROVED",
+//   },
+// ];
 
 const SamplingTemplate = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -96,6 +100,70 @@ const SamplingTemplate = () => {
     setCardCounts(counts);
   }, [data]);
 
+
+  const fetchSamplingTemplates = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/sSampleTemplate`);
+      const formattedData = response?.data[0]?.sSampleTemplate || [];
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching sampling templates:", error);
+      toast.error("Failed to fetch sampling templates");
+    }
+  };
+  useEffect(() => {
+    fetchSamplingTemplates();
+  }, []);
+  const addNewSamplingTemplate = async (newTemplate) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/sSampleTemplate`, newTemplate);
+      if (response.status === 200) {
+        toast.success("Sampling template added successfully");
+        fetchSamplingTemplates();
+        setLastStatus(newTemplate.status);
+      }
+    } catch (error) {
+      console.error("Error adding sampling template:", error);
+      toast.error("Failed to add sampling template");
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleEditSave = async (updatedData) => {
+    const {sno, ...dataToSend}=updatedData;
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sSampleTemplate/${updatedData.uniqueId}`,
+        dataToSend
+      );
+      if (response.status === 200) {
+        toast.success("Sampling template updated successfully");
+        fetchSamplingTemplates();
+      }
+    } catch (error) {
+      console.error("Error updating sampling template:", error);
+      toast.error("Failed to update sampling template");
+    }
+    setEditModalData(null);
+  };
+
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/delete-lims/sSampleTemplate/${item.uniqueId}`);
+      if (response.status === 200) {
+        toast.success("Sampling template deleted successfully");
+        fetchSamplingTemplates();
+      }
+    } catch (error) {
+      console.error("Error deleting sampling template:", error);
+      toast.error("Failed to delete sampling template");
+    }
+  };
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -119,11 +187,17 @@ const SamplingTemplate = () => {
     setViewModalData(rowData); // Set the data for ViewModal
     setIsViewModalOpen(true); // Open the ViewModal
   };
-
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
+      Cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.original.checkbox}
+          onChange={() => handleCheckboxChange(row.index)}
+        />
+      ),
     },
     { header: "SrNo.", accessor: "sno" },
     { header: "Template Name", accessor: "templateName" },
@@ -139,23 +213,60 @@ const SamplingTemplate = () => {
           <FontAwesomeIcon
             icon={faEye}
             className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
+            onClick={() => onViewDetails(row.original)}
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
   ];
 
+
+  // const columns = [
+  //   {
+  //     header: <input type="checkbox" onChange={handleSelectAll} />,
+  //     accessor: "checkbox",
+  //   },
+  //   { header: "SrNo.", accessor: "sno" },
+  //   { header: "Template Name", accessor: "templateName" },
+  //   { header: "Unique Code", accessor: "uniqueCode" },
+  //   { header: "Sample Type", accessor: "sampleType" },
+  //   { header: "Added On", accessor: "addedOn" },
+  //   { header: "Status", accessor: "status" },
+  //   {
+  //     header: "Actions",
+  //     accessor: "action",
+  //     Cell: ({ row }) => (
+  //       <>
+  //         <FontAwesomeIcon
+  //           icon={faEye}
+  //           className="mr-2 cursor-pointer"
+  //           onClick={() => onViewDetails(row)}
+  //         />
+  //         <FontAwesomeIcon
+  //           icon={faPenToSquare}
+  //           className="mr-2 cursor-pointer"
+  //         />
+  //         <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+  //       </>
+  //     ),
+  //   },
+  // ];
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
 
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       templateName: item["Template Name"] || "",
       uniqueCode: item["Unique Code"] || "",
       sampleType: item["Sample Type"] || "",
@@ -173,6 +284,9 @@ const SamplingTemplate = () => {
   const openModal = () => {
     setIsModalOpen(true);
   };
+  const closeViewModal=()=>{
+    setViewModalData(null);
+  }
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -182,11 +296,11 @@ const SamplingTemplate = () => {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
+  // const handleDelete = (item) => {
+  //   const newData = data.filter((d) => d !== item);
+  //   setData(newData);
+  //   console.log("Deleted item:", item);
+  // };
 
 
   const addNewStorageCondition = (newCondition) => {
@@ -207,13 +321,11 @@ const SamplingTemplate = () => {
 
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
-
-    
-
     const [SamplingTemplate, setSamplingTemplate] = useState({
       templateName: "",
       uniqueCode: "",
       sampleType: [],
+      status:lastStatus==="INITIATED"?"APPROVED":"INITIATED"
     })
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
@@ -552,13 +664,13 @@ const SamplingTemplate = () => {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
-  };
+  // const handleEditSave = (updatedData) => {
+  //   const newData = data.map((item) =>
+  //     item.sno === updatedData.sno ? updatedData : item
+  //   );
+  //   setData(newData);
+  //   setEditModalData(null);
+  // };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
@@ -686,18 +798,20 @@ const SamplingTemplate = () => {
 
     const handleChange = (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+      setSamplingTemplate(prev => ({ ...prev, [name]: value }));
+    };
+    const handleAdd = () => {
+      const currentDate = new Date().toISOString().split("T")[0];
+      const newTemplate = {
+        ...samplingTemplate,
+        addedOn: currentDate,
+        action: [],
+      };
+      onAdd(newTemplate);
     };
 
     const handleSave = () => {
       onSave(formData);
-    };
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
     };
 
     return (
@@ -990,14 +1104,28 @@ const SamplingTemplate = () => {
           onViewDetails={onViewDetails}
         openEditModal={openEditModal}
         />
+        {viewModalData && (
+          <ReusableModal visible={viewModalData!==null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          onAdd={addNewSamplingTemplate}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter(
+              (field) => field.key !== "action" && field.key !== "checkbox"
+            )}
+            title="Sampling Tamplate Details"
+            updateStatus={""}
+/>
+        )}
 
         {isModalOpen && (
-          <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
+          <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewSamplingTemplate} />
         )}
 
         {isModalsOpen && (
           <ImportModal
-            initialData={initialData}
+            initialData={filteredData}
             isOpen={isModalsOpen}
             onClose={handleCloseModals}
             columns={columns}

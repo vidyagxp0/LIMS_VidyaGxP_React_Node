@@ -25,29 +25,24 @@ import {
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    sampleType: "Product 1",
-    productMaterial: "Seq 1",
-    genericName: "Info 1",
-    specificationCode: "Start 1",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    sampleType: "Product 2",
-    productMaterial: "Seq 2",
-    genericName: "Info 2",
-    specificationCode: "Start 2",
-    status: "INITIATED",
-  },
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+import { toast } from "react-toastify";
+import ReusableModal from "../Modals/ResusableModal";
+
+const fields = [
+  { label: "Sample Type", key: "sampleType" },
+  { label: "Product / Material", key: "productMaterial" },
+  { label: "Generic Name", key: "genericName" },
+  { label: "Specification Code", key: "specificationCode" },
+
+  { label: "Status", key: "status" },
 ];
 
+
+
 const CalibrationSampleLogin = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,6 +57,31 @@ const CalibrationSampleLogin = () => {
   });
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+
+  const fetchCalibrationSampleLogin = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/cCalibrationSampleLogin`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.cCalibrationSampleLogin || []; // Adjust this based on your API response structure
+
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching Calibration Sample Login:", error);
+      toast.error("Failed to fetch Calibration Sample Login");
+    }
+  };
+  useEffect(() => {
+    fetchCalibrationSampleLogin();
+  }, []);
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -102,8 +122,9 @@ const CalibrationSampleLogin = () => {
   };
 
   const filteredData = data.filter((row) => {
+    const calibrationTypeLower = row.CalibrationType?.toLowerCase() || "";
     return (
-      row.sampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      calibrationTypeLower.includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -179,49 +200,97 @@ const CalibrationSampleLogin = () => {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/cCalibrationSampleLogin/${item.uniqueId}` // Update endpoint with uniqueId
+      );
+
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId); // Filter out the deleted item
+        setData(newData);
+        toast.success("Calibration Type deleted successfully");
+        console.log("Deleted item:", item);
+        fetchCalibrationSampleLogin();
+      }
+    } catch (error) {
+      console.error("Error deleting calibration type:", error);
+      toast.error("Failed to delete calibration type");
+    }
   };
 
-  const handleModalSubmit = (newInstrument) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
-      );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
+  const handleModalSubmit = async (newInstrument) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/cCalibrationSampleLogin`,
         {
-          checkbox: false,
-          sno: prevData.length + 1,
           sampleType: newInstrument.sampleType,
           productMaterial: newInstrument.productMaterial,
           genericName: newInstrument.genericName,
           specificationCode: newInstrument.specificationCode,
           status: "Active",
-        },
-      ]);
+        }
+      );
+
+      if (response.status === 200) {
+        const addedCalibrationlogin = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedCalibrationlogin,
+            sno: addedCalibrationlogin.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+
+        toast.success("Calibration Type added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding calibration type:", error);
+      toast.error("Failed to add calibration type");
     }
-    closeModal();
+
+    setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.storageCondition === StorageCondition
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
   };
 
   const openEditModal = (rowData) => {
-    setEditModalData(rowData);
+    setEditModalData({...rowData});
   };
 
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/cCalibrationSampleLogin/${updatedData.uniqueId}`, // Update endpoint with uniqueId
+        updatedData // Sending the updated data
+      );
+
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId ? { ...item, ...updatedData } : item
+        );
+
+        setData(newData);
+        fetchCalibrationSampleLogin();
+        toast.success("Calibration Sample Login updated successfully");
+        closeEditModal();
+      }
+    } catch (error) {
+      console.error("Error updating calibration Sample Login:", error);
+      toast.error("Failed to update calibration Sample Login");
+    } 
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -230,7 +299,7 @@ const CalibrationSampleLogin = () => {
       if (data) {
         setFormData(data);
       }
-    }, [data]);
+    }, []);
 
     const handleSave = () => {
       onSave(formData);
@@ -238,7 +307,7 @@ const CalibrationSampleLogin = () => {
 
     const handleChange = (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
+      setFormData((prev)=>({ ...formData, [name]: value }));
     };
     return (
       <div>
@@ -249,7 +318,8 @@ const CalibrationSampleLogin = () => {
           size="lg"
         >
           <CModalHeader>
-            <CModalTitle>Add Sample Login</CModalTitle>
+            <CModalTitle></CModalTitle>
+            {data.uniqueId ? "Edit" : "Add}"} Add New Sample Login
           </CModalHeader>
 
           <CModalBody>
@@ -262,7 +332,7 @@ const CalibrationSampleLogin = () => {
               onChange={handleChange}
               name="setCalibrationScheduleampleType"
             />
-            <CFormInput
+            {/* <CFormInput
               label="Test Plan / Revision No."
               className="mb-3"
               type="text"
@@ -270,7 +340,7 @@ const CalibrationSampleLogin = () => {
               value={formData?.testPlan || ""}
               onChange={handleChange}
               name="testPlan"
-            />
+            /> */}
             <CFormInput
               label="Product / Material"
               className="mb-3"
@@ -351,101 +421,114 @@ const CalibrationSampleLogin = () => {
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Calibartion Sample Login</h1>
-      <div className="grid grid-cols-5 gap-4 mb-4">
-        <Card
-          title="DROPPED"
-          count={cardCounts.DROPPED}
-          color="pink"
-          onClick={() => handleCardClick("DROPPED")}
-        />
-        <Card
-          title="INITIATED"
-          count={cardCounts.INITIATED}
-          color="blue"
-          onClick={() => handleCardClick("INITIATED")}
-        />
-        <Card
-          title="REINITIATED"
-          count={cardCounts.REINITIATED}
-          color="yellow"
-          onClick={() => handleCardClick("REINITIATED")}
-        />
-        <Card
-          title="APPROVED"
-          count={cardCounts.APPROVED}
-          color="green"
-          onClick={() => handleCardClick("APPROVED")}
-        />
-        <Card
-          title="REJECTED"
-          count={cardCounts.REJECTED}
-          color="red"
-          onClick={() => handleCardClick("REJECTED")}
-        />
-      </div>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Calibartion Sample Login</h1>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
+          />
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
+            color="blue"
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
           />
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Calibration_Sample_Login.pdf" title="Calibration Sample Login Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Add Sample Login" color="blue" onClick={openModal} />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Calibration_Sample_Login.pdf"
+              title="Calibration Sample Login Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Sample Login"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <CalibrationSampleLoginModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-      {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        <CalibrationSampleLoginModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
         />
-      )}
-    </div></>
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            title="Test Plan Details"
+            updateStatus={handleStatusUpdate}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

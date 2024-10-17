@@ -29,39 +29,13 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import Specifications from "./TestCategories.jsx";
-
-const staticData = [
-  {
-    sno: 1,
-    productName: "Product 1",
-    SpecificationID: "Spec 1",
-    testName: "Test 1",
-    testCode: "TC 1",
-    method: "Method 1",
-    category: "Category 1",
-    testType: "Type 1",
-    status: "INITIATED",
-  },
-
-  {
-    sno: 2,
-    productName: "Product 2",
-    SpecificationID: "Spec 2",
-    testName: "Test 2",
-    testCode: "TC 2",
-    method: "Method 2",
-    category: "Category 2",
-    testType: "Type ",
-    status: "INITIATED",
-  },
-];
-
-const initialData = JSON.parse(localStorage.getItem("testregistration")) || "";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 const fields = [
   { label: "Product Name", key: "productName" },
   { label: "Specification ID", key: "SpecificationID" },
-
   { label: "Test Name", key: "testName" },
   { label: "Test Code", key: "testCode" },
   { label: "Method", key: "method" },
@@ -79,19 +53,44 @@ function Testregistration() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-
-  // Combine static data with dynamic data from local storage
-  const [data, setData] = useState(() => {
-    return [...staticData, ...initialData]; // Merge static data with local storage data
-  });
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [data, setData] = useState([]);
+  console.log(data, "00000000000");
 
   useEffect(() => {
-    // Store dynamic data back to local storage
-    localStorage.setItem(
-      "testregistration",
-      JSON.stringify(data.filter((row) => !staticData.includes(row)))
-    );
-  }, [data]);
+    fetchProductData();
+  }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mTestRegistration`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mTestRegistration?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              productName: condition.productName || "No Name",
+              SpecificationID: condition.SpecificationID || "-",
+              testName: condition.testName || "-",
+              testCode: condition.testCode || "-",
+              method: condition.method || "-",
+              category: condition.category || "-",
+              testType: condition.testType || "-",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -104,11 +103,9 @@ function Testregistration() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-
-  console.log("Data:", data);
   const filteredData = Array.isArray(data)
     ? data.filter((row) => {
-        console.log("Row:", row); // Log each row to see its structure
+        console.log("Row:", row);
         const productName = row.productName || "";
         return (
           productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -116,10 +113,18 @@ function Testregistration() {
         );
       })
     : [];
-  // Fallback to an empty array if data is not an array
-
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, uniqueId: data.length + 1 }];
+    setData(updatedData);
+  };
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -133,7 +138,7 @@ function Testregistration() {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
     },
-    { header: "Sr.no.", accessor: "sno" },
+    { header: "Sr.no.", accessor: "uniqueId" },
     { header: "Specification ID", accessor: "SpecificationID" },
     { header: "Product Name", accessor: "productName" },
     { header: "Test Name", accessor: "testName" },
@@ -164,7 +169,7 @@ function Testregistration() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno: index + 1,
+      uniqueId: index + 1,
       uniqueCode: item["Unique Code"] || "",
       productName: item["Product Name"] || "",
       genericName: item["Generic Name"] || "",
@@ -186,29 +191,49 @@ function Testregistration() {
   };
 
   const closeViewModal = () => {
-    setViewModalData(false);
+    setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/mTestRegistration/${item.sno}`
+      );
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Product deleted successfully.");
+      } else {
+        toast.error("Failed to delete Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error deleting Product: " + (error.response?.data || error.message)
+      );
+    }
   };
 
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newCondition,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-      },
-    ]);
-    setData(newData);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mTestRegistration`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchProductData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   const handleStatusUpdate = (testPlan, newStatus) => {
@@ -224,26 +249,18 @@ function Testregistration() {
     const [testCode, settestCode] = useState("");
     const [method, setmethod] = useState("");
     const [category, setcategory] = useState("");
-    const [testType, settestType] = useState("");
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-
-    const handleAdd = () => {
+    const [testType, setestType] = useState("");
+    const handleProduct = () => {
       const newCondition = {
-        SpecificationID: SpecificationID,
-        productName: productName,
-        testName: testName,
-        testCode: testCode,
-        method: method,
-        category: category,
-        testType: testType,
-        action: [],
+        SpecificationID,
+        productName,
+        testName,
+        testCode,
+        method,
+        category,
+        testType,
+        status: "active",
       };
-      closeModal();
       onAdd(newCondition);
     };
 
@@ -255,7 +272,7 @@ function Testregistration() {
         <CModalBody>
           <CFormInput
             className="mb-3"
-            type="text"
+            type="number"
             label="Specification ID"
             placeholder="Specification ID"
             name="SpecificationID"
@@ -314,14 +331,14 @@ function Testregistration() {
             placeholder="Test type"
             name="testType"
             value={testType}
-            onChange={(e) => settestType(e.target.value)}
+            onChange={(e) => setestType(e.target.value)}
           />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleProduct}>
             Submit
           </CButton>
         </CModalFooter>
@@ -336,12 +353,29 @@ function Testregistration() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/mTestRegistration/${updatedData.sno}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("Test Registration updated successfully.");
+        setEditModalData(null);
+      } else {
+        toast.error("Failed to update Test Registration.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating Test Registration: " +
+          (error.response?.data || error.message)
+      );
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -377,7 +411,7 @@ function Testregistration() {
         <CModalBody>
           <CFormInput
             className="mb-3"
-            type="text"
+            type="number"
             label="Specification ID"
             placeholder="Specification ID"
             name="SpecificationID"
@@ -502,7 +536,7 @@ function Testregistration() {
         <StatusModal
           visible={isModalOpen}
           closeModal={closeModal}
-          onAdd={addNewStorageCondition}
+          onAdd={handleAdd}
         />
       )}
       {viewModalData && (
@@ -510,6 +544,7 @@ function Testregistration() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
+          onAdd={onAdd}
           fields={fields}
           title="Test Plan Details"
           updateStatus={handleStatusUpdate}

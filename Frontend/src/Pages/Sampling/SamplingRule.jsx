@@ -1,101 +1,196 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
-import {
-  CButton,
-  CFormInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CTableBody,
-  CTableDataCell,
-  CTableHeaderCell,
-  CTableRow,
-} from "@coreui/react";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CForm, CFormInput, CFormSelect } from "@coreui/react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import { BASE_URL } from "../../config.json";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    uniqueCode: "UC001",
-    description: "Description for UC001",
-    numberofRanges: 5,
-    updatedAt: "2024-07-01",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    uniqueCode: "UC002",
-    description: "Description for UC002",
-    numberofRanges: 10,
-    updatedAt: "2024-06-30",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    uniqueCode: "UC002",
-    description: "Description for UC002",
-    numberofRanges: 10,
-    updatedAt: "2024-06-30",
-    status: "Inactive",
-  },
-];
-
-const SamplingRule = () => {
-  const [data, setData] = useState(initialData);
+function SamplingRule() {
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Inactive");
   const [editModalData, setEditModalData] = useState(null);
-  const handleOpenModals = () => {
-    setIsModalsOpen(true);
-  };
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
+
+  useEffect(() => {
+    fetchSamplingRuleData();
+  }, []);
+  const convertToIST = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };  
+  const fetchSamplingRuleData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/sSamplingRule`);
+      const formattedData = response?.data[0]?.sSamplingRule || [];
+      console.log("Response Data:", response.data);
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+        updatedAt:convertToIST(item.updatedAt),
+      }));
+      console.log("Updated Data:", updatedData);
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching Sampling Rule data:", error);
+      toast.error("Failed to fetch Sampling Rule data");
+    }
   };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
+    setData((prevData) => prevData.map((row) => ({ ...row, checkbox: checked })));
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
+  const handleCheckboxChange = useCallback((index) => {
+    setData((prevData) =>
+      prevData.map((item, i) => (i === index ? { ...item, checkbox: !item.checkbox } : item))
     );
-  });
+  }, []);
 
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/delete-lims/sSamplingRule/${item.uniqueId}`);
+      if (response?.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
+        toast.success("Sampling Rule deleted successfully");
+        fetchSamplingRuleData();
+      } else {
+        toast.error("Failed to delete Sampling Rule");
+      }
+    } catch (error) {
+      console.error("Error deleting Sampling Rule:", error);
+      toast.error("Error deleting Sampling Rule");
+    }
   };
 
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+  const handleStatusUpdate = async (updatedData, newStatus) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/sSamplingRule/${updatedData.uniqueId}`, {
+        ...updatedData,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === updatedData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Sampling Rule status updated successfully");
+      } else {
+        toast.error("Failed to update Sampling Rule status");
+      }
+    } catch (error) {
+      console.error("Error updating Sampling Rule status:", error);
+      toast.error("Error updating Sampling Rule status");
+    }
   };
+
+  const addNewSamplingRule = async (newSamplingRule) => {
+    try {
+     const currentDateTime=new Date().toISOString();
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/sSamplingRule`, {...newSamplingRule,updatedAt:currentDateTime,status:"Active"});
+      if (response.status === 200) {
+        const addedSamplingRule = response.data;
+  
+        setData((prevData) => [
+          {
+            ...addedSamplingRule,
+            checkbox: false,
+            updatedAt: new Date(addedSamplingRule.updatedAt).toLocaleString("en-IN", {
+              timeZone: "Asia/Kolkata",
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            }), 
+          },
+          ...prevData,
+        ]);
+  
+        toast.success("Sampling Rule added successfully");
+        fetchSamplingRuleData();
+      }
+    } catch (error) {
+      console.error("Error adding Sampling Rule:", error);
+      toast.error("Failed to add Sampling Rule");
+    }
+    
+    setIsModalOpen(false); // Close the modal after completion
+  };
+  
+  
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const {sno,...dataToSend}=updatedData;
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/sSamplingRule/${updatedData.uniqueId}`, dataToSend);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? updatedData : item))
+        );
+        toast.success("Sampling Rule updated successfully");
+      } else {
+        toast.error("Failed to update Sampling Rule");
+      }
+    } catch (error) {
+      console.error("Error updating Sampling Rule:", error);
+      toast.error("Error updating Sampling Rule");
+    }
+    setEditModalData(null);
+  };
+
+  const handleExcelDataUpload = useCallback(
+    (excelData) => {
+      const updatedData = excelData.map((item, index) => ({
+        checkbox: false,
+        sno: data.length + index + 1,
+        uniqueCode: item["Unique Code"] || "",
+        description: item["Description"] || "",
+        numberofRanges: item["Number of Ranges"] || "",
+        status: item["Status"] || "",
+      }));
+      setData((prevData) => [...prevData, ...updatedData]);
+      setIsModalsOpen(false);
+    },
+    [data]
+  );
+
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
+      Cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.original.checkbox}
+          onChange={() => handleCheckboxChange(row.index)}
+        />
+      ),
     },
-    { header: "SrNo.", accessor: "sno" },
+    { header: "Sr No.", accessor: "sno" },
     { header: "Unique Code", accessor: "uniqueCode" },
     { header: "Description", accessor: "description" },
     { header: "Number of Ranges", accessor: "numberofRanges" },
@@ -109,188 +204,36 @@ const SamplingRule = () => {
           <FontAwesomeIcon
             icon={faEye}
             className="mr-2 cursor-pointer"
-            onClick={() => {
-              onViewDetails(row), navigate("/testResultsDetails");
-            }}
+            onClick={() => onViewDetails(row.original)}
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
   ];
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno: index + 1,
-      uniqueCode: item["Unique Code"] || "",
-      description: item["Description"] || "",
-      numberofRanges: item["Number of Ranges"] || "",
-      updatedAt: item["Updated At"] || "",
-      status: item["Status"] || "",
-    }));
 
-    const concatenatedData = [...updatedData];
-    setData(concatenatedData);
-    setIsModalsOpen(false); // Update data state with parsed Excel data
-  };
-  const openModal = () => {
-    setIsModalOpen(true);
+  const filteredData = data.filter((row) => {
+    const uniqueCodeMatch = row.uniqueCode ? row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+    const descriptionMatch = row.description ? row.description.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+
+    return (uniqueCodeMatch || descriptionMatch) && (statusFilter === "All" || row.status === statusFilter);
+  });
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "Inactive" ? "Active" : "Inactive";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newCondition,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-      },
-    ]);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
-  };
-
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [numRows, setNumRows] = useState(0);
-    const [inputValue, setInputValue] = useState(0);
-    const [samplingRuleName, setSamplingRuleName] = useState({
-      samplingName: "",
-      uniqueCode: "",
-      numberofRanges: "",
-    });
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-
-    const addRows = () => {
-      setNumRows(inputValue);
-    };
-
-    const renderRows = () => {
-      const rows = [];
-      for (let i = 0; i < numRows; i++) {
-        rows.push(
-          <CTableRow key={i}>
-            <CTableHeaderCell
-              className="mb-3 m-2 flex justify-between itmes center gap-4"
-              scope="row"
-            >
-              {i + 1}
-              <CFormInput
-                className="border-1 border-black"
-                placeholder="Lower"
-              ></CFormInput>
-              <CFormInput
-                className="border-1 border-black"
-                placeholder="Upper"
-              ></CFormInput>
-              <CFormInput
-                className="border-1 border-black"
-                placeholder="No. of Containers"
-              ></CFormInput>
-            </CTableHeaderCell>
-            {/* <CTableDataCell className="mb-3 m-2">
-            Rack {i + 1}: <input type="text" />{" "}
-          </CTableDataCell> */}
-          </CTableRow>
-        );
-      }
-      return rows;
-    };
-
-    const handleAdd = () => {
-      const newCondition = {
-        description: "jhjj",
-        uniqueCode: samplingRuleName.uniqueCode,
-        numberofRanges: samplingRuleName.numberofRanges,
-        updatedAt: "2020-2-20",
-        action: [],
-      };
-      onAdd(newCondition);
-    };
-
-    return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Rule</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Sampling Rule Name"
-            placeholder="Sampling Rule Name"
-            value={samplingRuleName.samplingName}
-            onChange={(e) =>
-              setSamplingRuleName({
-                ...samplingRuleName,
-                samplingName: e.target.value,
-              })
-            }
-          />
-
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Unique Code"
-            placeholder="Unique Code"
-            value={samplingRuleName.uniqueCode}
-            onChange={(e) =>
-              setSamplingRuleName({
-                ...samplingRuleName,
-                uniqueCode: e.target.value,
-              })
-            }
-          />
-
-          <CFormInput
-            className="mb-3"
-            type="number"
-            label="Number of Ranges"
-            placeholder="Number of Ranges"
-            value={inputValue}
-            onChange={handleInputChange}
-            min="0"
-          />
-          <CButton color="primary" onClick={addRows}>
-            Add Range
-          </CButton>
-        </CModalBody>
-        <CTableBody className="mb-3">{renderRows()}</CTableBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary" onClick={handleAdd}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
+  const closeViewModal = () => {
+    setViewModalData(null);
   };
 
   const openEditModal = (rowData) => {
@@ -300,29 +243,77 @@ const SamplingRule = () => {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [formData, setFormData] = useState({
+      uniqueCode: "",
+      description: "",
+      numberofRanges: "",
+      status:"Active"
+    });
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = () => {
+      onAdd(formData);
+      setFormData({
+        uniqueCode: "",
+        description: "",
+        numberofRanges: "",
+        status:"Active"
+      });
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Sampling Rule</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Unique Code"
+              name="uniqueCode"
+              value={formData.uniqueCode}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="number"
+              label="Number of Ranges"
+              name="numberofRanges"
+              value={formData.numberofRanges}
+              onChange={handleChange}
+            />
+          </CForm>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
+          </CButton>
+          <CButton color="primary" onClick={handleSubmit}>
+            Add
+          </CButton>
+        </CModalFooter>
+      </CModal>
     );
-    setData(newData);
-    setEditModalData(null);
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [numRows, setNumRows] = useState(0);
-    const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-
-    const addRows = () => {
-      setNumRows(inputValue);
-    };
 
     useEffect(() => {
       if (data) {
@@ -339,156 +330,117 @@ const SamplingRule = () => {
       onSave(formData);
     };
 
-    const renderRows = () => {
-      const rows = [];
-      for (let i = 0; i < numRows; i++) {
-        rows.push(
-          <CTableRow key={i}>
-            <CTableHeaderCell
-              className="mb-3 m-2 flex justify-between itmes center gap-4"
-              scope="row"
-            >
-              {i + 1}
-              <CFormInput
-                className="border-1 border-black"
-                placeholder="Lower"
-              ></CFormInput>
-              <CFormInput
-                className="border-1 border-black"
-                placeholder="Upper"
-              ></CFormInput>
-              <CFormInput
-                className="border-1 border-black"
-                placeholder="No. of Containers"
-              ></CFormInput>
-            </CTableHeaderCell>
-            {/* <CTableDataCell className="mb-3 m-2">
-            Rack {i + 1}: <input type="text" />{" "}
-          </CTableDataCell> */}
-          </CTableRow>
-        );
-      }
-      return rows;
-    };
-
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="lg"
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>Add Rule</CModalTitle>
+          <CModalTitle>Edit Sampling Rule</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Sampling Rule Name"
-            placeholder="Sampling Rule Name"
-          />
-
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Unique Code"
-            placeholder="Unique Code"
-            value={formData?.uniqueCode || ""}
-            onChange={handleChange}
-            name="uniqueCode"
-          />
-
-          <CFormInput
-            className="mb-3"
-            type="number"
-            label="Number of Ranges"
-            placeholder="Number of Ranges"
-            value={inputValue}
-            onChange={handleInputChange}
-            min="0"
-          />
-          <CButton color="primary" onClick={addRows}>
-            Add Range
-          </CButton>
+          <CForm>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Unique Code"
+              name="uniqueCode"
+              value={formData?.uniqueCode || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              name="description"
+              value={formData?.description || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="number"
+              label="Number of Ranges"
+              name="numberofRanges"
+              value={formData?.numberofRanges || ""}
+              onChange={handleChange}
+            />
+          </CForm>
         </CModalBody>
-        <CTableBody className="mb-3">{renderRows()}</CTableBody>
         <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
+          <CButton color="secondary" onClick={closeModal}>
+            Cancel
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Submit
+            Save Changes
           </CButton>
         </CModalFooter>
       </CModal>
     );
   };
 
-
-
-
-return (
-  <>
-  <LaunchQMS/>
-    <div className="m-5 mt-3 ">
-      <div className="main-head">
-        <h4 className="fw-bold">Sampling Rule</h4>
-      </div>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+  return (
+    <>
+      <div className="m-5 mt-3">
+        <div className="main-head">
+          <h4 className="fw-bold">Sampling Rule</h4>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Sampling_Rule.pdf" title="Sampling Rule Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Add Sampling Rule"
-            color="blue"
-            onClick={openModal}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload columns={columns} data={filteredData} fileName="SamplingRule.pdf" title="Sampling Rule Data" />
+            <ATMButton text="Import" color="pink" onClick={() => setIsModalsOpen(true)} />
+            <ATMButton text="Add Sampling Rule" color="blue" onClick={() => setIsModalOpen(true)} />
+          </div>
         </div>
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
+        />
+        {console.log("Filtered Data",filteredData)}
       </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onDelete={handleDelete}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        openEditModal={openEditModal}
-      />
-    </div>
 
-    {isModalOpen && (
-      <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />
-    )}
-    {isModalsOpen && (
-      <ImportModal
-        initialData={initialData}
-        isOpen={isModalsOpen}
-        onClose={handleCloseModals}
-        columns={columns}
-        onDataUpload={handleExcelDataUpload}
-      />
-    )}{editModalData && (
-      <EditModal
-        visible={Boolean(editModalData)}
-        closeModal={closeEditModal}
-        data={editModalData}
-        onSave={handleEditSave}
-      />
-    )}
-  </>
-)
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+          title="Sampling Rule Details"
+          updateStatus={(newStatus) => handleStatusUpdate(viewModalData, newStatus)}
+        />
+      )}
+
+      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={() => setIsModalOpen(false)} onAdd={addNewSamplingRule} />}
+
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={() => setIsModalsOpen(false)}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+
+      {editModalData && (
+        <EditModal visible={Boolean(editModalData)} closeModal={closeEditModal} data={editModalData} onSave={handleEditSave} />
+      )}
+    </>
+  );
 }
 
 export default SamplingRule;
