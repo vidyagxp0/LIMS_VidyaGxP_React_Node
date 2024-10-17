@@ -19,6 +19,7 @@ import Store from "./Pages/UserManagement/Department/Store";
 import Roles from "./Pages/UserManagement/Roles";
 import Samplelogin from "./Pages/Samplelogin/Samplelogin";
 import SampleWorkflow from "./Pages/Samplelogin/SampleWorkflow.jsx";
+import SampleWorkflowModal from "./Pages/Samplelogin/SampleWorkflowModal.jsx";
 import SampleLoginDetails from "./Pages/Samplelogin/SampleloginView/SampleLoginDetails.jsx";
 import TestResultsDetails from "./Pages/Samplelogin/SampleloginView/TestResultsDetails.jsx";
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1";
@@ -265,6 +266,7 @@ function App() {
 
             <Route path="/samplelogin" element={<Samplelogin />} />
             <Route path="/sampleWorkflow" element={<SampleWorkflow />} />
+            <Route path="/sampleWorkflowModal" element={<SampleWorkflowModal />} />
             <Route path="/viewDetails" element={<SampleLoginDetails />} />
             <Route
               path="/testResultsDetails"
