@@ -854,7 +854,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="text" 
                   name="qaReviewerApprover"
                   label="QA Reviewer/Approver"
                   value={formData?.qaReviewInfo?.qaReviewerApprover || ""}
@@ -887,7 +887,14 @@ const SampleWorkflowModal = ({ onClose }) => {
       default:
         return null;
     }
-  };
+  };    
+
+
+
+
+
+
+  
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
