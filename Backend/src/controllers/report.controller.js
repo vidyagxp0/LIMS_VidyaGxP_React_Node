@@ -163,9 +163,9 @@ export const generatePdfbyId = async (req, res) => {
       headerTemplate: headerHtml,
       footerTemplate: footerHtml,
       margin: {
-        top: "200px",
+        top: "150px",
         right: "50px",
-        bottom: "70px",
+        bottom: "50px",
         left: "50px",
       },
     });
