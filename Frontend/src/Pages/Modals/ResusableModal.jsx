@@ -24,7 +24,7 @@ const ReusableModal = ({
 }) => {
   const [statusModal, setStatusModal] = useState(false);
   const handleStatusChange = (newStatus) => {
-    updateStatus( newStatus);
+    updateStatus(newStatus);
     setStatusModal(false);
     closeModal();
   };

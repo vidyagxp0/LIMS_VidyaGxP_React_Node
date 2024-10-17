@@ -476,7 +476,7 @@ export const ReviewToOpen = async (req, res) => {
         .status(404)
         .json({ error: true, message: "Sample data not found." });
     }
-    if (sampleData.stage == "6") {
+    if (sampleData.stage === "6") {
       await transaction.rollback();
       return res
         .status(404)
