@@ -79,6 +79,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     assignedDepartment: "",
     riskAssessment: "",
     supervisor: "",
+    sampleDate: "",
     sampleMovementHistory: "",
     testingProgress: "",
     alertNotification: "",
@@ -105,7 +106,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     QaReviewerComment: "",
     QaReviewDate: "",
   });
-  console.log(formData, "<><><><><>?<>?<>?<>?<>?<>?");
+  console.log(formData, "formDtatatatatat");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -700,6 +701,15 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="supervisor"
                   label="Supervisor"
                   value={formData.supervisor || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="sampleDate"
+                  label="Sample Date"
+                  value={formData.sampleDate || ""}
                   onChange={handleInputChange}
                 />
               </CCol>

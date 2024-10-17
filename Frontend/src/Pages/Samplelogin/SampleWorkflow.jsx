@@ -27,10 +27,9 @@ import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
-import { BASE_URL } from "../../config.json";
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
-  console.log(data,"????????????????????????????")
+  console.log(data, "????????????????????????????");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -50,9 +49,9 @@ const SampleWorkFlow = () => {
     setShowModal(false);
   };
 
-  const fetchSpecificationStp = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/get-sample`);
+      const response = await axios.get(`http://localhost:9000/get-sample`);
       console.log(response.data); // Check the structure of the response
 
       // Assuming the actual array is nested inside a 'data' property
@@ -72,7 +71,7 @@ const SampleWorkFlow = () => {
     }
   };
   useEffect(() => {
-    fetchSpecificationStp();
+    fetchData();
   }, []);
 
   const filteredData = data.filter((row) => {
@@ -151,6 +150,10 @@ const SampleWorkFlow = () => {
     { header: "Sample Label", accessor: "sampleLabel" },
     { header: "Regulatory Requirements", accessor: "regulatoryRequirements" },
     { header: "Quality Control Checks", accessor: "qualityControlChecks" },
+    { header: "Delay Justification", accessor: "delayJustification" },
+    { header: "Testing Outcome", accessor: "testingOutcome" },
+    { header: "Pass / Fail ?", accessor: "passFail" },
+    { header: "Shelf Life reccommendation", accessor: "passFail" },
     { header: "Control Sample Reference", accessor: "controlSampleReference" },
     { header: "Sample Integrity Status", accessor: "sampleIntegrityStatus" },
     { header: "Risk Assessment", accessor: "riskAssessment" },
@@ -322,13 +325,16 @@ const SampleWorkFlow = () => {
       sampleDisposition: item["Sample Disposition"] || "",
       stabilityStudyType: item["Stability Study Type"] || "",
       stabilityStudyProtocol: item["Stability Study Protocol"] || "",
-      stabilityProtocolApprovalDate:item["Stability Protocol Approval date"] || "",
-      countryOfRegulatorySubmissions:item["Country of Regulatory Submissions"] || "",
+      stabilityProtocolApprovalDate:
+        item["Stability Protocol Approval date"] || "",
+      countryOfRegulatorySubmissions:
+        item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
-      photostabilityTestingResults:item["Photostability Testing results"] || "",
+      photostabilityTestingResults:
+        item["Photostability Testing results"] || "",
       reconstitutionStability: item["Reconstitution Stability"] || "",
       testingIntervalMonths: item["Testing Interval (months)"] || "",
-      shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
+      shelfLifeRecommendation: item["Shelf Life Recommendation"] || "",
       reviewerComment: item["Reviewer Comment"] || "",
       qaReviewerApprover: item["QA Reviewer/Approver"] || "",
       qaReviewerComment: item["QA Reviewer Comment"] || "",
@@ -574,10 +580,10 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Sampling Frequency</td>
             <td className="border px-4 py-2">Sample Disposition</td>
 
-
             <td className="border px-4 py-2">Stability Study Type</td>
             <td className="border px-4 py-2">Stability Study Protocol</td>
-            <td className="border px-4 py-2">Stability Protocol Approval date
+            <td className="border px-4 py-2">
+              Stability Protocol Approval date
             </td>
             <td className="border px-4 py-2">
               Country of Regulatory Submissions
@@ -598,7 +604,11 @@ const SampleWorkFlow = () => {
         </thead>
         <tbody>
           {data?.map((data, index) => (
-            <tr key={index} className="hover:bg-gray-100">
+            <tr
+              key={index}
+              className="hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleRowClick(item?.sampleId)}
+            >
               <td className="border px-4 py-2">{index + 1}</td>
               <td className="border px-4 py-2">{data.samplePlanId}</td>
               <td className="border px-4 py-2">{data.sampleId}</td>
