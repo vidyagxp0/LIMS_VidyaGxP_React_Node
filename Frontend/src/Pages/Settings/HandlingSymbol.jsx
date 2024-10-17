@@ -23,6 +23,7 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import axios from "axios";
 
 const initialData = [
   {
@@ -65,6 +66,24 @@ const HandlingSymbol = () => {
     REJECTED: 0,
   });
 
+
+  useEffect(() => {
+    fetchSymbols();
+  }, []);
+
+  const fetchSymbols = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/manage-lims/sHandlingSymbol`);
+      setData(response.data.map((item, index) => ({
+        ...item,
+        checkbox: false,
+        sno: index + 1,
+      })));
+    } catch (error) {
+      console.error('Error fetching symbols:', error);
+    }
+  };
+
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
   // ************************************************************************************************
@@ -81,12 +100,17 @@ const HandlingSymbol = () => {
     setEditModalData(null);
   };
 
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/manage-lims/sHandlingSymbol/${updatedData.id}`, updatedData);
+      const updatedList = data.map((item) =>
+        item.id === updatedData.id ? response.data : item
+      );
+      setData(updatedList);
+      closeEditModal();
+    } catch (error) {
+      console.error('Error updating symbol:', error);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -243,25 +267,23 @@ const HandlingSymbol = () => {
     },
   ];
 
-  const handleModalSubmit = (requalification) => {
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === requalification.sno ? requalification : item
-      );
-      setData(updatedList);
-    } else {
+  const handleModalSubmit = async (symbolData) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/sHandlingSymbol`, symbolData);
       setData((prevData) => [
         ...prevData,
         {
+          ...response.data,
           checkbox: false,
           sno: prevData.length + 1,
-          name: requalification.name,
           symbolCode: generateRandomSymbolCode(),
           status: "Active",
         },
       ]);
+      closeModal();
+    } catch (error) {
+      console.error('Error adding symbol:', error);
     }
-    closeModal();
   };
 
   const openModal = () => {
@@ -280,10 +302,15 @@ const HandlingSymbol = () => {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      await axios.delete(`${BASE_URL}/manage-lims/sHandlingSymbol/${item.id}`);
+      const newData = data.filter((d) => d.id !== item.id);
+      setData(newData);
+      console.log("Deleted item:", item);
+    } catch (error) {
+      console.error('Error deleting symbol:', error);
+    }
   };
 
   return (

@@ -18,7 +18,7 @@ import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const SampleWorkflowModal = ({ onClose }) => {
+const SampleWorkflowPanel = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -1039,4 +1039,4 @@ const SampleWorkflowModal = ({ onClose }) => {
   );
 };
 
-export default SampleWorkflowModal;
+export default SampleWorkflowPanel;
