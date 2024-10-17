@@ -49,7 +49,7 @@ const SampleWorkFlow = () => {
     setShowModal(false);
   };
 
-  const fetchSpecificationStp = async () => {
+  const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample`);
       console.log(response.data); // Check the structure of the response
@@ -71,7 +71,7 @@ const SampleWorkFlow = () => {
     }
   };
   useEffect(() => {
-    fetchSpecificationStp();
+    fetchData();
   }, []);
 
   const filteredData = data.filter((row) => {
@@ -434,20 +434,27 @@ const SampleWorkFlow = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleRowClick = async (sampleId) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/get-Sample/${sampleId}`
-      );
-      const sampleData = response.data;
+  // const handleRowClick = async (id) => {
+  //   //console.log(id, "dwsa");
+  //   // setLoading(true);
+  //   // try {
+  //   //   const response = await axios.put(
+  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //   );
+  //   //   const sampleData = response.data;
+  //   //   console.log(sampleData);
 
-      navigate(`/sampleWorkflowPanel`, { state: { sampleData } });
-    } catch (error) {
-      console.error("Error fetching sample data:", error);
-    } finally {
-      setLoading(false);
-    }
+  //   navigate("/sampleWorkflowPanel");
+  //   // } catch (error) {
+  //   //   console.error("Error fetching sample data:", error);
+  //   // } finally {
+  //   //   setLoading(false);
+  //   // }
+  // };
+
+  const handleRowClick = async (id) => {
+    navigate(`/sampleWorkflowPanel?id=${id}`);
+    console.log("IDD", id);
   };
 
   return (
@@ -619,7 +626,11 @@ const SampleWorkFlow = () => {
         </thead>
         <tbody>
           {data?.map((data, index) => (
-            <tr key={index} className="hover:bg-gray-100">
+            <tr
+              key={index}
+              className="hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleRowClick(data?.sampleId)}
+            >
               <td className="border px-4 py-2">{index + 1}</td>
               <td className="border px-4 py-2">{data.samplePlanId}</td>
               <td className="border px-4 py-2">{data.sampleId}</td>
