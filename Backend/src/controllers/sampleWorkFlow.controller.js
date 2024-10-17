@@ -7,22 +7,22 @@ import bcrypt from "bcrypt";
 export const createSample = async (req, res) => {
   try {
     const sampleData = req.body;
-    if (req.files["sampleBarCode"]) {
+    if (req.files && req.files["sampleBarCode"]) {
       sampleData.sampleBarCode = getFileUrl(
         req.files["sampleBarCode"][0].filename
       );
     }
-    if (req.files["specificationAttachment"]) {
+    if (req.files && req.files["specificationAttachment"]) {
       sampleData.specificationAttachment = getFileUrl(
         req.files["specificationAttachment"][0].filename
       );
     }
-    if (req.files["stpAttachment"]) {
+    if (req.files && req.files["stpAttachment"]) {
       sampleData.stpAttachment = getFileUrl(
         req.files["stpAttachment"][0].filename
       );
     }
-    if (req.files["attachment"]) {
+    if (req.files && req.files["attachment"]) {
       sampleData.attachment = getFileUrl(req.files["attachment"][0].filename);
     }
 
@@ -181,7 +181,7 @@ export const submitToReview = async (req, res) => {
         .json({ error: true, message: "Please provide a sample ID." });
     }
     const sampleData = await SampleWorkFlow.findOne({
-      where: { id: sampleId},
+      where: { id: sampleId },
       transaction,
     });
 
@@ -192,7 +192,7 @@ export const submitToReview = async (req, res) => {
         .json({ error: true, message: "Sample data not found." });
     }
 
-    if (sampleData.stage !== '1') {
+    if (sampleData.stage !== "1") {
       await transaction.rollback();
       return res.status(400).json({
         error: true,
@@ -237,7 +237,7 @@ export const submitToSupervisor = async (req, res) => {
         .json({ error: true, message: "Please provide a Sample ID." });
     }
     const sampleData = await SampleWorkFlow.findOne({
-      where: { id: sampleId},
+      where: { id: sampleId },
       transaction,
     });
 
@@ -248,7 +248,7 @@ export const submitToSupervisor = async (req, res) => {
         .json({ error: true, message: "Sample data not found." });
     }
 
-    if (sampleData.stage !== '2') {
+    if (sampleData.stage !== "2") {
       await transaction.rollback();
       return res.status(400).json({
         error: true,
@@ -304,7 +304,7 @@ export const submitToQA = async (req, res) => {
         .json({ error: true, message: "Sample data not found." });
     }
 
-    if (sampleData.stage !== '3') {
+    if (sampleData.stage !== "3") {
       await transaction.rollback();
       return res.status(400).json({
         error: true,
@@ -360,7 +360,7 @@ export const submitToQAReview = async (req, res) => {
         .json({ error: true, message: "Sample data not found." });
     }
 
-    if (sampleData.stage !== '4') {
+    if (sampleData.stage !== "4") {
       await transaction.rollback();
       return res.status(400).json({
         error: true,
@@ -416,7 +416,7 @@ export const submitToClosed = async (req, res) => {
         .json({ error: true, message: "Sample data not found." });
     }
 
-    if (sampleData.stage !== '5') {
+    if (sampleData.stage !== "5") {
       await transaction.rollback();
       return res.status(400).json({
         error: true,
@@ -472,7 +472,7 @@ export const ReviewToOpen = async (req, res) => {
         .status(404)
         .json({ error: true, message: "Sample data not found." });
     }
-    if (sampleData.stage === '6') {
+    if (sampleData.stage === "6") {
       await transaction.rollback();
       return res
         .status(404)

@@ -129,7 +129,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     allowNull: true,
   },
   assignedDepartment: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   sampleCollectionDate: {
@@ -209,7 +209,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     allowNull: true,
   },
   assignedDepartment: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   riskAssement: {

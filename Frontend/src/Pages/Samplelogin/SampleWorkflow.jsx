@@ -50,15 +50,14 @@ const SampleWorkFlow = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sLSamplePA`
-      );
-      const fetchedData = response?.data[0]?.sLSamplePA || [];
-      setData(fetchedData);
+      const response = await axios.get(`http://localhost:9000/get-Sample`);
+      setData(response.data);
+      navigate("/sampleWorkflow");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -101,7 +100,7 @@ const SampleWorkFlow = () => {
     { header: "Sample Quantity", accessor: "sampleQuantity" },
     { header: "UOM", accessor: "uom" },
     { header: "Market", accessor: "market" },
-    { header: "Sample Barcode", accessor: "sampleBarcode" },
+    { header: "Sample Barcode", accessor: "sampleBarCode" },
     { header: "Specification ID", accessor: "specificationId" },
     { header: "Specification Attachment", accessor: "specificationAttachment" },
     { header: "STP ID", accessor: "sTPId" },
@@ -256,7 +255,7 @@ const SampleWorkFlow = () => {
       sampleQuantity: item["Sample Quantity"] || "",
       uom: item["UOM"] || "",
       market: item["Market"] || "",
-      sampleBarcode: item["Sample Barcode"] || "",
+      sampleBarCode: item["Sample Barcode"] || "",
 
       specificationId: item["Specification ID"] || "",
       specificationAttachment: item["Specification Attachment"] || "",
@@ -356,7 +355,7 @@ const SampleWorkFlow = () => {
     "sampleQuantity",
     "uom",
     "market",
-    "sampleBarcode",
+    "sampleBarCode",
     "specificationId",
     "specificationAttachment",
     "stpId",
@@ -603,7 +602,7 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">{data.sampleQuantity}</td>
                 <td className="border px-4 py-2">{data.uom}</td>
                 <td className="border px-4 py-2">{data.market}</td>
-                <td className="border px-4 py-2">{data.sampleBarcode}</td>
+                <td className="border px-4 py-2">{data?.sampleBarCode}</td>
                 <td className="border px-4 py-2">{data.specificationId}</td>
                 <td className="border px-4 py-2">
                   {data.specificationAttachment}
