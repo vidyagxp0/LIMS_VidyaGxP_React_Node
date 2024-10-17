@@ -14,6 +14,8 @@ import {
 import ImportModal from "../Modals/importModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ControlSampleModal from "../Modals/ControlSampleModal";
+import { BASE_URL } from "../../config.json";
+
 import {
   CButton,
   CForm,
@@ -144,7 +146,7 @@ const ControlSample = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/get-all-lims/controlSampleManagement`
+          `${BASE_URL}/get-all-lims/controlSampleManagement`
         );
         const fetchData = response?.data[0]?.controlSampleManagement || [];
         const updatedData = fetchData?.map((item, index) => ({
@@ -253,24 +255,40 @@ const ControlSample = () => {
     console.log("Deleted item:", item);
   };
 
-  const handleDeleteControl = (item) => {
-    console.log(item , "item")
-    axios
-      .delete(`http://localhost:9000/delete-lims/controlSampleManagement/${item.sno}`)
-      .then((response) => {
+  // const handleDeleteControl = (item) => {
+  //   console.log(item , "item")
+  //   axios
+  //     .delete(`http://localhost:9000/delete-lims/controlSampleManagement/${item.sno}`)
+  //     .then((response) => {
+        
+  //       toast.success(response.data.message || "Control Sample deleted successfully!");
+            
+  //       // Update the local state after successful deletion
+  //       setData((prevData) => prevData.filter((sample) => sample.sno !== item.sno));
+          
+  //       closeModal(); // Close the modal after deletion
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       toast.error("Error deleting Control Sample.");
+  //     });
+  // };
+  
+  
+  const handleDeleteControl = async (item) => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/delete-lims/controlSampleManagement/${item.uniqueId}`);
+      if (response.status === 200) {
+        const newData = data.filter((sample) => sample.uniqueId !== item.uniqueId);
+        setData(newData);
         toast.success(response.data.message || "Control Sample deleted successfully!");
-  
-        // Update the local state after successful deletion
-        setData((prevData) => prevData.filter((sample) => sample.sno !== item.sno));
-  
-        closeModal(); // Close the modal after deletion
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Error deleting Control Sample.");
-      });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error deleting Control Sample.");
+    }
   };
-  
+
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];

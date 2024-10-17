@@ -108,12 +108,23 @@ function specficationtype() {
 
   console.log("Data:", data);
 
-  const filteredData = data.filter((row) => {
-    return (
-      row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+  // const filteredData = data.filter((row) => {
+  //   return (
+  //     row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+  //     (statusFilter === "All" || row.status === statusFilter)
+  //   );
+  // });
+  const filteredData = data?.filter((row) => {
+  const productName = row?.productName?.toLowerCase() || "";
+  const rowStatus = row?.status || "";
+
+  return (
+    productName.includes(searchQuery.toLowerCase()) &&
+    (statusFilter === "All" || rowStatus === statusFilter)
+  );
+}) || [];
+
+  
     const onViewDetails = (rowData) => {
       if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
         setIsViewModalOpen(false);
@@ -418,7 +429,7 @@ function specficationtype() {
           <div className="float-right flex gap-4">
             <PDFDownload
               columns={columns}
-              data={filteredData}
+              data={data}
               fileName="Master_Product.pdf"
               title="Master Product Data"
             />
@@ -432,7 +443,8 @@ function specficationtype() {
         </div>
         <Table
           columns={columns}
-          data={filteredData}
+          data={data}
+          // filteredData
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
