@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CModal,
@@ -16,101 +16,20 @@ import {
 import axios from "axios";
 import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SampleWorkflowPanel = ({ onClose }) => {
+  const location = useLocation();
+  const [sampleData, setSampleData] = useState(null);
+
+  const [formData, setFormData] = useState({});
   const [activeTab, setActiveTab] = useState("Sample Registration");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [formData, setFormData] = useState({
-    samplePlanId: "",
-    sampleId: "",
-    sampleName: "",
-    sampleType: "",
-    productMaterialName: "",
-    batchLotNumber: "",
-    samplePriority: "",
-    sampleQuantity: "",
-    uom: "",
-    market: "",
-    sampleBarCode: "",
-    specificationId: "",
-    specificationAttachment: null,
-    stpId: "",
-    stpAttachment: null,
-    testName: "",
-    testMethod: "",
-    testParameters: "",
-    testingFrequency: "",
-    testingLocation: "",
-    requiredInstruments: "",
-    testGrouping: "",
-    lsl: "",
-    usl: "",
-    testingDeadline: "",
-    plannerName: "",
-    sampleSource: "",
-    plannedDate: "",
-    labTechnician: "",
-    assignedDepartment: "",
-    sampleCollectionDate: "",
-
-    analysisType: "",
-    analysisResult: "",
-    analysisDate: "",
-    testingStartDate: "",
-    testingEndDate: "",
-    delayJustification: "",
-    testingOutcome: "",
-    testPlanId: "",
-    turnaroundTime: "",
-    sampleRetestingDate: "",
-    reviewDate: "",
-    sampleStorageLocation: "",
-    transportationMethod: "",
-    samplePreparationMethod: "",
-    samplePackagingDetails: "",
-    sampleLabel: "",
-    regulatoryRequirements: "",
-    qualityControlChecks: "",
-    controlSample: "",
-    referenceSample: "",
-    sampleIntegrityStatus: "",
-    assignedDepartment: "",
-    riskAssessment: "",
-    supervisor: "",
-    sampleMovementHistory: "",
-    testingProgress: "",
-    alertsNotifications: "",
-    deviationLogs: "",
-    commentsNotes: "",
-    attachments: null,
-    samplingFrequency: "",
-    sampleDisposition: "",
-
-    stabilityStudyType: "",
-    stabilityStudyProtocol: "",
-    stabilityProtocolApprovalDate: "",
-    countryOfRegulatorySubmissions: "",
-    ichZone: "",
-    photostabilityTestingResults: "",
-    reconstitutionStability: "",
-    testingInterval: "",
-    shelfLifeRecommendation: "",
-
-    reviewerApprover: "",
-    reviewerComment: "",
-    reviewDate: "",
-    qaReviewerApprover: "",
-    qaReviewerComment: "",
-    qaReviewDate: "",
-  });
-  console.log(formData, "<><><><><>?<>?<>?<>?<>?<>?");
-
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-  };
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (location.state?.sampleData) {
+      setFormData(location.state.sampleData);
+    }
+  }, [location.state]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -120,24 +39,21 @@ const SampleWorkflowPanel = ({ onClose }) => {
     }));
   };
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   const handleSave = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/create-sample`,
+        `http://localhost:9000/save-sample`,
         formData
       );
-      if (response.status === 200) {
-        toast.success("Sample Workflow added successfully.");
-        setIsModalOpen(false);
-        navigate("/sampleWorkflow");
-      } else {
-        toast.error("Failed to adsd Sample Workflow.");
-      }
+      toast.success("Sample data saved successfully!");
+      navigate("/samples");
     } catch (error) {
-      toast.error(
-        "Error adding Sample Workflow: " +
-          (error.response?.data || error.message)
-      );
+      console.error("Error saving data:", error);
+      toast.error("Error saving sample data.");
     }
   };
 
