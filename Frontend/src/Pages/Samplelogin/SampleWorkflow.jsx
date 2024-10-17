@@ -27,6 +27,7 @@ import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
+import {BASE_URL} from "../../config.json"
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,6 +39,8 @@ const SampleWorkFlow = () => {
   const [viewModalData, setViewModalData] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [loading,setLoading]=useState({});
+  const[selectedSampleId,setSelectedSamppleId]=useState(null);
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -50,13 +53,23 @@ const SampleWorkFlow = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sLSamplePA`
-      );
-      const fetchedData = response?.data[0]?.sLSamplePA || [];
-      setData(fetchedData);
+      const response = await axios.get(`${BASE_URL}/get-sample`);
+      console.log(response.data); // Check the structure of the response
+
+      // Assuming the actual array is nested inside a 'data' property
+      const responseData = Array.isArray(response.data)
+        ? response.data
+        : response.data.data;
+
+      const updatedData = responseData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+      }));
+setSelectedSamppleId(updatedData.id);
+      setData(updatedData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching ", error);
+      toast.error("Failed to fetch ");
     }
   };
   useEffect(() => {
@@ -84,6 +97,30 @@ const SampleWorkFlow = () => {
     // console.log("Updated row data:", updatedRow);
     // Update the rows here (if using state or Redux for state management)
   };
+
+  const generatePDF = async (sampleId) => {
+    console.log("Generating PDF for Sample ID:", sampleId);
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
+    try {
+      const response = await fetch(`http://localhost:9000/generate-report/${sampleId}`);
+      console.log("Response Status:", response.status);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Sample_Report_${sampleId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
+  };
+
 
   const columns = [
     {
@@ -443,6 +480,17 @@ const SampleWorkFlow = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <button
+        className="px-3 py-2 rounded flex gap-2 items-center bg-green-600 text-white font-medium cursor-pointer"
+        onClick={() => generatePDF(selectedSampleId)}
+      >
+        Generate Report
+        {loading[selectedSampleId] ? (
+          <div className="h-5 w-5 border-t-2 border-b-2 border-black animate-spin rounded-full"></div>
+        ) : (
+          <FontAwesomeIcon icon="fa-regular fa-file-pdf" />
+        )}
+      </button>
           <PDFDownload
             columns={columns}
             data={filteredData}
@@ -591,8 +639,8 @@ const SampleWorkFlow = () => {
         <tbody>
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100">
-              <tr>
-                <td className="border px-4 py-2">{index + 1}</td>
+              
+                <td  className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{data.samplePlanId}</td>
                 <td className="border px-4 py-2">{data.sampleId}</td>
                 <td className="border px-4 py-2">{data.sampleName}</td>
@@ -703,7 +751,7 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
                 <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
                 <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
-              </tr>
+
 
               <td className="border px-4 py-2 font-medium">
                 {" "}

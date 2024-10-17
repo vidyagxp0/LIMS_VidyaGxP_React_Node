@@ -24,9 +24,9 @@ const ReusableModal = ({
 }) => {
   const [statusModal, setStatusModal] = useState(false);
   const handleStatusChange = (newStatus) => {
-    updateStatus(newStatus); // Update status in the parent component
-    setStatusModal(false); // Close status modal
-    closeModal(); // Close view modal
+    updateStatus( newStatus);
+    setStatusModal(false);
+    closeModal();
   };
   return (
     <>
@@ -81,12 +81,15 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
     const newStatus = e.target.value;
     setSelectedStatus(newStatus);
     console.log("Selected status:", newStatus);
   };
 
   const handleUpdate = () => {
+    onUpdateStatus(selectedStatus); // Call parent function to update the status
+    closeModal(); // Close the modal
     if (selectedStatus) {
       console.log("Updating status to:", selectedStatus);
       onUpdateStatus(selectedStatus);
@@ -108,11 +111,11 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
           onChange={handleStatusChange}
           options={[
             { label: "Select Status", value: "" },
-            // { label: "Approve", value: "APPROVED" },
-            // { label: "Drop", value: "DROPPED" },
-            // { label: "Reject", value: "REJECTED" },
-            { label: "Active", value: "ACTIVE" },
-            { label: "Inactive", value: "INATCIVE" },
+            { label: "Approve", value: "APPROVED" },
+            { label: "Drop", value: "DROPPED" },
+            { label: "Reject", value: "REJECTED" },
+            // { label: "Active", value: "ACTIVE" },
+            // { label: "Inactive", value: "INATCIVE" },
           ]}
         />
       </CModalBody>
