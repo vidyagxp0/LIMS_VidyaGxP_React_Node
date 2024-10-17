@@ -76,7 +76,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  testParmeter: {
+  testParameter: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -281,6 +281,18 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     allowNull: true,
   },
   shelfLifeRecommendation: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  analysisType: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  analysisDate: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  analysisResult: {
     type: DataTypes.TEXT,
     allowNull: true,
   },

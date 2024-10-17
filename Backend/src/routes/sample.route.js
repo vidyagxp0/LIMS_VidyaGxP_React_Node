@@ -15,6 +15,7 @@ import {
 } from "../controllers/sampleWorkFlow.controller.js";
 import { upload } from "../utils/multer.js";
 import { checkJwtToken } from "../middleware/authentication.js";
+import { generatePdfbyId } from "../controllers/report.controller.js";
 
 const sampleRouter = express.Router();
 
@@ -59,5 +60,8 @@ sampleRouter.post("/send-qa-review", checkJwtToken, submitToQAReview);
 sampleRouter.post("/send-to-closed", checkJwtToken, submitToClosed);
 
 sampleRouter.post("/send-to-open", checkJwtToken, ReviewToOpen);
+
+sampleRouter.get("/generate-report/:id", generatePdfbyId);
+
 
 export default sampleRouter;
