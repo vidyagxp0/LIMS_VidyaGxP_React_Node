@@ -30,6 +30,8 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ReusableModal from "../Modals/ResusableModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
 
 const initialData = JSON.parse(localStorage.getItem("data")) || "";
 
@@ -52,28 +54,42 @@ function SpecificationsTestProcedure() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [data, setData] = useState([]);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/mStandardTestProcedure`
-        );
-        const fetchedData = response?.data[0]?.mStandardTestProcedure || [];
-
-        const updatedData = fetchedData.map((item, index) => ({
-          ...item,
-          sno: item?.sno || index + 1,
-        }));
-
-        setData(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchProductData();
   }, []);
+
+  const fetchProductData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mStandardTestProcedure`
+      );
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.mStandardTestProcedure?.map((condition) => ({
+              checkbox: false,
+              sno: condition.uniqueId,
+              productCode: condition.productCode || "No Code",
+              productName: condition.productName || "No Name",
+              specificationID:
+                condition.specificationID || "No Specification ID",
+              specificationName:
+                condition.specificationName || "No Specification Name",
+              effectFrom: condition.effectFrom || " - ",
+              reviewDate: condition.reviewDate || " - ",
+              status: condition.status || "Active",
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
@@ -83,23 +99,29 @@ function SpecificationsTestProcedure() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-  const filteredData = data
-  .filter((row) => {
-    return (
-      row?.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  })
-  .map((row, index) => ({ ...row, sno: index + 1 })); // Assign sno based on filtered data
-
-
-    const onAdd = (newRow) => {
-      const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
-      setData(updatedData);
-    };
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -151,13 +173,25 @@ function SpecificationsTestProcedure() {
   };
 
   const closeViewModal = () => {
-    setViewModalData(false);
+    setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/mStandardTestProcedure/${item.sno}`
+      );
+      if (response.status === 200) {
+        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        toast.success("Product deleted successfully.");
+      } else {
+        toast.error("Failed to delete Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error deleting Product: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -202,253 +236,229 @@ function SpecificationsTestProcedure() {
     setData(updatedData);
   };
 
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/mStandardTestProcedure`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchProductData(); // Refresh data after adding
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [specificationData, setSpecificationData] = useState({
-      productCode: [],
+      productCode: "",
       productName: "",
       specificationName: "",
       specificationID: "",
-      sampleType: [],
-      specificationType: [],
+      sampleType: "",
+      specificationType: "",
       effectFrom: "",
       reviewDate: "",
       supersedes: "",
       standardTestProcedureNo: "",
+      document: null,
     });
-
-    const handleAdd = async () => {
-      const currentDate = new Date().toISOString().split("T")[0];
-      const newCondition = {
-        productCode: specificationData.productCode,
-        productName: specificationData.productName,
-        specificationName: specificationData.specificationName,
-        specificationID: specificationData.specificationID,
-        sampleType: specificationData.sampleType,
-        specificationType: specificationData.specificationType,
-        effectFrom: specificationData.effectFrom,
-        reviewDate: specificationData.reviewDate,
-        supersedes: specificationData.supersedes,
-        standardTestProcedureNo: specificationData.standardTestProcedureNo,
-      };
-
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/manage-lims/add/mStandardTestProcedure",
-          newCondition
-        );
-
-        if (response.status === 200 || response.status === 201) {
-          console.log("Product added successfully:", response.data);
-          closeModal();
-          onAdd(newCondition);
-        } else {
-          console.error("Failed to add product:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error adding product:", error);
-      }
-    };
-
-    const top100Films = [
-      { label: "The Shawshank Redemption", year: 1994 },
-      { label: "The Godfather", year: 1972 },
-      { label: "The Godfather: Part II", year: 1974 },
-      { label: "The Dark Knight", year: 2008 },
-      { label: "12 Angry Men", year: 1957 },
+  
+    const materialCode = [
+      { label: "PRD-001" },
+      { label: "PRD-002" },
+      { label: "MAT-001" },
+      { label: "MAT-002" },
+      { label: "PRD-003" },
+      { label: "MAT-003" },
+      { label: "PRD-004" },
+      { label: "MAT-004" },
+      { label: "PRD-005" },
+      { label: "MAT-005" },
     ];
-
+  
+    const handleProduct = () => {
+      const newCondition = {
+        ...specificationData,
+        status: "active",
+      };
+      onAdd(newCondition);
+      closeModal(); // Close modal after adding specification
+    };
+  
+    const handleInputChange = (e) => {
+      const { name, value, files } = e.target;
+      setSpecificationData({
+        ...specificationData,
+        [name]: files ? files[0] : value,
+      });
+    };
+  
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <label className="mb-3" htmlFor="">
+          <label className="mb-3" htmlFor="productCode">
             Product/Material Code
           </label>
           <Autocomplete
             className="mb-3"
             disablePortal
             id="combo-box-demo"
-            options={top100Films}
-            renderInput={(params) => <TextField {...params} label="" />}
-            value={specificationData?.productCode}
-            onChange={(e) =>
+            options={materialCode}
+            renderInput={(params) => <TextField {...params} label="Product Code" />}
+            value={specificationData.productCode}
+            onChange={(e, newValue) =>
               setSpecificationData({
                 ...specificationData,
-                productCode: e.target.value,
+                productCode: newValue?.label || "",
               })
             }
           />
-
+  
           <CFormInput
             className="mb-3"
             type="text"
             label="Product Name"
+            name="productName"
             placeholder="Product Name"
-            value={specificationData?.productName}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                productName: e.target.value,
-              })
-            }
+            value={specificationData.productName}
+            onChange={handleInputChange}
           />
-
+  
           <CFormInput
             className="mb-3"
             type="text"
             label="Specification Name"
+            name="specificationName"
             placeholder="Specification Name"
-            value={specificationData?.specificationName}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                specificationName: e.target.value,
-              })
-            }
+            value={specificationData.specificationName}
+            onChange={handleInputChange}
           />
+  
           <CFormInput
             className="mb-3"
             type="text"
             label="Specification ID"
+            name="specificationID"
             placeholder="Specification ID"
-            value={specificationData?.specificationID}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                specificationID: e.target.value,
-              })
-            }
+            value={specificationData.specificationID}
+            onChange={handleInputChange}
           />
-
+  
           <CFormSelect
             className="mb-3"
-            type="select"
             label="Sample Type"
-            value={specificationData?.sampleType}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                sampleType: e.target.value,
-              })
-            }
+            name="sampleType"
+            value={specificationData.sampleType}
+            onChange={handleInputChange}
             options={[
-              "Select Sample Type",
+              { label: "Select Sample Type", value: "" },
               { label: "Raw Material", value: "Raw Material" },
-              { label: "hcl", value: "hcl" },
+              { label: "HCL", value: "HCL" },
               { label: "Hydrochloric Acid", value: "Hydrochloric Acid" },
               { label: "Petrochemical", value: "Petrochemical" },
               { label: "Initiated Product", value: "Initiated Product" },
               { label: "Semi Finished", value: "Semi Finished" },
               { label: "ABCD", value: "ABCD" },
-              { label: "H2So4", value: "H2So4" },
+              { label: "H2SO4", value: "H2SO4" },
               { label: "Micro Media", value: "Micro Media" },
-              { label: "FG Templage", value: "FG Templage" },
+              { label: "FG Template", value: "FG Template" },
             ]}
           />
+  
           <CFormSelect
             className="mb-3"
-            type="select"
             label="Specification Type"
-            value={specificationData?.specificationType}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                specificationType: e.target.value,
-              })
-            }
+            name="specificationType"
+            value={specificationData.specificationType}
+            onChange={handleInputChange}
             options={[
-              "Select Specification Type",
-              { label: "environment", value: "environment" },
-              { label: "culture", value: "culture" },
-              { label: "culture1", value: "culture1" },
-              { label: "working-standard", value: "working-standard" },
-              { label: "tentative", value: "tentative" },
-              { label: "release", value: "release" },
-              { label: "regulatory", value: "regulatory" },
+              { label: "Select Specification Type", value: "" },
+              { label: "Environment", value: "Environment" },
+              { label: "Culture", value: "Culture" },
+              { label: "Culture1", value: "Culture1" },
+              { label: "Working Standard", value: "Working Standard" },
+              { label: "Tentative", value: "Tentative" },
+              { label: "Release", value: "Release" },
+              { label: "Regulatory", value: "Regulatory" },
               { label: "Raw Material", value: "Raw Material" },
-              { label: "instrument", value: "instrument" },
-              { label: "shell life", value: "shell life" },
+              { label: "Instrument", value: "Instrument" },
+              { label: "Shelf Life", value: "Shelf Life" },
             ]}
           />
+  
           <CFormInput
             className="mb-3"
             type="date"
             label="Effective From"
-            placeholder=""
-            value={specificationData?.effectFrom}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                effectFrom: e.target.value,
-              })
-            }
+            name="effectFrom"
+            value={specificationData.effectFrom}
+            onChange={handleInputChange}
           />
+  
           <CFormInput
             className="mb-3"
             type="date"
             label="Review Date"
-            placeholder=""
-            value={specificationData?.reviewDate}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                reviewDate: e.target.value,
-              })
-            }
+            name="reviewDate"
+            value={specificationData.reviewDate}
+            onChange={handleInputChange}
           />
+  
           <CFormInput
             className="mb-3"
             type="text"
             label="Supersedes"
+            name="supersedes"
             placeholder="Supersedes"
-            value={specificationData?.supersedes}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                supersedes: e.target.value,
-              })
-            }
+            value={specificationData.supersedes}
+            onChange={handleInputChange}
           />
+  
           <CFormInput
             className="mb-3"
             type="text"
             label="Standard Test Procedure No."
+            name="standardTestProcedureNo"
             placeholder="Standard Test Procedure No."
-            value={specificationData?.standardTestProcedureNo}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                standardTestProcedureNo: e.target.value,
-              })
-            }
+            value={specificationData.standardTestProcedureNo}
+            onChange={handleInputChange}
           />
+  
           <CFormInput
             className="mb-3"
             type="file"
             label="Document"
-            placeholder=""
-            value={specificationData?.document}
-            onChange={(e) =>
-              setSpecificationData({
-                ...specificationData,
-                document: e.target.value,
-              })
-            }
+            name="document"
+            onChange={handleInputChange}
           />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleProduct}>
             Add Specifications
           </CButton>
         </CModalFooter>
       </CModal>
     );
   };
+  
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -457,12 +467,28 @@ function SpecificationsTestProcedure() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/mStandardTestProcedure/${updatedData.sno}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("Product updated successfully.");
+        setEditModalData(null);
+      } else {
+        toast.error("Failed to update Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating Product: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -487,12 +513,17 @@ function SpecificationsTestProcedure() {
         setInputValue(value);
       }
     };
-    const top100Films = [
-      { label: "The Shawshank Redemption", year: 1994 },
-      { label: "The Godfather", year: 1972 },
-      { label: "The Godfather: Part II", year: 1974 },
-      { label: "The Dark Knight", year: 2008 },
-      { label: "12 Angry Men", year: 1957 },
+    const materialCode = [
+      { label: "PRD-001" },
+      { label: "PRD-002" },
+      { label: "MAT-001" },
+      { label: "MAT-002" },
+      { label: "PRD-003" },
+      { label: "MAT-003" },
+      { label: "PRD-004" },
+      { label: "MAT-004" },
+      { label: "PRD-005" },
+      { label: "MAT-005" },
     ];
 
     return (
@@ -509,7 +540,7 @@ function SpecificationsTestProcedure() {
             disablePortal
             name="productCode"
             id="combo-box-demo"
-            options={top100Films}
+            options={materialCode}
             renderInput={(params) => <TextField {...params} label="" />}
             value={formData?.productCode || ""}
             onChange={handleChange}
@@ -698,7 +729,7 @@ function SpecificationsTestProcedure() {
       {isModalOpen && (
         <StatusModal
           visible={isModalOpen}
-          onAdd={onAdd}
+          onAdd={handleAdd}
           closeModal={closeModal}
         />
       )}

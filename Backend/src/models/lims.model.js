@@ -2,6 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
 const commonFields = [
+  "approval",
   "specification",
   "storageCondition",
   "storageLocation",
@@ -20,6 +21,7 @@ const commonFields = [
   "sMStorageCondition",
   "sMStandardProtocol",
   "sMStorageChamber",
+  "mTestRegistration",
   "sMChamberConditionMapping",
   "sMStabilityProtocol",
   "sMSampleStorage",

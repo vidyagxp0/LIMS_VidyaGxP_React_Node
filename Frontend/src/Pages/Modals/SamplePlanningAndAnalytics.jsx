@@ -14,6 +14,7 @@ import {
 } from "@coreui/react";
 import axios from 'axios';
 import BASE_URL from "../../config.json"
+import { toast } from "react-toastify";
 
 
 const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
@@ -90,12 +91,12 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
       .then((response) => {
         addRow(formData); 
         handleClose();
+        toast.success("Data added successfully");
       })
       .catch((error) => {
         console.error("There was an error submitting the data:", error);
       });
 
-    // Reset the form after submission
     setFormData({
       samplePlanId: "",
       sampleId: "",
@@ -191,9 +192,9 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Sample Type"
             value={formData.sampleType}
             onChange={handleChange}
-            placeholder="Enter Sample Type"
           />
           <CFormInput
+          type="number"
             name="batchLotNumber"
             label="Batch/Lot Number"
             value={formData.batchLotNumber}
@@ -219,9 +220,9 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Sample Priority"
             value={formData.samplePriority}
             onChange={handleChange}
-            placeholder="Enter Sample Priority"
           />
           <CFormInput
+          type="number"
             name="sampleQuantity"
             label="Sample Quantity"
             value={formData.sampleQuantity}
@@ -233,7 +234,6 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Tests"
             value={formData.tests}
             onChange={handleChange}
-            placeholder="Enter Sampling Method"
           />
           <CFormInput
             name="specificationId"
@@ -242,12 +242,12 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             onChange={handleChange}
             placeholder="Enter Storage Condition"
           />
-          <CFormTextarea
+          <CFormInput
+          type="file"
             name="specificationAttachment"
             label="Specification Attachment"
             value={formData.specificationAttachment}
             onChange={handleChange}
-            placeholder="Enter specificationAttachment"
           />
           <CFormInput
             name="stpId"
@@ -257,46 +257,45 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             placeholder="Enter Sample Temperature"
           />
           <CFormInput
+          type="file"
             name="stpAttachment"
             label="STP Attachment"
             value={formData.stpAttachment}
             onChange={handleChange}
-            placeholder="Enter Sample Packaging"
           />
           <CFormInput
             name="testPlanId"
             label="Test Plan Id"
             value={formData.testPlanId}
             onChange={handleChange}
-            placeholder="Enter Hazard Classification"
+            
           />
           <CFormInput
             name="testName"
             label="Test Name"
             value={formData.testName}
             onChange={handleChange}
-            placeholder="Enter Sample Collector"
+            
           />
           <CFormInput
             name="testMethod"
             label="Test Method"
             value={formData.testMethod}
             onChange={handleChange}
-            placeholder="Enter Collection Method"
+            
           />
           <CFormInput
             name="testParameters"
             label="Test Parameters"
             value={formData.testParameters}
             onChange={handleChange}
-            placeholder="Enter Sample Test Method"
+
           />
           <CFormInput
             name="testingFrequency"
             label="Testing Frequency"
             value={formData.testingFrequency}
             onChange={handleChange}
-            placeholder="Enter Sample Test Location"
           />
           <CFormInput
             name="testingLocation"
@@ -317,28 +316,24 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Lab Technician Name"
             value={formData.labTechnicianName}
             onChange={handleChange}
-            placeholder="Enter Lab Technician Name"
           />
           <CFormInput
             name="testGrouping"
             label="Test Grouping"
             value={formData.testGrouping}
             onChange={handleChange}
-            placeholder="Enter Lab Technician Signature"
           />
           <CFormInput
             name="expectedResults"
             label="Expected Results"
             value={formData.expectedResults}
             onChange={handleChange}
-            placeholder="Enter Test Result"
           />
           <CFormInput
             name="testingDeadline"
             label="Testing Deadline"
             value={formData.testingDeadline}
             onChange={handleChange}
-            placeholder="Enter Approval Status"
           />
           <CFormInput
             name="plannerName"
@@ -351,28 +346,24 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Lab Technician"
             value={formData.labTechnician}
             onChange={handleChange}
-            placeholder="Enter Testing Device"
           />
           <CFormInput
             name="reviewer"
             label="Reviewer"
             value={formData.reviewer}
             onChange={handleChange}
-            placeholder="Enter Testing Lab"
           />
           <CFormInput
             name="assignedDepartment"
             label="Assigned Department"
             value={formData.assignedDepartment}
             onChange={handleChange}
-            placeholder="Enter Test Certification"
           />
           <CFormInput
             name="supervisor"
             label="Supervisor"
             value={formData.supervisor}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
           <CFormInput
@@ -381,28 +372,26 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             value={formData.sampleCollectionDate}
             type="date"
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
+          type="date"
             name="testingStartDate"
             label="Testing Start Date"
             value={formData.testingStartDate}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="testingEndDate"
+            type="date"
             label="Testing End Date"
             value={formData.testingEndDate}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="turnaroundTime"
             label="Turn Around Time"
             value={formData.turnaroundTime}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="sampleRetestingDate"
@@ -410,7 +399,6 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             type="date"
             value={formData.sampleRetestingDate}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="reviewDate"
@@ -418,35 +406,30 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             type="date"
             value={formData.reviewDate}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="sampleStorageLocation"
             label="Sample Storage Location"
             value={formData.sampleStorageLocation}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="transportationMethod"
             label="Transportation Method"
             value={formData.transportationMethod}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="samplePreparationMethod"
             label="Sample Preparation Method"
             value={formData.samplePreparationMethod}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="samplePackagingDetails"
             label="Sample Packaging Details"
             value={formData.samplePackagingDetails}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
           <CFormInput
@@ -454,7 +437,6 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Sample Label"
             value={formData.sampleLabel}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
           <CFormInput
@@ -462,35 +444,30 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Regulatory Requirements"
             value={formData.regulatoryRequirements}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="qualityControlChecks"
             label="Quality Control Checks"
             value={formData.qualityControlChecks}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="controlSampleReference"
             label="Control Sample Reference"
             value={formData.controlSampleReference}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="sampleIntegrityStatus"
             label="Sample Integrity Status"
             value={formData.sampleIntegrityStatus}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="riskAssessment"
             label="Risk Assessment"
             value={formData.riskAssessment}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
           <CFormInput
@@ -498,21 +475,18 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Instruments Reserved"
             value={formData.instrumentsReserved}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="labAvailability"
             label="Lab Availability"
             value={formData.labAvailability}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="sampleCostEstimation"
             label="Sample Cost Estimation"
             value={formData.sampleCostEstimation}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
           <CFormInput
@@ -520,65 +494,57 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Resource Utilization"
             value={formData.resourceUtilization}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="sampleMovementHistory"
             label="Sample Movement History"
             value={formData.sampleMovementHistory}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="testingProgress"
             label="Testing Progress"
             value={formData.testingProgress}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="alertsNotifications"
             label="Alerts Notifications"
             value={formData.alertsNotifications}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="deviationLogs"
             label="Deviation Logs"
             value={formData.deviationLogs}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
-          <CFormInput
+          <CFormTextarea
             name="comments"
             label="Comments"
             value={formData.comments}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
           <CFormInput
             name="attachments"
             label="Attachments"
+            type="file"
             value={formData.attachments}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="samplingFrequency"
             label="Sampling Frequency"
             value={formData.samplingFrequency}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
           <CFormInput
             name="sampleDisposition"
             label="Sample Disposition"
             value={formData.sampleDisposition}
             onChange={handleChange}
-            placeholder="Enter Sample Retention Time"
           />
 
           <CButton type="submit" color="primary" style={{ marginTop: "1rem" }}>

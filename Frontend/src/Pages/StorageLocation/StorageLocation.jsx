@@ -1,7 +1,19 @@
-import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from "@coreui/react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import React from "react";
 
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -12,39 +24,52 @@ import ImportModal from "../Modals/importModal";
 import ViewModal from "../Modals/ViewModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+import { toast } from "react-toastify";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    storageCode: "SC001",
-    storageName: "Storage 1",
-    attachment: "attachment",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    storageCode: "SC002",
-    storageName: "Storage 2",
-    attachment: "attachment",
-    status: "Inactive",
-  },
+const fields = [
+  { label: "Storage Code", key: "storageCode" },
+  { label: "Storage Name", key: "storageName" },
+  { label: "attachment", key: "attachment" },
+  { label: "Status", key: "status" },
 ];
 
 function StorageLocation() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [viewModalData, setViewModalData] = useState(null);
-  const [deleteItem, setDeleteItem] = useState(null);
-  const [delModal, setDelModal] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [openDelModal, setOpenDelModal] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Inactive");
   const [editModalData, setEditModalData] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/storageLocation`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.storageLocation || []; // Adjust this based on your API response structure
+
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching ", error);
+      toast.error("Failed to fetch ");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -53,11 +78,34 @@ function StorageLocation() {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/storageLocation/${item.uniqueId}`
+      );
+
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success(" deleted successfully");
+
+        console.log("Deleted item:", item);
+      }
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting :", error);
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -66,20 +114,11 @@ function StorageLocation() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.storageName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
-  };
-
   const columns = [
-    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
     { header: "SrNo.", accessor: "sno" },
     { header: "Storage Code", accessor: "storageCode" },
     { header: "Storage Name", accessor: "storageName" },
@@ -90,82 +129,147 @@ function StorageLocation() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)} />
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => onDeleteItem(row)}
+          />
         </>
       ),
     },
   ];
 
-  const openModal = () => {
-    setIsModalOpen(true);
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        console.log("Row:", row); // Log each row to see its structure
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
+
+  const onViewDetails = (rowData) => {
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
-    console.log("Deleted item:", item);
   };
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
       sno: index + 1,
-      storageCode: item["Storage Code"] || "",
       storageName: item["Storage Name"] || "",
-      attachment: item["Attachment"] || "", // Ensure field name matches your Excel data
-      status: item["Status"] || "",
+      StorageCode: item["Storage Code"] || "",
+      attachment: item["attachment"] || "",
+      status: item["Status"] || "Active",
     }));
 
-    // Concatenate the updated data with existing data
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Update data state with parsed Excel data
+    setIsModalsOpen(false);
   };
-  const addNewStorageCondition = (newCondition) => {
-    setData((prevData) => [
-      ...prevData,
-      { ...newCondition, sno: prevData.length + 1, checkbox: false, storageCode: "CC" + 1 },
-    ]);
-    setIsModalOpen(false); // Close the modal after adding new condition
+
+  const addNewStorageLocation = async (newCondition) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/storageLocation`,
+        {
+          storageName: newCondition.storageName,
+          storageCode: newCondition.storageCode,
+          attachment: "Attachment",
+          status: newCondition.status || "Active",
+        }
+      );
+
+      if (response.status === 200) {
+        const addedStorageLocation = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedStorageLocation,
+            sno: addedStorageLocation.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+        closeModal();
+        fetchData();
+
+        toast.success(" added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding :", error);
+      toast.error("Failed to add ");
+    }
+
+    setIsModalOpen(false);
+  };
+
+  const handleStatusUpdate = (testPlan, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.testPlan === testPlan ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [name, setName] = useState("");
-
+    const [storageName, setstorageName] = useState("");
+    const [storageCode, setstorageCode] = useState("");
+    const [attachment, setattachment] = useState("");
     const handleAdd = () => {
       const newCondition = {
-        storageCode: "",
-        storageName: name,
-        createdAt: new Date().toISOString().split("T")[0], // Current date
-        attachment: "attachment",
-        status: "Active",
+        storageName,
+        storageCode,
+        attachment,
+        status: "active",
       };
-
       onAdd(newCondition);
     };
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>New Storage Location</CModalTitle>
+          <CModalTitle>New Storage Condition</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
             type="text"
             label="Name"
-            placeholder="Location Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="Storage Name"
+            value={storageName}
+            onChange={(e) => setstorageName(e.target.value)}
           />
+
+          <CFormInput
+            type="text"
+            label="Storage Code"
+            placeholder="Storage Code"
+            value={storageCode}
+            onChange={(e) => setstorageCode(e.target.value)}
+          />
+
+          {/* <CFormInput
+            type="file"
+            label="attachment"
+            placeholder="attachment"
+            value={attachment}
+            onChange={(e) => setattachment(e.target.value)}
+          /> */}
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
@@ -186,10 +290,30 @@ function StorageLocation() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) => (item.sno === updatedData.sno ? updatedData : item));
-    setData(newData);
-    setEditModalData(null);
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/storageLocation/${updatedData.uniqueId}`,
+        updatedData // Sending the updated data
+      );
+
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...updatedData }
+            : item
+        );
+
+        setData(newData);
+        toast.success(" updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating ", error);
+      toast.error("Failed to update");
+    } finally {
+      setEditModalData(null);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -225,16 +349,24 @@ function StorageLocation() {
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>New Storage Location</CModalTitle>
+          <CModalTitle>New Storage Condition</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
             type="text"
-            label="Name"
-            placeholder="Location Name"
-            value={formData?.storageName || ""}
+            label="Storage Name"
+            placeholder="Storage Name"
+            value={formData?.storageName}
             onChange={handleChange}
             name="storageName"
+          />
+          <CFormInput
+            type="text"
+            label="Storage Code"
+            placeholder="Storage Code"
+            value={formData?.storageCode}
+            onChange={handleChange}
+            name="storageCode"
           />
         </CModalBody>
         <CModalFooter>
@@ -251,11 +383,10 @@ function StorageLocation() {
 
   return (
     <>
+      <LaunchQMS />
       <div className="m-5 mt-3">
-        <LaunchQMS />
-
         <div className="main-head">
-          <h4 className="fw-bold ">Storage Location</h4>
+          <h4 className="fw-bold">Storage Conditions</h4>
         </div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
@@ -274,77 +405,67 @@ function StorageLocation() {
             <PDFDownload
               columns={columns}
               data={filteredData}
-              title="Storage Location"
-              fileName="Storage_Location.pdf"
+              attachment="Storage_Condition.pdf"
+              title="Storage Condition Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Storage Location" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Storage Condition"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
-        <Table
-          columns={columns}
-          data={filteredData}
-          onDelete={handleDelete}
-          onCheckboxChange={handleCheckboxChange}
-          onViewDetails={onViewDetails}
-          openEditModal={openEditModal}
-        />
+        {filteredData && filteredData.length > 0 ? (
+          <Table
+            columns={columns}
+            data={filteredData}
+            onCheckboxChange={handleCheckboxChange}
+            onViewDetails={onViewDetails}
+            onDelete={handleDelete}
+            openEditModal={openEditModal}
+          />
+        ) : (
+          <p>No storage conditions available.</p>
+        )}{" "}
       </div>
 
-      {isModalOpen && <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition} />}
-      {isViewModalOpen && <ViewModal visible={isViewModalOpen} closeModal={closeViewModal} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={addNewStorageLocation}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
       {isModalsOpen && (
         <ImportModal
-          initialData={initialData}
+          initialData={filteredData}
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
         />
       )}
-      <EditModal
-        visible={Boolean(editModalData)}
-        closeModal={closeEditModal}
-        data={editModalData}
-        onSave={handleEditSave}
-      />
     </>
   );
 }
-
-const RemoveModal = (props) => {
-  return (
-    <CModal alignment="center" visible={props.visible} onClose={props.closeModal} size="lg">
-      <CModalHeader>
-        <CModalTitle>Delete Storage Location</CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <p>Are you sure you want to delete this storage location?</p>
-      </CModalBody>
-      <CModalFooter>
-        <CButton
-          color="secondary"
-          onClick={props.closeModal}
-          style={{
-            marginRight: "0.5rem",
-            fontWeight: "500",
-          }}
-        >
-          Cancel
-        </CButton>
-        <CButton
-          color="danger"
-          onClick={props.confirmDelete}
-          style={{
-            fontWeight: "500",
-            color: "white",
-          }}
-        >
-          Delete
-        </CButton>
-      </CModalFooter>
-    </CModal>
-  );
-};
 
 export default StorageLocation;
