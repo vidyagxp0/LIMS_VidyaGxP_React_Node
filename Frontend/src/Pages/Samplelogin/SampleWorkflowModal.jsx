@@ -25,6 +25,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     supervisorReview: {},
     stabilityInformation: {},
   });
+  console.log(formData, "<><><><><>?<>?<>?<>?<>?<>?");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -40,9 +41,10 @@ const SampleWorkflowModal = ({ onClose }) => {
     });
   };
 
-  const handleSave = (tab) => {
-    console.log(`Data saved for ${tab}:`, formData[tab]);
-    alert(`Data saved for ${tab}`);
+  const handleSave = () => {
+    alert(
+      `Data saved for ${activeTab}: ${JSON.stringify(formData[activeTab])}`
+    );
   };
 
   const renderFields = (tab) => {
@@ -137,15 +139,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="uom"
                   label="UOM"
                   value={formData.sampleRegistration.uom || ""}
-                  onChange={(e) => handleInputChange(e, "sampleRegistration")}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="tests"
-                  label="Tests"
-                  value={formData.sampleRegistration.tests || ""}
                   onChange={(e) => handleInputChange(e, "sampleRegistration")}
                 />
               </CCol>
@@ -277,15 +270,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="testGrouping"
                   label="Test Grouping"
                   value={formData.sampleRegistration.testGrouping || ""}
-                  onChange={(e) => handleInputChange(e, "sampleRegistration")}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="expectedResults"
-                  label="Expected Results"
-                  value={formData.sampleRegistration.expectedResults || ""}
                   onChange={(e) => handleInputChange(e, "sampleRegistration")}
                 />
               </CCol>
@@ -710,7 +694,8 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CRow>
           </CForm>
         );
-      case "Supervisor Review":
+
+      case "Stability Information":
         return (
           <CForm>
             <CRow className="mb-3">
@@ -733,7 +718,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
             </CRow>
-
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -758,7 +742,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
             </CRow>
-
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -781,7 +764,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
             </CRow>
-
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -802,7 +784,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
             </CRow>
-
             <CRow className="mb-3">
               <CCol>
                 <CFormInput
@@ -816,7 +797,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CRow>
           </CForm>
         );
-      case "Stability Information":
+      case "Supervisor Review":
         return (
           <CForm>
             {/* Reviewer/Approver Section */}
@@ -854,7 +835,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  type="text" 
+                  type="text"
                   name="qaReviewerApprover"
                   label="QA Reviewer/Approver"
                   value={formData?.qaReviewInfo?.qaReviewerApprover || ""}
@@ -887,18 +868,24 @@ const SampleWorkflowModal = ({ onClose }) => {
       default:
         return null;
     }
-  };    
-
-
-
-
-
-
-  
+  };
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <div className="flex space-x-4 mb-8">
+        <CButton
+          color={
+            activeTab === "Stability Information" ? "primary" : "secondary"
+          }
+          onClick={() => handleTabClick("Stability Information")}
+          className={`transition-all duration-300 ${
+            activeTab === "Stability Information"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+        >
+          Stability Information
+        </CButton>
         <CButton
           color={activeTab === "Sample Registration" ? "primary" : "secondary"}
           onClick={() => handleTabClick("Sample Registration")}
@@ -921,6 +908,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         >
           Sample Analysis
         </CButton>
+
         <CButton
           color={activeTab === "Supervisor Review" ? "primary" : "secondary"}
           onClick={() => handleTabClick("Supervisor Review")}
@@ -931,19 +919,6 @@ const SampleWorkflowModal = ({ onClose }) => {
           } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
         >
           Supervisor Review
-        </CButton>
-        <CButton
-          color={
-            activeTab === "Stability Information" ? "primary" : "secondary"
-          }
-          onClick={() => handleTabClick("Stability Information")}
-          className={`transition-all duration-300 ${
-            activeTab === "Stability Information"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700"
-          } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-        >
-          Stability Information
         </CButton>
       </div>
 
