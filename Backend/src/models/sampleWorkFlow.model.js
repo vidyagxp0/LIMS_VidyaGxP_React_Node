@@ -44,10 +44,6 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  tests: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
   market: {
     type: DataTypes.TEXT,
     allowNull: true,
@@ -80,7 +76,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  testParmeter: {
+  testParameter: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -288,11 +284,31 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  analysisType: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  analysisDate: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  analysisResult: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   reviewerApprover: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  initiatorComment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   reviewerComment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  supervisorComment: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -312,17 +328,13 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  comment: {
-    type: TEXT,
-    allowNull: true,
-  },
   stage: {
     type: TEXT,
     defaultValue: 1,
     allowNull: true,
   },
   status: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: true,
     defaultValue: "Under Initiation",
   },
