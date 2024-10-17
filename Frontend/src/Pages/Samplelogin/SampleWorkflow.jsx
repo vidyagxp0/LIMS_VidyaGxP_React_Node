@@ -29,6 +29,7 @@ import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
+  console.log(data,"????????????????????????????")
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -141,7 +142,10 @@ const SampleWorkFlow = () => {
     { header: "Review Date", accessor: "reviewDate" },
     { header: "Sample Storage Location", accessor: "sampleStorageLocation" },
     { header: "Transportation Method", accessor: "transportationMethod" },
-    {header: "Sample Preparation Method",accessor: "samplePreparationMethod",},
+    {
+      header: "Sample Preparation Method",
+      accessor: "samplePreparationMethod",
+    },
     { header: "Sample Packaging Details", accessor: "samplePackagingDetails" },
     { header: "Sample Label", accessor: "sampleLabel" },
     { header: "Regulatory Requirements", accessor: "regulatoryRequirements" },
@@ -160,7 +164,10 @@ const SampleWorkFlow = () => {
     { header: "Sample Disposition", accessor: "sampleDisposition" },
     { header: "Stability Study Type", accessor: "stabilityStudyType" },
     { header: "Stability Study Protocol", accessor: "stabilityStudyProtocol" },
-    {header: "Stability Protocol Approval Date",accessor: "stabilityProtocolApprovalDate",},
+    {
+      header: "Stability Protocol Approval Date",
+      accessor: "stabilityProtocolApprovalDate",
+    },
     {
       header: "Country of Regulatory Submissions",
       accessor: "countryOfRegulatorySubmissions",
@@ -261,7 +268,6 @@ const SampleWorkFlow = () => {
       uom: item["UOM"] || "",
       market: item["Market"] || "",
       sampleBarCode: item["Sample Barcode"] || "",
-
       specificationId: item["Specification ID"] || "",
       specificationAttachment: item["Specification Attachment"] || "",
       sTPId: item["STP ID"] || "",
@@ -277,13 +283,11 @@ const SampleWorkFlow = () => {
       lsl: item["LSL"] || "",
       usl: item["USL"] || "",
       testingDeadline: item["Testing Deadline"] || "",
-
       plannerName: item["Planner Name"] || "",
       labTechnician: item["Lab Technician"] || "",
       reviewerApprover: item["Reviewer/Approver"] || "",
       assignedDepartment: item["Assigned Department"] || "",
       supervisor: item["Supervisor"] || "",
-
       sampleCollectionDate: item["Sample Collection Date"] || "",
       testingStartDate: item["Testing Start Date"] || "",
       testingEndDate: item["Testing End Date"] || "",
@@ -293,58 +297,47 @@ const SampleWorkFlow = () => {
       turnaroundTime: item["Turnaround Time (TAT)"] || "",
       sampleRetestingDate: item["Sample Retesting Date"] || "",
       reviewDate: item["Review Date"] || "",
-
       sampleStorageLocation: item["Sample Storage Location"] || "",
       transportationMethod: item["Transportation Method"] || "",
       samplePreparationMethod: item["Sample Preparation Method"] || "",
       samplePackagingDetails: item["Sample Packaging Details"] || "",
       sampleLabel: item["Sample Label"] || "",
-
       regulatoryRequirements: item["Regulatory Requirements"] || "",
       qualityControlChecks: item["Quality Control Checks"] || "",
       controlSampleReference: item["Control Sample Reference"] || "",
       sampleIntegrityStatus: item["Sample Integrity Status"] || "",
       riskAssessment: item["Risk Assessment"] || "",
-
       instrumentsReserved: item["Instruments Reserved"] || "",
       labAvailability: item["Lab Availability"] || "",
       sampleCostEstimation: item["Sample Cost Estimation"] || "",
       resourceUtilization: item["Resource Utilization"] || "",
-
       sampleMovementHistory: item["Sample Movement History"] || "",
       testingProgress: item["Testing Progress"] || "",
       alertsNotifications: item["Alerts/Notifications"] || "",
       deviationLogs: item["Deviation Logs"] || "",
-
       commentsNotes: item["Comments/Notes"] || "",
       attachments: item["Attachments"] || "",
       samplingFrequency: item["Sampling Frequency"] || "",
       sampleDisposition: item["Sample Disposition"] || "",
       stabilityStudyType: item["Stability Study Type"] || "",
       stabilityStudyProtocol: item["Stability Study Protocol"] || "",
-      stabilityProtocolApprovalDate:
-        item["Stability Protocol Approval date"] || "",
-      countryOfRegulatorySubmissions:
-        item["Country of Regulatory Submissions"] || "",
+      stabilityProtocolApprovalDate:item["Stability Protocol Approval date"] || "",
+      countryOfRegulatorySubmissions:item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
-      photostabilityTestingResults:
-        item["Photostability Testing results"] || "",
+      photostabilityTestingResults:item["Photostability Testing results"] || "",
       reconstitutionStability: item["Reconstitution Stability"] || "",
       testingIntervalMonths: item["Testing Interval (months)"] || "",
       shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
-
       reviewerComment: item["Reviewer Comment"] || "",
       qaReviewerApprover: item["QA Reviewer/Approver"] || "",
       qaReviewerComment: item["QA Reviewer Comment"] || "",
       qaReviewDate: item["QA Review Date"] || "",
-
       actions: item["Actions"] || "",
     }));
 
-    // Concatenate the updated data with existing data
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Close modal after data upload
+    setIsModalsOpen(false);
   };
 
   const fields = [
@@ -482,16 +475,16 @@ const SampleWorkFlow = () => {
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
-            <th colSpan="32" className="px-4 py-2 bg-yellow-600">
+            <th colSpan="25" className="px-4 py-2 bg-yellow-600">
               Sample Planning Information
             </th>
-            <th colSpan="10" className="px-4 py-2 bg-green-600">
+            <th colSpan="20" className="px-4 py-2 bg-green-600">
               Testing Requirements
             </th>
-            <th colSpan="5" className="px-4 py-2 bg-brown-600">
+            <th colSpan="9" className="px-4 py-2 bg-brown-600">
               Personnel and Roles
             </th>
-            <th colSpan="11" className="px-4 py-2 bg-violet-600">
+            <th colSpan="6" className="px-4 py-2 bg-violet-600">
               Schedule and Timeline
             </th>
             <th colSpan="5" className="px-4 py-2 bg-red-600">
@@ -521,13 +514,10 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Sample Source</td>
             <td className="border px-4 py-2">Planned Date</td>
             <td className="border px-4 py-2">Sample Priority</td>
-
             <td className="border px-4 py-2">Sample Quantity</td>
             <td className="border px-4 py-2">UOM</td>
-            {/* <td className="border px-4 py-2">Test</td> */}
             <td className="border px-4 py-2">Market</td>
             <td className="border px-4 py-2">Sample Barcode</td>
-
             <td className="border px-4 py-2">Specification ID</td>
             <td className="border px-4 py-2">Specification Attachment</td>
             <td className="border px-4 py-2">STP ID</td>
@@ -540,18 +530,16 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Testing Location</td>
             <td className="border px-4 py-2">Required Instruments</td>
             <td className="border px-4 py-2">Test Grouping</td>
-            {/* <td className="border px-4 py-2">Expected Result</td> */}
             <td className="border px-4 py-2">LSL</td>
             <td className="border px-4 py-2">USL</td>
             <td className="border px-4 py-2">Testing Deadline</td>
-
             <td className="border px-4 py-2">Planner Name</td>
             <td className="border px-4 py-2">Lab Technician</td>
             <td className="border px-4 py-2">Reviewer/Approver</td>
             <td className="border px-4 py-2">Assigned Department</td>
             <td className="border px-4 py-2">Supervisor</td>
-
             <td className="border px-4 py-2">Sample Collection Date</td>
+
             <td className="border px-4 py-2">Testing Start Date</td>
             <td className="border px-4 py-2">Testing End Date</td>
             <td className="border px-4 py-2">Delay Justification</td>
@@ -560,13 +548,11 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Turnaround Time (TAT)</td>
             <td className="border px-4 py-2">Sample Retesting Date</td>
             <td className="border px-4 py-2">Review Date</td>
-
             <td className="border px-4 py-2">Sample Storage Location</td>
             <td className="border px-4 py-2">Transportation Method</td>
             <td className="border px-4 py-2">Sample Preparation Method</td>
             <td className="border px-4 py-2">Sample Packaging Details</td>
             <td className="border px-4 py-2">Sample Label</td>
-
             <td className="border px-4 py-2">Regulatory Requirements</td>
             <td className="border px-4 py-2">Quality Control Checks</td>
             <td className="border px-4 py-2">Control Sample Reference</td>
@@ -574,25 +560,23 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Assigned Department</td>
             <td className="border px-4 py-2">Risk Assessment</td>
             <td className="border px-4 py-2">Supervisor</td>
-
             <td className="border px-4 py-2">Instruments Reserved</td>
             <td className="border px-4 py-2">Lab Availability</td>
             <td className="border px-4 py-2">Sample Cost Estimation</td>
             <td className="border px-4 py-2">Resource Utilization</td>
-
             <td className="border px-4 py-2">Sample Movement History</td>
             <td className="border px-4 py-2">Testing Progress</td>
             <td className="border px-4 py-2">Alerts/Notifications</td>
             <td className="border px-4 py-2">Deviation Logs</td>
-
             <td className="border px-4 py-2 text-wrap">Comments/Notes</td>
             <td className="border px-4 py-2">Attachments</td>
             <td className="border px-4 py-2">Sampling Frequency</td>
             <td className="border px-4 py-2">Sample Disposition</td>
+
+
             <td className="border px-4 py-2">Stability Study Type</td>
             <td className="border px-4 py-2">Stability Study Protocol</td>
-            <td className="border px-4 py-2">
-              Stability Protocol Approval date
+            <td className="border px-4 py-2">Stability Protocol Approval date
             </td>
             <td className="border px-4 py-2">
               Country of Regulatory Submissions
@@ -714,6 +698,16 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.reviewerComment}</td>{" "}
               <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
               <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
               <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
               <td className="border px-4 py-2 font-medium">
                 {" "}
