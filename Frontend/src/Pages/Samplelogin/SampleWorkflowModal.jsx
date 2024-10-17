@@ -821,7 +821,7 @@ const SampleWorkflowModal = ({ onClose }) => {
           <CForm>
             {/* Reviewer/Approver Section */}
             <CRow className="mb-3">
-              <CCol md={4}>
+              <CCol md={6}>
                 <CFormInput
                   type="text"
                   name="reviewerApprover"
@@ -830,7 +830,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={(e) => handleInputChange(e, "reviewInfo")}
                 />
               </CCol>
-              <CCol md={4}>
+              <CCol md={6}>
                 <CFormInput
                   type="text"
                   name="reviewerComment"
@@ -839,7 +839,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={(e) => handleInputChange(e, "reviewInfo")}
                 />
               </CCol>
-              <CCol md={4}>
+              <CCol md={6}>
                 <CFormInput
                   type="date"
                   name="reviewDate"
@@ -852,7 +852,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
-              <CCol md={4}>
+              <CCol md={6}>
                 <CFormInput
                   type="text"
                   name="qaReviewerApprover"
@@ -861,7 +861,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={(e) => handleInputChange(e, "qaReviewInfo")}
                 />
               </CCol>
-              <CCol md={4}>
+              <CCol md={6}>
                 <CFormInput
                   type="text"
                   name="qaReviewerComment"
@@ -870,7 +870,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={(e) => handleInputChange(e, "qaReviewInfo")}
                 />
               </CCol>
-              <CCol md={4}>
+              <CCol md={6}>
                 <CFormInput
                   type="date"
                   name="qaReviewDate"
@@ -886,28 +886,42 @@ const SampleWorkflowModal = ({ onClose }) => {
         );
       default:
         return null;
-       
     }
   };
 
   return (
-    <div className="p-6">
-      <div className="flex space-x-4 mb-6">
+    <div className="p-8 bg-gray-100 min-h-screen">
+      <div className="flex space-x-4 mb-8">
         <CButton
           color={activeTab === "Sample Registration" ? "primary" : "secondary"}
           onClick={() => handleTabClick("Sample Registration")}
+          className={`transition-all duration-300 ${
+            activeTab === "Sample Registration"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
         >
           Sample Registration
         </CButton>
         <CButton
           color={activeTab === "Sample Analysis" ? "primary" : "secondary"}
           onClick={() => handleTabClick("Sample Analysis")}
+          className={`transition-all duration-300 ${
+            activeTab === "Sample Analysis"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
         >
           Sample Analysis
         </CButton>
         <CButton
           color={activeTab === "Supervisor Review" ? "primary" : "secondary"}
           onClick={() => handleTabClick("Supervisor Review")}
+          className={`transition-all duration-300 ${
+            activeTab === "Supervisor Review"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
         >
           Supervisor Review
         </CButton>
@@ -916,20 +930,34 @@ const SampleWorkflowModal = ({ onClose }) => {
             activeTab === "Stability Information" ? "primary" : "secondary"
           }
           onClick={() => handleTabClick("Stability Information")}
+          className={`transition-all duration-300 ${
+            activeTab === "Stability Information"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
         >
           Stability Information
         </CButton>
       </div>
 
-      <div className="bg-white shadow-lg p-6 rounded-md">
+      <div className="bg-white shadow-2xl p-8 rounded-md transition-all duration-300">
         {renderFields(activeTab)}
       </div>
-      <CButton onClick={handleSave} className="bg-blue-600 text-white">
-        Save
-      </CButton>
-      <CButton onClick={onClose} className="ml-2">
-        Exit
-      </CButton>
+
+      <div className="flex flex-col gap-3 justify-end mt-6 fixed bottom-24 left-[95%]">
+        <CButton
+          onClick={handleSave}
+          className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
+        >
+          Save
+        </CButton>
+        <CButton
+          onClick={onClose}
+          className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
+        >
+          Exit
+        </CButton>
+      </div>
     </div>
   );
 };
