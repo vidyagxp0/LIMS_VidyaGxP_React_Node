@@ -24,7 +24,7 @@ const ReusableModal = ({
 }) => {
   const [statusModal, setStatusModal] = useState(false);
   const handleStatusChange = (newStatus) => {
-    updateStatus(data.sampleType, newStatus);
+    updateStatus(newStatus);
     setStatusModal(false);
     closeModal();
   };
@@ -80,34 +80,23 @@ const ReusableModal = ({
 const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
-  const handleStatusChange = async (newStatus) => {
-    try {
-      const response = await axios.put(
-        `${BASE_URL}/manage-lims/update-status/${data.sampleType}`,
-        {
-          status: newStatus,
-        }
-      );
-
-      if (response.status === 200) {
-        updateStatus(data.sampleType, newStatus);
-        toast.success("Status updated successfully.");
-      } else {
-        toast.error("Failed to update status.");
-      }
-    } catch (error) {
-      toast.error(
-        "Error updating status: " + (error.response?.data || error.message)
-      );
-    } finally {
-      setStatusModal(false);
-      closeModal();
-    }
+  const handleStatusChange = (e) => {
+    setSelectedStatus(e.target.value);
+    const newStatus = e.target.value;
+    setSelectedStatus(newStatus);
+    console.log("Selected status:", newStatus);
   };
 
   const handleUpdate = () => {
-    onUpdateStatus(selectedStatus);
-    closeModal();
+    onUpdateStatus(selectedStatus); // Call parent function to update the status
+    closeModal(); // Close the modal
+    if (selectedStatus) {
+      console.log("Updating status to:", selectedStatus);
+      onUpdateStatus(selectedStatus);
+      closeModal();
+    } else {
+      console.error("No status selected");
+    }
   };
 
   return (
@@ -125,8 +114,8 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
             { label: "Approve", value: "APPROVED" },
             { label: "Drop", value: "DROPPED" },
             { label: "Reject", value: "REJECTED" },
-            { label: "Active", value: "ACTIVE" },
-            { label: "Inactive", value: "INATCIVE" },
+            // { label: "Active", value: "ACTIVE" },
+            // { label: "Inactive", value: "INATCIVE" },
           ]}
         />
       </CModalBody>

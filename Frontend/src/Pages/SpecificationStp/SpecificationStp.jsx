@@ -31,6 +31,28 @@ import ReusableModal from "../Modals/ResusableModal";
 import { toast } from "react-toastify";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 
+const fields = [
+  { label: "Document Name", key: "documentName" },
+  { label: "Document Type", key: "documentType" },
+  {
+    label: "Department",
+    key: "department",
+  },
+
+  {
+    label: "Author ",
+    key: "author",
+  },
+  {
+    label: "Due Date",
+    key: "dueDate",
+  },
+  { label: "Effective Date", key: "effectiveDate" },
+  { label: "CC References", key: "ccReferences" },
+
+  { label: "Status", key: "status" },
+];
+
 const initialData = [
   {
     sno: 1,
@@ -67,91 +89,10 @@ const initialData = [
     ccReferences: "Initiate",
     status: "Active",
   },
-
-  {
-    sno: 4,
-    documentName: "Standard Operating Procedure for QMS, DMS",
-    documentType: "SOP",
-    department: "CQA",
-    author: "Admin 1",
-    dueDate: "08-10-2024",
-    effectiveDate: "08-10-2024",
-    ccReferences: "QA Reviewer",
-    status: "Active",
-  },
-
-  {
-    sno: 5,
-    documentName: "Testing",
-    documentType: "BPR",
-    department: "IT",
-    author: "Admin 1",
-    dueDate: "29-10-2024",
-    effectiveDate: "07-10-2024",
-    ccReferences: "Obsolete",
-    status: "Inactive",
-  },
-
-  {
-    sno: 6,
-    documentName: "Testing",
-    documentType: "SOP",
-    department: "CQA",
-    author: "Admin 1",
-    dueDate: "10-10-2024",
-    effectiveDate: "10-10-2024",
-    ccReferences: "Initiate",
-    status: "Active",
-  },
-
-  {
-    sno: 7,
-    documentName: "Standard Operating Procedure for QMS, DMS",
-    documentType: "SOP",
-    department: "CQA",
-    author: "Admin 1",
-    dueDate: "08-10-2024",
-    effectiveDate: "08-10-2024",
-    ccReferences: "QA Reviewer",
-    status: "Active",
-  },
-
-  {
-    sno: 8,
-    documentName: "Testing",
-    documentType: "BPR",
-    department: "IT",
-    author: "Admin 1",
-    dueDate: "29-10-2024",
-    effectiveDate: "07-10-2024",
-    ccReferences: "Obsolete",
-    status: "Inactive",
-  },
-];
-
-const fields = [
-  { label: "Document Name", key: "documentName" },
-  { label: "Document Type", key: "documentType" },
-  {
-    label: "Department",
-    key: "department",
-  },
-
-  {
-    label: "Author ",
-    key: "author",
-  },
-  {
-    label: "Due Date",
-    key: "dueDate",
-  },
-  { label: "Effective Date", key: "effectiveDate" },
-  { label: "CC References", key: "ccReferences" },
-  { label: "Status", key: "status" },
 ];
 
 function StorageCondition() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -163,31 +104,32 @@ function StorageCondition() {
   const [dateTo, setDateTo] = useState("");
   const [division, setDivision] = useState("");
   const [period, setPeriod] = useState("");
+  const [sortKey, setSortKey] = useState("documentName"); // Default sort key
+  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
 
-  //   const fetchStorageCondition = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${BASE_URL}/get-all-lims/storageCondition`
-  //       );
-  //       console.log(response);
-  //       const formattedData = response.data[0]?.storageCondition || []; // Adjust this based on your API response structure
+  const fetchSpecificationStp = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/specificationStp`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.specificationStp || []; // Adjust this based on your API response structure
 
-  //       const updatedData = formattedData.map((item, index) => ({
-  //         ...item,
-  //         sno: index + 1,
-  //         checkbox: false,
-  //       }));
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+      }));
 
-  //       setData(updatedData);
-  //     } catch (error) {
-  //       console.error("Error fetching ", error);
-  //       toast.error("Failed to fetch ");
-  //     }
-  //   };
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching ", error);
+      toast.error("Failed to fetch ");
+    }
+  };
 
-  //   useEffect(() => {
-  //     fetchStorageCondition();
-  //   }, []);
+  useEffect(() => {
+    fetchSpecificationStp();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -207,6 +149,25 @@ function StorageCondition() {
     setIsViewModalOpen(false);
   };
 
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
+      );
+
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success(" deleted successfully");
+
+        console.log("Deleted item:", item);
+      }
+      fetchSpecificationStp();
+    } catch (error) {
+      console.error("Error deleting :", error);
+    }
+  };
+
   const handleDateFromChange = (e) => {
     setDateFrom(e.target.value);
   };
@@ -221,25 +182,6 @@ function StorageCondition() {
 
   const handlePeriodChange = (e) => {
     setPeriod(e.target.value);
-  };
-
-  const handleDelete = async (item) => {
-    try {
-      const response = await axios.delete(
-        `${BASE_URL}/delete-lims/storageCondition/${item.uniqueId}`
-      );
-
-      if (response.status === 200) {
-        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
-        setData(newData);
-        toast.success(" deleted successfully");
-
-        console.log("Deleted item:", item);
-      }
-      fetchStorageCondition();
-    } catch (error) {
-      console.error("Error deleting storage condition:", error);
-    }
   };
 
   const handleSelectAll = (e) => {
@@ -271,41 +213,68 @@ function StorageCondition() {
     { header: "Effective Date", accessor: "effectiveDate" },
     { header: "CC References", accessor: "ccReferences" },
     { header: "Status", accessor: "status" },
-    // {
-    //   header: "Actions",
-    //   accessor: "action",
-    //   Cell: ({ row }) => (
-    //     <>
-    //       <FontAwesomeIcon
-    //         icon={faEye}
-    //         className="mr-2 cursor-pointer"
-    //         onClick={() => onViewDetails(row)}
-    //       />
-    //       <FontAwesomeIcon
-    //         icon={faPenToSquare}
-    //         className="mr-2 cursor-pointer"
-    //         onClick={() => openEditModal(row.original)}
-    //       />
-    //       <FontAwesomeIcon
-    //         icon={faTrashCan}
-    //         className="cursor-pointer"
-    //         onClick={() => handleDelete(row.original)}
-    //       />
-    //     </>
-    //   ),
-    // },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+            onClick={() => openEditModal(row.original)}
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
+        </>
+      ),
+    },
   ];
 
+  // Filtering logic
   const filteredData = Array.isArray(data)
     ? data.filter((row) => {
-        console.log("Row:", row); // Log each row to see its structure
-        const productName = row.productName || "";
+        const matchesSearchQuery = row.documentName
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        const matchesStatusFilter =
+          statusFilter === "All" || row.status === statusFilter;
+
+        const matchesDateFrom =
+          !dateFrom || new Date(row.effectiveDate) >= new Date(dateFrom);
+        const matchesDateTo =
+          !dateTo || new Date(row.effectiveDate) <= new Date(dateTo);
+
         return (
-          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-          (statusFilter === "All" || row.status === statusFilter)
+          matchesSearchQuery &&
+          matchesStatusFilter &&
+          matchesDateFrom &&
+          matchesDateTo
         );
       })
     : [];
+
+  // Sorting logic
+  const sortedData = [...filteredData].sort((a, b) => {
+    const aValue = a[sortKey];
+    const bValue = b[sortKey];
+
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      return sortOrder === "asc"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    } else if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
+    }
+    return 0; // For other types, no sorting
+  });
 
   const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
@@ -342,96 +311,166 @@ function StorageCondition() {
   };
 
   // Function to add a new storage condition
-  // const addNewStorageCondition = async (newCondition) => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${BASE_URL}/manage-lims/add/storageCondition`,
-  //       {
-  //         name: newCondition.name,
-  //         conditionCode: newCondition.conditionCode,
-  //         storageCondition: newCondition.storageCondition,
-  //         createdAt: new Date().toISOString(), // Current date as createdAt
-  //         attachment: newCondition.attachment || null,
-  //         status: newCondition.status || "Active",
-  //       }
-  //     );
+  const addNewStorageCondition = async (newCondition) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/specificationStp`,
+        {
+          documentName: newCondition.documentName,
+          documentType: newCondition.documentType,
+          department: newCondition.department,
+          author: newCondition.author,
+          dueDate: newCondition.dueDate,
+          effectiveDate: newCondition.effectiveDate,
+          ccReferences: newCondition.ccReferences,
+          status: newCondition.status || "APPROVED",
+        }
+      );
 
-  //     if (response.status === 200) {
-  //       const addedStorageCondition = response.data.addLIMS; // Accessing the added item from the response
+      if (response.status === 200) {
+        const addedSpecificationStp = response.data.addLIMS; // Accessing the added item from the response
 
-  //       setData((prevData) => [
-  //         ...prevData,
-  //         {
-  //           ...addedStorageCondition,
-  //           sno: addedStorageCondition.uniqueId, // Using uniqueId as sno
-  //           checkbox: false,
-  //         },
-  //       ]);
-  //       closeModal();
-  //       fetchStorageCondition();
-  //       toast.success("Calibration Type added successfully");
-  //       // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
-  //     }
-  //   } catch (error) {
-  //     console.error("Error adding calibration type:", error);
-  //     toast.error("Failed to add calibration type");
-  //   }
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedSpecificationStp,
+            sno: addedSpecificationStp.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+        closeModal();
 
-  //   setIsModalOpen(false);
-  // };
+        toast.success("Specification STP added successfully");
+        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
+      }
+    } catch (error) {
+      console.error("Error adding Specification STP", error);
+      toast.error("Error adding Specification STP");
+    }
 
-  const handleStatusUpdate = (testPlan, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.storageCondition === StorageCondition
-        ? { ...item, status: newStatus }
-        : item
-    );
-    setData(updatedData);
+    setIsModalOpen(false);
+  };
+  useEffect(() => {
+    fetchSpecificationStp();
+  }, []);
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/specificationStp/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [name, setname] = useState("");
-    const [conditionCode, setconditionCode] = useState("");
-    const [storageCondition, setstorageCondition] = useState("");
+    const [documentName, setdocumentName] = useState("");
+    const [documentType, setdocumentType] = useState("");
+    const [department, setdepartment] = useState("");
+    const [author, setauthor] = useState("");
+    const [dueDate, setdueDate] = useState("");
+    const [effectiveDate, seteffectiveDate] = useState("");
+    const [ccReferences, setccReferences] = useState("");
     const handleAdd = () => {
       const newCondition = {
-        name,
-        conditionCode,
-        storageCondition,
-        createdAt: new Date().toISOString().split("T")[0],
-        attachment: "",
-        status: "active",
+        documentName,
+        documentType,
+        department,
+        author,
+        dueDate,
+        effectiveDate,
+        ccReferences,
+        status: "APPROVED",
       };
       onAdd(newCondition);
     };
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>New Storage Condition</CModalTitle>
+          <CModalTitle>Add New Specification STP</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
             type="text"
-            label="Name"
-            placeholder="Storage Name"
-            value={name}
-            onChange={(e) => setname(e.target.value)}
+            label="Document Name"
+            placeholder="Document Name"
+            value={documentName}
+            onChange={(e) => setdocumentName(e.target.value)}
           />
 
           <CFormInput
             type="text"
-            label="Condition Code"
-            placeholder="Condition Code"
-            value={conditionCode}
-            onChange={(e) => setconditionCode(e.target.value)}
+            label="Document Type"
+            placeholder="Document Type"
+            value={documentType}
+            onChange={(e) => setdocumentType(e.target.value)}
           />
 
           <CFormInput
             type="text"
-            label="Storage Condition"
-            placeholder="Storage Condition"
-            value={storageCondition}
-            onChange={(e) => setstorageCondition(e.target.value)}
+            label="Department"
+            placeholder="Department"
+            value={department}
+            onChange={(e) => setdepartment(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            label="Author"
+            placeholder="Author"
+            value={author}
+            onChange={(e) => setauthor(e.target.value)}
+          />
+          <CFormInput
+            type="date"
+            label="Due Date"
+            placeholder="Due Date"
+            value={dueDate}
+            onChange={(e) => setdueDate(e.target.value)}
+          />
+          <CFormInput
+            type="date"
+            label="Effective Date"
+            placeholder="Effective Date"
+            value={effectiveDate}
+            onChange={(e) => seteffectiveDate(e.target.value)}
+          />
+          <CFormInput
+            type="text"
+            label="CC References"
+            placeholder="CC References"
+            value={ccReferences}
+            onChange={(e) => setccReferences(e.target.value)}
           />
         </CModalBody>
         <CModalFooter>
@@ -453,10 +492,11 @@ function StorageCondition() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
+
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/storageCondition/${updatedData.uniqueId}`,
+        `${BASE_URL}/manage-lims/update/specificationStp/${updatedData.uniqueId}`,
         updatedData // Sending the updated data
       );
 
@@ -510,32 +550,67 @@ function StorageCondition() {
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
-          <CModalTitle>New Storage Condition</CModalTitle>
+          <CModalTitle>Edit Specification STP</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
             type="text"
-            label="Storage Name"
-            placeholder="Storage Name"
-            value={formData?.name || ""}
+            label="Document Name"
+            placeholder="Document Name"
+            value={formData?.documentName || ""}
             onChange={handleChange}
-            name="name"
+            name="documentName"
+          />
+
+          <CFormInput
+            type="text"
+            label="Document Type"
+            placeholder="Document Type"
+            value={formData?.documentType || ""}
+            onChange={handleChange}
+            name="documentType"
+          />
+
+          <CFormInput
+            type="text"
+            label="Department"
+            placeholder="Department"
+            value={formData?.department || ""}
+            onChange={handleChange}
+            name="department"
           />
           <CFormInput
             type="text"
-            label="Condition Code"
-            placeholder="Condition Code"
-            value={formData?.conditionCode || ""}
+            label="Author"
+            placeholder="Author"
+            value={formData?.author || ""}
             onChange={handleChange}
-            name="conditionCode"
+            name="author"
+          />
+          <CFormInput
+            type="date"
+            label="Due Date"
+            placeholder="Due Date"
+            value={formData?.dueDate || ""}
+            onChange={handleChange}
+            name="dueDate"
+          />
+          <CFormInput
+            type="date"
+            label="Effective Date"
+            placeholder="Effective Date"
+            value={formData?.effectiveDate || ""}
+            onChange={handleChange}
+            name="author
+"
           />
           <CFormInput
             type="text"
-            label="Storage condition"
-            placeholder="Storage condition"
-            value={formData?.storageCondition || ""}
+            label="CC References"
+            placeholder="CC References"
+            value={formData?.ccReferences || ""}
             onChange={handleChange}
-            name="storageCondition"
+            name="ccReferences"
           />
         </CModalBody>
         <CModalFooter>
@@ -558,33 +633,22 @@ function StorageCondition() {
           <h4 className="fw-bold">Specification STP</h4>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between mb-6">
-          {/* Print Button */}
-          <div className="flex items-center space-x-4">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Print
-            </button>
-          </div>
-
-          {/* Form Inputs (Division, Date From, Date To, Select Period) */}
-          <div className="flex items-center space-x-4">
+        <div className="flex justify-between items-center mb-6">
+          {/* Left Section: All input fields */}
+          <div className="flex items-center space-x-6">
             {/* Division Dropdown */}
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Division</label>
-              <div className="relative">
-                <select
-                  value={division}
-                  onChange={handleDivisionChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-50"
-                >
-                  <option value="" disabled>
-                    Select Division
-                  </option>
-                  <option value="division1">Division 1</option>
-                  <option value="division2">Division 2</option>
-                  <option value="division3">Division 3</option>
-                </select>
-              </div>
+              <label className="text-sm font-semibold">Status</label>
+              <Dropdown
+                options={[
+                  { value: "All", label: "All" },
+                  { value: "REJECTED", label: "Reject" },
+                  { value: "DROPPED", label: "Droped" },
+                  { value: "APPROVED", label: "Approved" },
+                ]}
+                value={statusFilter}
+                onChange={setStatusFilter}
+              />
             </div>
 
             {/* Date From Input */}
@@ -614,38 +678,25 @@ function StorageCondition() {
             </div>
 
             {/* Select Period Dropdown */}
-            <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Select Period</label>
-              <div className="relative">
-                <select
-                  value={period}
-                  onChange={handlePeriodChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
-                >
-                  <option value="" disabled>
-                    Select Period
-                  </option>
-                  <option value="weekly">Weekly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="quarterly">Quarterly</option>
-                </select>
-              </div>
-            </div>
           </div>
+
+          {/* Button on the right side */}
+          <ATMButton
+            text="Add Specification STP"
+            color="blue"
+            onClick={openModal}
+            className="ml-auto"
+          />
         </div>
 
-        {filteredData && filteredData.length > 0 ? (
-          <Table
-            columns={columns}
-            data={filteredData}
-            onCheckboxChange={handleCheckboxChange}
-            onViewDetails={onViewDetails}
-            onDelete={handleDelete}
-            openEditModal={openEditModal}
-          />
-        ) : (
-          <p>No storage conditions available.</p>
-        )}
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
       {isModalOpen && (
@@ -655,16 +706,16 @@ function StorageCondition() {
           onAdd={addNewStorageCondition}
         />
       )}
-      {viewModalData && (
-        <ReusableModal
-          visible={viewModalData !== null}
-          closeModal={closeViewModal}
-          data={viewModalData}
-          fields={fields}
-          title="Test Plan Details"
-          updateStatus={handleStatusUpdate}
-        />
-      )}
+
+      <ReusableModal
+        visible={isViewModalOpen}
+        closeModal={closeViewModal}
+        data={viewModalData}
+        fields={fields}
+        title="Test Plan Details"
+        updateStatus={handleStatusUpdate}
+      />
+
       {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}
