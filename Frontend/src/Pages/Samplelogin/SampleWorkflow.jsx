@@ -70,7 +70,6 @@ const SampleWorkFlow = () => {
       toast.error("Failed to fetch ");
     }
   };
-
   useEffect(() => {
     fetchSpecificationStp();
   }, []);
@@ -361,7 +360,7 @@ const SampleWorkFlow = () => {
     "sampleName",
     "sampleType",
     "productMaterialName",
-    "batchLotNumber",
+    "batchNumber",
     "sampleSource",
     "plannedDate",
     "samplePriority",
@@ -432,6 +431,24 @@ const SampleWorkFlow = () => {
     "qaReviewerComment",
     "qaReviewDate",
   ];
+
+  const [loading, setLoading] = useState(false);
+
+  const handleRowClick = async (sampleId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-Sample/${sampleId}`
+      );
+      const sampleData = response.data;
+
+      navigate(`/sampleWorkflowPanel`, { state: { sampleData } });
+    } catch (error) {
+      console.error("Error fetching sample data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="m-5 mt-3">
