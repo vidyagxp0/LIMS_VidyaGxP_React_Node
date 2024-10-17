@@ -9,44 +9,104 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import WorkFlowModal from "../Modals/WorkFlowModal.jsx";
-import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
-
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    PlantCode: "Client 1",
-    PlantName: "client1@example.com",
-    Address: "Address 1",
-    Comments: "02-07-2024",
-    Workflow: "dummy workflow",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    PlantCode: "Client 2",
-    PlantName: "client2@example.com",
-    Address: "Address 2",
-    Comments: "03-07-2024",
-    Workflow: "dummy workflow",
-    status: "Inactive",
-  },
-];
+import axios from "axios";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import ReusableModal from "../Modals/ResusableModal";
 
 const WorkFlow = () => {
-  const [data, setData] = useState(initialData);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [data, setData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
 
+const fields = [
+  { label: "S.No", key: "sno" },
+  { label: "Plant Code", key: "PlantCode" },
+  { label: "Plant Name", key: "PlantName" },
+  { label: "Address", key: "Address" },
+  { label: "Comments", key: "Comments" },
+  { label: "Work Flow", key: "Workflow" },
+  { label: "Status", key: "status" },
+];
+
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditModalData(null);
+  };
+
+  useEffect(() => {
+    fetchWorkFlowData();
+  }, []);
+  const fetchWorkFlowData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/workFlow`);
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.workFlow?.map((condition, i) => ({
+              checkbox: false,
+              uniqueId: condition.uniqueId,
+              sno: i + 1,
+              PlantCode: condition.PlantCode,
+              PlantName: condition.PlantName,
+              Address: condition.Address,
+              Comments: condition.Comments,
+              Workflow: condition.Workflow,
+              status: condition.status,
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
+  const handleModalSubmit = async (newWorkFlow) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/workFlow`,
+        {
+          ...newWorkFlow,
+          status: newWorkFlow.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("WorkFlow added successfully.");
+        setIsModalOpen(false);
+        fetchWorkFlowData();
+      } else {
+        toast.error("Failed to add WorkFlow.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding WorkFlow: " + (error.response?.data || error.message)
+      );
+    }
+  };
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -84,8 +144,8 @@ const WorkFlow = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row.PlantName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
+      // row.PlantName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      statusFilter === "All" || row.status === statusFilter
     );
   });
 
@@ -160,61 +220,249 @@ const WorkFlow = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/workFlow/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.filter((d) => d.uniqueId !== item.uniqueId)
+        );
+        toast.success("WorkFlow deleted successfully.");
+        fetchWorkFlowData();
+      } else {
+        toast.error("Failed to delete WorkFlow.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error deleting WorkFlow: " + (error.response?.data || error.message)
+      );
+    }
+  };
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+      closeModal();
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Update Work flow</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <p className="mb-3 fw-bold">Update information</p>
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Plant Code"
+            name="PlantCode"
+            placeholder="Plant Code"
+            value={formData?.PlantCode || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Plant Name"
+            name="PlantName"
+            placeholder="Plant Name"
+            value={formData?.PlantName || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Address"
+            name="Address"
+            placeholder="Address"
+            value={formData?.Address || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="Comments"
+            label="Comments"
+            placeholder="Comments"
+            value={formData?.Comments || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Workflow"
+            name="Workflow"
+            placeholder="Workflow"
+            value={formData?.Workflow || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Update
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  const handleEditSave = async (updatedData) => {
+    try {
+      // const {sno,...datatosend}=updatedData;
+      console.log(updatedData, "unnnn");
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/workFlow/${updatedData.uniqueId}`,
+        updatedData
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.sno === updatedData.sno ? updatedData : item
+          )
+        );
+        toast.success("workFlow updated successfully.");
+        setEditModalData(null);
+        closeModal();
+      } else {
+        toast.error("Failed to update workFlow.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error updating workFlow: " + (error.response?.data || error.message)
+      );
+    }
+  };
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/workFlow/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("workFlow status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update workFlow status");
+      }
+    } catch (error) {
+      console.error("Error updating workFlow status:", error);
+      toast.error("Error updating workFlow status");
+    }
   };
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Work Flows</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Work Flows</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="WorkFlow.pdf"
+              title="WorkFlow Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add WorkFlow" color="blue" onClick={openModal} />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="WorkFlow.pdf" title="WorkFlow Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Add WorkFlow" color="blue" onClick={openModal} />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-      />
-      <WorkFlowModal visible={isModalOpen} closeModal={closeModal} />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-    </div></>
+        <WorkFlowModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
+        />
+        {isViewModalOpen && (
+          <ReusableModal
+            visible={isViewModalOpen}
+            fields={fields}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            updateStatus={handleStatusUpdate}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default WorkFlow;

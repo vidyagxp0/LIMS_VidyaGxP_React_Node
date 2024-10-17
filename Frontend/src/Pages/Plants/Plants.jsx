@@ -9,7 +9,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import PlantsModal from "../Modals/PlantsModal.jsx";
-import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
 import {
   CButton,
@@ -22,31 +21,14 @@ import {
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
+import { toast } from "react-toastify";
 
-
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    PlantCode: "Client 1",
-    PlantName: "client1@example.com",
-    Address: "Address 1",
-    RegisterOn: "02-07-2024",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    PlantCode: "Client 2",
-    PlantName: "client2@example.com",
-    Address: "Address 2",
-    RegisterOn: "03-07-2024",
-    status: "Inactive",
-  },
-];
 
 const Plants = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +39,45 @@ const Plants = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
+  const fields = [
+    { label: "S.No", key: "sno" },
+    { label: "Plant Code", key: "PlantCode" },
+    { label: "Plant Name", key: "PlantName" },
+    { label: "Address", key: "Address" },
+    { label: "Register On", key: "RegisterOn" },
+    { label: "Status", key: "status" },
+  ];
+
+
+  const fetchPlantData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/plant`);
+      if (response.data && Array.isArray(response.data)) {
+        const formattedData = response.data.flatMap(
+          (item) =>
+            item?.plant?.map((condition, i) => ({
+              checkbox: false,
+              uniqueId: condition.uniqueId,
+              sno: i + 1,
+              PlantCode: condition.PlantCode,
+              PlantName: condition.PlantName,
+              Address: condition.Address,
+              RegisterOn: condition.RegisterOn,
+              status: condition.status,
+            })) || []
+        );
+        setData(formattedData);
+      }
+    } catch (error) {
+      toast.error(
+        "Error fetching data: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchPlantData();
+  }, []);
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
     setEditModalOpen(true);
@@ -67,13 +88,32 @@ const Plants = () => {
     setEditModalData(null);
   };
 
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
-  };
+   const handleEditSave = async (updatedData) => {
+     try {
+       const response = await axios.put(
+         `${BASE_URL}/manage-lims/update/plant/${updatedData.uniqueId}`,
+         updatedData
+       );
+       if (response.status === 200) {
+         setData((prevData) =>
+           prevData.map((item) =>
+             item.sno === updatedData.sno ? updatedData : item
+           )
+         );
+         toast.success("plant updated successfully.");
+         setEditModalData(null);
+         closeModal();
+        // setIsModalOpen(false);
+
+       } else {
+         toast.error("Failed to update Plant.");
+       }
+     } catch (error) {
+       toast.error(
+         "Error updating Plant: " + (error.response?.data || error.message)
+       );
+     }
+   };
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -88,6 +128,7 @@ const Plants = () => {
 
     const handleSave = () => {
       onSave(formData);
+      closeEditModal();
     };
 
     return (
@@ -98,7 +139,7 @@ const Plants = () => {
         size="lg"
       >
         <CModalHeader>
-          <CModalTitle>Add Plant</CModalTitle>
+          <CModalTitle>Update Plant</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -134,7 +175,7 @@ const Plants = () => {
             Back
           </CButton>
           <CButton color="primary" onClick={handleSave}>
-            Add
+            Update
           </CButton>
         </CModalFooter>
       </CModal>
@@ -244,31 +285,28 @@ const Plants = () => {
   };
 
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
-  const handleModalSubmit = (newInstrument) => {
-    const currentDate = new Date().toISOString().split("T")[0];
-
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
+  const handleModalSubmit = async (newProduct) => {
+    try {
+      const currentDate = new Date().toISOString().split("T")[0];
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/plant`, {
+        ...newProduct,
+        RegisterOn: currentDate,
+        status: newProduct.status || "Active",
+      });
+      if (response.status === 200) {
+        toast.success("Client added successfully.");
+        setIsModalOpen(false);
+        fetchPlantData();
+      } else {
+        toast.error("Failed to add Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
       );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
-        {
-          checkbox: false,
-          sno: prevData.length + 1,
-          PlantName: newInstrument.PlantName,
-          PlantCode: newInstrument.PlantCode,
-          Address: newInstrument.Address,
-          RegisterOn: currentDate,
-          status: "Active",
-        },
-      ]);
     }
-    closeModal();
   };
-
+ 
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -281,75 +319,139 @@ const Plants = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/plant/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.filter((d) => d.uniqueId !== item.uniqueId)
+        );
+        toast.success("Plant deleted successfully.");
+        fetchPlantData();
+      } else {
+        toast.error("Failed to delete Plant.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error deleting Plant: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/plant/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Plant status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Plant status");
+      }
+    } catch (error) {
+      console.error("Error updating Plant status:", error);
+      toast.error("Error updating Plant status");
+    }
   };
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Plant`s</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Plant`s</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="plants.pdf"
+              title="Plants Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Plant" color="blue" onClick={openModal} />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="plants.pdf" title="Plants Data" />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Add Plant" color="blue" onClick={openModal} />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <PlantsModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        <PlantsModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
         />
-      )}
-    </div></>
+        {isViewModalOpen && (
+          <ReusableModal
+            visible={isViewModalOpen}
+            fields={fields}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            updateStatus={handleStatusUpdate}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default Plants;
