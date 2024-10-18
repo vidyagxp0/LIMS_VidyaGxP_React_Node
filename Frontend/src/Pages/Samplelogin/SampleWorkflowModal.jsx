@@ -12,6 +12,7 @@ import {
   CFormTextarea,
   CRow,
   CCol,
+  CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -28,8 +29,10 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleId: "",
     sampleName: "",
     sampleType: "",
+    srSupportiveAttachment: "",
+    qaSupportiveAttachment: "",
     productMaterialName: "",
-    batchlotNumber: "",
+    batchLotNumber: "",
     samplePriority: "",
     sampleQuantity: "",
     UOM: "",
@@ -44,7 +47,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     testParameter: "",
     testingFrequency: "",
     testingLocation: "",
-    requiredInstruments: "",
+    requiredInstrument: "",
     testGrouping: "",
     lsl: "",
     usl: "",
@@ -53,16 +56,22 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleSource: "",
     plannedDate: "",
     labTechnician: "",
+    sampleCostEstimation: "",
+    resourceUtilization: "",
+    sampleMovementHistory: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
-
+    srSupportiveAttachment: "",
+    saSupportiveAttachment: "",
+    siSupportiveAttachment: "",
     analysisType: "",
     analysisResult: "",
     analysisDate: "",
     testingStartDate: "",
     testingEndDate: "",
     delayJustification: "",
-    testingOutcome: "",
+    testingOutCome: "",
+    passFail: "",
     testPlanId: "",
     turnAroundTime: "",
     sampleRetestingDate: "",
@@ -70,22 +79,24 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleStorageLocation: "",
     transportationMethod: "",
     samplePreparationMethod: "",
-    samplePackagingDetails: "",
+    samplePackagingDetail: "",
     sampleLabel: "",
-    regulatoryRequirements: "",
-    qualityControlChecks: "",
+    regulatoryRequirement: "",
+    qualityControlCheck: "",
     controlSample: "",
     referenceSample: "",
     sampleIntegrityStatus: "",
-    assignedDepartment: "",
+    assignedDepartmentt: "",
     riskAssessment: "",
     supervisor: "",
+    instrumentsReserved: "",
+    labAvailability: "",
     sampleDate: "",
-    sampleMovementHistory: "",
+    // sampleMovementHistory: "",
     testingProgress: "",
     alertNotification: "",
-    deviationLogs: "",
-    commentsNotes: "",
+    deviationLog: "",
+    commentNotes: "",
     attachment: null,
     samplingFrequency: "",
     sampleDisposition: "",
@@ -103,9 +114,18 @@ const SampleWorkflowModal = ({ onClose }) => {
     reviewerApprover: "",
     reviewerComment: "",
     reviewDate: "",
-    qaReviewerApprover: "",
-    qaReviewerComment: "",
+    QaReviewerApprover: "",
+    QaReviewerComment: "",
     QaReviewDate: "",
+
+    qaReviewDate: "",
+    qaReview: "",
+    supervisionDate: "",
+    supervisor: "",
+    labTechnicianDate: "",
+    labTechnician: "",
+    initiationDate: "",
+    initiator: "",
   });
 
   const handleTabClick = (tabName) => {
@@ -114,12 +134,66 @@ const SampleWorkflowModal = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, options } = e.target;
+
+    if (name === "requiredInstrument") {
+      const selectedInstruments = [];
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].selected) {
+          selectedInstruments.push(options[i].value);
+        }
+      }
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: selectedInstruments,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+
+    if (name === "delayJustification" && value) {
+      setError("");
+    }
   };
+
+  const [error, setError] = useState("");
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case "High":
+        return "red";
+      case "Medium":
+        return "orange";
+      case "Low":
+        return "green";
+      default:
+        return "black";
+    }
+  };
+
+  const renderOptions = () => {
+    let options = [];
+    for (let i = 0; i <= 60; i++) {
+      options.push(
+        <option key={i} value={i}>
+          {i} {i === 1 ? "month" : "months"}
+        </option>
+      );
+    }
+    return options;
+  };
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const dd = String(today.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!id) return;
@@ -247,22 +321,75 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="batchlotNumber"
+                  name="batchLotNumber"
                   label="Batch/Lot Number"
-                  value={formData.batchlotNumber || ""}
+                  value={formData.batchLotNumber || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="samplePriority"
-                  label="Sample Priority"
-                  value={formData.samplePriority || ""}
-                  onChange={handleInputChange}
-                />
+              <CCol
+                md={12}
+                style={{
+                  marginBottom: "3px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ width: "100%" }}>
+                  <CFormLabel htmlFor="samplePriority">
+                    Sample Priority
+                  </CFormLabel>
+                  <CFormSelect
+                    name="samplePriority"
+                    value={formData.samplePriority || ""}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Priority</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </CFormSelect>
+                </div>
+
+                {formData.samplePriority && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginLeft: "45px",
+                      marginTop: "25px",
+                      padding: "5px 10px",
+                      backgroundColor: "#f0f0f0",
+                      borderRadius: "20px",
+                      boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor: getPriorityColor(
+                          formData.samplePriority
+                        ),
+                        width: "40px",
+                        height: "10px",
+                        borderRadius: "5px",
+                        marginRight: "10px",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "14px",
+                        color: getPriorityColor(formData.samplePriority),
+                      }}
+                    >
+                      {formData.samplePriority} Priority
+                    </span>
+                  </div>
+                )}
               </CCol>
               <CCol md={6}>
                 <CFormInput
@@ -393,15 +520,44 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="requiredInstruments"
+              {/* <CCol md={12}>
+                <CFormSelect
+                  name="requiredInstrument"
                   label="Required Instruments"
-                  value={formData.requiredInstruments || ""}
+                  value={formData.requiredInstrument || []}
                   onChange={handleInputChange}
-                />
-              </CCol>
+                  multiple
+                >
+                  <option value="">Select an Instrument</option>
+                  {[
+                    "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+                    "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+                    "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+                    "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+                    "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+                    "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+                    "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+                    "Moisture Analyzers – For determining the moisture content in products.",
+                    "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+                    "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+                    "Autoclaves – For sterilizing lab equipment and samples.",
+                    "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+                    "Karl Fischer Titrator – For measuring water content in samples.",
+                    "Refractometer – For determining the refractive index of liquids.",
+                    "Polarimeter – For measuring the optical rotation of a substance.",
+                    "Melting Point Apparatus – For determining the melting point of substances.",
+                    "Viscometer – For measuring the viscosity of liquid samples.",
+                    "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+                    "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+                    "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+                    "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+                  ].map((instrument, index) => (
+                    <option key={index} value={instrument}>
+                      {instrument}
+                    </option>
+                  ))}
+                </CFormSelect>
+              </CCol> */}
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
@@ -471,6 +627,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   label="Planned Date"
                   value={formData.plannedDate || ""}
                   onChange={handleInputChange}
+                  min={getCurrentDate()}
                 />
               </CCol>
             </CRow>
@@ -481,6 +638,26 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="labTechnician"
                   label="Lab Technician"
                   value={formData.labTechnician || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="sampleCostEstimation"
+                  label="Sample Cost Estimation"
+                  value={formData.sampleCostEstimation || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="resourceUtilization"
+                  label="Resource Utilization"
+                  value={formData.resourceUtilization || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -505,6 +682,15 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
             </CRow>
+            <CCol md={12}>
+              <CFormInput
+                type="file"
+                name="srSupportiveAttachment"
+                label="Supportive Attachment"
+                value={formData?.srSupportiveAttachment || ""}
+                onChange={handleInputChange}
+              />
+            </CCol>
           </CForm>
         );
       case "Sample Analysis":
@@ -561,20 +747,39 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
               <CCol md={6}>
+                <CFormLabel htmlFor="delayJustification">
+                  Delay Justification <span style={{ color: "red" }}>*</span>
+                </CFormLabel>
                 <CFormTextarea
                   name="delayJustification"
-                  label="Delay Justification"
                   value={formData.delayJustification || ""}
                   onChange={handleInputChange}
+                  invalid={!!error}
                 />
+                {error && (
+                  <div
+                    style={{ color: "red", fontSize: "12px", marginTop: "5px" }}
+                  >
+                    {error}
+                  </div>
+                )}
               </CCol>
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
-                <CFormSelect
-                  name="testingOutcome"
+                <CFormInput
+                  type="text"
+                  name="testingOutCome"
                   label="Testing Outcome"
-                  value={formData.testingOutcome || ""}
+                  value={formData.testingOutCome || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormSelect
+                  name="passFail"
+                  label="Pass/Fail"
+                  value={formData.passFail || ""}
                   onChange={handleInputChange}
                   options={[
                     "Select outcome",
@@ -655,9 +860,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="samplePackagingDetails"
+                  name="samplePackagingDetail"
                   label="Sample Packaging Details"
-                  value={formData.samplePackagingDetails || ""}
+                  value={formData.samplePackagingDetail || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -674,17 +879,26 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="regulatoryRequirements"
+                  name="regulatoryRequirement"
                   label="Regulatory Requirements"
-                  value={formData.regulatoryRequirements || ""}
+                  value={formData.regulatoryRequirement || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
               <CCol md={6}>
-                <CFormTextarea
-                  name="qualityControlChecks"
+                <CFormInput
+                  name="qualityControlCheck"
                   label="Quality Control Checks"
-                  value={formData.qualityControlChecks || ""}
+                  value={formData.qualityControlCheck || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="controlSampleReference"
+                  label="Control Sample Reference"
+                  value={formData.controlSampleReference || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -726,9 +940,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="assignedDepartment"
+                  name="assignedDepartmentt"
                   label="Assigned Department"
-                  value={formData.assignedDepartment || ""}
+                  value={formData.assignedDepartmentt || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -748,6 +962,24 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="supervisor"
                   label="Supervisor"
                   value={formData.supervisor || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="instrumentsReserved"
+                  label="Instruments Reserved"
+                  value={formData.instrumentsReserved || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="labAvailability"
+                  label="Lab Availability"
+                  value={formData.labAvailability || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -790,9 +1022,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
               <CCol md={6}>
                 <CFormTextarea
-                  name="deviationLogs"
+                  name="deviationLog"
                   label="Deviation Logs"
-                  value={formData.deviationLogs || ""}
+                  value={formData.deviationLog || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -800,9 +1032,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="commentsNotes"
+                  name="commentNotes"
                   label="Comments/Notes"
-                  value={formData.commentsNotes || ""}
+                  value={formData.commentNotes || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -810,7 +1042,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 <CFormInput
                   type="file"
                   name="attachment"
-                  label="attachment"
+                  label="Attachment"
                   onChange={handleInputChange}
                   multiple
                 />
@@ -840,26 +1072,40 @@ const SampleWorkflowModal = ({ onClose }) => {
                   ]}
                 />
               </CCol>
+              <CCol md={12}>
+                <CFormInput
+                  type="file"
+                  name="saSupportiveAttachment"
+                  label="Supportive Attachment"
+                  value={formData?.saSupportiveAttachment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
             </CRow>
           </CForm>
         );
-
       case "Stability Information":
         return (
           <CForm>
             <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
+              <CCol md={6} className="mb-3">
+                <CFormSelect
                   type="text"
                   name="stabilityStudyType"
                   label="Stability Study Type"
                   value={formData?.stabilityStudyType || ""}
                   onChange={handleInputChange}
+                  options={[
+                    "Select disposition",
+                    { label: "Long Term", value: "longTerm" },
+                    { label: "Accelerated", value: "accelerated" },
+                    { label: "Intermediate", value: "intermediate" },
+                  ]}
                 />
               </CCol>
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
-                  type="text"
+                  type="file"
                   name="stabilityStudyProtocol"
                   label="Stability Study Protocol"
                   value={formData?.stabilityStudyProtocol || ""}
@@ -868,7 +1114,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
                   name="stabilityProtocolApprovalDate"
@@ -877,7 +1123,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
                   name="countryOfRegulatorySubmissions"
@@ -888,16 +1134,17 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
+                <CFormLabel htmlFor="ichZone">ICH Zone</CFormLabel>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="ichZone"
                   label="ICH Zone"
                   value={formData?.ichZone || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
                   name="photoStabilityTestingResult"
@@ -908,7 +1155,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
                   name="reConstitutionStability"
@@ -917,23 +1164,36 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="number"
+              <CCol md={6} className="mb-3">
+                <CFormLabel htmlFor="testingInterval">
+                  Testing Interval (months)
+                </CFormLabel>
+                <CFormSelect
                   name="testingInterval"
-                  label="Testing Interval (months)"
                   value={formData?.testingInterval || ""}
                   onChange={handleInputChange}
-                />
+                >
+                  <option value="">Select Interval</option>
+                  {renderOptions()}
+                </CFormSelect>
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
                   name="shelfLifeRecommendation"
                   label="Shelf Life Recommendation"
                   value={formData?.shelfLifeRecommendation || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={12} className="mb-3">
+                <CFormInput
+                  type="file"
+                  name="siSupportiveAttachment"
+                  label="Supportive Attachment"
+                  value={formData?.siSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -945,7 +1205,7 @@ const SampleWorkflowModal = ({ onClose }) => {
           <CForm>
             {/* Reviewer/Approver Section */}
             <CRow className="mb-3">
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
                   name="reviewerApprover"
@@ -954,7 +1214,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
                   name="reviewerComment"
@@ -963,7 +1223,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
                   name="reviewDate"
@@ -972,29 +1232,42 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
+              <CCol md={12} className="mb-3">
+                <CFormInput
+                  type="file"
+                  name="revSupportiveAttachment"
+                  label="Supportive Attachment"
+                  value={formData?.srSupportiveAttachment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
             </CRow>
-
+          </CForm>
+        );
+      case "QA Review":
+        return (
+          <CForm>
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
-                  name="qaReviewerApprover"
+                  name="QaReviewerApprover"
                   label="QA Reviewer/Approver"
-                  value={formData?.qaReviewerApprover || ""}
+                  value={formData?.QaReviewerApprover || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
-                  name="qaReviewerComment"
+                  name="QaReviewerComment"
                   label="QA Reviewer Comment"
-                  value={formData?.qaReviewerComment || ""}
+                  value={formData?.QaReviewerComment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
                   name="QaReviewDate"
@@ -1003,9 +1276,96 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
+              <CCol md={12} className="mb-3">
+                <CFormInput
+                  type="file"
+                  name="qaSupportiveAttachment"
+                  label="Supportive Attachment"
+                  value={formData?.qaSupportiveAttachment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
             </CRow>
-
-            <div></div>
+          </CForm>
+        );
+      case "Activity Log":
+        return (
+          <CForm>
+            {/* Activity Log Section */}
+            <CRow className="mb-3">
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="text"
+                  name="initiator"
+                  label="Initiator Name"
+                  value={formData?.initiator || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="date"
+                  name="initiationDate"
+                  label=" Date of Initiation"
+                  value={formData?.initiationDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="text"
+                  name="labTechnician"
+                  label="Lab Technician Name"
+                  value={formData?.labTechnician || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="date"
+                  name="labTechnicianDate"
+                  label="Date of Lab Technician Review"
+                  value={formData?.labTechnicianDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>{" "}
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="text"
+                  name="supervisor"
+                  label="Supervisor Name"
+                  value={formData?.supervisor || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>{" "}
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="date"
+                  name="supervisionDate"
+                  label="Date of Supervision Review "
+                  value={formData?.supervisionDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="text"
+                  name="qaReview"
+                  label="QA Review"
+                  value={formData?.qaReview || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="date"
+                  name="qaReviewDate"
+                  label="Date of QA Review"
+                  value={formData?.qaReviewDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
           </CForm>
         );
       default:
@@ -1018,23 +1378,14 @@ const SampleWorkflowModal = ({ onClose }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          if (!formData.delayJustification) {
+            setError("Delay Justification is required.");
+            return;
+          }
           handleSave();
         }}
       >
         <div className="flex space-x-4 mb-8">
-          <CButton
-            color={
-              activeTab === "Stability Information" ? "primary" : "secondary"
-            }
-            onClick={() => handleTabClick("Stability Information")}
-            className={`transition-all duration-300 ${
-              activeTab === "Stability Information"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Stability Information
-          </CButton>
           <CButton
             color={
               activeTab === "Sample Registration" ? "primary" : "secondary"
@@ -1048,6 +1399,7 @@ const SampleWorkflowModal = ({ onClose }) => {
           >
             Sample Registration
           </CButton>
+
           <CButton
             color={activeTab === "Sample Analysis" ? "primary" : "secondary"}
             onClick={() => handleTabClick("Sample Analysis")}
@@ -1070,6 +1422,44 @@ const SampleWorkflowModal = ({ onClose }) => {
             } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
           >
             Supervisor Review
+          </CButton>
+
+          <CButton
+            color={
+              activeTab === "Stability Information" ? "primary" : "secondary"
+            }
+            onClick={() => handleTabClick("Stability Information")}
+            className={`transition-all duration-300 ${
+              activeTab === "Stability Information"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            Stability Information
+          </CButton>
+
+          <CButton
+            color={activeTab === "QA Review" ? "primary" : "secondary"}
+            onClick={() => handleTabClick("QA Review")}
+            className={`transition-all duration-300 ${
+              activeTab === "QA Review"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            QA Review
+          </CButton>
+
+          <CButton
+            color={activeTab === "AActivity Log" ? "primary" : "secondary"}
+            onClick={() => handleTabClick("Activity Log")}
+            className={`transition-all duration-300 ${
+              activeTab === "Activity Log"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            Activity Log
           </CButton>
         </div>
 

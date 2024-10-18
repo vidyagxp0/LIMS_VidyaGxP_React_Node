@@ -22,7 +22,7 @@ import axios from "axios";
 import { BASE_URL } from "../../config.json";
 
 
-const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
+const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, addRow }) => {
   const [fields, setFields] = useState([]);
 
   const addFields = () => {
@@ -94,7 +94,6 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
   const handleInputChange = (field, value) => {
     const updatedData = { ...instrumentData, [field]: value };
     setInstrumentData(updatedData);
-    console.log(updatedData);
   };
 
   // !+++++++++++++++++++++++
@@ -125,7 +124,22 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
     }
   };
 
-  // !+++++++++++++++++++++++
+  const handleAddInstrumentRegistration = (e) => {
+
+    e.preventDefault();
+    axios
+      .post(`http://localhost:9000/manage-lims/add/iMRegistration`,instrumentData)
+      .then((response) => {
+        toast.success(response.data.message || "Instrument Data added successfully!")
+        addRow(instrumentData);
+        closeModal()
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Instrument Data Already Registered");
+      });
+  };
+
 
   return (
     <div>
@@ -347,7 +361,7 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit }) => {
           <CButton color="secondary" onClick={closeModal}>
             Close
           </CButton>
-          <CButton color="primary" onClick={handleFormSubmit}>
+          <CButton color="primary" onClick={handleAddInstrumentRegistration}>
             Save changes
           </CButton>
         </CModalFooter>

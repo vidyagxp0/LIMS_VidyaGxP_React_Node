@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { randomSpecData } from "./SpecFunction";
 import SearchBar from "../components/ATM components/SearchBar/SearchBar";
 import { Dropdown } from "react-bootstrap";
@@ -6,20 +6,35 @@ import PDFDownload from "./PDFComponent/PDFDownload ";
 import ATMButton from "../components/ATM components/Button/ATMButton";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import {BASE_URL} from "../config.json"
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import SpecificationSpecModal from "./Modals/SpecificationSpecModal";
-
+// import SpecificationSpecModal from "./Modals/SpecificationSpecModal";
+import SpecificationviewModel from "./SpecificationviewModel";
+import { randomData } from "./STP/demoStp";
+import {
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
+  CButton,
+  CFormInput,
+} from "@coreui/react";
 randomSpecData;
 
 const SpecificationSpec = () => {
   const [data , setData] = useState(randomSpecData)
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewdata ,setviewdata]=useState(null)
+  const [error , setError] = useState(null);
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-    setEditModalOpen(true);
+
+  const openEditModal = (data) => {
+    setEditModalData(data);
+    setEditModalOpen(data);
   };
 
   const closeEditModal = () => {
@@ -35,6 +50,14 @@ const SpecificationSpec = () => {
     setIsModalOpen(true);
   };
 
+  const closeAddModal=()=>{
+    setIsModalOpen(false)
+  }
+  
+  const handleChange = (e, setFormData, formData) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleModalSubmit = (newControlSample) => {
     console.log(newControlSample,"newControlSample")
@@ -94,10 +117,604 @@ const SpecificationSpec = () => {
           reviewFrequency:newControlSample.reviewFrequency,
           expiryDate:newControlSample.expiryDate,
         },
-      ]);
+      ]);         
     }
     closeSpecificationModal();
   };
+
+  const fields = [
+    "specId",
+    "title",
+    "version",
+    "attachment",
+    "effectiveDate",
+    "creationDate",
+    "approvedBy",
+    "productName",
+    "batchLotNumber",
+    "productCategory",
+    "manufacturer",
+    "description",
+    "materialGrade",
+    "molecularFormula",
+    "packagingRequirements",
+    "storageConditions",
+    "shelfLife",
+    "labelingRequirements",
+    "testParameter",
+    "testMethod",
+    "acceptanceCriteria",
+    "unitsOfMeasurement",
+    "testFrequency",
+    "controlSampleReference",
+    "samplingPlan",
+    "testMethodValidation",
+    "referenceStandards",
+    "resultInterpretation",
+    "stabilityCriteria",
+    "reTestingInterval",
+    "regulatoryRequirements",
+    "certification",
+    "deviationHandling",
+    "auditTrail",
+    "documentReference",
+    "revisionHistory",
+    "attachments",
+    "comments",
+    "reviewFrequency",
+    "expiryDate"
+  ];
+
+ 
+  
+
+  const onDeleteItem = (specIdToDelete) => {
+    const filteredData = data.filter((item) => item.specId !== specIdToDelete);
+    setData(filteredData);
+  };
+
+  const onViewDetails=(data)=>{
+         setviewdata(data)
+  }
+
+  const closeViewModal=()=>{
+       setviewdata(null)
+  }
+  
+  const handleStatusUpdate = (specId, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.specId === specId ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
+  
+  
+  const handleAddSPC = async (newSTP) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTP);
+      const addedSPC = response.data.updatedLIMS?.spc[0];
+      if (addedSPC) {
+        setData(prevData => [...prevData, addedSPC]);
+      }
+      closeAddModal();
+    } catch (err) {
+      setError('Error adding STP');
+    }
+  };
+  
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`, updatedData);
+      const updatedSPC = response.data.updatedLIMS?.spc[0];
+      if (updatedSPC) {
+        setData(prevData => prevData.map(item => item.specId === updatedSPC.specId ? updatedSPC : item));
+      }
+      setEditModalData(null);
+    } catch (err) {
+      setError('Error updating STP');
+    }
+  };
+
+  const AddSPCModal = ({ visible, closeModal, onAdd }) => {
+    const [formData, setFormData] = useState({
+     specId:"",
+    title:"",
+    version:"",
+    attachment:"",
+    effectiveDate:"",
+    creationDate:"",
+    approvedBy:"",
+    productName:"",
+    batchLotNumber:"",
+    productCategory:"",
+    manufacturer:"",
+    description:"",
+    materialGrade:"",
+    molecularFormula:"",
+    packagingRequirements:"",
+    storageConditions:"",
+    shelfLife:"",
+    labelingRequirements:"",
+    testParameter:"",
+    testMethod:"",
+    acceptanceCriteria:"",
+    unitsOfMeasurement:"",
+    testFrequency:"",
+    controlSampleReference:"",
+    samplingPlan:"",
+    testMethodValidation:"",
+    referenceStandards:"",
+    resultInterpretation:"",
+    stabilityCriteria:"",
+    reTestingInterval:"",
+    regulatoryRequirements:"",
+    certification:"",
+    deviationHandling:"",
+    auditTrail:"",
+    documentReference:"",
+    revisionHistory:"",
+    attachments:"",
+    comments:"",
+    reviewFrequency:"",
+    expiryDat:""
+    });
+    const handleAdd = () => {
+     
+      onAdd(formData);
+      closeModal();
+    };
+
+    return (
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModalHeader>
+          <CModalTitle>Add Specification</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Specification ID"
+            name="specId"
+            value={formData.specId}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Specification Title/Name"
+            name="title"
+            value={formData.title}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="Version Number"
+            name="number"
+            value={formData.number}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Attachment"
+            name="attachment"
+            value={formData.attachment}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Effective Date"
+            name="effectiveDate"
+            value={formData.effectiveDate}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            label="Creation Date"
+            name="creationDate"
+            value={formData.creationDate}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Approved By"
+            name="approved"
+            value={formData.approved}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product Name"
+            name="product"
+            value={formData.product}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Batch/Lot Number"
+            name="batchLotNumber"
+            value={formData.batchLotNumber}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Product Category"
+            name="productCategory"
+            value={formData.productCategory}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Manufacturer/Supplier"
+            name="manufacturer"
+            value={formData.manufacturer}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Description"
+            name="description"
+            value={formData.description}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Material Grade"
+            name="materialGrade"
+            value={formData.materialGrade}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Molecular Formula"
+            name="molecularFormula"
+            value={formData.molecularFormula}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Packaging Requirements"
+            name="packaging"
+            value={formData.packaging}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Storage Conditions"
+            name="storage"
+            value={formData.storage}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Shelf Life"
+            name="shelfLife"
+            value={formData.shelfLife}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Labeling Requirements"
+            name="labeling"
+            value={formData.labeling}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Parameter"
+            name="testParameter"
+            value={formData.testParameter}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Method"
+            name="testmethod"
+            value={formData.testmethod}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Acceptance Criteria"
+            name="acceptanceCriteria"
+            value={formData.acceptanceCriteria}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Units of Measurement"
+            name="unitsOfMeasurement"
+            value={formData.unitsOfMeasurement}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Frequency"
+            name="testFrequency"
+            value={formData.testFrequency}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Control Sample Reference"
+            name="controlSampleReference"
+            value={formData.controlSampleReference}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Sampling Plan"
+            name="samplingPlan"
+            value={formData.samplingPlan}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+       
+       <CFormInput
+            className="mb-3"
+            type="text"
+            label="Test Method Validation"
+            name="testmethodValidation"
+            value={formData.testmethodValidation}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+       
+          
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Reference Standards"
+            name="referenceStandards"
+            value={formData.referenceStandards}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          
+       
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Result Interpretation"
+            name="resultInterpretation"
+            value={formData.resultInterpretation}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Stability Criteria"
+            name="stabilityCriteria"
+            value={formData.stabilityCriteria}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+       
+       
+       
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Re Testing Interval"
+            name="reTestingInterval"
+            value={formData.reTestingInterval}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Regulatory Requirements"
+            name="regulatoryrequirements"
+            value={formData.regulatoryrequirements}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          
+           
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Certification"
+            name="certification"
+            value={formData.certification}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+             
+             <CFormInput
+            className="mb-3"
+            type="file"
+            label="Deviation Handling"
+            name="deviationHandling"
+            value={formData.deviationHandling}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          
+             
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Audit Trail"
+            name="auditTrail"
+            value={formData.auditTrail}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          
+             
+          <CFormInput
+            className="mb-3"
+            type="file"
+            label="Document Reference"
+            name="documentReference"
+            value={formData.documentReference}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+             
+             <CFormInput
+            className="mb-3"
+            type="file"
+            label="Revision History"
+            name="revisionHistory"
+            value={formData.revisionHistory}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+       
+          
+       <CFormInput
+            className="mb-3"
+            type="file"
+            label="Attachments"
+            name="attachments"
+            value={formData.attachments}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+             
+             <CFormInput
+            className="mb-3"
+            type="file"
+            label="Comments/Remarks"
+            name="commentsremarks"
+            value={formData.commentsremarks}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+              <CFormInput
+            className="mb-3"
+            type="file"
+            label="Specificaion Review Frequency"
+            name="specificationreviewfrequency"
+            value={formData.specificationreviewfrequency}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+     
+         <CFormInput
+            className="mb-3"
+            type="file"
+            label="Specification Expiry"
+            name="specificatioexpiry"
+            value={formData.specificatioexpiry}
+            onChange={(e) => handleChange(e, setFormData, formData)}
+          />
+          
+       
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Close
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Add Specification
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+  useEffect(() => {
+    localStorage.setItem(
+      "spc",
+      JSON.stringify(data.filter((row) => !randomData.includes(row)))
+    );
+  }, [data]);
+
+  
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      if (data) {
+        setFormData(data);
+      }
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+   
+      onSave(formData);
+    };
+
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
+        <CModalHeader>
+          <CModalTitle>Edit Specification</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {Object.entries(formData).map(([key, value]) => {
+              let inputType;
+              if (key.includes("date")) {
+                inputType = "date";
+              } else if (key.includes("number")) {
+                inputType = "number";
+              } else if (key.includes("file")) {
+                inputType = "file";
+              } else {
+                inputType = "text";
+              }
+
+              return (
+                <div key={key}>
+                  <CFormInput
+                    className="mb-3"
+                    type={inputType}
+                    label={
+                      key.charAt(0).toUpperCase() +
+                      key
+                        .slice(1)
+                        .replace(/([A-Z])/g, " $1")
+                        .trim()
+                    }
+                    name={key}
+                    value={inputType !== "file" ? value : undefined}
+                    onChange={
+                      inputType === "file"
+                        ? (e) => handleChange(e, setFormData, formData)
+                        : handleChange
+                    }
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={closeModal}>
+            Close
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Save Changes
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  
+ 
   
   return (
     <>
@@ -122,8 +739,7 @@ const SpecificationSpec = () => {
               />
             </div>
             <div className="float-right flex gap-4">
-              <PDFDownload
-                columns={"'columns'"}
+              <PDFDownload              columns={"'columns'"}
                 data={"filteredData"}
                 title="Storage Location"
                 fileName="Storage_Location.pdf"
@@ -145,7 +761,7 @@ const SpecificationSpec = () => {
         <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-5">
           <thead>
             <tr className=" text-white text-left">
-              <th colSpan="11" className="px-4 py-2 bg-cyan-500">
+              <th colSpan="12" className="px-4 py-2 bg-cyan-500">
                 General Information
               </th>
               <th colSpan="7" className="px-4 py-2  bg-green-500">
@@ -171,6 +787,9 @@ const SpecificationSpec = () => {
               </th>
             </tr>
             <tr className="">
+            <td className="bg-gray-800 text-white border  px-4 py-2">
+                   S No.
+              </td>
               <td className="bg-gray-800 text-white border  px-4 py-2">
                 Specification ID
               </td>
@@ -295,6 +914,7 @@ const SpecificationSpec = () => {
           <tbody>
             {data.map((data, index) => (
               <tr key={index} className="hover:bg-gray-100">
+                <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{data.specId}</td>
                 <td className="border px-4 py-2">{data.title}</td>
                 <td className="border px-4 py-2">{data.version}</td>
@@ -355,9 +975,21 @@ const SpecificationSpec = () => {
                 <td className="border px-4 py-2">{data.expiryDate}</td>
                 <td className="border px-4 py-2">
                 <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" onClick={() => openEditModal(row)} />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => onDeleteItem(row)} />
+          <FontAwesomeIcon
+           icon={faEye}
+            className="mr-2 cursor-pointer" 
+            onClick={() => onViewDetails(data)} 
+            />
+          <FontAwesomeIcon
+           icon={faPenToSquare} 
+           className="mr-2 cursor-pointer" 
+           onClick={() => openEditModal(data)}
+            />
+          <FontAwesomeIcon 
+          icon={faTrashCan}
+           className="cursor-pointer" 
+           onClick={() => onDeleteItem(data.specId)} 
+           />
                 </>
                 </td>
               </tr>
@@ -366,11 +998,45 @@ const SpecificationSpec = () => {
         </table>
       </div>
 
-      <SpecificationSpecModal 
+      {
+        viewdata &&(
+          <SpecificationviewModel
+           visible={viewdata !== null}
+           closeModal={closeViewModal}
+           data={viewdata}
+           fields={fields}
+           title="Specification Details"
+           updateStatus={handleStatusUpdate}
+          
+          />
+        )
+      }
+      
+      {
+        editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )
+      }
+      {
+        isModalOpen && (
+         <AddSPCModal
+          visible={isModalOpen}
+          closeModal={closeAddModal}
+          onAdd ={handleAddSPC}
+         />
+        )
+      }
+   
+      {/* <SpecificationSpecModal 
        visible={isModalOpen}
        closeModal={closeSpecificationModal}
        handleSubmit={handleModalSubmit}
-        />
+        /> */}
     </>
   );
 };
