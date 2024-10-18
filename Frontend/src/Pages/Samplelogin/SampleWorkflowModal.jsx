@@ -56,8 +56,8 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleSource: "",
     plannedDate: "",
     labTechnician: "",
-    sampleCostEstimation:"",
-    resourceUtilization:"",
+    sampleCostEstimation: "",
+    resourceUtilization: "",
     sampleMovementHistory: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
@@ -520,7 +520,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={12}>
+              {/* <CCol md={12}>
                 <CFormSelect
                   name="requiredInstrument"
                   label="Required Instruments"
@@ -557,7 +557,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                     </option>
                   ))}
                 </CFormSelect>
-              </CCol>
+              </CCol> */}
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
@@ -609,7 +609,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              </CRow>
+            </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -650,8 +650,8 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              </CRow>
-              <CRow>
+            </CRow>
+            <CRow>
               <CCol md={6}>
                 <CFormInput
                   type="text"
