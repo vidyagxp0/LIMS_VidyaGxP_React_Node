@@ -61,7 +61,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleMovementHistory: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
-    srSupportiveAttachment: "",
+    suSupportiveAttachment: "",
     saSupportiveAttachment: "",
     siSupportiveAttachment: "",
     analysisType: "",
@@ -1237,7 +1237,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="revSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.srSupportiveAttachment || ""}
+                  value={formData?.suSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>

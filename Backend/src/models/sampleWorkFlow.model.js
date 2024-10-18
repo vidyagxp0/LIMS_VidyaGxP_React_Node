@@ -320,6 +320,30 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  srSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  qaSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  suSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  saSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  siSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  stabilityStudyProtocol: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   initiatorName: {
     type: DataTypes.TEXT,
     allowNull: true,

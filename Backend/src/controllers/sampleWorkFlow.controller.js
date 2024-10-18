@@ -8,11 +8,7 @@ import moment from "moment";
 export const createSample = async (req, res) => {
   try {
     const sampleData = req.body;
-    if (req.files && req.files["sampleBarCode"]) {
-      sampleData.sampleBarCode = getFileUrl(
-        req.files["sampleBarCode"][0].filename
-      );
-    }
+   
     if (req.files && req.files["specificationAttachment"]) {
       sampleData.specificationAttachment = getFileUrl(
         req.files["specificationAttachment"][0].filename
@@ -25,6 +21,24 @@ export const createSample = async (req, res) => {
     }
     if (req.files && req.files["attachment"]) {
       sampleData.attachment = getFileUrl(req.files["attachment"][0].filename);
+    }
+    if (req.files && req.files["srSupportiveAttachment"]) {
+      sampleData.srSupportiveAttachment = getFileUrl(req.files["srSupportiveAttachment"][0].filename);
+    }
+    if (req.files && req.files["qaSupportiveAttachment"]) {
+      sampleData.qaSupportiveAttachment = getFileUrl(req.files["qaSupportiveAttachment"][0].filename);
+    }
+    if (req.files && req.files["suSupportiveAttachment"]) {
+      sampleData.suSupportiveAttachment = getFileUrl(req.files["suSupportiveAttachment"][0].filename);
+    }
+    if (req.files && req.files["saSupportiveAttachment"]) {
+      sampleData.saSupportiveAttachment = getFileUrl(req.files["saSupportiveAttachment"][0].filename);
+    }
+    if (req.files && req.files["siSupportiveAttachment"]) {
+      sampleData.siSupportiveAttachment = getFileUrl(req.files["siSupportiveAttachment"][0].filename);
+    }
+    if (req.files && req.files["stabilityStudyProtocol"]) {
+      sampleData.stabilityStudyProtocol = getFileUrl(req.files["stabilityStudyProtocol"][0].filename);
     }
 
     const createSample = await SampleWorkFlow.create(sampleData);
@@ -73,11 +87,6 @@ export const updateSample = async (req, res) => {
       return res.status(404).json({ message: "SampleData not found" });
     }
 
-    if (req.files && req.files["sampleBarCode"]) {
-      sampleData.sampleBarCode = getFileUrl(
-        req.files["sampleBarCode"][0].filename
-      );
-    }
     if (req.files && req.files["specificationAttachment"]) {
       sampleData.specificationAttachment = getFileUrl(
         req.files["specificationAttachment"][0].filename
@@ -91,6 +100,36 @@ export const updateSample = async (req, res) => {
     if (req.files && req.files["attachment"]) {
       sampleData.attachment = getFileUrl(req.files["attachment"][0].filename);
     }
+     if (req.files && req.files["srSupportiveAttachment"]) {
+       sampleData.srSupportiveAttachment = getFileUrl(
+         req.files["srSupportiveAttachment"][0].filename
+       );
+     }
+     if (req.files && req.files["qaSupportiveAttachment"]) {
+       sampleData.qaSupportiveAttachment = getFileUrl(
+         req.files["qaSupportiveAttachment"][0].filename
+       );
+     }
+     if (req.files && req.files["suSupportiveAttachment"]) {
+       sampleData.suSupportiveAttachment = getFileUrl(
+         req.files["suSupportiveAttachment"][0].filename
+       );
+     }
+     if (req.files && req.files["saSupportiveAttachment"]) {
+       sampleData.saSupportiveAttachment = getFileUrl(
+         req.files["saSupportiveAttachment"][0].filename
+       );
+     }
+     if (req.files && req.files["siSupportiveAttachment"]) {
+       sampleData.siSupportiveAttachment = getFileUrl(
+         req.files["siSupportiveAttachment"][0].filename
+       );
+     }
+     if (req.files && req.files["stabilityStudyProtocol"]) {
+       sampleData.stabilityStudyProtocol = getFileUrl(
+         req.files["stabilityStudyProtocol"][0].filename
+       );
+     }
 
     await sampleData.update(updatedData);
     res.status(200).json({ error: false, data: sampleData });
