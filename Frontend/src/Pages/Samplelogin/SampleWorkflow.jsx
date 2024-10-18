@@ -30,7 +30,6 @@ import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
-  console.log(data, "????????????????????????????");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -65,7 +64,6 @@ const SampleWorkFlow = () => {
         ...item,
         sno: index + 1,
       }));
-      console.log(updatedData, "SAmplepriority");
       setData(updatedData);
     } catch (error) {
       console.error("Error fetching ", error);
