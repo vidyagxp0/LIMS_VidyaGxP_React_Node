@@ -520,7 +520,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              {/* <CCol md={12}>
+              <CCol md={12}>
                 <CFormSelect
                   name="requiredInstrument"
                   label="Required Instruments"
@@ -557,7 +557,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                     </option>
                   ))}
                 </CFormSelect>
-              </CCol> */}
+              </CCol>
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
@@ -783,8 +783,8 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                   options={[
                     "Select outcome",
-                    { label: "Pass", value: "pass" },
-                    { label: "Fail", value: "fail" },
+                    { label: "Pass", value: "Pass" },
+                    { label: "Fail", value: "Fail" },
                   ]}
                 />
               </CCol>

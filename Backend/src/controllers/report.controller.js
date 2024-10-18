@@ -84,10 +84,11 @@ const setSampleData = (data) => {
   sampleDatas.analysisType = sampleData?.analysisType ?? "";
   sampleDatas.analysisDate = sampleData?.analysisDate ?? "";
   sampleDatas.analysisResult = sampleData?.analysisResult ?? "";
-  sampleDatas.reviewerApprover = sampleData?.reviewerApprover ?? "";
   sampleDatas.initiatorComment = sampleData?.initiatorComment ?? "";
+  sampleDatas.labTechnicianComment = sampleData?.labTechnicianComment ?? "";
   sampleDatas.reviewerComment = sampleData?.reviewerComment ?? "";
-  sampleDatas.supervisorComment = sampleData?.supervisorComment ?? "";
+  sampleDatas.reviewerApprover = sampleData?.reviewerApprover ?? "";
+  sampleDatas.reviewDate = sampleData?.reviewDate ?? "";
   sampleDatas.QaReviewerApprover = sampleData?.QaReviewerApprover ?? "";
   sampleDatas.QaReviewerComment = sampleData?.QaReviewerComment ?? "";
   sampleDatas.QaReviewDate = sampleData?.QaReviewDate ?? "";
