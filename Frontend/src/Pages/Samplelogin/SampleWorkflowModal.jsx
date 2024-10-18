@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CModal,
@@ -14,13 +14,14 @@ import {
   CCol,
 } from "@coreui/react";
 import axios from "axios";
-import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { id } = useParams();
+  console.log(id);
 
   const [formData, setFormData] = useState({
     samplePlanId: "",
@@ -28,7 +29,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleName: "",
     sampleType: "",
     productMaterialName: "",
-    batchLotNumber: "",
+    batchlotNumber: "",
     samplePriority: "",
     sampleQuantity: "",
     UOM: "",
@@ -94,19 +95,18 @@ const SampleWorkflowModal = ({ onClose }) => {
     stabilityProtocolApprovalDate: "",
     countryOfRegulatorySubmissions: "",
     ichZone: "",
-    photostabilityTestingResults: "",
-    reconstitutionStability: "",
+    photoStabilityTestingResult: "",
+    reConstitutionStability: "",
     testingInterval: "",
     shelfLifeRecommendation: "",
 
     reviewerApprover: "",
     reviewerComment: "",
     reviewDate: "",
-    QaReviewerApprover: "",
-    QaReviewerComment: "",
+    qaReviewerApprover: "",
+    qaReviewerComment: "",
     QaReviewDate: "",
   });
-  console.log(formData, "formDtatatatatat");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -120,25 +120,70 @@ const SampleWorkflowModal = ({ onClose }) => {
       [name]: value,
     }));
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!id) return;
+      try {
+        const response = await axios.get(`http://localhost:9000/get-Sample/${id}`);
+        console.log(response.data);
 
-  const handleSave = async () => {
+        const responseData = Array.isArray(response.data)
+          ? response.data
+          : response.data.data;
+        console.log(responseData);
+        setFormData(responseData);
+      } catch (error) {
+        console.error("Error fetching ", error);
+        toast.error("Failed to fetch ");
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  const handleEdit = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:9000/create-sample`,
+      const response = await axios.put(
+        `http://localhost:9000/edit-sample/${id}`,
         formData
       );
       if (response.status === 200) {
-        toast.success("Sample Workflow added successfully.");
+        toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
         navigate("/sampleWorkflow");
       } else {
-        toast.error("Failed to adsd Sample Workflow.");
+        toast.error("Failed to update Sample Workflow.");
       }
     } catch (error) {
       toast.error(
-        "Error adding Sample Workflow: " +
+        "Error updating Sample Workflow: " +
           (error.response?.data || error.message)
       );
+    }
+  };
+
+  const handleSave = async () => {
+    if (id) {
+      await handleEdit();
+    } else {
+      try {
+        const response = await axios.post(
+          `http://localhost:9000/create-sample`,
+          formData
+        );
+        if (response.status === 200) {
+          toast.success("Sample Workflow added successfully.");
+          setIsModalOpen(false);
+          navigate("/sampleWorkflow");
+        } else {
+          toast.error("Failed to add Sample Workflow.");
+        }
+      } catch (error) {
+        toast.error(
+          "Error adding Sample Workflow: " +
+            (error.response?.data || error.message)
+        );
+      }
     }
   };
 
@@ -200,9 +245,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="batchLotNumber"
+                  name="batchlotNumber"
                   label="Batch/Lot Number"
-                  value={formData.batchLotNumber || ""}
+                  value={formData.batchlotNumber || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -853,9 +898,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="photostabilityTestingResults"
+                  name="photoStabilityTestingResult"
                   label="Photostability Testing Results"
-                  value={formData?.photostabilityTestingResults || ""}
+                  value={formData?.photoStabilityTestingResult || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -864,9 +909,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="reconstitutionStability"
+                  name="reConstitutionStability"
                   label="Reconstitution Stability"
-                  value={formData?.reconstitutionStability || ""}
+                  value={formData?.reConstitutionStability || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1035,7 +1080,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             type="submit"
             className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
           >
-            Save
+            {id?"Update":"Save"}
           </CButton>
           <CButton
             onClick={onClose}

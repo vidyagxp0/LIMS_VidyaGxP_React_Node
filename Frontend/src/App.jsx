@@ -271,7 +271,11 @@ function App() {
             <Route path="/sampleWorkflow" element={<SampleWorkflow />} />
             <Route path="/sampleWorkflowPanel" element={<SampleWorkFlowPanel />} />
             <Route
-              path="/sampleWorkflowModal"
+              path="/sampleWorkflowEdit/:id"
+              element={<SampleWorkflowModal />}
+            />
+            <Route
+              path="/sampleWorkflowModal/"
               element={<SampleWorkflowModal />}
             />
             <Route path="/viewDetails" element={<SampleLoginDetails />} />

@@ -120,6 +120,10 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  plannedDate: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   labTechnician: {
     type: DataTypes.TEXT,
     allowNull: true,

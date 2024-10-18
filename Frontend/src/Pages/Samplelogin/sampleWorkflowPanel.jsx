@@ -43,14 +43,16 @@ const SampleWorkflowPanel = ({ onClose }) => {
     setActiveTab(tab);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (id) => {
+    console.log(id, "iddddddddddd");
     try {
-      const response = await axios.post(
-        `http://localhost:9000/save-sample`,
+      const response = await axios.put(
+        `http://localhost:9000/edit-sample/${id}`, // Replace :id with actual ID
         formData
       );
+      console.log(response,)
       toast.success("Sample data saved successfully!");
-      navigate("/samples");
+      // navigate("/sampleWorkflowPanel");
     } catch (error) {
       console.error("Error saving data:", error);
       toast.error("Error saving sample data.");
@@ -940,6 +942,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
           <CButton
             type="submit"
             className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
+            onClick={handleSave}
           >
             Save
           </CButton>
