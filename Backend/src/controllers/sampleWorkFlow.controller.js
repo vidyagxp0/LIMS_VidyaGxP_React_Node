@@ -3,6 +3,7 @@ import { getFileUrl } from "../middleware/authentication.js";
 import { sequelize } from "../config/db.js";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import moment from "moment";
 
 export const createSample = async (req, res) => {
   try {
@@ -173,7 +174,7 @@ export const submitToReview = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId, comment } = req.body;
+    const { name, sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -202,9 +203,11 @@ export const submitToReview = async (req, res) => {
 
     await sampleData.update(
       {
+        initiatorName: name,
         initiatorComment: comment,
         status: "Pending Analysis",
         stage: 2,
+        initiatorReviewDate: moment().format("DD/MM/YYYY h:mm:ss a"),
       },
       { transaction }
     );
@@ -230,7 +233,7 @@ export const submitToSupervisor = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId, comment } = req.body;
+    const { name, sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -259,9 +262,11 @@ export const submitToSupervisor = async (req, res) => {
 
     await sampleData.update(
       {
-        supervisorComment: comment,
+        labTechnicianName: name,
+        labTechnicianComment: comment,
         status: "pending Supervisor",
         stage: 3,
+        labTechnicianReviewDate: moment().format("DD/MM/YYYY h:mm:ss a"),
       },
       { transaction }
     );
@@ -287,7 +292,7 @@ export const submitToQA = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId, comment } = req.body;
+    const { name, sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -316,9 +321,11 @@ export const submitToQA = async (req, res) => {
 
     await sampleData.update(
       {
-        supervisorComment: comment,
+        reviewerApprover: name,
+        reviewerComment: comment,
         status: "pending QA",
         stage: 4,
+        reviewDate: moment().format("DD/MM/YYYY h:mm:ss a"),
       },
       { transaction }
     );
@@ -344,7 +351,7 @@ export const submitToQAReview = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId, comment } = req.body;
+    const { name, sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -373,9 +380,11 @@ export const submitToQAReview = async (req, res) => {
 
     await sampleData.update(
       {
+        QaReviewerApprover: name,
         QaReviewerComment: comment,
         status: "QA Approved",
         stage: 5,
+        QaReviewDate: moment().format("DD/MM/YYYY h:mm:ss a"),
       },
       { transaction }
     );
