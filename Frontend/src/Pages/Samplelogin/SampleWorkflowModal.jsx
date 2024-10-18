@@ -55,7 +55,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     labTechnician: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
-
+    supportiveAttachment:"",
     analysisType: "",
     analysisResult: "",
     analysisDate: "",
@@ -124,7 +124,9 @@ const SampleWorkflowModal = ({ onClose }) => {
     const fetchData = async () => {
       if (!id) return;
       try {
-        const response = await axios.get(`http://localhost:9000/get-Sample/${id}`);
+        const response = await axios.get(
+          `http://localhost:9000/get-Sample/${id}`
+        );
         console.log(response.data);
 
         const responseData = Array.isArray(response.data)
@@ -841,7 +843,6 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CRow>
           </CForm>
         );
-
       case "Stability Information":
         return (
           <CForm>
@@ -970,8 +971,22 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
+              <CCol md={12}>
+                <CFormInput
+                  type="file"
+                  name="supportiveAttachment"
+                  label="Supportive Attachment"
+                  value={formData?.supportiveAttachment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
             </CRow>
 
+          </CForm>
+        );
+      case "QA Review":
+        return (
+          <CForm>
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6}>
@@ -1022,19 +1037,6 @@ const SampleWorkflowModal = ({ onClose }) => {
         <div className="flex space-x-4 mb-8">
           <CButton
             color={
-              activeTab === "Stability Information" ? "primary" : "secondary"
-            }
-            onClick={() => handleTabClick("Stability Information")}
-            className={`transition-all duration-300 ${
-              activeTab === "Stability Information"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Stability Information
-          </CButton>
-          <CButton
-            color={
               activeTab === "Sample Registration" ? "primary" : "secondary"
             }
             onClick={() => handleTabClick("Sample Registration")}
@@ -1046,6 +1048,7 @@ const SampleWorkflowModal = ({ onClose }) => {
           >
             Sample Registration
           </CButton>
+
           <CButton
             color={activeTab === "Sample Analysis" ? "primary" : "secondary"}
             onClick={() => handleTabClick("Sample Analysis")}
@@ -1069,6 +1072,44 @@ const SampleWorkflowModal = ({ onClose }) => {
           >
             Supervisor Review
           </CButton>
+
+          <CButton
+            color={
+              activeTab === "Stability Information" ? "primary" : "secondary"
+            }
+            onClick={() => handleTabClick("Stability Information")}
+            className={`transition-all duration-300 ${
+              activeTab === "Stability Information"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            Stability Information
+          </CButton>
+
+          <CButton
+            color={activeTab === "QA Review" ? "primary" : "secondary"}
+            onClick={() => handleTabClick("QA Review")}
+            className={`transition-all duration-300 ${
+              activeTab === "QA Review"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            QA Review
+          </CButton>
+
+          <CButton
+            color={activeTab === "AActivity Log" ? "primary" : "secondary"}
+            onClick={() => handleTabClick("Activity Log")}
+            className={`transition-all duration-300 ${
+              activeTab === "Activity Log"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            Activity Log
+          </CButton>
         </div>
 
         <div className="bg-white shadow-2xl p-8 rounded-md transition-all duration-300">
@@ -1080,7 +1121,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             type="submit"
             className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
           >
-            {id?"Update":"Save"}
+            {id ? "Update" : "Save"}
           </CButton>
           <CButton
             onClick={onClose}
