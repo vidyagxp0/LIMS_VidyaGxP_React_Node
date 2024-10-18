@@ -370,8 +370,8 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
   },
   stage: {
     type: TEXT,
-    defaultValue: 1,
-    allowNull: true,
+    defaultValue: "1",
+    allowNull: false,
   },
   status: {
     type: DataTypes.TEXT,
