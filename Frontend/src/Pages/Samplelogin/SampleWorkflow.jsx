@@ -28,6 +28,7 @@ import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
+import { FaFilePdf } from "react-icons/fa6";
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -509,7 +510,7 @@ const SampleWorkFlow = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-          <button
+          {/* <button
             className="px-3 py-2 rounded flex gap-2 items-center bg-green-600 text-white font-medium cursor-pointer"
             onClick={() => generatePDF(selectedSampleId)}
           >
@@ -519,7 +520,7 @@ const SampleWorkFlow = () => {
             ) : (
               <FontAwesomeIcon icon="fa-regular fa-file-pdf" />
             )}
-          </button>
+          </button> */}
           <PDFDownload
             columns={columns}
             data={filteredData}
@@ -783,29 +784,45 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
                 <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
                 <td className="border px-4 py-2">{data.sampleBarcode}</td>{" "}
-                <td className="border px-4 py-2">{data.status}</td>{" "}
-                <td className="border px-4 py-2">{data.generatePDF}</td>{" "}
-                <td className="border px-4 py-2 font-medium">
-                  {" "}
-                  <div className="flex gap-2 font-medium">
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => onViewDetails(data)}
-                    />
-                    <FontAwesomeIcon
-                      icon={faPenToSquare}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => openEditModal(data, index)}
-                    />
-                    <FontAwesomeIcon
-                      icon={faTrashCan}
-                      className="cursor-pointer"
-                      onClick={() => handleDelete(data)}
-                    />
-                  </div>
-                </td>
+                <td claossName="border px-4 py-2">{data.status}</td>{" "}
               </Link>
+              <td className="flex justify-center items-center px-4 py-2">
+                <FaFilePdf
+                  className="w-10 h-10 text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                  onClick={() => generatePDF(data.sampleId)} // Click event handler
+                />
+                {loading[data.sampleId] && (
+                  <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                )}
+              </td>
+              <td className="border px-4 py-2 font-medium">
+                <div className="flex gap-2 font-medium">
+                  <FontAwesomeIcon
+                    icon={faEye}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => {
+                      // Navigate to the specified URL
+                      window.location.href = "https://ipc.mydemosoftware.com";
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => {
+                      // Navigate to the specified URL
+                      window.location.href = "https://ipc.mydemosoftware.com";
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      // Navigate to the specified URL
+                      window.location.href = "https://ipc.mydemosoftware.com";
+                    }}
+                  />
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

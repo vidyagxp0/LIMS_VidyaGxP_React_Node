@@ -589,18 +589,14 @@ function CalibrationRecord() {
             />
           </div>
         </div>
-        {filteredData && filteredData.length > 0 ? (
-          <Table
-            columns={columns}
-            data={filteredData}
-            onCheckboxChange={handleCheckboxChange}
-            onViewDetails={onViewDetails}
-            onDelete={handleDelete}
-            openEditModal={openEditModal}
-          />
-        ) : (
-          <p>No Calibration Record available.</p>
-        )}
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
       {isModalOpen && (
