@@ -135,7 +135,7 @@ const SampleWorkFlow = () => {
     { header: "Sample Name", accessor: "sampleName" },
     { header: "Sample Type", accessor: "sampleType" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
-    { header: "Batch/Lot Number", accessor: "batchlotNumber" },
+    { header: "Batch/Lot Number", accessor: "batchLotNumber" },
     { header: "Sample Priority", accessor: "samplePriority" },
     { header: "Sample Quantity", accessor: "sampleQuantity" },
     { header: "UOM", accessor: "UOM" },
@@ -143,15 +143,15 @@ const SampleWorkFlow = () => {
     { header: "Sample Barcode", accessor: "sampleBarCode" },
     { header: "Specification ID", accessor: "specificationId" },
     { header: "Specification Attachment", accessor: "specificationAttachment" },
-    { header: "STP ID", accessor: "sTPId" },
-    { header: "STP Attachment", accessor: "sTPAttachment" },
-    { header: "Test Plan ID", accessor: "testPlanID" },
+    { header: "STP ID", accessor: "stpId" },
+    { header: "STP Attachment", accessor: "stpAttachment" },
+    { header: "Test Plan ID", accessor: "testPlanId" },
     { header: "Test Name", accessor: "testName" },
     { header: "Test Method", accessor: "testMethod" },
-    { header: "Test Parameters", accessor: "testParameters" },
+    { header: "Test Parameters", accessor: "testParameter" },
     { header: "Testing Frequency", accessor: "testingFrequency" },
     { header: "Testing Location", accessor: "testingLocation" },
-    { header: "Required Instruments", accessor: "requiredInstruments" },
+    { header: "Required Instruments", accessor: "requiredInstrument" },
     { header: "Test Grouping", accessor: "testGrouping" },
     { header: "LSL", accessor: "lsl" },
     { header: "USL", accessor: "usl" },
@@ -179,9 +179,9 @@ const SampleWorkFlow = () => {
     { header: "Regulatory Requirements", accessor: "regulatoryRequirements" },
     { header: "Quality Control Checks", accessor: "qualityControlChecks" },
     { header: "Delay Justification", accessor: "delayJustification" },
-    { header: "Testing Outcome", accessor: "testingOutcome" },
+    { header: "Testing Outcome", accessor: "testingOutCome" },
     { header: "Pass / Fail ?", accessor: "passFail" },
-    { header: "Shelf Life reccommendation", accessor: "passFail" },
+    // { header: "Shelf Life reccommendation", accessor: "shelfLifeRecommendation" },
     { header: "Control Sample Reference", accessor: "controlSampleReference" },
     { header: "Sample Integrity Status", accessor: "sampleIntegrityStatus" },
     { header: "Risk Assessment", accessor: "riskAssessment" },
@@ -302,15 +302,15 @@ const SampleWorkFlow = () => {
       sampleBarCode: item["Sample Barcode"] || "",
       specificationId: item["Specification ID"] || "",
       specificationAttachment: item["Specification Attachment"] || "",
-      sTPId: item["STP ID"] || "",
-      sTPAttachment: item["STP Attachment"] || "",
-      testPlanID: item["Test Plan ID"] || "",
+      stpId: item["STP ID"] || "",
+      stpAttachment: item["STP Attachment"] || "",
+      testPlanId: item["Test Plan ID"] || "",
       testName: item["Test Name"] || "",
       testMethod: item["Test Method"] || "",
-      testParameters: item["Test Parameters"] || "",
+      testParameter: item["Test Parameters"] || "",
       testingFrequency: item["Testing Frequency"] || "",
       testingLocation: item["Testing Location"] || "",
-      requiredInstruments: item["Required Instruments"] || "",
+      requiredInstrument: item["Required Instruments"] || "",
       testGrouping: item["Test Grouping"] || "",
       lsl: item["LSL"] || "",
       usl: item["USL"] || "",
@@ -324,7 +324,7 @@ const SampleWorkFlow = () => {
       testingStartDate: item["Testing Start Date"] || "",
       testingEndDate: item["Testing End Date"] || "",
       delayJustification: item["Delay Justification"] || "",
-      testingOutcome: item["Testing Outcome"] || "",
+      testingOutCome: item["Testing Outcome"] || "",
       passFail: item["Pass/Fail?"] || "",
       turnaroundTime: item["Turnaround Time (TAT)"] || "",
       sampleRetestingDate: item["Sample Retesting Date"] || "",
@@ -398,10 +398,10 @@ const SampleWorkFlow = () => {
     "testPlanId",
     "testName",
     "testMethod",
-    "testParameters",
+    "testParameter",
     "testingFrequency",
     "testingLocation",
-    "requiredInstruments",
+    "requiredInstrument",
     "testGrouping",
     "lsl",
     "usl",
@@ -415,6 +415,9 @@ const SampleWorkFlow = () => {
     "sampleCollectionDate",
     "testingStartDate",
     "testingEndDate",
+    "delayJustification",
+    "testingOutcome",
+    "passFail",
     "turnaroundTime",
     "sampleRetestingDate",
     "reviewDate",
@@ -659,7 +662,7 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.sampleName}</td>
               <td className="border px-4 py-2">{data.sampleType}</td>
               <td className="border px-4 py-2">{data.productMaterialName}</td>
-              <td className="border px-4 py-2">{data.batchlotNumber}</td>
+              <td className="border px-4 py-2">{data.batchLotNumber}</td>
               <td className="border px-4 py-2">{data.sampleSource}</td>
               <td className="border px-4 py-2">{data.plannedDate}</td>
               <td className="border px-4 py-2">{data.samplePriority}</td>
@@ -671,15 +674,15 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">
                 {data.specificationAttachment}
               </td>
-              <td className="border px-4 py-2">{data.sTPId}</td>
-              <td className="border px-4 py-2">{data.sTPAttachment}</td>
-              <td className="border px-4 py-2">{data.testPlanID}</td>
+              <td className="border px-4 py-2">{data.stpId}</td>
+              <td className="border px-4 py-2">{data.stpAttachment}</td>
+              <td className="border px-4 py-2">{data.testPlanId}</td>
               <td className="border px-4 py-2">{data.testName}</td>
               <td className="border px-4 py-2">{data.testMethod}</td>
-              <td className="border px-4 py-2">{data.testParameters}</td>
+              <td className="border px-4 py-2">{data.testParameter}</td>
               <td className="border px-4 py-2">{data.testingFrequency}</td>
               <td className="border px-4 py-2">{data.testingLocation}</td>
-              <td className="border px-4 py-2">{data.requiredInstruments}</td>
+              <td className="border px-4 py-2">{data.requiredInstrument}</td>
               <td className="border px-4 py-2">{data.testGrouping}</td>
               <td className="border px-4 py-2">{data.lsl}</td>{" "}
               <td className="border px-4 py-2">{data.usl}</td>{" "}
@@ -691,6 +694,9 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.sampleCollectionDate}</td>
               <td className="border px-4 py-2">{data.testingStartDate}</td>
               <td className="border px-4 py-2">{data.testingEndDate}</td>
+              <td className="border px-4 py-2">{data.delayJustification}</td>
+              <td className="border px-4 py-2">{data.testingOutCome}</td>
+              <td className="border px-4 py-2">{data.passFail}</td>
               <td className="border px-4 py-2">{data.turnaroundTime}</td>
               <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
               <td className="border px-4 py-2">{data.reviewDate}</td>

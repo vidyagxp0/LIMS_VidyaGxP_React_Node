@@ -29,7 +29,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleName: "",
     sampleType: "",
     productMaterialName: "",
-    batchlotNumber: "",
+    batchLotNumber: "",
     samplePriority: "",
     sampleQuantity: "",
     UOM: "",
@@ -41,10 +41,10 @@ const SampleWorkflowModal = ({ onClose }) => {
     stpAttachment: null,
     testName: "",
     testMethod: "",
-    testParameters: "",
+    testParameter: "",
     testingFrequency: "",
     testingLocation: "",
-    requiredInstruments: "",
+    requiredInstrument: "",
     testGrouping: "",
     lsl: "",
     usl: "",
@@ -62,7 +62,8 @@ const SampleWorkflowModal = ({ onClose }) => {
     testingStartDate: "",
     testingEndDate: "",
     delayJustification: "",
-    testingOutcome: "",
+    testingOutCome: "",
+    passFail: "",
     testPlanId: "",
     turnAroundTime: "",
     sampleRetestingDate: "",
@@ -247,9 +248,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="batchlotNumber"
+                  name="batchLotNumber"
                   label="Batch/Lot Number"
-                  value={formData.batchlotNumber || ""}
+                  value={formData.batchLotNumber || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -367,9 +368,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="testParameters"
+                  name="testParameter"
                   label="Test Parameters"
-                  value={formData.testParameters || ""}
+                  value={formData.testParameter || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -396,9 +397,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="requiredInstruments"
+                  name="requiredInstrument"
                   label="Required Instruments"
-                  value={formData.requiredInstruments || ""}
+                  value={formData.requiredInstrument || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -571,10 +572,19 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
-                <CFormSelect
-                  name="testingOutcome"
+                <CFormInput
+                  type="text"
+                  name="testingOutCome"
                   label="Testing Outcome"
-                  value={formData.testingOutcome || ""}
+                  value={formData.testingOutCome || ""}
+                  onChange={handleInputChange}
+                />
+                </CCol>
+                <CCol md={6}>
+                <CFormSelect
+                  name="passFail"
+                  label="Pass/Fail"
+                  value={formData.passFail || ""}
                   onChange={handleInputChange}
                   options={[
                     "Select outcome",
@@ -582,6 +592,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                     { label: "Fail", value: "fail" },
                   ]}
                 />
+                
               </CCol>
               <CCol md={6}>
                 <CFormInput
