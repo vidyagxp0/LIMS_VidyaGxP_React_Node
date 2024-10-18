@@ -19,7 +19,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import Table from "../../components/ATM components/Table/Table";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { randomSampleData } from "./SamplePlanningFunction";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
@@ -27,8 +27,10 @@ import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
+import { BASE_URL } from "../../config.json";
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
+  console.log(data, "????????????????????????????");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -38,6 +40,8 @@ const SampleWorkFlow = () => {
   const [viewModalData, setViewModalData] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState({});
+  const [selectedSampleId, setSelectedSamppleId] = useState(null);
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -50,13 +54,23 @@ const SampleWorkFlow = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sLSamplePA`
-      );
-      const fetchedData = response?.data[0]?.sLSamplePA || [];
-      setData(fetchedData);
+      const response = await axios.get(`${BASE_URL}/get-sample`);
+      console.log(response, "99999999999999999999999999"); // Check the structure of the response
+
+      // Assuming the actual array is nested inside a 'data' property
+      const responseData = Array.isArray(response.data)
+        ? response.data
+        : response.data.data;
+
+      const updatedData = responseData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+      }));
+      console.log(updatedData,"SAmplepriority");
+      setData(updatedData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching ", error);
+      toast.error("Failed to fetch ");
     }
   };
   useEffect(() => {
@@ -85,6 +99,31 @@ const SampleWorkFlow = () => {
     // Update the rows here (if using state or Redux for state management)
   };
 
+  const generatePDF = async (sampleId) => {
+    console.log("Generating PDF for Sample ID:", sampleId);
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
+    try {
+      const response = await fetch(
+        `http://localhost:9000/generate-report/${sampleId}`
+      );
+      console.log("Response Status:", response.status);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Sample_Report_${sampleId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
+  };
+
   const columns = [
     {
       header: <input type="checkbox" />,
@@ -96,12 +135,12 @@ const SampleWorkFlow = () => {
     { header: "Sample Name", accessor: "sampleName" },
     { header: "Sample Type", accessor: "sampleType" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
-    { header: "Batch/Lot Number", accessor: "batchNumber" },
+    { header: "Batch/Lot Number", accessor: "batchlotNumber" },
     { header: "Sample Priority", accessor: "samplePriority" },
     { header: "Sample Quantity", accessor: "sampleQuantity" },
-    { header: "UOM", accessor: "uom" },
+    { header: "UOM", accessor: "UOM" },
     { header: "Market", accessor: "market" },
-    { header: "Sample Barcode", accessor: "sampleBarcode" },
+    { header: "Sample Barcode", accessor: "sampleBarCode" },
     { header: "Specification ID", accessor: "specificationId" },
     { header: "Specification Attachment", accessor: "specificationAttachment" },
     { header: "STP ID", accessor: "sTPId" },
@@ -139,6 +178,10 @@ const SampleWorkFlow = () => {
     { header: "Sample Label", accessor: "sampleLabel" },
     { header: "Regulatory Requirements", accessor: "regulatoryRequirements" },
     { header: "Quality Control Checks", accessor: "qualityControlChecks" },
+    { header: "Delay Justification", accessor: "delayJustification" },
+    { header: "Testing Outcome", accessor: "testingOutcome" },
+    { header: "Pass / Fail ?", accessor: "passFail" },
+    { header: "Shelf Life reccommendation", accessor: "passFail" },
     { header: "Control Sample Reference", accessor: "controlSampleReference" },
     { header: "Sample Integrity Status", accessor: "sampleIntegrityStatus" },
     { header: "Risk Assessment", accessor: "riskAssessment" },
@@ -164,18 +207,18 @@ const SampleWorkFlow = () => {
     { header: "ICH Zone", accessor: "ichZone" },
     {
       header: "Photostability Testing Results",
-      accessor: "photostabilityTestingResults",
+      accessor: "photoStabilityTestingResult",
     },
-    { header: "Reconstitution Stability", accessor: "reconstitutionStability" },
-    { header: "Testing Interval (months)", accessor: "testingIntervalMonths" },
+    { header: "Reconstitution Stability", accessor: "reConstitutionStability" },
+    { header: "Testing Interval (months)", accessor: "testingInterval" },
     {
       header: "Shelf Life Recommendation",
       accessor: "shelfLifeRecommendation",
     },
     { header: "Reviewer Comment", accessor: "reviewerComment" },
-    { header: "QA Reviewer/Approver", accessor: "qaReviewerApprover" },
-    { header: "QA Reviewer Comment", accessor: "qaReviewerComment" },
-    { header: "QA Review Date", accessor: "qaReviewDate" },
+    { header: "QA Reviewer/Approver", accessor: "QaReviewerApprover" },
+    { header: "QA Reviewer Comment", accessor: " QaReviewerComment" },
+    { header: "QA Review Date", accessor: "qaReviQwDate" },
     {
       header: "Actions",
       accessor: "action",
@@ -254,10 +297,9 @@ const SampleWorkFlow = () => {
       plannedDate: item["Planned Date"] || "",
       samplePriority: item["Sample Priority"] || "",
       sampleQuantity: item["Sample Quantity"] || "",
-      uom: item["UOM"] || "",
+      UOM: item["UOM"] || "",
       market: item["Market"] || "",
-      sampleBarcode: item["Sample Barcode"] || "",
-
+      sampleBarCode: item["Sample Barcode"] || "",
       specificationId: item["Specification ID"] || "",
       specificationAttachment: item["Specification Attachment"] || "",
       sTPId: item["STP ID"] || "",
@@ -273,13 +315,11 @@ const SampleWorkFlow = () => {
       lsl: item["LSL"] || "",
       usl: item["USL"] || "",
       testingDeadline: item["Testing Deadline"] || "",
-
       plannerName: item["Planner Name"] || "",
       labTechnician: item["Lab Technician"] || "",
       reviewerApprover: item["Reviewer/Approver"] || "",
       assignedDepartment: item["Assigned Department"] || "",
       supervisor: item["Supervisor"] || "",
-
       sampleCollectionDate: item["Sample Collection Date"] || "",
       testingStartDate: item["Testing Start Date"] || "",
       testingEndDate: item["Testing End Date"] || "",
@@ -289,29 +329,24 @@ const SampleWorkFlow = () => {
       turnaroundTime: item["Turnaround Time (TAT)"] || "",
       sampleRetestingDate: item["Sample Retesting Date"] || "",
       reviewDate: item["Review Date"] || "",
-
       sampleStorageLocation: item["Sample Storage Location"] || "",
       transportationMethod: item["Transportation Method"] || "",
       samplePreparationMethod: item["Sample Preparation Method"] || "",
       samplePackagingDetails: item["Sample Packaging Details"] || "",
       sampleLabel: item["Sample Label"] || "",
-
       regulatoryRequirements: item["Regulatory Requirements"] || "",
       qualityControlChecks: item["Quality Control Checks"] || "",
       controlSampleReference: item["Control Sample Reference"] || "",
       sampleIntegrityStatus: item["Sample Integrity Status"] || "",
       riskAssessment: item["Risk Assessment"] || "",
-
       instrumentsReserved: item["Instruments Reserved"] || "",
       labAvailability: item["Lab Availability"] || "",
       sampleCostEstimation: item["Sample Cost Estimation"] || "",
       resourceUtilization: item["Resource Utilization"] || "",
-
       sampleMovementHistory: item["Sample Movement History"] || "",
       testingProgress: item["Testing Progress"] || "",
       alertsNotifications: item["Alerts/Notifications"] || "",
       deviationLogs: item["Deviation Logs"] || "",
-
       commentsNotes: item["Comments/Notes"] || "",
       attachments: item["Attachments"] || "",
       samplingFrequency: item["Sampling Frequency"] || "",
@@ -323,24 +358,23 @@ const SampleWorkFlow = () => {
       countryOfRegulatorySubmissions:
         item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
-      photostabilityTestingResults:
+      photoStabilityTestingResult:
         item["Photostability Testing results"] || "",
-      reconstitutionStability: item["Reconstitution Stability"] || "",
-      testingIntervalMonths: item["Testing Interval (months)"] || "",
+      reConstitutionStability: item["Reconstitution Stability"] || "",
+      testingInterval: item["Testing Interval (months)"] || "",
       shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
 
       reviewerComment: item["Reviewer Comment"] || "",
       qaReviewerApprover: item["QA Reviewer/Approver"] || "",
       qaReviewerComment: item["QA Reviewer Comment"] || "",
-      qaReviewDate: item["QA Review Date"] || "",
+      QaReviewDate: item["QA Review Date"] || "",
 
       actions: item["Actions"] || "",
     }));
 
-    // Concatenate the updated data with existing data
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Close modal after data upload
+    setIsModalsOpen(false);
   };
 
   const fields = [
@@ -349,14 +383,14 @@ const SampleWorkFlow = () => {
     "sampleName",
     "sampleType",
     "productMaterialName",
-    "batchLotNumber",
+    "batchNumber",
     "sampleSource",
     "plannedDate",
     "samplePriority",
     "sampleQuantity",
-    "uom",
+    "UOM",
     "market",
-    "sampleBarcode",
+    "sampleBarCode",
     "specificationId",
     "specificationAttachment",
     "stpId",
@@ -411,15 +445,40 @@ const SampleWorkFlow = () => {
     "stabilityProtocolApprovalDate",
     "countryOfRegulatorySubmissions",
     "ichZone",
-    "photostabilityTestingResults",
-    "reconstitutionStability",
-    "testingIntervalMonths",
+    "photoStabilityTestingResult",
+    "reConstitutionStability",
+    "testingInterval",
     "shelfLifeRecommendation",
     "reviewerComment",
     "qaReviewerApprover",
     "qaReviewerComment",
-    "qaReviewDate",
+    "QaReviewDate",
   ];
+
+  // const [loading, setLoading] = useState(false);
+
+  // const handleRowClick = async (id) => {
+  //   //console.log(id, "dwsa");
+  //   // setLoading(true);
+  //   // try {
+  //   //   const response = await axios.put(
+  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //   );
+  //   //   const sampleData = response.data;
+  //   //   console.log(sampleData);
+
+  //   navigate("/sampleWorkflowPanel");
+  //   // } catch (error) {
+  //   //   console.error("Error fetching sample data:", error);
+  //   // } finally {
+  //   //   setLoading(false);
+  //   // }
+  // };
+
+  // const handleRowClick = async (id) => {
+  //   navigate(`/sampleWorkflowPanel/${id}`);
+  //   console.log("IDD", id);
+  // };
 
   return (
     <div className="m-5 mt-3">
@@ -443,6 +502,17 @@ const SampleWorkFlow = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+          <button
+            className="px-3 py-2 rounded flex gap-2 items-center bg-green-600 text-white font-medium cursor-pointer"
+            onClick={() => generatePDF(selectedSampleId)}
+          >
+            Generate Report
+            {loading[selectedSampleId] ? (
+              <div className="h-5 w-5 border-t-2 border-b-2 border-black animate-spin rounded-full"></div>
+            ) : (
+              <FontAwesomeIcon icon="fa-regular fa-file-pdf" />
+            )}
+          </button>
           <PDFDownload
             columns={columns}
             data={filteredData}
@@ -460,16 +530,16 @@ const SampleWorkFlow = () => {
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
-            <th colSpan="10" className="px-4 py-2 bg-yellow-600">
+            <th colSpan="25" className="px-4 py-2 bg-yellow-600">
               Sample Planning Information
             </th>
-            <th colSpan="10" className="px-4 py-2 bg-green-600">
+            <th colSpan="20" className="px-4 py-2 bg-green-600">
               Testing Requirements
             </th>
-            <th colSpan="5" className="px-4 py-2 bg-brown-600">
+            <th colSpan="9" className="px-4 py-2 bg-brown-600">
               Personnel and Roles
             </th>
-            <th colSpan="11" className="px-4 py-2 bg-violet-600">
+            <th colSpan="6" className="px-4 py-2 bg-violet-600">
               Schedule and Timeline
             </th>
             <th colSpan="5" className="px-4 py-2 bg-red-600">
@@ -484,7 +554,7 @@ const SampleWorkFlow = () => {
             <th colSpan="4" className="px-4 py-2 bg-green-300">
               Tracking and Monitoring
             </th>
-            <th colSpan="6" className="px-4 py-2 bg-violet-500">
+            <th colSpan="16" className="px-4 py-2 bg-violet-500">
               Miscellaneous
             </th>
           </tr>
@@ -501,10 +571,8 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Sample Priority</td>
             <td className="border px-4 py-2">Sample Quantity</td>
             <td className="border px-4 py-2">UOM</td>
-            {/* <td className="border px-4 py-2">Test</td> */}
             <td className="border px-4 py-2">Market</td>
             <td className="border px-4 py-2">Sample Barcode</td>
-
             <td className="border px-4 py-2">Specification ID</td>
             <td className="border px-4 py-2">Specification Attachment</td>
             <td className="border px-4 py-2">STP ID</td>
@@ -517,18 +585,16 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Testing Location</td>
             <td className="border px-4 py-2">Required Instruments</td>
             <td className="border px-4 py-2">Test Grouping</td>
-            {/* <td className="border px-4 py-2">Expected Result</td> */}
             <td className="border px-4 py-2">LSL</td>
             <td className="border px-4 py-2">USL</td>
             <td className="border px-4 py-2">Testing Deadline</td>
-
             <td className="border px-4 py-2">Planner Name</td>
             <td className="border px-4 py-2">Lab Technician</td>
             <td className="border px-4 py-2">Reviewer/Approver</td>
             <td className="border px-4 py-2">Assigned Department</td>
             <td className="border px-4 py-2">Supervisor</td>
-
             <td className="border px-4 py-2">Sample Collection Date</td>
+
             <td className="border px-4 py-2">Testing Start Date</td>
             <td className="border px-4 py-2">Testing End Date</td>
             <td className="border px-4 py-2">Delay Justification</td>
@@ -537,13 +603,11 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Turnaround Time (TAT)</td>
             <td className="border px-4 py-2">Sample Retesting Date</td>
             <td className="border px-4 py-2">Review Date</td>
-
             <td className="border px-4 py-2">Sample Storage Location</td>
             <td className="border px-4 py-2">Transportation Method</td>
             <td className="border px-4 py-2">Sample Preparation Method</td>
             <td className="border px-4 py-2">Sample Packaging Details</td>
             <td className="border px-4 py-2">Sample Label</td>
-
             <td className="border px-4 py-2">Regulatory Requirements</td>
             <td className="border px-4 py-2">Quality Control Checks</td>
             <td className="border px-4 py-2">Control Sample Reference</td>
@@ -551,21 +615,19 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Assigned Department</td>
             <td className="border px-4 py-2">Risk Assessment</td>
             <td className="border px-4 py-2">Supervisor</td>
-
             <td className="border px-4 py-2">Instruments Reserved</td>
             <td className="border px-4 py-2">Lab Availability</td>
             <td className="border px-4 py-2">Sample Cost Estimation</td>
             <td className="border px-4 py-2">Resource Utilization</td>
-
             <td className="border px-4 py-2">Sample Movement History</td>
             <td className="border px-4 py-2">Testing Progress</td>
             <td className="border px-4 py-2">Alerts/Notifications</td>
             <td className="border px-4 py-2">Deviation Logs</td>
-
             <td className="border px-4 py-2 text-wrap">Comments/Notes</td>
             <td className="border px-4 py-2">Attachments</td>
             <td className="border px-4 py-2">Sampling Frequency</td>
             <td className="border px-4 py-2">Sample Disposition</td>
+
             <td className="border px-4 py-2">Stability Study Type</td>
             <td className="border px-4 py-2">Stability Study Protocol</td>
             <td className="border px-4 py-2">
@@ -584,127 +646,110 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">QA Reviewer/Approver </td>
             <td className="border px-4 py-2">QA Reviewer Comment </td>
             <td className="border px-4 py-2">QA Review Date </td>
-
             <td className="border px-4 py-2">Actions</td>
           </tr>
         </thead>
         <tbody>
           {data?.map((data, index) => (
-            <tr key={index} className="hover:bg-gray-100">
-              <tr>
-                <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{data.samplePlanId}</td>
-                <td className="border px-4 py-2">{data.sampleId}</td>
-                <td className="border px-4 py-2">{data.sampleName}</td>
-                <td className="border px-4 py-2">{data.sampleType}</td>
-                <td className="border px-4 py-2">{data.productMaterialName}</td>
-                <td className="border px-4 py-2">{data.batchNumber}</td>
-                <td className="border px-4 py-2">{data.samplePriority}</td>
-                <td className="border px-4 py-2">{data.sampleQuantity}</td>
-                <td className="border px-4 py-2">{data.uom}</td>
-                <td className="border px-4 py-2">{data.market}</td>
-                <td className="border px-4 py-2">{data.sampleBarcode}</td>
-                <td className="border px-4 py-2">{data.specificationId}</td>
-                <td className="border px-4 py-2">
-                  {data.specificationAttachment}
-                </td>
-                <td className="border px-4 py-2">{data.sTPId}</td>
-                <td className="border px-4 py-2">{data.sTPAttachment}</td>
-                <td className="border px-4 py-2">{data.testPlanID}</td>
-                <td className="border px-4 py-2">{data.testName}</td>
-                <td className="border px-4 py-2">{data.testMethod}</td>
-                <td className="border px-4 py-2">{data.testParameters}</td>
-                <td className="border px-4 py-2">{data.testingFrequency}</td>
-                <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td className="border px-4 py-2">{data.requiredInstruments}</td>
-                <td className="border px-4 py-2">{data.testGrouping}</td>
-                <td className="border px-4 py-2">{data.lsl}</td>{" "}
-                <td className="border px-4 py-2">{data.usl}</td>{" "}
-                <td className="border px-4 py-2">{data.testingDeadline}</td>
-                <td className="border px-4 py-2">{data.plannerName}</td>
-                <td className="border px-4 py-2">{data.sampleSource}</td>
-                <td className="border px-4 py-2">{data.plannedDate}</td>
-                <td className="border px-4 py-2">{data.labTechnician}</td>
-                <td className="border px-4 py-2">{data.reviewerApprover}</td>
-                <td className="border px-4 py-2">{data.assignedDepartment}</td>
-                <td className="border px-4 py-2">
-                  {data.sampleCollectionDate}
-                </td>
-                <td className="border px-4 py-2">{data.testingStartDate}</td>
-                <td className="border px-4 py-2">{data.testingEndDate}</td>
-                <td className="border px-4 py-2">{data.turnaroundTime}</td>
-                <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
-                <td className="border px-4 py-2">{data.reviewDate}</td>
-                <td className="border px-4 py-2">
-                  {data.sampleStorageLocation}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.transportationMethod}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.samplePreparationMethod}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.samplePackagingDetails}
-                </td>
-                <td className="border px-4 py-2">{data.sampleLabel}</td>
-                <td className="border px-4 py-2">
-                  {data.regulatoryRequirements}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.qualityControlChecks}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.controlSampleReference}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.sampleIntegrityStatus}
-                </td>
-                <td className="border px-4 py-2">{data.riskAssessment}</td>
-                <td className="border px-4 py-2">{data.supervisor}</td>{" "}
-                <td className="border px-4 py-2">
-                  {data.sampleMovementHistory}
-                </td>
-                <td className="border px-4 py-2">{data.testingProgress}</td>
-                <td className="border px-4 py-2">{data.alertsNotifications}</td>
-                <td className="border px-4 py-2">{data.deviationLogs}</td>
-                <td className="border px-4 py-2 text-wrap">
-                  {data.commentsNotes}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.attachments}</td>
-                <td className="border px-4 py-2">{data.samplingFrequency}</td>
-                <td className="border px-4 py-2">{data.sampleDisposition}</td>
-                <td className="border px-4 py-2">
-                  {data.stabilityStudyType}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.stabilityStudyProtocol}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.stabilityProtocolApprovalDate}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.countryOfRegulatorySubmissions}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.ichZone}</td>{" "}
-                <td className="border px-4 py-2">
-                  {data.photostabilityTestingResults}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.reconstitutionStability}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.testingIntervalMonths}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.shelfLifeRecommendation}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.reviewerComment}</td>{" "}
-                <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
-                <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
-                <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
-              </tr>
-
+            <tr key={index} className="hover:bg-gray-100 cursor-pointer">
+             <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
+              <td className="border px-4 py-2">{index + 1}</td>
+              <td className="border px-4 py-2">{data.samplePlanId}</td>
+              <td className="border px-4 py-2">{data.sampleId}</td>
+              <td className="border px-4 py-2">{data.sampleName}</td>
+              <td className="border px-4 py-2">{data.sampleType}</td>
+              <td className="border px-4 py-2">{data.productMaterialName}</td>
+              <td className="border px-4 py-2">{data.batchlotNumber}</td>
+              <td className="border px-4 py-2">{data.sampleSource}</td>
+              <td className="border px-4 py-2">{data.plannedDate}</td>
+              <td className="border px-4 py-2">{data.samplePriority}</td>
+              <td className="border px-4 py-2">{data.sampleQuantity}</td>
+              <td className="border px-4 py-2">{data.UOM}</td>
+              <td className="border px-4 py-2">{data.market}</td>
+              <td className="border px-4 py-2">{data?.sampleBarCode}</td>
+              <td className="border px-4 py-2">{data.specificationId}</td>
+              <td className="border px-4 py-2">
+                {data.specificationAttachment}
+              </td>
+              <td className="border px-4 py-2">{data.sTPId}</td>
+              <td className="border px-4 py-2">{data.sTPAttachment}</td>
+              <td className="border px-4 py-2">{data.testPlanID}</td>
+              <td className="border px-4 py-2">{data.testName}</td>
+              <td className="border px-4 py-2">{data.testMethod}</td>
+              <td className="border px-4 py-2">{data.testParameters}</td>
+              <td className="border px-4 py-2">{data.testingFrequency}</td>
+              <td className="border px-4 py-2">{data.testingLocation}</td>
+              <td className="border px-4 py-2">{data.requiredInstruments}</td>
+              <td className="border px-4 py-2">{data.testGrouping}</td>
+              <td className="border px-4 py-2">{data.lsl}</td>{" "}
+              <td className="border px-4 py-2">{data.usl}</td>{" "}
+              <td className="border px-4 py-2">{data.testingDeadline}</td>
+              <td className="border px-4 py-2">{data.plannerName}</td>
+              <td className="border px-4 py-2">{data.labTechnician}</td>
+              <td className="border px-4 py-2">{data.reviewerApprover}</td>
+              <td className="border px-4 py-2">{data.assignedDepartment}</td>
+              <td className="border px-4 py-2">{data.sampleCollectionDate}</td>
+              <td className="border px-4 py-2">{data.testingStartDate}</td>
+              <td className="border px-4 py-2">{data.testingEndDate}</td>
+              <td className="border px-4 py-2">{data.turnaroundTime}</td>
+              <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
+              <td className="border px-4 py-2">{data.reviewDate}</td>
+              <td className="border px-4 py-2">{data.sampleStorageLocation}</td>
+              <td className="border px-4 py-2">{data.transportationMethod}</td>
+              <td className="border px-4 py-2">
+                {data.samplePreparationMethod}
+              </td>
+              <td className="border px-4 py-2">
+                {data.samplePackagingDetails}
+              </td>
+              <td className="border px-4 py-2">{data.sampleLabel}</td>
+              <td className="border px-4 py-2">
+                {data.regulatoryRequirements}
+              </td>
+              <td className="border px-4 py-2">{data.qualityControlChecks}</td>
+              <td className="border px-4 py-2">
+                {data.controlSampleReference}
+              </td>
+              <td className="border px-4 py-2">{data.sampleIntegrityStatus}</td>
+              <td className="border px-4 py-2">{data.riskAssessment}</td>
+              <td className="border px-4 py-2">{data.supervisor}</td>{" "}
+              <td className="border px-4 py-2">{data.sampleMovementHistory}</td>
+              <td className="border px-4 py-2">{data.testingProgress}</td>
+              <td className="border px-4 py-2">{data.alertsNotifications}</td>
+              <td className="border px-4 py-2">{data.deviationLogs}</td>
+              <td className="border px-4 py-2 text-wrap">
+                {data.commentsNotes}
+              </td>{" "}
+              <td className="border px-4 py-2">{data.attachments}</td>
+              <td className="border px-4 py-2">{data.samplingFrequency}</td>
+              <td className="border px-4 py-2">{data.sampleDisposition}</td>
+              <td className="border px-4 py-2">
+                {data.stabilityStudyType}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.stabilityStudyProtocol}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.stabilityProtocolApprovalDate}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.countryOfRegulatorySubmissions}
+              </td>{" "}
+              <td className="border px-4 py-2">{data.ichZone}</td>{" "}
+              <td className="border px-4 py-2">
+                {data.photoStabilityTestingResult}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.reConstitutionStability}
+              </td>{" "}
+              <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
+              <td className="border px-4 py-2">
+                {data.shelfLifeRecommendation}
+              </td>{" "}
+              <td className="border px-4 py-2">hgggg{data.reviewerComment}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
+              <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
+              <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
               <td className="border px-4 py-2 font-medium">
                 {" "}
                 <div className="flex gap-2 font-medium">
@@ -725,6 +770,7 @@ const SampleWorkFlow = () => {
                   />
                 </div>
               </td>
+            </Link>
             </tr>
           ))}
         </tbody>

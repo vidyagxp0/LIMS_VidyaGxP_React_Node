@@ -224,6 +224,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AnalystPersonal from "./Pages/AnalystPersonal.jsx";
 import STP from "./Pages/STP/STP.jsx";
+import SampleWorkFlowPanel from "./Pages/Samplelogin/sampleWorkflowPanel.jsx";
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -268,8 +269,13 @@ function App() {
 
             <Route path="/samplelogin" element={<Samplelogin />} />
             <Route path="/sampleWorkflow" element={<SampleWorkflow />} />
+            <Route path="/sampleWorkflowPanel" element={<SampleWorkFlowPanel />} />
             <Route
-              path="/sampleWorkflowModal"
+              path="/sampleWorkflowEdit/:id"
+              element={<SampleWorkflowModal />}
+            />
+            <Route
+              path="/sampleWorkflowModal/"
               element={<SampleWorkflowModal />}
             />
             <Route path="/viewDetails" element={<SampleLoginDetails />} />

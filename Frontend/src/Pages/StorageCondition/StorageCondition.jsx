@@ -528,3 +528,28 @@ function StorageCondition() {
 }
 
 export default StorageCondition;
+
+//   // {
+//   //   header: "Actions",
+//   //   accessor: "action",
+//   //   Cell: ({ row }) => (
+//   //     <>
+//   //       <FontAwesomeIcon
+//   //         icon={faEye}
+//   //         className="mr-2 cursor-pointer"
+//   //         onClick={() => onViewDetails(row)}
+//   //       />
+//   //       <FontAwesomeIcon
+//   //         icon={faPenToSquare}
+//   //         className="mr-2 cursor-pointer"
+//   //         onClick={() => openEditModal(row.original)}
+//   //       />
+//   //       <FontAwesomeIcon
+//   //         icon={faTrashCan}
+//   //         className="cursor-pointer"
+//   //         onClick={() => handleDelete(row.original)}
+//   //       />
+//   //     </>
+//   //   ),
+//   // },
+// ];

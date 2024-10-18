@@ -14,104 +14,22 @@ import {
   CCol,
 } from "@coreui/react";
 import axios from "axios";
+import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const SampleWorkflowModal = ({ onClose }) => {
+const SampleWorkflowPanel = ({ onClose }) => {
+  const location = useLocation();
+  const [sampleData, setSampleData] = useState(null);
+
+  const [formData, setFormData] = useState({});
   const [activeTab, setActiveTab] = useState("Sample Registration");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { id } = useParams();
-  console.log(id);
 
-  const [formData, setFormData] = useState({
-    samplePlanId: "",
-    sampleId: "",
-    sampleName: "",
-    sampleType: "",
-    productMaterialName: "",
-    batchlotNumber: "",
-    samplePriority: "",
-    sampleQuantity: "",
-    UOM: "",
-    market: "",
-    sampleBarCode: "",
-    specificationId: "",
-    specificationAttachment: null,
-    stpId: "",
-    stpAttachment: null,
-    testName: "",
-    testMethod: "",
-    testParameters: "",
-    testingFrequency: "",
-    testingLocation: "",
-    requiredInstruments: "",
-    testGrouping: "",
-    lsl: "",
-    usl: "",
-    testingDeadline: "",
-    plannerName: "",
-    sampleSource: "",
-    plannedDate: "",
-    labTechnician: "",
-    assignedDepartment: "",
-    sampleCollectionDate: "",
-
-    analysisType: "",
-    analysisResult: "",
-    analysisDate: "",
-    testingStartDate: "",
-    testingEndDate: "",
-    delayJustification: "",
-    testingOutcome: "",
-    testPlanId: "",
-    turnAroundTime: "",
-    sampleRetestingDate: "",
-    reviewDate: "",
-    sampleStorageLocation: "",
-    transportationMethod: "",
-    samplePreparationMethod: "",
-    samplePackagingDetails: "",
-    sampleLabel: "",
-    regulatoryRequirements: "",
-    qualityControlChecks: "",
-    controlSample: "",
-    referenceSample: "",
-    sampleIntegrityStatus: "",
-    assignedDepartment: "",
-    riskAssessment: "",
-    supervisor: "",
-    sampleDate: "",
-    sampleMovementHistory: "",
-    testingProgress: "",
-    alertNotification: "",
-    deviationLogs: "",
-    commentsNotes: "",
-    attachment: null,
-    samplingFrequency: "",
-    sampleDisposition: "",
-
-    stabilityStudyType: "",
-    stabilityStudyProtocol: "",
-    stabilityProtocolApprovalDate: "",
-    countryOfRegulatorySubmissions: "",
-    ichZone: "",
-    photoStabilityTestingResult: "",
-    reConstitutionStability: "",
-    testingInterval: "",
-    shelfLifeRecommendation: "",
-
-    reviewerApprover: "",
-    reviewerComment: "",
-    reviewDate: "",
-    qaReviewerApprover: "",
-    qaReviewerComment: "",
-    QaReviewDate: "",
-  });
-
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-  };
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (location.state?.sampleData) {
+      setFormData(location.state.sampleData);
+    }
+  }, [location.state]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -120,70 +38,24 @@ const SampleWorkflowModal = ({ onClose }) => {
       [name]: value,
     }));
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return;
-      try {
-        const response = await axios.get(`http://localhost:9000/get-Sample/${id}`);
-        console.log(response.data);
 
-        const responseData = Array.isArray(response.data)
-          ? response.data
-          : response.data.data;
-        console.log(responseData);
-        setFormData(responseData);
-      } catch (error) {
-        console.error("Error fetching ", error);
-        toast.error("Failed to fetch ");
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
-  const handleEdit = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}`,
-        formData
-      );
-      if (response.status === 200) {
-        toast.success("Sample Workflow updated successfully.");
-        setIsModalOpen(false);
-        navigate("/sampleWorkflow");
-      } else {
-        toast.error("Failed to update Sample Workflow.");
-      }
-    } catch (error) {
-      toast.error(
-        "Error updating Sample Workflow: " +
-          (error.response?.data || error.message)
-      );
-    }
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
   };
 
-  const handleSave = async () => {
-    if (id) {
-      await handleEdit();
-    } else {
-      try {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formData
-        );
-        if (response.status === 200) {
-          toast.success("Sample Workflow added successfully.");
-          setIsModalOpen(false);
-          navigate("/sampleWorkflow");
-        } else {
-          toast.error("Failed to add Sample Workflow.");
-        }
-      } catch (error) {
-        toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
-        );
-      }
+  const handleSave = async (id) => {
+    console.log(id, "iddddddddddd");
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/edit-sample/${id}`, // Replace :id with actual ID
+        formData
+      );
+      console.log(response,)
+      toast.success("Sample data saved successfully!");
+      // navigate("/sampleWorkflowPanel");
+    } catch (error) {
+      console.error("Error saving data:", error);
+      toast.error("Error saving sample data.");
     }
   };
 
@@ -245,9 +117,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="batchlotNumber"
+                  name="batchLotNumber"
                   label="Batch/Lot Number"
-                  value={formData.batchlotNumber || ""}
+                  value={formData.batchLotNumber || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -276,9 +148,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="UOM"
+                  name="uom"
                   label="UOM"
-                  value={formData.UOM || ""}
+                  value={formData.uom || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -595,9 +467,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="number"
-                  name="turnAroundTime"
+                  name="turnaroundTime"
                   label="Turnaround Time (TAT)"
-                  value={formData.turnAroundTime || ""}
+                  value={formData.turnaroundTime || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -749,15 +621,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="date"
-                  name="sampleDate"
-                  label="Sample Date"
-                  value={formData.sampleDate || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
@@ -780,9 +643,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="alertNotification"
+                  name="alertsNotifications"
                   label="Alerts/Notifications"
-                  value={formData.alertNotification || ""}
+                  value={formData.alertsNotifications || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -807,8 +670,8 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="file"
-                  name="attachment"
-                  label="attachment"
+                  name="attachments"
+                  label="Attachments"
                   onChange={handleInputChange}
                   multiple
                 />
@@ -898,9 +761,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="photoStabilityTestingResult"
+                  name="photostabilityTestingResults"
                   label="Photostability Testing Results"
-                  value={formData?.photoStabilityTestingResult || ""}
+                  value={formData?.photostabilityTestingResults || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -909,9 +772,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="reConstitutionStability"
+                  name="reconstitutionStability"
                   label="Reconstitution Stability"
-                  value={formData?.reConstitutionStability || ""}
+                  value={formData?.reconstitutionStability || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -995,9 +858,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
-                  name="QaReviewDate"
+                  name="qaReviewDate"
                   label="QA Review Date"
-                  value={formData?.QaReviewDate || ""}
+                  value={formData?.qaReviewDate || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1079,8 +942,9 @@ const SampleWorkflowModal = ({ onClose }) => {
           <CButton
             type="submit"
             className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
+            onClick={handleSave}
           >
-            {id?"Update":"Save"}
+            Save
           </CButton>
           <CButton
             onClick={onClose}
@@ -1094,4 +958,4 @@ const SampleWorkflowModal = ({ onClose }) => {
   );
 };
 
-export default SampleWorkflowModal;
+export default SampleWorkflowPanel;
