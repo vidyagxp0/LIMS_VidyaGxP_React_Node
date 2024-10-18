@@ -42,7 +42,7 @@ export const getSample = async (req, res) => {
     const sampleData = await SampleWorkFlow.findAll();
     res.status(200).json({ error: false, data: sampleData });
   } catch (error) {
-    res
+    res 
       .status(500)
       .json({ message: "Error fetching sample", error: error.message });
   }
