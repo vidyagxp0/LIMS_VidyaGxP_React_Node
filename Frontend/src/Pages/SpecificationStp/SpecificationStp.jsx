@@ -104,32 +104,56 @@ function StorageCondition() {
   const [dateTo, setDateTo] = useState("");
   const [division, setDivision] = useState("");
   const [period, setPeriod] = useState("");
-  const [sortKey, setSortKey] = useState("documentName"); // Default sort key
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
+  const [sortKey, setSortKey] = useState("documentName");
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  const fetchSpecificationStp = async () => {
+  const [apiData, setApiData] = useState(null);
+  console.log(apiData,"loooooooooooooo")
+
+
+
+  // 	Document Name,	Document Type,	Department,	Author,	Due Date,	Effective Date,	CC, References,	Status
+  //  document_name, document_type_id, department_id, reviewers,due_dateDoc, effective_date, reference_record, status
+
+
+  useEffect(() => {
+    openModal();
+  }, []);
+  const openModal = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/get-all-lims/specificationStp`
+        "https://dms.mydemosoftware.com/api/document"
       );
-      console.log(response);
-      const formattedData = response.data[0]?.specificationStp || []; // Adjust this based on your API response structure
 
-      const updatedData = formattedData.map((item, index) => ({
-        ...item,
-        sno: index + 1,
-      }));
+      setApiData(response.data);
 
-      setData(updatedData);
+      console.log(response.data);
+
+      // window.location.href = "https://dms.mydemosoftware.com/login";
     } catch (error) {
-      console.error("Error fetching ", error);
-      toast.error("Failed to fetch ");
+      console.error("Error fetching the data:", error);
     }
   };
 
-  useEffect(() => {
-    fetchSpecificationStp();
-  }, []);
+  // const fetchSpecificationStp = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${BASE_URL}/get-all-lims/specificationStp`
+  //     );
+  //     console.log(response);
+  //     const formattedData = response.data[0]?.specificationStp || [];
+
+  //     const updatedData = formattedData.map((item, index) => ({
+  //       ...item,
+  //       sno: index + 1,
+  //     }));
+
+  //     setApiData(updatedData);
+  //   } catch (error) {
+  //     console.error("Error fetching ", error);
+  //     toast.error("Failed to fetch ");
+  //   }
+  // };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -138,9 +162,9 @@ function StorageCondition() {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -156,8 +180,8 @@ function StorageCondition() {
       );
 
       if (response.status === 200) {
-        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
-        setData(newData);
+        const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
+        setApiData(newData);
         toast.success(" deleted successfully");
 
         console.log("Deleted item:", item);
@@ -186,8 +210,8 @@ function StorageCondition() {
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
+    const newData = apiData.map((row) => ({ ...row, checkbox: checked }));
+    setApiData(newData);
   };
   const columns = [
     {
@@ -239,8 +263,8 @@ function StorageCondition() {
   ];
 
   // Filtering logic
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
+  const filteredData = Array.isArray(apiData)
+    ? apiData.filter((row) => {
         const matchesSearchQuery = row.documentName
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
@@ -289,9 +313,9 @@ function StorageCondition() {
   };
 
   const handleCheckboxChange = (index) => {
-    const newData = [...data];
+    const newData = [...apiData];
     newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+    setApiData(newData);
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -306,7 +330,7 @@ function StorageCondition() {
     }));
 
     const concatenatedData = [...updatedData];
-    setData(concatenatedData);
+    setApiData(concatenatedData);
     setIsModalsOpen(false); // Update data state with parsed Excel data
   };
 
@@ -330,7 +354,7 @@ function StorageCondition() {
       if (response.status === 200) {
         const addedSpecificationStp = response.data.addLIMS; // Accessing the added item from the response
 
-        setData((prevData) => [
+        setApiData((prevData) => [
           ...prevData,
           {
             ...addedSpecificationStp,
@@ -350,9 +374,9 @@ function StorageCondition() {
 
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    fetchSpecificationStp();
-  }, []);
+  // useEffect(() => {
+  //   fetchSpecificationStp();
+  // }, []);
   const handleStatusUpdate = async (newStatus) => {
     if (!newStatus) {
       console.error("New status is undefined");
@@ -376,7 +400,7 @@ function StorageCondition() {
         }
       );
       if (response.status === 200) {
-        setData((prevData) =>
+        setApiData((prevData) =>
           prevData.map((item) =>
             item.uniqueId === viewModalData.uniqueId
               ? { ...item, status: newStatus }
@@ -501,13 +525,13 @@ function StorageCondition() {
       );
 
       if (response.status === 200) {
-        const newData = data.map((item) =>
+        const newData = apiData.map((item) =>
           item.uniqueId === updatedData.uniqueId
             ? { ...item, ...updatedData }
             : item
         );
 
-        setData(newData);
+        setApiData(newData);
         toast.success(" updated successfully");
       }
     } catch (error) {
@@ -517,10 +541,10 @@ function StorageCondition() {
       setEditModalData(null);
     }
   };
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
+  const EditModal = ({ visible, closeModal, apiData, onSave }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
-    const [formData, setFormData] = useState(data);
+    const [formData, setFormData] = useState(apiData);
 
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
@@ -534,10 +558,10 @@ function StorageCondition() {
     };
 
     useEffect(() => {
-      if (data) {
-        setFormData(data);
+      if (apiData) {
+        setFormData(apiData);
       }
-    }, [data]);
+    }, [apiData]);
 
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -557,7 +581,7 @@ function StorageCondition() {
             type="text"
             label="Document Name"
             placeholder="Document Name"
-            value={formData?.documentName || ""}
+            value={formdocumentName || ""}
             onChange={handleChange}
             name="documentName"
           />

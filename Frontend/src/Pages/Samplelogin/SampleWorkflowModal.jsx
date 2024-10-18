@@ -23,7 +23,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
-  console.log(id);
+  console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
     samplePlanId: "",
@@ -248,6 +248,7 @@ const SampleWorkflowModal = ({ onClose }) => {
           `http://localhost:9000/create-sample`,
           formData
         );
+        console.log(response, "iddddddddddddddddddddddd");
         if (response.status === 200) {
           toast.success("Sample Workflow added successfully.");
           setIsModalOpen(false);
@@ -349,9 +350,9 @@ const SampleWorkflowModal = ({ onClose }) => {
                     onChange={handleInputChange}
                   >
                     <option value="">Select Priority</option>
-                    <option value="High">High</option>
-                    <option value="Medium">Medium</option>
                     <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
                   </CFormSelect>
                 </div>
 
@@ -435,10 +436,17 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="sampleBarCode"
                   label=""
                   value={formData.sampleBarCode || ""}
-                  onChange={handleInputChange}
+                  onChange={(e) => {
+                    const inputValue = e.target.value;
+                    if (/^\d*$/.test(inputValue) && inputValue.length <= 42) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  maxLength={42}
                 />
+
                 {formData.sampleBarCode && (
-                  <div style={{ marginTop: "10px" }}>
+                  <div>
                     <Barcode value={formData.sampleBarCode} />
                   </div>
                 )}
@@ -572,8 +580,6 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
             </CRow>
             <CRow className="mb-3">
-           
-            
               <CCol md={6}>
                 <CFormInput
                   type="number"
@@ -673,26 +679,26 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-            <CRow className="mt-3 mb-3">
-            <CCol md={6} >
-                <CFormInput
-                  type="text"
-                  name="testGrouping"
-                  label="Test Grouping"
-                  value={formData.testGrouping || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="date"
-                  name="sampleCollectionDate"
-                  label="Sample Collection Date"
-                  value={formData.sampleCollectionDate || ""}
-                  onChange={handleInputChange}
+              <CRow className="mt-3 mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="testGrouping"
+                    label="Test Grouping"
+                    value={formData.testGrouping || ""}
+                    onChange={handleInputChange}
                   />
-              </CCol>
-                  </CRow>
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="date"
+                    name="sampleCollectionDate"
+                    label="Sample Collection Date"
+                    value={formData.sampleCollectionDate || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
             </CRow>
             <CCol md={12}>
               <CFormInput
