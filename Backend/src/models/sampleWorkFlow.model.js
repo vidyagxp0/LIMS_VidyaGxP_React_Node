@@ -208,18 +208,37 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  assignedDepartment: {
+  assignedDepartmentt: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  riskAssement: {
+  riskAssessment: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
   supervisor: {
     type: DataTypes.TEXT,
     allowNull: true,
+  },  
+  // New Fields Add!
+  instrumentsReserved: {
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
+  labAvailability: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  sampleCostEstimation: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  resourceUtilization: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+// End Here!
+
   sampleMovementHistory: {
     type: DataTypes.TEXT,
     allowNull: true,
@@ -260,11 +279,11 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  stabilityProtocolApprovelDate: {
+  stabilityProtocolApprovalDate: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  countryRegulatorySubmission: {
+  countryOfRegulatorySubmissions: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
