@@ -405,7 +405,29 @@ function Testcategories() {
       onSave(formData);
     };
 
-    const currentDate = new Date().toISOString().split("T")[0];
+    const handleEditTestCategory = (e) => {
+      e.preventDefault();
+    
+      axios
+        .put(
+          `http://localhost:9000/manage-lims/update/mTestCategories/${formData.uniqueId}`,
+          formData
+        )
+        .then((response) => {
+          toast.success(response.data.message || "Control Sample updated successfully!");
+    
+          // Update the local state with the updated formData
+          setData((prevData) =>
+            prevData.map((item) => (item.sno === formData.sno ? formData : item))
+          );
+    
+          closeModal();
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("Error while updating Control Sample");
+        });
+    };
 
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
@@ -465,7 +487,7 @@ function Testcategories() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleSave}>
+          <CButton color="primary" onClick={handleEditTestCategory}>
             Submit
           </CButton>
         </CModalFooter>
