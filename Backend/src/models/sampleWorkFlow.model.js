@@ -28,7 +28,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  batchlotNumber: {
+  batchLotNumber: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
