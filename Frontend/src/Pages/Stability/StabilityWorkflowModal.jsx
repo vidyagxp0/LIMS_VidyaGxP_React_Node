@@ -17,7 +17,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
-const SampleWorkflowModal = ({ onClose }) => {
+const stabilityWorkFlowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
@@ -55,6 +55,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     labTechnician: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
+    sampleRagistrationAttachment: "",
 
     analysisType: "",
     analysisResult: "",
@@ -89,6 +90,12 @@ const SampleWorkflowModal = ({ onClose }) => {
     attachment: null,
     samplingFrequency: "",
     sampleDisposition: "",
+    sampleAnalysisAttachemnt: "",
+
+    reviewerApprover: "",
+    reviewerComment: "",
+    reviewDate: "",
+    supervisorReviewAttachment: "",
 
     stabilityStudyType: "",
     stabilityStudyProtocol: "",
@@ -99,13 +106,21 @@ const SampleWorkflowModal = ({ onClose }) => {
     reConstitutionStability: "",
     testingInterval: "",
     shelfLifeRecommendation: "",
+    stabilityInformationAttachment: "",
 
-    reviewerApprover: "",
-    reviewerComment: "",
-    reviewDate: "",
-    qaReviewerApprover: "",
-    qaReviewerComment: "",
-    QaReviewDate: "",
+    qAReviewerApprover: "",
+    qAComment: "",
+    reviewDatee: "",
+    qAReviewAttachment: "",
+
+    initiatorName: "",
+    initiatorDate: "",
+    labTechicianName: "",
+    labTechicianDate: "",
+    supervisorName: "",
+    supervisorDate: "",
+    qAReview: "",
+    qAReviewDate: "",
   });
 
   const handleTabClick = (tabName) => {
@@ -152,7 +167,7 @@ const SampleWorkflowModal = ({ onClose }) => {
       if (response.status === 200) {
         toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
-        navigate("/sampleWorkflow");
+        navigate("/stabilityWorkFlow");
       } else {
         toast.error("Failed to update Sample Workflow.");
       }
@@ -176,7 +191,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         if (response.status === 200) {
           toast.success("Sample Workflow added successfully.");
           setIsModalOpen(false);
-          navigate("/sampleWorkflow");
+          navigate("/stabilityWorkFlow");
         } else {
           toast.error("Failed to add Sample Workflow.");
         }
@@ -501,6 +516,15 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="sampleCollectionDate"
                   label="Sample Collection Date"
                   value={formData.sampleCollectionDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="file"
+                  name="sampleRagistrationAttachment"
+                  label="Support Attachemnt"
+                  value={formData?.sampleRagistrationAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -840,7 +864,67 @@ const SampleWorkflowModal = ({ onClose }) => {
                   ]}
                 />
               </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="file"
+                  name="sampleAnalysisAttachemnt"
+                  label="Support Attachemnt"
+                  value={formData?.sampleAnalysisAttachemnt || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
             </CRow>
+          </CForm>
+        );
+
+      case "Supervisor Review":
+        return (
+          <CForm>
+            {/* Reviewer/Approver Section */}
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="reviewerApprover"
+                  label="Reviewer/Approver"
+                  value={formData?.reviewerApprover || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="reviewerComment"
+                  label="Reviewer Comment"
+                  value={formData?.reviewerComment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="reviewDate"
+                  label="Review Date"
+                  value={formData?.reviewDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            {/* QA Reviewer/Approver Section */}
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="file"
+                  name="supervisorReviewAttachment"
+                  label="Support Attachemnt"
+                  value={formData?.supervisorReviewAttachment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <div></div>
           </CForm>
         );
 
@@ -937,10 +1021,20 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="file"
+                  name="stabilityInformationAttachment"
+                  label="Support Attachemnt"
+                  value={formData?.reviewDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
             </CRow>
           </CForm>
         );
-      case "Supervisor Review":
+
+      case "QA Review":
         return (
           <CForm>
             {/* Reviewer/Approver Section */}
@@ -948,66 +1042,128 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="reviewerApprover"
-                  label="Reviewer/Approver"
-                  value={formData?.reviewerApprover || ""}
+                  name="qAReviewerApprover"
+                  label="QA Reviewer/Approver"
+                  value={formData?.qAReviewerApprover || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="reviewerComment"
-                  label="Reviewer Comment"
-                  value={formData?.reviewerComment || ""}
+                  name="qAComment"
+                  label="QA Comment"
+                  value={formData?.qAComment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
               <CCol md={6}>
                 <CFormInput
                   type="date"
-                  name="reviewDate"
+                  name="reviewDatee"
                   label="Review Date"
-                  value={formData?.reviewDate || ""}
+                  value={formData?.reviewDatee || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
             </CRow>
 
-            {/* QA Reviewer/Approver Section */}
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="qaReviewerApprover"
-                  label="QA Reviewer/Approver"
-                  value={formData?.qaReviewerApprover || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="qaReviewerComment"
-                  label="QA Reviewer Comment"
-                  value={formData?.qaReviewerComment || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="date"
-                  name="QaReviewDate"
-                  label="QA Review Date"
-                  value={formData?.QaReviewDate || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
+            <CCol md={6}>
+              <CFormInput
+                type="file"
+                name="qAReviewAttachment"
+                label="Support Attachemnt"
+                value={formData?.qAReviewAttachment || ""}
+                onChange={handleInputChange}
+              />
+            </CCol>
 
             <div></div>
           </CForm>
         );
+
+      case "Active Log":
+        return (
+          <CForm>
+            {/* Active Log Section */}
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="initiatorName"
+                  label="Initiator Name"
+                  value={formData?.initiatorName || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="initiatorDate"
+                  label="Initiator Date"
+                  value={formData?.initiatorDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="labTechicianName"
+                  label="Lab Technician Name"
+                  value={formData?.labTechicianName || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="labTechicianDate"
+                  label="Lab Technician Date"
+                  value={formData?.labTechicianDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="supervisorName"
+                  label="Supervisor Name"
+                  value={formData?.supervisorName || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="supervisorDate"
+                  label="Supervisor Date"
+                  value={formData?.supervisorDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="qAReview"
+                  label="QA Review "
+                  value={formData?.qAReview || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="qAReviewDate"
+                  label="QA Review Date"
+                  value={formData?.qAReviewDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+            <div></div>
+          </CForm>
+        );
+
       default:
         return null;
     }
@@ -1022,19 +1178,6 @@ const SampleWorkflowModal = ({ onClose }) => {
         }}
       >
         <div className="flex space-x-4 mb-8">
-          <CButton
-            color={
-              activeTab === "Stability Information" ? "primary" : "secondary"
-            }
-            onClick={() => handleTabClick("Stability Information")}
-            className={`transition-all duration-300 ${
-              activeTab === "Stability Information"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Stability Information
-          </CButton>
           <CButton
             color={
               activeTab === "Sample Registration" ? "primary" : "secondary"
@@ -1071,6 +1214,41 @@ const SampleWorkflowModal = ({ onClose }) => {
           >
             Supervisor Review
           </CButton>
+          <CButton
+            color={
+              activeTab === "Stability Information" ? "primary" : "secondary"
+            }
+            onClick={() => handleTabClick("Stability Information")}
+            className={`transition-all duration-300 ${
+              activeTab === "Stability Information"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            Stability Information
+          </CButton>
+          <CButton
+            color={activeTab === "QA Review" ? "primary" : "secondary"}
+            onClick={() => handleTabClick("QA Review")}
+            className={`transition-all duration-300 ${
+              activeTab === "QA Review"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            QA Review
+          </CButton>
+          <CButton
+            color={activeTab === "Active Log" ? "primary" : "secondary"}
+            onClick={() => handleTabClick("Active Log")}
+            className={`transition-all duration-300 ${
+              activeTab === "Active Log"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+          >
+            Active Log
+          </CButton>
         </div>
 
         <div className="bg-white shadow-2xl p-8 rounded-md transition-all duration-300">
@@ -1096,4 +1274,4 @@ const SampleWorkflowModal = ({ onClose }) => {
   );
 };
 
-export default SampleWorkflowModal;
+export default stabilityWorkFlowModal;
