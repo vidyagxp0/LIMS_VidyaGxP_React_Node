@@ -66,7 +66,7 @@ const SampleWorkFlow = () => {
         ...item,
         sno: index + 1,
       }));
-      console.log(updatedData,"SAmplepriority");
+      console.log(updatedData, "SAmplepriority");
       setData(updatedData);
     } catch (error) {
       console.error("Error fetching ", error);
@@ -358,8 +358,7 @@ const SampleWorkFlow = () => {
       countryOfRegulatorySubmissions:
         item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
-      photoStabilityTestingResult:
-        item["Photostability Testing results"] || "",
+      photoStabilityTestingResult: item["Photostability Testing results"] || "",
       reConstitutionStability: item["Reconstitution Stability"] || "",
       testingInterval: item["Testing Interval (months)"] || "",
       shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
@@ -655,128 +654,142 @@ const SampleWorkFlow = () => {
         <tbody>
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100 cursor-pointer">
-             <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
-              <td className="border px-4 py-2">{index + 1}</td>
-              <td className="border px-4 py-2">{data.samplePlanId}</td>
-              <td className="border px-4 py-2">{data.sampleId}</td>
-              <td className="border px-4 py-2">{data.sampleName}</td>
-              <td className="border px-4 py-2">{data.sampleType}</td>
-              <td className="border px-4 py-2">{data.productMaterialName}</td>
-              <td className="border px-4 py-2">{data.batchLotNumber}</td>
-              <td className="border px-4 py-2">{data.sampleSource}</td>
-              <td className="border px-4 py-2">{data.plannedDate}</td>
-              <td className="border px-4 py-2">{data.samplePriority}</td>
-              <td className="border px-4 py-2">{data.sampleQuantity}</td>
-              <td className="border px-4 py-2">{data.UOM}</td>
-              <td className="border px-4 py-2">{data.market}</td>
-              <td className="border px-4 py-2">{data?.sampleBarCode}</td>
-              <td className="border px-4 py-2">{data.specificationId}</td>
-              <td className="border px-4 py-2">
-                {data.specificationAttachment}
-              </td>
-              <td className="border px-4 py-2">{data.stpId}</td>
-              <td className="border px-4 py-2">{data.stpAttachment}</td>
-              <td className="border px-4 py-2">{data.testPlanId}</td>
-              <td className="border px-4 py-2">{data.testName}</td>
-              <td className="border px-4 py-2">{data.testMethod}</td>
-              <td className="border px-4 py-2">{data.testParameter}</td>
-              <td className="border px-4 py-2">{data.testingFrequency}</td>
-              <td className="border px-4 py-2">{data.testingLocation}</td>
-              <td className="border px-4 py-2">{data.requiredInstrument}</td>
-              <td className="border px-4 py-2">{data.testGrouping}</td>
-              <td className="border px-4 py-2">{data.lsl}</td>{" "}
-              <td className="border px-4 py-2">{data.usl}</td>{" "}
-              <td className="border px-4 py-2">{data.testingDeadline}</td>
-              <td className="border px-4 py-2">{data.plannerName}</td>
-              <td className="border px-4 py-2">{data.labTechnician}</td>
-              <td className="border px-4 py-2">{data.reviewerApprover}</td>
-              <td className="border px-4 py-2">{data.assignedDepartment}</td>
-              <td className="border px-4 py-2">{data.sampleCollectionDate}</td>
-              <td className="border px-4 py-2">{data.testingStartDate}</td>
-              <td className="border px-4 py-2">{data.testingEndDate}</td>
-              <td className="border px-4 py-2">{data.delayJustification}</td>
-              <td className="border px-4 py-2">{data.testingOutCome}</td>
-              <td className="border px-4 py-2">{data.passFail}</td>
-              <td className="border px-4 py-2">{data.turnaroundTime}</td>
-              <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
-              <td className="border px-4 py-2">{data.reviewDate}</td>
-              <td className="border px-4 py-2">{data.sampleStorageLocation}</td>
-              <td className="border px-4 py-2">{data.transportationMethod}</td>
-              <td className="border px-4 py-2">
-                {data.samplePreparationMethod}
-              </td>
-              <td className="border px-4 py-2">
-                {data.samplePackagingDetails}
-              </td>
-              <td className="border px-4 py-2">{data.sampleLabel}</td>
-              <td className="border px-4 py-2">
-                {data.regulatoryRequirements}
-              </td>
-              <td className="border px-4 py-2">{data.qualityControlChecks}</td>
-              <td className="border px-4 py-2">
-                {data.controlSampleReference}
-              </td>
-              <td className="border px-4 py-2">{data.sampleIntegrityStatus}</td>
-              <td className="border px-4 py-2">{data.riskAssessment}</td>
-              <td className="border px-4 py-2">{data.supervisor}</td>{" "}
-              <td className="border px-4 py-2">{data.sampleMovementHistory}</td>
-              <td className="border px-4 py-2">{data.testingProgress}</td>
-              <td className="border px-4 py-2">{data.alertsNotifications}</td>
-              <td className="border px-4 py-2">{data.deviationLogs}</td>
-              <td className="border px-4 py-2 text-wrap">
-                {data.commentsNotes}
-              </td>{" "}
-              <td className="border px-4 py-2">{data.attachments}</td>
-              <td className="border px-4 py-2">{data.samplingFrequency}</td>
-              <td className="border px-4 py-2">{data.sampleDisposition}</td>
-              <td className="border px-4 py-2">
-                {data.stabilityStudyType}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.stabilityStudyProtocol}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.stabilityProtocolApprovalDate}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.countryOfRegulatorySubmissions}
-              </td>{" "}
-              <td className="border px-4 py-2">{data.ichZone}</td>{" "}
-              <td className="border px-4 py-2">
-                {data.photoStabilityTestingResult}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.reConstitutionStability}
-              </td>{" "}
-              <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
-              <td className="border px-4 py-2">
-                {data.shelfLifeRecommendation}
-              </td>{" "}
-              <td className="border px-4 py-2">hgggg{data.reviewerComment}</td>{" "}
-              <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
-              <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
-              <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-              <td className="border px-4 py-2 font-medium">
-                {" "}
-                <div className="flex gap-2 font-medium">
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    className="mr-2 cursor-pointer"
-                    onClick={() => onViewDetails(data)}
-                  />
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    className="mr-2 cursor-pointer"
-                    onClick={() => openEditModal(data, index)}
-                  />
-                  <FontAwesomeIcon
-                    icon={faTrashCan}
-                    className="cursor-pointer"
-                    onClick={() => handleDelete(data)}
-                  />
-                </div>
-              </td>
-            </Link>
+              <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
+                <td className="border px-4 py-2">{index + 1}</td>
+                <td className="border px-4 py-2">{data.samplePlanId}</td>
+                <td className="border px-4 py-2">{data.sampleId}</td>
+                <td className="border px-4 py-2">{data.sampleName}</td>
+                <td className="border px-4 py-2">{data.sampleType}</td>
+                <td className="border px-4 py-2">{data.productMaterialName}</td>
+                <td className="border px-4 py-2">{data.batchLotNumber}</td>
+                <td className="border px-4 py-2">{data.sampleSource}</td>
+                <td className="border px-4 py-2">{data.plannedDate}</td>
+                <td className="border px-4 py-2">{data.samplePriority}</td>
+                <td className="border px-4 py-2">{data.sampleQuantity}</td>
+                <td className="border px-4 py-2">{data.UOM}</td>
+                <td className="border px-4 py-2">{data.market}</td>
+                <td className="border px-4 py-2">{data?.sampleBarCode}</td>
+                <td className="border px-4 py-2">{data.specificationId}</td>
+                <td className="border px-4 py-2">
+                  {data.specificationAttachment}
+                </td>
+                <td className="border px-4 py-2">{data.stpId}</td>
+                <td className="border px-4 py-2">{data.stpAttachment}</td>
+                <td className="border px-4 py-2">{data.testPlanId}</td>
+                <td className="border px-4 py-2">{data.testName}</td>
+                <td className="border px-4 py-2">{data.testMethod}</td>
+                <td className="border px-4 py-2">{data.testParameter}</td>
+                <td className="border px-4 py-2">{data.testingFrequency}</td>
+                <td className="border px-4 py-2">{data.testingLocation}</td>
+                <td className="border px-4 py-2">{data.requiredInstrument}</td>
+                <td className="border px-4 py-2">{data.testGrouping}</td>
+                <td className="border px-4 py-2">{data.lsl}</td>{" "}
+                <td className="border px-4 py-2">{data.usl}</td>{" "}
+                <td className="border px-4 py-2">{data.testingDeadline}</td>
+                <td className="border px-4 py-2">{data.plannerName}</td>
+                <td className="border px-4 py-2">{data.labTechnician}</td>
+                <td className="border px-4 py-2">{data.reviewerApprover}</td>
+                <td className="border px-4 py-2">{data.assignedDepartment}</td>
+                <td className="border px-4 py-2">
+                  {data.sampleCollectionDate}
+                </td>
+                <td className="border px-4 py-2">{data.testingStartDate}</td>
+                <td className="border px-4 py-2">{data.testingEndDate}</td>
+                <td className="border px-4 py-2">{data.delayJustification}</td>
+                <td className="border px-4 py-2">{data.testingOutCome}</td>
+                <td className="border px-4 py-2">{data.passFail}</td>
+                <td className="border px-4 py-2">{data.turnaroundTime}</td>
+                <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
+                <td className="border px-4 py-2">{data.reviewDate}</td>
+                <td className="border px-4 py-2">
+                  {data.sampleStorageLocation}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.transportationMethod}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.samplePreparationMethod}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.samplePackagingDetails}
+                </td>
+                <td className="border px-4 py-2">{data.sampleLabel}</td>
+                <td className="border px-4 py-2">
+                  {data.regulatoryRequirements}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.qualityControlChecks}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.controlSampleReference}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.sampleIntegrityStatus}
+                </td>
+                <td className="border px-4 py-2">{data.riskAssessment}</td>
+                <td className="border px-4 py-2">{data.supervisor}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.sampleMovementHistory}
+                </td>
+                <td className="border px-4 py-2">{data.testingProgress}</td>
+                <td className="border px-4 py-2">{data.alertsNotifications}</td>
+                <td className="border px-4 py-2">{data.deviationLogs}</td>
+                <td className="border px-4 py-2 text-wrap">
+                  {data.commentsNotes}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.attachments}</td>
+                <td className="border px-4 py-2">{data.samplingFrequency}</td>
+                <td className="border px-4 py-2">{data.sampleDisposition}</td>
+                <td className="border px-4 py-2">
+                  {data.stabilityStudyType}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.stabilityStudyProtocol}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.stabilityProtocolApprovalDate}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.countryOfRegulatorySubmissions}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.ichZone}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.photoStabilityTestingResult}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.reConstitutionStability}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.shelfLifeRecommendation}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  hgggg{data.reviewerComment}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
+                <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
+                <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
+                <td className="border px-4 py-2 font-medium">
+                  {" "}
+                  <div className="flex gap-2 font-medium">
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => onViewDetails(data)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => openEditModal(data, index)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className="cursor-pointer"
+                      onClick={() => handleDelete(data)}
+                    />
+                  </div>
+                </td>
+              </Link>
             </tr>
           ))}
         </tbody>
