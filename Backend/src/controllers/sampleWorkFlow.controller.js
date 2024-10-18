@@ -72,22 +72,22 @@ export const updateSample = async (req, res) => {
       return res.status(404).json({ message: "SampleData not found" });
     }
 
-    if (req.files["sampleBarCode"]) {
+    if (req.files && req.files["sampleBarCode"]) {
       sampleData.sampleBarCode = getFileUrl(
         req.files["sampleBarCode"][0].filename
       );
     }
-    if (req.files["specificationAttachment"]) {
+    if (req.files && req.files["specificationAttachment"]) {
       sampleData.specificationAttachment = getFileUrl(
         req.files["specificationAttachment"][0].filename
       );
     }
-    if (req.files["stpAttachment"]) {
+    if (req.files && req.files["stpAttachment"]) {
       sampleData.stpAttachment = getFileUrl(
         req.files["stpAttachment"][0].filename
       );
     }
-    if (req.files["attachment"]) {
+    if (req.files && req.files["attachment"]) {
       sampleData.attachment = getFileUrl(req.files["attachment"][0].filename);
     }
 
@@ -173,7 +173,7 @@ export const submitToReview = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId } = req.body;
+    const { sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -202,6 +202,7 @@ export const submitToReview = async (req, res) => {
 
     await sampleData.update(
       {
+        initiatorComment: comment,
         status: "Pending Analysis",
         stage: 2,
       },
@@ -229,7 +230,7 @@ export const submitToSupervisor = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId } = req.body;
+    const { sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -258,6 +259,7 @@ export const submitToSupervisor = async (req, res) => {
 
     await sampleData.update(
       {
+        supervisorComment: comment,
         status: "pending Supervisor",
         stage: 3,
       },
@@ -285,7 +287,7 @@ export const submitToQA = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId } = req.body;
+    const { sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -314,6 +316,7 @@ export const submitToQA = async (req, res) => {
 
     await sampleData.update(
       {
+        supervisorComment: comment,
         status: "pending QA",
         stage: 4,
       },
@@ -341,7 +344,7 @@ export const submitToQAReview = async (req, res) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { sampleId } = req.body;
+    const { sampleId, comment } = req.body;
 
     if (!sampleId) {
       return res
@@ -370,6 +373,7 @@ export const submitToQAReview = async (req, res) => {
 
     await sampleData.update(
       {
+        QaReviewerComment: comment,
         status: "QA Approved",
         stage: 5,
       },
@@ -481,16 +485,17 @@ export const ReviewToOpen = async (req, res) => {
 
     // Define stage and status mappings
     const stageMapping = {
-      2: { newStatus: "Under Initiation", newStage: 2 },
-      3: { newStatus: "Pending Analysis", newStage: 3 },
-      4: { newStatus: "Pending Supervisor", newStage: 4 },
-      5: { newStatus: "Pending QA", newStage: 5 },
-      6: { newStatus: "QA Approved", newStage: 6 },
-      7: { newStatus: "Pending Supervisor", newStage: 7 },
+      2: { newStatus: "Under Initiation", newStage: 1 },
+      3: { newStatus: "Pending Analysis", newStage: 2 },
+      4: { newStatus: "Pending Supervisor", newStage: 3 },
+      5: { newStatus: "Pending QA", newStage: 4 },
+      6: { newStatus: "QA Approved", newStage: 5 },
+      // 7: { newStatus: "Pending Supervisor", newStage: 6 },
     };
 
     const currentStage = sampleData.stage;
     const currentStatus = sampleData.status;
+    console.log(currentStage, currentStatus);
     if (!stageMapping[currentStage]) {
       await transaction.rollback();
       return res.status(400).json({
@@ -501,6 +506,7 @@ export const ReviewToOpen = async (req, res) => {
 
     // Update SampleWorkFlow stage and status
     const { newStatus, newStage } = stageMapping[currentStage];
+    console.log(newStage, newStatus);
     const updatedSampleWorkFlow = await sampleData.update(
       {
         status: newStatus,

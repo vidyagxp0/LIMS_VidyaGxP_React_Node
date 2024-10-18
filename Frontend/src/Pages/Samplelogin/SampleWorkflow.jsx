@@ -19,7 +19,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
 import Table from "../../components/ATM components/Table/Table";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { randomSampleData } from "./SamplePlanningFunction";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
@@ -39,6 +39,8 @@ const SampleWorkFlow = () => {
   const [viewModalData, setViewModalData] = useState(null);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [loading,setLoading]=useState({});
+  const[selectedSampleId,setSelectedSamppleId]=useState(null);
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -63,7 +65,7 @@ const SampleWorkFlow = () => {
         ...item,
         sno: index + 1,
       }));
-
+      console.log(updatedData,"SAmplepriority");
       setData(updatedData);
     } catch (error) {
       console.error("Error fetching ", error);
@@ -96,6 +98,30 @@ const SampleWorkFlow = () => {
     // Update the rows here (if using state or Redux for state management)
   };
 
+  const generatePDF = async (sampleId) => {
+    console.log("Generating PDF for Sample ID:", sampleId);
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
+    try {
+      const response = await fetch(`http://localhost:9000/generate-report/${sampleId}`);
+      console.log("Response Status:", response.status);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Sample_Report_${sampleId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
+  };
+
+
   const columns = [
     {
       header: <input type="checkbox" />,
@@ -107,10 +133,10 @@ const SampleWorkFlow = () => {
     { header: "Sample Name", accessor: "sampleName" },
     { header: "Sample Type", accessor: "sampleType" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
-    { header: "Batch/Lot Number", accessor: "batchNumber" },
+    { header: "Batch/Lot Number", accessor: "batchlotNumber" },
     { header: "Sample Priority", accessor: "samplePriority" },
     { header: "Sample Quantity", accessor: "sampleQuantity" },
-    { header: "UOM", accessor: "uom" },
+    { header: "UOM", accessor: "UOM" },
     { header: "Market", accessor: "market" },
     { header: "Sample Barcode", accessor: "sampleBarCode" },
     { header: "Specification ID", accessor: "specificationId" },
@@ -175,10 +201,10 @@ const SampleWorkFlow = () => {
     { header: "ICH Zone", accessor: "ichZone" },
     {
       header: "Photostability Testing Results",
-      accessor: "photostabilityTestingResults",
+      accessor: "photoStabilityTestingResult",
     },
-    { header: "Reconstitution Stability", accessor: "reconstitutionStability" },
-    { header: "Testing Interval (months)", accessor: "testingIntervalMonths" },
+    { header: "Reconstitution Stability", accessor: "reConstitutionStability" },
+    { header: "Testing Interval (months)", accessor: "testingInterval" },
     {
       header: "Shelf Life Recommendation",
       accessor: "shelfLifeRecommendation",
@@ -186,7 +212,7 @@ const SampleWorkFlow = () => {
     { header: "Reviewer Comment", accessor: "reviewerComment" },
     { header: "QA Reviewer/Approver", accessor: "qaReviewerApprover" },
     { header: "QA Reviewer Comment", accessor: "qaReviewerComment" },
-    { header: "QA Review Date", accessor: "qaReviewDate" },
+    { header: "QA Review Date", accessor: "QaReviewDate" },
     {
       header: "Actions",
       accessor: "action",
@@ -265,7 +291,7 @@ const SampleWorkFlow = () => {
       plannedDate: item["Planned Date"] || "",
       samplePriority: item["Sample Priority"] || "",
       sampleQuantity: item["Sample Quantity"] || "",
-      uom: item["UOM"] || "",
+      UOM: item["UOM"] || "",
       market: item["Market"] || "",
       sampleBarCode: item["Sample Barcode"] || "",
 
@@ -334,16 +360,16 @@ const SampleWorkFlow = () => {
       countryOfRegulatorySubmissions:
         item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
-      photostabilityTestingResults:
+      photoStabilityTestingResult:
         item["Photostability Testing results"] || "",
-      reconstitutionStability: item["Reconstitution Stability"] || "",
-      testingIntervalMonths: item["Testing Interval (months)"] || "",
+      reConstitutionStability: item["Reconstitution Stability"] || "",
+      testingInterval: item["Testing Interval (months)"] || "",
       shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
 
       reviewerComment: item["Reviewer Comment"] || "",
       qaReviewerApprover: item["QA Reviewer/Approver"] || "",
       qaReviewerComment: item["QA Reviewer Comment"] || "",
-      qaReviewDate: item["QA Review Date"] || "",
+      QaReviewDate: item["QA Review Date"] || "",
 
       actions: item["Actions"] || "",
     }));
@@ -365,7 +391,7 @@ const SampleWorkFlow = () => {
     "plannedDate",
     "samplePriority",
     "sampleQuantity",
-    "uom",
+    "UOM",
     "market",
     "sampleBarCode",
     "specificationId",
@@ -422,17 +448,17 @@ const SampleWorkFlow = () => {
     "stabilityProtocolApprovalDate",
     "countryOfRegulatorySubmissions",
     "ichZone",
-    "photostabilityTestingResults",
-    "reconstitutionStability",
-    "testingIntervalMonths",
+    "photoStabilityTestingResult",
+    "reConstitutionStability",
+    "testingInterval",
     "shelfLifeRecommendation",
     "reviewerComment",
     "qaReviewerApprover",
     "qaReviewerComment",
-    "qaReviewDate",
+    "QaReviewDate",
   ];
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   // const handleRowClick = async (id) => {
   //   //console.log(id, "dwsa");
@@ -452,10 +478,10 @@ const SampleWorkFlow = () => {
   //   // }
   // };
 
-  const handleRowClick = (sampleId) => {
-    const encodedId = encodeURIComponent(sampleId); // Encode the sampleId
-    navigate(`/sample-details/${encodedId}`); // Use the encoded sampleId
-  };
+  // const handleRowClick = async (id) => {
+  //   navigate(`/sampleWorkflowPanel/${id}`);
+  //   console.log("IDD", id);
+  // };
 
   return (
     <div className="m-5 mt-3">
@@ -479,6 +505,17 @@ const SampleWorkFlow = () => {
           />
         </div>
         <div className="float-right flex gap-4">
+        <button
+        className="px-3 py-2 rounded flex gap-2 items-center bg-green-600 text-white font-medium cursor-pointer"
+        onClick={() => generatePDF(selectedSampleId)}
+      >
+        Generate Report
+        {loading[selectedSampleId] ? (
+          <div className="h-5 w-5 border-t-2 border-b-2 border-black animate-spin rounded-full"></div>
+        ) : (
+          <FontAwesomeIcon icon="fa-regular fa-file-pdf" />
+        )}
+      </button>
           <PDFDownload
             columns={columns}
             data={filteredData}
@@ -620,27 +657,25 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">QA Reviewer/Approver </td>
             <td className="border px-4 py-2">QA Reviewer Comment </td>
             <td className="border px-4 py-2">QA Review Date </td>
-
             <td className="border px-4 py-2">Actions</td>
           </tr>
         </thead>
         <tbody>
           {data?.map((data, index) => (
-            <tr
-              key={index}
-              className="hover:bg-gray-100 cursor-pointer"
-              onClick={() => handleRowClick(data?.sampleId)}
-            >
+            <tr key={index} className="hover:bg-gray-100 cursor-pointer">
+             <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
               <td className="border px-4 py-2">{index + 1}</td>
               <td className="border px-4 py-2">{data.samplePlanId}</td>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
               <td className="border px-4 py-2">{data.sampleType}</td>
               <td className="border px-4 py-2">{data.productMaterialName}</td>
-              <td className="border px-4 py-2">{data.batchNumber}</td>
+              <td className="border px-4 py-2">{data.batchlotNumber}</td>
+              <td className="border px-4 py-2">{data.sampleSource}</td>
+              <td className="border px-4 py-2">{data.plannedDate}</td>
               <td className="border px-4 py-2">{data.samplePriority}</td>
               <td className="border px-4 py-2">{data.sampleQuantity}</td>
-              <td className="border px-4 py-2">{data.uom}</td>
+              <td className="border px-4 py-2">{data.UOM}</td>
               <td className="border px-4 py-2">{data.market}</td>
               <td className="border px-4 py-2">{data?.sampleBarCode}</td>
               <td className="border px-4 py-2">{data.specificationId}</td>
@@ -661,8 +696,6 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.usl}</td>{" "}
               <td className="border px-4 py-2">{data.testingDeadline}</td>
               <td className="border px-4 py-2">{data.plannerName}</td>
-              <td className="border px-4 py-2">{data.sampleSource}</td>
-              <td className="border px-4 py-2">{data.plannedDate}</td>
               <td className="border px-4 py-2">{data.labTechnician}</td>
               <td className="border px-4 py-2">{data.reviewerApprover}</td>
               <td className="border px-4 py-2">{data.assignedDepartment}</td>
@@ -715,19 +748,19 @@ const SampleWorkFlow = () => {
               </td>{" "}
               <td className="border px-4 py-2">{data.ichZone}</td>{" "}
               <td className="border px-4 py-2">
-                {data.photostabilityTestingResults}
+                {data.photoStabilityTestingResult}
               </td>{" "}
               <td className="border px-4 py-2">
-                {data.reconstitutionStability}
+                {data.reConstitutionStability}
               </td>{" "}
-              <td className="border px-4 py-2">{data.testingIntervalMonths}</td>{" "}
+              <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
               <td className="border px-4 py-2">
                 {data.shelfLifeRecommendation}
               </td>{" "}
-              <td className="border px-4 py-2">{data.reviewerComment}</td>{" "}
+              <td className="border px-4 py-2">hgggg{data.reviewerComment}</td>{" "}
               <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
               <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
-              <td className="border px-4 py-2">{data.qaReviewDate}</td>{" "}
+              <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
               <td className="border px-4 py-2 font-medium">
                 {" "}
                 <div className="flex gap-2 font-medium">
@@ -748,6 +781,7 @@ const SampleWorkFlow = () => {
                   />
                 </div>
               </td>
+            </Link>
             </tr>
           ))}
         </tbody>
