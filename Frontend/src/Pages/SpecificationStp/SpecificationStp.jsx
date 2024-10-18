@@ -30,6 +30,7 @@ import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
 import { toast } from "react-toastify";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { Navigate } from "react-router-dom";
 
 const fields = [
   { label: "Document Name", key: "documentName" },
@@ -91,7 +92,7 @@ const initialData = [
   },
 ];
 
-function StorageCondition() {
+function SpecificationStp() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -140,6 +141,10 @@ function StorageCondition() {
   };
   const openModal = () => {
     setIsModalOpen(true);
+  };
+
+  const handleClick = () => {
+    window.location.href = "https://ipc.mydemosoftware.com";
   };
 
   const closeModal = () => {
@@ -403,86 +408,87 @@ function StorageCondition() {
     const [effectiveDate, seteffectiveDate] = useState("");
     const [ccReferences, setccReferences] = useState("");
     const handleAdd = () => {
-      const newCondition = {
-        documentName,
-        documentType,
-        department,
-        author,
-        dueDate,
-        effectiveDate,
-        ccReferences,
-        status: "APPROVED",
-      };
-      onAdd(newCondition);
+      // Navigate("/https://ipc.mydemosoftware.com");
+      // const newCondition = {
+      //   documentName,
+      //   documentType,
+      //   department,
+      //   author,
+      //   dueDate,
+      //   effectiveDate,
+      //   ccReferences,
+      //   status: "APPROVED",
+      // };
+      // onAdd(newCondition);
     };
-    return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
-        <CModalHeader>
-          <CModalTitle>Add New Specification STP</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            type="text"
-            label="Document Name"
-            placeholder="Document Name"
-            value={documentName}
-            onChange={(e) => setdocumentName(e.target.value)}
-          />
+    // return (
+    //   <CModal alignment="center" visible={visible} onClose={closeModal}>
+    //     <CModalHeader>
+    //       <CModalTitle>Add New Specification STP</CModalTitle>
+    //     </CModalHeader>
+    //     <CModalBody>
+    //       <CFormInput
+    //         type="text"
+    //         label="Document Name"
+    //         placeholder="Document Name"
+    //         value={documentName}
+    //         onChange={(e) => setdocumentName(e.target.value)}
+    //       />
 
-          <CFormInput
-            type="text"
-            label="Document Type"
-            placeholder="Document Type"
-            value={documentType}
-            onChange={(e) => setdocumentType(e.target.value)}
-          />
+    //       <CFormInput
+    //         type="text"
+    //         label="Document Type"
+    //         placeholder="Document Type"
+    //         value={documentType}
+    //         onChange={(e) => setdocumentType(e.target.value)}
+    //       />
 
-          <CFormInput
-            type="text"
-            label="Department"
-            placeholder="Department"
-            value={department}
-            onChange={(e) => setdepartment(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            label="Author"
-            placeholder="Author"
-            value={author}
-            onChange={(e) => setauthor(e.target.value)}
-          />
-          <CFormInput
-            type="date"
-            label="Due Date"
-            placeholder="Due Date"
-            value={dueDate}
-            onChange={(e) => setdueDate(e.target.value)}
-          />
-          <CFormInput
-            type="date"
-            label="Effective Date"
-            placeholder="Effective Date"
-            value={effectiveDate}
-            onChange={(e) => seteffectiveDate(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            label="CC References"
-            placeholder="CC References"
-            value={ccReferences}
-            onChange={(e) => setccReferences(e.target.value)}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Cancel
-          </CButton>
-          <CButton color="primary" onClick={handleAdd}>
-            Add
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
+    //       <CFormInput
+    //         type="text"
+    //         label="Department"
+    //         placeholder="Department"
+    //         value={department}
+    //         onChange={(e) => setdepartment(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="text"
+    //         label="Author"
+    //         placeholder="Author"
+    //         value={author}
+    //         onChange={(e) => setauthor(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="date"
+    //         label="Due Date"
+    //         placeholder="Due Date"
+    //         value={dueDate}
+    //         onChange={(e) => setdueDate(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="date"
+    //         label="Effective Date"
+    //         placeholder="Effective Date"
+    //         value={effectiveDate}
+    //         onChange={(e) => seteffectiveDate(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="text"
+    //         label="CC References"
+    //         placeholder="CC References"
+    //         value={ccReferences}
+    //         onChange={(e) => setccReferences(e.target.value)}
+    //       />
+    //     </CModalBody>
+    //     <CModalFooter>
+    //       <CButton color="light" onClick={closeModal}>
+    //         Cancel
+    //       </CButton>
+    //       <CButton color="primary" onClick={handleAdd}>
+    //         Add
+    //       </CButton>
+    //     </CModalFooter>
+    //   </CModal>
+    // );
   };
 
   const openEditModal = (rowData) => {
@@ -684,7 +690,7 @@ function StorageCondition() {
           <ATMButton
             text="Add Specification STP"
             color="blue"
-            onClick={openModal}
+            onClick={handleClick}
             className="ml-auto"
           />
         </div>
@@ -737,4 +743,4 @@ function StorageCondition() {
   );
 }
 
-export default StorageCondition;
+export default SpecificationStp;
