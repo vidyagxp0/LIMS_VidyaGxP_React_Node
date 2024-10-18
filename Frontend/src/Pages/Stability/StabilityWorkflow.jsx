@@ -1,4 +1,11 @@
-import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader } from "@coreui/react";
+import {
+  CButton,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+} from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -6,19 +13,24 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ImportModal from "../Modals/importModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
 import Table from "../../components/ATM components/Table/Table";
 import { Link, useNavigate } from "react-router-dom";
-import { randomSampleData } from "./SamplePlanningFunction";
+//import { randomSampleData } from "./SamplePlanningFunction";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
-import SampleWorkflowModal from "./SampleWorkflowModal";
+import StabilityWorkflowModal from "./StabilityWorkflowModal";
 import { BASE_URL } from "../../config.json";
-const SampleWorkFlow = () => {
+const StabilityWorkflow = () => {
   const [data, setData] = useState([]);
+  console.log(data, "????????????????????????????");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -33,7 +45,7 @@ const SampleWorkFlow = () => {
 
   const openWorkflowModal = () => {
     setShowModal(true);
-    navigate("/sampleWorkflowModal");
+    navigate("/stabilityWorkflowModal");
   };
 
   const closeWorkflowModal = () => {
@@ -43,8 +55,9 @@ const SampleWorkFlow = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample`);
-      console.log(response, "99999999999999999999999999");
+      console.log(response, "99999999999999999999999999"); // Check the structure of the response
 
+      // Assuming the actual array is nested inside a 'data' property
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
@@ -53,6 +66,7 @@ const SampleWorkFlow = () => {
         ...item,
         sno: index + 1,
       }));
+      console.log(updatedData, "SAmplepriority");
       setData(updatedData);
     } catch (error) {
       console.error("Error fetching ", error);
@@ -89,7 +103,9 @@ const SampleWorkFlow = () => {
     console.log("Generating PDF for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
-      const response = await fetch(`http://localhost:9000/generate-report/${sampleId}`);
+      const response = await fetch(
+        `http://localhost:9000/generate-report/${sampleId}`
+      );
       console.log("Response Status:", response.status);
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -119,7 +135,7 @@ const SampleWorkFlow = () => {
     { header: "Sample Name", accessor: "sampleName" },
     { header: "Sample Type", accessor: "sampleType" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
-    { header: "Batch/Lot Number", accessor: "batchLotNumber" },
+    { header: "Batch/Lot Number", accessor: "batchlotNumber" },
     { header: "Sample Priority", accessor: "samplePriority" },
     { header: "Sample Quantity", accessor: "sampleQuantity" },
     { header: "UOM", accessor: "UOM" },
@@ -127,15 +143,15 @@ const SampleWorkFlow = () => {
     { header: "Sample Barcode", accessor: "sampleBarCode" },
     { header: "Specification ID", accessor: "specificationId" },
     { header: "Specification Attachment", accessor: "specificationAttachment" },
-    { header: "STP ID", accessor: "stpId" },
-    { header: "STP Attachment", accessor: "stpAttachment" },
-    { header: "Test Plan ID", accessor: "testPlanId" },
+    { header: "STP ID", accessor: "sTPId" },
+    { header: "STP Attachment", accessor: "sTPAttachment" },
+    { header: "Test Plan ID", accessor: "testPlanID" },
     { header: "Test Name", accessor: "testName" },
     { header: "Test Method", accessor: "testMethod" },
-    { header: "Test Parameters", accessor: "testParameter" },
+    { header: "Test Parameters", accessor: "testParameters" },
     { header: "Testing Frequency", accessor: "testingFrequency" },
     { header: "Testing Location", accessor: "testingLocation" },
-    { header: "Required Instruments", accessor: "requiredInstrument" },
+    { header: "Required Instruments", accessor: "requiredInstruments" },
     { header: "Test Grouping", accessor: "testGrouping" },
     { header: "LSL", accessor: "lsl" },
     { header: "USL", accessor: "usl" },
@@ -144,11 +160,12 @@ const SampleWorkFlow = () => {
     { header: "Sample Source", accessor: "sampleSource" },
     { header: "Planned Date", accessor: "plannedDate" },
     { header: "Lab Technician", accessor: "labTechnician" },
+    { header: "Reviewer/Approver", accessor: "reviewerApprover" },
     { header: "Assigned Department", accessor: "assignedDepartment" },
     { header: "Sample Collection Date", accessor: "sampleCollectionDate" },
     { header: "Testing Start Date", accessor: "testingStartDate" },
     { header: "Testing End Date", accessor: "testingEndDate" },
-    { header: "Turnaround Time (TAT)", accessor: "turnAroundTime" },
+    { header: "Turnaround Time (TAT)", accessor: "turnaroundTime" },
     { header: "Sample Retesting Date", accessor: "sampleRetestingDate" },
     { header: "Review Date", accessor: "reviewDate" },
     { header: "Sample Storage Location", accessor: "sampleStorageLocation" },
@@ -157,29 +174,24 @@ const SampleWorkFlow = () => {
       header: "Sample Preparation Method",
       accessor: "samplePreparationMethod",
     },
-    { header: "Sample Packaging Details", accessor: "samplePackagingDetail" },
+    { header: "Sample Packaging Details", accessor: "samplePackagingDetails" },
     { header: "Sample Label", accessor: "sampleLabel" },
-    { header: "Regulatory Requirements", accessor: "regulatoryRequirement" },
-    { header: "Quality Control Checks", accessor: "qualityControlCheck" },
+    { header: "Regulatory Requirements", accessor: "regulatoryRequirements" },
+    { header: "Quality Control Checks", accessor: "qualityControlChecks" },
     { header: "Delay Justification", accessor: "delayJustification" },
-    { header: "Testing Outcome", accessor: "testingOutCome" },
+    { header: "Testing Outcome", accessor: "testingOutcome" },
     { header: "Pass / Fail ?", accessor: "passFail" },
-    // { header: "Shelf Life reccommendation", accessor: "shelfLifeRecommendation" },
+    { header: "Shelf Life reccommendation", accessor: "passFail" },
     { header: "Control Sample Reference", accessor: "controlSampleReference" },
     { header: "Sample Integrity Status", accessor: "sampleIntegrityStatus" },
-    { header: "Assigned Department", accessor: "assignedDepartmentt" },
     { header: "Risk Assessment", accessor: "riskAssessment" },
     { header: "Supervisor", accessor: "supervisor" },
-    { header: "Instrumnets Reserved", accessor: "instrumentsReserved" },
-    { header: "Lab Availability", accessor: "labAvailability" },
-    { header: "Sample Cost Estimation", accessor: "sampleCostEstimation" },
-    { header: "Resource Utilization", accessor: "resourceUtilization" },
     { header: "Sample Movement History", accessor: "sampleMovementHistory" },
     { header: "Testing Progress", accessor: "testingProgress" },
-    { header: "Alerts/Notifications", accessor: "alertNotification" },
-    { header: "Deviation Logs", accessor: "deviationLog" },
-    { header: "Comments/Notes", accessor: "commentNotes" },
-    { header: "Attachments", accessor: "attachment" },
+    { header: "Alerts/Notifications", accessor: "alertsNotifications" },
+    { header: "Deviation Logs", accessor: "deviationLogs" },
+    { header: "Comments/Notes", accessor: "commentsNotes" },
+    { header: "Attachments", accessor: "attachments" },
     { header: "Sampling Frequency", accessor: "samplingFrequency" },
     { header: "Sample Disposition", accessor: "sampleDisposition" },
     { header: "Stability Study Type", accessor: "stabilityStudyType" },
@@ -203,11 +215,10 @@ const SampleWorkFlow = () => {
       header: "Shelf Life Recommendation",
       accessor: "shelfLifeRecommendation",
     },
-    { header: "Reviewer/Approver", accessor: "reviewerApprover" },
     { header: "Reviewer Comment", accessor: "reviewerComment" },
     { header: "QA Reviewer/Approver", accessor: "QaReviewerApprover" },
     { header: "QA Reviewer Comment", accessor: " QaReviewerComment" },
-    { header: "QA Review Date", accessor: "QaReviewDate" },
+    { header: "QA Review Date", accessor: "qaReviQwDate" },
     {
       header: "Actions",
       accessor: "action",
@@ -220,7 +231,10 @@ const SampleWorkFlow = () => {
               onViewDetails(row);
             }}
           />
-          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            className="mr-2 cursor-pointer"
+          />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
       ),
@@ -288,69 +302,70 @@ const SampleWorkFlow = () => {
       sampleBarCode: item["Sample Barcode"] || "",
       specificationId: item["Specification ID"] || "",
       specificationAttachment: item["Specification Attachment"] || "",
-      stpId: item["STP ID"] || "",
-      stpAttachment: item["STP Attachment"] || "",
-      testPlanId: item["Test Plan ID"] || "",
+      sTPId: item["STP ID"] || "",
+      sTPAttachment: item["STP Attachment"] || "",
+      testPlanID: item["Test Plan ID"] || "",
       testName: item["Test Name"] || "",
       testMethod: item["Test Method"] || "",
-      testParameter: item["Test Parameters"] || "",
+      testParameters: item["Test Parameters"] || "",
       testingFrequency: item["Testing Frequency"] || "",
       testingLocation: item["Testing Location"] || "",
-      requiredInstrument: item["Required Instruments"] || "",
+      requiredInstruments: item["Required Instruments"] || "",
       testGrouping: item["Test Grouping"] || "",
       lsl: item["LSL"] || "",
       usl: item["USL"] || "",
       testingDeadline: item["Testing Deadline"] || "",
       plannerName: item["Planner Name"] || "",
       labTechnician: item["Lab Technician"] || "",
+      reviewerApprover: item["Reviewer/Approver"] || "",
       assignedDepartment: item["Assigned Department"] || "",
+      supervisor: item["Supervisor"] || "",
       sampleCollectionDate: item["Sample Collection Date"] || "",
       testingStartDate: item["Testing Start Date"] || "",
       testingEndDate: item["Testing End Date"] || "",
       delayJustification: item["Delay Justification"] || "",
-      testingOutCome: item["Testing Outcome"] || "",
+      testingOutcome: item["Testing Outcome"] || "",
       passFail: item["Pass/Fail?"] || "",
-      turnAroundTime: item["Turnaround Time (TAT)"] || "",
+      turnaroundTime: item["Turnaround Time (TAT)"] || "",
       sampleRetestingDate: item["Sample Retesting Date"] || "",
       reviewDate: item["Review Date"] || "",
       sampleStorageLocation: item["Sample Storage Location"] || "",
       transportationMethod: item["Transportation Method"] || "",
       samplePreparationMethod: item["Sample Preparation Method"] || "",
-      samplePackagingDetail: item["Sample Packaging Details"] || "",
+      samplePackagingDetails: item["Sample Packaging Details"] || "",
       sampleLabel: item["Sample Label"] || "",
-      regulatoryRequirement: item["Regulatory Requirements"] || "",
-      qualityControlCheck: item["Quality Control Checks"] || "",
+      regulatoryRequirements: item["Regulatory Requirements"] || "",
+      qualityControlChecks: item["Quality Control Checks"] || "",
       controlSampleReference: item["Control Sample Reference"] || "",
       sampleIntegrityStatus: item["Sample Integrity Status"] || "",
-      assignedDepartmentt: item["Assigned Departmentt"] || "",
       riskAssessment: item["Risk Assessment"] || "",
-      supervisor: item["Supervisor"] || "",
       instrumentsReserved: item["Instruments Reserved"] || "",
       labAvailability: item["Lab Availability"] || "",
       sampleCostEstimation: item["Sample Cost Estimation"] || "",
       resourceUtilization: item["Resource Utilization"] || "",
       sampleMovementHistory: item["Sample Movement History"] || "",
       testingProgress: item["Testing Progress"] || "",
-      alertNotification: item["Alerts/Notifications"] || "",
-      deviationLog: item["Deviation Logs"] || "",
-      commentNotes: item["Comments/Notes"] || "",
-      attachment: item["Attachment"] || "",
+      alertsNotifications: item["Alerts/Notifications"] || "",
+      deviationLogs: item["Deviation Logs"] || "",
+      commentsNotes: item["Comments/Notes"] || "",
+      attachments: item["Attachments"] || "",
       samplingFrequency: item["Sampling Frequency"] || "",
       sampleDisposition: item["Sample Disposition"] || "",
       stabilityStudyType: item["Stability Study Type"] || "",
       stabilityStudyProtocol: item["Stability Study Protocol"] || "",
-      stabilityProtocolApprovalDate: item["Stability Protocol Approval date"] || "",
-      countryOfRegulatorySubmissions: item["Country of Regulatory Submissions"] || "",
+      stabilityProtocolApprovalDate:
+        item["Stability Protocol Approval date"] || "",
+      countryOfRegulatorySubmissions:
+        item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
       photoStabilityTestingResult: item["Photostability Testing results"] || "",
       reConstitutionStability: item["Reconstitution Stability"] || "",
       testingInterval: item["Testing Interval (months)"] || "",
       shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
-      reviewerApprover: item["Reviewer/Approver"] || "",
 
       reviewerComment: item["Reviewer Comment"] || "",
-      QaReviewerApprover: item["QA Reviewer/Approver"] || "",
-      QaReviewerComment: item["QA Reviewer Comment"] || "",
+      qaReviewerApprover: item["QA Reviewer/Approver"] || "",
+      qaReviewerComment: item["QA Reviewer Comment"] || "",
       QaReviewDate: item["QA Review Date"] || "",
 
       actions: item["Actions"] || "",
@@ -382,10 +397,10 @@ const SampleWorkFlow = () => {
     "testPlanId",
     "testName",
     "testMethod",
-    "testParameter",
+    "testParameters",
     "testingFrequency",
     "testingLocation",
-    "requiredInstrument",
+    "requiredInstruments",
     "testGrouping",
     "lsl",
     "usl",
@@ -395,37 +410,33 @@ const SampleWorkFlow = () => {
     "labTechnician",
     "reviewer",
     "assignedDepartment",
+    "supervisor",
     "sampleCollectionDate",
     "testingStartDate",
     "testingEndDate",
-    "delayJustification",
-    "testingOutcome",
-    "passFail",
-    "turnAroundTime",
+    "turnaroundTime",
     "sampleRetestingDate",
     "reviewDate",
     "sampleStorageLocation",
     "transportationMethod",
     "samplePreparationMethod",
-    "samplePackagingDetail",
+    "samplePackagingDetails",
     "sampleLabel",
-    "regulatoryRequirement",
-    "qualityControlCheck",
+    "regulatoryRequirements",
+    "qualityControlChecks",
     "controlSampleReference",
     "sampleIntegrityStatus",
-    "assignedDepartmentt",
     "riskAssessment",
-    "supervisor",
     "instrumentsReserved",
     "labAvailability",
     "sampleCostEstimation",
     "resourceUtilization",
     "sampleMovementHistory",
     "testingProgress",
-    "alertNotification",
-    "deviationLog",
+    "alertsNotifications",
+    "deviationLogs",
     "comments",
-    "attachment",
+    "attachments",
     "samplingFrequency",
     "sampleDisposition",
     "stabilityStudyType",
@@ -437,10 +448,9 @@ const SampleWorkFlow = () => {
     "reConstitutionStability",
     "testingInterval",
     "shelfLifeRecommendation",
-    "reviewerApprover",
     "reviewerComment",
-    "QaReviewerApprover",
-    "QaReviewerComment",
+    "qaReviewerApprover",
+    "qaReviewerComment",
     "QaReviewDate",
   ];
 
@@ -509,7 +519,11 @@ const SampleWorkFlow = () => {
             title="Investigation L2 Data"
           />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Add Sample Workflow" color="blue" onClick={openWorkflowModal} />
+          <ATMButton
+            text="Add Sample Workflow"
+            color="blue"
+            onClick={openWorkflowModal}
+          />
         </div>
       </div>
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
@@ -577,6 +591,7 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Lab Technician</td>
             <td className="border px-4 py-2">Reviewer/Approver</td>
             <td className="border px-4 py-2">Assigned Department</td>
+            <td className="border px-4 py-2">Supervisor</td>
             <td className="border px-4 py-2">Sample Collection Date</td>
 
             <td className="border px-4 py-2">Testing Start Date</td>
@@ -614,8 +629,12 @@ const SampleWorkFlow = () => {
 
             <td className="border px-4 py-2">Stability Study Type</td>
             <td className="border px-4 py-2">Stability Study Protocol</td>
-            <td className="border px-4 py-2">Stability Protocol Approval date</td>
-            <td className="border px-4 py-2">Country of Regulatory Submissions</td>
+            <td className="border px-4 py-2">
+              Stability Protocol Approval date
+            </td>
+            <td className="border px-4 py-2">
+              Country of Regulatory Submissions
+            </td>
             <td className="border px-4 py-2">ICH Zone</td>
             <td className="border px-4 py-2">Photostability Testing results</td>
             <td className="border px-4 py-2">Reconstitution Stability</td>
@@ -626,23 +645,23 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">QA Reviewer/Approver </td>
             <td className="border px-4 py-2">QA Reviewer Comment </td>
             <td className="border px-4 py-2">QA Review Date </td>
-            <td className="border px-4 py-2">Sample Barcode </td>
-            <td className="border px-4 py-2">Status </td>
-            <td className="border px-4 py-2">Generate PDF </td>
             <td className="border px-4 py-2">Actions</td>
           </tr>
         </thead>
         <tbody>
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100 cursor-pointer">
-              <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
+              <Link
+                to={`/stabilityWorkflowEdit/${data.id}`}
+                className="contents"
+              >
                 <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{data.samplePlanId}</td>
                 <td className="border px-4 py-2">{data.sampleId}</td>
                 <td className="border px-4 py-2">{data.sampleName}</td>
                 <td className="border px-4 py-2">{data.sampleType}</td>
                 <td className="border px-4 py-2">{data.productMaterialName}</td>
-                <td className="border px-4 py-2">{data.batchLotNumber}</td>
+                <td className="border px-4 py-2">{data.batchlotNumber}</td>
                 <td className="border px-4 py-2">{data.sampleSource}</td>
                 <td className="border px-4 py-2">{data.plannedDate}</td>
                 <td className="border px-4 py-2">{data.samplePriority}</td>
@@ -654,15 +673,15 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">
                   {data.specificationAttachment}
                 </td>
-                <td className="border px-4 py-2">{data.stpId}</td>
-                <td className="border px-4 py-2">{data.stpAttachment}</td>
-                <td className="border px-4 py-2">{data.testPlanId}</td>
+                <td className="border px-4 py-2">{data.sTPId}</td>
+                <td className="border px-4 py-2">{data.sTPAttachment}</td>
+                <td className="border px-4 py-2">{data.testPlanID}</td>
                 <td className="border px-4 py-2">{data.testName}</td>
                 <td className="border px-4 py-2">{data.testMethod}</td>
-                <td className="border px-4 py-2">{data.testParameter}</td>
+                <td className="border px-4 py-2">{data.testParameters}</td>
                 <td className="border px-4 py-2">{data.testingFrequency}</td>
                 <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td className="border px-4 py-2">{data.requiredInstrument}</td>
+                <td className="border px-4 py-2">{data.requiredInstruments}</td>
                 <td className="border px-4 py-2">{data.testGrouping}</td>
                 <td className="border px-4 py-2">{data.lsl}</td>{" "}
                 <td className="border px-4 py-2">{data.usl}</td>{" "}
@@ -676,10 +695,7 @@ const SampleWorkFlow = () => {
                 </td>
                 <td className="border px-4 py-2">{data.testingStartDate}</td>
                 <td className="border px-4 py-2">{data.testingEndDate}</td>
-                <td className="border px-4 py-2">{data.delayJustification}</td>
-                <td className="border px-4 py-2">{data.testingOutCome}</td>
-                <td className="border px-4 py-2">{data.passFail}</td>
-                <td className="border px-4 py-2">{data.turnAroundTime}</td>
+                <td className="border px-4 py-2">{data.turnaroundTime}</td>
                 <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
                 <td className="border px-4 py-2">{data.reviewDate}</td>
                 <td className="border px-4 py-2">
@@ -692,38 +708,33 @@ const SampleWorkFlow = () => {
                   {data.samplePreparationMethod}
                 </td>
                 <td className="border px-4 py-2">
-                  {data.samplePackagingDetail}
+                  {data.samplePackagingDetails}
                 </td>
                 <td className="border px-4 py-2">{data.sampleLabel}</td>
                 <td className="border px-4 py-2">
-                  {data.regulatoryRequirement}
+                  {data.regulatoryRequirements}
                 </td>
-                <td className="border px-4 py-2">{data.qualityControlCheck}</td>
+                <td className="border px-4 py-2">
+                  {data.qualityControlChecks}
+                </td>
                 <td className="border px-4 py-2">
                   {data.controlSampleReference}
                 </td>
                 <td className="border px-4 py-2">
                   {data.sampleIntegrityStatus}
                 </td>
-                <td className="border px-4 py-2">{data.assignedDepartmentt}</td>
                 <td className="border px-4 py-2">{data.riskAssessment}</td>
                 <td className="border px-4 py-2">{data.supervisor}</td>{" "}
-                <td className="border px-4 py-2">{data.instrumentsReserved}</td>{" "}
-                <td className="border px-4 py-2">{data.labAvailability}</td>{" "}
-                <td className="border px-4 py-2">
-                  {data.sampleCostEstimation}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.resourceUtilization}</td>{" "}
                 <td className="border px-4 py-2">
                   {data.sampleMovementHistory}
                 </td>
                 <td className="border px-4 py-2">{data.testingProgress}</td>
-                <td className="border px-4 py-2">{data.alertNotification}</td>
-                <td className="border px-4 py-2">{data.deviationLog}</td>
+                <td className="border px-4 py-2">{data.alertsNotifications}</td>
+                <td className="border px-4 py-2">{data.deviationLogs}</td>
                 <td className="border px-4 py-2 text-wrap">
-                  {data.commentNotes}
+                  {data.commentsNotes}
                 </td>{" "}
-                <td className="border px-4 py-2">{data.attachment}</td>
+                <td className="border px-4 py-2">{data.attachments}</td>
                 <td className="border px-4 py-2">{data.samplingFrequency}</td>
                 <td className="border px-4 py-2">{data.sampleDisposition}</td>
                 <td className="border px-4 py-2">
@@ -749,16 +760,12 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">
                   {data.shelfLifeRecommendation}
                 </td>{" "}
-                <td className="border px-4 py-2">{data.reviewerApprover}</td>
                 <td className="border px-4 py-2">
-                  {data.reviewerComment}
+                  hgggg{data.reviewerComment}
                 </td>{" "}
-                <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
-                <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
+                <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
+                <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
                 <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-                <td className="border px-4 py-2">{data.sampleBarcode}</td>{" "}
-                <td className="border px-4 py-2">{data.status}</td>{" "}
-                <td className="border px-4 py-2">{data.generatePDF}</td>{" "}
                 <td className="border px-4 py-2 font-medium">
                   {" "}
                   <div className="flex gap-2 font-medium">
@@ -794,7 +801,7 @@ const SampleWorkFlow = () => {
         />
       )}
       {viewModalData && (
-        <SampleWorkflowModal
+        <StabilityWorkflowModal
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
@@ -804,7 +811,7 @@ const SampleWorkFlow = () => {
         />
       )}
 
-      {showModal && <SampleWorkflowModal onClose={closeWorkflowModal} />}
+      {showModal && <StabilityWorkflowModal onClose={closeWorkflowModal} />}
 
       {editModalData && (
         <SamplePlanningAEdit
@@ -828,4 +835,4 @@ const SampleWorkFlow = () => {
   );
 };
 
-export default SampleWorkFlow;
+export default StabilityWorkflow;

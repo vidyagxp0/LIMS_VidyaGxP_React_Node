@@ -225,6 +225,9 @@ import "react-toastify/dist/ReactToastify.css";
 import AnalystPersonal from "./Pages/AnalystPersonal.jsx";
 import STP from "./Pages/STP/STP.jsx";
 import SampleWorkFlowPanel from "./Pages/Samplelogin/sampleWorkflowPanel.jsx";
+import StabilityWorkflow from "./Pages/Stability/StabilityWorkflow.jsx";
+import StabilityWorkFlowModal from "./Pages/Stability/StabilityWorkflowModal.jsx";
+import StabilityWorkFlowPanel from "./Pages/Stability/StabilityWorkflowPanel.jsx";
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -266,15 +269,36 @@ function App() {
 
             <Route path="/samplelogin" element={<Samplelogin />} />
             <Route path="/sampleWorkflow" element={<SampleWorkflow />} />
-            <Route path="/sampleWorkflowPanel" element={<SampleWorkFlowPanel />} />
-            <Route path="/sampleWorkflowModal" element={<SampleWorkflowModal />} />
-            <Route path="/sampleWorkflowEdit/:id" element={<SampleWorkflowModal />} />
-
+            <Route
+              path="/sampleWorkflowPanel"
+              element={<SampleWorkFlowPanel />}
+            />
+            <Route
+              path="/sampleWorkflowEdit/:id"
+              element={<SampleWorkflowModal />}
+            />
+            <Route
+              path="/sampleWorkflowModal/"
+              element={<SampleWorkflowModal />}
+            />
             <Route path="/viewDetails" element={<SampleLoginDetails />} />
             <Route path="/testResultsDetails" element={<TestResultsDetails />} />
             <Route path="/investigationl1" element={<InvestigationL1 />} />
             <Route path="/investigationl2" element={<InvestigationL2 />} />
             <Route path="/sample-planning" element={<SamplePlanning />} />
+            <Route path="/stabilityworkflow" element={<StabilityWorkflow />} />
+            <Route
+              path="/stabilityWorkflowPanel"
+              element={<StabilityWorkFlowPanel />}
+            />
+            <Route
+              path="/stabilityWorkflowEdit/:id"
+              element={<StabilityWorkFlowModal />}
+            />
+            <Route
+              path="/stabilityWorkflowModal/"
+              element={<StabilityWorkFlowModal />}
+            />
 
             <Route path="/storageCondition1321" element={<Storage_Condition />} />
             <Route path="/standardProtocol" element={<StandardProtocol />} />
