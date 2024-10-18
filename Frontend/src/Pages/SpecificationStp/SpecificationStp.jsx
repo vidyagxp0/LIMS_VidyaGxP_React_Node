@@ -107,32 +107,49 @@ function SpecificationStp() {
   const [period, setPeriod] = useState("");
   const [sortKey, setSortKey] = useState("documentName");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [apiData, setApiData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const [apiData, setApiData] = useState(null);
-  console.log(apiData,"loooooooooooooo")
-
-
+  console.log(apiData, "loooooooooooooo");
 
   // 	Document Name,	Document Type,	Department,	Author,	Due Date,	Effective Date,	CC, References,	Status
   //  document_name, document_type_id, department_id, reviewers,due_dateDoc, effective_date, reference_record, status
 
-
   useEffect(() => {
     openModal();
   }, []);
+
   const openModal = async () => {
+    setLoading(true);
+    setError(null); // Reset error state
     try {
       const response = await axios.get(
         "https://dms.mydemosoftware.com/api/document"
       );
+      const documents = response.data.body.document;
 
-      setApiData(response.data);
-
-      console.log(response.data);
-
-      // window.location.href = "https://dms.mydemosoftware.com/login";
+      if (Array.isArray(documents)) {
+        const filteredData = documents.map((document) => ({
+          document_name: document.document_name,
+          document_type_id: document.document_type_id,
+          department_id: document.department_id,
+          reviewers: document.reviewers,
+          due_dateDoc: document.due_dateDoc,
+          effective_date: document.effective_date,
+          reference_record: document.reference_record,
+          status: document.status,
+        }));
+        setApiData(filteredData);
+      } else {
+        console.warn("Expected an array, but got:", documents);
+        setError("Unexpected data format.");
+      }
     } catch (error) {
       console.error("Error fetching the data:", error);
+      setError("Failed to fetch data.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -224,23 +241,23 @@ function SpecificationStp() {
       accessor: "sno",
     },
 
-    { header: "Document Name", accessor: "documentName" },
-    { header: "Document Type", accessor: "documentType" },
+    { header: "Document Name", accessor: "document_name" },
+    { header: "Document Type", accessor: "document_type_id" },
     {
       header: "Department",
-      accessor: "department",
+      accessor: "department_id",
     },
 
     {
       header: "Author ",
-      accessor: "author",
+      accessor: "reviewers",
     },
     {
       header: "Due Date",
-      accessor: "dueDate",
+      accessor: "due_dateDoc",
     },
-    { header: "Effective Date", accessor: "effectiveDate" },
-    { header: "CC References", accessor: "ccReferences" },
+    { header: "Effective Date", accessor: "reviewers" },
+    { header: "CC References", accessor: "reference_record" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -270,16 +287,19 @@ function SpecificationStp() {
   // Filtering logic
   const filteredData = Array.isArray(apiData)
     ? apiData.filter((row) => {
-        const matchesSearchQuery = row.documentName
+        // Ensure document_name exists before calling toLowerCase
+        const documentName = row.document_name || ""; // Fallback to an empty string if undefined
+        const matchesSearchQuery = documentName
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
+
         const matchesStatusFilter =
           statusFilter === "All" || row.status === statusFilter;
 
         const matchesDateFrom =
-          !dateFrom || new Date(row.effectiveDate) >= new Date(dateFrom);
+          !dateFrom || new Date(row.effective_date) >= new Date(dateFrom);
         const matchesDateTo =
-          !dateTo || new Date(row.effectiveDate) <= new Date(dateTo);
+          !dateTo || new Date(row.effective_date) <= new Date(dateTo);
 
         return (
           matchesSearchQuery &&
@@ -719,14 +739,18 @@ function SpecificationStp() {
           />
         </div>
 
-        <Table
-          columns={columns}
-          data={filteredData}
-          onCheckboxChange={handleCheckboxChange}
-          onViewDetails={onViewDetails}
-          onDelete={handleDelete}
-          openEditModal={openEditModal}
-        />
+        {filteredData.length > 0 ? (
+          <Table
+            columns={columns}
+            data={filteredData}
+            onCheckboxChange={handleCheckboxChange}
+            onViewDetails={onViewDetails}
+            onDelete={handleDelete}
+            openEditModal={openEditModal}
+          />
+        ) : (
+          <p>No data available.</p>
+        )}
       </div>
 
       {isModalOpen && (
