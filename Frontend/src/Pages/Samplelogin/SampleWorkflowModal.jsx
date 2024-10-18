@@ -53,6 +53,9 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleSource: "",
     plannedDate: "",
     labTechnician: "",
+    sampleCostEstimation:"",
+    resourceUtilization:"",
+    sampleMovementHistory: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
 
@@ -71,22 +74,24 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleStorageLocation: "",
     transportationMethod: "",
     samplePreparationMethod: "",
-    samplePackagingDetails: "",
+    samplePackagingDetail: "",
     sampleLabel: "",
-    regulatoryRequirements: "",
-    qualityControlChecks: "",
+    regulatoryRequirement: "",
+    qualityControlCheck: "",
     controlSample: "",
     referenceSample: "",
     sampleIntegrityStatus: "",
-    assignedDepartment: "",
+    assignedDepartmentt: "",
     riskAssessment: "",
     supervisor: "",
+    instrumentsReserved: "",
+    labAvailability: "",
     sampleDate: "",
-    sampleMovementHistory: "",
+    // sampleMovementHistory: "",
     testingProgress: "",
     alertNotification: "",
-    deviationLogs: "",
-    commentsNotes: "",
+    deviationLog: "",
+    commentNotes: "",
     attachment: null,
     samplingFrequency: "",
     sampleDisposition: "",
@@ -104,8 +109,8 @@ const SampleWorkflowModal = ({ onClose }) => {
     reviewerApprover: "",
     reviewerComment: "",
     reviewDate: "",
-    qaReviewerApprover: "",
-    qaReviewerComment: "",
+    QaReviewerApprover: "",
+    QaReviewerComment: "",
     QaReviewDate: "",
   });
 
@@ -452,7 +457,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-            </CRow>
+              </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -480,6 +485,26 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="labTechnician"
                   label="Lab Technician"
                   value={formData.labTechnician || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="sampleCostEstimation"
+                  label="Sample Cost Estimation"
+                  value={formData.sampleCostEstimation || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              </CRow>
+              <CRow>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="resourceUtilization"
+                  label="Resource Utilization"
+                  value={formData.resourceUtilization || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -664,9 +689,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="samplePackagingDetails"
+                  name="samplePackagingDetail"
                   label="Sample Packaging Details"
-                  value={formData.samplePackagingDetails || ""}
+                  value={formData.samplePackagingDetail || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -683,17 +708,26 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="regulatoryRequirements"
+                  name="regulatoryRequirement"
                   label="Regulatory Requirements"
-                  value={formData.regulatoryRequirements || ""}
+                  value={formData.regulatoryRequirement || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
               <CCol md={6}>
-                <CFormTextarea
-                  name="qualityControlChecks"
+                <CFormInput
+                  name="qualityControlCheck"
                   label="Quality Control Checks"
-                  value={formData.qualityControlChecks || ""}
+                  value={formData.qualityControlCheck || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="controlSampleReference"
+                  label="Control Sample Reference"
+                  value={formData.controlSampleReference || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -735,9 +769,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="assignedDepartment"
+                  name="assignedDepartmentt"
                   label="Assigned Department"
-                  value={formData.assignedDepartment || ""}
+                  value={formData.assignedDepartmentt || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -757,6 +791,24 @@ const SampleWorkflowModal = ({ onClose }) => {
                   name="supervisor"
                   label="Supervisor"
                   value={formData.supervisor || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="instrumentsReserved"
+                  label="Instruments Reserved"
+                  value={formData.instrumentsReserved || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="labAvailability"
+                  label="Lab Availability"
+                  value={formData.labAvailability || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -799,9 +851,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
               <CCol md={6}>
                 <CFormTextarea
-                  name="deviationLogs"
+                  name="deviationLog"
                   label="Deviation Logs"
-                  value={formData.deviationLogs || ""}
+                  value={formData.deviationLog || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -809,9 +861,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormTextarea
-                  name="commentsNotes"
+                  name="commentNotes"
                   label="Comments/Notes"
-                  value={formData.commentsNotes || ""}
+                  value={formData.commentNotes || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -988,18 +1040,18 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="qaReviewerApprover"
+                  name="QaReviewerApprover"
                   label="QA Reviewer/Approver"
-                  value={formData?.qaReviewerApprover || ""}
+                  value={formData?.QaReviewerApprover || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="qaReviewerComment"
+                  name="QaReviewerComment"
                   label="QA Reviewer Comment"
-                  value={formData?.qaReviewerComment || ""}
+                  value={formData?.QaReviewerComment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
