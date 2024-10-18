@@ -62,6 +62,7 @@ function Storage_Condition() {
     fetchData();
   }, []);
 
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -247,6 +248,7 @@ function Storage_Condition() {
     const [description, setDescription] = useState("");
     const handleProduct = () => {
       const newCondition = {
+        conditionCode,
         stabilityCondition,
         description,
         status: "active",
@@ -260,6 +262,15 @@ function Storage_Condition() {
             <CModalTitle>New Condition</CModalTitle>
           </CModalHeader>
           <CModalBody>
+          <CFormInput
+              className="mb-3"
+              type="text"
+              label="Condition Code"
+              placeholder=" "
+              value={conditionCode}
+              onChange={(e) => setConditionCode(e.target.value)}
+            />
+          
             <CFormInput
               className="mb-3"
               type="text"
@@ -268,14 +279,7 @@ function Storage_Condition() {
               value={stabilityCondition}
               onChange={(e) => setStabilityCondition(e.target.value)}
             />
-             <CFormInput
-              className="mb-3"
-              type="text"
-              label="Condition Code"
-              placeholder=" "
-              value={conditionCode}
-              onChange={(e) => setConditionCode(e.target.value)}
-            />
+           
             <CFormInput
               className="mb-3"
               type="text"
@@ -443,5 +447,4 @@ function Storage_Condition() {
     </>
   );
 }
-
 export default Storage_Condition;

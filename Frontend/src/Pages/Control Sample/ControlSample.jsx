@@ -255,40 +255,6 @@ const ControlSample = () => {
     console.log("Deleted item:", item);
   };
 
-<<<<<<< HEAD
-  // const handleDeleteControl = (item) => {
-  //   console.log(item , "item")
-  //   axios
-  //     .delete(`http://localhost:9000/delete-lims/controlSampleManagement/${item.sno}`)
-  //     .then((response) => {
-        
-  //       toast.success(response.data.message || "Control Sample deleted successfully!");
-            
-  //       // Update the local state after successful deletion
-  //       setData((prevData) => prevData.filter((sample) => sample.sno !== item.sno));
-          
-  //       closeModal(); // Close the modal after deletion
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       toast.error("Error deleting Control Sample.");
-  //     });
-  // };
-  
-  
-  const handleDeleteControl = async (item) => {
-    try {
-      const response = await axios.delete(`${BASE_URL}/delete-lims/controlSampleManagement/${item.uniqueId}`);
-      if (response.status === 200) {
-        const newData = data.filter((sample) => sample.uniqueId !== item.uniqueId);
-        setData(newData);
-        toast.success(response.data.message || "Control Sample deleted successfully!");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Error deleting Control Sample.");
-    }
-=======
   const handleDeleteControl = (item) => {
     console.log(item , "item")
     axios
@@ -302,7 +268,6 @@ const ControlSample = () => {
         console.error(err);
         toast.error("Error deleting Control Sample.");
       });
->>>>>>> origin/development
   };
 
 

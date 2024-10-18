@@ -1,3 +1,496 @@
+// import React, { useEffect, useState } from "react";
+// import {
+//   CButton,
+//   CFormInput,
+//   CModal,
+//   CModalBody,
+//   CModalFooter,
+//   CModalHeader,
+//   CModalTitle,
+// } from "@coreui/react";
+// import {
+//   faEye,
+//   faPenToSquare,
+//   faTrashCan,
+// } from "@fortawesome/free-regular-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import Table from "../../components/ATM components/Table/Table";
+// import ATMButton from "../../components/ATM components/Button/ATMButton";
+// import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+// import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+// import ImportModal from "../Modals/importModal";
+// import PDFDownload from "../PDFComponent/PDFDownload ";
+// import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+// import ReusableModal from "../Modals/ResusableModal";
+// import axios from "axios";
+// import { BASE_URL } from "../../config.json";
+// import { toast } from "react-toastify";
+
+// function StabilityProtocol() {
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [statusFilter, setStatusFilter] = useState("All");
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [viewModalData, setViewModalData] = useState(null);
+//   const [isModalsOpen, setIsModalsOpen] = useState(false);
+//   const [editModalData, setEditModalData] = useState(null);
+//   const [data, setData] = useState([]);
+//   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+//   const fields = [
+//     { label: "Protocol ID", key: "protocolId" },
+//     { label: "Description", key: "description" },
+//     { label: "Product/Material", key: "productMaterial" },
+//     { label: "Specification ID", key: "specificationId" },
+//     { label: "Sample Type", key: "sampleType" },
+//     { label: "Initiated On", key: "initiatedOn" },
+//     { label: "Status", key: "status" },
+//   ];
+  
+//   const fetchData = async () => {
+//     try {
+//       const response = await axios.get(
+//         `${BASE_URL}/get-all-lims/sMStabilityProtocol`
+//       );
+//       const fetchedData = response?.data[0]?.sMStabilityProtocol || [];
+
+//       const updatedData = fetchedData.map((item, index) => ({
+//         sno: index + 1,
+//         ...item,
+//       }));
+
+//       setData(updatedData);
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//       toast.error("Failed to fetch stability protocol data");
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchData();
+//   }, []);
+  
+//   const handleOpenModals = () => {
+//     setIsModalsOpen(true);
+//   };
+
+//   const handleCloseModals = () => {
+//     setIsModalsOpen(false);
+//   };
+
+//   const handleEditSave = async (updatedData) => {
+//     const { sno, checkbox, ...dataToSend } = updatedData;
+//     try {
+//       const response = await axios.put(
+//         `${BASE_URL}/manage-lims/update/sMStabilityProtocol/${updatedData.uniqueId}`,
+//         dataToSend
+//       );
+//       if (response.status === 200) {
+//         const newData = data.map((item) =>
+//           item.uniqueId === updatedData.uniqueId
+//             ? { ...item, ...response.data }
+//             : item
+//         );
+//         setData(newData);
+//         closeEditModal();
+//         toast.success("Stability protocol updated successfully");
+//         fetchData();
+//       } else {
+//         console.error("Failed to update stability protocol:", response.statusText);
+//         toast.error("Failed to update stability protocol");
+//       }
+//     } catch (error) {
+//       console.error("Error updating stability protocol:", error);
+//       toast.error("Error updating stability protocol");
+//     }
+//   };
+
+//   const handleSelectAll = (e) => {
+//     const checked = e.target.checked;
+//     const newData = data.map((row) => ({ ...row, checkbox: checked }));
+//     setData(newData);
+//   };
+
+//   const filteredData = Array.isArray(data)
+//     ? data.filter((row) => {
+//         const protocolId = row.protocolId || "";
+//         return (
+//           protocolId.toLowerCase().includes(searchQuery.toLowerCase()) &&
+//           (statusFilter === "All" || row.status === statusFilter)
+//         );
+//       })
+//     : [];
+  
+//   const onViewDetails = (rowData) => {
+//     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+//       setIsViewModalOpen(false);
+//       setViewModalData(null);
+//     } else {
+//       setViewModalData(rowData);
+//       setIsViewModalOpen(true);
+//     }
+//   };
+  
+//   const handleCheckboxChange = (index) => {
+//     const newData = [...data];
+//     newData[index].checkbox = !newData[index].checkbox;
+//     setData(newData);
+//   };
+
+//   const columns = [
+//     { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+//     { header: "SrNo.", accessor: "sno" },
+//     { header: "Protocol ID", accessor: "protocolId" },
+//     { header: "Description", accessor: "description" },
+//     { header: "Product/Material", accessor: "productMaterial" },
+//     { header: "Specification ID", accessor: "specificationId" },
+//     { header: "Sample Type", accessor: "sampleType" },
+//     { header: "Initiated On", accessor: "initiatedOn" },
+//     { header: "Status", accessor: "status" },
+//     {
+//       header: "Actions",
+//       accessor: "action",
+//       Cell: ({ row }) => (
+//         <>
+//           <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+//           <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
+//           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
+//         </>
+//       ),
+//     },
+//   ];
+
+//   const openModal = () => {
+//     setIsModalOpen(true);
+//   };
+
+//   const closeModal = () => {
+//     setIsModalOpen(false);
+//   };
+
+//   const openEditModal = (rowData) => {
+//     setEditModalData(rowData);
+//   };
+  
+//   const closeEditModal = () => {
+//     setEditModalData(null);
+//   };
+  
+//   const closeViewModal = () => {
+//     setIsViewModalOpen(false);
+//   };
+
+//   const handleDelete = async (item) => {
+//     try {
+//       const response = await axios.delete(
+//         `${BASE_URL}/delete-lims/sMStabilityProtocol/${item.uniqueId}`
+//       );
+//       if (response.status === 200) {
+//         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+//         setData(newData);
+//         toast.success("Stability protocol deleted successfully");
+//         fetchData();
+//       } else {
+//         console.error("Failed to delete stability protocol:", response.statusText);
+//         toast.error("Failed to delete stability protocol");
+//       }
+//     } catch (error) {
+//       console.error("Error deleting stability protocol:", error);
+//       toast.error("Error deleting stability protocol");
+//     }
+//   };
+
+//   const handleAdd = async (newStabilityProtocol) => {
+//     try {
+//       const response = await axios.post(
+//         `${BASE_URL}/manage-lims/add/sMStabilityProtocol`,
+//         {
+//           ...newStabilityProtocol,
+//           initiatedOn: new Date().toISOString().split("T")[0],
+//           status: newStabilityProtocol.status || "INITIATED",
+//         }
+//       );
+//       if (response.status === 200) {
+//         toast.success("Stability protocol added successfully");
+//         fetchData();
+//         setIsModalOpen(false);
+//       } else {
+//         toast.error("Failed to add stability protocol");
+//       }
+//     } catch (error) {
+//       toast.error(
+//         "Error adding stability protocol: " + (error.response?.data || error.message)
+//       );
+//     }
+//   };
+
+//   const handleExcelDataUpload = async (excelData) => {
+//     try {
+//       const response = await axios.post(
+//         `${BASE_URL}/manage-lims/bulk-add/sMStabilityProtocol`,
+//         excelData
+//       );
+//       if (response.status === 200) {
+//         toast.success("Bulk upload successful");
+//         fetchData();
+//         handleCloseModals();
+//       } else {
+//         toast.error("Failed to upload data");
+//       }
+//     } catch (error) {
+//       toast.error("Error uploading data: " + (error.response?.data || error.message));
+//     }
+//   };
+  
+//   const StatusModal = ({ visible, closeModal, onAdd }) => {
+//     const [protocolId, setProtocolId] = useState("");
+//     const [description, setDescription] = useState("");
+//     const [productMaterial, setProductMaterial] = useState("");
+//     const [specificationId, setSpecificationId] = useState("");
+//     const [sampleType, setSampleType] = useState("");
+
+//     const handleAdd = () => {
+//       const newProtocol = {
+//         protocolId,
+//         description,
+//         productMaterial,
+//         specificationId,
+//         sampleType,
+//         status: "INITIATED",
+//       };
+//       onAdd(newProtocol);
+//     };
+    
+//     return (
+//       <>
+//         <CModal alignment="center" visible={visible} onClose={closeModal}>
+//           <CModalHeader>
+//             <CModalTitle>Add Stability Protocol</CModalTitle>
+//           </CModalHeader>
+//           <CModalBody>
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Protocol ID"
+//               value={protocolId}
+//               onChange={(e) => setProtocolId(e.target.value)}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Description"
+//               value={description}
+//               onChange={(e) => setDescription(e.target.value)}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Product/Material"
+//               value={productMaterial}
+//               onChange={(e) => setProductMaterial(e.target.value)}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Specification ID"
+//               value={specificationId}
+//               onChange={(e) => setSpecificationId(e.target.value)}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Sample Type"
+//               value={sampleType}
+//               onChange={(e) => setSampleType(e.target.value)}
+//             />
+//           </CModalBody>
+//           <CModalFooter>
+//             <CButton color="light" onClick={closeModal}>
+//               Back
+//             </CButton>
+//             <CButton className="bg-info text-white" onClick={handleAdd}>
+//               Add
+//             </CButton>
+//           </CModalFooter>
+//         </CModal>
+//       </>
+//     );
+//   };
+
+//   const EditModal = ({ visible, closeModal, data, onSave }) => {
+//     const [formData, setFormData] = useState(data);
+
+//     useEffect(() => {
+//       setFormData(data);
+//     }, [data]);
+
+//     const handleChange = (e) => {
+//       const { name, value } = e.target;
+//       setFormData({ ...formData, [name]: value });
+//     };
+
+//     const handleSave = () => {
+//       onSave(formData);
+//     };
+
+//     return (
+//       <>
+//         <CModal alignment="center" visible={visible} onClose={closeModal}>
+//           <CModalHeader>
+//             <CModalTitle>Edit Stability Protocol</CModalTitle>
+//           </CModalHeader>
+//           <CModalBody>
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Protocol ID"
+//               name="protocolId"
+//               value={formData?.protocolId || ""}
+//               onChange={handleChange}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Description"
+//               name="description"
+//               value={formData?.description || ""}
+//               onChange={handleChange}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Product/Material"
+//               name="productMaterial"
+//               value={formData?.productMaterial || ""}
+//               onChange={handleChange}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Specification ID"
+//               name="specificationId"
+//               value={formData?.specificationId || ""}
+//               onChange={handleChange}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Sample Type"
+//               name="sampleType"
+//               value={formData?.sampleType || ""}
+//               onChange={handleChange}
+//             />
+//             <CFormInput
+//               className="mb-3"
+//               type="text"
+//               label="Status"
+//               name="status"
+//               value={formData?.status || ""}
+//               onChange={handleChange}
+//             />
+//           </CModalBody>
+//           <CModalFooter>
+//             <CButton color="light" onClick={closeModal}>
+//               Back
+//             </CButton>
+//             <CButton className="bg-info text-white" onClick={handleSave}>
+//               Update
+//             </CButton>
+//           </CModalFooter>
+//         </CModal>
+//       </>
+//     );
+//   };
+
+//   return (
+//     <>
+//       <LaunchQMS />
+//       <div className="m-5 mt-3">
+//         <div className="main-head">
+//           <h4 className="fw-bold">Stability Protocol</h4>
+//         </div>
+//         <div className="flex items-center justify-between mb-4">
+//           <div className="flex space-x-4">
+//             <SearchBar value={searchQuery} onChange={setSearchQuery} />
+//             <Dropdown
+//               options={[
+//                 { value: "All", label: "All" },
+//                 { value: "INITIATED", label: "INITIATED" },
+//                 { value: "APPROVED", label: "APPROVED" },
+//                 { value: "REJECTED", label: "REJECTED" },
+//                 { value: "REINITIATED", label: "REINITIATED" },
+//                 { value: "DROPPED", label: "DROPPED" },
+//               ]}
+//               value={statusFilter}
+//               onChange={setStatusFilter}
+//             />
+//           </div>
+//           <div className="float-right flex gap-4">
+//             <PDFDownload
+//               columns={columns}
+//               data={filteredData}
+//               fileName="Stability_Protocol.pdf"
+//               title="Stability Protocol Data"
+//             />
+//             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+//             <ATMButton
+//               text="Add Stability Protocol"
+//               color="blue"
+//               onClick={openModal}
+//             />
+//           </div>
+//         </div>
+//         <Table
+//           columns={columns}
+//           data={filteredData}
+//           onDelete={handleDelete}
+//           onCheckboxChange={handleCheckboxChange}
+//           onViewDetails={onViewDetails}
+//           openEditModal={openEditModal}
+//         />
+//       </div>
+//       {isModalOpen && (
+//         <StatusModal
+//           visible={isModalOpen}
+//           closeModal={closeModal}
+//           onAdd={handleAdd}
+//         />
+//       )}
+//       {viewModalData && (
+//         <ReusableModal
+//           visible={viewModalData !== null}
+//           closeModal={closeViewModal}
+//           data={viewModalData}
+//           fields={fields}
+//           onClose={closeViewModal}
+//           title="Stability Protocol Details"
+//         />
+//       )}
+//       {isModalsOpen && (
+//         <ImportModal
+//           initialData={data}
+//           isOpen={isModalsOpen}
+//           onClose={handleCloseModals}
+//           columns={columns}
+//           onDataUpload={handleExcelDataUpload}
+//         />
+//       )}
+//       {editModalData && (
+//         <EditModal
+//           visible={Boolean(editModalData)}
+//           closeModal={closeEditModal}
+//           data={editModalData}
+//           onSave={handleEditSave}
+//         />
+//       )}
+//     </>
+//   );
+// }
+
+// export default StabilityProtocol;
+
+
+
+
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
