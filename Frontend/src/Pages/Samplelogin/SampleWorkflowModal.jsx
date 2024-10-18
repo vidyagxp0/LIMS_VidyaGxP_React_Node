@@ -29,8 +29,8 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleId: "",
     sampleName: "",
     sampleType: "",
-    srSupportiveAttachment: "",
-    qaSupportiveAttachment: "",
+    srSupportiveAttachment: null,
+    qaSupportiveAttachment: null,
     productMaterialName: "",
     batchLotNumber: "",
     samplePriority: "",
@@ -61,9 +61,9 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleMovementHistory: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
-    srSupportiveAttachment: "",
-    saSupportiveAttachment: "",
-    siSupportiveAttachment: "",
+    siSupportiveAttachment: null,
+    saSupportiveAttachment: null,
+    srSupportiveAttachment: null,
     analysisType: "",
     analysisResult: "",
     analysisDate: "",
@@ -134,7 +134,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    const { name, value, options } = e.target;
+    const { name, value, options,files } = e.target;
 
     if (name === "requiredInstrument") {
       const selectedInstruments = [];
@@ -427,7 +427,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="sampleBarCode"
                   label="Sample Barcode"
-                  value={formData?.sampleRegistration?.sampleBarCode || ""}
+                  // value={formData?.sampleRegistration?.sampleBarCode || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -687,7 +687,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 type="file"
                 name="srSupportiveAttachment"
                 label="Supportive Attachment"
-                value={formData?.srSupportiveAttachment || ""}
+                // value={formData?.srSupportiveAttachment || ""}
                 onChange={handleInputChange}
               />
             </CCol>
@@ -1077,7 +1077,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="saSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.saSupportiveAttachment || ""}
+                  // value={formData?.saSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1108,7 +1108,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="stabilityStudyProtocol"
                   label="Stability Study Protocol"
-                  value={formData?.stabilityStudyProtocol || ""}
+                  // value={formData?.stabilityStudyProtocol || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1193,7 +1193,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="siSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.siSupportiveAttachment || ""}
+                  // value={formData?.siSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1237,7 +1237,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="revSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.srSupportiveAttachment || ""}
+                  // value={formData?.srSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1281,7 +1281,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="qaSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.qaSupportiveAttachment || ""}
+                  // value={formData?.qaSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>

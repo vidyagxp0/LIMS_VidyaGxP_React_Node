@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./Pages/Login/Login";
+import Login from "./Pages/Auth/Login.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@coreui/coreui/dist/css/coreui.min.css";
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
@@ -225,6 +225,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AnalystPersonal from "./Pages/AnalystPersonal.jsx";
 import STP from "./Pages/STP/STP.jsx";
 import SampleWorkFlowPanel from "./Pages/Samplelogin/sampleWorkflowPanel.jsx";
+import Signup from "./Pages/Auth/Signup.jsx";
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
@@ -240,6 +241,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login show={checkLoggedIn} />} />
+          <Route path="/signup" element={<Signup/>} />
           <Route path="" element={<MainPanel />}>
             <Route
               path="/dashboard"
@@ -269,7 +271,10 @@ function App() {
 
             <Route path="/samplelogin" element={<Samplelogin />} />
             <Route path="/sampleWorkflow" element={<SampleWorkflow />} />
-            <Route path="/sampleWorkflowPanel" element={<SampleWorkFlowPanel />} />
+            <Route
+              path="/sampleWorkflowPanel"
+              element={<SampleWorkFlowPanel />}
+            />
             <Route
               path="/sampleWorkflowEdit/:id"
               element={<SampleWorkflowModal />}
