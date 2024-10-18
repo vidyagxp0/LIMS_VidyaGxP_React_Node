@@ -89,8 +89,9 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     allowNull: true,
   },
   requiredInstrument: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: true,
+    defaultValue: [],
   },
   testGrouping: {
     type: DataTypes.TEXT,
@@ -219,7 +220,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
   supervisor: {
     type: DataTypes.TEXT,
     allowNull: true,
-  },  
+  },
   // New Fields Add!
   instrumentsReserved: {
     type: DataTypes.TEXT,
@@ -237,7 +238,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-// End Here!
+  // End Here!
 
   sampleMovementHistory: {
     type: DataTypes.TEXT,
@@ -319,7 +320,7 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  reviewerApprover: {
+  initiatorName: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -327,11 +328,27 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  reviewerComment: {
+  initiatorReviewDate: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorComment: {
+  labTechnicianName: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  labTechnicianComment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  labTechnicianReviewDate: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  reviewerApprover: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  reviewerComment: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
