@@ -17,6 +17,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import Barcode from "react-barcode";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -400,18 +401,22 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-            </CRow>
-            <CRow className="mb-3">
               <CCol md={6}>
-                <CFormInput
+                <CFormSelect
                   type="text"
                   name="UOM"
                   label="UOM"
                   value={formData.UOM || ""}
                   onChange={handleInputChange}
+                  options={[
+                    "Select Unit",
+                    { label: "gm", value: "Gm" },
+                    { label: "ml", value: "Ml" },
+                  ]}
                 />
               </CCol>
             </CRow>
+            <CRow className="mb-3"></CRow>
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -423,13 +428,20 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
               <CCol md={6}>
+                <CFormLabel>Sample Barcode</CFormLabel>
+
                 <CFormInput
-                  type="file"
+                  type="text"
                   name="sampleBarCode"
-                  label="Sample Barcode"
-                  value={formData?.sampleRegistration?.sampleBarCode || ""}
+                  label=""
+                  value={formData.sampleBarCode || ""}
                   onChange={handleInputChange}
                 />
+                {formData.sampleBarCode && (
+                  <div style={{ marginTop: "10px" }}>
+                    <Barcode value={formData.sampleBarCode} />
+                  </div>
+                )}
               </CCol>
             </CRow>
             <CRow className="mb-3">
@@ -520,7 +532,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={12}>
+              <CCol md={12} className="mt-3">
                 <CFormSelect
                   name="requiredInstrument"
                   label="Required Instruments"
@@ -560,17 +572,8 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testGrouping"
-                  label="Test Grouping"
-                  value={formData.testGrouping || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
+           
+            
               <CCol md={6}>
                 <CFormInput
                   type="number"
@@ -670,8 +673,16 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-            </CRow>
-            <CRow className="mb-3">
+            <CRow className="mt-3 mb-3">
+            <CCol md={6} >
+                <CFormInput
+                  type="text"
+                  name="testGrouping"
+                  label="Test Grouping"
+                  value={formData.testGrouping || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
               <CCol md={6}>
                 <CFormInput
                   type="date"
@@ -679,8 +690,9 @@ const SampleWorkflowModal = ({ onClose }) => {
                   label="Sample Collection Date"
                   value={formData.sampleCollectionDate || ""}
                   onChange={handleInputChange}
-                />
+                  />
               </CCol>
+                  </CRow>
             </CRow>
             <CCol md={12}>
               <CFormInput
@@ -1030,7 +1042,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol md={6}>
+              <CCol md={12}>
                 <CFormTextarea
                   name="commentNotes"
                   label="Comments/Notes"
@@ -1215,7 +1227,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
               <CCol md={6} className="mb-3">
-                <CFormInput
+                <CFormTextarea
                   type="text"
                   name="reviewerComment"
                   label="Reviewer Comment"
@@ -1259,7 +1271,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
               <CCol md={6} className="mb-3">
-                <CFormInput
+                <CFormTextarea
                   type="text"
                   name="QaReviewerComment"
                   label="QA Reviewer Comment"
