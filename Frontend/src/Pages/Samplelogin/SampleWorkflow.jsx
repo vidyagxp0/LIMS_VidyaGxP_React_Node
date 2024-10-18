@@ -452,9 +452,9 @@ const SampleWorkFlow = () => {
   //   // }
   // };
 
-  const handleRowClick = async (id) => {
-    navigate(`/sampleWorkflowPanel?id=${id}`);
-    console.log("IDD", id);
+  const handleRowClick = (sampleId) => {
+    const encodedId = encodeURIComponent(sampleId); // Encode the sampleId
+    navigate(`/sample-details/${encodedId}`); // Use the encoded sampleId
   };
 
   return (
