@@ -71,7 +71,7 @@ sampleRouter.post("/send-to-closed", checkJwtToken, submitToClosed);
 
 sampleRouter.post("/send-to-open", checkJwtToken, ReviewToOpen);
 
-sampleRouter.get("/generate-report/:id", generatePdfbyId);
+sampleRouter.get("/generate-report/:id/:type", generatePdfbyId);
 
 
 export default sampleRouter;
