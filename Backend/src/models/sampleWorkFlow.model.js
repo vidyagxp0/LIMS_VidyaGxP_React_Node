@@ -406,4 +406,8 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  types: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });

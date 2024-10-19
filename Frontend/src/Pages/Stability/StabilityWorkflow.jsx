@@ -53,8 +53,9 @@ const SampleWorkFlow = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/get-sample`);
-      console.log(response, "99999999999999999999999999");
+      const response = await axios.get(`${BASE_URL}/get-sample/stability`);
+      console.log(response, "99999999999999999999999999"); // Check the structure of the response
+console.log(response,"Stablity");
 
       const responseData = Array.isArray(response.data)
         ? response.data

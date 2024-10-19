@@ -53,9 +53,9 @@ sampleRouter.put(
 
 sampleRouter.delete("/delete-Sample/:id", deleteSample);
 
-sampleRouter.get("/get-Sample", getSample);
+sampleRouter.get("/get-Sample/:type", getSample);
 
-sampleRouter.get("/get-Sample/:id", getSampleById);
+sampleRouter.get("/get-Sample/:id/:type", getSampleById);
 
 sampleRouter.post("/e-signature", checkJwtToken, eSignature);
 
