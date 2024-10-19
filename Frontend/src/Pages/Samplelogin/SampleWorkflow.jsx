@@ -287,6 +287,19 @@ const SampleWorkFlow = () => {
     setViewModalData(null);
   };
 
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("");
+
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) return text;
+    return `${text.slice(0, maxLength)}...`;
+  };
+
+  const handleFullTextClick = (text) => {
+    setSelectedItem(text);
+    setModalOpen(true);
+  };
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -689,7 +702,41 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">{data.testParameter}</td>
                 <td className="border px-4 py-2">{data.testingFrequency}</td>
                 <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td className="border px-4 py-2">{data.requiredInstrument}</td>
+                <td className="border px-4 py-2">
+                  <div className="flex flex-wrap">
+                    {instruments.map((item, index) => (
+                      <div key={index} className="mr-2">
+                        <span className="block cursor-pointer">
+                          {truncateText(item, 10)}{" "}
+                          {/* Change 10 to desired max length */}
+                          {item.length > 10 && (
+                            <span
+                              className="text-blue-500 ml-1 cursor-pointer"
+                              onClick={() => handleFullTextClick(item)}
+                            >
+                              (more)
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </td>
+                {/* Modal */}
+                {isModalOpen && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-4 rounded shadow">
+                      <h2 className="text-lg font-bold">Full Data</h2>
+                      <p>{selectedItem}</p>
+                      <button
+                        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+                        onClick={() => setModalOpen(false)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                )}
                 <td className="border px-4 py-2">{data.testGrouping}</td>
                 <td className="border px-4 py-2">{data.lsl}</td>{" "}
                 <td className="border px-4 py-2">{data.usl}</td>{" "}
