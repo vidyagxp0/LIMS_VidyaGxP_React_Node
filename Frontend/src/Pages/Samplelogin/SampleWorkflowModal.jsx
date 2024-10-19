@@ -543,10 +543,17 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
+
               <CCol md={12} className="mt-3">
-                <label htmlFor="requiredInstrument">Required Instruments</label>
-                <div className="flex flex-wrap gap-2 mb-2">
+                {/* Label and selected instruments display */}
+                <label htmlFor="requiredInstrument">
+                  Select Required Instruments
+                </label>
+
+                {/* Display selected instruments with the option to remove */}
+                <div className="flex flex-wrap gap-2 mb-2 mt-2">
                   {formData.requiredInstrument &&
+                  formData.requiredInstrument.length > 0 ? (
                     formData.requiredInstrument.map((instrument, index) => (
                       <span
                         key={index}
@@ -569,15 +576,33 @@ const SampleWorkflowModal = ({ onClose }) => {
                           &times; {/* Cross icon */}
                         </button>
                       </span>
-                    ))}
+                    ))
+                  ) : (
+                    <p className="text-gray-500">
+                      No instruments selected yet.
+                    </p>
+                  )}
                 </div>
 
+                {/* Dropdown for selecting instruments */}
                 <CFormSelect
                   name="requiredInstrument"
-                  label="Required Instruments"
-                  value={formData.requiredInstrument || []}
-                  onChange={handleInputChange}
-                  multiple
+                  value="" // Keep empty so it resets after each selection
+                  onChange={(e) => {
+                    const selectedInstrument = e.target.value;
+                    if (
+                      selectedInstrument &&
+                      !formData.requiredInstrument.includes(selectedInstrument)
+                    ) {
+                      setFormData((prevData) => ({
+                        ...prevData,
+                        requiredInstrument: [
+                          ...prevData.requiredInstrument,
+                          selectedInstrument,
+                        ],
+                      }));
+                    }
+                  }}
                 >
                   <option value="">Select an Instrument</option>
                   {[
