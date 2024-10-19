@@ -492,25 +492,26 @@ const SampleWorkFlow = () => {
     <div className="m-5 mt-3">
       <LaunchQMS />
 
-      <div className="main-head">
-        <h2 className="fw-bold">Sample WorkFlow</h2>
-      </div>
-
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+      <div className="">
+        <div className="main-head">
+          <h2 className="fw-bold">Sample WorkFlow</h2>
         </div>
-        <div className="float-right flex gap-4">
-          {/* <button
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            {/* <button
             className="px-3 py-2 rounded flex gap-2 items-center bg-green-600 text-white font-medium cursor-pointer"
             onClick={() => generatePDF(selectedSampleId)}
           >
@@ -521,20 +522,22 @@ const SampleWorkFlow = () => {
               <FontAwesomeIcon icon="fa-regular fa-file-pdf" />
             )}
           </button> */}
-          <PDFDownload
-            columns={columns}
-            data={filteredData}
-            fileName="InvestigationL2.pdf"
-            title="Investigation L2 Data"
-          />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Add Sample Workflow"
-            color="blue"
-            onClick={openWorkflowModal}
-          />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="InvestigationL2.pdf"
+              title="Investigation L2 Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Sample Workflow"
+              color="blue"
+              onClick={openWorkflowModal}
+            />
+          </div>
         </div>
       </div>
+
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
