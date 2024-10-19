@@ -781,7 +781,7 @@ const SampleWorkFlow = () => {
               </td>
               <td className="flex justify-center items-center px-4 py-2">
                 <FaFilePdf
-                  className="w-10 h-10 text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                  className="w-9 h-9 text-black cursor-pointer mt-16 transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
                   onClick={() => generatePDF(data.sampleId)} // Click event handler
                 />
                 {loading[data.sampleId] && (
