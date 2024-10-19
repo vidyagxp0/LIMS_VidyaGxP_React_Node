@@ -168,6 +168,10 @@
                     <td><%= reportData?.sampleDate || "Not Applicable" %></td>
                 </tr>
                 <tr>
+                    <th>Planned Date</th>
+                    <td><%= reportData?.plannedDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
                     <th>Lab Technician</th>
                     <td><%= reportData?.labTechnician || "Not Applicable" %></td>
                     <th>Assigned Department</th>
@@ -177,6 +181,18 @@
                     <th>Sample Collection Date</th>
                     <td><%= reportData?.sampleCollectionDate || "Not Applicable" %></td>
                 </tr>             
+                <tr>
+                    <th>Sample Collection Date</th>
+                    <td><%= reportData?.sampleCollectionDate || "Not Applicable" %></td>
+                </tr>     
+                <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.srSupportiveAttachment) { %>
+                        <a href="<%= reportData.srSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>        
             </table>
         </div>
         <div class="remarks">
@@ -248,9 +264,21 @@
                 </tr>
                 <tr>
                     <th>Risk Assessment</th>
-                    <td><%= reportData?.riskAssement || "Not Applicable" %></td>
+                    <td><%= reportData?.riskAssessment || "Not Applicable" %></td>
                     <th>Supervisor</th>
                     <td><%= reportData?.supervisor || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Instruments Reserved</th>
+                    <td><%= reportData?.instrumentsReserved || "Not Applicable" %></td>
+                    <th>Lab Availability</th>
+                    <td><%= reportData?.labAvailability || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Cost Estimation</th>
+                    <td><%= reportData?.sampleCostEstimation || "Not Applicable" %></td>
+                    <th>Resource Utilization</th>
+                    <td><%= reportData?.resourceUtilization || "Not Applicable" %></td>
                 </tr>
                 <tr>
                     <th>Sample Movement History</th>
@@ -279,6 +307,14 @@
                     <td><%= reportData?.samplingFrequency || "Not Applicable" %></td>
                     <th>Sample Disposition</th>
                     <td><%= reportData?.sampleDisposition || "Not Applicable" %></td>
+                </tr> 
+                <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.saSupportiveAttachment) { %>
+                        <a href="<%= reportData.saSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
                 </tr>            
             </table>
         </div>
@@ -293,9 +329,9 @@
                 </tr>
                 <tr>
                     <th>Stability Protocol Approval Date</th>
-                    <td><%= reportData?.stabilityProtocolApprovelDate || "Not Applicable" %></td>
+                    <td><%= reportData?.stabilityProtocolApprovalDate || "Not Applicable" %></td>
                     <th>Country of Regulatory Submissions</th>
-                    <td><%= reportData?.countryRegulatorySubmission || "Not Applicable" %></td>
+                    <td><%= reportData?.countryOfRegulatorySubmissions || "Not Applicable" %></td>
                 </tr>
                 <tr>
                     <th>ICH Zone</th>
@@ -312,7 +348,15 @@
                 <tr>
                     <th>Shelf Life Recommendation</th>
                     <td><%= reportData?.shelfLifeRecommendation || "Not Applicable" %></td>
-                </tr>     
+                </tr>    
+                  <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.suSupportiveAttachment) { %>
+                        <a href="<%= reportData.suSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>         
             </table>
         </div>
         <div class="remarks">
@@ -338,6 +382,14 @@
                     <th>QA Review Date</th>
                     <td><%= reportData?.QaReviewDate || "Not Applicable" %></td>
                 </tr>
+                <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.siSupportiveAttachment) { %>
+                        <a href="<%= reportData.siSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>         
             </table>
         </div>
 </body>

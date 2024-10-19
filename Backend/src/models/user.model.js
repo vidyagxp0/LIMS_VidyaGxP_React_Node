@@ -45,7 +45,10 @@ export const User = sequelize.define("User", {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
-  
+  user_type: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 User.addHook("afterSync", async () => {
@@ -56,9 +59,24 @@ User.addHook("afterSync", async () => {
     const commonPass = await hash("lims@123", salt);
     if (processesCount === 0) {
       await User.bulkCreate([
-        { name: "Admin", email: "admin@vidyagxp.com", password: hashpass },
-        { name: "Amit", email: "amit@gmail.com", password: commonPass },
-        { name: "User", email: "user@gmail.com", password: commonPass },
+        {
+          name: "Admin",
+          email: "admin@vidyagxp.com",
+          password: hashpass,
+          user_type: "admin",
+        },
+        {
+          name: "Amit",
+          email: "amit@gmail.com",
+          password: commonPass,
+          user_type: "user",
+        },
+        {
+          name: "User",
+          email: "user@gmail.com",
+          password: commonPass,
+          user_type: "user",
+        },
       ]);
       console.log("Admin User created");
     } else {
