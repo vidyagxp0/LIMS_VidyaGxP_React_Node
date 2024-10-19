@@ -267,6 +267,84 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
   };
+  const instruments = [
+    {
+      label:
+        "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+    },
+    {
+      label:
+        "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+    },
+    {
+      label:
+        "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+    },
+    {
+      label:
+        "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+    },
+    {
+      label:
+        "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+    },
+    {
+      label:
+        "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+    },
+    {
+      label:
+        "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+    },
+    {
+      label:
+        "Moisture Analyzers – For determining the moisture content in products.",
+    },
+    {
+      label:
+        "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+    },
+    {
+      label:
+        "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+    },
+    { label: "Autoclaves – For sterilizing lab equipment and samples." },
+    {
+      label:
+        "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+    },
+    {
+      label: "Karl Fischer Titrator – For measuring water content in samples.",
+    },
+    {
+      label: "Refractometer – For determining the refractive index of liquids.",
+    },
+    {
+      label: "Polarimeter – For measuring the optical rotation of a substance.",
+    },
+    {
+      label:
+        "Melting Point Apparatus – For determining the melting point of substances.",
+    },
+    { label: "Viscometer – For measuring the viscosity of liquid samples." },
+    {
+      label:
+        "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+    },
+    {
+      label:
+        "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+    },
+    {
+      label:
+        "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+    },
+    {
+      label:
+        "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+    },
+  ];
+  const [dropdownOpen, setDropdownOpen] = useState(false); // To toggle dropdown visibility
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -534,44 +612,55 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
             </CRow>
             <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testingLocation"
-                  label="Testing Location"
-                  value={formData.testingLocation || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={12} className="mt-3">
-                <label htmlFor="requiredInstrument">Required Instruments</label>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {formData.requiredInstrument &&
+                            {/* Input field to display selected instruments (display-only) */}
+                            <CCol md={12} className="mt-3">
+                <div
+                  className="selected-instrument-field"
+                  style={{
+                    border: "1px solid #ced4da",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    minHeight: "40px",
+                  }}
+                >
+                  {formData.requiredInstrument.length === 0 ? (
+                    <span style={{ color: "#6c757d" }}>
+                      No Instruments Selected
+                    </span>
+                  ) : (
                     formData.requiredInstrument.map((instrument, index) => (
                       <span
                         key={index}
-                        className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center"
+                        className="selected-instrument"
+                        style={{
+                          backgroundColor: "#e9ecef",
+                          padding: "5px 10px",
+                          borderRadius: "15px",
+                          display: "inline-flex",
+                          alignItems: "center",
+                        }}
                       >
                         {instrument}
-                        <button
-                          type="button"
-                          className="ml-2 text-red-500"
-                          onClick={() => {
-                            setFormData((prevData) => ({
-                              ...prevData,
-                              requiredInstrument:
-                                prevData.requiredInstrument.filter(
-                                  (item) => item !== instrument
-                                ),
-                            }));
+                        <span
+                          onClick={() => removeInstrument(instrument)}
+                          style={{
+                            marginLeft: "8px",
+                            cursor: "pointer",
+                            color: "#dc3545",
                           }}
                         >
-                          &times; {/* Cross icon */}
-                        </button>
+                          x
+                        </span>
                       </span>
-                    ))}
+                    ))
+                  )}
                 </div>
+              </CCol>
 
+              {/* <CCol md={12} className="mt-3">
                 <CFormSelect
                   name="requiredInstrument"
                   label="Required Instruments"
@@ -608,7 +697,24 @@ const SampleWorkflowModal = ({ onClose }) => {
                     </option>
                   ))}
                 </CFormSelect>
+              </CCol> */}
+
+              <CCol md={12} className="mt-3">
+                <CFormSelect
+                  name="requiredInstrument"
+                  label="Required Instruments"
+                  value={formData.requiredInstrument || ""}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select an Instrument</option>
+                  {instruments.map((instrument, index) => (
+                    <option key={index} value={instrument.label}>
+                      {instrument.label}
+                    </option>
+                  ))}
+                </CFormSelect>
               </CCol>
+            
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
