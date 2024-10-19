@@ -110,14 +110,18 @@ const setSampleData = (data) => {
 
 export const generatePdfbyId = async (req, res) => {
   const sampleId = req.params.id;
+  const type = req.params.type;
   let sampleData;
   try {
-    const sample = await fetch(`http://localhost:9000/get-Sample/${sampleId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const sample = await fetch(
+      `http://localhost:9000/get-Sample/${sampleId}/${type}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     sampleData = await sample.json();
 
     setSampleData(sampleData);
