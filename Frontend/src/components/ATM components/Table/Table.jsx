@@ -85,6 +85,12 @@ const Table = ({
               ))}
             </tr>
           </thead>
+          {currentData?.length === 0 ? (
+            <div style={{ textAlign: "center", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginBottom: "1rem", columnGap: "0px", border: "0px !important", color:"gray" }} >
+              No Data Available!
+            </div>
+          ) : (
+          
           <tbody className="bg-white divide-y divide-gray-200">
             {currentData?.map((row, rowIndex) => (
               <tr key={rowIndex}>
@@ -148,7 +154,10 @@ const Table = ({
               </tr>
             ))}
           </tbody>
+
+)}
         </table>
+        {currentData.length > 0 ? (
         <div className="mt-4 flex justify-end">
           <nav
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
@@ -197,6 +206,7 @@ const Table = ({
             </button>
           </nav>
         </div>
+        ):""}
       </div>
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
@@ -205,6 +215,7 @@ const Table = ({
         item={itemToDelete}
       />
     </>
+    
   );
 };
 

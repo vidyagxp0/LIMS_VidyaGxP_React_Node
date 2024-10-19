@@ -27,6 +27,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
+    types:"sample",
     stage: "1",
     samplePlanId: "",
     sampleId: "",
@@ -229,9 +230,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const fetchData = async () => {
     if (!id) return;
     try {
-      const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}`
-      );
+      const response = await axios.get(`http://localhost:9000/get-Sample/${id}/sample`);
       console.log(response.data);
 
       const responseData = Array.isArray(response.data)
@@ -638,53 +637,27 @@ const SampleWorkflowModal = ({ onClose }) => {
 
               {/* Input field to display selected instruments (display-only) */}
               <CCol md={12} className="mt-3">
-                <div
-                  className="selected-instrument-field"
-                  style={{
-                    border: "1px solid #ced4da",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                    minHeight: "40px",
-                  }}
-                >
-                  {formData.requiredInstrument.length === 0 ? (
-                    <span style={{ color: "#6c757d" }}>
-                      No Instruments Selected
-                    </span>
-                  ) : (
-                    formData.requiredInstrument.map((instrument, index) => (
-                      <span
-                        key={index}
-                        className="selected-instrument"
-                        style={{
-                          backgroundColor: "#e9ecef",
-                          padding: "5px 10px",
-                          borderRadius: "15px",
-                          display: "inline-flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        {instrument}
-                        <span
-                          onClick={() => removeInstrument(instrument)}
-                          style={{
-                            marginLeft: "8px",
-                            cursor: "pointer",
-                            color: "#dc3545",
-                          }}
-                        >
-                          x
-                        </span>
-                      </span>
-                    ))
-                  )}
-                </div>
-              </CCol>
+    <label htmlFor="requiredInstrument">Required Instruments</label>
+    <div className="flex flex-wrap gap-2 mb-2">
+      {formData.requiredInstrument && formData.requiredInstrument.map((instrument, index) => (
+        <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center">
+          {instrument}
+          <button
+            type="button"
+            className="ml-2 text-red-500"
+            onClick={() => {
+              setFormData((prevData) => ({
+                ...prevData,
+                requiredInstrument: prevData.requiredInstrument.filter((item) => item !== instrument),
+              }));
+            }}
+          >
+            &times; {/* Cross icon */}
+          </button>
+        </span>
+      ))}
+    </div>
 
-              {/* <CCol md={12} className="mt-3">
                 <CFormSelect
                   name="requiredInstrument"
                   label="Required Instruments"
@@ -721,7 +694,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                     </option>
                   ))}
                 </CFormSelect>
-              </CCol> */}
+              </CCol> 
 
               <CCol md={12} className="mt-3">
                 <CFormSelect

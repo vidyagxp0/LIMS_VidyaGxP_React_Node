@@ -56,7 +56,7 @@ const SampleWorkFlow = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/get-sample`);
+      const response = await axios.get(`${BASE_URL}/get-sample/sample`);
       console.log(response, "Sample Data for Pdf");
 
       const responseData = Array.isArray(response.data)
