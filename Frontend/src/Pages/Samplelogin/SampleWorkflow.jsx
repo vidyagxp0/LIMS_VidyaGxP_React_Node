@@ -289,6 +289,19 @@ const SampleWorkFlow = () => {
     setViewModalData(null);
   };
 
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("");
+
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) return text;
+    return `${text.slice(0, maxLength)}...`;
+  };
+
+  const handleFullTextClick = (text) => {
+    setSelectedItem(text);
+    setModalOpen(true);
+  };
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,

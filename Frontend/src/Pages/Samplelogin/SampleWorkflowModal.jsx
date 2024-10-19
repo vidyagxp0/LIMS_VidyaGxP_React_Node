@@ -27,7 +27,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
-    types:"sample",
+    types: "sample",
     stage: "1",
     samplePlanId: "",
     sampleId: "",
@@ -41,7 +41,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleQuantity: "",
     UOM: "",
     market: "",
-    sampleBarCode: "2345876976i7-90897654-098756456758697",
+    sampleBarCode: "",
     specificationId: "",
     specificationAttachment: null,
     stpId: "",
@@ -137,7 +137,6 @@ const SampleWorkflowModal = ({ onClose }) => {
   };
   const navigate = useNavigate();
 
-  // Toggle selection of instruments
   const handleInputChange = (e) => {
     const { name, value, options, files } = e.target;
 
@@ -162,34 +161,6 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (name === "delayJustification" && value) {
       setError("");
     }
-
-    //   setFormData((prevFormData) => {
-    //     const selectedInstruments = [...prevFormData.requiredInstrument];
-    //     if (selectedInstruments.includes(value)) {
-    //       return {
-    //         ...prevFormData,
-    //         requiredInstrument: selectedInstruments.filter(
-    //           (instrument) => instrument !== value
-    //         ),
-    //       };
-    //     } else {
-    //       return {
-    //         ...prevFormData,
-    //         requiredInstrument: [...selectedInstruments, value],
-    //       };
-    //     }
-    //   }
-    // );
-  };
-
-  // Remove selected instrument
-  const removeInstrument = (instrument) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      requiredInstrument: prevFormData.requiredInstrument.filter(
-        (item) => item !== instrument
-      ),
-    }));
   };
 
   const [error, setError] = useState("");
@@ -230,7 +201,9 @@ const SampleWorkflowModal = ({ onClose }) => {
   const fetchData = async () => {
     if (!id) return;
     try {
-      const response = await axios.get(`http://localhost:9000/get-Sample/${id}/sample`);
+      const response = await axios.get(
+        `http://localhost:9000/get-Sample/${id}/sample`
+      );
       console.log(response.data);
 
       const responseData = Array.isArray(response.data)
@@ -294,84 +267,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
   };
-  const instruments = [
-    {
-      label:
-        "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
-    },
-    {
-      label:
-        "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
-    },
-    {
-      label:
-        "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
-    },
-    {
-      label:
-        "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
-    },
-    {
-      label:
-        "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
-    },
-    {
-      label:
-        "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
-    },
-    {
-      label:
-        "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
-    },
-    {
-      label:
-        "Moisture Analyzers – For determining the moisture content in products.",
-    },
-    {
-      label:
-        "Conductivity Meter – For measuring the electrical conductivity in solutions.",
-    },
-    {
-      label:
-        "Microbial Incubators – For cultivating and maintaining microbial cultures.",
-    },
-    { label: "Autoclaves – For sterilizing lab equipment and samples." },
-    {
-      label:
-        "Balances (Analytical and Microbalances) – For precise weighing of samples.",
-    },
-    {
-      label: "Karl Fischer Titrator – For measuring water content in samples.",
-    },
-    {
-      label: "Refractometer – For determining the refractive index of liquids.",
-    },
-    {
-      label: "Polarimeter – For measuring the optical rotation of a substance.",
-    },
-    {
-      label:
-        "Melting Point Apparatus – For determining the melting point of substances.",
-    },
-    { label: "Viscometer – For measuring the viscosity of liquid samples." },
-    {
-      label:
-        "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
-    },
-    {
-      label:
-        "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
-    },
-    {
-      label:
-        "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
-    },
-    {
-      label:
-        "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
-    },
-  ];
-  const [dropdownOpen, setDropdownOpen] = useState(false); // To toggle dropdown visibility
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -536,7 +431,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              {/* <CCol md={6}>
+              <CCol md={6}>
                 <CFormLabel>Sample Barcode</CFormLabel>
 
                 <CFormInput
@@ -546,25 +441,19 @@ const SampleWorkflowModal = ({ onClose }) => {
                   value={formData.sampleBarCode || ""}
                   onChange={(e) => {
                     const inputValue = e.target.value;
-                    if (/^\d*$/.test(inputValue) && inputValue.length <= 32) {
+                    if (/^\d*$/.test(inputValue) && inputValue.length <= 42) {
                       handleInputChange(e);
                     }
                   }}
-                  maxLength={32}
+                  maxLength={42}
                 />
 
                 {formData.sampleBarCode && (
-                  <div style={{ width: '300px', overflow: 'hidden' }}> 
-                  <Barcode
-                    value={formData.sampleBarCode}
-                    width={300 / (formData.sampleBarCode.length || 1)}
-                    height={100} 
-                    displayValue={false} 
-                    margin={10}
-                  />
-                </div>
+                  <div>
+                    <Barcode value={formData.sampleBarCode} />
+                  </div>
                 )}
-              </CCol> */}
+              </CCol>
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
@@ -634,36 +523,86 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="testingFrequency"
+                  label="Testing Frequency"
+                  value={formData.testingFrequency || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="testingLocation"
+                  label="Testing Location"
+                  value={formData.testingLocation || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
 
-              {/* Input field to display selected instruments (display-only) */}
               <CCol md={12} className="mt-3">
-    <label htmlFor="requiredInstrument">Required Instruments</label>
-    <div className="flex flex-wrap gap-2 mb-2">
-      {formData.requiredInstrument && formData.requiredInstrument.map((instrument, index) => (
-        <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center">
-          {instrument}
-          <button
-            type="button"
-            className="ml-2 text-red-500"
-            onClick={() => {
-              setFormData((prevData) => ({
-                ...prevData,
-                requiredInstrument: prevData.requiredInstrument.filter((item) => item !== instrument),
-              }));
-            }}
-          >
-            &times; {/* Cross icon */}
-          </button>
-        </span>
-      ))}
-    </div>
+                {/* Label and selected instruments display */}
+                <label htmlFor="requiredInstrument">
+                  Select Required Instruments
+                </label>
 
+                {/* Display selected instruments with the option to remove */}
+                <div className="flex flex-wrap gap-2 mb-2 mt-2">
+                  {formData.requiredInstrument &&
+                  formData.requiredInstrument.length > 0 ? (
+                    formData.requiredInstrument.map((instrument, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center"
+                      >
+                        {instrument}
+                        <button
+                          type="button"
+                          className="ml-2 text-red-500"
+                          onClick={() => {
+                            setFormData((prevData) => ({
+                              ...prevData,
+                              requiredInstrument:
+                                prevData.requiredInstrument.filter(
+                                  (item) => item !== instrument
+                                ),
+                            }));
+                          }}
+                        >
+                          &times; {/* Cross icon */}
+                        </button>
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-gray-500">
+                      No instruments selected yet.
+                    </p>
+                  )}
+                </div>
+
+                {/* Dropdown for selecting instruments */}
                 <CFormSelect
                   name="requiredInstrument"
-                  label="Required Instruments"
-                  value={formData.requiredInstrument || []}
-                  onChange={handleInputChange}
-                  multiple
+                  value="" // Keep empty so it resets after each selection
+                  onChange={(e) => {
+                    const selectedInstrument = e.target.value;
+                    if (
+                      selectedInstrument &&
+                      !formData.requiredInstrument.includes(selectedInstrument)
+                    ) {
+                      setFormData((prevData) => ({
+                        ...prevData,
+                        requiredInstrument: [
+                          ...prevData.requiredInstrument,
+                          selectedInstrument,
+                        ],
+                      }));
+                    }
+                  }}
                 >
                   <option value="">Select an Instrument</option>
                   {[
@@ -691,22 +630,6 @@ const SampleWorkflowModal = ({ onClose }) => {
                   ].map((instrument, index) => (
                     <option key={index} value={instrument}>
                       {instrument}
-                    </option>
-                  ))}
-                </CFormSelect>
-              </CCol> 
-
-              <CCol md={12} className="mt-3">
-                <CFormSelect
-                  name="requiredInstrument"
-                  label="Required Instruments"
-                  value={formData.requiredInstrument || ""}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select an Instrument</option>
-                  {instruments.map((instrument, index) => (
-                    <option key={index} value={instrument.label}>
-                      {instrument.label}
                     </option>
                   ))}
                 </CFormSelect>
