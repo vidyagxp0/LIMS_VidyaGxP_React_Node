@@ -41,7 +41,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleQuantity: "",
     UOM: "",
     market: "",
-    sampleBarCode: "",
+    sampleBarCode: "2345876976i7-90897654-098756456758697",
     specificationId: "",
     specificationAttachment: null,
     stpId: "",
@@ -137,8 +137,9 @@ const SampleWorkflowModal = ({ onClose }) => {
   };
   const navigate = useNavigate();
 
+  // Toggle selection of instruments
   const handleInputChange = (e) => {
-    const { name, value, options,files } = e.target;
+    const { name, value, options, files } = e.target;
 
     if (name === "requiredInstrument") {
       const selectedInstruments = [];
@@ -161,6 +162,34 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (name === "delayJustification" && value) {
       setError("");
     }
+
+    //   setFormData((prevFormData) => {
+    //     const selectedInstruments = [...prevFormData.requiredInstrument];
+    //     if (selectedInstruments.includes(value)) {
+    //       return {
+    //         ...prevFormData,
+    //         requiredInstrument: selectedInstruments.filter(
+    //           (instrument) => instrument !== value
+    //         ),
+    //       };
+    //     } else {
+    //       return {
+    //         ...prevFormData,
+    //         requiredInstrument: [...selectedInstruments, value],
+    //       };
+    //     }
+    //   }
+    // );
+  };
+
+  // Remove selected instrument
+  const removeInstrument = (instrument) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      requiredInstrument: prevFormData.requiredInstrument.filter(
+        (item) => item !== instrument
+      ),
+    }));
   };
 
   const [error, setError] = useState("");
@@ -204,7 +233,9 @@ const SampleWorkflowModal = ({ onClose }) => {
       const response = await axios.get(`http://localhost:9000/get-Sample/${id}/sample`);
       console.log(response.data);
 
-      const responseData = Array.isArray(response.data) ? response.data : response.data.data;
+      const responseData = Array.isArray(response.data)
+        ? response.data
+        : response.data.data;
       // console.log(responseData);
       setFormData(responseData);
       console.log(formData.stage);
@@ -219,7 +250,10 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleEdit = async () => {
     try {
-      const response = await axios.put(`http://localhost:9000/edit-sample/${id}`, formData);
+      const response = await axios.put(
+        `http://localhost:9000/edit-sample/${id}`,
+        formData
+      );
       if (response.status === 200) {
         toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
@@ -228,7 +262,10 @@ const SampleWorkflowModal = ({ onClose }) => {
         toast.error("Failed to update Sample Workflow.");
       }
     } catch (error) {
-      toast.error("Error updating Sample Workflow: " + (error.response?.data || error.message));
+      toast.error(
+        "Error updating Sample Workflow: " +
+          (error.response?.data || error.message)
+      );
     }
   };
 
@@ -250,10 +287,91 @@ const SampleWorkflowModal = ({ onClose }) => {
           toast.error("Failed to add Sample Workflow.");
         }
       } catch (error) {
-        toast.error("Error adding Sample Workflow: " + (error.response?.data || error.message));
+        toast.error(
+          "Error adding Sample Workflow: " +
+            (error.response?.data || error.message)
+        );
       }
     }
   };
+  const instruments = [
+    {
+      label:
+        "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+    },
+    {
+      label:
+        "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+    },
+    {
+      label:
+        "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+    },
+    {
+      label:
+        "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+    },
+    {
+      label:
+        "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+    },
+    {
+      label:
+        "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+    },
+    {
+      label:
+        "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+    },
+    {
+      label:
+        "Moisture Analyzers – For determining the moisture content in products.",
+    },
+    {
+      label:
+        "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+    },
+    {
+      label:
+        "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+    },
+    { label: "Autoclaves – For sterilizing lab equipment and samples." },
+    {
+      label:
+        "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+    },
+    {
+      label: "Karl Fischer Titrator – For measuring water content in samples.",
+    },
+    {
+      label: "Refractometer – For determining the refractive index of liquids.",
+    },
+    {
+      label: "Polarimeter – For measuring the optical rotation of a substance.",
+    },
+    {
+      label:
+        "Melting Point Apparatus – For determining the melting point of substances.",
+    },
+    { label: "Viscometer – For measuring the viscosity of liquid samples." },
+    {
+      label:
+        "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+    },
+    {
+      label:
+        "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+    },
+    {
+      label:
+        "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+    },
+    {
+      label:
+        "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+    },
+  ];
+  const [dropdownOpen, setDropdownOpen] = useState(false); // To toggle dropdown visibility
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -331,7 +449,9 @@ const SampleWorkflowModal = ({ onClose }) => {
                 }}
               >
                 <div style={{ width: "100%" }}>
-                  <CFormLabel htmlFor="samplePriority">Sample Priority</CFormLabel>
+                  <CFormLabel htmlFor="samplePriority">
+                    Sample Priority
+                  </CFormLabel>
                   <CFormSelect
                     name="samplePriority"
                     value={formData.samplePriority || ""}
@@ -359,7 +479,9 @@ const SampleWorkflowModal = ({ onClose }) => {
                   >
                     <div
                       style={{
-                        backgroundColor: getPriorityColor(formData.samplePriority),
+                        backgroundColor: getPriorityColor(
+                          formData.samplePriority
+                        ),
                         width: "40px",
                         height: "10px",
                         borderRadius: "5px",
@@ -414,7 +536,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              {/* <CCol md={6}>
                 <CFormLabel>Sample Barcode</CFormLabel>
 
                 <CFormInput
@@ -424,19 +546,25 @@ const SampleWorkflowModal = ({ onClose }) => {
                   value={formData.sampleBarCode || ""}
                   onChange={(e) => {
                     const inputValue = e.target.value;
-                    if (/^\d*$/.test(inputValue) && inputValue.length <= 42) {
+                    if (/^\d*$/.test(inputValue) && inputValue.length <= 32) {
                       handleInputChange(e);
                     }
                   }}
-                  maxLength={42}
+                  maxLength={32}
                 />
 
                 {formData.sampleBarCode && (
-                  <div>
-                    <Barcode value={formData.sampleBarCode} />
-                  </div>
+                  <div style={{ width: '300px', overflow: 'hidden' }}> 
+                  <Barcode
+                    value={formData.sampleBarCode}
+                    width={300 / (formData.sampleBarCode.length || 1)}
+                    height={100} 
+                    displayValue={false} 
+                    margin={10}
+                  />
+                </div>
                 )}
-              </CCol>
+              </CCol> */}
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
@@ -506,26 +634,8 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testingFrequency"
-                  label="Testing Frequency"
-                  value={formData.testingFrequency || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testingLocation"
-                  label="Testing Location"
-                  value={formData.testingLocation || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
+
+              {/* Input field to display selected instruments (display-only) */}
               <CCol md={12} className="mt-3">
     <label htmlFor="requiredInstrument">Required Instruments</label>
     <div className="flex flex-wrap gap-2 mb-2">
@@ -581,6 +691,22 @@ const SampleWorkflowModal = ({ onClose }) => {
                   ].map((instrument, index) => (
                     <option key={index} value={instrument}>
                       {instrument}
+                    </option>
+                  ))}
+                </CFormSelect>
+              </CCol> 
+
+              <CCol md={12} className="mt-3">
+                <CFormSelect
+                  name="requiredInstrument"
+                  label="Required Instruments"
+                  value={formData.requiredInstrument || ""}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select an Instrument</option>
+                  {instruments.map((instrument, index) => (
+                    <option key={index} value={instrument.label}>
+                      {instrument.label}
                     </option>
                   ))}
                 </CFormSelect>
@@ -793,7 +919,11 @@ const SampleWorkflowModal = ({ onClose }) => {
                   invalid={!!error}
                 />
                 {error && (
-                  <div style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{error}</div>
+                  <div
+                    style={{ color: "red", fontSize: "12px", marginTop: "5px" }}
+                  >
+                    {error}
+                  </div>
                 )}
               </CCol>
             </CRow>
@@ -1197,7 +1327,9 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
               <CCol md={6} className="mb-3">
-                <CFormLabel htmlFor="testingInterval">Testing Interval (months)</CFormLabel>
+                <CFormLabel htmlFor="testingInterval">
+                  Testing Interval (months)
+                </CFormLabel>
                 <CFormSelect
                   name="testingInterval"
                   value={formData?.testingInterval || ""}
@@ -1430,7 +1562,9 @@ const SampleWorkflowModal = ({ onClose }) => {
         >
           <div className="flex space-x-4 mb-8">
             <CButton
-              color={activeTab === "Sample Registration" ? "primary" : "secondary"}
+              color={
+                activeTab === "Sample Registration" ? "primary" : "secondary"
+              }
               onClick={() => handleTabClick("Sample Registration")}
               className={`transition-all duration-300 ${
                 activeTab === "Sample Registration"
@@ -1454,7 +1588,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CButton>
 
             <CButton
-              color={activeTab === "Supervisor Review" ? "primary" : "secondary"}
+              color={
+                activeTab === "Supervisor Review" ? "primary" : "secondary"
+              }
               onClick={() => handleTabClick("Supervisor Review")}
               className={`transition-all duration-300 ${
                 activeTab === "Supervisor Review"
@@ -1466,7 +1602,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CButton>
 
             <CButton
-              color={activeTab === "Stability Information" ? "primary" : "secondary"}
+              color={
+                activeTab === "Stability Information" ? "primary" : "secondary"
+              }
               onClick={() => handleTabClick("Stability Information")}
               className={`transition-all duration-300 ${
                 activeTab === "Stability Information"
@@ -1481,7 +1619,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               color={activeTab === "QA Review" ? "primary" : "secondary"}
               onClick={() => handleTabClick("QA Review")}
               className={`transition-all duration-300 ${
-                activeTab === "QA Review" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                activeTab === "QA Review"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
               } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
             >
               QA Review

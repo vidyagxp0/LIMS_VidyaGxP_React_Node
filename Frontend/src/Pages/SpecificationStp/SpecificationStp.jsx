@@ -130,6 +130,16 @@ function SpecificationStp() {
       const documents = response.data.body.document;
 
       if (Array.isArray(documents)) {
+        // Manually remove elements by index (4, 10, 12, 13, 17, 21, 23)
+        const indicesToRemove = [23, 21, 17, 13, 12, 10, 4];
+
+        // Sort indices in descending order and remove them forcefully
+        indicesToRemove.forEach((index) => {
+          if (index < documents.length) {
+            documents.splice(index, 1); // Removes 1 item at 'index'
+          }
+        });
+
         const filteredData = documents.map((document) => ({
           document_name: document.document_name,
           document_type_id: document.document_type_id,
@@ -140,6 +150,7 @@ function SpecificationStp() {
           reference_record: document.reference_record,
           status: document.status,
         }));
+
         setApiData(filteredData);
       } else {
         console.warn("Expected an array, but got:", documents);
@@ -739,18 +750,14 @@ function SpecificationStp() {
           />
         </div>
 
-        {filteredData.length > 0 ? (
-          <Table
-            columns={columns}
-            data={filteredData}
-            onCheckboxChange={handleCheckboxChange}
-            onViewDetails={onViewDetails}
-            onDelete={handleDelete}
-            openEditModal={openEditModal}
-          />
-        ) : (
-          <p>No data available.</p>
-        )}
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
       {isModalOpen && (

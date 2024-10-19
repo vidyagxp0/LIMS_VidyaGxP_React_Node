@@ -475,18 +475,14 @@ function StorageCondition() {
             />
           </div>
         </div>
-        {filteredData && filteredData.length > 0 ? (
-          <Table
-            columns={columns}
-            data={filteredData}
-            onCheckboxChange={handleCheckboxChange}
-            onViewDetails={onViewDetails}
-            onDelete={handleDelete}
-            openEditModal={openEditModal}
-          />
-        ) : (
-          <p>No storage conditions available.</p>
-        )}
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
       {isModalOpen && (

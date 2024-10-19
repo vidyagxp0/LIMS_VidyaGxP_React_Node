@@ -307,6 +307,17 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
           </CNavGroup>
+
+          <CNavItem
+            href="https://barcode.mydemosoftware.com/login"
+            target="_blank" 
+            style={{ gap: "18px" }}
+            className={isActive("/barcode")}
+          >
+            <TbCurrentLocation />
+            Barcode
+          </CNavItem>
+
           <CNavGroup
             toggler={
               <>

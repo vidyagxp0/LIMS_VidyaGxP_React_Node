@@ -20,17 +20,16 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import Table from "../../components/ATM components/Table/Table";
 import { Link, useNavigate } from "react-router-dom";
-//import { randomSampleData } from "./SamplePlanningFunction";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
-import StabilityWorkflowModal from "./StabilityWorkflowModal";
+// import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
-const StabilityWorkflow = () => {
+import { FaFilePdf } from "react-icons/fa6";
+const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
-  console.log(data, "????????????????????????????");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -45,7 +44,7 @@ const StabilityWorkflow = () => {
 
   const openWorkflowModal = () => {
     setShowModal(true);
-    navigate("/stabilityWorkflowModal");
+    navigate("/sampleWorkflowModal");
   };
 
   const closeWorkflowModal = () => {
@@ -58,7 +57,6 @@ const StabilityWorkflow = () => {
       console.log(response, "99999999999999999999999999"); // Check the structure of the response
 console.log(response,"Stablity");
 
-      // Assuming the actual array is nested inside a 'data' property
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
@@ -67,7 +65,6 @@ console.log(response,"Stablity");
         ...item,
         sno: index + 1,
       }));
-      console.log(updatedData, "SAmplepriority");
       setData(updatedData);
     } catch (error) {
       console.error("Error fetching ", error);
@@ -136,7 +133,7 @@ console.log(response,"Stablity");
     { header: "Sample Name", accessor: "sampleName" },
     { header: "Sample Type", accessor: "sampleType" },
     { header: "Product/Material Name", accessor: "productMaterialName" },
-    { header: "Batch/Lot Number", accessor: "batchlotNumber" },
+    { header: "Batch/Lot Number", accessor: "batchLotNumber" },
     { header: "Sample Priority", accessor: "samplePriority" },
     { header: "Sample Quantity", accessor: "sampleQuantity" },
     { header: "UOM", accessor: "UOM" },
@@ -144,15 +141,15 @@ console.log(response,"Stablity");
     { header: "Sample Barcode", accessor: "sampleBarCode" },
     { header: "Specification ID", accessor: "specificationId" },
     { header: "Specification Attachment", accessor: "specificationAttachment" },
-    { header: "STP ID", accessor: "sTPId" },
-    { header: "STP Attachment", accessor: "sTPAttachment" },
-    { header: "Test Plan ID", accessor: "testPlanID" },
+    { header: "STP ID", accessor: "stpId" },
+    { header: "STP Attachment", accessor: "stpAttachment" },
+    { header: "Test Plan ID", accessor: "testPlanId" },
     { header: "Test Name", accessor: "testName" },
     { header: "Test Method", accessor: "testMethod" },
-    { header: "Test Parameters", accessor: "testParameters" },
+    { header: "Test Parameters", accessor: "testParameter" },
     { header: "Testing Frequency", accessor: "testingFrequency" },
     { header: "Testing Location", accessor: "testingLocation" },
-    { header: "Required Instruments", accessor: "requiredInstruments" },
+    { header: "Required Instruments", accessor: "requiredInstrument" },
     { header: "Test Grouping", accessor: "testGrouping" },
     { header: "LSL", accessor: "lsl" },
     { header: "USL", accessor: "usl" },
@@ -161,12 +158,11 @@ console.log(response,"Stablity");
     { header: "Sample Source", accessor: "sampleSource" },
     { header: "Planned Date", accessor: "plannedDate" },
     { header: "Lab Technician", accessor: "labTechnician" },
-    { header: "Reviewer/Approver", accessor: "reviewerApprover" },
     { header: "Assigned Department", accessor: "assignedDepartment" },
     { header: "Sample Collection Date", accessor: "sampleCollectionDate" },
     { header: "Testing Start Date", accessor: "testingStartDate" },
     { header: "Testing End Date", accessor: "testingEndDate" },
-    { header: "Turnaround Time (TAT)", accessor: "turnaroundTime" },
+    { header: "Turnaround Time (TAT)", accessor: "turnAroundTime" },
     { header: "Sample Retesting Date", accessor: "sampleRetestingDate" },
     { header: "Review Date", accessor: "reviewDate" },
     { header: "Sample Storage Location", accessor: "sampleStorageLocation" },
@@ -175,24 +171,29 @@ console.log(response,"Stablity");
       header: "Sample Preparation Method",
       accessor: "samplePreparationMethod",
     },
-    { header: "Sample Packaging Details", accessor: "samplePackagingDetails" },
+    { header: "Sample Packaging Details", accessor: "samplePackagingDetail" },
     { header: "Sample Label", accessor: "sampleLabel" },
-    { header: "Regulatory Requirements", accessor: "regulatoryRequirements" },
-    { header: "Quality Control Checks", accessor: "qualityControlChecks" },
+    { header: "Regulatory Requirements", accessor: "regulatoryRequirement" },
+    { header: "Quality Control Checks", accessor: "qualityControlCheck" },
     { header: "Delay Justification", accessor: "delayJustification" },
-    { header: "Testing Outcome", accessor: "testingOutcome" },
+    { header: "Testing Outcome", accessor: "testingOutCome" },
     { header: "Pass / Fail ?", accessor: "passFail" },
-    { header: "Shelf Life reccommendation", accessor: "passFail" },
+    // { header: "Shelf Life reccommendation", accessor: "shelfLifeRecommendation" },
     { header: "Control Sample Reference", accessor: "controlSampleReference" },
     { header: "Sample Integrity Status", accessor: "sampleIntegrityStatus" },
+    { header: "Assigned Department", accessor: "assignedDepartmentt" },
     { header: "Risk Assessment", accessor: "riskAssessment" },
     { header: "Supervisor", accessor: "supervisor" },
+    { header: "Instrumnets Reserved", accessor: "instrumentsReserved" },
+    { header: "Lab Availability", accessor: "labAvailability" },
+    { header: "Sample Cost Estimation", accessor: "sampleCostEstimation" },
+    { header: "Resource Utilization", accessor: "resourceUtilization" },
     { header: "Sample Movement History", accessor: "sampleMovementHistory" },
     { header: "Testing Progress", accessor: "testingProgress" },
-    { header: "Alerts/Notifications", accessor: "alertsNotifications" },
-    { header: "Deviation Logs", accessor: "deviationLogs" },
-    { header: "Comments/Notes", accessor: "commentsNotes" },
-    { header: "Attachments", accessor: "attachments" },
+    { header: "Alerts/Notifications", accessor: "alertNotification" },
+    { header: "Deviation Logs", accessor: "deviationLog" },
+    { header: "Comments/Notes", accessor: "commentNotes" },
+    { header: "Attachments", accessor: "attachment" },
     { header: "Sampling Frequency", accessor: "samplingFrequency" },
     { header: "Sample Disposition", accessor: "sampleDisposition" },
     { header: "Stability Study Type", accessor: "stabilityStudyType" },
@@ -216,10 +217,11 @@ console.log(response,"Stablity");
       header: "Shelf Life Recommendation",
       accessor: "shelfLifeRecommendation",
     },
+    { header: "Reviewer/Approver", accessor: "reviewerApprover" },
     { header: "Reviewer Comment", accessor: "reviewerComment" },
     { header: "QA Reviewer/Approver", accessor: "QaReviewerApprover" },
     { header: "QA Reviewer Comment", accessor: " QaReviewerComment" },
-    { header: "QA Review Date", accessor: "qaReviQwDate" },
+    { header: "QA Review Date", accessor: "QaReviewDate" },
     {
       header: "Actions",
       accessor: "action",
@@ -303,53 +305,53 @@ console.log(response,"Stablity");
       sampleBarCode: item["Sample Barcode"] || "",
       specificationId: item["Specification ID"] || "",
       specificationAttachment: item["Specification Attachment"] || "",
-      sTPId: item["STP ID"] || "",
-      sTPAttachment: item["STP Attachment"] || "",
-      testPlanID: item["Test Plan ID"] || "",
+      stpId: item["STP ID"] || "",
+      stpAttachment: item["STP Attachment"] || "",
+      testPlanId: item["Test Plan ID"] || "",
       testName: item["Test Name"] || "",
       testMethod: item["Test Method"] || "",
-      testParameters: item["Test Parameters"] || "",
+      testParameter: item["Test Parameters"] || "",
       testingFrequency: item["Testing Frequency"] || "",
       testingLocation: item["Testing Location"] || "",
-      requiredInstruments: item["Required Instruments"] || "",
+      requiredInstrument: item["Required Instruments"] || "",
       testGrouping: item["Test Grouping"] || "",
       lsl: item["LSL"] || "",
       usl: item["USL"] || "",
       testingDeadline: item["Testing Deadline"] || "",
       plannerName: item["Planner Name"] || "",
       labTechnician: item["Lab Technician"] || "",
-      reviewerApprover: item["Reviewer/Approver"] || "",
       assignedDepartment: item["Assigned Department"] || "",
-      supervisor: item["Supervisor"] || "",
       sampleCollectionDate: item["Sample Collection Date"] || "",
       testingStartDate: item["Testing Start Date"] || "",
       testingEndDate: item["Testing End Date"] || "",
       delayJustification: item["Delay Justification"] || "",
-      testingOutcome: item["Testing Outcome"] || "",
+      testingOutCome: item["Testing Outcome"] || "",
       passFail: item["Pass/Fail?"] || "",
-      turnaroundTime: item["Turnaround Time (TAT)"] || "",
+      turnAroundTime: item["Turnaround Time (TAT)"] || "",
       sampleRetestingDate: item["Sample Retesting Date"] || "",
       reviewDate: item["Review Date"] || "",
       sampleStorageLocation: item["Sample Storage Location"] || "",
       transportationMethod: item["Transportation Method"] || "",
       samplePreparationMethod: item["Sample Preparation Method"] || "",
-      samplePackagingDetails: item["Sample Packaging Details"] || "",
+      samplePackagingDetail: item["Sample Packaging Details"] || "",
       sampleLabel: item["Sample Label"] || "",
-      regulatoryRequirements: item["Regulatory Requirements"] || "",
-      qualityControlChecks: item["Quality Control Checks"] || "",
+      regulatoryRequirement: item["Regulatory Requirements"] || "",
+      qualityControlCheck: item["Quality Control Checks"] || "",
       controlSampleReference: item["Control Sample Reference"] || "",
       sampleIntegrityStatus: item["Sample Integrity Status"] || "",
+      assignedDepartmentt: item["Assigned Departmentt"] || "",
       riskAssessment: item["Risk Assessment"] || "",
+      supervisor: item["Supervisor"] || "",
       instrumentsReserved: item["Instruments Reserved"] || "",
       labAvailability: item["Lab Availability"] || "",
       sampleCostEstimation: item["Sample Cost Estimation"] || "",
       resourceUtilization: item["Resource Utilization"] || "",
       sampleMovementHistory: item["Sample Movement History"] || "",
       testingProgress: item["Testing Progress"] || "",
-      alertsNotifications: item["Alerts/Notifications"] || "",
-      deviationLogs: item["Deviation Logs"] || "",
-      commentsNotes: item["Comments/Notes"] || "",
-      attachments: item["Attachments"] || "",
+      alertNotification: item["Alerts/Notifications"] || "",
+      deviationLog: item["Deviation Logs"] || "",
+      commentNotes: item["Comments/Notes"] || "",
+      attachment: item["Attachment"] || "",
       samplingFrequency: item["Sampling Frequency"] || "",
       sampleDisposition: item["Sample Disposition"] || "",
       stabilityStudyType: item["Stability Study Type"] || "",
@@ -363,10 +365,11 @@ console.log(response,"Stablity");
       reConstitutionStability: item["Reconstitution Stability"] || "",
       testingInterval: item["Testing Interval (months)"] || "",
       shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
+      reviewerApprover: item["Reviewer/Approver"] || "",
 
       reviewerComment: item["Reviewer Comment"] || "",
-      qaReviewerApprover: item["QA Reviewer/Approver"] || "",
-      qaReviewerComment: item["QA Reviewer Comment"] || "",
+      QaReviewerApprover: item["QA Reviewer/Approver"] || "",
+      QaReviewerComment: item["QA Reviewer Comment"] || "",
       QaReviewDate: item["QA Review Date"] || "",
 
       actions: item["Actions"] || "",
@@ -398,10 +401,10 @@ console.log(response,"Stablity");
     "testPlanId",
     "testName",
     "testMethod",
-    "testParameters",
+    "testParameter",
     "testingFrequency",
     "testingLocation",
-    "requiredInstruments",
+    "requiredInstrument",
     "testGrouping",
     "lsl",
     "usl",
@@ -411,33 +414,37 @@ console.log(response,"Stablity");
     "labTechnician",
     "reviewer",
     "assignedDepartment",
-    "supervisor",
     "sampleCollectionDate",
     "testingStartDate",
     "testingEndDate",
-    "turnaroundTime",
+    "delayJustification",
+    "testingOutcome",
+    "passFail",
+    "turnAroundTime",
     "sampleRetestingDate",
     "reviewDate",
     "sampleStorageLocation",
     "transportationMethod",
     "samplePreparationMethod",
-    "samplePackagingDetails",
+    "samplePackagingDetail",
     "sampleLabel",
-    "regulatoryRequirements",
-    "qualityControlChecks",
+    "regulatoryRequirement",
+    "qualityControlCheck",
     "controlSampleReference",
     "sampleIntegrityStatus",
+    "assignedDepartmentt",
     "riskAssessment",
+    "supervisor",
     "instrumentsReserved",
     "labAvailability",
     "sampleCostEstimation",
     "resourceUtilization",
     "sampleMovementHistory",
     "testingProgress",
-    "alertsNotifications",
-    "deviationLogs",
+    "alertNotification",
+    "deviationLog",
     "comments",
-    "attachments",
+    "attachment",
     "samplingFrequency",
     "sampleDisposition",
     "stabilityStudyType",
@@ -449,9 +456,10 @@ console.log(response,"Stablity");
     "reConstitutionStability",
     "testingInterval",
     "shelfLifeRecommendation",
+    "reviewerApprover",
     "reviewerComment",
-    "qaReviewerApprover",
-    "qaReviewerComment",
+    "QaReviewerApprover",
+    "QaReviewerComment",
     "QaReviewDate",
   ];
 
@@ -502,7 +510,7 @@ console.log(response,"Stablity");
           />
         </div>
         <div className="float-right flex gap-4">
-          <button
+          {/* <button
             className="px-3 py-2 rounded flex gap-2 items-center bg-green-600 text-white font-medium cursor-pointer"
             onClick={() => generatePDF(selectedSampleId)}
           >
@@ -512,7 +520,7 @@ console.log(response,"Stablity");
             ) : (
               <FontAwesomeIcon icon="fa-regular fa-file-pdf" />
             )}
-          </button>
+          </button> */}
           <PDFDownload
             columns={columns}
             data={filteredData}
@@ -592,7 +600,6 @@ console.log(response,"Stablity");
             <td className="border px-4 py-2">Lab Technician</td>
             <td className="border px-4 py-2">Reviewer/Approver</td>
             <td className="border px-4 py-2">Assigned Department</td>
-            <td className="border px-4 py-2">Supervisor</td>
             <td className="border px-4 py-2">Sample Collection Date</td>
 
             <td className="border px-4 py-2">Testing Start Date</td>
@@ -646,23 +653,23 @@ console.log(response,"Stablity");
             <td className="border px-4 py-2">QA Reviewer/Approver </td>
             <td className="border px-4 py-2">QA Reviewer Comment </td>
             <td className="border px-4 py-2">QA Review Date </td>
+            <td className="border px-4 py-2">Sample Barcode </td>
+            <td className="border px-4 py-2">Status </td>
+            <td className="border px-4 py-2">Generate PDF </td>
             <td className="border px-4 py-2">Actions</td>
           </tr>
         </thead>
         <tbody>
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100 cursor-pointer">
-              <Link
-                to={`/stabilityWorkflowEdit/${data.id}`}
-                className="contents"
-              >
+              <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
                 <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{data.samplePlanId}</td>
                 <td className="border px-4 py-2">{data.sampleId}</td>
                 <td className="border px-4 py-2">{data.sampleName}</td>
                 <td className="border px-4 py-2">{data.sampleType}</td>
                 <td className="border px-4 py-2">{data.productMaterialName}</td>
-                <td className="border px-4 py-2">{data.batchlotNumber}</td>
+                <td className="border px-4 py-2">{data.batchLotNumber}</td>
                 <td className="border px-4 py-2">{data.sampleSource}</td>
                 <td className="border px-4 py-2">{data.plannedDate}</td>
                 <td className="border px-4 py-2">{data.samplePriority}</td>
@@ -674,15 +681,15 @@ console.log(response,"Stablity");
                 <td className="border px-4 py-2">
                   {data.specificationAttachment}
                 </td>
-                <td className="border px-4 py-2">{data.sTPId}</td>
-                <td className="border px-4 py-2">{data.sTPAttachment}</td>
-                <td className="border px-4 py-2">{data.testPlanID}</td>
+                <td className="border px-4 py-2">{data.stpId}</td>
+                <td className="border px-4 py-2">{data.stpAttachment}</td>
+                <td className="border px-4 py-2">{data.testPlanId}</td>
                 <td className="border px-4 py-2">{data.testName}</td>
                 <td className="border px-4 py-2">{data.testMethod}</td>
-                <td className="border px-4 py-2">{data.testParameters}</td>
+                <td className="border px-4 py-2">{data.testParameter}</td>
                 <td className="border px-4 py-2">{data.testingFrequency}</td>
                 <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td className="border px-4 py-2">{data.requiredInstruments}</td>
+                <td className="border px-4 py-2">{data.requiredInstrument}</td>
                 <td className="border px-4 py-2">{data.testGrouping}</td>
                 <td className="border px-4 py-2">{data.lsl}</td>{" "}
                 <td className="border px-4 py-2">{data.usl}</td>{" "}
@@ -696,7 +703,10 @@ console.log(response,"Stablity");
                 </td>
                 <td className="border px-4 py-2">{data.testingStartDate}</td>
                 <td className="border px-4 py-2">{data.testingEndDate}</td>
-                <td className="border px-4 py-2">{data.turnaroundTime}</td>
+                <td className="border px-4 py-2">{data.delayJustification}</td>
+                <td className="border px-4 py-2">{data.testingOutCome}</td>
+                <td className="border px-4 py-2">{data.passFail}</td>
+                <td className="border px-4 py-2">{data.turnAroundTime}</td>
                 <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
                 <td className="border px-4 py-2">{data.reviewDate}</td>
                 <td className="border px-4 py-2">
@@ -709,33 +719,38 @@ console.log(response,"Stablity");
                   {data.samplePreparationMethod}
                 </td>
                 <td className="border px-4 py-2">
-                  {data.samplePackagingDetails}
+                  {data.samplePackagingDetail}
                 </td>
                 <td className="border px-4 py-2">{data.sampleLabel}</td>
                 <td className="border px-4 py-2">
-                  {data.regulatoryRequirements}
+                  {data.regulatoryRequirement}
                 </td>
-                <td className="border px-4 py-2">
-                  {data.qualityControlChecks}
-                </td>
+                <td className="border px-4 py-2">{data.qualityControlCheck}</td>
                 <td className="border px-4 py-2">
                   {data.controlSampleReference}
                 </td>
                 <td className="border px-4 py-2">
                   {data.sampleIntegrityStatus}
                 </td>
+                <td className="border px-4 py-2">{data.assignedDepartmentt}</td>
                 <td className="border px-4 py-2">{data.riskAssessment}</td>
                 <td className="border px-4 py-2">{data.supervisor}</td>{" "}
+                <td className="border px-4 py-2">{data.instrumentsReserved}</td>{" "}
+                <td className="border px-4 py-2">{data.labAvailability}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.sampleCostEstimation}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.resourceUtilization}</td>{" "}
                 <td className="border px-4 py-2">
                   {data.sampleMovementHistory}
                 </td>
                 <td className="border px-4 py-2">{data.testingProgress}</td>
-                <td className="border px-4 py-2">{data.alertsNotifications}</td>
-                <td className="border px-4 py-2">{data.deviationLogs}</td>
+                <td className="border px-4 py-2">{data.alertNotification}</td>
+                <td className="border px-4 py-2">{data.deviationLog}</td>
                 <td className="border px-4 py-2 text-wrap">
-                  {data.commentsNotes}
+                  {data.commentNotes}
                 </td>{" "}
-                <td className="border px-4 py-2">{data.attachments}</td>
+                <td className="border px-4 py-2">{data.attachment}</td>
                 <td className="border px-4 py-2">{data.samplingFrequency}</td>
                 <td className="border px-4 py-2">{data.sampleDisposition}</td>
                 <td className="border px-4 py-2">
@@ -761,33 +776,53 @@ console.log(response,"Stablity");
                 <td className="border px-4 py-2">
                   {data.shelfLifeRecommendation}
                 </td>{" "}
+                <td className="border px-4 py-2">{data.reviewerApprover}</td>
                 <td className="border px-4 py-2">
-                  hgggg{data.reviewerComment}
+                  {data.reviewerComment}
                 </td>{" "}
-                <td className="border px-4 py-2">{data.qaReviewerApprover}</td>{" "}
-                <td className="border px-4 py-2">{data.qaReviewerComment}</td>{" "}
+                <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
+                <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
                 <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-                <td className="border px-4 py-2 font-medium">
-                  {" "}
-                  <div className="flex gap-2 font-medium">
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => onViewDetails(data)}
-                    />
-                    <FontAwesomeIcon
-                      icon={faPenToSquare}
-                      className="mr-2 cursor-pointer"
-                      onClick={() => openEditModal(data, index)}
-                    />
-                    <FontAwesomeIcon
-                      icon={faTrashCan}
-                      className="cursor-pointer"
-                      onClick={() => handleDelete(data)}
-                    />
-                  </div>
-                </td>
+                <td className="border px-4 py-2">{data.sampleBarcode}</td>{" "}
+                <td claossName="border px-4 py-2">{data.status}</td>{" "}
               </Link>
+              <td className="flex justify-center items-center px-4 py-2">
+                <FaFilePdf
+                  className="w-10 h-10 text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                  onClick={() => generatePDF(data.sampleId)} // Click event handler
+                />
+                {loading[data.sampleId] && (
+                  <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                )}
+              </td>
+              <td className="border px-4 py-2 font-medium">
+                <div className="flex gap-2 font-medium">
+                  <FontAwesomeIcon
+                    icon={faEye}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => {
+                      // Navigate to the specified URL
+                      window.location.href = "https://ipc.mydemosoftware.com";
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => {
+                      // Navigate to the specified URL
+                      window.location.href = "https://ipc.mydemosoftware.com";
+                    }}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className="cursor-pointer"
+                    onClick={() => {
+                      // Navigate to the specified URL
+                      window.location.href = "https://ipc.mydemosoftware.com";
+                    }}
+                  />
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -802,7 +837,7 @@ console.log(response,"Stablity");
         />
       )}
       {viewModalData && (
-        <StabilityWorkflowModal
+        <SampleWorkflowModal
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
@@ -812,7 +847,7 @@ console.log(response,"Stablity");
         />
       )}
 
-      {showModal && <StabilityWorkflowModal onClose={closeWorkflowModal} />}
+      {showModal && <SampleWorkflowModal onClose={closeWorkflowModal} />}
 
       {editModalData && (
         <SamplePlanningAEdit
@@ -836,4 +871,4 @@ console.log(response,"Stablity");
   );
 };
 
-export default StabilityWorkflow;
+export default SampleWorkFlow;
