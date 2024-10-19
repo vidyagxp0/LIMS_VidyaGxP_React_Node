@@ -40,7 +40,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleQuantity: "",
     UOM: "",
     market: "",
-    sampleBarCode: "",
+    sampleBarCode: "2345876976i7-90897654-098756456758697",
     specificationId: "",
     specificationAttachment: null,
     stpId: "",
@@ -537,7 +537,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-              <CCol md={6}>
+              {/* <CCol md={6}>
                 <CFormLabel>Sample Barcode</CFormLabel>
 
                 <CFormInput
@@ -555,11 +555,17 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
 
                 {formData.sampleBarCode && (
-                  <div>
-                    <Barcode value={formData.sampleBarCode} />
-                  </div>
+                  <div style={{ width: '300px', overflow: 'hidden' }}> 
+                  <Barcode
+                    value={formData.sampleBarCode}
+                    width={300 / (formData.sampleBarCode.length || 1)}
+                    height={100} 
+                    displayValue={false} 
+                    margin={10}
+                  />
+                </div>
                 )}
-              </CCol>
+              </CCol> */}
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
