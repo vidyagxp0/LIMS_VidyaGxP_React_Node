@@ -25,7 +25,7 @@ const InstrumentMasterModal = ({
   visible,
   closeModal,
   handleSubmit,
-  addRow,
+  // addRow,
 }) => {
   const [fields, setFields] = useState([]);
 
@@ -141,7 +141,7 @@ const InstrumentMasterModal = ({
         toast.success(
           response.data.message || "Instrument Data added successfully!"
         );
-        addRow(instrumentData);
+        instrumentData;
         closeModal();
       })
       .catch((err) => {

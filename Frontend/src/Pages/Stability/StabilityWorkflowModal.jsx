@@ -223,13 +223,13 @@ const StabilityWorkFlow = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}`,
+        `http://localhost:9000/edit-sample/${id}/stability`,
         formData
       );
       if (response.status === 200) {
         toast.success("Stability Workflow updated successfully.");
         setIsModalOpen(false);
-        navigate("/sampleWorkflow");
+        navigate("/stabilityWorkflow");
       } else {
         toast.error("Failed to update Stability Workflow.");
       }
@@ -253,7 +253,7 @@ const StabilityWorkFlow = ({ onClose }) => {
         if (response.status === 200) {
           toast.success("Stability Workflow added successfully.");
           setIsModalOpen(false);
-          navigate("/sampleWorkflow");
+          navigate("/stabilityWorkflow");
         } else {
           toast.error("Failed to add Stability Workflow.");
         }
