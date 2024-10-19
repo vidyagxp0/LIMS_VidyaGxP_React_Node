@@ -8,7 +8,7 @@ import moment from "moment";
 export const createSample = async (req, res) => {
   try {
     const sampleData = req.body;
-   
+
     if (req.files && req.files["specificationAttachment"]) {
       sampleData.specificationAttachment = getFileUrl(
         req.files["specificationAttachment"][0].filename
@@ -65,7 +65,7 @@ export const createSample = async (req, res) => {
 
 export const getSample = async (req, res) => {
   try {
-    const { type } = req.body;
+    const { type } = req.params;
     const sampleData = await SampleWorkFlow.findAll({ where: { types: type } });
     res.status(200).json({ error: false, data: sampleData });
   } catch (error) {
