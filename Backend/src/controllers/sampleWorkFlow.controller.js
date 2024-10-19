@@ -23,22 +23,34 @@ export const createSample = async (req, res) => {
       sampleData.attachment = getFileUrl(req.files["attachment"][0].filename);
     }
     if (req.files && req.files["srSupportiveAttachment"]) {
-      sampleData.srSupportiveAttachment = getFileUrl(req.files["srSupportiveAttachment"][0].filename);
+      sampleData.srSupportiveAttachment = getFileUrl(
+        req.files["srSupportiveAttachment"][0].filename
+      );
     }
     if (req.files && req.files["qaSupportiveAttachment"]) {
-      sampleData.qaSupportiveAttachment = getFileUrl(req.files["qaSupportiveAttachment"][0].filename);
+      sampleData.qaSupportiveAttachment = getFileUrl(
+        req.files["qaSupportiveAttachment"][0].filename
+      );
     }
     if (req.files && req.files["suSupportiveAttachment"]) {
-      sampleData.suSupportiveAttachment = getFileUrl(req.files["suSupportiveAttachment"][0].filename);
+      sampleData.suSupportiveAttachment = getFileUrl(
+        req.files["suSupportiveAttachment"][0].filename
+      );
     }
     if (req.files && req.files["saSupportiveAttachment"]) {
-      sampleData.saSupportiveAttachment = getFileUrl(req.files["saSupportiveAttachment"][0].filename);
+      sampleData.saSupportiveAttachment = getFileUrl(
+        req.files["saSupportiveAttachment"][0].filename
+      );
     }
     if (req.files && req.files["siSupportiveAttachment"]) {
-      sampleData.siSupportiveAttachment = getFileUrl(req.files["siSupportiveAttachment"][0].filename);
+      sampleData.siSupportiveAttachment = getFileUrl(
+        req.files["siSupportiveAttachment"][0].filename
+      );
     }
     if (req.files && req.files["stabilityStudyProtocol"]) {
-      sampleData.stabilityStudyProtocol = getFileUrl(req.files["stabilityStudyProtocol"][0].filename);
+      sampleData.stabilityStudyProtocol = getFileUrl(
+        req.files["stabilityStudyProtocol"][0].filename
+      );
     }
 
     const createSample = await SampleWorkFlow.create(sampleData);
@@ -53,10 +65,11 @@ export const createSample = async (req, res) => {
 
 export const getSample = async (req, res) => {
   try {
-    const sampleData = await SampleWorkFlow.findAll();
+    const { type } = req.body;
+    const sampleData = await SampleWorkFlow.findAll({ where: { types: type } });
     res.status(200).json({ error: false, data: sampleData });
   } catch (error) {
-    res 
+    res
       .status(500)
       .json({ message: "Error fetching sample", error: error.message });
   }
@@ -100,36 +113,36 @@ export const updateSample = async (req, res) => {
     if (req.files && req.files["attachment"]) {
       sampleData.attachment = getFileUrl(req.files["attachment"][0].filename);
     }
-     if (req.files && req.files["srSupportiveAttachment"]) {
-       sampleData.srSupportiveAttachment = getFileUrl(
-         req.files["srSupportiveAttachment"][0].filename
-       );
-     }
-     if (req.files && req.files["qaSupportiveAttachment"]) {
-       sampleData.qaSupportiveAttachment = getFileUrl(
-         req.files["qaSupportiveAttachment"][0].filename
-       );
-     }
-     if (req.files && req.files["suSupportiveAttachment"]) {
-       sampleData.suSupportiveAttachment = getFileUrl(
-         req.files["suSupportiveAttachment"][0].filename
-       );
-     }
-     if (req.files && req.files["saSupportiveAttachment"]) {
-       sampleData.saSupportiveAttachment = getFileUrl(
-         req.files["saSupportiveAttachment"][0].filename
-       );
-     }
-     if (req.files && req.files["siSupportiveAttachment"]) {
-       sampleData.siSupportiveAttachment = getFileUrl(
-         req.files["siSupportiveAttachment"][0].filename
-       );
-     }
-     if (req.files && req.files["stabilityStudyProtocol"]) {
-       sampleData.stabilityStudyProtocol = getFileUrl(
-         req.files["stabilityStudyProtocol"][0].filename
-       );
-     }
+    if (req.files && req.files["srSupportiveAttachment"]) {
+      sampleData.srSupportiveAttachment = getFileUrl(
+        req.files["srSupportiveAttachment"][0].filename
+      );
+    }
+    if (req.files && req.files["qaSupportiveAttachment"]) {
+      sampleData.qaSupportiveAttachment = getFileUrl(
+        req.files["qaSupportiveAttachment"][0].filename
+      );
+    }
+    if (req.files && req.files["suSupportiveAttachment"]) {
+      sampleData.suSupportiveAttachment = getFileUrl(
+        req.files["suSupportiveAttachment"][0].filename
+      );
+    }
+    if (req.files && req.files["saSupportiveAttachment"]) {
+      sampleData.saSupportiveAttachment = getFileUrl(
+        req.files["saSupportiveAttachment"][0].filename
+      );
+    }
+    if (req.files && req.files["siSupportiveAttachment"]) {
+      sampleData.siSupportiveAttachment = getFileUrl(
+        req.files["siSupportiveAttachment"][0].filename
+      );
+    }
+    if (req.files && req.files["stabilityStudyProtocol"]) {
+      sampleData.stabilityStudyProtocol = getFileUrl(
+        req.files["stabilityStudyProtocol"][0].filename
+      );
+    }
 
     await sampleData.update(updatedData);
     res.status(200).json({ error: false, data: sampleData });

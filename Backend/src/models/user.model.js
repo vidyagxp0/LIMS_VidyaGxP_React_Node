@@ -47,7 +47,7 @@ export const User = sequelize.define("User", {
   },
   user_type: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
 });
 
