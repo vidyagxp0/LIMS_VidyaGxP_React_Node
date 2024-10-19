@@ -21,8 +21,12 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 
-
-const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, addRow }) => {
+const InstrumentMasterModal = ({
+  visible,
+  closeModal,
+  handleSubmit,
+  addRow,
+}) => {
   const [fields, setFields] = useState([]);
 
   const addFields = () => {
@@ -47,6 +51,7 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, addRow }) =>
     Instrument: "",
     InstrumentId: "",
     Made: "",
+    calibrationStatus: "",
     Model: "",
     fields: [],
     manufacturerSerialNo: "",
@@ -68,6 +73,7 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, addRow }) =>
       instrumentCategoryDescription: "",
       Instrument: "",
       InstrumentId: "",
+      calibrationStatus: "",
       Made: "",
       Model: "",
       fields: [],
@@ -109,7 +115,7 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, addRow }) =>
         `${BASE_URL}/manage-lims/add/iMRegistration`,
         instrumentDetails
       );
-      console.log(response,"000000000000000000000000000")
+      console.log(response, "000000000000000000000000000");
       if (response.status === 200) {
         toast.success("Instrument added successfully.");
         fetchProductData();
@@ -125,21 +131,24 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, addRow }) =>
   };
 
   const handleAddInstrumentRegistration = (e) => {
-
     e.preventDefault();
     axios
-      .post(`http://localhost:9000/manage-lims/add/iMRegistration`,instrumentData)
+      .post(
+        `http://localhost:9000/manage-lims/add/iMRegistration`,
+        instrumentData
+      )
       .then((response) => {
-        toast.success(response.data.message || "Instrument Data added successfully!")
+        toast.success(
+          response.data.message || "Instrument Data added successfully!"
+        );
         addRow(instrumentData);
-        closeModal()
+        closeModal();
       })
       .catch((err) => {
         console.error(err);
         toast.error("Instrument Data Already Registered");
       });
   };
-
 
   return (
     <div>
@@ -190,6 +199,18 @@ const InstrumentMasterModal = ({ visible, closeModal, handleSubmit, addRow }) =>
             value={instrumentData.InstrumentId}
             onChange={(e) => handleInputChange("InstrumentId", e.target.value)}
           />
+          <CFormSelect
+            className="mb-3"
+            label="Calibration Status"
+            value={instrumentData.calibrationStatus}
+            onChange={(e) =>
+              handleInputChange("calibrationStatus", e.target.value)
+            }
+          >
+            <option value="">Select...</option>
+            <option value="calibrated">Calibrated</option>
+            <option value="nonCalibrated">Non - Calibrated</option>
+          </CFormSelect>
           <CFormInput
             className="mb-3"
             type="text"

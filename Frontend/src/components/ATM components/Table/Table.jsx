@@ -15,7 +15,7 @@ const Table = ({
   onDelete,
   openEditModal,
 }) => {
-  const pageSize = 5;
+  const pageSize = 7;
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
