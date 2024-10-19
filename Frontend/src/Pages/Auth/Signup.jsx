@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { CForm, CFormInput, CButton, CFormCheck } from "@coreui/react";
-import { useNavigate } from "react-router-dom";
+import { CForm, CFormInput, CButton } from "@coreui/react";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios"; // Import Axios
 import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Login(props) {
+function Signup() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [passwd, setPasswd] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,21 +19,29 @@ function Login(props) {
     setter(data.target.value);
   };
 
-  const handleLogin = () => {
-    if (email === "G") {
-      toast.success("Login successfully");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
-    } else if (email === "Amit" && passwd === "Amit@121") {
-      toast.success("Login successfully");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
-    } else if (email === "" || passwd === "") {
-      toast.warning("Enter required credentials");
+  const handleSignup = async () => { // Make this function async
+    if (username && email && passwd) {
+      try {
+        const response = await axios.post("http://localhost:9000/admin/add-user", { 
+          username,
+          email,
+          password: passwd,
+        });
+        if (response.status === 201) { // Check for successful response
+          toast.success("Signup successful");
+          setTimeout(() => {
+            navigate("/"); // Redirect to home or login page
+          }, 1000);
+        } else {
+          toast.error("Signup failed. Please try again.");
+        }
+      } catch (error) {
+        toast.error(
+          "Error during signup: " + (error.response?.data?.message || error.message)
+        );
+      }
     } else {
-      toast.error("Invalid Credentials");
+      toast.warning("Please fill in all fields");
     }
   };
 
@@ -49,17 +59,15 @@ function Login(props) {
             borderTopLeftRadius: "100px",
           }}
         >
-          {/* Image Section */}
           <div className="w-0 md:w-1/2 hidden md:block ">
             <img
               src="https://www.pharmaceutical-technology.com/wp-content/uploads/sites/24/2021/06/shutterstock_1985751242-scaled.jpg"
               className="h-full object-cover"
               style={{ borderTopLeftRadius: "100px" }}
-              alt="Login"
+              alt="Signup"
             />
           </div>
 
-          {/* Form Section */}
           <div
             className="w-full md:w-1/2 bg-gradient-to-r from-[#b3cafe] to-[#C0D2FC] p-10 flex flex-col justify-center"
             style={{ borderBottomRightRadius: "100px" }}
@@ -69,7 +77,7 @@ function Login(props) {
                 <img src="login.png" width={"200px"} className="md:w-300px" />
               </div>
               <h2 className="text-xl md:text-3xl md:text-white font-bold text-center ">
-                Welcome To Laboratory Information Management System.
+                Create Your Account
               </h2>
             </div>
             <CForm>
@@ -78,6 +86,15 @@ function Login(props) {
                   type="text"
                   placeholder="Username"
                   label="Username"
+                  onChange={(event) => handleInputData(event, setUsername)}
+                  className="p-3 rounded-full w-full bg-white border border-gray-400"
+                />
+              </div>
+              <div className="mb-4 md:text-white ">
+                <CFormInput
+                  type="email"
+                  placeholder="Email"
+                  label="Email"
                   onChange={(event) => handleInputData(event, setEmail)}
                   className="p-3 rounded-full w-full bg-white border border-gray-400"
                 />
@@ -99,19 +116,16 @@ function Login(props) {
                   />
                 </div>
               </div>
-              <div className="flex justify-between items-center mb-6 md:text-white">
-                <CFormCheck label="Remember me" />
-                <a href="#" className="text-sm md:text-white">
-                  Forgot Password
-                </a>
-              </div>
               <div className="mb-6">
                 <CButton
-                  className="w-full p-3 rounded-full bg-black text-white font-bold text-xl md:text-2xl"
-                  onClick={handleLogin}
+                  className="w-full p-3 rounded-full bg-black text-white font-bold text-xl md:text-xl"
+                  onClick={handleSignup}
                 >
-                  LOGIN
+                  SIGN UP
                 </CButton>
+              </div>
+              <div className="text-lg text-white text-center">
+                If you have an account already, <Link to="/" className="text-blue-600 hover:text-blue-800 underline font-medium">Login</Link>
               </div>
             </CForm>
           </div>
@@ -122,4 +136,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default Signup;

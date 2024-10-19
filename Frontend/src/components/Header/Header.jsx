@@ -42,6 +42,8 @@ function Header({ toggleSidebarClass }) {
     }, 500);
   };
 
+  const user=JSON.parse(localStorage.getItem("user"));
+
   return (
     <header
       id="head"
@@ -111,7 +113,7 @@ function Header({ toggleSidebarClass }) {
                   alt=""
                 />
               </CAvatar>
-              Amit Patel <FontAwesomeIcon icon={faAngleDown} />
+              {user}<FontAwesomeIcon icon={faAngleDown} />
             </button>
 
             {drop && (
@@ -128,7 +130,7 @@ function Header({ toggleSidebarClass }) {
                   alt="Profile"
                   className="w-8 h-8 rounded-full mr-2"
                 />
-                <span className="font-bold text-white">Amit Patel</span>
+                <span className="font-bold text-white">{user}</span>
               </div>
 
               <Link
@@ -153,7 +155,7 @@ function Header({ toggleSidebarClass }) {
                 <span className="mr-3">◘</span> Admin Panel
               </Link> */}
 
-              <Link to="/" className="block py-2 px-4 hover:bg-gray-100">
+              <Link to="/" onClick={()=>localStorage.clear()} className="block py-2 px-4 hover:bg-gray-100">
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="mr-2"

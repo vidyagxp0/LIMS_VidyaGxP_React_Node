@@ -18,6 +18,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
+import ProgressBar from "../../components/Workflow/ProgressBar";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -26,12 +27,13 @@ const SampleWorkflowModal = ({ onClose }) => {
   console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
+    stage: "1",
     samplePlanId: "",
     sampleId: "",
     sampleName: "",
     sampleType: "",
-    srSupportiveAttachment: "",
-    qaSupportiveAttachment: "",
+    srSupportiveAttachment: null,
+    qaSupportiveAttachment: null,
     productMaterialName: "",
     batchLotNumber: "",
     samplePriority: "",
@@ -62,9 +64,9 @@ const SampleWorkflowModal = ({ onClose }) => {
     sampleMovementHistory: "",
     assignedDepartment: "",
     sampleCollectionDate: "",
-    suSupportiveAttachment: "",
-    saSupportiveAttachment: "",
-    siSupportiveAttachment: "",
+    siSupportiveAttachment: null,
+    saSupportiveAttachment: null,
+    srSupportiveAttachment: null,
     analysisType: "",
     analysisResult: "",
     analysisDate: "",
@@ -136,7 +138,8 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   // Toggle selection of instruments
   const handleInputChange = (e) => {
-    const { name, value, options } = e.target;
+    const { name, value, options,files } = e.target;
+
     if (name === "requiredInstrument") {
       const selectedInstruments = [];
       for (let i = 0; i < options.length; i++) {
@@ -221,35 +224,28 @@ const SampleWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  const fetchData = async () => {
+    if (!id) return;
+    try {
+      const response = await axios.get(`http://localhost:9000/get-Sample/${id}`);
+      console.log(response.data);
+
+      const responseData = Array.isArray(response.data) ? response.data : response.data.data;
+      // console.log(responseData);
+      setFormData(responseData);
+      console.log(formData.stage);
+    } catch (error) {
+      console.error("Error fetching ", error);
+      toast.error("Failed to fetch ");
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      if (!id) return;
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-Sample/${id}`
-        );
-        console.log(response.data);
-
-        const responseData = Array.isArray(response.data)
-          ? response.data
-          : response.data.data;
-        console.log(responseData);
-        setFormData(responseData);
-      } catch (error) {
-        console.error("Error fetching ", error);
-        toast.error("Failed to fetch ");
-      }
-    };
-
     fetchData();
   }, [id]);
 
   const handleEdit = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}`,
-        formData
-      );
+      const response = await axios.put(`http://localhost:9000/edit-sample/${id}`, formData);
       if (response.status === 200) {
         toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
@@ -258,10 +254,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         toast.error("Failed to update Sample Workflow.");
       }
     } catch (error) {
-      toast.error(
-        "Error updating Sample Workflow: " +
-          (error.response?.data || error.message)
-      );
+      toast.error("Error updating Sample Workflow: " + (error.response?.data || error.message));
     }
   };
 
@@ -283,10 +276,7 @@ const SampleWorkflowModal = ({ onClose }) => {
           toast.error("Failed to add Sample Workflow.");
         }
       } catch (error) {
-        toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
-        );
+        toast.error("Error adding Sample Workflow: " + (error.response?.data || error.message));
       }
     }
   };
@@ -386,7 +376,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="sampleId"
                   label="Sample ID"
                   value={formData.sampleId || ""}
@@ -445,9 +435,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 }}
               >
                 <div style={{ width: "100%" }}>
-                  <CFormLabel htmlFor="samplePriority">
-                    Sample Priority
-                  </CFormLabel>
+                  <CFormLabel htmlFor="samplePriority">Sample Priority</CFormLabel>
                   <CFormSelect
                     name="samplePriority"
                     value={formData.samplePriority || ""}
@@ -475,9 +463,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   >
                     <div
                       style={{
-                        backgroundColor: getPriorityColor(
-                          formData.samplePriority
-                        ),
+                        backgroundColor: getPriorityColor(formData.samplePriority),
                         width: "40px",
                         height: "10px",
                         borderRadius: "5px",
@@ -731,6 +717,17 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
+                  type="text"
+                  name="testGrouping"
+                  label="Test Grouping"
+                  value={formData.testGrouping || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
                   type="number"
                   name="lsl"
                   label="LSL"
@@ -854,7 +851,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 type="file"
                 name="srSupportiveAttachment"
                 label="Supportive Attachment"
-                value={formData?.srSupportiveAttachment || ""}
+                // value={formData?.srSupportiveAttachment || ""}
                 onChange={handleInputChange}
               />
             </CCol>
@@ -924,11 +921,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   invalid={!!error}
                 />
                 {error && (
-                  <div
-                    style={{ color: "red", fontSize: "12px", marginTop: "5px" }}
-                  >
-                    {error}
-                  </div>
+                  <div style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{error}</div>
                 )}
               </CCol>
             </CRow>
@@ -1244,7 +1237,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="saSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.saSupportiveAttachment || ""}
+                  // value={formData?.saSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1275,7 +1268,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="stabilityStudyProtocol"
                   label="Stability Study Protocol"
-                  value={formData?.stabilityStudyProtocol || ""}
+                  // value={formData?.stabilityStudyProtocol || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1332,9 +1325,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
               <CCol md={6} className="mb-3">
-                <CFormLabel htmlFor="testingInterval">
-                  Testing Interval (months)
-                </CFormLabel>
+                <CFormLabel htmlFor="testingInterval">Testing Interval (months)</CFormLabel>
                 <CFormSelect
                   name="testingInterval"
                   value={formData?.testingInterval || ""}
@@ -1360,7 +1351,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="siSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.siSupportiveAttachment || ""}
+                  // value={formData?.siSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1404,7 +1395,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="revSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.suSupportiveAttachment || ""}
+                  // value={formData?.srSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1448,7 +1439,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="file"
                   name="qaSupportiveAttachment"
                   label="Supportive Attachment"
-                  value={formData?.qaSupportiveAttachment || ""}
+                  // value={formData?.qaSupportiveAttachment || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -1540,116 +1531,124 @@ const SampleWorkflowModal = ({ onClose }) => {
     }
   };
 
+  const handleStageChange = () => {
+    fetchData();
+  };
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!formData.delayJustification) {
-            setError("Delay Justification is required.");
-            return;
-          }
-          handleSave();
-        }}
-      >
-        <div className="flex space-x-4 mb-8">
-          <CButton
-            color={
-              activeTab === "Sample Registration" ? "primary" : "secondary"
+    <>
+      {id ? (
+        <ProgressBar
+          stage={Number(formData.stage)}
+          sampleId={id}
+          onStageClick={handleStageChange}
+        />
+      ) : (
+        ""
+      )}
+      <div className="p-8 bg-gray-100 min-h-screen">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!formData.delayJustification) {
+              setError("Delay Justification is required.");
+              return;
             }
-            onClick={() => handleTabClick("Sample Registration")}
-            className={`transition-all duration-300 ${
-              activeTab === "Sample Registration"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Sample Registration
-          </CButton>
+            handleSave();
+          }}
+        >
+          <div className="flex space-x-4 mb-8">
+            <CButton
+              color={activeTab === "Sample Registration" ? "primary" : "secondary"}
+              onClick={() => handleTabClick("Sample Registration")}
+              className={`transition-all duration-300 ${
+                activeTab === "Sample Registration"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+            >
+              Sample Registration
+            </CButton>
 
-          <CButton
-            color={activeTab === "Sample Analysis" ? "primary" : "secondary"}
-            onClick={() => handleTabClick("Sample Analysis")}
-            className={`transition-all duration-300 ${
-              activeTab === "Sample Analysis"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Sample Analysis
-          </CButton>
+            <CButton
+              color={activeTab === "Sample Analysis" ? "primary" : "secondary"}
+              onClick={() => handleTabClick("Sample Analysis")}
+              className={`transition-all duration-300 ${
+                activeTab === "Sample Analysis"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+            >
+              Sample Analysis
+            </CButton>
 
-          <CButton
-            color={activeTab === "Supervisor Review" ? "primary" : "secondary"}
-            onClick={() => handleTabClick("Supervisor Review")}
-            className={`transition-all duration-300 ${
-              activeTab === "Supervisor Review"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Supervisor Review
-          </CButton>
+            <CButton
+              color={activeTab === "Supervisor Review" ? "primary" : "secondary"}
+              onClick={() => handleTabClick("Supervisor Review")}
+              className={`transition-all duration-300 ${
+                activeTab === "Supervisor Review"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+            >
+              Supervisor Review
+            </CButton>
 
-          <CButton
-            color={
-              activeTab === "Stability Information" ? "primary" : "secondary"
-            }
-            onClick={() => handleTabClick("Stability Information")}
-            className={`transition-all duration-300 ${
-              activeTab === "Stability Information"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Stability Information
-          </CButton>
+            <CButton
+              color={activeTab === "Stability Information" ? "primary" : "secondary"}
+              onClick={() => handleTabClick("Stability Information")}
+              className={`transition-all duration-300 ${
+                activeTab === "Stability Information"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+            >
+              Stability Information
+            </CButton>
 
-          <CButton
-            color={activeTab === "QA Review" ? "primary" : "secondary"}
-            onClick={() => handleTabClick("QA Review")}
-            className={`transition-all duration-300 ${
-              activeTab === "QA Review"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            QA Review
-          </CButton>
+            <CButton
+              color={activeTab === "QA Review" ? "primary" : "secondary"}
+              onClick={() => handleTabClick("QA Review")}
+              className={`transition-all duration-300 ${
+                activeTab === "QA Review" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+            >
+              QA Review
+            </CButton>
 
-          <CButton
-            color={activeTab === "AActivity Log" ? "primary" : "secondary"}
-            onClick={() => handleTabClick("Activity Log")}
-            className={`transition-all duration-300 ${
-              activeTab === "Activity Log"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
-          >
-            Activity Log
-          </CButton>
-        </div>
+            <CButton
+              color={activeTab === "AActivity Log" ? "primary" : "secondary"}
+              onClick={() => handleTabClick("Activity Log")}
+              className={`transition-all duration-300 ${
+                activeTab === "Activity Log"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+            >
+              Activity Log
+            </CButton>
+          </div>
 
-        <div className="bg-white shadow-2xl p-8 rounded-md transition-all duration-300">
-          {renderFields(activeTab)}
-        </div>
+          <div className="bg-white shadow-2xl p-8 rounded-md transition-all duration-300">
+            {renderFields(activeTab)}
+          </div>
 
-        <div className="flex flex-col gap-3 justify-end mt-6 fixed bottom-24 left-[95%]">
-          <CButton
-            type="submit"
-            className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
-          >
-            {id ? "Update" : "Save"}
-          </CButton>
-          <CButton
-            onClick={onClose}
-            className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
-          >
-            Exit
-          </CButton>
-        </div>
-      </form>
-    </div>
+          <div className="flex flex-col gap-3 justify-end mt-6 fixed bottom-24 left-[95%]">
+            <CButton
+              type="submit"
+              className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
+            >
+              {id ? "Update" : "Save"}
+            </CButton>
+            <CButton
+              onClick={onClose}
+              className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
+            >
+              Exit
+            </CButton>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 

@@ -1,11 +1,4 @@
-import {
-  CButton,
-  CFormInput,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-} from "@coreui/react";
+import { CButton, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -13,11 +6,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ImportModal from "../Modals/importModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-regular-svg-icons";
+import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import Table from "../../components/ATM components/Table/Table";
 import { Link, useNavigate } from "react-router-dom";
 import { randomSampleData } from "./SamplePlanningFunction";
@@ -56,7 +45,7 @@ const SampleWorkFlow = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample`);
-      console.log(response, "99999999999999999999999999");
+      console.log(response, "Sample Data for Pdf");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -102,9 +91,7 @@ const SampleWorkFlow = () => {
     console.log("Generating PDF for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
-      const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}`
-      );
+      const response = await fetch(`http://localhost:9000/generate-report/${sampleId}`);
       console.log("Response Status:", response.status);
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -235,10 +222,7 @@ const SampleWorkFlow = () => {
               onViewDetails(row);
             }}
           />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-          />
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-2 cursor-pointer" />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
       ),
@@ -357,10 +341,8 @@ const SampleWorkFlow = () => {
       sampleDisposition: item["Sample Disposition"] || "",
       stabilityStudyType: item["Stability Study Type"] || "",
       stabilityStudyProtocol: item["Stability Study Protocol"] || "",
-      stabilityProtocolApprovalDate:
-        item["Stability Protocol Approval date"] || "",
-      countryOfRegulatorySubmissions:
-        item["Country of Regulatory Submissions"] || "",
+      stabilityProtocolApprovalDate: item["Stability Protocol Approval date"] || "",
+      countryOfRegulatorySubmissions: item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
       photoStabilityTestingResult: item["Photostability Testing results"] || "",
       reConstitutionStability: item["Reconstitution Stability"] || "",
@@ -641,12 +623,8 @@ const SampleWorkFlow = () => {
 
             <td className="border px-4 py-2">Stability Study Type</td>
             <td className="border px-4 py-2">Stability Study Protocol</td>
-            <td className="border px-4 py-2">
-              Stability Protocol Approval date
-            </td>
-            <td className="border px-4 py-2">
-              Country of Regulatory Submissions
-            </td>
+            <td className="border px-4 py-2">Stability Protocol Approval date</td>
+            <td className="border px-4 py-2">Country of Regulatory Submissions</td>
             <td className="border px-4 py-2">ICH Zone</td>
             <td className="border px-4 py-2">Photostability Testing results</td>
             <td className="border px-4 py-2">Reconstitution Stability</td>
@@ -667,6 +645,7 @@ const SampleWorkFlow = () => {
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100 cursor-pointer">
               <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
+              {/* { setSelectedSamppleId(data.sampleId)} */}
                 <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{data.samplePlanId}</td>
                 <td className="border px-4 py-2">{data.sampleId}</td>

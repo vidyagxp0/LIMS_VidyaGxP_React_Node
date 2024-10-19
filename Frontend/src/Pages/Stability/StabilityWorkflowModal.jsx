@@ -17,6 +17,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import ProgressBar from "../../components/Workflow/ProgressBar";
 
 const StabilityWorkFlow = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -194,7 +195,7 @@ const StabilityWorkFlow = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  useEffect(() => {
+
     const fetchData = async () => {
       if (!id) return;
       try {
@@ -213,7 +214,8 @@ const StabilityWorkFlow = ({ onClose }) => {
         toast.error("Failed to fetch ");
       }
     };
-
+    
+    useEffect(() => {
     fetchData();
   }, [id]);
 
@@ -1373,8 +1375,21 @@ const StabilityWorkFlow = ({ onClose }) => {
         return null;
     }
   };
+  const handleStageChange = () => {
+    fetchData();
+  };
 
   return (
+    <>
+    {id ? (
+      <ProgressBar
+        stage={Number(formData.stage)}
+        sampleId={id}
+        onStageClick={handleStageChange}
+      />
+    ) : (
+      ""
+    )}
     <div className="p-8 bg-gray-100 min-h-screen">
       <form
         onSubmit={(e) => {
@@ -1484,6 +1499,7 @@ const StabilityWorkFlow = ({ onClose }) => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 
