@@ -22,10 +22,15 @@ const sampleRouter = express.Router();
 sampleRouter.post(
   "/create-sample",
   upload.fields([
-    { name: "sampleBarCode", maxCount: 1 },
     { name: "specificationAttachment", maxCount: 1 },
     { name: "stpAttachment", maxCount: 1 },
     { name: "attachment", maxCount: 1 },
+    { name: "siSupportiveAttachment", maxCount: 1 },
+    { name: "qaSupportiveAttachment", maxCount: 1 },
+    { name: "suSupportiveAttachment", maxCount: 1 },
+    { name: "saSupportiveAttachment", maxCount: 1 },
+    { name: "siSupportiveAttachment", maxCount: 1 },
+    { name: "stabilityStudyProtocol", maxCount: 1 },
   ]),
   createSample
 );
@@ -33,10 +38,15 @@ sampleRouter.post(
 sampleRouter.put(
   "/edit-sample/:id",
   upload.fields([
-    { name: "sampleBarCode", maxCount: 1 },
     { name: "specificationAttachment", maxCount: 1 },
     { name: "stpAttachment", maxCount: 1 },
     { name: "attachment", maxCount: 1 },
+    { name: "siSupportiveAttachment", maxCount: 1 },
+    { name: "qaSupportiveAttachment", maxCount: 1 },
+    { name: "suSupportiveAttachment", maxCount: 1 },
+    { name: "saSupportiveAttachment", maxCount: 1 },
+    { name: "siSupportiveAttachment", maxCount: 1 },
+    { name: "stabilityStudyProtocol", maxCount: 1 },
   ]),
   updateSample
 );

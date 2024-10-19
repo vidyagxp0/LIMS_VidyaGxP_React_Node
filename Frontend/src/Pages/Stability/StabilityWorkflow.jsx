@@ -491,8 +491,8 @@ const SampleWorkFlow = () => {
     <div className="m-5 mt-3">
       <LaunchQMS />
 
-      <div className="main-head">
-        <h2 className="fw-bold">Sample WorkFlow</h2>
+      <div className="main-head mb-2">
+        <h2 className="fw-bold">Stability WorkFlow</h2>
       </div>
 
       <div className="flex items-center justify-between mb-4">
@@ -528,7 +528,7 @@ const SampleWorkFlow = () => {
           />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
           <ATMButton
-            text="Add Sample Workflow"
+            text="Add Stability Workflow"
             color="blue"
             onClick={openWorkflowModal}
           />

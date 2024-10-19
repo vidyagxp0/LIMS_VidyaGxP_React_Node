@@ -3,7 +3,7 @@ import { CForm, CFormInput, CButton, CFormCheck } from "@coreui/react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../../Pages/Login/Login.css";
+import "../../Pages/Auth/Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import axios from "axios"; // Import axios
@@ -85,9 +85,14 @@ function AdminPanel(props) {
           >
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center">
-                <img src="https://connexo.io/assets/img/logo/logo.png" width={"300px"} />
+                <img
+                  src="https://connexo.io/assets/img/logo/logo.png"
+                  width={"300px"}
+                />
               </div>
-              <h2 className="text-3xl font-bold text-center text-dark">Welcome To Admin Console</h2>
+              <h2 className="text-3xl font-bold text-center text-dark">
+                Welcome To Admin Console
+              </h2>
             </div>
             <CForm>
               <div className="mb-4 text-gray-200">
