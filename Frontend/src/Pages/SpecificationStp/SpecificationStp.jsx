@@ -195,7 +195,7 @@ function SpecificationStp() {
   // };
 
   const handleClick = () => {
-    window.location.href = "https://ipc.mydemosoftware.com";
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const closeModal = () => {
@@ -205,23 +205,25 @@ function SpecificationStp() {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = async (item) => {
-    try {
-      const response = await axios.delete(
-        `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
-      );
+  const handleDelete = async () => {
+    window.location.href = "https://dms.mydemosoftware.com";
 
-      if (response.status === 200) {
-        const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
-        setApiData(newData);
-        toast.success(" deleted successfully");
+    // try {
+    //   const response = await axios.delete(
+    //     `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
+    //   );
 
-        console.log("Deleted item:", item);
-      }
-      fetchSpecificationStp();
-    } catch (error) {
-      console.error("Error deleting :", error);
-    }
+    //   if (response.status === 200) { 
+    //     const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
+    //     setApiData(newData);
+    //     toast.success(" deleted successfully");
+
+    //     console.log("Deleted item:", item);
+    //   }
+    //   fetchSpecificationStp();
+    // } catch (error) {
+    //   console.error("Error deleting :", error);
+    // }
   };
 
   const handleDateFromChange = (e) => {
@@ -287,7 +289,7 @@ function SpecificationStp() {
           <FontAwesomeIcon
             icon={faTrashCan}
             className="cursor-pointer"
-            onClick={() => handleDelete(row.original)}
+            onClick={() => handleDelete}
           />
         </>
       ),
@@ -335,16 +337,16 @@ function SpecificationStp() {
     return 0; // For other types, no sorting
   });
 
-  const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      // If the modal is already open for the same item, close it
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
-      // Otherwise, open it with the new data
-      setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
+  const onViewDetails = () => {
+    // if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+    //   setIsViewModalOpen(false);
+    //   setViewModalData(null);
+    // } else {
+    //   setViewModalData(rowData);
+    //   setIsViewModalOpen(true);
+    // }
+
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const handleCheckboxChange = (index) => {
@@ -545,8 +547,10 @@ function SpecificationStp() {
     // );
   };
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
+  const openEditModal = () => {
+    // setEditModalData(rowData);
+
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const closeEditModal = () => {

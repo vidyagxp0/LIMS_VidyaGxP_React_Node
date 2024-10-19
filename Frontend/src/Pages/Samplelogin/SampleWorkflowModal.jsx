@@ -19,12 +19,13 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
+import { BASE_URL } from "../../config.json";
+import BarcodeExportButton from "./BarcodeExportButton";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
-  console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
     types: "sample",
@@ -438,21 +439,12 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={formData.sampleBarCode || ""}
-                  onChange={(e) => {
-                    const inputValue = e.target.value;
-                    if (/^\d*$/.test(inputValue) && inputValue.length <= 42) {
-                      handleInputChange(e);
-                    }
-                  }}
-                  maxLength={42}
+                  value={""}
+                  disabled
                 />
-
-                {formData.sampleBarCode && (
-                  <div>
-                    <Barcode value={formData.sampleBarCode} />
-                  </div>
-                )}
+                <div>
+                  <BarcodeExportButton />
+                </div>
               </CCol>
             </CRow>
             <CRow className="mb-3">

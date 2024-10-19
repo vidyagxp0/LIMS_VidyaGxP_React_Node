@@ -57,7 +57,6 @@ const SampleWorkFlow = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      console.log(response, "Sample Data for Pdf");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -681,11 +680,11 @@ const SampleWorkFlow = () => {
           {data?.map((data, index) => (
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
-              <td className="border cursor-pointer  px-4 py-2">
-                {index + 1}
-              </td>
+              <td className="border cursor-pointer  px-4 py-2">{index + 1}</td>
               <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
-                <td className="hover:bg-gray-200 border px-4 py-2">{data.samplePlanId}</td>
+                <td className="hover:bg-gray-200 border px-4 py-2">
+                  {data.samplePlanId}
+                </td>
               </Link>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
@@ -788,9 +787,7 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
               <td claossName="border px-4 py-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
-                {data?.sampleBarCode && (
-                  <BarcodeExportButton barcodeValue={data.sampleBarCode} />
-                )}
+                <BarcodeExportButton />
               </td>
               <td className="flex justify-center items-center px-4 py-2">
                 <FaFilePdf
