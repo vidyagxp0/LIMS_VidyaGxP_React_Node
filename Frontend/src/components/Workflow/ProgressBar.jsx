@@ -100,7 +100,7 @@ const ProgressBar = (props) => {
       </div>
       <div className="inner-container pqrform-topdiv">
         <div className="flex justify-end gap-4 bg-slate-700 p-3">
-          {stage === 1 && (
+          {stage == "1" && (
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
@@ -110,7 +110,7 @@ const ProgressBar = (props) => {
               </button>
             </>
           )}
-          {stage === 2 && (
+          {stage == "2" && (
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
@@ -150,7 +150,7 @@ const ProgressBar = (props) => {
                 </button> */}
             </>
           )}
-          {stage === 3 && (
+          {stage == "3" && (
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
@@ -166,7 +166,7 @@ const ProgressBar = (props) => {
               </button>
             </>
           )}
-          {stage === 4 && (
+          {stage == "4" && (
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"

@@ -77,8 +77,10 @@ export const getSample = async (req, res) => {
 
 export const getSampleById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const sampleData = await SampleWorkFlow.findByPk(id);
+    const { id, type } = req.params;
+    const sampleData = await SampleWorkFlow.findOne({
+      where: { id: id, types: type },
+    });
     if (!sampleData) {
       return res.status(404).json({ message: "SampleData not found" });
     }

@@ -27,6 +27,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
+    types:"sample",
     stage: "1",
     samplePlanId: "",
     sampleId: "",
@@ -200,7 +201,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const fetchData = async () => {
     if (!id) return;
     try {
-      const response = await axios.get(`http://localhost:9000/get-Sample/${id}`);
+      const response = await axios.get(`http://localhost:9000/get-Sample/${id}/sample`);
       console.log(response.data);
 
       const responseData = Array.isArray(response.data) ? response.data : response.data.data;

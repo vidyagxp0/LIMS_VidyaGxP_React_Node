@@ -26,6 +26,7 @@ const StabilityWorkFlow = ({ onClose }) => {
   //   console.log(id);
 
   const [formData, setFormData] = useState({
+    types:"stability",
     samplePlanId: "",
     sampleId: "",
     sampleName: "",
@@ -200,9 +201,9 @@ const StabilityWorkFlow = ({ onClose }) => {
       if (!id) return;
       try {
         const response = await axios.get(
-          `http://localhost:9000/get-Sample/${id}`
+          `http://localhost:9000/get-Sample/${id}/stability`
         );
-        console.log(response.data);
+        console.log(response.data,"edittttttt");
 
         const responseData = Array.isArray(response.data)
           ? response.data
@@ -214,7 +215,7 @@ const StabilityWorkFlow = ({ onClose }) => {
         toast.error("Failed to fetch ");
       }
     };
-    
+
     useEffect(() => {
     fetchData();
   }, [id]);
