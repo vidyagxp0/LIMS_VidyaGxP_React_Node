@@ -229,6 +229,9 @@ import Signup from "./Pages/Auth/Signup.jsx";
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
+import StabilityWorkflow from "./Pages/Stability/StabilityWorkflow.jsx";
+import StabilityWorkflowModal from "./Pages/Stability/StabilityWorkflowModal.jsx";
+import StabilityWorkFlowPanel from "./Pages/Stability/StabilityWorkflowPanel.jsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false);
@@ -292,11 +295,11 @@ function App() {
             />
             <Route
               path="/stabilityWorkflowEdit/:id"
-              element={<StabilityWorkFlowModal />}
+              element={<StabilityWorkflowModal />}
             />
             <Route
               path="/stabilityWorkflowModal/"
-              element={<StabilityWorkFlowModal />}
+              element={<StabilityWorkflowModal />}
             />
 
             <Route path="/storageCondition1321" element={<Storage_Condition />} />

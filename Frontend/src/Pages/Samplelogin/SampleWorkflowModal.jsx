@@ -18,6 +18,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
+import ProgressBar from "../../components/Workflow/ProgressBar";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -270,7 +271,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="sampleId"
                   label="Sample ID"
                   value={formData.sampleId || ""}

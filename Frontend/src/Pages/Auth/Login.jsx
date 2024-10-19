@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { CForm, CFormInput, CButton, CFormCheck } from "@coreui/react";
+import {
+  CForm,
+  CFormInput,
+  CButton,
+  CFormCheck,
+  CFormSelect,
+} from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,11 +13,14 @@ import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 function Login(props) {
   const [email, setEmail] = useState("");
   const [passwd, setPasswd] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [userRole, setUserRole] = useState("admin");
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleInputData = (data, setter) => {
@@ -20,46 +29,44 @@ function Login(props) {
 
   const handleLogin = async () => {
     if (email === "" || passwd === "") {
-        toast.warning("Enter required credentials");
-        return;
+      toast.warning("Enter required credentials");
+      return;
     }
 
     try {
-        const response = await axios.post('http://localhost:9000/admin/admin-login', { 
-            email,
-            password: passwd,
-        });
+      const apiUrl = userRole === "admin"
+        ? "http://localhost:9000/admin/admin-login"
+        : "http://localhost:9000/admin/user-login";
 
-        const { token } = response.data;
-        localStorage.setItem('token', token);
-        toast.success("Login successfully");
-        setTimeout(() => {
-            navigate("/dashboard");
-        }, 1000);
+      const response = await axios.post(apiUrl, {
+        email,
+        password: passwd,
+        role: userRole,
+      });
+
+      const { token, data } = response.data; // Extract token and user data
+      localStorage.setItem("token", token);
+      if (data) {
+        console.log("User details:", data.name); // Logging user details
+        localStorage.setItem("user", JSON.stringify(data.name)); // Store user details if needed
+      }
+      
+      
+      localStorage.setItem("token", token);
+      toast.success("Login successfully");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
     } catch (error) {
-        toast.error("Invalid Credentials");
+      toast.error("Invalid Credentials");
     }
-};
-  // const handleLogin = () => {
-  //   if (email === "G") {
-  //     toast.success("Login successfully");
-  //     setTimeout(() => {
-  //       navigate("/dashboard");
-  //     }, 1000);
-  //   } else if (email === "Amit" && passwd === "Amit@121") {
-  //     toast.success("Login successfully");
-  //     setTimeout(() => {
-  //       navigate("/dashboard");
-  //     }, 1000);
-  //   } else if (email === "" || passwd === "") {
-  //     toast.warning("Enter required credentials");
-  //   } else {
-  //     toast.error("Invalid Credentials");
-  //   }
-  // };
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -72,7 +79,6 @@ function Login(props) {
             borderTopLeftRadius: "100px",
           }}
         >
-          {/* Image Section */}
           <div className="w-0 md:w-1/2 hidden md:block ">
             <img
               src="https://www.pharmaceutical-technology.com/wp-content/uploads/sites/24/2021/06/shutterstock_1985751242-scaled.jpg"
@@ -82,7 +88,6 @@ function Login(props) {
             />
           </div>
 
-          {/* Form Section */}
           <div
             className="w-full md:w-1/2 bg-gradient-to-r from-[#b3cafe] to-[#C0D2FC] p-10 flex flex-col justify-center"
             style={{ borderBottomRightRadius: "100px" }}
@@ -96,11 +101,29 @@ function Login(props) {
               </h2>
             </div>
             <CForm>
+              <div className="relative my-4 md:text-black outline-none mr-2">
+                <CFormSelect
+                  value={userRole}
+                  onChange={(e) => setUserRole(e.target.value)}
+                  onClick={handleToggle}
+                  className="p-3 rounded-full w-full bg-white border border-gray-400 outline-none appearance-none"
+                  style={{ paddingRight: "3rem" }}
+                >
+                  <option value="admin">Admin</option>
+                  <option value="supervisor">Supervisor</option>
+                  <option value="labTechnician">Lab Technician</option>
+                  <option value="allRoles">All Roles</option>
+                </CFormSelect>
+
+                <span className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none bg-white text-zinc-500">
+                  {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+                </span>
+              </div>
               <div className="mb-4 md:text-white ">
                 <CFormInput
                   type="text"
                   placeholder="Username or Email"
-                  label="UsernameOrEmail"
+                  label="Username Or Email"
                   onChange={(event) => handleInputData(event, setEmail)}
                   className="p-3 rounded-full w-full bg-white border border-gray-400"
                 />
@@ -118,7 +141,7 @@ function Login(props) {
                   <FontAwesomeIcon
                     icon={showPassword ? faEyeSlash : faEye}
                     onClick={togglePasswordVisibility}
-                    className="cursor-pointer text-gray-400 absolute top-14 transform -translate-y-1/2 right-4"
+                    className="cursor-pointer text-zinc-500 absolute top-[62px] transform -translate-y-1/2 right-4"
                   />
                 </div>
               </div>
@@ -137,9 +160,14 @@ function Login(props) {
                 </CButton>
               </div>
               <div className="text-lg text-white text-center">
-                If you don't have an account? 
-              <Link className="text-blue-600 hover:text-blue-800 underline font-medium"
-                to="/signup">Signup</Link></div>
+                If you don't have an account?
+                <Link
+                  className="text-blue-600 hover:text-blue-800 underline font-medium"
+                  to="/signup"
+                >
+                  Signup
+                </Link>
+              </div>
             </CForm>
           </div>
         </div>

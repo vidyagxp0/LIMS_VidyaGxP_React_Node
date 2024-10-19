@@ -17,6 +17,8 @@ import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
+import { FaFilePdf } from "react-icons/fa6";
+
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -43,7 +45,7 @@ const SampleWorkFlow = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample`);
-      console.log(response, "99999999999999999999999999");
+      console.log(response, "Sample Data for Pdf");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -636,6 +638,7 @@ const SampleWorkFlow = () => {
           {data?.map((data, index) => (
             <tr key={index} className="hover:bg-gray-100 cursor-pointer">
               <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
+              {/* { setSelectedSamppleId(data.sampleId)} */}
                 <td className="border px-4 py-2">{index + 1}</td>
                 <td className="border px-4 py-2">{data.samplePlanId}</td>
                 <td className="border px-4 py-2">{data.sampleId}</td>
@@ -758,7 +761,17 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
                 <td className="border px-4 py-2">{data.sampleBarcode}</td>{" "}
                 <td className="border px-4 py-2">{data.status}</td>{" "}
-                <td className="border px-4 py-2">{data.generatePDF}</td>{" "}
+                </Link>
+                <td className="border px-4 py-2">{data.generatePDF}
+                <td className="flex justify-center items-center px-4 py-2">
+                <FaFilePdf size={20}
+                  className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                  onClick={() => generatePDF(data.id)}
+                />
+                {loading[data.sampleId] && (
+                  <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                )}
+              </td></td>{" "}
                 <td className="border px-4 py-2 font-medium">
                   {" "}
                   <div className="flex gap-2 font-medium">
@@ -777,9 +790,10 @@ const SampleWorkFlow = () => {
                       className="cursor-pointer"
                       onClick={() => handleDelete(data)}
                     />
+                  
                   </div>
                 </td>
-              </Link>
+              
             </tr>
           ))}
         </tbody>
