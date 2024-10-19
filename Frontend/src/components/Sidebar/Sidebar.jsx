@@ -315,6 +315,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </>
             }
           >
+            <Link to="/StabilityWorkflow">
+              <CNavItem
+                href="#"
+                className={isActive("/StabilityWorkflow")}
+                style={{ ...isActive("/StabilityWorkflow") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Stability Workflow
+              </CNavItem>
+            </Link>
             <Link to="/storageCondition1321">
               <CNavItem
                 href="#"
@@ -2358,7 +2370,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
 
             {/* to be continue */}
 
-              {/* <Link to="/settings/projects">
+            {/* <Link to="/settings/projects">
                 <CNavItem
                   href="#"
                   className={isActive(" /settings/projects")}
@@ -2479,9 +2491,6 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </CNavItem>
               </Link> */}
             {/* to be continue */}
-
-
-
 
             {/* <Link to="/settings/externalRegistration">
               <CNavItem
