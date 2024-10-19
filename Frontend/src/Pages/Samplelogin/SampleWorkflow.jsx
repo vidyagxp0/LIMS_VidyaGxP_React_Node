@@ -29,6 +29,7 @@ import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
+import Barcode from "react-barcode"; // Import Barcode component
 const SampleWorkFlow = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -583,7 +584,7 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Sample Quantity</td>
             <td className="border px-4 py-2">UOM</td>
             <td className="border px-4 py-2">Market</td>
-            <td className="border px-4 py-2">Sample Barcode</td>
+           
             <td className="border px-4 py-2">Specification ID</td>
             <td className="border px-4 py-2">Specification Attachment</td>
             <td className="border px-4 py-2">STP ID</td>
@@ -656,8 +657,8 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">QA Reviewer/Approver </td>
             <td className="border px-4 py-2">QA Reviewer Comment </td>
             <td className="border px-4 py-2">QA Review Date </td>
-            <td className="border px-4 py-2">Sample Barcode </td>
             <td className="border px-4 py-2">Status </td>
+            <td className="border px-4 py-2">Sample Barcode</td>
             <td className="border px-4 py-2">Generate PDF </td>
             <td className="border px-4 py-2">Actions</td>
           </tr>
@@ -679,7 +680,7 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">{data.sampleQuantity}</td>
                 <td className="border px-4 py-2">{data.UOM}</td>
                 <td className="border px-4 py-2">{data.market}</td>
-                <td className="border px-4 py-2">{data?.sampleBarCode}</td>
+               
                 <td className="border px-4 py-2">{data.specificationId}</td>
                 <td className="border px-4 py-2">
                   {data.specificationAttachment}
@@ -786,8 +787,12 @@ const SampleWorkFlow = () => {
                 <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
                 <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
                 <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-                <td className="border px-4 py-2">{data.sampleBarcode}</td>{" "}
-                <td claossName="border px-4 py-2">{data.status}</td>{" "}
+                  <td claossName="border px-4 py-2">{data.status}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data?.sampleBarCode && (
+                    <Barcode value={data.sampleBarCode} />
+                  )}
+                </td>
               </Link>
               <td className="flex justify-center items-center px-4 py-2">
                 <FaFilePdf

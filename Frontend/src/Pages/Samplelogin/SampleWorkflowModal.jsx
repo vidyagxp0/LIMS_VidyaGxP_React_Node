@@ -136,11 +136,31 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   // Toggle selection of instruments
   const handleInputChange = (e) => {
-    const { value } = e.target;
+    const { name, value, options } = e.target;
+    if (name === "requiredInstrument") {
+      const selectedInstruments = [];
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].selected) {
+          selectedInstruments.push(options[i].value);
+        }
+      }
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: selectedInstruments,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+
+    if (name === "delayJustification" && value) {
+      setError("");
+    }
     setFormData((prevFormData) => {
       const selectedInstruments = [...prevFormData.requiredInstrument];
       if (selectedInstruments.includes(value)) {
-        // Remove instrument if already selected
         return {
           ...prevFormData,
           requiredInstrument: selectedInstruments.filter(
@@ -148,7 +168,6 @@ const SampleWorkflowModal = ({ onClose }) => {
           ),
         };
       } else {
-        // Add instrument to selection
         return {
           ...prevFormData,
           requiredInstrument: [...selectedInstruments, value],
@@ -523,11 +542,11 @@ const SampleWorkflowModal = ({ onClose }) => {
                   value={formData.sampleBarCode || ""}
                   onChange={(e) => {
                     const inputValue = e.target.value;
-                    if (/^\d*$/.test(inputValue) && inputValue.length <= 42) {
+                    if (/^\d*$/.test(inputValue) && inputValue.length <= 32) {
                       handleInputChange(e);
                     }
                   }}
-                  maxLength={42}
+                  maxLength={32}
                 />
 
                 {formData.sampleBarCode && (
