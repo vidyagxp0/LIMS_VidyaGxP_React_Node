@@ -130,17 +130,16 @@ function SpecificationStp() {
       const documents = response.data.body.document;
 
       if (Array.isArray(documents)) {
-        // Manually remove elements by index (4, 10, 12, 13, 17, 21, 23)
         const indicesToRemove = [23, 21, 17, 13, 12, 10, 4];
 
-        // Sort indices in descending order and remove them forcefully
         indicesToRemove.forEach((index) => {
           if (index < documents.length) {
             documents.splice(index, 1); // Removes 1 item at 'index'
           }
         });
 
-        const filteredData = documents.map((document) => ({
+        const filteredData = documents.map((document, index) => ({
+          sno: index + 1,
           document_name: document.document_name,
           document_type_id: document.document_type_id,
           department_id: document.department_id,

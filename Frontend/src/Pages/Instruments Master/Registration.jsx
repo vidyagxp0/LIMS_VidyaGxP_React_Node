@@ -468,6 +468,8 @@ const Registration = () => {
     { header: "Installed At", accessor: "InstalledAt" },
     { header: "Expiry On", accessor: "ExpiryOn" },
     { header: "Status", accessor: "status" },
+    { header: "Calibration Date", accessor: "calibrationDate" },
+    { header: "Calibration Due On", accessor: "calibrationDueOn" },
     {
       header: "Calibration Status",
       accessor: "CalibrationStatus",
