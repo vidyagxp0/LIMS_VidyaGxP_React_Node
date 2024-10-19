@@ -50,7 +50,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     testParameter: "",
     testingFrequency: "",
     testingLocation: "",
-    requiredInstrument: "",
+    requiredInstrument: [],
     testGrouping: "",
     lsl: "",
     usl: "",
@@ -526,6 +526,27 @@ const SampleWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
               <CCol md={12} className="mt-3">
+    <label htmlFor="requiredInstrument">Required Instruments</label>
+    <div className="flex flex-wrap gap-2 mb-2">
+      {formData.requiredInstrument && formData.requiredInstrument.map((instrument, index) => (
+        <span key={index} className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center">
+          {instrument}
+          <button
+            type="button"
+            className="ml-2 text-red-500"
+            onClick={() => {
+              setFormData((prevData) => ({
+                ...prevData,
+                requiredInstrument: prevData.requiredInstrument.filter((item) => item !== instrument),
+              }));
+            }}
+          >
+            &times; {/* Cross icon */}
+          </button>
+        </span>
+      ))}
+    </div>
+
                 <CFormSelect
                   name="requiredInstrument"
                   label="Required Instruments"
