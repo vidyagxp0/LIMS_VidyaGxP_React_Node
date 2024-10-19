@@ -86,7 +86,7 @@ const Table = ({
             </tr>
           </thead>
           {currentData?.length === 0 ? (
-            <div style={{ textAlign: "center", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginBottom: "1rem", columnGap: "0px", border: "0px !important", color:"gray" }} >
+            <div style={{ textAlign: "center",left:"44%",position:"absolute", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginTop: "5rem", columnGap: "0px", border: "0px !important", color:"gray" }} >
               No Data Available!
             </div>
           ) : (
