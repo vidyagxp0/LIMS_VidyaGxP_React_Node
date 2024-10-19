@@ -140,7 +140,8 @@ function SpecificationStp() {
           }
         });
 
-        const filteredData = documents.map((document) => ({
+        const filteredData = documents.map((document, index) => ({
+          serial_number: index + 1, // Assign a serial number manually
           document_name: document.document_name,
           document_type_id: document.document_type_id,
           department_id: document.department_id,
