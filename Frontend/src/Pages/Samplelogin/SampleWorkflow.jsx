@@ -92,7 +92,7 @@ const SampleWorkFlow = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(`http://localhost:9000/generate-report/${sampleId}`);
-      console.log("Response Status:", response.status);
+      console.log("Response Status:", response);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }

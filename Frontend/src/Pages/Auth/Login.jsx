@@ -34,14 +34,10 @@ function Login(props) {
     }
 
     try {
-      const apiUrl = userRole === "admin"
-        ? "http://localhost:9000/admin/admin-login"
-        : "http://localhost:9000/admin/user-login";
-
-      const response = await axios.post(apiUrl, {
+      const response = await axios.post("http://localhost:9000/admin/admin-login", {
         email,
         password: passwd,
-        role: userRole,
+        // role: userRole,
       });
 
       const { token, data } = response.data; // Extract token and user data
@@ -101,24 +97,6 @@ function Login(props) {
               </h2>
             </div>
             <CForm>
-              <div className="relative my-4 md:text-black outline-none mr-2">
-                <CFormSelect
-                  value={userRole}
-                  onChange={(e) => setUserRole(e.target.value)}
-                  onClick={handleToggle}
-                  className="p-3 rounded-full w-full bg-white border border-gray-400 outline-none appearance-none"
-                  style={{ paddingRight: "3rem" }}
-                >
-                  <option value="admin">Admin</option>
-                  <option value="supervisor">Supervisor</option>
-                  <option value="labTechnician">Lab Technician</option>
-                  <option value="allRoles">All Roles</option>
-                </CFormSelect>
-
-                <span className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none bg-white text-zinc-500">
-                  {isOpen ? <FaChevronUp /> : <FaChevronDown />}
-                </span>
-              </div>
               <div className="mb-4 md:text-white ">
                 <CFormInput
                   type="text"
