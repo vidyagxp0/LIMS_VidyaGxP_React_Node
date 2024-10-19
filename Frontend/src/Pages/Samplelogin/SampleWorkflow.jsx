@@ -66,7 +66,7 @@ const SampleWorkFlow = () => {
         ...item,
         sno: index + 1,
       }));
-      console.log(updatedData,"SAmplepriority");
+      console.log(updatedData, "SAmplepriority");
       setData(updatedData);
     } catch (error) {
       console.error("Error fetching ", error);
@@ -363,8 +363,7 @@ const SampleWorkFlow = () => {
       countryOfRegulatorySubmissions:
         item["Country of Regulatory Submissions"] || "",
       ichZone: item["ICH Zone"] || "",
-      photoStabilityTestingResult:
-        item["Photostability Testing results"] || "",
+      photoStabilityTestingResult: item["Photostability Testing results"] || "",
       reConstitutionStability: item["Reconstitution Stability"] || "",
       testingInterval: item["Testing Interval (months)"] || "",
       shelfLifeRecommendation: item["Shelf life reccommendation"] || "",
