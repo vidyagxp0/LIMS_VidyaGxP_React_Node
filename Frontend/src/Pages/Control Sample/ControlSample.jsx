@@ -256,14 +256,11 @@ const ControlSample = () => {
   const handleDeleteControl = (item) => {
     console.log(item , "item")
     axios
-      .delete(`http://localhost:9000/delete-lims/controlSampleManagement/${item.sno}`)
+      .delete(`http://localhost:9000/delete-lims/controlSampleManagement/${item.uniqueId}`)
       .then((response) => {
         toast.success(response.data.message || "Control Sample deleted successfully!");
   
-        // Update the local state after successful deletion
-        setData((prevData) => prevData.filter((sample) => sample.sno !== item.sno));
-  
-        closeModal(); // Close the modal after deletion
+        closeModal(); 
       })
       .catch((err) => {
         console.error(err);
@@ -319,7 +316,7 @@ const ControlSample = () => {
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
     setEditModalOpen(true);
-  };
+  };``
 
   const closeEditModal = () => {
     setEditModalOpen(false);
@@ -405,7 +402,7 @@ const ControlSample = () => {
     
       axios
         .put(
-          `http://localhost:9000/manage-lims/update/controlSampleManagement/${formData.sno}`,
+          `http://localhost:9000/manage-lims/update/controlSampleManagement/${formData.uniqueId}`,
           formData
         )
         .then((response) => {

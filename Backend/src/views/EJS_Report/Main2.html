@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+        font-family:Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        margin: 20px;
+        line-height: 1.6;
+      }
+      .report-content {
+        margin-top: 30px; /* Increase margin top for more spacing */
+      }
+      h1, h2 {
+        margin-bottom: 20px;
+        text-align: left; /* Align headings to the left */
+        clear: both; /* Clear floats to prevent overlap */
+      }   
+      h1 {
+        font-size: 24px;
+      }      
+      h2 {
+        font-size: 18px;
+        /* color: rgb(97 135 212); */
+        color: white;
+      }
+      p {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        /* border-collapse: collapse; */
+        margin-bottom: 30px; /* Increase margin bottom for more spacing */
+        /* border: 1px solid #000;  */
+      }
+      th, td {
+        /* border: 1px solid #000;  */
+        padding: 10px; /* Adjusted padding for better spacing */
+        text-align: left;
+      }
+      th {
+        /* background-color: #f8f8f8; */
+        font-weight: bold;
+      }
+      .remarks {
+       page-break-inside: avoid;
+      }
+      .heading
+      {
+        /* padding-top: 35px; */
+        color: rgb(97 135 212);
+        border-bottom: rgb(97 135 212) solid 2px;
+        /* background-color: rgb(97 135 212); */
+        text-align: left;
+      }
+      .sub-heading
+      {
+        /* padding-top: 35px; */
+        padding: 5px;
+        padding-inline: 15px;
+        max-width: fit-content;
+        background-color: rgb(97 135 212);
+        text-align: center;
+        border-top-left-radius: 20px;
+      }
+      </style>
+    <body>
+        <div class="remarks">
+            <h2 class="heading">Sample Registration</h2>
+            <table>
+                <tr>
+                    <th>Sample Plan ID</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                    <th>Sample ID</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Name</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Type</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Product/Material Name</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Batch/Lot Number</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Priority</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Quantity</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>UOM</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Market</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Barcode</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Specification Id</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Specification Attachment</th>
+                    <td> <% if (reportData?.initiatorAttachment) { %>
+                        <a href="<%= reportData.initiatorAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>
+                <tr>
+                    <th>STP Id</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>STP Attachment</th>
+                    <td> <% if (reportData?.initiatorAttachment) { %>
+                        <a href="<%= reportData.initiatorAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>
+                <tr>
+                    <th>Test Name</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Test Method</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Test Parameters</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Testing Frequency</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing Location</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Required Instruments</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Test Grouping</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>LSL</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>USL</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing Deadline</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Planner Name</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Source</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Planned Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Lab Technician</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Assigned Department</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Collection Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>             
+            </table>
+        </div>
+        <div class="remarks">
+            <h2 class="heading">Sample Analysis</h2>
+            <table>
+                <tr>
+                    <th>Analysis Type</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                    <th>Analysis Result</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Analysis Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Testing Start Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing End Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Delay Justification</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing Outcome</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Test Plan ID</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Turnaround Time (TAT)</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Retesting Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Review Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Storage Location</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Transportation Method</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Preparation Method</th>
+                   <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Packaging Details</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Label</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Regulatory Requirements</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Quality Control Checks</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Control Sample</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Reference Sample</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Integrity Status</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Assigned Department</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Risk Assessment</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Supervisor</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Movement History</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Testing Progress</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Alerts/Notifications</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Deviation Logs</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Comments/Notes</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Attachments</th>
+                    <td> <% if (reportData?.initiatorAttachment) { %>
+                        <a href="<%= reportData.initiatorAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>
+                <tr>
+                    <th>Sampling Frequency</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Sample Disposition</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>            
+            </table>
+        </div>
+        <div class="remarks">
+            <h2 class="heading">Supervisor</h2>
+            <table>
+                <tr>
+                    <th>Stability Study Type</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                    <th>Stability Study Protocol</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Stability Protocol Approval Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Country of Regulatory Submissions</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>ICH Zone</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Photostability Testing Results</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Reconstitution Stability</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>Testing Interval (months)</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Shelf Life Recommendation</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>     
+            </table>
+        </div>
+        <div class="remarks">
+            <h2 class="heading">Stability Information</h2>
+            <table>
+                <tr>
+                    <th>Reviewer/Approver</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                    <th>Reviewer Comment</th>
+                    <td><%= reportData?.initiator_name || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Review Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>QA Reviewer/Approver</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                    <th>QA Reviewer Comment</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>QA Review Date</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+            </table>
+        </div>
+</body>
+</html>

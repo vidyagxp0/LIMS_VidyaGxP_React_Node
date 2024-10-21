@@ -55,34 +55,27 @@ function SampleType() {
   const [data, setData] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchProductData();
-  }, []);
-
-  const fetchProductData = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/get-all-lims/mSampleType`);
-      if (response.data && Array.isArray(response.data)) {
-        const formattedData = response.data.flatMap(
-          (item) =>
-            item?.mSampleType?.map((condition) => ({
-              checkbox: false,
-              sno: condition.uniqueId,
-              sampleTypeName: condition.sampleTypeName || "No Sample Type Name",
-              addDate: condition.addDate || "No Date",
-              daysToComplete: condition.daysToComplete || "No Days to Complete",
-              status: condition.status || "Active",
-            })) || []
-        );
-        setData(formattedData);
-        closeModal();
-      }
-    } catch (error) {
-      toast.error(
-        "Error fetching data: " + (error.response?.data || error.message)
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/mSampleType`
       );
+      const fetchedData = response?.data[0]?.mSampleType || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -150,20 +143,22 @@ function SampleType() {
   };
 
   const handleDelete = async (item) => {
+    console.log(item);
+
     try {
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/mSampleType/${item.sno}`
+        `${BASE_URL}/delete-lims/mSampleType/${item.uniqueId}`
       );
       if (response.status === 200) {
-        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
-        toast.success("Sample deleted successfully.");
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
       } else {
-        toast.error("Failed to delete Sample.");
+        console.error("Failed to delete investigation:", response.statusText);
       }
     } catch (error) {
-      toast.error(
-        "Error deleting Sample: " + (error.response?.data || error.message)
-      );
+      console.error("Error deleting investigation:", error);
     }
   };
 
@@ -179,7 +174,7 @@ function SampleType() {
       );
       if (response.status === 200) {
         toast.success("Sample added successfully.");
-        fetchProductData(); // Refresh data after adding
+        fetchData(); // Refresh data after adding
         setIsModalOpen(false);
       } else {
         toast.error("Failed to add Sample.");
@@ -429,26 +424,29 @@ function SampleType() {
     setEditModalData(null);
   };
   const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/mSampleType/${updatedData.sno}`,
-        updatedData
+        `${BASE_URL}/manage-lims/update/mSampleType/${updatedData.uniqueId}`,
+        dataTosend
       );
       if (response.status === 200) {
-        setData((prevData) =>
-          prevData.map((item) =>
-            item.sno === updatedData.sno ? updatedData : item
-          )
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
         );
-        toast.success("SampleType updated successfully.");
-        setEditModalData(null);
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
       } else {
-        toast.error("Failed to update SampleType.");
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
       }
     } catch (error) {
-      toast.error(
-        "Error updating SampleType: " + (error.response?.data || error.message)
-      );
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
     }
   };
   const EditModal = ({ visible, closeModal, data, onSave }) => {

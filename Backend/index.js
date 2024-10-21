@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import limsRouter from "./src/routes/lims.route.js";
 import adminRouter from "./src/routes/admin.route.js";
+import sampleRouter from "./src/routes/sample.route.js";
 import helmet from "helmet";
 import { connectToDB } from "./src/config/db.js";
 import config from "./src/config/config.json" assert { type: "json" };
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", limsRouter);
 app.use("/admin", adminRouter);
+app.use("/", sampleRouter);
 
 // Helper function to get base64 encoded image
 const getBase64Image = async (filePath) => {
@@ -59,15 +61,15 @@ const getBase64Image = async (filePath) => {
 };
 
 // Example route to check uploaded file
-app.get('/images/:filename', (req, res) => {
+app.get("/images/:filename", (req, res) => {
   const { filename } = req.params;
-  const filePath = path.join(__dirname, 'src/public/images', filename);
+  const filePath = path.join(__dirname, "src/public/images", filename);
   res.sendFile(filePath);
 });
 
-app.get('/documents/:filename', (req, res) => {
+app.get("/documents/:filename", (req, res) => {
   const { filename } = req.params;
-  const filePath = path.join(__dirname, 'src/public/documents', filename);
+  const filePath = path.join(__dirname, "src/public/documents", filename);
   res.sendFile(filePath);
 });
 

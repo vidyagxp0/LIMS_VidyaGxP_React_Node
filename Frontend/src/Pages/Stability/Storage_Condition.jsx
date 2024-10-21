@@ -58,14 +58,16 @@ const initialData = [
 
 
 function Storage_Condition() {
-  const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [viewModalData, setViewModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Inactive");
-  const [editModalData, setEditModalData] = useState(null)
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
+  const [data, setData] = useState([]);
+  console.log(data, "datatatatatatata");
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -107,16 +109,44 @@ function Storage_Condition() {
   };
 
 
+  // const closeViewModal = () => {
+  //   setIsViewModalOpen(false);
+  // };
+
+  
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  // };
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  // const handleEditSave = (updatedData) => {
-  //   const newData = data.map((item) =>
-  //     item.sno === updatedData.sno ? updatedData : item
-  //   );
-  //   setData(newData);
-  //   setEditModalData(null);
-  // };
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
+        dataTosend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
+      } else {
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
+      }
+    } catch (error) {
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
+    }
+  };
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -124,15 +154,24 @@ function Storage_Condition() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.conditionCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
+  const filteredData = Array.isArray(data)
+  ? data.filter((row) => {
+      console.log("Row:", row);
+      const conditionCode = row.conditionCode || "";
+      return (
+        conditionCode?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
+        (statusFilter === "All" || row.status === statusFilter)
+      );
+    })
+  : [];
   const onViewDetails = (rowData) => {
-    setViewModalData(data);
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -141,10 +180,7 @@ function Storage_Condition() {
     setData(newData);
   };
   const columns = [
-    {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
+    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
     { header: "SrNo.", accessor: "sno" },
     { header: "Condition Code", accessor: "conditionCode" },
     { header: "Stability Condition", accessor: "stabilityCondition" },
@@ -155,35 +191,38 @@ function Storage_Condition() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => {
-              onViewDetails(row), navigate("/testResultsDetails");
-            }}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            onClick={() => openEditModal(row.original)}
-            className="mr-2 cursor-pointer"
-          />
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+          <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
         </>
       ),
     },
   ];
+  
 
   const openModal = () => {
     setIsModalOpen(true);
   };
 
-  // const handleDelete = (item) => {
-  //   const newData = data.filter((d) => d !== item);
-  //   setData(newData);
-  //   console.log("Deleted item:", item);
-  // };
+  const handleDelete = async (item) => {
+    console.log(item);
 
-
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sMStorageCondition/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
+  };
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -201,85 +240,58 @@ function Storage_Condition() {
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
-    setData((prevData)=>[
+    setData((prevData) => [
       ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
-
-  const handleDelete = async (item) => {
-    console.log(item);
-
-    try {
-      const response = await axios.delete(
-        `http://localhost:9000/delete-lims/sMStorageCondition/${item.uniqueId}`
-      );
-      if (response.status === 200) {
-        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
-        setData(newData);
-        toast.success("Data deleted successfully");
-        fetchData();
-      } else {
-        console.error("Failed to delete investigation:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting investigation:", error);
-    }
   };
 
-
-  const handleAdd = async (newProduct) => {
+  const handleAdd = async (newSampleType) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/manage-lims/add/sMStorageCondition`,
+        `${BASE_URL}/manage-lims/add/sMStorageCondition`,
         {
-          ...newProduct,
+          ...newSampleType,
           addDate: new Date().toISOString().split("T")[0],
-          status: newProduct.status || "Active",
+          status: newSampleType.status || "Active",
         }
       );
       if (response.status === 200) {
-        toast.success("Product added successfully.");
-        fetchData();
+        toast.success("Sample added successfully.");
+        fetchData(); // Refresh data after adding
         setIsModalOpen(false);
       } else {
-        toast.error("Failed to adsd Product.");
+        toast.error("Failed to add Sample.");
       }
     } catch (error) {
       toast.error(
-        "Error adding product: " + (error.response?.data || error.message)
+        "Error adding Sample: " + (error.response?.data || error.message)
       );
     }
   };
-  
 
-  const StatusModal = ({visible , closeModal,onAdd}) => {
-    const [stabilityCondition , setStabilityCondition] = useState('')
-    const [description, setDescription] = useState('')
-    const [conditionCode, setConditionCode] = useState('')
-
-    const handleAdd = ()=>{
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [stabilityCondition, setStabilityCondition] = useState("");
+    const [conditionCode, setConditionCode] = useState("");
+    const [description, setDescription] = useState("");
+    const handleProduct = () => {
       const newCondition = {
-        conditionCode:conditionCode,
-        stabilityCondition:stabilityCondition,
-        description:description,
-        attachment:"attachment",
-        action:[],
-      }
+        stabilityCondition,
+        description,
+        status: "active",
+      };
       onAdd(newCondition);
-      closeModal();
-    }
-    
-
+    };
     return (
       <>
-        <CModal
-          alignment="center"
-          visible={visible}
-          onClose={closeModal}
-        >
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
           <CModalHeader>
             <CModalTitle>New Condition</CModalTitle>
           </CModalHeader>
@@ -290,7 +302,15 @@ function Storage_Condition() {
               label="Stability Storage Condition"
               placeholder="°C °F "
               value={stabilityCondition}
-              onChange={(e)=> setStabilityCondition(e.target.value)}
+              onChange={(e) => setStabilityCondition(e.target.value)}
+            />
+             <CFormInput
+              className="mb-3"
+              type="text"
+              label="Condition Code"
+              placeholder=" "
+              value={conditionCode}
+              onChange={(e) => setConditionCode(e.target.value)}
             />
             <CFormInput
               className="mb-3"
@@ -298,7 +318,7 @@ function Storage_Condition() {
               label="Description"
               placeholder=" "
               value={description}
-              onChange={(e)=> setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <CFormInput
               className="mb-3"
@@ -313,7 +333,9 @@ function Storage_Condition() {
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleAdd}>Add</CButton>
+            <CButton className="bg-info text-white" onClick={handleProduct}>
+              Add
+            </CButton>
           </CModalFooter>
         </CModal>
       </>
@@ -337,12 +359,8 @@ function Storage_Condition() {
     };
 
     return (
-          <>
-        <CModal
-          alignment="center"
-          visible={visible}
-          onClose={closeModal}
-        >
+      <>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
           <CModalHeader>
             <CModalTitle>New Condition</CModalTitle>
           </CModalHeader>
@@ -354,6 +372,14 @@ function Storage_Condition() {
               name="stabilityCondition"
               placeholder="°C °F "
               value={formData?.stabilityCondition || ""}
+              onChange={handleChange}
+            />
+             <CFormInput
+              className="mb-3"
+              type="text"
+              label="Condition Code"
+              placeholder=" "
+              value={formData?.conditionCode}
               onChange={handleChange}
             />
             <CFormInput
@@ -370,48 +396,14 @@ function Storage_Condition() {
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleSave}>Add</CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Add
+            </CButton>
           </CModalFooter>
         </CModal>
       </>
-        
     );
   };
-  const handleEditSave = async (updatedData) => {
-    const { sno, checkbox, ...dataTosend } = updatedData;
-    try {
-      const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
-        dataTosend
-      );
-      if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId
-            ? { ...item, ...response.data }
-            : item
-        );
-        setData(newData);
-        closeEditModal();
-        toast.success("Data updated successfully");
-        fetchData();
-      } else {
-        console.error("Failed to update investigation:", response.statusText);
-        toast.error("Failed to update investigation");
-      }
-    } catch (error) {
-      console.error("Error updating investigation:", error);
-      toast.error("Error updating investigation");
-    }
-  };
-  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.samplingID === samplingConfiguration.samplingID
-        ? { ...item, status: newStatus }
-        : item
-    );
-    setData(updatedData);
-  };
-  
 
   return (
     <>
@@ -441,7 +433,11 @@ function Storage_Condition() {
               title="Storage Condition Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Storage Condition" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Storage Condition"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -453,12 +449,24 @@ function Storage_Condition() {
           openEditModal={openEditModal}
         />
       </div>
-      {isModalOpen && 
-      <StatusModal
-       visible={isModalOpen}
-       closeModal={closeModal} 
-       onAdd={handleAdd} />}
-
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={handleAdd}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          onClose={handleCloseModals}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -490,7 +498,5 @@ function Storage_Condition() {
     </>
   );
 }
-
-
 
 export default Storage_Condition;

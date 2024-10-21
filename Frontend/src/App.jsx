@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./Pages/Login/Login";
+import Login from "./Pages/Auth/Login.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@coreui/coreui/dist/css/coreui.min.css";
 import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
@@ -18,6 +18,8 @@ import QualityCheck from "./Pages/UserManagement/Department/QualityCheck";
 import Store from "./Pages/UserManagement/Department/Store";
 import Roles from "./Pages/UserManagement/Roles";
 import Samplelogin from "./Pages/Samplelogin/Samplelogin";
+import SampleWorkflow from "./Pages/Samplelogin/SampleWorkflow.jsx";
+import SampleWorkflowModal from "./Pages/Samplelogin/SampleWorkflowModal.jsx";
 import SampleLoginDetails from "./Pages/Samplelogin/SampleloginView/SampleLoginDetails.jsx";
 import TestResultsDetails from "./Pages/Samplelogin/SampleloginView/TestResultsDetails.jsx";
 import InvestigationL1 from "./Pages/Samplelogin/InvestigationL1";
@@ -210,6 +212,7 @@ import TestHistory from "./Pages/Settings/TestHistory.jsx";
 import SettingVendors from "./Pages/Settings/SettingVendors.jsx";
 import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx";
 import ControlSample from "./Pages/Control Sample/ControlSample.jsx";
+import SpecificationStp from "./Pages/SpecificationStp/SpecificationStp.jsx";
 import SpecificationSpec from "./Pages/SpecificationSpec.jsx";
 
 import AdminPanel from "./components/AdminPanel/AdminPanel.jsx";
@@ -217,13 +220,18 @@ import AdminMainPanel from "./components/AdminPanel/AdminMainPanel.jsx";
 import UserMgnt from "./components/AdminPanel/User Management/UserMgnt.jsx";
 import SiteManagement from "./components/AdminPanel/Site-Management/SiteManagement.jsx";
 import ProcessManagement from "./components/AdminPanel/Process-Management/ProcessManagement.jsx";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AnalystPersonal from "./Pages/AnalystPersonal.jsx";
 import STP from "./Pages/STP/STP.jsx";
+import SampleWorkFlowPanel from "./Pages/Samplelogin/sampleWorkflowPanel.jsx";
+import Signup from "./Pages/Auth/Signup.jsx";
 // import StabilityProtocolDetails from './Pages/Stability/StabilityProtocol.jsx'
 // import SampleStorageDetails from './Pages/Stability/SampleStorage.jsx'
 // import CoaTemplateDetails from './Pages/Stability/CoaTemplate.jsx'
+import StabilityWorkflow from "./Pages/Stability/StabilityWorkflow.jsx";
+import StabilityWorkflowModal from "./Pages/Stability/StabilityWorkflowModal.jsx";
+import StabilityWorkFlowPanel from "./Pages/Stability/StabilityWorkflowPanel.jsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false);
@@ -236,6 +244,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login show={checkLoggedIn} />} />
+          <Route path="/signup" element={<Signup/>} />
           <Route path="" element={<MainPanel />}>
             <Route
               path="/dashboard"
@@ -249,6 +258,7 @@ function App() {
             <Route path="/analyst-personal" element={<AnalystPersonal />} />
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/control-sample" element={<ControlSample />} />
+            <Route path="/SpecificationStp" element={<SpecificationStp />} />
             <Route path="/specificationSpec" element={<SpecificationSpec />} />
 
             <Route path="/department" element={<Department />} />
@@ -260,11 +270,37 @@ function App() {
             <Route path="/roles" element={<Roles />} />
 
             <Route path="/samplelogin" element={<Samplelogin />} />
+            <Route path="/sampleWorkflow" element={<SampleWorkflow />} />
+            <Route
+              path="/sampleWorkflowPanel"
+              element={<SampleWorkFlowPanel />}
+            />
+            <Route
+              path="/sampleWorkflowEdit/:id"
+              element={<SampleWorkflowModal />}
+            />
+            <Route
+              path="/sampleWorkflowModal/"
+              element={<SampleWorkflowModal />}
+            />
             <Route path="/viewDetails" element={<SampleLoginDetails />} />
             <Route path="/testResultsDetails" element={<TestResultsDetails />} />
             <Route path="/investigationl1" element={<InvestigationL1 />} />
             <Route path="/investigationl2" element={<InvestigationL2 />} />
             <Route path="/sample-planning" element={<SamplePlanning />} />
+            <Route path="/stabilityworkflow" element={<StabilityWorkflow />} />
+            <Route
+              path="/stabilityWorkflowPanel"
+              element={<StabilityWorkFlowPanel />}
+            />
+            <Route
+              path="/stabilityWorkflowEdit/:id"
+              element={<StabilityWorkflowModal />}
+            />
+            <Route
+              path="/stabilityWorkflowModal/"
+              element={<StabilityWorkflowModal />}
+            />
 
             <Route path="/storageCondition1321" element={<Storage_Condition />} />
             <Route path="/standardProtocol" element={<StandardProtocol />} />

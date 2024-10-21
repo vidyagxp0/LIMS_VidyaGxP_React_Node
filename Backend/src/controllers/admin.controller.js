@@ -114,6 +114,7 @@ export const signUp = async (req, res) => {
           gender: gender,
           designation: designation,
           password: hashPassword,
+          // user_type: "user",
           // profile_pic: getImageUrl(req?.file),
         },
         { transaction }

@@ -57,7 +57,6 @@ export const addLIMSField = async (
   transaction
 ) => {
   let fieldArray = limsRecord[fieldName];
-
   if (!Array.isArray(fieldArray)) {
     fieldArray = [];
   }

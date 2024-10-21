@@ -257,7 +257,7 @@ function StorageCondition() {
           },
         ]);
         closeModal();
-
+        fetchStorageCondition();
         toast.success("Calibration Type added successfully");
         // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
       }
@@ -265,9 +265,7 @@ function StorageCondition() {
       console.error("Error adding calibration type:", error);
       toast.error("Failed to add calibration type");
     }
-    useEffect(() => {
-      fetchStorageCondition();
-    }, []);
+
     setIsModalOpen(false);
   };
 
@@ -477,18 +475,14 @@ function StorageCondition() {
             />
           </div>
         </div>
-        {filteredData && filteredData.length > 0 ? (
-          <Table
-            columns={columns}
-            data={filteredData}
-            onCheckboxChange={handleCheckboxChange}
-            onViewDetails={onViewDetails}
-            onDelete={handleDelete}
-            openEditModal={openEditModal}
-          />
-        ) : (
-          <p>No storage conditions available.</p>
-        )}
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
       {isModalOpen && (
@@ -531,3 +525,27 @@ function StorageCondition() {
 
 export default StorageCondition;
 
+//   // {
+//   //   header: "Actions",
+//   //   accessor: "action",
+//   //   Cell: ({ row }) => (
+//   //     <>
+//   //       <FontAwesomeIcon
+//   //         icon={faEye}
+//   //         className="mr-2 cursor-pointer"
+//   //         onClick={() => onViewDetails(row)}
+//   //       />
+//   //       <FontAwesomeIcon
+//   //         icon={faPenToSquare}
+//   //         className="mr-2 cursor-pointer"
+//   //         onClick={() => openEditModal(row.original)}
+//   //       />
+//   //       <FontAwesomeIcon
+//   //         icon={faTrashCan}
+//   //         className="cursor-pointer"
+//   //         onClick={() => handleDelete(row.original)}
+//   //       />
+//   //     </>
+//   //   ),
+//   // },
+// ];

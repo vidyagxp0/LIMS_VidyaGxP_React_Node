@@ -15,7 +15,7 @@ const Table = ({
   onDelete,
   openEditModal,
 }) => {
-  const pageSize = 5;
+  const pageSize = 7;
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -85,6 +85,12 @@ const Table = ({
               ))}
             </tr>
           </thead>
+          {currentData?.length === 0 ? (
+            <div style={{ textAlign: "center",left:"44%",position:"absolute", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginTop: "5rem", columnGap: "0px", border:"none", color:"gray" }} >
+              No Data Available!
+            </div>
+          ) : (
+          
           <tbody className="bg-white divide-y divide-gray-200">
           {currentData?.map((row, rowIndex) => (
   <tr key={rowIndex}>
@@ -149,7 +155,10 @@ const Table = ({
 ))}
 
           </tbody>
+
+)}
         </table>
+        {currentData.length > 0 ? (
         <div className="mt-4 flex justify-end">
           <nav
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
@@ -198,6 +207,7 @@ const Table = ({
             </button>
           </nav>
         </div>
+        ):""}
       </div>
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
@@ -206,6 +216,7 @@ const Table = ({
         item={itemToDelete}
       />
     </>
+    
   );
 };
 

@@ -51,7 +51,6 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
 
   const resetForm = () => {
     setControlSapmleData({
-      sno:"",
       checkbox: "",
       sampleId: "",
       productName: "",
@@ -112,16 +111,11 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
   const handleAddControlSample = (e) => {
 
     e.preventDefault();
-
-    const newSampleData = {
-      ...controlSampleData,
-      sno: addRow.length > 0 ? addRow.length + 1 : 1, 
-    };
     axios
-      .post(`http://localhost:9000/manage-lims/add/controlSampleManagement`,newSampleData)
+      .post(`http://localhost:9000/manage-lims/add/controlSampleManagement`,controlSampleData)
       .then((response) => {
         toast.success(response.data.message || "Control Sample added successfully!")
-        addRow(newSampleData);
+        addRow(controlSampleData);
         closeModal()
       })
       .catch((err) => {
@@ -130,7 +124,7 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
       });
   };
 
-  return (
+  return ( 
     <div>
       <CModal
         alignment="center"

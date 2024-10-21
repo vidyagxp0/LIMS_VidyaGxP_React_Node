@@ -37,7 +37,14 @@ import { AiOutlineClose } from "react-icons/ai";
 
 import "./Sidebar.css";
 
-import { CNavGroup, CNavItem, CSidebar, CSidebarBrand, CSidebarHeader, CSidebarNav } from "@coreui/react";
+import {
+  CNavGroup,
+  CNavItem,
+  CSidebar,
+  CSidebarBrand,
+  CSidebarHeader,
+  CSidebarNav,
+} from "@coreui/react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "../../components/Sidebar/Sidebar.css";
@@ -66,7 +73,10 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
       >
         <CSidebarHeader className="border-bottom ">
           <CSidebarBrand>
-            <Link to="/dashboard" className="logo w-[200px] d-flex align-items-center">
+            <Link
+              to="/dashboard"
+              className="logo w-[200px] d-flex align-items-center"
+            >
               <img
                 src="/images/vidhyaGxp.png"
                 alt="..."
@@ -75,20 +85,33 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 }}
               />
             </Link>
-            <button className={`close-button ${isSidebarVisible ? "block" : "hidden"}`} onClick={toggleSidebarClass}>
+            <button
+              className={`close-button ${
+                isSidebarVisible ? "block" : "hidden"
+              }`}
+              onClick={toggleSidebarClass}
+            >
               <AiOutlineClose className="text-orange-400 text-2xl absolute left-[210px] top-[25px]" />
             </button>
           </CSidebarBrand>
         </CSidebarHeader>
         <CSidebarNav>
           <Link to="/dashboard">
-            <CNavItem href="#" style={{ ...isActive("/dashboard"), gap: "18px" }} className={isActive("/dashboard")}>
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/dashboard"), gap: "18px" }}
+              className={isActive("/dashboard")}
+            >
               <TfiDashboard />
               Dashboard
             </CNavItem>
           </Link>
           <Link to="/approval">
-            <CNavItem href="#" style={{ ...isActive("/approval"), gap: "18px" }} className={isActive("/approval")}>
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/approval"), gap: "18px" }}
+              className={isActive("/approval")}
+            >
               <MdOutlineVerified />
               Approval
             </CNavItem>
@@ -103,6 +126,17 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Storage Condition
             </CNavItem>
           </Link>
+          <Link to="/SpecificationStp">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/SpecificationStp"), gap: "18px" }}
+              className={isActive("/SpecificationStp")}
+            >
+              <AiOutlineContainer />
+              Specification/STP
+            </CNavItem>
+          </Link>
+
           <Link to="/specificationSpec">
             <CNavItem
               href="#"
@@ -125,7 +159,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
           </Link>
 
           <Link to="/stp">
-            <CNavItem href="#" style={{ ...isActive("/stp"), gap: "18px" }} className={isActive("/stp")}>
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/stp"), gap: "18px" }}
+              className={isActive("/stp")}
+            >
               <TbCurrentLocation />
               STP
             </CNavItem>
@@ -164,7 +202,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             }
           >
             <Link to="/department">
-              <CNavItem href="#" className={isActive("/department")} style={{ ...isActive("/department") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/department")}
+                style={{ ...isActive("/department") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -172,7 +214,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/users">
-              <CNavItem href="#" className={isActive("/users")} style={{ ...isActive("/users") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/users")}
+                style={{ ...isActive("/users") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -180,7 +226,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/roles">
-              <CNavItem href="#" className={isActive("/roles")} style={{ ...isActive("/roles") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/roles")}
+                style={{ ...isActive("/roles") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -196,8 +246,24 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </>
             }
           >
+            <Link to="/sampleWorkflow">
+              <CNavItem
+                href="#"
+                className={isActive("/sampleWorkflow")}
+                style={{ ...isActive("/samplelogin") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Sample Workflow
+              </CNavItem>
+            </Link>
             <Link to="/samplelogin">
-              <CNavItem href="#" className={isActive("/samplelogin")} style={{ ...isActive("/samplelogin") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/samplelogin")}
+                style={{ ...isActive("/samplelogin") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -205,7 +271,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/sample-planning">
-              <CNavItem href="#" className={isActive("/sample-planning")} style={{ ...isActive("/sample-planning") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/sample-planning")}
+                style={{ ...isActive("/sample-planning") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -213,7 +283,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/investigationl1">
-              <CNavItem href="#" className={isActive("/investigationl1")} style={{ ...isActive("/investigationl1") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/investigationl1")}
+                style={{ ...isActive("/investigationl1") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -221,7 +295,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/investigationl2">
-              <CNavItem href="#" className={isActive("/investigationl2")} style={{ ...isActive("/investigationl2") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/investigationl2")}
+                style={{ ...isActive("/investigationl2") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -229,6 +307,17 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
           </CNavGroup>
+
+          <CNavItem
+            href="https://barcode.mydemosoftware.com/login"
+            target="_blank" 
+            style={{ gap: "18px" }}
+            className={isActive("/barcode")}
+          >
+            <TbCurrentLocation />
+            Barcode
+          </CNavItem>
+
           <CNavGroup
             toggler={
               <>
@@ -237,6 +326,18 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </>
             }
           >
+            <Link to="/StabilityWorkflow">
+              <CNavItem
+                href="#"
+                className={isActive("/StabilityWorkflow")}
+                style={{ ...isActive("/StabilityWorkflow") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Stability Workflow
+              </CNavItem>
+            </Link>
             <Link to="/storageCondition1321">
               <CNavItem
                 href="#"
@@ -250,7 +351,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/standardProtocol">
-              <CNavItem href="#" className={isActive("/standardProtocol")} style={{ ...isActive("/standardProtocol") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/standardProtocol")}
+                style={{ ...isActive("/standardProtocol") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -258,7 +363,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/storageChamber">
-              <CNavItem href="#" className={isActive("/storageChamber")} style={{ ...isActive("/storageChamber") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/storageChamber")}
+                style={{ ...isActive("/storageChamber") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -302,7 +411,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/sampleStorage">
-              <CNavItem href="#" className={isActive("/sampleStorage")} style={{ ...isActive("/sampleStorage") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/sampleStorage")}
+                style={{ ...isActive("/sampleStorage") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -310,7 +423,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/coaTemplate">
-              <CNavItem href="#" className={isActive("/coaTemplate")} style={{ ...isActive("/coaTemplate") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/coaTemplate")}
+                style={{ ...isActive("/coaTemplate") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -330,7 +447,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/worksheetHeader">
-              <CNavItem href="#" className={isActive("/worksheetHeader")} style={{ ...isActive("/worksheetHeader") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/worksheetHeader")}
+                style={{ ...isActive("/worksheetHeader") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -362,7 +483,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/sampleLogin1321">
-              <CNavItem href="#" className={isActive("/sampleLogin1321")} style={{ ...isActive("/sampleLogin1321") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/sampleLogin1321")}
+                style={{ ...isActive("/sampleLogin1321") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -370,7 +495,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/sampleAcceptance">
-              <CNavItem href="#" className={isActive("/sampleAcceptance")} style={{ ...isActive("/sampleAcceptance") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/sampleAcceptance")}
+                style={{ ...isActive("/sampleAcceptance") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -387,7 +516,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             }
           >
             <Link to="/Masters/Product">
-              <CNavItem href="#" className={isActive("/Masters/Product")} style={{ ...isActive("/Masters/Product") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/Masters/Product")}
+                style={{ ...isActive("/Masters/Product") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -467,7 +600,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/Masters/TestPlan">
-              <CNavItem href="#" className={isActive("/Masters/TestPlan")} style={{ ...isActive("/Masters/TestPlan") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/Masters/TestPlan")}
+                style={{ ...isActive("/Masters/TestPlan") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -475,7 +612,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/Masters/MyTests">
-              <CNavItem href="#" className={isActive("/Masters/MyTests")} style={{ ...isActive("/Masters/MyTests") }}>
+              <CNavItem
+                href="#"
+                className={isActive("/Masters/MyTests")}
+                style={{ ...isActive("/Masters/MyTests") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -1691,8 +1832,6 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </CNavGroup>
           </CNavGroup> */}
 
-        
-
           <CNavGroup
             toggler={
               <>
@@ -1965,7 +2104,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             toggler={
               <>
                 <GrCertificate />
-                <span style={{ marginLeft: "18px" }}>Reports / Certificate</span>
+                <span style={{ marginLeft: "18px" }}>
+                  Reports / Certificate
+                </span>
               </>
             }
           >
@@ -2046,33 +2187,53 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </Link>
           </CNavGroup>
           <Link to="/vender">
-            <CNavItem href="#" className={isActive("/vender")} style={{ ...isActive("/vender"), fontSize: "14px" }}>
+            <CNavItem
+              href="#"
+              className={isActive("/vender")}
+              style={{ ...isActive("/vender"), fontSize: "14px" }}
+            >
               <CiShop />
               <span style={{ marginLeft: "21px" }}>Vendor</span>
             </CNavItem>
           </Link>
           <Link to="/clients">
-            <CNavItem href="#" className={isActive("/clients")} style={{ ...isActive("/clients") }}>
+            <CNavItem
+              href="#"
+              className={isActive("/clients")}
+              style={{ ...isActive("/clients") }}
+            >
               <FaPeopleLine />
               <span style={{ marginLeft: "21px" }}>Clients</span>
             </CNavItem>
           </Link>
           <Link to="/plants">
-            <CNavItem href="#" className={isActive(" /plants")} style={{ ...isActive("/plants") }}>
+            <CNavItem
+              href="#"
+              className={isActive(" /plants")}
+              style={{ ...isActive("/plants") }}
+            >
               <PiNuclearPlant />
               <span style={{ marginLeft: "21px" }}>Plants</span>
             </CNavItem>
           </Link>
 
           <Link to="/workFlow">
-            <CNavItem href="#" className={isActive("/workFlow")} style={{ ...isActive("/workFlow") }}>
+            <CNavItem
+              href="#"
+              className={isActive("/workFlow")}
+              style={{ ...isActive("/workFlow") }}
+            >
               <GoWorkflow />
               <span style={{ marginLeft: "21px" }}>Workflow</span>
             </CNavItem>
           </Link>
 
           <Link to="/auditTrail">
-            <CNavItem href="#" className={isActive(" /auditTrail")} style={{ ...isActive("/auditTrail") }}>
+            <CNavItem
+              href="#"
+              className={isActive(" /auditTrail")}
+              style={{ ...isActive("/auditTrail") }}
+            >
               <AiOutlineAudit />
               <span style={{ marginLeft: "21px" }}>Audit Trail</span>
             </CNavItem>
@@ -2182,7 +2343,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               </CNavItem>
             </Link>
             <Link to="/settings/grade">
-              <CNavItem href="#" className={isActive(" /settings/grade")} style={{ ...isActive("/settings/grade") }}>
+              <CNavItem
+                href="#"
+                className={isActive(" /settings/grade")}
+                style={{ ...isActive("/settings/grade") }}
+              >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
@@ -2213,126 +2378,131 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Access Right
               </CNavItem>
             </Link> */}
-            <Link to="/settings/projects">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/projects")}
-                style={{ ...isActive("/settings/projects") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Projects
-              </CNavItem>
-            </Link>
-            <Link to="/settings/template">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/template")}
-                style={{ ...isActive("/settings/template") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Template
-              </CNavItem>
-            </Link>
-            <Link to="/settings/trainingConfirmation">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/trainingConfirmation")}
-                style={{ ...isActive("/settings/trainingConfirmation") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Training Confirmations
-              </CNavItem>
-            </Link>
-            <Link to="/settings/proposal">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/proposal")}
-                style={{ ...isActive("/settings/proposal") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Proposal
-              </CNavItem>
-            </Link>
-            <Link to="/settings/nominations">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/nominations")}
-                style={{ ...isActive("/settings/nominations") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Nominations
-              </CNavItem>
-            </Link>
-            <Link to="/settings/reQualificationRequest">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/reQualificationRequest")}
-                style={{ ...isActive("/settings/reQualificationRequest") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Re-Qualification Request
-              </CNavItem>
-            </Link>
-            <Link to="/settings/resources">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/resources")}
-                style={{ ...isActive("/settings/resources") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Resources
-              </CNavItem>
-            </Link>
-            <Link to="/settings/typeOfSection">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/typeOfSection")}
-                style={{ ...isActive("/settings/typeOfSection") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Type of Section
-              </CNavItem>
-            </Link>
-            <Link to="/settings/wosTest">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/wosTest")}
-                style={{ ...isActive("/settings/wosTest") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                WOS Test
-              </CNavItem>
-            </Link>
-            <Link to="/settings/serviceprovider">
-              <CNavItem
-                href="#"
-                className={isActive(" /settings/serviceprovider")}
-                style={{ ...isActive("/settings/serviceprovider") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Service Provider
-              </CNavItem>
-            </Link>
+
+            {/* to be continue */}
+
+            {/* <Link to="/settings/projects">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/projects")}
+                  style={{ ...isActive("/settings/projects") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Projects
+                </CNavItem>
+              </Link>
+              <Link to="/settings/template">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/template")}
+                  style={{ ...isActive("/settings/template") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Template
+                </CNavItem>
+              </Link>
+              <Link to="/settings/trainingConfirmation">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/trainingConfirmation")}
+                  style={{ ...isActive("/settings/trainingConfirmation") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Training Confirmations
+                </CNavItem>
+              </Link>
+              <Link to="/settings/proposal">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/proposal")}
+                  style={{ ...isActive("/settings/proposal") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Proposal
+                </CNavItem>
+              </Link>
+              <Link to="/settings/nominations">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/nominations")}
+                  style={{ ...isActive("/settings/nominations") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Nominations
+                </CNavItem>
+              </Link>
+              <Link to="/settings/reQualificationRequest">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/reQualificationRequest")}
+                  style={{ ...isActive("/settings/reQualificationRequest") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Re-Qualification Request
+                </CNavItem>
+              </Link>
+              <Link to="/settings/resources">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/resources")}
+                  style={{ ...isActive("/settings/resources") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Resources
+                </CNavItem>
+              </Link>
+              <Link to="/settings/typeOfSection">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/typeOfSection")}
+                  style={{ ...isActive("/settings/typeOfSection") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Type of Section
+                </CNavItem>
+              </Link>
+              <Link to="/settings/wosTest">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/wosTest")}
+                  style={{ ...isActive("/settings/wosTest") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  WOS Test
+                </CNavItem>
+              </Link>
+              <Link to="/settings/serviceprovider">
+                <CNavItem
+                  href="#"
+                  className={isActive(" /settings/serviceprovider")}
+                  style={{ ...isActive("/settings/serviceprovider") }}
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>
+                  Service Provider
+                </CNavItem>
+              </Link> */}
+            {/* to be continue */}
+
             {/* <Link to="/settings/externalRegistration">
               <CNavItem
                 href="#"
@@ -2345,7 +2515,10 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 External Registration
               </CNavItem>
             </Link> */}
-            <Link to="/settings/testTechniques">
+
+            {/* to be continue */}
+
+            {/* <Link to="/settings/testTechniques">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/testTechniques")}
@@ -2356,7 +2529,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Test Techniques
               </CNavItem>
-            </Link>
+            </Link> */}
+            {/* to be continue */}
+
             {/* <Link to="/settings/instrumentRegistration">
               <CNavItem
                 href="#"
@@ -2369,7 +2544,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Instrument Regitration
               </CNavItem>
             </Link> */}
-            <Link to="/settings/stability">
+
+            {/* to be continue */}
+            {/* <Link to="/settings/stability">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/stability")}
@@ -2404,7 +2581,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Vendor
               </CNavItem>
-            </Link>
+            </Link> */}
+            {/* to be continue */}
+
             {/* <Link to="/settings/appConfiguration">
               <CNavItem
                 href="#"
