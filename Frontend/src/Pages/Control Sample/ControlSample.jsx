@@ -666,8 +666,8 @@ const ControlSample = () => {
               onChange={handleChange}
               name="remarks"
             />
-            <CButton color="primary" type="submit">
-              Save changes
+            <CButton color="primary" type="submit"  >
+              save change
             </CButton>
           </CForm>
         </CModalBody>

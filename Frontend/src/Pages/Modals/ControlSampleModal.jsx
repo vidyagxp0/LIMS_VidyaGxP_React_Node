@@ -111,17 +111,37 @@ const ControlSampleModal = ({ visible, closeModal, handleSubmit, addRow }) => {
   const handleAddControlSample = (e) => {
 
     e.preventDefault();
-    axios
-      .post(`http://localhost:9000/manage-lims/add/controlSampleManagement`,controlSampleData)
-      .then((response) => {
-        toast.success(response.data.message || "Control Sample added successfully!")
+    // axios
+    //   .post(`http://localhost:9000/manage-lims/add/controlSampleManagement`,controlSampleData)
+    //   .then((response) => {
+    //     toast.success(response.data.message || "Control Sample added successfully!")
+    //     addRow(controlSampleData);
+    //     closeModal()
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     toast.error("Control Sample Already Registered");
+    //   });
+    
+    try{
+      const response =  axios.post(`http://localhost:9000/manage-lims/add/controlSampleManagement`,{
+        ...controlSampleData,
+        status: newProduct.status || "Active",
+      })
+      if(response.status === 200 ){
+             toast.success(response.data.message || "Control Sample added successfully!")
         addRow(controlSampleData);
         closeModal()
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Control Sample Already Registered");
-      });
+      }
+      else{
+        toast.error("Failed to add Product.");
+      }
+    }
+    catch(error){
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   return ( 
