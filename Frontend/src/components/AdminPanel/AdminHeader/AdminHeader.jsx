@@ -41,7 +41,7 @@ function AdminHeader() {
   return (
     <header
       id="head"
-      className="text-gray-900 w-[100%] mobile:flex-col  desktop:flex-col laptop:flex-col tablet:flex-col py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[72px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8"
+      className="text-gray-900 w-[100%] mobile:flex-col  desktop:flex-col laptop:flex-col tablet:flex-col py-4 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[75px] flex items-center justify-center  px-4 tablet:px-6 laptop:px-8 ml-1"
     >
       <div className="flex items-center  w-[75%]  justify-center ">
         <div className="text-center">
@@ -51,7 +51,7 @@ function AdminHeader() {
         </div>
       </div>
 
-      <div className="flex items-end  justify-center w-[15%]">
+      <div className="flex items-end  justify-center w-[15%] gap-10">
         <div className="relative  mr-3">
           <button
             onClick={() => setNotification(!notification)}
@@ -61,7 +61,7 @@ function AdminHeader() {
               icon={faBell}
               className="text-xl mobile:text-2xl"
             />
-            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+            <span className="absolute top-[-4px] right-[-2px] inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
               12
             </span>
           </button>
@@ -100,14 +100,14 @@ function AdminHeader() {
               onClick={() => setDrop(!drop)}
               className="flex items-center text-gray-100 hover:text-gray-300"
             >
-               <CAvatar color="light" size="lg" status="success" className="mr-2">
+               <CAvatar color="light" size="md" status="success" className="mr-2">
                 <img
                   className="rounded-full "
                   src="https://cdn-icons-png.freepik.com/512/5003/5003094.png"
                   alt=""
                 />
               </CAvatar>
-              Amit Patel <FontAwesomeIcon icon={faAngleDown} className="ml-2" />
+              Admin <FontAwesomeIcon icon={faAngleDown} className="ml-2" />
             </button>
             {drop && (
               <div className="absolute left-0 z-50 py-2 mt-1 text-base bg-white border border-gray-300 rounded">
@@ -124,7 +124,7 @@ function AdminHeader() {
                   alt="Profile"
                   className="w-8 h-8 rounded-full mr-2"
                 />
-                <span className="font-bold">Amit Patel</span>
+                <span className="font-bold text-white">Admin</span>
               </div>
 
               <Link
@@ -143,7 +143,7 @@ function AdminHeader() {
                 <span className="mr-3">♣</span> About
               </div>
 
-              <Link to="/admin-login" onClick={()=>localStorage.clear()} className="block py-2 px-4 hover:bg-gray-100">
+              <Link to="/admin-login" onClick={()=>localStorage.clear()} className="block py-2 px-4 hover:bg-red-100 rounded-b-lg">
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="mr-2"

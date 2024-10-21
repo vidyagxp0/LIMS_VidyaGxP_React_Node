@@ -142,33 +142,33 @@ const SampleWorkflowModal = ({ onClose }) => {
     const { name, value, options, files } = e.target;
 
     if (name === "requiredInstrument") {
-        const selectedInstruments = [];
-        for (let i = 0; i < options.length; i++) {
-            if (options[i].selected) {
-                selectedInstruments.push(options[i].value);
-            }
+      const selectedInstruments = [];
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].selected) {
+          selectedInstruments.push(options[i].value);
         }
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: selectedInstruments,
-        }));
+      }
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: selectedInstruments,
+      }));
     } else if (e.target.type === "file") {
-        // Handle file input
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: files[0], // Store the first file selected
-        }));
+      // Handle file input
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0], // Store the first file selected
+      }));
     } else {
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
 
     if (name === "delayJustification" && value) {
-        setError("");
+      setError("");
     }
-};
+  };
 
   const [error, setError] = useState("");
 
@@ -250,29 +250,36 @@ const SampleWorkflowModal = ({ onClose }) => {
   };
 
   const handleSave = async () => {
-    if (id) {
-      await handleEdit();
-    } else {
-      try {
+    const formDataToSend = new FormData(); // Create a new FormData object
+
+    // Append all form data to the FormData object
+    for (const key in formData) {
+      if (Array.isArray(formData[key])) {
+        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+      } else {
+        formDataToSend.append(key, formData[key]);
+      }
+    }
+
+    try {
+      if (id) {
+        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+      } else {
         const response = await axios.post(
           `http://localhost:9000/create-sample`,
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          formDataToSend,
+          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
-        console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Sample Workflow added successfully.");
-          setIsModalOpen(false);
-          navigate("/sampleWorkflow");
-        } else {
-          toast.error("Failed to add Sample Workflow.");
-        }
-      } catch (error) {
-        toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
-        );
+        // Handle success response
+        toast.success("Sample Workflow added successfully.");
+        setIsModalOpen(false);
+        navigate("/sampleWorkflow");
       }
+    } catch (error) {
+      console.error("Error uploading file:", error); // Log the error
+      toast.error(
+        "Failed to upload file: " + (error.response?.data || error.message)
+      );
     }
   };
 
@@ -563,7 +570,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
                 {/* Display selected instruments with the option to remove */}
                 <div className="flex flex-wrap gap-2 mb-2 mt-2">
-                  {formData.requiredInstrument &&
+                  {Array.isArray(formData.requiredInstrument) &&
                   formData.requiredInstrument.length > 0 ? (
                     formData.requiredInstrument.map((instrument, index) => (
                       <span
@@ -781,7 +788,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CCol md={12}>
               <CFormInput
                 type="file"
-                name="srSupportiveAttachment"
+                name="suSupportiveAttachment"
                 label="Supportive Attachment"
                 // value={formData?.srSupportiveAttachment || ""}
                 onChange={handleInputChange}

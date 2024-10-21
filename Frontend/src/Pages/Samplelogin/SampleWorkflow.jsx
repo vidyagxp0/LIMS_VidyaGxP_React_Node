@@ -749,7 +749,20 @@ const SampleWorkFlow = ({ instrumentData }) => {
                 )}
               </td>
               <td className="border px-4 py-2">{data.stpId}</td>
-              <td className="border px-4 py-2">{data.stpAttachment}</td>
+              <td className="border px-4 py-2">
+                {data.stpAttachment ? (
+                  <a
+                    href={data.stpAttachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
+              </td>
               <td className="border px-4 py-2">{data.testPlanId}</td>
               <td className="border px-4 py-2">{data.testName}</td>
               <td className="border px-4 py-2">{data.testMethod}</td>
@@ -801,7 +814,20 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2 text-wrap">
                 {data.commentNotes}
               </td>{" "}
-              <td className="border px-4 py-2">{data.attachment}</td>
+              <td className="border px-4 py-2">
+                {data.attachment ? (
+                  <a
+                    href={data.attachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
+              </td>
               <td className="border px-4 py-2">{data.samplingFrequency}</td>
               <td className="border px-4 py-2">{data.sampleDisposition}</td>
               <td className="border px-4 py-2">
