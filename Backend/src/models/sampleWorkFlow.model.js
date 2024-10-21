@@ -89,8 +89,9 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     allowNull: true,
   },
   requiredInstrument: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: true,
+    defaultValue: [],
   },
   testGrouping: {
     type: DataTypes.TEXT,
@@ -208,11 +209,11 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  assignedDepartment: {
+  assignedDepartmentt: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  riskAssement: {
+  riskAssessment: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -220,6 +221,25 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  // New Fields Add!
+  instrumentsReserved: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  labAvailability: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  sampleCostEstimation: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  resourceUtilization: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  // End Here!
+
   sampleMovementHistory: {
     type: DataTypes.TEXT,
     allowNull: true,
@@ -260,11 +280,11 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  stabilityProtocolApprovelDate: {
+  stabilityProtocolApprovalDate: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  countryRegulatorySubmission: {
+  countryOfRegulatorySubmissions: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -300,7 +320,31 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  reviewerApprover: {
+  srSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  qaSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  suSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  saSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  siSupportiveAttachment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  stabilityStudyProtocol: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  initiatorName: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -308,11 +352,27 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  reviewerComment: {
+  initiatorReviewDate: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorComment: {
+  labTechnicianName: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  labTechnicianComment: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  labTechnicianReviewDate: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  reviewerApprover: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  reviewerComment: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
@@ -334,8 +394,8 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
   },
   stage: {
     type: TEXT,
-    defaultValue: 1,
-    allowNull: true,
+    defaultValue: "1",
+    allowNull: false,
   },
   status: {
     type: DataTypes.TEXT,
@@ -345,5 +405,9 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
   action: {
     type: DataTypes.TEXT,
     allowNull: true,
+  },
+  types: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
 });

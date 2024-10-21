@@ -11,7 +11,7 @@ const setSampleData = (data) => {
   sampleDatas.sampleName = sampleData?.sampleName ?? "";
   sampleDatas.sampleType = sampleData?.sampleType ?? "";
   sampleDatas.productMaterialName = sampleData?.productMaterialName ?? "";
-  sampleDatas.batchlotNumber = sampleData?.batchlotNumber ?? "";
+  sampleDatas.batchLotNumber = sampleData?.batchLotNumber ?? "";
   sampleDatas.samplePriority = sampleData?.samplePriority ?? "";
   sampleDatas.sampleQuantity = sampleData?.sampleQuantity ?? "";
   sampleDatas.UOM = sampleData?.UOM ?? "";
@@ -35,6 +35,7 @@ const setSampleData = (data) => {
   sampleDatas.plannerName = sampleData?.plannerName ?? "";
   sampleDatas.sampleDate = sampleData?.sampleDate ?? "";
   sampleDatas.sampleSource = sampleData?.sampleSource ?? "";
+  sampleDatas.plannedDate = sampleData?.plannedDate ?? "";
   sampleDatas.labTechnician = sampleData?.labTechnician ?? "";
   sampleDatas.assignedDepartment = sampleData?.assignedDepartment ?? "";
   sampleDatas.sampleCollectionDate = sampleData?.sampleCollectionDate ?? "";
@@ -57,8 +58,12 @@ const setSampleData = (data) => {
   sampleDatas.qualityControlCheck = sampleData?.qualityControlCheck ?? "";
   sampleDatas.controlSampleReference = sampleData?.controlSampleReference ?? "";
   sampleDatas.sampleIntegrityStatus = sampleData?.sampleIntegrityStatus ?? "";
-  sampleDatas.riskAssement = sampleData?.riskAssement ?? "";
+  sampleDatas.riskAssessment = sampleData?.riskAssessment ?? "";
   sampleDatas.supervisor = sampleData?.supervisor ?? "";
+  sampleDatas.instrumentsReserved = sampleData?.instrumentsReserved ?? "";
+  sampleDatas.labAvailability = sampleData?.labAvailability ?? "";
+  sampleDatas.sampleCostEstimation = sampleData?.sampleCostEstimation ?? "";
+  sampleDatas.resourceUtilization = sampleData?.resourceUtilization ?? "";
   sampleDatas.sampleMovementHistory = sampleData?.sampleMovementHistory ?? "";
   sampleDatas.testingProgress = sampleData?.testingProgress ?? "";
   sampleDatas.alertNotification = sampleData?.alertNotification ?? "";
@@ -69,10 +74,10 @@ const setSampleData = (data) => {
   sampleDatas.sampleDisposition = sampleData?.sampleDisposition ?? "";
   sampleDatas.stabilityStudyType = sampleData?.stabilityStudyType ?? "";
   sampleDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
-  sampleDatas.stabilityProtocolApprovelDate =
-    sampleData?.stabilityProtocolApprovelDate ?? "";
-  sampleDatas.countryRegulatorySubmission =
-    sampleData?.countryRegulatorySubmission ?? "";
+  sampleDatas.stabilityProtocolApprovalDate =
+    sampleData?.stabilityProtocolApprovalDate ?? "";
+  sampleDatas.countryOfRegulatorySubmissions =
+    sampleData?.countryOfRegulatorySubmissions ?? "";
   sampleDatas.ichZone = sampleData?.ichZone ?? "";
   sampleDatas.photoStabilityTestingResult =
     sampleData?.photoStabilityTestingResult ?? "";
@@ -84,10 +89,17 @@ const setSampleData = (data) => {
   sampleDatas.analysisType = sampleData?.analysisType ?? "";
   sampleDatas.analysisDate = sampleData?.analysisDate ?? "";
   sampleDatas.analysisResult = sampleData?.analysisResult ?? "";
-  sampleDatas.reviewerApprover = sampleData?.reviewerApprover ?? "";
+  sampleDatas.srSupportiveAttachment = sampleData?.srSupportiveAttachment ?? "";
+  sampleDatas.qaSupportiveAttachment = sampleData?.qaSupportiveAttachment ?? "";
+  sampleDatas.suSupportiveAttachment = sampleData?.suSupportiveAttachment ?? "";
+  sampleDatas.saSupportiveAttachment = sampleData?.saSupportiveAttachment ?? "";
+  sampleDatas.siSupportiveAttachment = sampleData?.siSupportiveAttachment ?? "";
+  sampleDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
   sampleDatas.initiatorComment = sampleData?.initiatorComment ?? "";
+  sampleDatas.labTechnicianComment = sampleData?.labTechnicianComment ?? "";
   sampleDatas.reviewerComment = sampleData?.reviewerComment ?? "";
-  sampleDatas.supervisorComment = sampleData?.supervisorComment ?? "";
+  sampleDatas.reviewerApprover = sampleData?.reviewerApprover ?? "";
+  sampleDatas.reviewDate = sampleData?.reviewDate ?? "";
   sampleDatas.QaReviewerApprover = sampleData?.QaReviewerApprover ?? "";
   sampleDatas.QaReviewerComment = sampleData?.QaReviewerComment ?? "";
   sampleDatas.QaReviewDate = sampleData?.QaReviewDate ?? "";
@@ -98,14 +110,18 @@ const setSampleData = (data) => {
 
 export const generatePdfbyId = async (req, res) => {
   const sampleId = req.params.id;
+  const type = req.params.type;
   let sampleData;
   try {
-    const sample = await fetch(`http://localhost:9000/get-Sample/${sampleId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const sample = await fetch(
+      `http://localhost:9000/get-Sample/${sampleId}/${type}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     sampleData = await sample.json();
 
     setSampleData(sampleData);

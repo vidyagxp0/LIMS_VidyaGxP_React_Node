@@ -30,6 +30,7 @@ import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
 import { toast } from "react-toastify";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { Navigate } from "react-router-dom";
 
 const fields = [
   { label: "Document Name", key: "documentName" },
@@ -91,7 +92,7 @@ const initialData = [
   },
 ];
 
-function StorageCondition() {
+function SpecificationStp() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -104,32 +105,83 @@ function StorageCondition() {
   const [dateTo, setDateTo] = useState("");
   const [division, setDivision] = useState("");
   const [period, setPeriod] = useState("");
-  const [sortKey, setSortKey] = useState("documentName"); // Default sort key
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
+  const [sortKey, setSortKey] = useState("documentName");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [apiData, setApiData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const fetchSpecificationStp = async () => {
+  console.log(apiData, "loooooooooooooo");
+
+  // 	Document Name,	Document Type,	Department,	Author,	Due Date,	Effective Date,	CC, References,	Status
+  //  document_name, document_type_id, department_id, reviewers,due_dateDoc, effective_date, reference_record, status
+
+  useEffect(() => {
+    openModal();
+  }, []);
+
+  const openModal = async () => {
+    setLoading(true);
+    setError(null); // Reset error state
     try {
       const response = await axios.get(
-        `${BASE_URL}/get-all-lims/specificationStp`
+        "https://dms.mydemosoftware.com/api/document"
       );
-      console.log(response);
-      const formattedData = response.data[0]?.specificationStp || []; // Adjust this based on your API response structure
+      const documents = response.data.body.document;
 
-      const updatedData = formattedData.map((item, index) => ({
-        ...item,
-        sno: index + 1,
-      }));
+      if (Array.isArray(documents)) {
+        const indicesToRemove = [23, 21, 17, 13, 12, 10, 4];
 
-      setData(updatedData);
+        indicesToRemove.forEach((index) => {
+          if (index < documents.length) {
+            documents.splice(index, 1); // Removes 1 item at 'index'
+          }
+        });
+
+        const filteredData = documents.map((document, index) => ({
+          sno: index + 1,
+          document_name: document.document_name,
+          document_type_id: document.document_type_id,
+          department_id: document.department_id,
+          reviewers: document.reviewers,
+          due_dateDoc: document.due_dateDoc,
+          effective_date: document.effective_date,
+          reference_record: document.reference_record,
+          status: document.status,
+        }));
+
+        setApiData(filteredData);
+      } else {
+        console.warn("Expected an array, but got:", documents);
+        setError("Unexpected data format.");
+      }
     } catch (error) {
-      console.error("Error fetching ", error);
-      toast.error("Failed to fetch ");
+      console.error("Error fetching the data:", error);
+      setError("Failed to fetch data.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchSpecificationStp();
-  }, []);
+  // const fetchSpecificationStp = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${BASE_URL}/get-all-lims/specificationStp`
+  //     );
+  //     console.log(response);
+  //     const formattedData = response.data[0]?.specificationStp || [];
+
+  //     const updatedData = formattedData.map((item, index) => ({
+  //       ...item,
+  //       sno: index + 1,
+  //     }));
+
+  //     setApiData(updatedData);
+  //   } catch (error) {
+  //     console.error("Error fetching ", error);
+  //     toast.error("Failed to fetch ");
+  //   }
+  // };
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -138,8 +190,12 @@ function StorageCondition() {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-  const openModal = () => {
-    setIsModalOpen(true);
+  // const openModal = () => {
+  //   setIsModalOpen(true);
+  // };
+
+  const handleClick = () => {
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const closeModal = () => {
@@ -149,23 +205,25 @@ function StorageCondition() {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = async (item) => {
-    try {
-      const response = await axios.delete(
-        `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
-      );
+  const handleDelete = async () => {
+    window.location.href = "https://dms.mydemosoftware.com";
 
-      if (response.status === 200) {
-        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
-        setData(newData);
-        toast.success(" deleted successfully");
+    // try {
+    //   const response = await axios.delete(
+    //     `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
+    //   );
 
-        console.log("Deleted item:", item);
-      }
-      fetchSpecificationStp();
-    } catch (error) {
-      console.error("Error deleting :", error);
-    }
+    //   if (response.status === 200) { 
+    //     const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
+    //     setApiData(newData);
+    //     toast.success(" deleted successfully");
+
+    //     console.log("Deleted item:", item);
+    //   }
+    //   fetchSpecificationStp();
+    // } catch (error) {
+    //   console.error("Error deleting :", error);
+    // }
   };
 
   const handleDateFromChange = (e) => {
@@ -186,8 +244,8 @@ function StorageCondition() {
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
+    const newData = apiData.map((row) => ({ ...row, checkbox: checked }));
+    setApiData(newData);
   };
   const columns = [
     {
@@ -195,23 +253,23 @@ function StorageCondition() {
       accessor: "sno",
     },
 
-    { header: "Document Name", accessor: "documentName" },
-    { header: "Document Type", accessor: "documentType" },
+    { header: "Document Name", accessor: "document_name" },
+    { header: "Document Type", accessor: "document_type_id" },
     {
       header: "Department",
-      accessor: "department",
+      accessor: "department_id",
     },
 
     {
       header: "Author ",
-      accessor: "author",
+      accessor: "reviewers",
     },
     {
       header: "Due Date",
-      accessor: "dueDate",
+      accessor: "due_dateDoc",
     },
-    { header: "Effective Date", accessor: "effectiveDate" },
-    { header: "CC References", accessor: "ccReferences" },
+    { header: "Effective Date", accessor: "reviewers" },
+    { header: "CC References", accessor: "reference_record" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -231,7 +289,7 @@ function StorageCondition() {
           <FontAwesomeIcon
             icon={faTrashCan}
             className="cursor-pointer"
-            onClick={() => handleDelete(row.original)}
+            onClick={() => handleDelete}
           />
         </>
       ),
@@ -239,18 +297,21 @@ function StorageCondition() {
   ];
 
   // Filtering logic
-  const filteredData = Array.isArray(data)
-    ? data.filter((row) => {
-        const matchesSearchQuery = row.documentName
+  const filteredData = Array.isArray(apiData)
+    ? apiData.filter((row) => {
+        // Ensure document_name exists before calling toLowerCase
+        const documentName = row.document_name || ""; // Fallback to an empty string if undefined
+        const matchesSearchQuery = documentName
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
+
         const matchesStatusFilter =
           statusFilter === "All" || row.status === statusFilter;
 
         const matchesDateFrom =
-          !dateFrom || new Date(row.effectiveDate) >= new Date(dateFrom);
+          !dateFrom || new Date(row.effective_date) >= new Date(dateFrom);
         const matchesDateTo =
-          !dateTo || new Date(row.effectiveDate) <= new Date(dateTo);
+          !dateTo || new Date(row.effective_date) <= new Date(dateTo);
 
         return (
           matchesSearchQuery &&
@@ -276,22 +337,22 @@ function StorageCondition() {
     return 0; // For other types, no sorting
   });
 
-  const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      // If the modal is already open for the same item, close it
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
-      // Otherwise, open it with the new data
-      setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
+  const onViewDetails = () => {
+    // if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+    //   setIsViewModalOpen(false);
+    //   setViewModalData(null);
+    // } else {
+    //   setViewModalData(rowData);
+    //   setIsViewModalOpen(true);
+    // }
+
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const handleCheckboxChange = (index) => {
-    const newData = [...data];
+    const newData = [...apiData];
     newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+    setApiData(newData);
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -306,7 +367,7 @@ function StorageCondition() {
     }));
 
     const concatenatedData = [...updatedData];
-    setData(concatenatedData);
+    setApiData(concatenatedData);
     setIsModalsOpen(false); // Update data state with parsed Excel data
   };
 
@@ -330,7 +391,7 @@ function StorageCondition() {
       if (response.status === 200) {
         const addedSpecificationStp = response.data.addLIMS; // Accessing the added item from the response
 
-        setData((prevData) => [
+        setApiData((prevData) => [
           ...prevData,
           {
             ...addedSpecificationStp,
@@ -350,9 +411,9 @@ function StorageCondition() {
 
     setIsModalOpen(false);
   };
-  useEffect(() => {
-    fetchSpecificationStp();
-  }, []);
+  // useEffect(() => {
+  //   fetchSpecificationStp();
+  // }, []);
   const handleStatusUpdate = async (newStatus) => {
     if (!newStatus) {
       console.error("New status is undefined");
@@ -376,7 +437,7 @@ function StorageCondition() {
         }
       );
       if (response.status === 200) {
-        setData((prevData) =>
+        setApiData((prevData) =>
           prevData.map((item) =>
             item.uniqueId === viewModalData.uniqueId
               ? { ...item, status: newStatus }
@@ -403,90 +464,93 @@ function StorageCondition() {
     const [effectiveDate, seteffectiveDate] = useState("");
     const [ccReferences, setccReferences] = useState("");
     const handleAdd = () => {
-      const newCondition = {
-        documentName,
-        documentType,
-        department,
-        author,
-        dueDate,
-        effectiveDate,
-        ccReferences,
-        status: "APPROVED",
-      };
-      onAdd(newCondition);
+      // Navigate("/https://ipc.mydemosoftware.com");
+      // const newCondition = {
+      //   documentName,
+      //   documentType,
+      //   department,
+      //   author,
+      //   dueDate,
+      //   effectiveDate,
+      //   ccReferences,
+      //   status: "APPROVED",
+      // };
+      // onAdd(newCondition);
     };
-    return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
-        <CModalHeader>
-          <CModalTitle>Add New Specification STP</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            type="text"
-            label="Document Name"
-            placeholder="Document Name"
-            value={documentName}
-            onChange={(e) => setdocumentName(e.target.value)}
-          />
+    // return (
+    //   <CModal alignment="center" visible={visible} onClose={closeModal}>
+    //     <CModalHeader>
+    //       <CModalTitle>Add New Specification STP</CModalTitle>
+    //     </CModalHeader>
+    //     <CModalBody>
+    //       <CFormInput
+    //         type="text"
+    //         label="Document Name"
+    //         placeholder="Document Name"
+    //         value={documentName}
+    //         onChange={(e) => setdocumentName(e.target.value)}
+    //       />
 
-          <CFormInput
-            type="text"
-            label="Document Type"
-            placeholder="Document Type"
-            value={documentType}
-            onChange={(e) => setdocumentType(e.target.value)}
-          />
+    //       <CFormInput
+    //         type="text"
+    //         label="Document Type"
+    //         placeholder="Document Type"
+    //         value={documentType}
+    //         onChange={(e) => setdocumentType(e.target.value)}
+    //       />
 
-          <CFormInput
-            type="text"
-            label="Department"
-            placeholder="Department"
-            value={department}
-            onChange={(e) => setdepartment(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            label="Author"
-            placeholder="Author"
-            value={author}
-            onChange={(e) => setauthor(e.target.value)}
-          />
-          <CFormInput
-            type="date"
-            label="Due Date"
-            placeholder="Due Date"
-            value={dueDate}
-            onChange={(e) => setdueDate(e.target.value)}
-          />
-          <CFormInput
-            type="date"
-            label="Effective Date"
-            placeholder="Effective Date"
-            value={effectiveDate}
-            onChange={(e) => seteffectiveDate(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            label="CC References"
-            placeholder="CC References"
-            value={ccReferences}
-            onChange={(e) => setccReferences(e.target.value)}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Cancel
-          </CButton>
-          <CButton color="primary" onClick={handleAdd}>
-            Add
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
+    //       <CFormInput
+    //         type="text"
+    //         label="Department"
+    //         placeholder="Department"
+    //         value={department}
+    //         onChange={(e) => setdepartment(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="text"
+    //         label="Author"
+    //         placeholder="Author"
+    //         value={author}
+    //         onChange={(e) => setauthor(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="date"
+    //         label="Due Date"
+    //         placeholder="Due Date"
+    //         value={dueDate}
+    //         onChange={(e) => setdueDate(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="date"
+    //         label="Effective Date"
+    //         placeholder="Effective Date"
+    //         value={effectiveDate}
+    //         onChange={(e) => seteffectiveDate(e.target.value)}
+    //       />
+    //       <CFormInput
+    //         type="text"
+    //         label="CC References"
+    //         placeholder="CC References"
+    //         value={ccReferences}
+    //         onChange={(e) => setccReferences(e.target.value)}
+    //       />
+    //     </CModalBody>
+    //     <CModalFooter>
+    //       <CButton color="light" onClick={closeModal}>
+    //         Cancel
+    //       </CButton>
+    //       <CButton color="primary" onClick={handleAdd}>
+    //         Add
+    //       </CButton>
+    //     </CModalFooter>
+    //   </CModal>
+    // );
   };
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
+  const openEditModal = () => {
+    // setEditModalData(rowData);
+
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const closeEditModal = () => {
@@ -501,13 +565,13 @@ function StorageCondition() {
       );
 
       if (response.status === 200) {
-        const newData = data.map((item) =>
+        const newData = apiData.map((item) =>
           item.uniqueId === updatedData.uniqueId
             ? { ...item, ...updatedData }
             : item
         );
 
-        setData(newData);
+        setApiData(newData);
         toast.success(" updated successfully");
       }
     } catch (error) {
@@ -517,10 +581,10 @@ function StorageCondition() {
       setEditModalData(null);
     }
   };
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
+  const EditModal = ({ visible, closeModal, apiData, onSave }) => {
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
-    const [formData, setFormData] = useState(data);
+    const [formData, setFormData] = useState(apiData);
 
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
@@ -534,10 +598,10 @@ function StorageCondition() {
     };
 
     useEffect(() => {
-      if (data) {
-        setFormData(data);
+      if (apiData) {
+        setFormData(apiData);
       }
-    }, [data]);
+    }, [apiData]);
 
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -557,7 +621,7 @@ function StorageCondition() {
             type="text"
             label="Document Name"
             placeholder="Document Name"
-            value={formData?.documentName || ""}
+            value={formdocumentName || ""}
             onChange={handleChange}
             name="documentName"
           />
@@ -684,7 +748,7 @@ function StorageCondition() {
           <ATMButton
             text="Add Specification STP"
             color="blue"
-            onClick={openModal}
+            onClick={handleClick}
             className="ml-auto"
           />
         </div>
@@ -737,4 +801,4 @@ function StorageCondition() {
   );
 }
 
-export default StorageCondition;
+export default SpecificationStp;

@@ -235,15 +235,20 @@ function StorageLocation() {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-      
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/storageLocation/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/storageLocation/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -445,18 +450,14 @@ function StorageLocation() {
             />
           </div>
         </div>
-        {filteredData && filteredData.length > 0 ? (
-          <Table
-            columns={columns}
-            data={filteredData}
-            onCheckboxChange={handleCheckboxChange}
-            onViewDetails={onViewDetails}
-            onDelete={handleDelete}
-            openEditModal={openEditModal}
-          />
-        ) : (
-          <p>No storage conditions available.</p>
-        )}{" "}
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
       </div>
 
       {isModalOpen && (
@@ -466,15 +467,15 @@ function StorageLocation() {
           onAdd={addNewStorageLocation}
         />
       )}
-      
-        <ReusableModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-          fields={fields}
-          title="Test Plan Details"
-          updateStatus={handleStatusUpdate}
-        />
+
+      <ReusableModal
+        visible={isViewModalOpen}
+        closeModal={closeViewModal}
+        data={viewModalData}
+        fields={fields}
+        title="Test Plan Details"
+        updateStatus={handleStatusUpdate}
+      />
       {editModalData && (
         <EditModal
           visible={Boolean(editModalData)}

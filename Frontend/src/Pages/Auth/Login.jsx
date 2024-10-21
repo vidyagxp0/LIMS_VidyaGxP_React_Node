@@ -1,42 +1,83 @@
 import React, { useState } from "react";
-import { CForm, CFormInput, CButton, CFormCheck } from "@coreui/react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import {
+  CForm,
+  CFormInput,
+  CButton,
+  CFormCheck,
+  CFormSelect,
+} from "@coreui/react";
+import { Link, useNavigate } from "react-router-dom";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 function Login(props) {
   const [email, setEmail] = useState("");
   const [passwd, setPasswd] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [userRole, setUserRole] = useState("admin");
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleInputData = (data, setter) => {
     setter(data.target.value);
   };
 
-  const handleLogin = () => {
-    if (email === "G") {
-      toast.success("Login successfully");
+  const handleLogin = async () => {
+    if (!email.trim()) {
+      toast.warning("Email is required");
+      return;
+    }
+    if (!passwd.trim()) {
+      toast.warning("Password is required");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/admin/user-login",
+        {
+          email,
+          password: passwd,
+        }
+      );
+
+      const { token, data } = response.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
+      }
+      if (data && data.name) {
+        localStorage.setItem("user", JSON.stringify(data.name));
+        console.log("User details:", data.name);
+      }
+
+      toast.success("Login successful");
+
       setTimeout(() => {
         navigate("/dashboard");
       }, 1000);
-    } else if (email === "Amit" && passwd === "Amit@121") {
-      toast.success("Login successfully");
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
-    } else if (email === "" || passwd === "") {
-      toast.warning("Enter required credentials");
-    } else {
-      toast.error("Invalid Credentials");
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error("Invalid credentials. Please try again.");
+      } else if (error.response && error.response.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error("Network error. Please check your connection.");
+      }
+      console.error("Login error:", error);
     }
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -49,7 +90,6 @@ function Login(props) {
             borderTopLeftRadius: "100px",
           }}
         >
-          {/* Image Section */}
           <div className="w-0 md:w-1/2 hidden md:block ">
             <img
               src="https://www.pharmaceutical-technology.com/wp-content/uploads/sites/24/2021/06/shutterstock_1985751242-scaled.jpg"
@@ -59,7 +99,6 @@ function Login(props) {
             />
           </div>
 
-          {/* Form Section */}
           <div
             className="w-full md:w-1/2 bg-gradient-to-r from-[#b3cafe] to-[#C0D2FC] p-10 flex flex-col justify-center"
             style={{ borderBottomRightRadius: "100px" }}
@@ -76,8 +115,8 @@ function Login(props) {
               <div className="mb-4 md:text-white ">
                 <CFormInput
                   type="text"
-                  placeholder="Username"
-                  label="Username"
+                  placeholder="Username or Email"
+                  label="Username Or Email"
                   onChange={(event) => handleInputData(event, setEmail)}
                   className="p-3 rounded-full w-full bg-white border border-gray-400"
                 />
@@ -95,7 +134,7 @@ function Login(props) {
                   <FontAwesomeIcon
                     icon={showPassword ? faEyeSlash : faEye}
                     onClick={togglePasswordVisibility}
-                    className="cursor-pointer text-gray-400 absolute top-14 transform -translate-y-1/2 right-4"
+                    className="cursor-pointer text-zinc-500 absolute top-[62px] transform -translate-y-1/2 right-4"
                   />
                 </div>
               </div>
@@ -107,17 +146,25 @@ function Login(props) {
               </div>
               <div className="mb-6">
                 <CButton
-                  className="w-full p-3 rounded-full bg-black text-white font-bold text-xl md:text-2xl"
+                  className="w-full p-3 rounded-full bg-black text-white font-bold text-xl md:text-xl"
                   onClick={handleLogin}
                 >
                   LOGIN
                 </CButton>
               </div>
+              <div className="text-lg text-white text-center">
+                If you don't have an account?
+                <Link
+                  className="text-blue-600 hover:text-blue-800 underline font-medium"
+                  to="/signup"
+                >
+                  Signup
+                </Link>
+              </div>
             </CForm>
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 }
