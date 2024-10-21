@@ -20,12 +20,13 @@ import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
+import SampleWorkFlow from "../Samplelogin/SampleWorkflow";
 
 const InstrumentMasterModal = ({
   visible,
   closeModal,
   handleSubmit,
-  addRow,
+  // addRow,
 }) => {
   const [fields, setFields] = useState([]);
 
@@ -141,7 +142,7 @@ const InstrumentMasterModal = ({
         toast.success(
           response.data.message || "Instrument Data added successfully!"
         );
-        addRow(instrumentData);
+        instrumentData;
         closeModal();
       })
       .catch((err) => {
@@ -377,6 +378,9 @@ const InstrumentMasterModal = ({
               onChange={(content) => handleInputChange("description", content)}
             />
           </div>
+          {instrumentData.calibrationStatus === "calibrated" && (
+            <SampleWorkFlow instrumentData={instrumentData} />
+          )}
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
