@@ -73,7 +73,7 @@ const Registration = () => {
               InstalledAt: condition.InstalledAt || "-",
               calibrationDate: condition.calibrationDate || "-",
               calibrationDueOn: condition.calibrationDueOn || "-",
-              calibrationStatus: condition.calibrationStatus || "-",
+              calibrationStatus: condition.calibrationStatus || "calibrated",
               ExpiryOn: condition.ExpiryOn || "-",
               status: condition.status || "Active",
             })) || []
@@ -417,8 +417,8 @@ const Registration = () => {
 
   useEffect(() => {
     const counts = {
-      calibrated:0,
-      nonCalibrated:0,
+      calibrated: 0,
+      nonCalibrated: 0,
     };
 
     data.forEach((item) => {
@@ -485,7 +485,7 @@ const Registration = () => {
       Cell: ({ value }) => (
         <span
           style={{
-            backgroundColor: value === "Calibrated" ? "green" : "red",
+            backgroundColor: value === "calibrated" ? "green" : "orange",
             color: "white",
             padding: "0.25em 0.5em",
             borderRadius: "4px",
@@ -669,6 +669,13 @@ const Registration = () => {
               ]}
               value={statusFilter}
               onChange={setStatusFilter}
+              className={`${
+                statusFilter === "calibrated"
+                  ? "bg-green-500"
+                  : statusFilter === "nonCalibrated"
+                  ? "bg-orange-500"
+                  : "bg-white"
+              } text-white p-2 rounded`}
             />
           </div>
           <div className="float-right flex gap-4">

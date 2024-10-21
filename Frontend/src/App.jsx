@@ -214,6 +214,7 @@ import AppConfiguration from "./Pages/Settings/AppConfiguration.jsx";
 import ControlSample from "./Pages/Control Sample/ControlSample.jsx";
 import SpecificationStp from "./Pages/SpecificationStp/SpecificationStp.jsx";
 import SpecificationSpec from "./Pages/SpecificationSpec.jsx";
+import ControlSampleModal from "./Pages/Modals/ControlSampleModal.jsx";
 
 import AdminMainPanel from "./components/AdminPanel/AdminMainPanel.jsx";
 import UserMgnt from "./components/AdminPanel/User Management/UserMgnt.jsx";
@@ -233,6 +234,7 @@ import StabilityWorkFlowPanel from "./Pages/Stability/StabilityWorkflowPanel.jsx
 import AdminPanel from "./components/AdminPanel/AdminPanel.jsx";
 import AnalystQualificationModal from "./Pages/AnalystQualificationModal.jsx";
 import AnalystQualification from "./Pages/AnalystQualification.jsx";
+// import ControlSampleModal from "./Pages/Modals/ControlSampleModal.jsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false);
@@ -297,6 +299,10 @@ function App() {
             <Route
               path="/stabilityWorkflowEdit/:id"
               element={<StabilityWorkflowModal />}
+            />
+              <Route
+              path="/control-Sample-modal"
+              element={<ControlSampleModal />}
             />
             <Route
               path="/stabilityWorkflowModal/"
