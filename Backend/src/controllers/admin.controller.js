@@ -114,7 +114,7 @@ export const signUp = async (req, res) => {
           gender: gender,
           designation: designation,
           password: hashPassword,
-          user_type: "user",
+          // user_type: "user",
           // profile_pic: getImageUrl(req?.file),
         },
         { transaction }
@@ -165,7 +165,7 @@ export const userLogin = async (req, res) => {
     }
 
     const data = await User.findOne({
-      where: { email: email.toLowerCase(), isActive: true, user_type: "user" },
+      where: { email: email.toLowerCase(), isActive: true },
     });
 
     if (!data) {

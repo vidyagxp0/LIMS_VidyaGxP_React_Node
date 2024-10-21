@@ -7,7 +7,7 @@ import {
   CFormSelect,
 } from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -28,33 +28,48 @@ function Login(props) {
   };
 
   const handleLogin = async () => {
-    if (email === "" || passwd === "") {
-      toast.warning("Enter required credentials");
+    if (!email.trim()) {
+      toast.warning("Email is required");
+      return;
+    }
+    if (!passwd.trim()) {
+      toast.warning("Password is required");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:9000/admin/admin-login", {
-        email,
-        password: passwd,
-        // role: userRole,
-      });
+      const response = await axios.post(
+        "http://localhost:9000/admin/user-login",
+        {
+          email,
+          password: passwd,
+        }
+      );
 
-      const { token, data } = response.data; // Extract token and user data
-      localStorage.setItem("token", token);
-      if (data) {
-        console.log("User details:", data.name); // Logging user details
-        localStorage.setItem("user", JSON.stringify(data.name)); // Store user details if needed
+      const { token, data } = response.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
       }
-      
-      
-      localStorage.setItem("token", token);
-      toast.success("Login successfully");
+      if (data && data.name) {
+        localStorage.setItem("user", JSON.stringify(data.name));
+        console.log("User details:", data.name);
+      }
+
+      toast.success("Login successful");
+
       setTimeout(() => {
         navigate("/dashboard");
       }, 1000);
     } catch (error) {
-      toast.error("Invalid Credentials");
+      if (error.response && error.response.status === 401) {
+        toast.error("Invalid credentials. Please try again.");
+      } else if (error.response && error.response.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error("Network error. Please check your connection.");
+      }
+      console.error("Login error:", error);
     }
   };
 
@@ -150,7 +165,6 @@ function Login(props) {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 }
