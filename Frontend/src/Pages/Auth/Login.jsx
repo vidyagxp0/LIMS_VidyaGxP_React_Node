@@ -107,7 +107,7 @@ function Login(props) {
               <div className="flex justify-center items-center mb-6">
                 <img src="login.png" width={"200px"} className="md:w-300px" />
               </div>
-              <h2 className="text-xl md:text-3xl md:text-white font-bold text-center ">
+              <h2 className="text-xl md:text-3xl md:text-white font-bold text-center mb-2">
                 Welcome To Laboratory Information Management System.
               </h2>
             </div>
@@ -151,15 +151,6 @@ function Login(props) {
                 >
                   LOGIN
                 </CButton>
-              </div>
-              <div className="text-lg text-white text-center">
-                If you don't have an account?
-                <Link
-                  className="text-blue-600 hover:text-blue-800 underline font-medium"
-                  to="/signup"
-                >
-                  Signup
-                </Link>
               </div>
             </CForm>
           </div>

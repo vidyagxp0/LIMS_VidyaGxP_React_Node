@@ -107,8 +107,7 @@ const SampleWorkFlow = () => {
         `http://localhost:9000/generate-report/${sampleId}/sample`
       );
       console.log("Response", response);
-     
-      
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -683,11 +682,11 @@ const SampleWorkFlow = () => {
           {data?.map((data, index) => (
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
-              <td className="border cursor-pointer  px-4 py-2">
-                {index + 1}
-              </td>
+              <td className="border cursor-pointer  px-4 py-2">{index + 1}</td>
               <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
-                <td className="hover:bg-gray-200 border px-4 py-2">{data.samplePlanId}</td>
+                <td className="hover:bg-gray-200 border px-4 py-2">
+                  {data.samplePlanId}
+                </td>
               </Link>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
@@ -702,7 +701,18 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.market}</td>
               <td className="border px-4 py-2">{data.specificationId}</td>
               <td className="border px-4 py-2">
-                {data.specificationAttachment}
+                {data.specificationAttachment ? (
+                  <a
+                    href={data.specificationAttachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
               </td>
               <td className="border px-4 py-2">{data.stpId}</td>
               <td className="border px-4 py-2">{data.stpAttachment}</td>
@@ -794,16 +804,19 @@ const SampleWorkFlow = () => {
                   <BarcodeExportButton barcodeValue={data.sampleBarCode} />
                 )}
               </td>
-              <td className="border px-4 py-2">{data.generatePDF}
+              <td className="border px-4 py-2">
+                {data.generatePDF}
                 <td className="flex justify-center items-center px-4 py-2">
-                <FaFilePdf size={20}
-                  className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
-                  onClick={() => generatePDF(data.id)}
-                />
-                {loading[data.id] && (
-                  <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
-                )}
-              </td></td>{" "}
+                  <FaFilePdf
+                    size={20}
+                    className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                    onClick={() => generatePDF(data.id)}
+                  />
+                  {loading[data.id] && (
+                    <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                  )}
+                </td>
+              </td>{" "}
               <td className="border px-4 py-2 font-medium">
                 <div className="flex gap-2 font-medium">
                   <FontAwesomeIcon

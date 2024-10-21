@@ -141,27 +141,33 @@ const SampleWorkflowModal = ({ onClose }) => {
     const { name, value, options, files } = e.target;
 
     if (name === "requiredInstrument") {
-      const selectedInstruments = [];
-      for (let i = 0; i < options.length; i++) {
-        if (options[i].selected) {
-          selectedInstruments.push(options[i].value);
+        const selectedInstruments = [];
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].selected) {
+                selectedInstruments.push(options[i].value);
+            }
         }
-      }
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: selectedInstruments,
-      }));
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: selectedInstruments,
+        }));
+    } else if (e.target.type === "file") {
+        // Handle file input
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: files[0], // Store the first file selected
+        }));
     } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     }
 
     if (name === "delayJustification" && value) {
-      setError("");
+        setError("");
     }
-  };
+};
 
   const [error, setError] = useState("");
 
@@ -249,7 +255,8 @@ const SampleWorkflowModal = ({ onClose }) => {
       try {
         const response = await axios.post(
           `http://localhost:9000/create-sample`,
-          formData
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
         console.log(response, "iddddddddddddddddddddddd");
         if (response.status === 200) {
