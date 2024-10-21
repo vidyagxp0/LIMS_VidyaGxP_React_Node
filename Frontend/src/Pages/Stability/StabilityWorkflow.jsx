@@ -20,15 +20,20 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import Table from "../../components/ATM components/Table/Table";
 import { Link, useNavigate } from "react-router-dom";
+// import { randomSampleData } from "./SamplePlanningFunction";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import { toast } from "react-toastify";
-// import SampleWorkflowModal from "./SampleWorkflowModal";
+
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
-const SampleWorkFlow = () => {
+import Barcode from "react-barcode"; // Import Barcode component
+import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
+import SampleWorkflowModal from "../Samplelogin/SampleWorkflowModal";
+
+const StabilityWorkFlow = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -44,7 +49,7 @@ const SampleWorkFlow = () => {
 
   const openWorkflowModal = () => {
     setShowModal(true);
-    navigate("/stabilityWorkflowModal");
+    navigate("/sampleWorkflowModal");
   };
 
   const closeWorkflowModal = () => {
@@ -54,8 +59,6 @@ const SampleWorkFlow = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/stability`);
-      console.log(response, "99999999999999999999999999"); // Check the structure of the response
-console.log(response,"Stablity");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -102,9 +105,11 @@ console.log(response,"Stablity");
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}/stability`
+        `http://localhost:9000/generate-report/${sampleId}/sample`
       );
-      console.log("Response Status:", response.status);
+      console.log("Response", response);
+     
+      
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -285,6 +290,19 @@ console.log(response,"Stablity");
 
   const closeViewModal = () => {
     setViewModalData(null);
+  };
+
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState("");
+
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) return text;
+    return `${text.slice(0, maxLength)}...`;
+  };
+
+  const handleFullTextClick = (text) => {
+    setSelectedItem(text);
+    setModalOpen(true);
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -492,25 +510,26 @@ console.log(response,"Stablity");
     <div className="m-5 mt-3">
       <LaunchQMS />
 
-      <div className="main-head mb-2">
-        <h2 className="fw-bold">Stability WorkFlow</h2>
-      </div>
-
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+      <div className="">
+        <div className="main-head">
+          <h2 className="fw-bold">Stability WorkFlow</h2>
         </div>
-        <div className="float-right flex gap-4">
-          {/* <button
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            {/* <button
             className="px-3 py-2 rounded flex gap-2 items-center bg-green-600 text-white font-medium cursor-pointer"
             onClick={() => generatePDF(selectedSampleId)}
           >
@@ -521,42 +540,44 @@ console.log(response,"Stablity");
               <FontAwesomeIcon icon="fa-regular fa-file-pdf" />
             )}
           </button> */}
-          <PDFDownload
-            columns={columns}
-            data={filteredData}
-            fileName="InvestigationL2.pdf"
-            title="Investigation L2 Data"
-          />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Add Stability Workflow"
-            color="blue"
-            onClick={openWorkflowModal}
-          />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="InvestigationL2.pdf"
+              title="Investigation L2 Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Stability Workflow"
+              color="blue"
+              onClick={openWorkflowModal}
+            />
+          </div>
         </div>
       </div>
+
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
-        <thead>
+      <thead>
           <tr className="bg-yellow-600 text-white text-left">
-            <th colSpan="25" className="px-4 py-2 bg-yellow-600">
-              Sample Planning Information
+            <th colSpan="30" className="px-4 py-2 bg-yellow-600">
+              Sample Registration
             </th>
-            <th colSpan="20" className="px-4 py-2 bg-green-600">
-              Testing Requirements
+            <th colSpan="31" className="px-4 py-2 bg-green-600">
+              Sample Analysis
             </th>
-            <th colSpan="9" className="px-4 py-2 bg-brown-600">
-              Personnel and Roles
+            <th colSpan="4" className="px-4 py-2 bg-brown-600">
+              Supervisor Review
             </th>
-            <th colSpan="6" className="px-4 py-2 bg-violet-600">
-              Schedule and Timeline
+            <th colSpan="10" className="px-4 py-2 bg-violet-600">
+              Stability Information
             </th>
-            <th colSpan="5" className="px-4 py-2 bg-red-600">
-              Logistics and Sample Handling
+            <th colSpan="4" className="px-4 py-2 bg-red-600">
+              QA Review
             </th>
-            <th colSpan="5" className="px-4 py-2 bg-blue-600">
-              Quality and Compliance
+            <th colSpan="4" className="px-4 py-2 bg-blue-600">
+              Actions
             </th>
-            <th colSpan="4" className="px-4 py-2 bg-orange-600">
+            {/* <th colSpan="4" className="px-4 py-2 bg-orange-600">
               Resource Allocation
             </th>
             <th colSpan="4" className="px-4 py-2 bg-green-300">
@@ -564,7 +585,7 @@ console.log(response,"Stablity");
             </th>
             <th colSpan="16" className="px-4 py-2 bg-violet-500">
               Miscellaneous
-            </th>
+            </th> */}
           </tr>
           <tr className="bg-slate-600 text-white">
             <td className="border px-4 py-2">S.No</td>
@@ -580,7 +601,7 @@ console.log(response,"Stablity");
             <td className="border px-4 py-2">Sample Quantity</td>
             <td className="border px-4 py-2">UOM</td>
             <td className="border px-4 py-2">Market</td>
-            <td className="border px-4 py-2">Sample Barcode</td>
+
             <td className="border px-4 py-2">Specification ID</td>
             <td className="border px-4 py-2">Specification Attachment</td>
             <td className="border px-4 py-2">STP ID</td>
@@ -653,140 +674,126 @@ console.log(response,"Stablity");
             <td className="border px-4 py-2">QA Reviewer/Approver </td>
             <td className="border px-4 py-2">QA Reviewer Comment </td>
             <td className="border px-4 py-2">QA Review Date </td>
-            <td className="border px-4 py-2">Sample Barcode </td>
             <td className="border px-4 py-2">Status </td>
+            <td className="border px-4 py-2">Sample Barcode</td>
             <td className="border px-4 py-2">Generate PDF </td>
             <td className="border px-4 py-2">Actions</td>
           </tr>
         </thead>
         <tbody>
           {data?.map((data, index) => (
-            <tr key={index} className="">
-             
-                <td className="border px-4 py-2">{index + 1}</td>
-                <Link to={`/stabilityWorkflowEdit/${data.id}`} className="contents">
-                <td className="border px-4 py-2 hover:bg-gray-200 cursor-pointer">{data.samplePlanId}</td> </Link>
-                <td className="border px-4 py-2">{data.sampleId}</td>
-                <td className="border px-4 py-2">{data.sampleName}</td>
-                <td className="border px-4 py-2">{data.sampleType}</td>
-                <td className="border px-4 py-2">{data.productMaterialName}</td>
-                <td className="border px-4 py-2">{data.batchLotNumber}</td>
-                <td className="border px-4 py-2">{data.sampleSource}</td>
-                <td className="border px-4 py-2">{data.plannedDate}</td>
-                <td className="border px-4 py-2">{data.samplePriority}</td>
-                <td className="border px-4 py-2">{data.sampleQuantity}</td>
-                <td className="border px-4 py-2">{data.UOM}</td>
-                <td className="border px-4 py-2">{data.market}</td>
-                <td className="border px-4 py-2">{data?.sampleBarCode}</td>
-                <td className="border px-4 py-2">{data.specificationId}</td>
-                <td className="border px-4 py-2">
-                  {data.specificationAttachment}
+            <tr key={index} className=" ">
+              {/* { setSelectedSamppleId(data.sampleId)} */}
+              <td className="border cursor-pointer  px-4 py-2">{index + 1}</td>
+              <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
+                <td className="hover:bg-gray-200 border px-4 py-2">
+                  {data.samplePlanId}
                 </td>
-                <td className="border px-4 py-2">{data.stpId}</td>
-                <td className="border px-4 py-2">{data.stpAttachment}</td>
-                <td className="border px-4 py-2">{data.testPlanId}</td>
-                <td className="border px-4 py-2">{data.testName}</td>
-                <td className="border px-4 py-2">{data.testMethod}</td>
-                <td className="border px-4 py-2">{data.testParameter}</td>
-                <td className="border px-4 py-2">{data.testingFrequency}</td>
-                <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td className="border px-4 py-2">{data.requiredInstrument}</td>
-                <td className="border px-4 py-2">{data.testGrouping}</td>
-                <td className="border px-4 py-2">{data.lsl}</td>{" "}
-                <td className="border px-4 py-2">{data.usl}</td>{" "}
-                <td className="border px-4 py-2">{data.testingDeadline}</td>
-                <td className="border px-4 py-2">{data.plannerName}</td>
-                <td className="border px-4 py-2">{data.labTechnician}</td>
-                <td className="border px-4 py-2">{data.reviewerApprover}</td>
-                <td className="border px-4 py-2">{data.assignedDepartment}</td>
-                <td className="border px-4 py-2">
-                  {data.sampleCollectionDate}
-                </td>
-                <td className="border px-4 py-2">{data.testingStartDate}</td>
-                <td className="border px-4 py-2">{data.testingEndDate}</td>
-                <td className="border px-4 py-2">{data.delayJustification}</td>
-                <td className="border px-4 py-2">{data.testingOutCome}</td>
-                <td className="border px-4 py-2">{data.passFail}</td>
-                <td className="border px-4 py-2">{data.turnAroundTime}</td>
-                <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
-                <td className="border px-4 py-2">{data.reviewDate}</td>
-                <td className="border px-4 py-2">
-                  {data.sampleStorageLocation}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.transportationMethod}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.samplePreparationMethod}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.samplePackagingDetail}
-                </td>
-                <td className="border px-4 py-2">{data.sampleLabel}</td>
-                <td className="border px-4 py-2">
-                  {data.regulatoryRequirement}
-                </td>
-                <td className="border px-4 py-2">{data.qualityControlCheck}</td>
-                <td className="border px-4 py-2">
-                  {data.controlSampleReference}
-                </td>
-                <td className="border px-4 py-2">
-                  {data.sampleIntegrityStatus}
-                </td>
-                <td className="border px-4 py-2">{data.assignedDepartmentt}</td>
-                <td className="border px-4 py-2">{data.riskAssessment}</td>
-                <td className="border px-4 py-2">{data.supervisor}</td>{" "}
-                <td className="border px-4 py-2">{data.instrumentsReserved}</td>{" "}
-                <td className="border px-4 py-2">{data.labAvailability}</td>{" "}
-                <td className="border px-4 py-2">
-                  {data.sampleCostEstimation}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.resourceUtilization}</td>{" "}
-                <td className="border px-4 py-2">
-                  {data.sampleMovementHistory}
-                </td>
-                <td className="border px-4 py-2">{data.testingProgress}</td>
-                <td className="border px-4 py-2">{data.alertNotification}</td>
-                <td className="border px-4 py-2">{data.deviationLog}</td>
-                <td className="border px-4 py-2 text-wrap">
-                  {data.commentNotes}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.attachment}</td>
-                <td className="border px-4 py-2">{data.samplingFrequency}</td>
-                <td className="border px-4 py-2">{data.sampleDisposition}</td>
-                <td className="border px-4 py-2">
-                  {data.stabilityStudyType}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.stabilityStudyProtocol}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.stabilityProtocolApprovalDate}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.countryOfRegulatorySubmissions}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.ichZone}</td>{" "}
-                <td className="border px-4 py-2">
-                  {data.photoStabilityTestingResult}
-                </td>{" "}
-                <td className="border px-4 py-2">
-                  {data.reConstitutionStability}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
-                <td className="border px-4 py-2">
-                  {data.shelfLifeRecommendation}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.reviewerApprover}</td>
-                <td className="border px-4 py-2">
-                  {data.reviewerComment}
-                </td>{" "}
-                <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
-                <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
-                <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-                <td className="border px-4 py-2">{data.sampleBarcode}</td>{" "}
-                <td claossName="border px-4 py-2">{data.status}</td>{" "}
-                <td className="border px-4 py-2">{data.generatePDF}
+              </Link>
+              <td className="border px-4 py-2">{data.sampleId}</td>
+              <td className="border px-4 py-2">{data.sampleName}</td>
+              <td className="border px-4 py-2">{data.sampleType}</td>
+              <td className="border px-4 py-2">{data.productMaterialName}</td>
+              <td className="border px-4 py-2">{data.batchLotNumber}</td>
+              <td className="border px-4 py-2">{data.sampleSource}</td>
+              <td className="border px-4 py-2">{data.plannedDate}</td>
+              <td className="border px-4 py-2">{data.samplePriority}</td>
+              <td className="border px-4 py-2">{data.sampleQuantity}</td>
+              <td className="border px-4 py-2">{data.UOM}</td>
+              <td className="border px-4 py-2">{data.market}</td>
+              <td className="border px-4 py-2">{data.specificationId}</td>
+              <td className="border px-4 py-2">
+                {data.specificationAttachment}
+              </td>
+              <td className="border px-4 py-2">{data.stpId}</td>
+              <td className="border px-4 py-2">{data.stpAttachment}</td>
+              <td className="border px-4 py-2">{data.testPlanId}</td>
+              <td className="border px-4 py-2">{data.testName}</td>
+              <td className="border px-4 py-2">{data.testMethod}</td>
+              <td className="border px-4 py-2">{data.testParameter}</td>
+              <td className="border px-4 py-2">{data.testingFrequency}</td>
+              <td className="border px-4 py-2">{data.testingLocation}</td>
+              <td className="border px-4 py-2">{data.requiredInstrument}</td>
+              <td className="border px-4 py-2">{data.testGrouping}</td>
+              <td className="border px-4 py-2">{data.lsl}</td>{" "}
+              <td className="border px-4 py-2">{data.usl}</td>{" "}
+              <td className="border px-4 py-2">{data.testingDeadline}</td>
+              <td className="border px-4 py-2">{data.plannerName}</td>
+              <td className="border px-4 py-2">{data.labTechnician}</td>
+              <td className="border px-4 py-2">{data.reviewerApprover}</td>
+              <td className="border px-4 py-2">{data.assignedDepartment}</td>
+              <td className="border px-4 py-2">{data.sampleCollectionDate}</td>
+              <td className="border px-4 py-2">{data.testingStartDate}</td>
+              <td className="border px-4 py-2">{data.testingEndDate}</td>
+              <td className="border px-4 py-2">{data.delayJustification}</td>
+              <td className="border px-4 py-2">{data.testingOutCome}</td>
+              <td className="border px-4 py-2">{data.passFail}</td>
+              <td className="border px-4 py-2">{data.turnAroundTime}</td>
+              <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
+              <td className="border px-4 py-2">{data.reviewDate}</td>
+              <td className="border px-4 py-2">{data.sampleStorageLocation}</td>
+              <td className="border px-4 py-2">{data.transportationMethod}</td>
+              <td className="border px-4 py-2">
+                {data.samplePreparationMethod}
+              </td>
+              <td className="border px-4 py-2">{data.samplePackagingDetail}</td>
+              <td className="border px-4 py-2">{data.sampleLabel}</td>
+              <td className="border px-4 py-2">{data.regulatoryRequirement}</td>
+              <td className="border px-4 py-2">{data.qualityControlCheck}</td>
+              <td className="border px-4 py-2">
+                {data.controlSampleReference}
+              </td>
+              <td className="border px-4 py-2">{data.sampleIntegrityStatus}</td>
+              <td className="border px-4 py-2">{data.assignedDepartmentt}</td>
+              <td className="border px-4 py-2">{data.riskAssessment}</td>
+              <td className="border px-4 py-2">{data.supervisor}</td>{" "}
+              <td className="border px-4 py-2">{data.instrumentsReserved}</td>{" "}
+              <td className="border px-4 py-2">{data.labAvailability}</td>{" "}
+              <td className="border px-4 py-2">{data.sampleCostEstimation}</td>{" "}
+              <td className="border px-4 py-2">{data.resourceUtilization}</td>{" "}
+              <td className="border px-4 py-2">{data.sampleMovementHistory}</td>
+              <td className="border px-4 py-2">{data.testingProgress}</td>
+              <td className="border px-4 py-2">{data.alertNotification}</td>
+              <td className="border px-4 py-2">{data.deviationLog}</td>
+              <td className="border px-4 py-2 text-wrap">
+                {data.commentNotes}
+              </td>{" "}
+              <td className="border px-4 py-2">{data.attachment}</td>
+              <td className="border px-4 py-2">{data.samplingFrequency}</td>
+              <td className="border px-4 py-2">{data.sampleDisposition}</td>
+              <td className="border px-4 py-2">
+                {data.stabilityStudyType}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.stabilityStudyProtocol}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.stabilityProtocolApprovalDate}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.countryOfRegulatorySubmissions}
+              </td>{" "}
+              <td className="border px-4 py-2">{data.ichZone}</td>{" "}
+              <td className="border px-4 py-2">
+                {data.photoStabilityTestingResult}
+              </td>{" "}
+              <td className="border px-4 py-2">
+                {data.reConstitutionStability}
+              </td>{" "}
+              <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
+              <td className="border px-4 py-2">
+                {data.shelfLifeRecommendation}
+              </td>{" "}
+              <td className="border px-4 py-2">{data.reviewerApprover}</td>
+              <td className="border px-4 py-2">{data.reviewerComment}</td>{" "}
+              <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
+              <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
+              <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
+              <td claossName="border spx-4 py-2">{data.status}</td>{" "}
+              <td className="border px-4 py-2">
+                <BarcodeExportButton />
+              </td>
+              <td className="border px-4 py-2">{data.generatePDF}
                 <td className="flex justify-center items-center px-4 py-2">
                 <FaFilePdf size={20}
                   className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
@@ -872,4 +879,4 @@ console.log(response,"Stablity");
   );
 };
 
-export default SampleWorkFlow;
+export default StabilityWorkFlow;

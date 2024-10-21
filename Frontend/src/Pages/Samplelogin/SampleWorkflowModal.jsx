@@ -29,7 +29,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
     types: "sample",
     stage: "1",
-    samplePlanId: "",
+    samplePlanId: 1000,
     sampleId: "",
     sampleName: "",
     sampleType: "",
@@ -276,11 +276,12 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="samplePlanId"
                   label="Sample Plan ID"
-                  value={formData?.samplePlanId || ""}
+                  value={formData?.samplePlanId || 1000}
                   onChange={handleInputChange}
+                  min={1000}
                 />
               </CCol>
               <CCol md={6}>
@@ -515,12 +516,23 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
-                <CFormInput
+                <CFormSelect
                   type="text"
                   name="testParameter"
                   label="Test Parameters"
                   value={formData.testParameter || ""}
                   onChange={handleInputChange}
+                  options={[
+                    "Select Tests",
+                    { label: "Description", value: "Description" },
+                    { label: "Weight Of 20 tablets", value: "Weight Of 20 tablets" },
+                    { label: "Average Weight ( mg )", value: "Average Weight ( mg )" },
+                    { label: "Thickness", value: "Thickness" },
+                    { label: "Disintigration Time", value:"Disintigration Time" },
+                    { label: "Hardness", value: "Hardness" },
+                    { label: "Diameter", value: "Diameter" },
+                    { label: "Friability", value: "Friability" },
+                  ]}
                 />
               </CCol>
               <CCol md={6}>
