@@ -141,22 +141,30 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
       [key]: value,
     }));
   };
-
+  
+  
   const handleSubmitAnalyst = async (e) => {
     e.preventDefault();
 
     try {
+      const token = localStorage.getItem('token'); // Get the token from wherever you store it
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
       if (data) {
         // Edit existing analyst
         const { sno, ...updatedData } = analystData;
         const response = await axios.put(
-          `${BASE_URL}/manage-lims/update/analystPersonal/${sno}`,
-          updatedData
+          `${BASE_URL}/manage-lims/update/analystPersonal/${data.uniqueId}`,
+          updatedData,
+          config
         );
 
         if (response.status === 200) {
           toast.success("Analyst updated successfully!");
           handleSubmit(analystData);
+          fetchData(); // Fetch updated data
           closeModal();
         } else {
           toast.error("Failed to update analyst.");
@@ -165,20 +173,21 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
         // Add new analyst
         const response = await axios.post(
           `${BASE_URL}/manage-lims/add/analystPersonal`,
-          analystData
+          analystData,
+          config
         );
 
         if (response.status === 200) {
           toast.success("Analyst added successfully!");
           handleSubmit(response.data);
-          fetchData();
+          fetchData(); // Fetch updated data
           closeModal();
         } else {
           toast.error("Failed to add analyst.");
         }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error updating/adding analyst:", error);
       if (error.response) {
         toast.error(
           error.response.data.message || "Error updating/adding analyst"
@@ -188,6 +197,56 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
       }
     }
   };
+  
+  
+  
+
+  // const handleSubmitAnalyst = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     if (data) {
+  //       // Edit existing analyst
+  //       const { sno, ...updatedData } = analystData;
+  //       const response = await axios.put(
+  //         `${BASE_URL}/manage-lims/update/analystPersonal/${sno}`,
+  //         updatedData
+  //       );
+
+  //       if (response.status === 200) {
+  //         toast.success("Analyst updated successfully!");
+  //         handleSubmit(analystData);
+  //         closeModal();
+  //       } else {
+  //         toast.error("Failed to update analyst.");
+  //       }
+  //     } else {
+  //       // Add new analyst
+  //       const response = await axios.post(
+  //         `${BASE_URL}/manage-lims/add/analystPersonal`,
+  //         analystData
+  //       );
+
+  //       if (response.status === 200) {
+  //         toast.success("Analyst added successfully!");
+  //         handleSubmit(response.data);
+  //         fetchData();
+  //         closeModal();
+  //       } else {
+  //         toast.error("Failed to add analyst.");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     if (error.response) {
+  //       toast.error(
+  //         error.response.data.message || "Error updating/adding analyst"
+  //       );
+  //     } else {
+  //       toast.error("Error updating/adding analyst");
+  //     }
+  //   }
+  // };
 
   return (
     <CModal visible={visible} onClose={closeModal}>

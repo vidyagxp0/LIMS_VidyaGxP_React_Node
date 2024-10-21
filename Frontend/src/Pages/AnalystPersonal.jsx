@@ -60,6 +60,8 @@ const AnalystPersonal = () => {
   const handleCheckboxChange = (e, item) => {
     setData(data.map((d) => (d === item ? { ...d, checkbox: e.target.checked } : d)));
   };
+  
+
 
   const columns = [
     {
@@ -166,11 +168,24 @@ const AnalystPersonal = () => {
     }
   };
 
-  const onViewDetails = (row) => {
-    setViewModalData(row);
-    setIsViewModalOpen(true);
+  // const onViewDetails = (row) => {
+  //   setViewModalData(row);
+  //   setIsViewModalOpen(true);
+  // };
+  
+  
+  const onViewDetails = (rowData) => {
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      // If the modal is already open for the same item, close it
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      // Otherwise, open it with the new data
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
-
+  
   const closeViewModal = () => {
     setIsViewModalOpen(false);
     setViewModalData(null);
@@ -219,9 +234,24 @@ const AnalystPersonal = () => {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload columns={columns} data={filteredData} fileName="Analyst_Personal.pdf" title="Analyst Personal Data" />
-            <ATMButton text="Import" color="pink" onClick={() => setIsImportModalOpen(true)} />
-            <ATMButton text="Add Analyst" color="blue" onClick={openModal} />
+            <PDFDownload 
+            columns={columns} 
+            data={filteredData}
+             fileName="Analyst_Personal.pdf" 
+             title="Analyst Personal Data" 
+             />
+           
+            <ATMButton 
+            text="Import" 
+            color="pink"
+             onClick={() => setIsImportModalOpen(true)}
+              />
+              
+            <ATMButton
+             text="Add Analyst"
+              color="blue" 
+              onClick={openModal}
+               />
           </div>
         </div>
         <Table
@@ -249,6 +279,7 @@ const AnalystPersonal = () => {
         handleSubmit={handleModalSubmit}
         data={editModalData}
         fetchData={fetchData}
+        editModalData={editModalData}
       />
 
       {/* View Details Modal */}
@@ -259,6 +290,7 @@ const AnalystPersonal = () => {
           data={viewModalData}
           fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action' && field.key !== 'checkbox')}
           title="Analyst Personal Details"
+         
         />
       )}
     </>
