@@ -722,7 +722,18 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2">{data.market}</td>
               <td className="border px-4 py-2">{data.specificationId}</td>
               <td className="border px-4 py-2">
-                {data.specificationAttachment}
+                {data.specificationAttachment ? (
+                  <a
+                    href={data.specificationAttachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
               </td>
               <td className="border px-4 py-2">{data.stpId}</td>
               <td className="border px-4 py-2">{data.stpAttachment}</td>

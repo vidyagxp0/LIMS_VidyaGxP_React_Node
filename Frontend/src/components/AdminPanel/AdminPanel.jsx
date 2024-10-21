@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../Pages/Auth/Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 // import axios from "axios"; // Import axios
 
 function AdminPanel(props) {
@@ -18,11 +19,13 @@ function AdminPanel(props) {
     setter(data.target.value);
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    if (email === "" || passwd === "") {
-      toast.warning("Enter required credentials");
+  const handleLogin = async () => {
+    if (!email.trim()) {
+      toast.warning("Email is required");
+      return;
+    }
+    if (!passwd.trim()) {
+      toast.warning("Password is required");
       return;
     }
 
@@ -32,25 +35,35 @@ function AdminPanel(props) {
         {
           email,
           password: passwd,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
-      if (response.data.token) {
-        localStorage.setItem("adminToken", response.data.token);
-        toast.success("Login Successful");
-        navigate("/admin-panel/userManagement");
-        props.show(true);
-      } else {
-        toast.error("Login failed. Please try again.");
+      const { token, data } = response.data;
+      console.log(token,data,"tttttt");
+      
+
+      if (token) {
+        localStorage.setItem("token", token);
       }
+      if (data && data.name) {
+        localStorage.setItem("user", JSON.stringify(data.name));
+        console.log("User details:", data.name);
+      }
+
+      toast.success("Login successful");
+
+      setTimeout(() => {
+        navigate("/admin-panel/userManagement");
+      }, 1000);
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error("Invalid credentials. Please try again.");
+      } else if (error.response && error.response.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error("Network error. Please check your connection.");
+      }
       console.error("Login error:", error);
-      toast.error("Invalid Credentials");
     }
   };
 
@@ -86,11 +99,11 @@ function AdminPanel(props) {
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center">
                 <img
-                  src="https://connexo.io/assets/img/logo/logo.png"
+                  src="login.png"
                   width={"300px"}
                 />
               </div>
-              <h2 className="text-3xl font-bold text-center text-dark">
+              <h2 className="text-3xl font-bold text-center text-dark mb-4">
                 Welcome To Admin Console
               </h2>
             </div>

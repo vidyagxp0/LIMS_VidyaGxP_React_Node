@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
-import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react"
+import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import axios from 'axios';
+import { BASE_URL } from '../../../config.json';
 
 const UserMgnt = () => {
   const [addModal, setAddModal] = useState(false);
@@ -9,43 +11,51 @@ const UserMgnt = () => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [editData, setEditData] = useState(null);
+  const [data, setData] = useState([]);
+  const [roles, setRoles] = useState([]);
 
-  const [data, setData] = useState([
-    { id: 'na-001', name: 'Admin', designation: 'Admin', email: 'Admin@gamil.com' },
-    { id: 'na-002', name: 'Super Admin', designation: 'Super Admin', email: 'SuperAdmin@gamil.com' },
-    { id: 'na-003', name: 'User1', designation: 'Manager', email: 'user1@gamil.com' },
-    { id: 'na-004', name: 'User2', designation: 'Quality Manager', email: 'user2@gamil.com' },
-    { id: 'na-005', name: 'User3', designation: 'Quality Analyst', email: 'user3@gamil.com' },
-    { id: 'na-006', name: 'User4', designation: 'User4', email: 'user4@gamil.com' },
-    { id: 'na-007', name: 'User5', designation: 'Quality Manager', email: 'user5@gamil.com' },
-    { id: 'na-008', name: 'User6', designation: 'User6', email: 'user6@gamil.com' },
-    { id: 'na-009', name: 'User7', designation: 'Quality Manager', email: 'user7@gamil.com' },
-    { id: 'na-010', name: 'User8', designation: 'User10', email: 'user8@gamil.com' }
-  ]);
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/admin/get-all-users`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response.data.response);
+      setData(response.data.response);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const fetchRoles = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/admin/get-all-roles`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response.data.response, "ROlessssss");
+      setRoles(response.data.response); // Assuming the response data is an array of roles
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+    fetchRoles();
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
-  // const nextPage = () => setCurrentPage(currentPage + 1);
-  // const prevPage = () => setCurrentPage(currentPage - 1);
-  // const nextToLastPage = () => setCurrentPage(Math.ceil(data.length / pageSize));
-
-  // const filteredData = data.filter((item) => {
-  //   const searchFilter =
-  //     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     item.code.toLowerCase().includes(searchTerm.toLowerCase());
-  //   const statusFilterCheck =
-  //     statusFilter === "" || item.status === statusFilter;
-  //   return searchFilter && statusFilterCheck;
-  // });
-
   const totalPages = Math.ceil(data.length / pageSize);
-  const paginatedData = data.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const paginatedData = data.slice(startIndex, endIndex);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -85,13 +95,26 @@ const UserMgnt = () => {
     setAddModal(false);
   };
 
+  const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    return date.toLocaleString('en-IN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'Asia/Kolkata',
+    }).replace(',', ''); // Remove comma between date and time
+  };
+
   return (
     <div className="mx-5">
-      <div className="row my-5">
+      <div className="row my-2">
         <div className="main-head d-flex justify-content-between">
           <div className="title fw-bold fs-5 py-4">User management</div>
-          <div className=" fs-5 py-4">
-            <CButton color="primary" onClick={() => setAddModal(true)} style={{ fontSize: '0.9rem' }} >Add User</CButton>
+          <div className="fs-5 py-4">
+            <CButton color="primary" onClick={() => setAddModal(true)} style={{ fontSize: '0.9rem' }}>Add User</CButton>
           </div>
         </div>
       </div>
@@ -100,21 +123,25 @@ const UserMgnt = () => {
         <CTable align="middle" responsive className="mb-0 table-responsive">
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >S.No</CTableHeaderCell>
-              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col" >ID</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">S.No</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">ID</CTableHeaderCell>
               <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Name</CTableHeaderCell>
               <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Designation</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Gender</CTableHeaderCell>
+              <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Created At</CTableHeaderCell>
               <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Email</CTableHeaderCell>
               <CTableHeaderCell style={{ background: "#5D76A9", color: "white" }} scope="col">Actions</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {data.slice(startIndex, endIndex).map((item, index) => (
+            {paginatedData.map((item, index) => (
               <CTableRow key={item.id}>
                 <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                <CTableDataCell>{item.id}</CTableDataCell>
+                <CTableDataCell>{item.user_id}</CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
                 <CTableDataCell>{item.designation}</CTableDataCell>
+                <CTableDataCell>{item.gender}</CTableDataCell>
+                <CTableDataCell>{formatDate(item.createdAt)}</CTableDataCell>
                 <CTableDataCell>{item.email}</CTableDataCell>
                 <CTableDataCell>
                   <div className="d-flex gap-3">
@@ -128,21 +155,6 @@ const UserMgnt = () => {
           </CTableBody>
         </CTable>
       </div>
-
-      {/* <div className="d-flex justify-content-between align-items-center my-4">
-        <div className="pagination">
-          <button className="btn mr-2" onClick={prevPage} disabled={currentPage === 1}>
-            &lt;&lt;
-          </button>
-          <button className="btn mr-2 bg-dark-subtle rounded-circle">{currentPage}</button>
-          <button className="btn mr-2" onClick={nextPage} disabled={endIndex >= data.length}>
-            &gt;&gt;
-          </button>
-        </div>
-        <button className="btn d-flex align-items-center border" onClick={nextToLastPage}>
-          Next <FaArrowRight className='ms-2' />
-        </button>
-      </div> */}
 
       <div className="d-flex justify-content-end my-4">
         <nav aria-label="...">
@@ -164,23 +176,23 @@ const UserMgnt = () => {
         </nav>
       </div>
 
-      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} addUser={handleAddUser} />}
-      {editModal && <EditModal visible={editModal} closeModal={() => setEditModal(false)} data={editData} confirmEdit={handleEditConfirm} />}
+      {addModal && <StatusModal visible={addModal} closeModal={() => setAddModal(false)} addUser={handleAddUser} roles={roles} />}
+      {editModal && <EditModal visible={editModal} closeModal={() => setEditModal(false)} data={editData} confirmEdit={handleEditConfirm} roles={roles} />}
       {viewPermissionModal && <ViewPermissionModal visible={viewPermissionModal} closeModal={() => setViewPermissionModal(false)} data={editData} />}
       {deleteModal && <DeleteModal visible={deleteModal} closeModal={() => setDeleteModal(false)} confirmDelete={handleDeleteConfirm} />}
     </div>
   );
 }
 
-const StatusModal = (_props) => {
+const StatusModal = (props) => {
   const [formData, setFormData] = useState({
-    id: '',
     name: '',
     email: '',
     designation: '',
     gender: '',
     password: '',
-    role: ''
+    role: '',
+    // profilePic: null
   });
 
   const handleChange = (e) => {
@@ -191,16 +203,73 @@ const StatusModal = (_props) => {
     }));
   };
 
-  const handleSubmit = () => {
-    const newUser = {
-      ...formData,
-      id: `na-${Math.random().toString(36).substr(2, 9)}` // Generate a random ID
-    };
-    _props.addUser(newUser);
+  // const handleFileChange = (e) => {
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     profilePic: e.target.files[0] // Store the selected file
+  //   }));
+  // };
+
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem('token'); // Retrieve the token from local storage
+  
+      if (!token) {
+        console.error("Token not found. User might not be logged in.");
+        return;
+      }
+  
+      const formDataToSend = new FormData(); // Create a FormData object
+  
+      // Append user data to FormData
+      Object.keys(formData).forEach(key => {
+        // Check if formData[key] is an object or array and append accordingly
+        if (Array.isArray(formData[key])) {
+          formData[key].forEach((value, index) => {
+            formDataToSend.append(`${key}[${index}]`, value);
+          });
+        } else {
+          formDataToSend.append(key, formData[key]);
+        }
+      });
+  
+      const response = await axios.post(`${BASE_URL}/admin/add-user`, formDataToSend, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add Bearer token for authorization
+          // 'Content-Type': 'multipart/form-data'
+        }
+      });
+  
+      // Assuming the response contains the newly created user
+      const newUser = response.data; // Adjust based on your API response structure
+  
+      // If addUser is a prop function passed down to add the new user to the parent state
+      if (props.addUser) {
+        props.addUser(newUser);
+      }
+  
+      // If closeModal is a prop function passed to close the modal after submission
+      if (props.closeModal) {
+        props.closeModal();
+      }
+  
+      console.log("User successfully added:", newUser); // For debugging
+  
+    } catch (error) {
+      // Log detailed error information for easier debugging
+      if (error.response) {
+        console.error("Server responded with an error:", error.response.data);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error during setup:", error.message);
+      }
+    }
   };
+  
 
   return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+    <CModal alignment="center" visible={props.visible} onClose={props.closeModal}>
       <CModalHeader>
         <CModalTitle>Add User</CModalTitle>
       </CModalHeader>
@@ -265,27 +334,32 @@ const StatusModal = (_props) => {
         <CFormSelect
           className='mb-3'
           label="Roles"
-          name="role"
-          value={formData.role}
+          name="role" // Ensure this is singular
+          value={formData.role} // Corrected to formData.role
           onChange={handleChange}
           options={[
             { label: "Select", value: "" },
-            { label: "Admin", value: "Admin" },
-            { label: "Manager", value: "Manager" },
-            { label: "Quality Analyst", value: "Quality Analyst" }
+            ...props.roles.map((role) => ({ label: role.role, value: role.role_id })) // Pass roles as props
           ]}
         />
+        {/* <CFormInput
+          className='mb-3'
+          type="file"
+          label="Profile Picture"
+          name="profilePic"
+          onChange={handleFileChange} // Handle file selection
+        /> */}
       </CModalBody>
       <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+        <CButton color="light" onClick={props.closeModal}>Back</CButton>
         <CButton color="primary" onClick={handleSubmit}>Add User</CButton>
       </CModalFooter>
     </CModal>
   );
 };
 
-const EditModal = (_props) => {
-  const [formData, setFormData] = useState({ ..._props.data });
+const EditModal = (props) => {
+  const [formData, setFormData] = useState({ ...props.data });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -296,11 +370,11 @@ const EditModal = (_props) => {
   };
 
   const handleSubmit = () => {
-    _props.confirmEdit(formData);
+    props.confirmEdit(formData);
   };
 
   return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+    <CModal alignment="center" visible={props.visible} onClose={props.closeModal}>
       <CModalHeader>
         <CModalTitle>Edit User</CModalTitle>
       </CModalHeader>
@@ -344,7 +418,7 @@ const EditModal = (_props) => {
           value={formData.gender}
           onChange={handleChange}
           options={[
-            "Select ",
+            { label: "Select", value: "" },
             { label: "Male", value: "Male" },
             { label: "Female", value: "Female" },
             { label: "Other", value: "Other" }
@@ -365,45 +439,43 @@ const EditModal = (_props) => {
         <CFormSelect
           className='mb-3'
           label="Roles"
-          name="role"
-          value={formData.role}
+          name="role" // Ensure this is singular
+          value={formData.role} // Corrected to formData.role
           onChange={handleChange}
           options={[
-            "Select ",
-            { label: "Admin", value: "Admin" },
-            { label: "Manager", value: "Manager" },
-            { label: "Quality Analyst", value: "Quality Analyst" }
+            { label: "Select", value: "" },
+            ...props.roles.map((role) => ({ label: role.role, value: role.role_id })) // Pass roles as props
           ]}
         />
       </CModalBody>
       <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Back</CButton>
+        <CButton color="light" onClick={props.closeModal}>Back</CButton>
         <CButton color="primary" onClick={handleSubmit}>Update User</CButton>
       </CModalFooter>
     </CModal>
   );
 };
 
-const ViewPermissionModal = (_props) => {
+const ViewPermissionModal = (props) => {
   return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal}>
+    <CModal alignment="center" visible={props.visible} onClose={props.closeModal}>
       <CModalHeader>
         <CModalTitle>View Permission</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <p>Permissions for {_props.data.name}</p>
+        <p>Permissions for {props.data.name}</p>
         {/* Display user permissions here */}
       </CModalBody>
       <CModalFooter>
-        <CButton color="light" onClick={_props.closeModal}>Close</CButton>
+        <CButton color="light" onClick={props.closeModal}>Close</CButton>
       </CModalFooter>
     </CModal>
   );
 };
 
-const DeleteModal = (_props) => {
+const DeleteModal = (props) => {
   return (
-    <CModal alignment="center" visible={_props.visible} onClose={_props.closeModal} size="lg">
+    <CModal alignment="center" visible={props.visible} onClose={props.closeModal} size="lg">
       <CModalHeader>
         <CModalTitle style={{ fontSize: "1.2rem", fontWeight: "600" }}>Delete User</CModalTitle>
       </CModalHeader>
@@ -411,8 +483,8 @@ const DeleteModal = (_props) => {
         <p>Are you sure you want to delete this User?</p>
       </div>
       <CModalFooter>
-        <CButton color="secondary" onClick={_props.closeModal} style={{ marginRight: "0.5rem", fontWeight: "500" }}>Cancel</CButton>
-        <CButton color="danger" onClick={_props.confirmDelete} style={{ fontWeight: "500", color: "white" }}>Delete</CButton>
+        <CButton color="secondary" onClick={props.closeModal} style={{ marginRight: "0.5rem", fontWeight: "500" }}>Cancel</CButton>
+        <CButton color="danger" onClick={props.confirmDelete} style={{ fontWeight: "500", color: "white" }}>Delete</CButton>
       </CModalFooter>
     </CModal>
   );

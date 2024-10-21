@@ -31,7 +31,7 @@ const AdminSidebar = () => {
         colorScheme="dark"
         id="sideBar"
       >
-        <CSidebarHeader className="border-bottom ">
+        <CSidebarHeader className="border-bottom pb-1">
           <CSidebarBrand>
             <Link
               to="/Dashboard"
