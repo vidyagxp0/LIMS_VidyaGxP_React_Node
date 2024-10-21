@@ -222,7 +222,6 @@ import SiteManagement from "./components/AdminPanel/Site-Management/SiteManageme
 import ProcessManagement from "./components/AdminPanel/Process-Management/ProcessManagement.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AnalystPersonal from "./Pages/AnalystPersonal.jsx";
 import STP from "./Pages/STP/STP.jsx";
 import SampleWorkFlowPanel from "./Pages/Samplelogin/sampleWorkflowPanel.jsx";
 import Signup from "./Pages/Auth/Signup.jsx";
@@ -232,6 +231,8 @@ import Signup from "./Pages/Auth/Signup.jsx";
 import StabilityWorkflow from "./Pages/Stability/StabilityWorkflow.jsx";
 import StabilityWorkflowModal from "./Pages/Stability/StabilityWorkflowModal.jsx";
 import StabilityWorkFlowPanel from "./Pages/Stability/StabilityWorkflowPanel.jsx";
+import AnalystQualificationModal from "./Pages/AnalystQualificationModal.jsx";
+import AnalystQualification from "./Pages/AnalystQualification.jsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedin] = useState(false);
@@ -255,7 +256,8 @@ function App() {
             <Route path="/approval" element={<Approval />} />
             <Route path="/approval/1321" element={<Details />} />
             <Route path="/storage-location" element={<StorageLocation />} />
-            <Route path="/analyst-personal" element={<AnalystPersonal />} />
+            <Route path="/analyst-qualification" element={<AnalystQualification />} />
+            <Route path="/analyst-qualification-modal" element={<AnalystQualificationModal />} />
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/control-sample" element={<ControlSample />} />
             <Route path="/SpecificationStp" element={<SpecificationStp />} />
@@ -300,6 +302,10 @@ function App() {
             <Route
               path="/stabilityWorkflowModal/"
               element={<StabilityWorkflowModal />}
+            />
+             <Route
+              path="/analystQualificationModal/"
+              element={<AnalystQualificationModal />}
             />
 
             <Route path="/storageCondition1321" element={<Storage_Condition />} />
