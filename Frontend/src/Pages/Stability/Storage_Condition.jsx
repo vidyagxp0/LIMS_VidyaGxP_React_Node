@@ -125,7 +125,7 @@ function Storage_Condition() {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
         dataTosend
       );
       if (response.status === 200) {
@@ -256,7 +256,7 @@ function Storage_Condition() {
   const handleAdd = async (newSampleType) => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/sMStorageCondition`,
+        `http://localhost:9000/manage-lims/add/sMStorageCondition`,
         {
           ...newSampleType,
           addDate: new Date().toISOString().split("T")[0],

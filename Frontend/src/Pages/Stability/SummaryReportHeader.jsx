@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { toast } from "react-toastify";
 import {
   faEye,
   faPenToSquare,
@@ -28,7 +27,6 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { BASE_URL } from "../../config.json";
 
 
