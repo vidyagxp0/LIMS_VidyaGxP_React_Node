@@ -2,6 +2,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { toast } from "react-toastify";
 import {
   faEye,
   faPenToSquare,
@@ -30,11 +32,19 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
 import { Button } from "react-bootstrap";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
+const fields = [
+  { label: "S.No", key: "sno" },
+  { label: "Condition Code", key: "conditionCode" },
+  { label: "Stability Condition", key: "stabilityCondition" },
+  { label: "Description", key: "description" },
+  { label: "Status", key: "status" },
+];
 const initialData = [
   {
     checkbox: false,
@@ -75,6 +85,29 @@ const StorageChamber = () => {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-all-lims/sMStorageChamber`
+      );
+      const fetchedData = response?.data[0]?.sMStorageChamber || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -124,8 +157,8 @@ const StorageChamber = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); // Set the data for ViewModal
-    setIsViewModalOpen(true); // Open the ViewModal
+    setViewModalData(rowData); 
+    setIsViewModalOpen(true); 
   };
 
   const columns = [
@@ -161,23 +194,35 @@ const StorageChamber = () => {
     },
   ];
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+
+  const handleDelete = async (item) => {
+    console.log(item);
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/sMStorageChamber/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
   };
 
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
-
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const openModal = () => {
+    setIsModalOpen(true);
   };
+ 
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -211,18 +256,32 @@ const StorageChamber = () => {
     setIsModalOpen(false);
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [numRows, setNumRows] = useState(0);
-    const [inputValue, setInputValue] = useState(0);
-    const [chamberId, setChamberId] = useState("");
-    const [description, setDescription] = useState("");
-    const [makeModel, setMakeModel] = useState("");
-    const [serialNo, setSerialNo] = useState("");
-    const [location, setLocation] = useState("");
-    const [comments, setComments] = useState("");
-    const [stabilityStorageCondition, setStabilityStorageCondition] = useState("");
-    const [numberOfShelfs, setNumberOfShelfs] = useState("");
-    const [maximunNumberOfShelfs, setMaximunNumberOfShelfs] = useState("");
+  
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:9000/manage-lims/add/sMStorageChamber`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to adsd Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+ 
     const handleInputChange = (e) => {
       const value = parseInt(e.target.value, 10);
       if (!isNaN(value) && value >= 0) {
@@ -234,7 +293,7 @@ const StorageChamber = () => {
       setNumRows(inputValue);
     };
 
-    const renderRows = () => {
+    const renderRows = (numRows) => {
       const rows = [];
       for (let i = 0; i < numRows; i++) {
         rows.push(
@@ -250,6 +309,20 @@ const StorageChamber = () => {
       }
       return rows;
     };
+    
+  
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [numRows, setNumRows] = useState(0);
+    const [inputValue, setInputValue] = useState(0);
+    const [chamberId, setChamberId] = useState("");
+    const [description, setDescription] = useState("");
+    const [makeModel, setMakeModel] = useState("");
+    const [serialNo, setSerialNo] = useState("");
+    const [location, setLocation] = useState("");
+    const [comments, setComments] = useState("");
+    const [stabilityStorageCondition, setStabilityStorageCondition] = useState("");
+    const [numberOfShelfs, setNumberOfShelfs] = useState("");
+    const [maximunNumberOfShelfs, setMaximunNumberOfShelfs] = useState("");
 
     const handleAdd = () => {
       const newCondition = {
@@ -262,6 +335,7 @@ const StorageChamber = () => {
       };
       onAdd(newCondition);
     };
+  
 
     return (
       <>
@@ -393,16 +467,18 @@ const StorageChamber = () => {
     setEditModalData(rowData);
   };
 
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
-  };
+
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
@@ -450,6 +526,8 @@ const StorageChamber = () => {
       }
       return rows;
     };
+
+    
     return (
       <>
         <CModal
@@ -585,6 +663,41 @@ const StorageChamber = () => {
     );
   };
 
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/sMStorageChamber/${updatedData.uniqueId}`,
+        dataTosend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
+      } else {
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
+      }
+    } catch (error) {
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
+    }
+  };
+  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.samplingID === samplingConfiguration.samplingID
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
+  };
+
   return (
     <>
     <LaunchQMS />
@@ -657,12 +770,22 @@ const StorageChamber = () => {
         openEditModal={openEditModal}
       />
       {isModalOpen && (
-        <StatusModal
-          visible={isModalOpen}
-          closeModal={closeModal}
-          onAdd={addNewStorageCondition}
-        />
+         <ReusableModal
+         visible={viewModalData !== null}
+        closeModal={closeViewModal}
+        data={viewModalData}
+        fields={fields}
+        onClose={handleCloseModals}
+        title="Test Plan Details"
+        updateStatus={handleStatusUpdate}
+       />
       )}
+ {isModalOpen && 
+      <StatusModal
+       visible={isModalOpen}
+       closeModal={closeModal} 
+       onAdd={handleAdd} />}
+
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}

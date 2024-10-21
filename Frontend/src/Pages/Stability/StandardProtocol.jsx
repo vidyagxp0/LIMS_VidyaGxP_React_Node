@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 import {
   CButton,
   CFormInput,
@@ -47,12 +49,45 @@ function StandardProtocol() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cardCounts, setCardCounts] = useState({
+    DROPPED: 0,
+    INITIATED: 0,
+    REINITIATED: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+  });
+  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
-  const [lastStatus, setLastStatus] = useState("Inactive");
-  const [editModalData, setEditModalData] = useState(null)
+
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-all-lims/sMStandardProtocol`
+      );
+      const fetchedData = response?.data[0]?.sMStandardProtocol || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleCloseModals = () => {
@@ -120,14 +155,6 @@ function StandardProtocol() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -153,11 +180,57 @@ function StandardProtocol() {
     setLastStatus(nextStatus)
     setIsModalOpen(false);
   }
+  const handleDelete = async (item) => {
+    console.log(item);
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/sMStandardProtocol/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
+  };
+
+
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:9000/manage-lims/add/sMStandardProtocol`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to adsd Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const StatusModal = ({visible , closeModal,onAdd}) => {
     const [standardProtocolName , setStandardProtocolName] = useState('')
     const [standardProtocolId, setStandardProtocolId] = useState('')
     const [description, setDescription] = useState('')
+
+    
 
     const handleAdd = ()=>{
       const newCondition ={
@@ -221,13 +294,40 @@ function StandardProtocol() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`,
+        dataTosend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
+      } else {
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
+      }
+    } catch (error) {
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
+    }
   };
+  // const handleStatusUpdate = (samplingConfiguration, newStatus) => {
+  //   const updatedData = data.map((item) =>
+  //     item.samplingID === samplingConfiguration.samplingID
+  //       ? { ...item, status: newStatus }
+  //       : item
+  //   );
+  //   setData(updatedData);
+  // };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData , setFormData] = useState(data)
@@ -331,8 +431,26 @@ const handleSave = ()=>{
       </div>
 
       {isModalOpen && (
-        <StatusModal onAdd={addNewStandardProtocol} visible={isModalOpen} closeModal={closeModal} />
-      )}
+        <StatusModal
+         onAdd={handleAdd}
+          visible={isModalOpen}
+           closeModal={closeModal} 
+         
+           />
+          )}
+           {viewModalData && (
+            <ReusableModal
+              visible={viewModalData !== null}
+              closeModal={closeViewModal}
+              data={viewModalData}
+              fields={fields}
+              onClose={handleCloseModals}
+              title="Test Plan Details"
+              updateStatus={handleStatusUpdate}
+            />
+          )}
+           
+     
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}

@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { toast } from "react-toastify";
 import {
   faEye,
   faPenToSquare,
@@ -28,36 +28,20 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import CoaModal from "../Modals/CoaModal";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    productName: "Product 1",
-    chamberID: "CH001",
-    actualQuantity: 100,
-    availableQuantity: 80,
-    protocolType: "Type X",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    productName: "Product 2",
-    chamberID: "CH002",
-    actualQuantity: 150,
-    availableQuantity: 150,
-    protocolType: "Type Y",
-    status: "INITIATED",
-  },
-];
+
+
 function CoaTemplate() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]); 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [statusModal, setStatusModal] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [viewModalData, setViewModalData] = useState(null);
+  const [viewModalData, setViewModalData] = useState("");
+  const [formData,setFormData] = useState([])
+  const [newChamber, setNewChamber] = useState([]);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -65,15 +49,28 @@ function CoaTemplate() {
     APPROVED: 0,
     REJECTED: 0,
   });
-  const [lastStatus, setLastStatus] = useState("INITIATED");
+  const [lastStatus, setLastStatus] = useState("");
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [coaModal , setCoaModal] = useState(false);
 
+  const fields = [
+    { label: "S.No", key: "sno" },
+    { label: "Product Name", key: "productName" },
+    { label: "Unique Code", key: "uniqueCode" },
+    {label:"Chamber ID,",key:"chamberId"},
+    {label:"Actual Quantity",key:"actualQuantity"},
+    {label:"Protocol Type",key:"protocolType"},
+    { label: "Generic Name", key: "genericName" },
+    { label: "Re-Testing Period ", key: "reTestingPeriod" },
+    { label: "Status", key: "status" },
+  ];
+
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
-
+  
   const handleCoaOpenModals = () => {
     setCoaModal(true);
   };
@@ -86,6 +83,30 @@ function CoaTemplate() {
     setIsModalsOpen(false);
   };
 
+  const addCoaChamber = async (newChamber) => {
+    try {
+      const response = await axios.post(`http://localhost:9000/manage-lims/add/sMCOATemplate`, {
+       ...newChamber,
+       addDate: new Date().toISOString().split("T")[0],
+       status: newChamber.status || "Active",
+      }); 
+  
+      if (response.status === 200 || response.status === 201) {
+        setData((prevData) => [...prevData, newChamber]); // Use newChamber instead of addNewCoaTemplate
+      } else {
+        console.error("Failed to add condition:", response.status);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error("Error adding condition:", error.response.data);
+      } else if (error.request) {
+        console.error("No response from server:", error.request);
+      } else {
+        console.error("Error setting up request:", error.message);
+      }
+    }
+  };
+  
   useEffect(() => {
     const counts = {
       DROPPED: 0,
@@ -94,6 +115,8 @@ function CoaTemplate() {
       APPROVED: 0,
       REJECTED: 0,
     };
+
+   
 
     data.forEach((item) => {
       if (item.status === "DROPPED") counts.DROPPED++;
@@ -117,13 +140,18 @@ function CoaTemplate() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
-
   const filteredData = data.filter((row) => {
     return (
       row.productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
+
+  const onSave = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
+  
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData); // Set the data for ViewModal
@@ -155,14 +183,22 @@ function CoaTemplate() {
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row.original)}
+            onClick={() => openEditModal(row.original.id)}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon 
+          icon={faTrashCan}
+           className="cursor-pointer"
+           onClick={() => handleDelete(row.original.id)}
+            />
         </>
       ),
     },
   ];
 
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -175,11 +211,11 @@ function CoaTemplate() {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
+  // const handleDelete = (item) => {
+  //   const newData = data.filter((d) => d !== item);
+  //   setData(newData);
+  //   console.log("Deleted item:", item);
+  // };
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -195,13 +231,29 @@ function CoaTemplate() {
     }));
 
     const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenateData); 
+    setIsModalsOpen(false);
   };
 
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/sMCOATemplate/${item.uniqueId}`
+      );
+      console.log(response); 
+      if (response.status === 200 || response.status === 201 ) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Deleted successfully"); 
+      }
+    } catch (error) {
+      console.error("Error deleting storage condition:", error);
+    }
+  };
   const addNewStorageCondition = (newCondition) => {
+
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
+    setData((prevData) => [ 
       ...prevData,
       {
         ...newCondition,
@@ -214,7 +266,65 @@ function CoaTemplate() {
     setIsModalOpen(false);
   };
 
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-all-lims/sMCOATemplate`
+      );
+      const fetchedData = response?.data[0]?.sMCOATemplate || [];
+      
+      
+      const updatedData = fetchedData?.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+      setData(updatedData);  // Set fetched data in state to display in table
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData(); 
+  }, []);
+
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`,
+        dataTosend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
+      } else {
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
+      }
+    } catch (error) {
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
+    }
+  };
+  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.samplingID === samplingConfiguration.samplingID
+        ? { ...item, status: newStatus }
+        : item
+    );
+    setData(updatedData);
+  };
+
+
+
+  const StatusModal = ({ visible, closeModal, onAdd,onSave }) => {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(1);
@@ -224,6 +334,19 @@ function CoaTemplate() {
     const [reportTitle, setReportTitle] = useState("");
     const [productMaterialCaption, setProductMaterialCaption] = useState("");
     const [formatNo, setFormatNo] = useState("");
+    const handleSave = () => {
+      const newCondition = {
+        productName: productMaterialCaption,
+        chamberID: "0000",  // Use appropriate values
+        actualQuantity: "000",
+        availableQuantity: "0000",
+        protocolType: coaType,
+        status: "active",
+
+      };
+      onSave(newCondition);
+      setIsModalOpen(false); 
+    }
 
     const handleHeaderRowsChange = (e) => {
       const value = Math.min(parseInt(e.target.value, 10) || 0, 50);
@@ -242,24 +365,24 @@ function CoaTemplate() {
     const handleFooterColumnsChange = (e) => {
       setFooterColumns(parseInt(e.target.value, 10));
     };
+    // const handleSave = () => {
+    //   onSave(formData);
+    //   setIsModalOpen(false)
+    // };
 
     const renderTable = (rows, columns) => {
+      if (rows <= 0) return <tr><td colSpan={columns}>No data available</td></tr>;
+    
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
         const tableColumns = [];
         for (let j = 0; j < columns; j++) {
           tableColumns.push(
-            <td key={j} className="flex gap-4">
+            <td key={j}>
               <CFormInput type="text" placeholder={`Lower Count `} />
-
               <CFormSelect
                 className="mb-2"
-                options={[
-                  {
-                    label: "Select Field",
-                    value: "1",
-                  },
-                ]}
+                options={[{ label: "Select Field", value: "1" }]}
               />
             </td>
           );
@@ -268,18 +391,8 @@ function CoaTemplate() {
       }
       return tableRows;
     };
+    
 
-    const handleAdd = () => {
-      const newCondition = {
-        productName: productMaterialCaption,
-        chamberID: "0000",
-        actualQuantity: "000",
-        availableQuantity: "0000",
-        protocolType: coaType,
-        action: [],
-      };
-      onAdd(newCondition);
-    };
 
     return (
       <CModal
@@ -334,11 +447,11 @@ function CoaTemplate() {
             label="Product/Material Caption"
             placeholder="Product"
             value={productMaterialCaption}
-            onChange={(e) => setProductMaterialCaption(e.target.value)}
+            onChange={(e) =>  setProductMaterialCaption(e.target.value)}
           />
           <CFormInput
             className="mb-3"
-            type="text"
+              type="text"
             label="Format No."
             placeholder="Format No."
             value={formatNo}
@@ -406,7 +519,7 @@ function CoaTemplate() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleSave}>
             Submit
           </CButton>
         </CModalFooter>
@@ -421,13 +534,7 @@ function CoaTemplate() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
-  };
+ 
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [headerRows, setHeaderRows] = useState(0);
@@ -440,6 +547,7 @@ function CoaTemplate() {
       if (data) {
         setFormData(data);
       }
+    
     }, [data]);
 
     const handleChange = (e) => {
@@ -470,22 +578,20 @@ function CoaTemplate() {
     };
 
     const renderTable = (rows, columns) => {
+      if (rows <= 0 || columns <= 0) {
+        return <tr><td colSpan={columns}>No data available</td></tr>;
+      }
+    
       const tableRows = [];
       for (let i = 0; i < rows; i++) {
         const tableColumns = [];
         for (let j = 0; j < columns; j++) {
           tableColumns.push(
-            <td key={j} className="flex gap-4">
+            <td key={j}>
               <CFormInput type="text" placeholder={`Lower Count `} />
-
               <CFormSelect
                 className="mb-2"
-                options={[
-                  {
-                    label: "Select Field",
-                    value: "1",
-                  },
-                ]}
+                options={[{ label: "Select Field", value: "1" }]}
               />
             </td>
           );
@@ -494,18 +600,27 @@ function CoaTemplate() {
       }
       return tableRows;
     };
+    
+   
 
     const handleAdd = () => {
       const newCondition = {
-        productName: productMaterialCaption,
-        chamberID: "0000",
-        actualQuantity: "000",
-        availableQuantity: "0000",
-        protocolType: coaType,
+        productName: formData?.productName || '', 
+        chamberID: formData?.chamberID || '', 
+        actualQuantity: formData?.actualQuantity || '',
+        availableQuantity: formData?.availableQuantity || '',
+        protocolType: formData?.protocolType || '',
         action: [],
       };
-      onAdd(newCondition);
+     
+      console.log(newCondition,"==================")
+      setData((prevData) => [...prevData, newCondition]);
+    
+      // Modal close karne ke baad form reset karo
+      setFormData(null);
+      closeModal();
     };
+    
 
     return (
       <CModal
@@ -684,7 +799,7 @@ function CoaTemplate() {
         </div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <SearchBar value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} />
             <Dropdown
               options={[
                 { value: "All", label: "All" },
@@ -716,6 +831,7 @@ function CoaTemplate() {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           openEditModal={openEditModal}
+        
         />
 
         {isModalOpen && (
@@ -723,6 +839,9 @@ function CoaTemplate() {
             visible={isModalOpen}
             onAdd={addNewStorageCondition}
             closeModal={closeModal}
+            onSave={addCoaChamber}
+          
+            
           />
         )}
         {isModalsOpen && (
@@ -743,6 +862,17 @@ function CoaTemplate() {
             onSave={handleEditSave}
           />
         )}
+         {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          onClose={handleCloseModals}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
 
         {
           coaModal && (

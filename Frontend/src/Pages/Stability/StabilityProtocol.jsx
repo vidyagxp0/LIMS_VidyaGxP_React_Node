@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
+import axios from "axios";
 import {
   faEye,
   faPenToSquare,
@@ -31,6 +33,7 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import { Button } from "react-bootstrap";
+import ReusableModal from "../Modals/ResusableModal";
 import { Link } from "react-router-dom";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
@@ -80,6 +83,31 @@ function StabilityProtocol() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-all-lims/sMStabilityProtocol`
+      );
+      const fetchedData = response?.data[0]?.sMStabilityProtocol || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -181,12 +209,6 @@ function StabilityProtocol() {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -219,6 +241,51 @@ function StabilityProtocol() {
     ]);
     setLastStatus(nextStatus);
     setIsModalOpen(false);
+  };
+  const handleDelete = async (item) => {
+    console.log(item);
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/sMStabilityProtocol/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
+  };
+
+
+
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:9000/manage-lims/add/sMStabilityProtocol`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to adsd Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -279,6 +346,15 @@ function StabilityProtocol() {
       onAdd(newCondition);
     };
 
+    const handleStatusUpdate = (samplingConfiguration, newStatus) => {
+      const updatedData = data.map((item) =>
+        item.samplingID === samplingConfiguration.samplingID
+          ? { ...item, status: newStatus }
+          : item
+      );
+      setData(updatedData);
+    };
+
     return (
       <>
         <CModal
@@ -337,7 +413,7 @@ function StabilityProtocol() {
             />
             <label className="mb-3">Protocol Type</label>
             <CFormCheck
-              className="mb-3"
+              className="mb-3"  
               type="radio"
               id="protocolTypeNew"
               name="protocolType"
@@ -651,6 +727,40 @@ function StabilityProtocol() {
               value={packageConfiguration}
               onChange={(e) => setPackageConfiguration(e.target.value)}
             />
+              <CFormInput
+              className="mb-3"
+              type="text"
+              label="Instructions"
+              placeholder="Instructions"
+              name="instructions"
+              value={specificationID}
+              onChange={(e) => setSpecificationID(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Package Configuration"
+              placeholder="Package Configuration"
+              value={sampleType}
+              onChange={(e) => setSampleType(e.target.value)}
+            />
+              <CFormInput
+              className="mb-3"
+              type="text"
+              label="Instructions"
+              placeholder="Instructions"
+              name="instructions"
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Package Configuration"
+              placeholder="Package Configuration"
+              value={packageConfiguration}
+              onChange={(e) => setPackageConfiguration(e.target.value)}
+            />
           </CModalBody>
           <CModalFooter>
             <CButton color="light" onClick={closeModal}>
@@ -672,12 +782,33 @@ function StabilityProtocol() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+
+
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/sMStabilityProtocol/${updatedData.uniqueId}`,
+        dataTosend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
+      } else {
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
+      }
+    } catch (error) {
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -689,11 +820,12 @@ function StabilityProtocol() {
         setFormData(data);
       }
     }, [data]);
-
     const handleChange = (e) => {
-      const { name, value } = e.target;
+      const { name, type, value, files } = e.target;
+      const val = type === "file" ? files[0] : value;
       setFormData({ ...formData, [name]: value });
-    };
+  };
+  
 
     const handleSave = () => {
       onSave(formData);
@@ -797,6 +929,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="text"
+              name="protocolID"
               label="Protocol Id"
               placeholder="Protocol Id"
               value={formData?.protocolID || ""}
@@ -805,6 +938,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="select"
+              name="sampleLoginTemplet"
               label="Sample Login Template"
               placeholder="Select..."
               options={[
@@ -818,6 +952,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              name="DateFormat"
               label="Manufacturing Date"
               placeholder=" "
               value={formData?.manufacturingDate || ""}
@@ -848,6 +983,7 @@ function StabilityProtocol() {
               className="mb-3"
               type="text"
               label="Sample By"
+              name="sampleBy"
               placeholder="Sample By"
               value={formData?.sampleBy || ""}
               onChange={handleChange}
@@ -855,6 +991,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="text"
+              name="storageConditionUOM"
               label="Storage Condition UOM"
               placeholder="Storage Condition UOM"
               value={formData?.storageConditionUOM || ""}
@@ -881,6 +1018,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              name="DateFormat"
               label="Starting Date"
               placeholder=""
               value={formData?.startDate || ""}
@@ -921,6 +1059,7 @@ function StabilityProtocol() {
                 <CFormInput
                   className="mb-3"
                   type="text"
+                  name="numberOfConditions"
                   id="numberOfConditions"
                   label="Number Of Storage Conditions"
                   placeholder="Number Of Storage Conditions"
@@ -1108,7 +1247,7 @@ function StabilityProtocol() {
 
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
@@ -1160,7 +1299,7 @@ function StabilityProtocol() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Stability_Protocol.pdf" title="Stability Protocol Data" />
+            <PDFDownload columns={columns} data={filteredData} fileName="Stability_Protocol.pdf" title="Stability Protocol Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add Protocol" color="blue" onClick={openModal} />
           </div>
@@ -1174,13 +1313,24 @@ function StabilityProtocol() {
           openEditModal={openEditModal}
         />
 
-        {isModalOpen && (
+{viewModalData && (
+        <ReusableModal
+        visible={viewModalData !== null}
+        closeModal={closeViewModal}
+        data={viewModalData}
+        fields={fields}
+        onClose={handleCloseModals}
+        title="Test Plan Details"
+        updateStatus={handleStatusUpdate}
+        />
+      )}
+
+        {isModalOpen &&
           <StatusModal
-            onAdd={addNewStorageCondition}
             visible={isModalOpen}
             closeModal={closeModal}
-          />
-        )}
+            onAdd={handleAdd} />}
+
         {isModalsOpen && (
           <ImportModal
             initialData={initialData}

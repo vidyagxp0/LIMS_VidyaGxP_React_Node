@@ -26,7 +26,7 @@ import SamplePlanning from "./Pages/Samplelogin/SamplePlanning.jsx";
 
 import Storage_Condition from "./Pages/Stability/Storage_Condition";
 import ChamberConditionMapping from "./Pages/Stability/ChamberConditionMapping";
-// import ChamberTransfer from "./Pages/Stability/ChamberTransfer";
+// import ChamberTransfer from "./Pages/Stability/ChamberTransfer"; 
 import CoaTemplate from "./Pages/Stability/CoaTemplate";
 import StorageChamber from "./Pages/Stability/StorageChamber";
 import StandardProtocol from "./Pages/Stability/StandardProtocol";

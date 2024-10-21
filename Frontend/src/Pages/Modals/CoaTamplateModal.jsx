@@ -151,44 +151,42 @@ const CoaTamplateModal = ({visible, closeModal, handleSubmit}) => {
             value={coaData.coaType}
             onChange={(e) => handleInputChange("coaType", e.target.value)}
           />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Report Title"
-            placeholder="Report Title"
-            name="ReportTitle"
-            value={coaData.reportTitle}
-            onChange={(e) => handleInputChange("reportTitle", e.target.value)}
+         <CFormInput
+    type="text"
+    className="mb-3"
+    label="Report Title"
+    placeholder="Report Title"
+    name="ReportTitle"
+    value={coaData.reportTitle}
+    onChange={(e) => handleInputChange("reportTitle", e.target.value)}
           />
           <CFormInput
-            type="text"
-            className="mb-3"
-            label="Product/Material Caption"
-            placeholder="Product/Material Caption"
-            name="MaterialCaption"
-            value={coaData.materialCaption}
-            onChange={(e) =>
-              handleInputChange("materialCaption", e.target.value)
-            }
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Serial No."
-            placeholder="Serial Number"
-            name="SerialNo"
-            value={coaData.serialNo}
-            onChange={(e) => handleInputChange("serialNo", e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            className="mb-3"
-            label="Format No."
-            placeholder="Format No."
-            name="FormatNo"
-            value={coaData.formatNo}
-            onChange={(e) => handleInputChange("formatNo", e.target.value)}
-          />
+    type="text"
+    className="mb-3"
+    label="Product/Material Caption"
+    placeholder="Product/Material Caption"
+    name="MaterialCaption"
+    value={coaData.materialCaption}
+    onChange={(e) => handleInputChange("materialCaption", e.target.value)}
+/>
+<CFormInput
+    type="text"
+    className="mb-3"
+    label="Serial No."
+    placeholder="Serial Number"
+    name="SerialNo"
+    value={coaData.serialNo}
+    onChange={(e) => handleInputChange("serialNo", e.target.value)}
+/>
+<CFormInput
+    type="text"
+    className="mb-3"
+    label="Format No."
+    placeholder="Format No."
+    name="FormatNo"
+    value={coaData.formatNo}
+    onChange={(e) => handleInputChange("formatNo", e.target.value)}
+/>
 
           <CModalTitle className="bg-light mb-3">Header</CModalTitle>
 

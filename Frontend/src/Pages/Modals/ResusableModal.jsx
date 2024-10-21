@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 import {
   CButton,
   CFormSelect,
@@ -83,7 +85,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   const handleStatusChange = async (newStatus) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/update-status/${data.sampleType}`,
+        `http://localhost:9000/manage-lims/update-status/${data.sampleType}`,
         {
           status: newStatus,
         }
@@ -100,7 +102,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
         "Error updating status: " + (error.response?.data || error.message)
       );
     } finally {
-      setStatusModal(false);
+      // setStatusModal(false);
       closeModal();
     }
   };

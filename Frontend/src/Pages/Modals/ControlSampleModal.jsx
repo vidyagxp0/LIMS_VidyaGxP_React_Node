@@ -13,7 +13,7 @@ import {
   CModalTitle,
   CRow,
 } from "@coreui/react";
-import "react-quill/dist/quill.snow.css";
+// import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 

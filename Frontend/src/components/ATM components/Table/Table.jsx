@@ -86,67 +86,68 @@ const Table = ({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {currentData?.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {columns?.map((column) => (
-                  <td
-                    key={column.accessor}
-                    className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                  >
-                    {column.accessor === "checkbox" ? (
-                      <input
-                        type="checkbox"
-                        checked={row.checkbox}
-                        onChange={() => onCheckboxChange(rowIndex + startIndex)}
-                      />
-                    ) : column.accessor === "status" ? (
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                          row.status
-                        )}`}
-                      >
-                        {row.status}
-                      </span>
-                    ) : column.accessor === "action" ? (
-                      <div className="flex space-x-2">
-                        <FontAwesomeIcon
-                          icon={faEye}
-                          className="mr-2 cursor-pointer"
-                          onClick={() => onViewDetails(row)}
-                        />
-                        <FontAwesomeIcon
-                          icon={faPenToSquare}
-                          className="mr-2 cursor-pointer"
-                          onClick={() => openEditModal(row)}
-                        />
-                        <FontAwesomeIcon
-                          icon={faTrashCan}
-                          className="cursor-pointer"
-                          onClick={() => openDeleteModal(row)}
-                        />
-                      </div>
-                    ) : column.accessor === "attachment" ? (
-                      <div>
-                        <button
-                          className="bg-blue-500 text-white px-2 py-1 rounded"
-                          onClick={() => handleAttachmentClick(rowIndex)}
-                        >
-                          Add Attachment
-                        </button>
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          ref={(el) => (attachmentInput.current[rowIndex] = el)}
-                          onChange={(e) => console.log(e.target.files[0])} // Handle file upload logic here
-                        />
-                      </div>
-                    ) : (
-                      row[column.accessor]
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
+          {currentData?.map((row, rowIndex) => (
+  <tr key={rowIndex}>
+    {columns?.map((column) => (
+      <td
+        key={column.accessor}
+        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+      >
+        {column.accessor === "checkbox" ? (
+          <input
+            type="checkbox"
+            checked={Boolean(row.checkbox)} // Ensure it is always a boolean
+            onChange={() => onCheckboxChange(rowIndex + startIndex)}
+          />
+        ) : column.accessor === "status" ? (
+          <span
+            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+              row.status
+            )}`}
+          >
+            {row.status}
+          </span>
+        ) : column.accessor === "action" ? (
+          <div className="flex space-x-2">
+            <FontAwesomeIcon
+              icon={faEye}
+              className="mr-2 cursor-pointer"
+              onClick={() => onViewDetails(row)}
+            />
+            <FontAwesomeIcon
+              icon={faPenToSquare}
+              className="mr-2 cursor-pointer"
+              onClick={() => openEditModal(row)}
+            />
+            <FontAwesomeIcon
+              icon={faTrashCan}
+              className="cursor-pointer"
+              onClick={() => openDeleteModal(row)}
+            />
+          </div>
+        ) : column.accessor === "attachment" ? (
+          <div>
+            <button
+              className="bg-blue-500 text-white px-2 py-1 rounded"
+              onClick={() => handleAttachmentClick(rowIndex)}
+            >
+              Add Attachment
+            </button>
+            <input
+              type="file"
+              style={{ display: "none" }}
+              ref={(el) => (attachmentInput.current[rowIndex] = el)}
+              onChange={(e) => console.log(e.target.files[0])} 
+            />
+          </div>
+        ) : (
+          row[column.accessor] // Directly displaying the value from the data
+        )}
+      </td>
+    ))}
+  </tr>
+))}
+
           </tbody>
         </table>
         <div className="mt-4 flex justify-end">
