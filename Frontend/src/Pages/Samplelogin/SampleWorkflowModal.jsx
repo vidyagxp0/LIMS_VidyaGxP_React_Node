@@ -123,6 +123,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     QaReviewerApprover: "",
     QaReviewerComment: "",
     QaReviewDate: "",
+    suSupportiveAttachment:"",
 
     qaReviewDate: "",
     qaReview: "",
