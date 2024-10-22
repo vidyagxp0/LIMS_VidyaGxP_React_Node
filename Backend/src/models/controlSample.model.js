@@ -1,7 +1,7 @@
 import { sequelize } from "../config/db.js";
 import { DataTypes, TEXT } from "sequelize";
 
-export const controlSample = sequelize.define("controlSample", {
+export const ControlSample = sequelize.define("ControlSample", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -126,27 +126,15 @@ export const controlSample = sequelize.define("controlSample", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorName: {
+  ReviewerName: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorComment: {
+  ReviewerComment: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorReviewDate: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  QaReviewerName: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  QaReviewerComment: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  QaReviewDate: {
+  ReviewDate: {
     type: DataTypes.TEXT,
     allowNull: true,
   },

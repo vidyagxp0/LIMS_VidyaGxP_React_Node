@@ -406,14 +406,16 @@ function SpecificationStp() {
     return 0; 
   });
 
-  const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
-      setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
+  const onViewDetails = () => {
+    // if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+    //   setIsViewModalOpen(false);
+    //   setViewModalData(null);
+    // } else {
+    //   setViewModalData(rowData);
+    //   setIsViewModalOpen(true);
+    // }
+
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const handleCheckboxChange = (index) => {

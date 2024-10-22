@@ -226,27 +226,15 @@ export const AnalystQualification = sequelize.define("AnalystQualification", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorName: {
+  ReviewerName: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorComment: {
+  ReviewerComment: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  supervisorReviewDate: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  QaReviewerName: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  QaReviewerComment: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  QaReviewDate: {
+  ReviewDate: {
     type: DataTypes.TEXT,
     allowNull: true,
   },

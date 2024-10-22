@@ -82,10 +82,24 @@ export const adminLogin = async (req, res) => {
 export const signUp = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
-    const { password, email, gender, name, rolesArray, designation,user_type } = req.body;
+    const {
+      password,
+      email,
+      gender,
+      name,
+      rolesArray,
+      designation,
+      user_type,
+    } = req.body;
 
-
-    if (!password || !email || !name || !designation || !rolesArray || !user_type) {
+    if (
+      !password ||
+      !email ||
+      !name ||
+      !designation ||
+      !rolesArray ||
+      !user_type
+    ) {
       return res.status(400).json({
         error: true,
         message: "Please provide proper user details!",

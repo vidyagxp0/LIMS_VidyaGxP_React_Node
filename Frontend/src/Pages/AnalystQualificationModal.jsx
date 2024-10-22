@@ -171,7 +171,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     } else {
       try {
         const response = await axios.post(
-          `http://localhost:9000/create-sample`,
+          `http://localhost:9000/create-sample/sample`,
           formData
         );
         console.log(response, "iddddddddddddddddddddddd");
