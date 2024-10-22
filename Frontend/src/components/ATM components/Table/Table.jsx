@@ -6,6 +6,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal";
+import { useNavigate } from "react-router-dom";
 
 const Table = ({
   columns,
@@ -14,7 +15,6 @@ const Table = ({
   onViewDetails,
   onDelete,
   openEditModal,
-  onEdit,
 }) => {
   const pageSize = 7;
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,6 +24,7 @@ const Table = ({
   const startIndex = (currentPage - 1) * pageSize;
   const currentData = data?.slice(startIndex, startIndex + pageSize);
   const attachmentInput = useRef([]);
+  const navigate =useNavigate();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -108,7 +109,7 @@ const Table = ({
                     
                     onClick={
                       column.accessor === "analystId" // Replace with actual accessor name for Analyst ID column
-                        ? () => onEdit(row) // Call this function when the Analyst ID column is clicked
+                        ? () => navigate(`/analyst-qualification-modal`) // Call this function when the Analyst ID column is clicked
                         : undefined
                     }
                     style={
