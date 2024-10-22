@@ -14,6 +14,8 @@ import {
 import ImportModal from "../Modals/importModal";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ControlSampleModal from "../Modals/ControlSampleModal";
+import { BASE_URL } from "../../config.json";
+
 import {
   CButton,
   CForm,
@@ -144,7 +146,7 @@ const ControlSample = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/get-all-lims/controlSampleManagement`
+          `${BASE_URL}/get-all-lims/controlSampleManagement`
         );
         const fetchData = response?.data[0]?.controlSampleManagement || [];
         const updatedData = fetchData?.map((item, index) => ({
@@ -267,7 +269,66 @@ const ControlSample = () => {
         toast.error("Error deleting Control Sample.");
       });
   };
-  
+
+  const handleAdd = async (newSampleStorage) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/controlSampleManagement`,
+        {
+          ...newSampleStorage,
+          status: newSampleStorage.status || "INITIATED",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Sample storage added successfully");
+        fetchData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add sample storage");
+      }
+    } catch (error) {c
+      toast.error(
+        "Error adding sample storage: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+
+
+const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [formData, setFormData] = useState({
+        SampleID: "",
+        materialName: "",
+        materialCode: "",
+        ARNo: "",
+        BatchNo: "",
+        mgfDate: "",
+        expiryDate: "",
+        quantity: "",
+        quantityWithdrawn: "",
+        currentQuantity: "",
+        uom: "",
+        storageLocation: "",
+        storageCondition: "",
+        inspectionScheduledOn: "", 
+        inspectionScheduledBy: "",
+        abnormalObservation: "",
+        observationDate: "",
+        destructionDueOn: "",
+        destroyedBy: "",
+        neutralizingAgent: "",
+        destructionDate: "",
+        status: ""
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    }};
+
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -446,228 +507,208 @@ const ControlSample = () => {
           <CModalTitle>Add Instrument</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Edit information and register new Control Sample</p>
-          <CForm onSubmit={handleEditControlSample}>
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Sample Id"
-              placeholder="Sample Id"
-              value={formData?.sampleId || ""}
-              onChange={handleChange}
-              name="sampleId"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Product Name"
-              placeholder="Product Name"
-              value={formData?.productName || ""}
-              onChange={handleChange}
-              name="productName"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Product Code"
-              placeholder="Product Code"
-              value={formData?.productCode || ""}
-              onChange={handleChange}
-              name="productCode"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Sample Type"
-              placeholder="Sample Type"
-              value={formData?.sampleType || ""}
-              onChange={handleChange}
-              name="sampleType"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Market"
-              placeholder="Market"
-              value={formData?.market || ""}
-              onChange={handleChange}
-              name="market"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Batch No"
-              placeholder="Batch No"
-              value={formData?.batchNo || ""}
-              onChange={handleChange}
-              name="batchNo"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="AR No"
-              placeholder="AR No"
-              value={formData?.arNo || ""}
-              onChange={handleChange}
-              name="arNo"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Mfg Date"
-              placeholder="Mfg Date"
-              value={formData?.mfgDate || ""}
-              onChange={handleChange}
-              name="mfgDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Expiry Date"
-              placeholder="Expiry Date"
-              value={formData?.expiryDate || ""}
-              onChange={handleChange}
-              name="expiryDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="number"
-              label="Quantity"
-              placeholder="Quantity"
-              value={formData?.quantity || ""}
-              onChange={handleChange}
-              name="quantity"
-            />
-            <CFormInput
-              className="mb-3"
-              type="number"
-              label="Quantity Withdrawn"
-              placeholder="Quantity Withdrawn"
-              value={formData?.quantityWithdrawn || ""}
-              onChange={handleChange}
-              name="quantityWithdrawn"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Current Quantity"
-              placeholder="Current Quantity"
-              value={formData?.currentQuantity || ""}
-              onChange={handleChange}
-              name="currentQuantity"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="UOM"
-              placeholder="UOM"
-              value={formData?.uom || ""}
-              onChange={handleChange}
-              name="uom"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Storage Location"
-              placeholder="Storage Location"
-              value={formData?.storageLocation || ""}
-              onChange={handleChange}
-              name="storageLocation"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Storage Condition"
-              placeholder="Storage Condition"
-              value={formData?.storageCondition || ""}
-              onChange={handleChange}
-              name="storageCondition"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Visual Inspection Scheduled On"
-              placeholder="Visual Inspection Scheduled On"
-              value={formData?.visualInspectionScheduledOn || ""}
-              onChange={handleChange}
-              name="visualInspectionScheduledOn"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Visual Inspection Performed By"
-              placeholder="Visual Inspection Performed By"
-              value={formData?.visualInspectionPerformedBy || ""}
-              onChange={handleChange}
-              name="visualInspectionPerformedBy"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Abnormal Observation"
-              placeholder="Abnormal Observation"
-              value={formData?.abnormalObservation || ""}
-              onChange={handleChange}
-              name="abnormalObservation"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Observation Date"
-              placeholder="Observation Date"
-              value={formData?.observationDate || ""}
-              onChange={handleChange}
-              name="observationDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Destruction Due On"
-              placeholder="Destruction Due On"
-              value={formData?.destructionDueOn || ""}
-              onChange={handleChange}
-              name="destructionDueOn"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Destroyed By"
-              placeholder="Destroyed By"
-              value={formData?.destroyedBy || ""}
-              onChange={handleChange}
-              name="destroyedBy"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Neutralizing Agent"
-              placeholder="Neutralizing Agent"
-              value={formData?.neutralizingAgent || ""}
-              onChange={handleChange}
-              name="neutralizingAgent"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Destruction Date"
-              placeholder="Destruction Date"
-              value={formData?.destructionDate || ""}
-              onChange={handleChange}
-              name="destructionDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Remarks"
-              placeholder="Remarks"
-              value={formData?.remarks || ""}
-              onChange={handleChange}
-              name="remarks"
-            />
-            <CButton color="primary" type="submit">
-              Save changes
-            </CButton>
-          </CForm>
+            <p>Edit information and register new Control Sample</p>
+            <CForm onSubmit={handleEditControlSample}>
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Sample Id"
+                    placeholder="Sample Id"
+                    value={SampleID}
+                    onChange={handleChange}
+                    name="sampleId"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Product Name"
+                    placeholder="Product Name"
+                    value={materialName}
+                    onChange={handleChange}
+                    name="materialName"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Product Code"
+                    placeholder="Product Code"
+                    value={materialCode}
+                    onChange={handleChange}
+                    name="materialCode"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Batch No"
+                    placeholder="Batch No"
+                    value={BatchNo}
+                    onChange={handleChange}
+                    name="batchNo"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="AR No"
+                    placeholder="AR No"
+                    value={ARNo}
+                    onChange={handleChange}
+                    name="arNo"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="date"
+                    label="Mfg Date"
+                    placeholder="Mfg Date"
+                    value={mgfDate}
+                    onChange={handleChange}
+                    name="mfgDate"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="date"
+                    label="Expiry Date"
+                    placeholder="Expiry Date"
+                    value={expiryDate}
+                    onChange={handleChange}
+                    name="expiryDate"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="number"
+                    label="Quantity"
+                    placeholder="Quantity"
+                    value={quantity}
+                    onChange={handleChange}
+                    name="quantity"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="number"
+                    label="Quantity Withdrawn"
+                    placeholder="Quantity Withdrawn"
+                    value={quantityWithdrawn}
+                    onChange={handleChange}
+                    name="quantityWithdrawn"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Current Quantity"
+                    placeholder="Current Quantity"
+                    value={currentQuantity}
+                    onChange={handleChange}
+                    name="currentQuantity"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="UOM"
+                    placeholder="UOM"
+                    value={uom}
+                    onChange={handleChange}
+                    name="uom"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Storage Location"
+                    placeholder="Storage Location"
+                    value={storageLocation}
+                    onChange={handleChange}
+                    name="storageLocation"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Storage Condition"
+                    placeholder="Storage Condition"
+                    value={storageCondition}
+                    onChange={handleChange}
+                    name="storageCondition"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="date"
+                    label="Visual Inspection Scheduled On"
+                    placeholder="Visual Inspection Scheduled On"
+                    value={inspectionScheduledOn}
+                    onChange={handleChange}
+                    name="visualInspectionScheduledOn"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Visual Inspection Performed By"
+                    placeholder="Visual Inspection Performed By"
+                    value={inspectionScheduledBy}
+                    onChange={handleChange}
+                    name="visualInspectionPerformedBy"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Abnormal Observation"
+                    placeholder="Abnormal Observation"
+                    value={abnormalObservation}
+                    onChange={handleChange}
+                    name="abnormalObservation"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="date"
+                    label="Observation Date"
+                    placeholder="Observation Date"
+                    value={observationDate}
+                    onChange={handleChange}
+                    name="observationDate"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Destruction Due On"
+                    placeholder="Destruction Due On"
+                    value={destructionDueOn}
+                    onChange={handleChange}
+                    name="destructionDueOn"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Destroyed By"
+                    placeholder="Destroyed By"
+                    value={destroyedBy}
+                    onChange={handleChange}
+                    name="destroyedBy"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Neutralizing Agent"
+                    placeholder="Neutralizing Agent"
+                    value={neutralizingAgent}
+                    onChange={handleChange}
+                    name="neutralizingAgent"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="date"
+                    label="Destruction Date"
+                    placeholder="Destruction Date"
+                    value={destructionDate}
+                    onChange={handleChange}
+                    name="destructionDate"
+                />
+                <CFormInput
+                    className="mb-3"
+                    type="text"
+                    label="Status"
+                    placeholder="Status"
+                    value={status}
+                    onChange={handleChange}
+                    name="status"
+                />
+                <CButton type="submit">Submit</CButton>
+            </CForm>
         </CModalBody>
 
         <CModalFooter>
@@ -740,6 +781,14 @@ const ControlSample = () => {
         handleSubmit={handleModalSubmit}
         addRow={addRow}
       />
+
+{isModalOpen && (
+        <StatusModal  
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={handleAdd}
+        />
+      )}
 
       {editModalOpen && (
         <EditModal

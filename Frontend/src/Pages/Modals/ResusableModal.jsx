@@ -90,12 +90,13 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   };
 
   const handleUpdate = () => {
-    onUpdateStatus(selectedStatus); // Call parent function to update the status
-    closeModal(); // Close the modal
+    onUpdateStatus(selectedStatus); 
+    closeModal(); 
     if (selectedStatus) {
       console.log("Updating status to:", selectedStatus);
       onUpdateStatus(selectedStatus);
       closeModal();
+      
     } else {
       console.error("No status selected");
     }

@@ -91,6 +91,7 @@ function Storage_Condition() {
     fetchData();
   }, []);
 
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -121,12 +122,14 @@ function Storage_Condition() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
+
+
   const handleEditSave = async (updatedData) => {
-    const { sno, checkbox, ...dataTosend } = updatedData;
+    const { sno, checkbox, ...dataToSend } = updatedData;
     try {
       const response = await axios.put(
         `http://localhost:9000/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
-        dataTosend
+        dataToSend
       );
       if (response.status === 200) {
         const newData = data.map((item) =>
@@ -136,17 +139,60 @@ function Storage_Condition() {
         );
         setData(newData);
         closeEditModal();
-        toast.success("Data updated successfully");
+        toast.success("Sample storage updated successfully");
         fetchData();
       } else {
-        console.error("Failed to update investigation:", response.statusText);
-        toast.error("Failed to update investigation");
+        console.error("Failed to update sample storage:", response.statusText);
+        toast.error("Failed to update sample storage");
       }
     } catch (error) {
-      console.error("Error updating investigation:", error);
-      toast.error("Error updating investigation");
+      console.error("Error updating sample storage:", error);
+      toast.error("Error updating sample storage");
     }
   };
+
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+  
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        setIsViewModalOpen(false); 
+        closeViewModal(); 
+       
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
+
+  };
+  
+  
+
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -165,13 +211,7 @@ function Storage_Condition() {
     })
   : [];
   const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
-      setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
+    setViewModalData(rowData);
   };
 
   const handleCheckboxChange = (index) => {
@@ -209,7 +249,7 @@ function Storage_Condition() {
 
     try {
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/sMStorageCondition/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMStorageCondition/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -234,8 +274,8 @@ function Storage_Condition() {
     }));
 
     const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData(concatenateData); 
+    setIsModalsOpen(false); 
   };
 
   const addNewStorageCondition = (newCondition) => {
@@ -283,6 +323,7 @@ function Storage_Condition() {
     const [description, setDescription] = useState("");
     const handleProduct = () => {
       const newCondition = {
+        conditionCode,
         stabilityCondition,
         description,
         status: "active",
@@ -291,11 +332,20 @@ function Storage_Condition() {
     };
     return (
       <>
-        <CModal alignment="center" visible={visible} onClose={closeModal}>
+        <CModal alignment="center" visible={isViewModalOpen} onClose={closeViewModal}>
           <CModalHeader>
             <CModalTitle>New Condition</CModalTitle>
           </CModalHeader>
           <CModalBody>
+          <CFormInput
+              className="mb-3"
+              type="text"
+              label="Condition Code"
+              placeholder=" "
+              value={conditionCode}
+              onChange={(e) => setConditionCode(e.target.value)}
+            />
+          
             <CFormInput
               className="mb-3"
               type="text"
@@ -304,14 +354,7 @@ function Storage_Condition() {
               value={stabilityCondition}
               onChange={(e) => setStabilityCondition(e.target.value)}
             />
-             <CFormInput
-              className="mb-3"
-              type="text"
-              label="Condition Code"
-              placeholder=" "
-              value={conditionCode}
-              onChange={(e) => setConditionCode(e.target.value)}
-            />
+           
             <CFormInput
               className="mb-3"
               type="text"
@@ -320,14 +363,7 @@ function Storage_Condition() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="conditionCode"
-              placeholder=" "
-              value={conditionCode}
-              onChange={(e)=> setConditionCode(e.target.value)}
-            />
+          
           </CModalBody>
           <CModalFooter>
             <CButton color="light" onClick={closeModal}>
@@ -377,6 +413,7 @@ function Storage_Condition() {
              <CFormInput
               className="mb-3"
               type="text"
+               name="conditionCode"
               label="Condition Code"
               placeholder=" "
               value={formData?.conditionCode}
@@ -498,5 +535,4 @@ function Storage_Condition() {
     </>
   );
 }
-
 export default Storage_Condition;

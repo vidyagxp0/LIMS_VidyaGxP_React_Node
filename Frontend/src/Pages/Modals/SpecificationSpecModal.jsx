@@ -11,95 +11,52 @@ import {
 } from "@coreui/react";
 
 const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
-  const [fields, setFields] = useState([]);
-
   const [usageData, setUsagedata] = useState({
-    specId: "",
-    title: "",
-    version: "",
-    attachment: "",
-    effectiveDate: "",
-    creationDate: "",
-    approvedBy: "",
-    productName: "",
-    batchLotNumber: "",
-    productCategory: "",
-    manufacturer: "",
-    description: "",
-    materialGrade: "",
-    molecularFormula: "",
-    packagingRequirements: "",
-    storageConditions: "",
-    shelfLife: "",
-    labelingRequirements: "",
-    testParameter: "",
-    testMethod: "",
-    acceptanceCriteria: "",
-    unitsOfMeasurement: "",
-    testFrequency: "",
-    controlSampleReference: "",
-    samplingPlan: "",
-    testMethodValidation: "",
-    referenceStandards: "",
-    resultInterpretation: "",
-    stabilityCriteria: "",
-    reTestingInterval: "",
-    regulatoryRequirements: "",
-    certification: "",
-    deviationHandling: "",
-    auditTrail: "",
-    documentReference: "",
-    revisionHistory: "",
-    attachments: "",
-    comments: "",
-    reviewFrequency: "",
-    expiryDate: "",
-    status: "",
+    specId:"",
+    title:"",
+    version:"",
+    attachment:"",
+    effectiveDate:"",
+    creationDate:"",
+    approvedBy:"",
+    productName:"",
+    batchLotNumber:"",
+    productCategory:"",
+    manufacturer:"",
+    description:"",
+    materialGrade:"",
+    molecularFormula:"",
+    packagingRequirements:"",
+    storageConditions:"",
+    shelfLife:"",
+    labelingRequirements:"",
+    testParameter:"",
+    testMethod:"",
+    acceptanceCriteria:"",
+    unitsOfMeasurement:"",
+    testFrequency:"",
+    controlSampleReference:"",
+    samplingPlan:"",
+    testMethodValidation:"",
+    referenceStandards:"",
+    resultInterpretation:"",
+    stabilityCriteria:"",
+    reTestingInterval:"",
+    regulatoryRequirements:"",
+    certification:"",
+    deviationHandling:"",
+    auditTrail:"",
+    documentReference:"",
+    revisionHistory:'',
+    attachments:"",
+    comments:"",
+    reviewFrequency:"",
+    expiryDat:""
   });
 
   const resetForm = () => {
     setUsagedata({
-      specId: "",
-      title: "",
-      version: "",
-      attachment: "",
-      effectiveDate: "",
-      creationDate: "",
-      approvedBy: "",
-      productName: "",
-      batchLotNumber: "",
-      productCategory: "",
-      manufacturer: "",
-      description: "",
-      materialGrade: "",
-      molecularFormula: "",
-      packagingRequirements: "",
-      storageConditions: "",
-      shelfLife: "",
-      labelingRequirements: "",
-      testParameter: "",
-      testMethod: "",
-      acceptanceCriteria: "",
-      unitsOfMeasurement: "",
-      testFrequency: "",
-      controlSampleReference: "",
-      samplingPlan: "",
-      testMethodValidation: "",
-      referenceStandards: "",
-      resultInterpretation: "",
-      stabilityCriteria: "",
-      reTestingInterval: "",
-      regulatoryRequirements: "",
-      certification: "",
-      deviationHandling: "",
-      auditTrail: "",
-      documentReference: "",
-      revisionHistory: "",
-      attachments: "",
-      comments: "",
-      reviewFrequency: "",
-      expiryDate: "",
-      status: "",
+      // ... reset all fields to empty strings
     });
   };
 
@@ -110,30 +67,29 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
   }, [visible]);
 
   const handleInputChange = (field, value) => {
-    const updatedData = { ...usageData, [field]: value };
-    setUsagedata(updatedData);
-    console.log(updatedData);
+    setUsagedata(prevData => ({
+      ...prevData,
+      [field]: value
+    }));
   };
 
-  // !+++++++++++++++++++++++
+  // const handleFormSubmit = () => {
+  //   handleSubmit(usageData);
+  //   closeModal();
+  // };
+ 
   const handleFormSubmit = () => {
-    const instrumentDetails = {
-      ...usageData,
-      AddedOn: new Date().toISOString(),
-      fields,
-    };
-
-    const existingInstruments =
-      JSON.parse(localStorage.getItem("specification")) || [];
-    const updatedInstruments = [...existingInstruments, instrumentDetails];
-    localStorage.setItem("specification", JSON.stringify(updatedInstruments));
-
-    handleSubmit(instrumentDetails);
-
+    const formData = new FormData();
+    Object.entries(usageData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+  
+    handleSubmit(formData); 
     closeModal();
   };
-  // !+++++++++++++++++++++++
-
+  
+  
+  
   return (
     <div>
       <CModal

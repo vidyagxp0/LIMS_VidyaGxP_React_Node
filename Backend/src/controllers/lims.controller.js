@@ -36,7 +36,7 @@ const commonFeilds = [
   "sMSampleLoginTemplate",
   "sMWorkSheetHeader",
   "sMSummaryReportHeader",
-  "sMSampleAcceptanceTemplate",
+  "sMSampleAcceptnceTemplate",
   "sMSampleLogin",
   "smSampleAcceptance",
   "mmasterProduct",

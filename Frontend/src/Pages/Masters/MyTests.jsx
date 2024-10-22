@@ -69,9 +69,9 @@ function Mytests() {
       if (response.data && Array.isArray(response.data)) {
         const formattedData = response.data.flatMap(
           (item) =>
-            item?.mMyTest?.map((condition) => ({
+            item?.mMyTest?.map((condition,index) => ({
               checkbox: false,
-              sno: condition.uniqueId,
+              sno:index+1,
               ARNo: condition.ARNo || "-",
               productName: condition.productName || "-",
               sampleIncharge: condition.sampleIncharge || "-",
@@ -200,6 +200,7 @@ const onViewDetails = (rowData) => {
       if (response.status === 200) {
         setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
         toast.success("Product deleted successfully.");
+       fetchProductData()
       } else {
         toast.error("Failed to delete Product.");
       }

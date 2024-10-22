@@ -13,6 +13,7 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
     occurredOn: "",
     reportedOn: "",
     problemInDetails: "",
+    status:"Active"
 
   })
   const handleInputChange = (field, value) => {
@@ -39,6 +40,7 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
       occurredOn: "",
       reportedOn: "",
       problemInDetails: "",
+    
     });
   };
 
@@ -79,8 +81,8 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Instrument Category"
             placeholder="weighing balance "
+            label="Instrument Category"
             name='InstrumentCategory'
             value={problemData.InstrumentCategory}
             onChange={(e) => handleInputChange("InstrumentCategory", e.target.value)}
@@ -90,8 +92,8 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Supplied By"
             placeholder="Supplied By "
+            label="Supplied By"
             name='SuppliedBy'
             value={problemData.suppliedBy}
             onChange={(e) => handleInputChange("suppliedBy", e.target.value)}
@@ -99,8 +101,8 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Problem ID"
             placeholder="Problem ID"
+            label="Problem ID"
             name='ProblemID'
             value={problemData.problemId}
             onChange={(e) => handleInputChange("problemId", e.target.value)}
@@ -129,8 +131,8 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Problem In Brief"
             placeholder=" Problem In Brief"
+            label="Problem In Brief"
             name='ProblemInBrief'
             value={problemData.problemInBrief}
             onChange={(e) => handleInputChange("problemInBrief", e.target.value)}
@@ -146,9 +148,10 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
             onChange={(e) => handleInputChange("referenceDocument", e.target.value)}
 
           />
-          <CFormInput type="date"
-            label="Occurred On"
+          <CFormInput 
+          type="date"
             placeholder=" "
+            label="Occurred On"
             name='OccurredOn'
             value={problemData.occurredOn}
             onChange={(e) => handleInputChange("occurredOn", e.target.value)}
@@ -167,13 +170,24 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="text"
+            placeholder=" Problem In Details"
             className="mb-3"
             label="Problem In Details"
-            placeholder=" Problem In Details"
             name='ProblemInDetails'
             value={problemData.problemInDetails}
             onChange={(e) => handleInputChange("problemInDetails", e.target.value)}
 
+          />
+       <CFormSelect
+            className="mb-3"
+            label="Status"
+            name="status"
+            value={problemData.status}
+            onChange={(e) => handleInputChange("status", e.target.value)}
+            options={[
+              { label: "Active", value: "Active" },
+              { label: "Inactive", value: "Inactive" }
+            ]}
           />
         </CModalBody>
         <CModalFooter>

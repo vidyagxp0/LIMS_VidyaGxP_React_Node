@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ImportModal from "../Modals/importModal";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import { randomData } from "./demoStp";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
@@ -33,6 +34,7 @@ const STP = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [dataChanged, setDataChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   // const [data, setData] = useState(() => {
@@ -91,7 +93,7 @@ const STP = () => {
       const stpData = response.data[0]?.STP || [];
 
       const filteredData = stpData.map((item, index) => ({
-        sno:item.uniqueId ,
+        sno: item.uniqueId,
         stpId: item.stpId || "No STP ID",
         title: item.title || "No Title",
         attachment: item.attachment || "No Attachment",
@@ -152,7 +154,75 @@ const STP = () => {
     fetchSTPs();
   }, [dataChanged]);
 
-  // POST API - Add new STP
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+
+    const columns = [
+      {
+        header: <input type="checkbox" onChange={handleSelectAll} />,
+        accessor: "checkbox",
+      },
+      { header: "SrNo.", accessor: "sno" },
+      { header: "Storage Code", accessor: "storageCode" },
+      { header: "Storage Name", accessor: "storageName" },
+      { header: "attachment", accessor: "attachment" },
+      { header: "Status", accessor: "status" },
+      {
+        header: "Actions",
+        accessor: "action",
+        Cell: ({ row }) => (
+          <>
+            <FontAwesomeIcon
+              icon={faEye}
+              className="mr-2 cursor-pointer"
+              onClick={() => onViewDetails(row)}
+            />
+            <FontAwesomeIcon
+              icon={faPenToSquare}
+              className="mr-2 cursor-pointer"
+            />
+            <FontAwesomeIcon
+              icon={faTrashCan}
+              className="cursor-pointer"
+              onClick={() => onDeleteItem(row)}
+            />
+          </>
+        ),
+      },
+    ];
+
+
+
+  // const filteredData = Array.isArray(data)
+  //   ? data.filter((row) => {
+  //     console.log("Row:", row); // Log each row to see its structure
+  //     const productName = row.productName || "";
+  //     return (
+  //       productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+  //       (statusFilter === "All" || row.status === statusFilter)
+  //     );
+  //   })
+  //   : [];
+
+
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+      storageName: item["Storage Name"] || "",
+      StorageCode: item["Storage Code"] || "",
+      attachment: item["attachment"] || "",
+      status: item["Status"] || "Active",
+    }));
+
+    const concatenatedData = [...updatedData];
+    setData(concatenatedData);
+    setIsModalsOpen(false);
+  };
+
   const handleAddSTP = async (newSTPData) => {
     setIsLoading(true);
     try {
@@ -183,7 +253,7 @@ const STP = () => {
         setData((prevData) =>
           prevData.map((item) =>
             item.sno === updatedData.sno ? { ...item, ...updatedData } : item
-        )
+          )
         );
         toast.success("STP updated successfully");
         setEditModalData(null);
@@ -197,7 +267,7 @@ const STP = () => {
       setIsLoading(false);
     }
   };
-  
+
 
   const AddSTPModal = ({ visible, closeModal, onAdd }) => {
     const [formData, setFormData] = useState({
@@ -247,7 +317,7 @@ const STP = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
       }
     };
-  
+
     const validateForm = () => {
       const newErrors = {};
       Object.keys(formData).forEach(key => {
@@ -258,15 +328,15 @@ const STP = () => {
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     };
-  
+
     const handleAdd = () => {
       if (validateForm()) {
-        
+
         onAdd(formData);
         closeModal();
       }
     };
-  
+
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal} size="md">
         <CModalHeader>
@@ -283,7 +353,7 @@ const STP = () => {
               } else if (key === "attachment" || key === "attachments") {
                 inputType = "file";
               }
-  
+
               return (
                 <CFormInput
                   key={key}
@@ -322,13 +392,13 @@ const STP = () => {
     const [formData, setFormData] = useState(data);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-  
+
     useEffect(() => {
       if (data) {
         setFormData(data);
       }
     }, [data]);
-  
+
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -336,7 +406,7 @@ const STP = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
       }
     };
-  
+
     const validateForm = () => {
       const newErrors = {};
       Object.keys(formData).forEach(key => {
@@ -347,14 +417,14 @@ const STP = () => {
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     };
-  
+
     const handleSave = async (e) => {
       e.preventDefault();
       if (!validateForm()) return;
-  
+
       setIsLoading(true);
       try {
-        await onSave({...formData,sno:formData.sno});
+        await onSave({ ...formData, sno: formData.sno });
         closeModal();
       } catch (error) {
         console.error("Error updating STP:", error);
@@ -363,9 +433,9 @@ const STP = () => {
         setIsLoading(false);
       }
     };
-  
+
     if (!visible) return null;
-  
+
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
         <CModalHeader>
@@ -389,7 +459,7 @@ const STP = () => {
                     </div>
                   );
                 }
-  
+
                 let inputType = "text";
                 if (key.includes("date")) {
                   inputType = "date";
@@ -398,7 +468,7 @@ const STP = () => {
                 } else if (key === "attachment" || key === "attachments") {
                   inputType = "file";
                 }
-  
+
                 return (
                   <div key={key}>
                     <CFormInput
@@ -432,26 +502,32 @@ const STP = () => {
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
+  const openModal = () => {
+    setIsModalsOpen(true);
+  };
+  const handleCloseModals = () => {
+    setIsModalsOpen(false);
+  };
 
   const closeViewModal = () => {
     setViewModalData(null);
   };
 
-  const openModal = (mode, item = null) => {
-    setModalMode(mode);
-    setCurrentItem(item);
-    if (mode === "edit" || mode === "view") {
-      setNewStorageLocation(item);
-    } else {
-      setNewStorageLocation({
-        stpId: "",
-        title: "",
-        attachment: "",
-        // ... (reset all other fields)
-      });
-    }
-    setIsModalOpen(true);
-  };
+  // const openModal = (mode, item = null) => {
+  //   setModalMode(mode);
+  //   setCurrentItem(item);
+  //   if (mode === "edit" || mode === "view") {
+  //     setNewStorageLocation(item);
+  //   } else {
+  //     setNewStorageLocation({
+  //       stpId: "",
+  //       title: "",
+  //       attachment: "",
+  //       // ... (reset all other fields)
+  //     });
+  //   }
+  //   setIsModalOpen(true);
+  // };
 
   const handleDelete = async (item) => {
     try {
@@ -599,9 +675,10 @@ const STP = () => {
                 { value: "Inactive", label: "Inactive" },
               ]}
               value={""}
-              onChange={""}
+              onChange={(newValue) => console.log(newValue)}  // yahan ek function pass karo
               className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             />
+
           </div>
 
           <div className="flex justify-end space-x-4 text-nowrap">
@@ -615,7 +692,7 @@ const STP = () => {
             <ATMButton
               text="Import"
               color="pink"
-              onClick={"handleOpenModals"}
+              onClick={openModal} // Open the modal correctly
               className="px-4 py-2 bg-pink-500 text-white rounded-md shadow hover:bg-pink-600 transition"
             />
             <ATMButton
@@ -703,9 +780,8 @@ const STP = () => {
               onClick={() =>
                 handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
               }
-              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-                currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-              }`}
+              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+                }`}
               disabled={currentPage === 1}
             >
               Previous
@@ -714,11 +790,10 @@ const STP = () => {
               <button
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
-                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
-                  currentPage === index + 1
-                    ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                    : "hover:text-blue-500"
-                }`}
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${currentPage === index + 1
+                  ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                  : "hover:text-blue-500"
+                  }`}
               >
                 {index + 1}
               </button>
@@ -731,11 +806,10 @@ const STP = () => {
                     : totalPageCount
                 )
               }
-              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-                currentPage === totalPageCount
-                  ? "cursor-not-allowed"
-                  : "cursor-pointer"
-              }`}
+              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${currentPage === totalPageCount
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+                }`}
               disabled={currentPage === totalPageCount}
             >
               Next
@@ -768,6 +842,16 @@ const STP = () => {
           onSave={handleEditSave}
         />
       )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={filteredData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+
     </div>
   );
 };

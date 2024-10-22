@@ -23,49 +23,33 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import ReusableModal from "../Modals/ResusableModal";
+import { BASE_URL } from "../../config.json";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    name: "Test Name 1",
-    standardProtocolId: "T001",
-    standardProtocolDescription: "Type A",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    name: "Test Name 2",
-    standardProtocolId: "T002",
-    standardProtocolDescription: "Type B",
-    status: "Inactive",
-  },
-];
 
 function StandardProtocol() {
-  const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
-  const [viewModalData, setViewModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
+  const [viewModalData, setViewModalData] = useState(null);
+  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-  const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [data, setData] = useState([]);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-
+  const fields = [
+    { label: "Standard Protocol Name", key: "StandardProtocolName" },
+    { label: "Standard Protocol Id", key: "StandardProtocolId" },
+    { label: "Standard Protocol Description", key: "StandardProtocolDescription" },
+    { label: "Status", key: "status" },
+  ];
+  
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `http://localhost:9000/get-all-lims/sMStandardProtocol`
-      );
+      );
       const fetchedData = response?.data[0]?.sMStandardProtocol || [];
 
       const updatedData = fetchedData.map((item, index) => ({
@@ -82,223 +66,86 @@ function StandardProtocol() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
+  
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
+  };
+  
+  const closeEditModal = () => {
+    setEditModalData(null);
+  };
+  
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-  const handleSelectAll = (e) => {
-    const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
-  };
-
-  const filteredData = data.filter((row) => {
-    return (
-      row.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
-
-  const onViewDetails = (rowData) => {
-    setViewModalData(rowData);
-  };
-
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
-  };
-  const columns = [
-    {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
-    { header: "SrNo.", accessor: "sno" },
-    { header: "Standard Protocol Name", accessor: "name" },
-    { header: "Standard Protocol Id", accessor: "standardProtocolId" },
-    {
-      header: "Standard Protocol Description",
-      accessor: "standardProtocolDescription",
-    },
-    { header: "Status", accessor: "status" },
-    {
-      header: "Actions",
-      accessor: "action",
-      Cell: ({ row }) => (
-        <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => {
-              onViewDetails(row), navigate("/testResultsDetails");
-            }}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row.original)}
-          />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
-        </>
-      ),
-    },
-  ];
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-
-      sno: initialData.length + index + 1,
-      name: item["Standard Protocol Name"] || "",
-      standardProtocolId: item["Standard Protocol Id"] || "",
-      standardProtocolDescription: item["Standard Protocol Description"] || "",
-      status: item["Status"] || "",
-    }));
-
-    const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
-  };
-
-  const addNewStandardProtocol = (newCondition) => {
-    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
-    setData((prevData)=>[
-      ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
-    setIsModalOpen(false);
-  }
-  const handleDelete = async (item) => {
-    console.log(item);
-
-    try {
-      const response = await axios.delete(
-        `http://localhost:9000/delete-lims/sMStandardProtocol/${item.uniqueId}`
-      );
-      if (response.status === 200) {
-        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
-        setData(newData);
-        toast.success("Data deleted successfully");
-        fetchData();
-      } else {
-        console.error("Failed to delete investigation:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error deleting investigation:", error);
-    }
-  };
 
 
-  const handleAdd = async (newProduct) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:9000/manage-lims/add/sMStandardProtocol`,
-        {
-          ...newProduct,
-          addDate: new Date().toISOString().split("T")[0],
-          status: newProduct.status || "Active",
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Product added successfully.");
-        fetchData();
-        setIsModalOpen(false);
-      } else {
-        toast.error("Failed to adsd Product.");
-      }
-    } catch (error) {
-      toast.error(
-        "Error adding product: " + (error.response?.data || error.message)
-      );
-    }
-  };
-
-  const StatusModal = ({visible , closeModal,onAdd}) => {
-    const [standardProtocolName , setStandardProtocolName] = useState('')
-    const [standardProtocolId, setStandardProtocolId] = useState('')
-    const [description, setDescription] = useState('')
-
+  const handleStatusUpdate = async (newStatus) => {
+   
     
-
-    const handleAdd = ()=>{
-      const newCondition ={
-        name: standardProtocolName,
-        standardProtocolId: standardProtocolId,
-        standardProtocolDescription: description,
-        action:[],
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/approval/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
       }
-      onAdd(newCondition)
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
     }
-    return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Standard Protocol</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Standard Protocol Name"
-            value={standardProtocolName}
-            onChange={(e)=>setStandardProtocolName(e.target.value)}
-            placeholder=""
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Standard Protocol Id"
-            placeholder=""
-            value={standardProtocolId}
-            onChange={(e)=>setStandardProtocolId(e.target.value)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Description"
-            placeholder=""
-            value={description}
-            onChange={(e)=>setDescription(e.target.value)}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Cancel
-          </CButton>
-          <CButton className="bg-info text-white" onClick={handleAdd}>Add</CButton>
-        </CModalFooter>
-      </CModal>
-    );
   };
 
+  const addNewApproval = async (newApproval) => {
+    try {
+      const response = await axios.post(`http://localhost:9000/manage-lims/add/approval`, newApproval);
+      if (response.status === 200) {
+        const addedApproval = response.data;
+        setData((prevData) => [
+          {
+            ...addedApproval,
+            checkbox: false,
+          },
+          ...prevData,
+        ]);
+        toast.success("Approval added successfully");
+        fetchApprovalData();
+      }
+    } catch (error) {
+      console.error("Error adding Approval:", error);
+      toast.error("Failed to add Approval");
+    }
+    setIsModalOpen(false);
+  };
   
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-  };
-
-  const closeEditModal = () => {
-    setEditModalData(null);
-  };
   const handleEditSave = async (updatedData) => {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`,
+        `${BASE_URL}/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`,
         dataTosend
       );
       if (response.status === 200) {
@@ -312,87 +159,250 @@ function StandardProtocol() {
         toast.success("Data updated successfully");
         fetchData();
       } else {
-        console.error("Failed to update investigation:", response.statusText);
-        toast.error("Failed to update investigation");
+        console.error("Failed to update standard protocol:", response.statusText);
+        toast.error("Failed to update standard protocol");
       }
     } catch (error) {
-      console.error("Error updating investigation:", error);
-      toast.error("Error updating investigation");
+      console.error("Error updating standard protocol:", error);
+      toast.error("Error updating standard protocol");
     }
   };
-  // const handleStatusUpdate = (samplingConfiguration, newStatus) => {
-  //   const updatedData = data.map((item) =>
-  //     item.samplingID === samplingConfiguration.samplingID
-  //       ? { ...item, status: newStatus }
-  //       : item
-  //   );
-  //   setData(updatedData);
-  // };
 
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [formData , setFormData] = useState(data)
-    useEffect(() => {
-      setFormData(data)
-    } , [data])
-    const handleChange = (e)=>{
-      const {name , value} = e.target;
-      setFormData({...formData , [name]:value})
-    }
-const handleSave = ()=>{
-  onSave(formData)
-}
+  const handleSelectAll = (e) => {
+    const checked = e.target.checked;
+    const newData = data.map((row) => ({ ...row, checkbox: checked }));
+    setData(newData);
+  };
+  const filteredData = Array.isArray(data)
+  ? data.filter((row) => {
+    console.log("Row:", row);
+    const conditionCode = row.conditionCode || "";
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
-        <CModalHeader>
-          <CModalTitle>Standard Protocol</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Standard Protocol Name"
-            name="name"
-            placeholder=""
-            value={formData?.name || ""}
-            onChange={handleChange}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Standard Protocol Id"
-            placeholder=""
-           name="standardProtocolId"
-           value={formData?.standardProtocolId || ""}
-           onChange={handleChange}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Description"
-            placeholder=""
-            name="standardProtocolDescription"
-            value={formData?.standardProtocolDescription || ""}
-            onChange={handleChange}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Cancel
-          </CButton>
-          <CButton className="bg-info text-white" onClick={handleSave}>Update</CButton>
-        </CModalFooter>
-      </CModal>
+      conditionCode?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.status === statusFilter)
     );
+  })
+: [];
+  
+  const onViewDetails = (rowData) => {
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
+  };
+  
+  // ... (keep other functions like handleSelectAll, filteredData, onViewDetails, etc.)
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
   
 
+
+  
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [StandardProtocolName, setStandardProtocolName] = useState("");
+    const [StandardProtocolId, setStandardProtocolId] = useState("");
+    const [StandardProtocolDescription, setsetStandardProtocolDescription] = useState("");
+    const handleProduct = () => {
+      const newCondition = {
+        StandardProtocolName,
+        StandardProtocolId,
+        StandardProtocolDescription,
+        status: "active",
+      };
+      onAdd(newCondition);
+    };
+    
+    
+    return (
+      <>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+          <CModalHeader>
+            <CModalTitle>New Condition</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+          <CFormInput
+              className="mb-3"
+              type="text"
+              placeholder=" "
+              label="Standard Protocol Name"
+              value={StandardProtocolName}
+              onChange={(e) => setStandardProtocolName(e.target.value)}
+            />
+          
+            <CFormInput
+              className="mb-3"
+              type="text"
+              placeholder="°C °F "
+              label="Standard Protocol Id"
+              value={StandardProtocolId}
+              onChange={(e) => setStandardProtocolId(e.target.value)}
+            />
+           
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Standard Protocol Description"
+              value={StandardProtocolDescription}
+              placeholder=" "
+              onChange={(e) => setsetStandardProtocolDescription(e.target.value)}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleProduct}>
+              Add
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+  
+  const columns = [
+    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    { header: "SrNo.", accessor: "sno" },
+    { header: "Standard Protocol Name", accessor: "StandardProtocolName" },
+    { header: "Standard Protocol Id", accessor: "StandardProtocolId" },
+    { header: "Standard Protocol Description", accessor: "StandardProtocolDescription" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Actions",
+      accessor: "action",
+      Cell: ({ row }) => (
+        <>
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+          <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
+          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
+        </>
+      ),
+    },
+  ];
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sMStandardProtocol/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete standard protocol:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting standard protocol:", error);
+    }
+  };
+
+  const handleAdd = async (newStandardProtocol) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/sMStandardProtocol`,
+        {
+          ...newStandardProtocol,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newStandardProtocol.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Standard protocol added successfully.");
+        fetchData(); // Refresh data after adding
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add standard protocol.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding standard protocol: " + (error.response?.data || error.message)
+      );
+    }
+  };
+  
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+      onSave(formData);
+    };
+
+    return (
+      <>
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
+          <CModalHeader>
+            <CModalTitle>New Condition</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Standard Protocol Name"
+              placeholder="°C °F "  
+              name="StandardProtocolName"
+              value={formData?.StandardProtocolName || ""}
+              onChange={handleChange}
+            />
+             <CFormInput
+              className="mb-3"
+              type="text"
+              label="Standard Protocol Id"     
+              placeholder=" "
+              name="StandardProtocolId"
+              value={formData?.StandardProtocolId}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Standard Protocol Description"
+              name="StandardProtocolDescription" 
+              placeholder=" "
+              value={formData?.StandardProtocolDescription || ""}
+              onChange={handleChange}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Add
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+
+  // ... (keep StatusModal and EditModal components)
+
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Standard Protocol</h4>
@@ -411,7 +421,12 @@ const handleSave = ()=>{
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Standard_Protocol.pdf" title="Standard Protocol Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Standard_Protocol.pdf"
+              title="Standard Protocol Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Standard Protocol"
@@ -429,28 +444,24 @@ const handleSave = ()=>{
           openEditModal={openEditModal}
         />
       </div>
-
       {isModalOpen && (
         <StatusModal
-         onAdd={handleAdd}
           visible={isModalOpen}
-           closeModal={closeModal} 
-         
-           />
-          )}
-           {viewModalData && (
-            <ReusableModal
-              visible={viewModalData !== null}
-              closeModal={closeViewModal}
-              data={viewModalData}
-              fields={fields}
-              onClose={handleCloseModals}
-              title="Test Plan Details"
-              updateStatus={handleStatusUpdate}
-            />
-          )}
-           
-     
+          closeModal={closeModal}
+          onAdd={handleAdd}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          onClose={handleCloseModals}
+          title="Standard Protocol Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -467,10 +478,9 @@ const handleSave = ()=>{
           data={editModalData}
           onSave={handleEditSave}
         />
-      )}  
+      )}
     </>
   );
 }
-
 
 export default StandardProtocol;
