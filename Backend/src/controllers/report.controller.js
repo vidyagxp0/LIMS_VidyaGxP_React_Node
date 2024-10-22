@@ -1,5 +1,24 @@
 import puppeteer from "puppeteer";
 import { getBase64Image } from "../../index.js";
+import bwipjs from "bwip-js";
+import { promisify } from "util";
+
+const generateBarcodeBase64 = async (barcodeText) => {
+  try {
+    const toBuffer = promisify(bwipjs.toBuffer);
+    const png = await toBuffer({
+      bcid: "code128", // Barcode type
+      text: barcodeText, // Text to encode
+      scale: 3, // Scale factor
+      includetext: false, // Show text below barcode
+      textxalign: "center", // Center align the text
+    });
+    return `data:image/png;base64,${png.toString("base64")}`;
+  } catch (error) {
+    console.error("Error generating barcode:", error);
+    throw error;
+  }
+};
 
 const sampleDatas = {};
 const setSampleData = (data) => {
@@ -138,12 +157,21 @@ export const generatePdfbyId = async (req, res) => {
         .status(404)
         .json({ error: true, message: "Sample data not found" });
     }
+
+    // Generate the barcode for the provided sample ID or any relevant string
+    const barcodeBase64 = await generateBarcodeBase64(
+      sampleDatas.sampleBarCode
+    );
     // Render the main HTML with EJS
     const htmlContent = await new Promise((resolve, reject) => {
-      req.app.render("report", { reportData: sampleDatas }, (err, html) => {
-        if (err) return reject(err);
-        resolve(html);
-      });
+      req.app.render(
+        "report",
+        { reportData: sampleDatas, barcodeBase64: barcodeBase64 },
+        (err, html) => {
+          if (err) return reject(err);
+          resolve(html);
+        }
+      );
     });
 
     // Render the header and footer with EJS
