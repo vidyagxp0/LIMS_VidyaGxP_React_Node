@@ -112,7 +112,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}/sample`
+        `http://localhost:9000/generate-report/${sampleId}`
       );
       console.log("Response", response);
 
