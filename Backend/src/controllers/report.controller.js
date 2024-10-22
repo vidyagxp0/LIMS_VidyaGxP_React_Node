@@ -378,7 +378,6 @@ export const generatePdfControlSamp = async (req, res) => {
   }
 };
 
-
 const setSampleDataAnalyst = (data) => {
   const sampleData = data.data;
 
@@ -400,11 +399,14 @@ const setSampleDataAnalyst = (data) => {
   sampleDatas.trainingProgramName = sampleData?.trainingProgramName ?? "";
   sampleDatas.trainingStartDate = sampleData?.trainingStartDate ?? "";
   sampleDatas.trainingCompletionDate = sampleData?.trainingCompletionDate ?? "";
-  sampleDatas.trainingCompletionStatus = sampleData?.trainingCompletionStatus ?? "";
-  sampleDatas.certificationNameNumber = sampleData?.certificationNameNumber ?? "";
+  sampleDatas.trainingCompletionStatus =
+    sampleData?.trainingCompletionStatus ?? "";
+  sampleDatas.certificationNameNumber =
+    sampleData?.certificationNameNumber ?? "";
   sampleDatas.certificationBody = sampleData?.certificationBody ?? "";
   sampleDatas.certificationDate = sampleData?.certificationDate ?? "";
-  sampleDatas.nextReCertificationDate = sampleData?.nextReCertificationDate ?? "";
+  sampleDatas.nextReCertificationDate =
+    sampleData?.nextReCertificationDate ?? "";
   sampleDatas.competencyTestName = sampleData?.competencyTestName ?? "";
   sampleDatas.testDate = sampleData?.testDate ?? "";
   sampleDatas.testResults = sampleData?.testResults ?? "";
@@ -414,7 +416,8 @@ const setSampleDataAnalyst = (data) => {
   sampleDatas.techniqueSkillName = sampleData?.techniqueSkillName ?? "";
   sampleDatas.qualificationDate = sampleData?.qualificationDate ?? "";
   sampleDatas.skillLevel = sampleData?.skillLevel ?? "";
-  sampleDatas.reQualificationRequired = sampleData?.reQualificationRequired ?? "";
+  sampleDatas.reQualificationRequired =
+    sampleData?.reQualificationRequired ?? "";
   sampleDatas.reQualificationDueDate = sampleData?.reQualificationDueDate ?? "";
   sampleDatas.instrumentNameId = sampleData?.instrumentNameId ?? "";
   sampleDatas.methodNameId = sampleData?.methodNameId ?? "";
@@ -445,14 +448,13 @@ const setSampleDataAnalyst = (data) => {
   sampleDatas.QaReviewDate = sampleData?.QaReviewDate ?? "";
 };
 
-
 export const generatePdfAnalyst = async (req, res) => {
   const sampleId = req.params.id;
-  const type = req.params.type;
+  
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/get-Sample/${sampleId}/${type}`,
+      `http://localhost:9000/analyst/get-analyst/${sampleId}`,
       {
         method: "GET",
         headers: {
