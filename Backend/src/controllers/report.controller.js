@@ -36,7 +36,7 @@ const setSampleData = (data) => {
   sampleDatas.sampleQuantity = sampleData?.sampleQuantity ?? "";
   sampleDatas.UOM = sampleData?.UOM ?? "";
   sampleDatas.market = sampleData?.market ?? "";
-  sampleDatas.sampleBarCode = sampleData?.sampleBarCode ?? "";
+  sampleDatas.sampleBarCode = sampleData?.sampleBarCode ?? "1234567890";
   sampleDatas.specificationId = sampleData?.specificationId ?? "";
   sampleDatas.specificationAttachment =
     sampleData?.specificationAttachment ?? "";
@@ -245,7 +245,7 @@ const setStablityData = (data) => {
   sampleDatas.sampleQuantity = sampleData?.sampleQuantity ?? "";
   sampleDatas.UOM = sampleData?.UOM ?? "";
   sampleDatas.market = sampleData?.market ?? "";
-  sampleDatas.sampleBarCode = sampleData?.sampleBarCode ?? "";
+  sampleDatas.sampleBarCode = sampleData?.sampleBarCode ?? "1234567890";
   sampleDatas.specificationId = sampleData?.specificationId ?? "";
   sampleDatas.specificationAttachment =
     sampleData?.specificationAttachment ?? "";
