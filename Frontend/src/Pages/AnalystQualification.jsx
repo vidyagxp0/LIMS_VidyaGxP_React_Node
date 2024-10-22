@@ -29,12 +29,19 @@ const AnalystQualification = () => {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedAnalyst, setSelectedAnalyst] = useState(null);
   const navigate = useNavigate();
 
   const openWorkflowModal = () => {
     setShowModal(true);
     navigate("/analystQualificationModal");
   };
+  const handleEdit = (analyst) => {
+    setSelectedAnalyst(analyst); // Set the selected analyst data
+    setIsModalOpen(true); // Open the modal
+  };
+ 
+
 
   const closeWorkflowModal = () => {
     setShowModal(false);
@@ -345,6 +352,7 @@ const AnalystQualification = () => {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           openEditModal={openEditModal}
+          onEdit={handleEdit}
         />
       </div>
 
@@ -354,6 +362,13 @@ const AnalystQualification = () => {
           onClose={() => setIsImportModalOpen(false)}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalOpen && (
+        <AnalystQualificationModal
+          visible={isModalOpen}
+          onClose={closeModal}
+          data={selectedAnalyst} // Pass the selected analyst data to the modal
         />
       )}
 

@@ -14,6 +14,7 @@ const Table = ({
   onViewDetails,
   onDelete,
   openEditModal,
+  onEdit,
 }) => {
   const pageSize = 7;
   const [currentPage, setCurrentPage] = useState(1);
@@ -107,7 +108,7 @@ const Table = ({
                     
                     onClick={
                       column.accessor === "analystId" // Replace with actual accessor name for Analyst ID column
-                        ? () => handleAnalystIdClick(row) // Call this function when the Analyst ID column is clicked
+                        ? () => onEdit(row) // Call this function when the Analyst ID column is clicked
                         : undefined
                     }
                     style={
