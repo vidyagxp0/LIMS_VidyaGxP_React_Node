@@ -49,7 +49,7 @@ const StabilityWorkFlow = () => {
 
   const openWorkflowModal = () => {
     setShowModal(true);
-    navigate("/sampleWorkflowModal");
+    navigate("/stabilityWorkflowModal");
   };
 
   const closeWorkflowModal = () => {
@@ -685,7 +685,7 @@ const StabilityWorkFlow = () => {
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
               <td className="border cursor-pointer  px-4 py-2">{index + 1}</td>
-              <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
+              <Link to={`/stabilityWorkflowEdit/${data.id}`} className="contents">
                 <td className="hover:bg-gray-200 border px-4 py-2">
                   {data.samplePlanId}
                 </td>
