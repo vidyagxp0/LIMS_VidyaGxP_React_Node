@@ -109,7 +109,7 @@ const Table = ({
                     
                     onClick={
                       column.accessor === "analystId" // Replace with actual accessor name for Analyst ID column
-                        ? () => navigate(`/analyst-qualification-modal`) // Call this function when the Analyst ID column is clicked
+                        ? () => navigate(`/analyst-qualification-edit/${row.id}`) // Call this function when the Analyst ID column is clicked
                         : undefined
                     }
                     style={
