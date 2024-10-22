@@ -11,7 +11,7 @@ const baseStages = [
   "Closed Done",
 ];
 
-const ProgressBar = (props) => {
+const ProgressBar2 = (props) => {
   const navigate = useNavigate();
   const { stage = 1, sampleId = 1, onStageClick } = props;
 
@@ -19,6 +19,9 @@ const ProgressBar = (props) => {
   const [stages, setStages] = useState(baseStages);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState("");
+  // const token = localStorage.getItem("token");
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGVzIjpbeyJ1c2VyUm9sZV9pZCI6MTksInJvbGVfaWQiOjIsInVzZXJfaWQiOjQsInJvbGUiOiJJbml0aWF0b3IiLCJjcmVhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoifSx7InVzZXJSb2xlX2lkIjoyMCwicm9sZV9pZCI6MywidXNlcl9pZCI6NCwicm9sZSI6IlJldmlld2VyIiwiY3JlYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIn0seyJ1c2VyUm9sZV9pZCI6MjEsInJvbGVfaWQiOjQsInVzZXJfaWQiOjQsInJvbGUiOiJBcHByb3ZlciIsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMThUMTE6MzM6MDQuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMThUMTE6MzM6MDQuMDAwWiJ9LHsidXNlclJvbGVfaWQiOjIyLCJyb2xlX2lkIjo1LCJ1c2VyX2lkIjo0LCJyb2xlIjoiVmlld29ubHkiLCJjcmVhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoifSx7InVzZXJSb2xlX2lkIjoyMywicm9sZV9pZCI6NiwidXNlcl9pZCI6NCwicm9sZSI6IkZ1bGxwZXJtaXNzaW9uIiwiY3JlYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIn1dLCJpYXQiOjE3MjkyNTEyMzQsImV4cCI6MTcyOTMzNzYzNH0.9MW4KFce_eizbvURp4XEaurDiPiQIkK5cJSlWqQdLlY";
   useEffect(() => {
     setCurrentStage(stage - 1);
     console.log(stage);
@@ -41,9 +44,6 @@ const ProgressBar = (props) => {
     setUrl(url);
     setIsModalOpen(true);
   };
-  const token = localStorage.getItem("token");
-  // console.log(token,"ttttttttt");
-  
 
   const callApis = async (formData, sampleId) => {
     try {
@@ -188,4 +188,4 @@ const ProgressBar = (props) => {
   );
 };
 
-export default ProgressBar;
+export default ProgressBar2;

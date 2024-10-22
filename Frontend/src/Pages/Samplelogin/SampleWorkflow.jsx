@@ -44,6 +44,14 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState({});
   const [selectedSampleId, setSelectedSamppleId] = useState(null);
+  const [samples, setSamples] = useState([]);
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 20);
+    }
+    return randomNumbers;
+  };
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -57,6 +65,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/sample`);
+      console.log(response, "5656565656565656");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -481,10 +490,11 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleCopyRow = (rowData) => {
     // Concatenate all the row data into a single string
-    const rowText = Object.values(rowData).join('\t');
-    
+    const rowText = Object.values(rowData).join("\t");
+
     // Copy the row data to the clipboard
-    navigator.clipboard.writeText(rowText)
+    navigator.clipboard
+      .writeText(rowText)
       .then(() => {
         alert("Row data copied to clipboard!");
       })
@@ -704,7 +714,10 @@ const SampleWorkFlow = ({ instrumentData }) => {
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
               <td className="border cursor-pointer  px-4 ">{index + 1}</td>
-              <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents mt-3">
+              <Link
+                to={`/sampleWorkflowEdit/${data.id}`}
+                className="contents mt-3"
+              >
                 <td className="hover:bg-gray-200 border px-4">
                   {data.samplePlanId}
                 </td>
@@ -736,7 +749,20 @@ const SampleWorkFlow = ({ instrumentData }) => {
                 )}
               </td>
               <td className="border px-4 py-2">{data.stpId}</td>
-              <td className="border px-4 py-2">{data.stpAttachment}</td>
+              <td className="border px-4 py-2">
+                {data.stpAttachment ? (
+                  <a
+                    href={data.stpAttachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
+              </td>
               <td className="border px-4 py-2">{data.testPlanId}</td>
               <td className="border px-4 py-2">{data.testName}</td>
               <td className="border px-4 py-2">{data.testMethod}</td>
@@ -788,7 +814,20 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2 text-wrap">
                 {data.commentNotes}
               </td>{" "}
-              <td className="border px-4 py-2">{data.attachment}</td>
+              <td className="border px-4 py-2">
+                {data.attachment ? (
+                  <a
+                    href={data.attachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
+              </td>
               <td className="border px-4 py-2">{data.samplingFrequency}</td>
               <td className="border px-4 py-2">{data.sampleDisposition}</td>
               <td className="border px-4 py-2">
@@ -819,7 +858,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
               <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-              <td claossName="border px-4 py-2 ml-2">{data.status}</td>{" "}
+              <td className="border px-4 py-2 ml-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
                 <BarcodeExportButton />
               </td>

@@ -129,7 +129,7 @@ function SpecificationStp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log(apiData, "loooooooooooooo");
+  // console.log(apiData, "loooooooooooooo");
 
   // 	Document Name,	Document Type,	Department,	Author,	Due Date,	Effective Date,	CC, References,	Status
   //  document_name, document_type_id, department_id, reviewers,due_dateDoc, effective_date, reference_record, status
@@ -368,8 +368,8 @@ function SpecificationStp() {
   // Filtering logic
   const filteredData = Array.isArray(apiData)
     ? apiData.filter((row) => {
-        // Ensure document_name exists before calling toLowerCase
-        const documentName = row.document_name || ""; // Fallback to an empty string if undefined
+        
+        const documentName = row.document_name || ""; 
         const matchesSearchQuery = documentName
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
@@ -403,7 +403,7 @@ function SpecificationStp() {
     } else if (typeof aValue === "number" && typeof bValue === "number") {
       return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
     }
-    return 0; // For other types, no sorting
+    return 0; 
   });
 
   const onViewDetails = () => {
@@ -458,20 +458,20 @@ function SpecificationStp() {
       );
 
       if (response.status === 200) {
-        const addedSpecificationStp = response.data.addLIMS; // Accessing the added item from the response
+        const addedSpecificationStp = response.data.addLIMS; 
 
         setApiData((prevData) => [
           ...prevData,
           {
             ...addedSpecificationStp,
-            sno: addedSpecificationStp.uniqueId, // Using uniqueId as sno
+            sno: addedSpecificationStp.uniqueId, 
             checkbox: false,
           },
         ]);
         closeModal();
 
         toast.success("Specification STP added successfully");
-        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
+       
       }
     } catch (error) {
       console.error("Error adding Specification STP", error);

@@ -40,6 +40,10 @@ const Table = ({
         return "bg-yellow-500 text-white  p-1 ";
       case "APPROVED":
         return "bg-green-500 text-white  p-1 ";
+        case "calibrated":
+          return "bg-green-500 text-white  p-1 ";
+          case "nonCalibrated":
+            return "bg-orange-500 text-white  p-1 ";
       default:
         return "";
     }

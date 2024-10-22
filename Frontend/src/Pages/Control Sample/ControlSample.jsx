@@ -26,99 +26,100 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const storedData = JSON.parse(localStorage.getItem("controlSample")) || [];
+// const storedData = JSON.parse(localStorage.getItem("controlSample")) || [];
 
-const initialData = [
-  {
-    checkbox: false,
-    sampleId: "SID001",
-    productName: "Material 1",
-    productCode: "MCode001",
-    sampleType: "Type A",
-    market: "Market A",
-    arNo: "AR001",
-    batchNo: "Batch001",
-    mfgDate: "2023-10-01",
-    expiryDate: "2025-10-01",
-    quantity: "1000",
-    quantityWithdrawn: "500",
-    currentQuantity: "500",
-    uom: "KG",
-    storageLocation: "Loc001",
-    storageCondition: "Cold Storage",
-    visualInspectionScheduledOn: "2024-10-01",
-    visualInspectionPerformedBy: "Inspector A",
-    abnormalObservation: "No",
-    observationDate: "2024-09-30",
-    destructionDueOn: "2026-10-01",
-    destroyedBy: "Staff A",
-    neutralizingAgent: "Agent A",
-    destructionDate: "2026-09-30",
-    remarks: "No remarks",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sampleId: "SID002",
-    productName: "Material 2",
-    productCode: "MCode002",
-    sampleType: "Type B",
-    market: "Market B",
-    arNo: "AR002",
-    batchNo: "Batch002",
-    mfgDate: "2023-11-01",
-    expiryDate: "2025-11-01",
-    quantity: "2000",
-    quantityWithdrawn: "1000",
-    currentQuantity: "1000",
-    uom: "L",
-    storageLocation: "Loc002",
-    storageCondition: "Room Temperature",
-    visualInspectionScheduledOn: "2024-11-01",
-    visualInspectionPerformedBy: "Inspector B",
-    abnormalObservation: "No",
-    observationDate: "2024-10-31",
-    destructionDueOn: "2026-11-01",
-    destroyedBy: "Staff B",
-    neutralizingAgent: "Agent B",
-    destructionDate: "2026-10-31",
-    remarks: "Minor observation",
-    status: "Inactive",
-  },
-  {
-    checkbox: false,
-    sampleId: "SID003",
-    productName: "Material 3",
-    productCode: "MCode003",
-    sampleType: "Type C",
-    market: "Market C",
-    arNo: "AR003",
-    batchNo: "Batch003",
-    mfgDate: "2023-12-01",
-    expiryDate: "2025-12-01",
-    quantity: "3000",
-    quantityWithdrawn: "1500",
-    currentQuantity: "1500",
-    uom: "g",
-    storageLocation: "Loc003",
-    storageCondition: "Freezer",
-    visualInspectionScheduledOn: "2024-12-01",
-    visualInspectionPerformedBy: "Inspector C",
-    abnormalObservation: "Yes",
-    observationDate: "2024-11-30",
-    destructionDueOn: "2026-12-01",
-    destroyedBy: "Staff C",
-    neutralizingAgent: "Agent C",
-    destructionDate: "2026-11-30",
-    remarks: "Requires follow-up",
-    status: "Active",
-  },
-  ...storedData, // Add the data from localStorage (if any) at the end
-];
+// const initialData = [
+//   {
+//     checkbox: false,
+//     sampleId: "SID001",
+//     productName: "Material 1",
+//     productCode: "MCode001",
+//     sampleType: "Type A",
+//     market: "Market A",
+//     arNo: "AR001",
+//     batchNo: "Batch001",
+//     mfgDate: "2023-10-01",
+//     expiryDate: "2025-10-01",
+//     quantity: "1000",
+//     quantityWithdrawn: "500",
+//     currentQuantity: "500",
+//     uom: "KG",
+//     storageLocation: "Loc001",
+//     storageCondition: "Cold Storage",
+//     visualInspectionScheduledOn: "2024-10-01",
+//     visualInspectionPerformedBy: "Inspector A",
+//     abnormalObservation: "No",
+//     observationDate: "2024-09-30",
+//     destructionDueOn: "2026-10-01",
+//     destroyedBy: "Staff A",
+//     neutralizingAgent: "Agent A",
+//     destructionDate: "2026-09-30",
+//     remarks: "No remarks",
+//     status: "Active",
+//   },
+//   {
+//     checkbox: false,
+//     sampleId: "SID002",
+//     productName: "Material 2",
+//     productCode: "MCode002",
+//     sampleType: "Type B",
+//     market: "Market B",
+//     arNo: "AR002",
+//     batchNo: "Batch002",
+//     mfgDate: "2023-11-01",
+//     expiryDate: "2025-11-01",
+//     quantity: "2000",
+//     quantityWithdrawn: "1000",
+//     currentQuantity: "1000",
+//     uom: "L",
+//     storageLocation: "Loc002",
+//     storageCondition: "Room Temperature",
+//     visualInspectionScheduledOn: "2024-11-01",
+//     visualInspectionPerformedBy: "Inspector B",
+//     abnormalObservation: "No",
+//     observationDate: "2024-10-31",
+//     destructionDueOn: "2026-11-01",
+//     destroyedBy: "Staff B",
+//     neutralizingAgent: "Agent B",
+//     destructionDate: "2026-10-31",
+//     remarks: "Minor observation",
+//     status: "Inactive",
+//   },
+//   {
+//     checkbox: false,
+//     sampleId: "SID003",
+//     productName: "Material 3",
+//     productCode: "MCode003",
+//     sampleType: "Type C",
+//     market: "Market C",
+//     arNo: "AR003",
+//     batchNo: "Batch003",
+//     mfgDate: "2023-12-01",
+//     expiryDate: "2025-12-01",
+//     quantity: "3000",
+//     quantityWithdrawn: "1500",
+//     currentQuantity: "1500",
+//     uom: "g",
+//     storageLocation: "Loc003",
+//     storageCondition: "Freezer",
+//     visualInspectionScheduledOn: "2024-12-01",
+//     visualInspectionPerformedBy: "Inspector C",
+//     abnormalObservation: "Yes",
+//     observationDate: "2024-11-30",
+//     destructionDueOn: "2026-12-01",
+//     destroyedBy: "Staff C",
+//     neutralizingAgent: "Agent C",
+//     destructionDate: "2026-11-30",
+//     remarks: "Requires follow-up",
+//     status: "Active",
+//   },
+//   ...storedData, // Add the data from localStorage (if any) at the end
+// ];
 
 const ControlSample = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   console.log(data, "data");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -128,6 +129,9 @@ const ControlSample = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const navigate= useNavigate()
+
   const filteredData = data.filter((row) => {
     return (
       row.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -170,8 +174,10 @@ const ControlSample = () => {
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
+
   const openControlModal = () => {
     setIsModalOpen(true);
+    navigate('/control-Sample-modal')
   };
 
   const closeControlModal = () => {
@@ -245,6 +251,11 @@ const ControlSample = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+    setViewModalData(null);
   };
 
   const handleDelete = (item) => {
@@ -371,6 +382,36 @@ const ControlSample = () => {
     }
     closeControlModal();
   };
+  const fields = {
+    checkbox: false,
+    sno: "",
+    sampleId: "",
+    productName: "",
+    productCode: "",
+    sampleType: "",
+    market: "",
+    arNo: "",
+    batchNo: "",
+    mfgDate: "",
+    expiryDate: "",
+    quantity: "",
+    quantityWithdrawn: "",
+    currentQuantity: "",
+    uom: "",
+    storageLocation: "",
+    storageCondition: "",
+    visualInspectionScheduledOn: "",
+    visualInspectionPerformedBy: "",
+    abnormalObservation: "",
+    observationDate: "",
+    destructionDueOn: "",
+    destroyedBy: "",
+    neutralizingAgent: "",
+    destructionDate: "",
+    remarks: "",
+    status: ""
+};
+
 
   const handleEditSave = (updatedData) => {
     console.log(updatedData, "updatedData");
@@ -734,12 +775,18 @@ const ControlSample = () => {
         />
       )}
 
-      <ControlSampleModal
-        visible={isModalOpen}
-        closeModal={closeControlModal}
-        handleSubmit={handleModalSubmit}
-        addRow={addRow}
-      />
+{viewModalData && (
+        <ControlSampleModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title=" Analyst Qualification Modal"
+          updateStatus={""}
+        />
+      )}
+
+      {showModal && <ControlSampleModal onClose={closeWorkflowModal} />}
 
       {editModalOpen && (
         <EditModal

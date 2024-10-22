@@ -4,10 +4,11 @@ import Barcode from "react-barcode";
 import { FaDownload } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
+import SampleWorkFlow from "./SampleWorkflow";
 
 const BarcodeExportButton = () => {
   const [idForBarcode, setIdForBarcode] = useState(null);
-  console.log(idForBarcode, "pppppppppppppppppppppppppppppp");
+  console.log(idForBarcode);
   const barcodeRef = useRef(null);
 
   const generateRandomNumbers = (length) => {
@@ -24,7 +25,6 @@ const BarcodeExportButton = () => {
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
-      console.log(responseData, "ooooooooooooooooooooooo");
 
       const randomNumbers = generateRandomNumbers(16);
       const idWithRandomNumbers = `${responseData[0]?.id}${randomNumbers}`;
@@ -72,7 +72,7 @@ const BarcodeExportButton = () => {
     <div className="flex items-center justify-between">
       {idForBarcode && (
         <div ref={barcodeRef}>
-          <Barcode displayValue={false} value={idForBarcode} />{" "}
+          <Barcode displayValue={true} value={idForBarcode} />{" "}
         </div>
       )}
       <button
