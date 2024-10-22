@@ -231,115 +231,116 @@ export const generatePdfbyId = async (req, res) => {
   }
 };
 
+const stabilityDatas = {};
+
 const setStablityData = (data) => {
   const sampleData = data.data;
 
-  sampleDatas.id = sampleData?.id ?? "";
-  sampleDatas.samplePlanId = sampleData?.samplePlanId ?? "";
-  sampleDatas.sampleId = sampleData?.sampleId ?? "";
-  sampleDatas.sampleName = sampleData?.sampleName ?? "";
-  sampleDatas.sampleType = sampleData?.sampleType ?? "";
-  sampleDatas.productMaterialName = sampleData?.productMaterialName ?? "";
-  sampleDatas.batchLotNumber = sampleData?.batchLotNumber ?? "";
-  sampleDatas.samplePriority = sampleData?.samplePriority ?? "";
-  sampleDatas.sampleQuantity = sampleData?.sampleQuantity ?? "";
-  sampleDatas.UOM = sampleData?.UOM ?? "";
-  sampleDatas.market = sampleData?.market ?? "";
-  sampleDatas.sampleBarCode = sampleData?.sampleBarCode ?? "";
-  sampleDatas.specificationId = sampleData?.specificationId ?? "";
-  sampleDatas.specificationAttachment =
+  stabilityDatas.id = sampleData?.id ?? "";
+  stabilityDatas.samplePlanId = sampleData?.samplePlanId ?? "";
+  stabilityDatas.sampleId = sampleData?.sampleId ?? "";
+  stabilityDatas.sampleName = sampleData?.sampleName ?? "";
+  stabilityDatas.sampleType = sampleData?.sampleType ?? "";
+  stabilityDatas.productMaterialName = sampleData?.productMaterialName ?? "";
+  stabilityDatas.batchLotNumber = sampleData?.batchLotNumber ?? "";
+  stabilityDatas.samplePriority = sampleData?.samplePriority ?? "";
+  stabilityDatas.sampleQuantity = sampleData?.sampleQuantity ?? "";
+  stabilityDatas.UOM = sampleData?.UOM ?? "";
+  stabilityDatas.market = sampleData?.market ?? "";
+  stabilityDatas.sampleBarCode = sampleData?.sampleBarCode ?? "";
+  stabilityDatas.specificationId = sampleData?.specificationId ?? "";
+  stabilityDatas.specificationAttachment =
     sampleData?.specificationAttachment ?? "";
-  sampleDatas.stpId = sampleData?.stpId ?? "";
-  sampleDatas.stpAttachment = sampleData?.stpAttachment ?? "";
-  sampleDatas.testName = sampleData?.testName ?? "";
-  sampleDatas.testMethod = sampleData?.testMethod ?? "";
-  sampleDatas.testParameter = sampleData?.testParameter ?? "";
-  sampleDatas.testingFrequency = sampleData?.testingFrequency ?? "";
-  sampleDatas.testingLocation = sampleData?.testingLocation ?? "";
-  sampleDatas.requiredInstrument = sampleData?.requiredInstrument ?? "";
-  sampleDatas.testGrouping = sampleData?.testGrouping ?? "";
-  sampleDatas.lsl = sampleData?.lsl ?? "";
-  sampleDatas.usl = sampleData?.usl ?? "";
-  sampleDatas.testingDeadline = sampleData?.testingDeadline ?? "";
-  sampleDatas.plannerName = sampleData?.plannerName ?? "";
-  sampleDatas.sampleDate = sampleData?.sampleDate ?? "";
-  sampleDatas.sampleSource = sampleData?.sampleSource ?? "";
-  sampleDatas.plannedDate = sampleData?.plannedDate ?? "";
-  sampleDatas.labTechnician = sampleData?.labTechnician ?? "";
-  sampleDatas.assignedDepartment = sampleData?.assignedDepartment ?? "";
-  sampleDatas.sampleCollectionDate = sampleData?.sampleCollectionDate ?? "";
-  sampleDatas.testingStartDate = sampleData?.testingStartDate ?? "";
-  sampleDatas.testingEndDate = sampleData?.testingEndDate ?? "";
-  sampleDatas.delayJustification = sampleData?.delayJustification ?? "";
-  sampleDatas.testingOutCome = sampleData?.testingOutCome ?? "";
-  sampleDatas.passFail = sampleData?.passFail ?? "";
-  sampleDatas.testPlanId = sampleData?.testPlanId ?? "";
-  sampleDatas.turnAroundTime = sampleData?.turnAroundTime ?? "";
-  sampleDatas.sampleRetestingDate = sampleData?.sampleRetestingDate ?? "";
-  sampleDatas.reviewDate = sampleData?.reviewDate ?? "";
-  sampleDatas.sampleStorageLocation = sampleData?.sampleStorageLocation ?? "";
-  sampleDatas.transportationMethod = sampleData?.transportationMethod ?? "";
-  sampleDatas.samplePreparationMethod =
+  stabilityDatas.stpId = sampleData?.stpId ?? "";
+  stabilityDatas.stpAttachment = sampleData?.stpAttachment ?? "";
+  stabilityDatas.testName = sampleData?.testName ?? "";
+  stabilityDatas.testMethod = sampleData?.testMethod ?? "";
+  stabilityDatas.testParameter = sampleData?.testParameter ?? "";
+  stabilityDatas.testingFrequency = sampleData?.testingFrequency ?? "";
+  stabilityDatas.testingLocation = sampleData?.testingLocation ?? "";
+  stabilityDatas.requiredInstrument = sampleData?.requiredInstrument ?? "";
+  stabilityDatas.testGrouping = sampleData?.testGrouping ?? "";
+  stabilityDatas.lsl = sampleData?.lsl ?? "";
+  stabilityDatas.usl = sampleData?.usl ?? "";
+  stabilityDatas.testingDeadline = sampleData?.testingDeadline ?? "";
+  stabilityDatas.plannerName = sampleData?.plannerName ?? "";
+  stabilityDatas.sampleDate = sampleData?.sampleDate ?? "";
+  stabilityDatas.sampleSource = sampleData?.sampleSource ?? "";
+  stabilityDatas.plannedDate = sampleData?.plannedDate ?? "";
+  stabilityDatas.labTechnician = sampleData?.labTechnician ?? "";
+  stabilityDatas.assignedDepartment = sampleData?.assignedDepartment ?? "";
+  stabilityDatas.sampleCollectionDate = sampleData?.sampleCollectionDate ?? "";
+  stabilityDatas.testingStartDate = sampleData?.testingStartDate ?? "";
+  stabilityDatas.testingEndDate = sampleData?.testingEndDate ?? "";
+  stabilityDatas.delayJustification = sampleData?.delayJustification ?? "";
+  stabilityDatas.testingOutCome = sampleData?.testingOutCome ?? "";
+  stabilityDatas.passFail = sampleData?.passFail ?? "";
+  stabilityDatas.testPlanId = sampleData?.testPlanId ?? "";
+  stabilityDatas.turnAroundTime = sampleData?.turnAroundTime ?? "";
+  stabilityDatas.sampleRetestingDate = sampleData?.sampleRetestingDate ?? "";
+  stabilityDatas.reviewDate = sampleData?.reviewDate ?? "";
+  stabilityDatas.sampleStorageLocation = sampleData?.sampleStorageLocation ?? "";
+  stabilityDatas.transportationMethod = sampleData?.transportationMethod ?? "";
+  stabilityDatas.samplePreparationMethod =
     sampleData?.samplePreparationMethod ?? "";
-  sampleDatas.samplePackagingDetail = sampleData?.samplePackagingDetail ?? "";
-  sampleDatas.sampleLabel = sampleData?.sampleLabel ?? "";
-  sampleDatas.regulatoryRequirement = sampleData?.regulatoryRequirement ?? "";
-  sampleDatas.qualityControlCheck = sampleData?.qualityControlCheck ?? "";
-  sampleDatas.controlSampleReference = sampleData?.controlSampleReference ?? "";
-  sampleDatas.sampleIntegrityStatus = sampleData?.sampleIntegrityStatus ?? "";
-  sampleDatas.riskAssessment = sampleData?.riskAssessment ?? "";
-  sampleDatas.supervisor = sampleData?.supervisor ?? "";
-  sampleDatas.instrumentsReserved = sampleData?.instrumentsReserved ?? "";
-  sampleDatas.labAvailability = sampleData?.labAvailability ?? "";
-  sampleDatas.sampleCostEstimation = sampleData?.sampleCostEstimation ?? "";
-  sampleDatas.resourceUtilization = sampleData?.resourceUtilization ?? "";
-  sampleDatas.sampleMovementHistory = sampleData?.sampleMovementHistory ?? "";
-  sampleDatas.testingProgress = sampleData?.testingProgress ?? "";
-  sampleDatas.alertNotification = sampleData?.alertNotification ?? "";
-  sampleDatas.deviationLog = sampleData?.deviationLog ?? "";
-  sampleDatas.commentNotes = sampleData?.commentNotes ?? "";
-  sampleDatas.attachment = sampleData?.attachment ?? "";
-  sampleDatas.samplingFrequency = sampleData?.samplingFrequency ?? "";
-  sampleDatas.sampleDisposition = sampleData?.sampleDisposition ?? "";
-  sampleDatas.stabilityStudyType = sampleData?.stabilityStudyType ?? "";
-  sampleDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
-  sampleDatas.stabilityProtocolApprovalDate =
+  stabilityDatas.samplePackagingDetail = sampleData?.samplePackagingDetail ?? "";
+  stabilityDatas.sampleLabel = sampleData?.sampleLabel ?? "";
+  stabilityDatas.regulatoryRequirement = sampleData?.regulatoryRequirement ?? "";
+  stabilityDatas.qualityControlCheck = sampleData?.qualityControlCheck ?? "";
+  stabilityDatas.controlSampleReference = sampleData?.controlSampleReference ?? "";
+  stabilityDatas.sampleIntegrityStatus = sampleData?.sampleIntegrityStatus ?? "";
+  stabilityDatas.riskAssessment = sampleData?.riskAssessment ?? "";
+  stabilityDatas.supervisor = sampleData?.supervisor ?? "";
+  stabilityDatas.instrumentsReserved = sampleData?.instrumentsReserved ?? "";
+  stabilityDatas.labAvailability = sampleData?.labAvailability ?? "";
+  stabilityDatas.sampleCostEstimation = sampleData?.sampleCostEstimation ?? "";
+  stabilityDatas.resourceUtilization = sampleData?.resourceUtilization ?? "";
+  stabilityDatas.sampleMovementHistory = sampleData?.sampleMovementHistory ?? "";
+  stabilityDatas.testingProgress = sampleData?.testingProgress ?? "";
+  stabilityDatas.alertNotification = sampleData?.alertNotification ?? "";
+  stabilityDatas.deviationLog = sampleData?.deviationLog ?? "";
+  stabilityDatas.commentNotes = sampleData?.commentNotes ?? "";
+  stabilityDatas.attachment = sampleData?.attachment ?? "";
+  stabilityDatas.samplingFrequency = sampleData?.samplingFrequency ?? "";
+  stabilityDatas.sampleDisposition = sampleData?.sampleDisposition ?? "";
+  stabilityDatas.stabilityStudyType = sampleData?.stabilityStudyType ?? "";
+  stabilityDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
+  stabilityDatas.stabilityProtocolApprovalDate =
     sampleData?.stabilityProtocolApprovalDate ?? "";
-  sampleDatas.countryOfRegulatorySubmissions =
+  stabilityDatas.countryOfRegulatorySubmissions =
     sampleData?.countryOfRegulatorySubmissions ?? "";
-  sampleDatas.ichZone = sampleData?.ichZone ?? "";
-  sampleDatas.photoStabilityTestingResult =
+  stabilityDatas.ichZone = sampleData?.ichZone ?? "";
+  stabilityDatas.photoStabilityTestingResult =
     sampleData?.photoStabilityTestingResult ?? "";
-  sampleDatas.reConstitutionStability =
+  stabilityDatas.reConstitutionStability =
     sampleData?.reConstitutionStability ?? "";
-  sampleDatas.testingInterval = sampleData?.testingInterval ?? "";
-  sampleDatas.shelfLifeRecommendation =
+  stabilityDatas.testingInterval = sampleData?.testingInterval ?? "";
+  stabilityDatas.shelfLifeRecommendation =
     sampleData?.shelfLifeRecommendation ?? "";
-  sampleDatas.analysisType = sampleData?.analysisType ?? "";
-  sampleDatas.analysisDate = sampleData?.analysisDate ?? "";
-  sampleDatas.analysisResult = sampleData?.analysisResult ?? "";
-  sampleDatas.srSupportiveAttachment = sampleData?.srSupportiveAttachment ?? "";
-  sampleDatas.qaSupportiveAttachment = sampleData?.qaSupportiveAttachment ?? "";
-  sampleDatas.suSupportiveAttachment = sampleData?.suSupportiveAttachment ?? "";
-  sampleDatas.saSupportiveAttachment = sampleData?.saSupportiveAttachment ?? "";
-  sampleDatas.siSupportiveAttachment = sampleData?.siSupportiveAttachment ?? "";
-  sampleDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
-  sampleDatas.initiatorComment = sampleData?.initiatorComment ?? "";
-  sampleDatas.labTechnicianComment = sampleData?.labTechnicianComment ?? "";
-  sampleDatas.reviewerComment = sampleData?.reviewerComment ?? "";
-  sampleDatas.reviewerApprover = sampleData?.reviewerApprover ?? "";
-  sampleDatas.reviewDate = sampleData?.reviewDate ?? "";
-  sampleDatas.QaReviewerApprover = sampleData?.QaReviewerApprover ?? "";
-  sampleDatas.QaReviewerComment = sampleData?.QaReviewerComment ?? "";
-  sampleDatas.QaReviewDate = sampleData?.QaReviewDate ?? "";
-  sampleDatas.stage = sampleData?.stage ?? "";
-  sampleDatas.status = sampleData?.status ?? "";
-  sampleDatas.createdAt = sampleData?.createdAt ?? "";
+  stabilityDatas.analysisType = sampleData?.analysisType ?? "";
+  stabilityDatas.analysisDate = sampleData?.analysisDate ?? "";
+  stabilityDatas.analysisResult = sampleData?.analysisResult ?? "";
+  stabilityDatas.srSupportiveAttachment = sampleData?.srSupportiveAttachment ?? "";
+  stabilityDatas.qaSupportiveAttachment = sampleData?.qaSupportiveAttachment ?? "";
+  stabilityDatas.suSupportiveAttachment = sampleData?.suSupportiveAttachment ?? "";
+  stabilityDatas.saSupportiveAttachment = sampleData?.saSupportiveAttachment ?? "";
+  stabilityDatas.siSupportiveAttachment = sampleData?.siSupportiveAttachment ?? "";
+  stabilityDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
+  stabilityDatas.initiatorComment = sampleData?.initiatorComment ?? "";
+  stabilityDatas.labTechnicianComment = sampleData?.labTechnicianComment ?? "";
+  stabilityDatas.reviewerComment = sampleData?.reviewerComment ?? "";
+  stabilityDatas.reviewerApprover = sampleData?.reviewerApprover ?? "";
+  stabilityDatas.reviewDate = sampleData?.reviewDate ?? "";
+  stabilityDatas.QaReviewerApprover = sampleData?.QaReviewerApprover ?? "";
+  stabilityDatas.QaReviewerComment = sampleData?.QaReviewerComment ?? "";
+  stabilityDatas.QaReviewDate = sampleData?.QaReviewDate ?? "";
+  stabilityDatas.stage = sampleData?.stage ?? "";
+  stabilityDatas.status = sampleData?.status ?? "";
+  stabilityDatas.createdAt = sampleData?.createdAt ?? "";
 };
 
 export const generatePdfbyIdStability = async (req, res) => {
   const id = req.params.id;
-  const type = req.params.type;
   let sampleData;
   try {
     const sample = await fetch(
@@ -370,13 +371,13 @@ export const generatePdfbyIdStability = async (req, res) => {
 
     // Generate the barcode for the provided sample ID or any relevant string
     const barcodeBase64 = await generateBarcodeBase64(
-      sampleDatas.sampleBarCode
+      stabilityDatas.sampleBarCode
     );
     // Render the main HTML with EJS
     const htmlContent = await new Promise((resolve, reject) => {
       req.app.render(
         "stabilityReport",
-        { reportData: sampleDatas, barcodeBase64: barcodeBase64 },
+        { reportData: stabilityDatas, barcodeBase64: barcodeBase64 },
         (err, html) => {
           if (err) return reject(err);
           resolve(html);
