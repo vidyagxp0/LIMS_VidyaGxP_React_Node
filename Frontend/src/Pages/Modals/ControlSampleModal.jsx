@@ -18,7 +18,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
-import ProgressBar from "../../components/Workflow/ProgressBar";
+// import ProgressBar from "../../components/Workflow/ProgressBar";
+import { ProgressBar3 } from "../../components/Workflow/ProgressBar2";
 
 const ControlSampleModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -536,7 +537,7 @@ const ControlSampleModal = ({ onClose }) => {
   return (
     <>
       {id ? (
-        <ProgressBar
+        <ProgressBar3
           stage={Number(formData.stage)}
           sampleId={id}
           onStageClick={handleStageChange}

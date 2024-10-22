@@ -43,7 +43,7 @@ const AnalystQualification = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/get-all-lims/analystPersonal`
+        `${BASE_URL}/analyst/get-analyst`
       );
       console.log("API Response:", response.data);
 

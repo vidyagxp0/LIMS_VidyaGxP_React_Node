@@ -13,10 +13,6 @@ import React, { useEffect, useState } from "react";
 
 const QualificationModal = (_props) => {
   const [selectedColumnNo, setSelectedColumnNo] = useState("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
   const [formData, setFormData] = useState({
     assignmentNo: "",
     columnName: "",

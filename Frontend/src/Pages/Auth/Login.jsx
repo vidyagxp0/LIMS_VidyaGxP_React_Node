@@ -47,6 +47,8 @@ function Login(props) {
       );
 
       const { token, data } = response.data;
+      console.log(token,"Tokken");
+      
 
       if (token) {
         localStorage.setItem("token", token);
