@@ -9,6 +9,7 @@ import helmet from "helmet";
 import { connectToDB } from "./src/config/db.js";
 import config from "./src/config/config.json" assert { type: "json" };
 import fs from "fs/promises"; // Use fs/promises for ES module support
+import analystRouter from "./src/routes/analyst.route.js";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", limsRouter);
 app.use("/admin", adminRouter);
 app.use("/", sampleRouter);
+app.use("/", analystRouter);
 
 // Helper function to get base64 encoded image
 const getBase64Image = async (filePath) => {
