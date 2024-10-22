@@ -174,6 +174,10 @@ const AnalystPersonal = () => {
   // };
   
   
+  
+  
+  
+  
   const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
       // If the modal is already open for the same item, close it
@@ -214,6 +218,21 @@ const AnalystPersonal = () => {
     setEditModalData(null);
   };
 
+  
+  const handleExcelDataUpload = (excelData) => {
+    const updatedData = excelData.map((item, index) => ({
+      checkbox: false,
+      sno: index + 1,
+       analystid: item["Analyst ID"] || "",
+       Fullname: item["Full Name"] || "",
+       dateofbirth: item["Date Of Birth"] || "",
+        emailaddress: item["Email Address"] || "",
+         phonenumber: item["Phone Number"] || "",
+         department: item["Department"] || "",
+    }))};
+  
+  
+  
   return (
     <>
       <div className="m-5 mt-3">
@@ -266,6 +285,7 @@ const AnalystPersonal = () => {
 
       {isImportModalOpen && (
         <ImportModal
+        initialData={filteredData}
           isOpen={isImportModalOpen}
           onClose={() => setIsImportModalOpen(false)}
           columns={columns}
