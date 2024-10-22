@@ -91,7 +91,7 @@ const STP = () => {
       const stpData = response.data[0]?.STP || [];
 
       const filteredData = stpData.map((item, index) => ({
-        sno:item.uniqueId ,
+        sno: item.uniqueId,
         stpId: item.stpId || "No STP ID",
         title: item.title || "No Title",
         attachment: item.attachment || "No Attachment",
@@ -156,11 +156,14 @@ const STP = () => {
   const handleAddSTP = async (newSTPData) => {
     setIsLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTPData);
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/STP`,
+        newSTPData
+      );
       if (response.status === 200 || response.status === 201) {
-        setData(prevData => [...prevData, response.data]);  // Ensure new data is appended
+        setData((prevData) => [...prevData, response.data]); // Ensure new data is appended
+        fetchSTPs();d
         toast.success("New STP added successfully!");
-        fetchSTPs();
       } else {
         toast.error("Failed to add new STP. Please try again.");
       }
@@ -183,7 +186,7 @@ const STP = () => {
         setData((prevData) =>
           prevData.map((item) =>
             item.sno === updatedData.sno ? { ...item, ...updatedData } : item
-        )
+          )
         );
         toast.success("STP updated successfully");
         setEditModalData(null);
@@ -197,7 +200,6 @@ const STP = () => {
       setIsLoading(false);
     }
   };
-  
 
   const AddSTPModal = ({ visible, closeModal, onAdd }) => {
     const [formData, setFormData] = useState({
@@ -247,28 +249,32 @@ const STP = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
       }
     };
-  
+
     const validateForm = () => {
       const newErrors = {};
-      Object.keys(formData).forEach(key => {
-        if (!formData[key] && key !== 'attachment' && key !== 'attachments') {
+      Object.keys(formData).forEach((key) => {
+        if (!formData[key] && key !== "attachment" && key !== "attachments") {
           newErrors[key] = "This field is required";
         }
       });
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     };
-  
+
     const handleAdd = () => {
       if (validateForm()) {
-        
         onAdd(formData);
         closeModal();
       }
     };
-  
+
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="md">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>Add STP</CModalTitle>
         </CModalHeader>
@@ -276,20 +282,31 @@ const STP = () => {
           <CForm>
             {Object.entries(formData).map(([key, value]) => {
               let inputType = "text";
-              if (key.includes("date")) {
+
+              if (key === "effectiveDate") {
+                inputType = "date";
+              } else if (key === "creationDate") {
+                inputType = "date";
+              } else if (key.includes("date")) {
                 inputType = "date";
               } else if (key.includes("number") || key === "version") {
                 inputType = "number";
               } else if (key === "attachment" || key === "attachments") {
                 inputType = "file";
               }
-  
+
               return (
                 <CFormInput
                   key={key}
                   className="mb-3"
                   type={inputType}
-                  label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1").trim()}
+                  label={
+                    key.charAt(0).toUpperCase() +
+                    key
+                      .slice(1)
+                      .replace(/([A-Z])/g, " $1")
+                      .trim()
+                  }
                   name={key}
                   value={inputType !== "file" ? value : undefined}
                   onChange={handleChange}
@@ -322,13 +339,13 @@ const STP = () => {
     const [formData, setFormData] = useState(data);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-  
+
     useEffect(() => {
       if (data) {
         setFormData(data);
       }
     }, [data]);
-  
+
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -336,25 +353,25 @@ const STP = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
       }
     };
-  
+
     const validateForm = () => {
       const newErrors = {};
-      Object.keys(formData).forEach(key => {
-        if (!formData[key] && key !== 'uniqueId' && key !== 'sno') {
+      Object.keys(formData).forEach((key) => {
+        if (!formData[key] && key !== "uniqueId" && key !== "sno") {
           newErrors[key] = "This field is required";
         }
       });
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     };
-  
+
     const handleSave = async (e) => {
       e.preventDefault();
       if (!validateForm()) return;
-  
+
       setIsLoading(true);
       try {
-        await onSave({...formData,sno:formData.sno});
+        await onSave({ ...formData, sno: formData.sno });
         closeModal();
       } catch (error) {
         console.error("Error updating STP:", error);
@@ -363,11 +380,16 @@ const STP = () => {
         setIsLoading(false);
       }
     };
-  
+
     if (!visible) return null;
-  
+
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>Edit STP</CModalTitle>
         </CModalHeader>
@@ -389,7 +411,7 @@ const STP = () => {
                     </div>
                   );
                 }
-  
+
                 let inputType = "text";
                 if (key.includes("date")) {
                   inputType = "date";
@@ -398,13 +420,19 @@ const STP = () => {
                 } else if (key === "attachment" || key === "attachments") {
                   inputType = "file";
                 }
-  
+
                 return (
                   <div key={key}>
                     <CFormInput
                       className="mb-3"
                       type={inputType}
-                      label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1").trim()}
+                      label={
+                        key.charAt(0).toUpperCase() +
+                        key
+                          .slice(1)
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()
+                      }
                       name={key}
                       value={inputType !== "file" ? value : undefined}
                       onChange={handleChange}
@@ -455,7 +483,9 @@ const STP = () => {
 
   const handleDelete = async (item) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/delete-lims/STP/${item.sno}`);
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/STP/${item.sno}`
+      );
       if (response.status === 200) {
         const updatedData = data.filter(
           (dataItem) => dataItem.sno !== item.sno
@@ -468,7 +498,10 @@ const STP = () => {
       }
     } catch (error) {
       console.error("Error deleting STP:", error);
-      toast.error("Error deleting STP: " + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error deleting STP: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
 
