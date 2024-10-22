@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 
 const AnalystQualification = () => {
   const [data, setData] = useState([]);
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,7 +39,7 @@ const AnalystQualification = () => {
   };
   const handleEdit = (analyst) => {
     setSelectedAnalyst(analyst); // Set the selected analyst data
-    console.log(analyst,"ANNNNNNN");
+    // console.log(analyst,"ANNNNNNN");
     
     setIsModalOpen(true); // Open the modal
   };
@@ -55,16 +56,16 @@ const AnalystQualification = () => {
       // console.log("API Response:", response.data);
 
       const formattedData = response?.data.data || [];
-      console.log(formattedData);
+      // console.log(formattedData);
 
       const updatedData = formattedData.map((item, index) => ({
         sno: index + 1,
         ...item,
       }));
-      console.log(updatedData, "AAAAAAAaaa");
+      // console.log(updatedData, "AAAAAAAaaa");
 
       setData(updatedData);
-      console.log(updatedData);
+      // console.log(updatedData);
     } catch (error) {
       console.error("Error fetching analysts:", error);
     }
@@ -81,6 +82,8 @@ const AnalystQualification = () => {
       (statusFilter === "All" || row.QualificationStatus === statusFilter)
     );
   });
+  // console.log(filteredData,"FILTERED DATA");
+  
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -102,10 +105,6 @@ const AnalystQualification = () => {
     {
       header: "Analyst ID",
       accessor: "analystId",
-      onClick: () => {
-        // Your custom logic for handling click on "Analyst ID" header
-        console.log("Analyst ID header clicked!");
-      },
     },
     { header: "Full Name", accessor: "fullName" },
     { header: "Date of Birth", accessor: "dateOfBirth" },
@@ -178,11 +177,6 @@ const AnalystQualification = () => {
             icon={faEye}
             className="mr-2 cursor-pointer"
             onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
@@ -267,12 +261,14 @@ const AnalystQualification = () => {
         `${BASE_URL}/analyst/delete-analyst/${item.id}`
       );
       setData((prevData) =>
-        prevData.filter((dataItem) => dataItem.uniqueId !== item.uniqueId)
+        prevData.filter((dataItem) => dataItem.id !== item.id)
       );
       closeModal();
       fetchData();
+      toast.success("Analyst deleted successfully");
     } catch (error) {
       console.error("Error deleting analyst:", error);
+      toast.error("Error deleting analyst");
     }
   };
 
@@ -347,16 +343,30 @@ const AnalystQualification = () => {
             />
           </div>
         </div>
+        {/* {console.log(filteredData, "Table Ko Sendd")} */}
+        
         <Table
           columns={columns}
           data={filteredData}
           onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
-          openEditModal={openEditModal}
+          // openEditModal={openEditModal}
           onEdit={handleEdit}
         />
       </div>
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+          title="Analyst Qualification Details"
+        //  updateStatus={handleStatusUpdate}
+        />
+      )}
 
       {isImportModalOpen && (
         <ImportModal

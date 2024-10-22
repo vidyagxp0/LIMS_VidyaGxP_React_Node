@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
+import {BASE_URL} from "../config.json";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {
@@ -27,7 +28,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { id } = useParams();
-  console.log(id, "ididididididididiidioidiidid");
+  // console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
     analystId: "",
@@ -85,23 +86,23 @@ const AnalystQualificationModal = ({ onClose }) => {
     status: "",
   });
 
-  const fetchAnalystData = async (id) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/analyst/get-analyst/${id}`);
-      if (response.status === 200) {
-        setFormData(response.data); // Assuming response.data contains the analyst data
-      } else {
-        // toast.error("Failed to fetch analyst data.");
-      }
-    } catch (error) {
-      console.error("Error fetching analyst data:", error);
-      // toast.error("Error fetching analyst data.");
-    }
-  };
+  // const fetchAnalystData = async (id) => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL}/analyst/get-analyst/${id}`);
+  //     if (response.status === 200) {
+  //       setFormData(response.data); // Assuming response.data contains the analyst data
+  //     } else {
+  //       // toast.error("Failed to fetch analyst data.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching analyst data:", error);
+  //     // toast.error("Error fetching analyst data.");
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchAnalystData();
-  }, [id]);
+  // useEffect(() => {
+  //   fetchAnalystData();
+  // }, [id]);
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -148,14 +149,14 @@ const AnalystQualificationModal = ({ onClose }) => {
       const response = await axios.get(
         `http://localhost:9000/analyst/get-analyst/${id}`
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
-      console.log(responseData,"rrrrrrrrrrrrrrrr");
+      // console.log(responseData,"rrrrrrrrrrrrrrrr");
       setFormData(responseData);
-      console.log(formData.stage);
+      // console.log(formData.stage);
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -172,15 +173,15 @@ const AnalystQualificationModal = ({ onClose }) => {
         formData
       );
       if (response.status === 200) {
-        toast.success("Sample Workflow updated successfully.");
+        toast.success("Data updated successfully.");
         setIsModalOpen(false);
         navigate("/analyst-qualification");
       } else {
-        toast.error("Failed to update Sample Workflow.");
+        toast.error("Failed to update Data.");
       }
     } catch (error) {
       toast.error(
-        "Error updating Sample Workflow: " +
+        "Error updating Data: " +
           (error.response?.data || error.message)
       );
     }
@@ -195,7 +196,7 @@ const AnalystQualificationModal = ({ onClose }) => {
           `http://localhost:9000/analyst/create-analyst`,
           formData
         );
-        console.log(response, "iddddddddddddddddddddddd");
+        // console.log(response, "iddddddddddddddddddddddd");
         if (response.status === 200) {
           toast.success("Data added successfully.");
           setIsModalOpen(false);

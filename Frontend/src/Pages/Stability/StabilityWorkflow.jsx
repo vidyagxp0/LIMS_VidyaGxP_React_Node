@@ -107,7 +107,7 @@ const StabilityWorkFlow = () => {
       const response = await fetch(
         `http://localhost:9000/stability-generate-report/${sampleId}`
       );
-      console.log("Response", response);
+      // console.log("Response", response);
      
       
       if (!response.ok) {
