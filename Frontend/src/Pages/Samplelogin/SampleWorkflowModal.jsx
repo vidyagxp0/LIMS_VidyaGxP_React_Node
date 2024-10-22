@@ -21,12 +21,29 @@ import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
+import TestParametersTable from "./TestParametersTable"; // Import the new component
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
+  const [testParameters, setTestParameters] = useState([]);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const handleAddRow = () => {
+    setTestParameters([
+      ...testParameters,
+      { sno: "", testParameter: "", usl: "", lsl: "", result: "", remarks: "" },
+    ]);
+  };
+
+  const handleRowChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedRows = testParameters.map((row, idx) =>
+      idx === index ? { ...row, [name]: value } : row
+    );
+    setTestParameters(updatedRows);
+  };
 
   const [formData, setFormData] = useState({
     types: "sample",
@@ -849,6 +866,15 @@ const SampleWorkflowModal = ({ onClose }) => {
       case "Sample Analysis":
         return (
           <CForm>
+            <CButton color="primary" onClick={handleAddRow}>
+              Add Test Parameters Row
+            </CButton>
+
+            {/* Use the TestParametersTable component */}
+            <TestParametersTable
+              testParameters={testParameters}
+              handleRowChange={handleRowChange}
+            />
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
