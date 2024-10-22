@@ -6,11 +6,10 @@ import {
   deleteAnalyst,
   getAnalystById,
   updateAnalyst,
-  eSignature,
-  submitToSupervisor,
-  submitToQAReview,
   submitToClosed,
   ReviewToOpen,
+  submitToReviewer,
+  submitToAnalyst,
 } from "../controllers/analystQualification.controller.js";
 
 import { checkJwtToken } from "../middleware/authentication.js";
@@ -38,16 +37,14 @@ analystRouter.get("/get-analyst", getAnalyst);
 
 analystRouter.get("/get-analyst/:id", getAnalystById);
 
-analystRouter.post("/e-signature", checkJwtToken, eSignature);
+analystRouter.post("/send-review", checkJwtToken, submitToAnalyst);
 
-analystRouter.post("/send-supervisor", checkJwtToken, submitToSupervisor);
-
-analystRouter.post("/send-qa-review", checkJwtToken, submitToQAReview);
+analystRouter.post("/send-to-reviewer", checkJwtToken, submitToReviewer);
 
 analystRouter.post("/send-to-closed", checkJwtToken, submitToClosed);
 
 analystRouter.post("/send-to-open", checkJwtToken, ReviewToOpen);
 
-analystRouter.get("/generate-report/:id/analyst", generatePdfbyId);
+analystRouter.get("/generate-report/:id", generatePdfbyId);
 
 export default analystRouter;
