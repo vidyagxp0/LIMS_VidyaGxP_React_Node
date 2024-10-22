@@ -123,7 +123,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     QaReviewerApprover: "",
     QaReviewerComment: "",
     QaReviewDate: "",
-    suSupportiveAttachment:"",
+    suSupportiveAttachment: "",
 
     qaReviewDate: "",
     qaReview: "",
@@ -570,10 +570,19 @@ const SampleWorkflowModal = ({ onClose }) => {
                   options={[
                     "Select Tests",
                     { label: "Description", value: "Description" },
-                    { label: "Weight Of 20 tablets", value: "Weight Of 20 tablets" },
-                    { label: "Average Weight ( mg )", value: "Average Weight ( mg )" },
+                    {
+                      label: "Weight Of 20 tablets",
+                      value: "Weight Of 20 tablets",
+                    },
+                    {
+                      label: "Average Weight ( mg )",
+                      value: "Average Weight ( mg )",
+                    },
                     { label: "Thickness", value: "Thickness" },
-                    { label: "Disintigration Time", value:"Disintigration Time" },
+                    {
+                      label: "Disintigration Time",
+                      value: "Disintigration Time",
+                    },
                     { label: "Hardness", value: "Hardness" },
                     { label: "Diameter", value: "Diameter" },
                     { label: "Friability", value: "Friability" },
@@ -613,9 +622,9 @@ const SampleWorkflowModal = ({ onClose }) => {
                   className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
                   onClick={toggleDropdown} // Toggle dropdown on input click
                 >
-                  {formData.requiredInstrument &&
+                  {Array.isArray(formData.requiredInstrument) &&
                   formData.requiredInstrument.length > 0 ? (
-                    formData.requiredInstrument.map((instrument, index) => (
+                    formData?.requiredInstrument?.map((instrument, index) => (
                       <span
                         key={index}
                         className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"

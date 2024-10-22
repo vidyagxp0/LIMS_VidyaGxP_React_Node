@@ -705,6 +705,7 @@ const Registration = () => {
           visible={isModalOpen}
           closeModal={closeModal}
           handleSubmit={handleModalSubmit}
+          fetchProductData={fetchProductData}
         />
 
         {isModalsOpen && (
@@ -714,6 +715,7 @@ const Registration = () => {
             onClose={handleCloseModals}
             columns={columns}
             onDataUpload={handleExcelDataUpload}
+            
           />
         )}
         {viewModalData && (

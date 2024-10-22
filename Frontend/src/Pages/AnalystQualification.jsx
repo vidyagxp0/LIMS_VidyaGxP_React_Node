@@ -38,6 +38,8 @@ const AnalystQualification = () => {
   };
   const handleEdit = (analyst) => {
     setSelectedAnalyst(analyst); // Set the selected analyst data
+    console.log(analyst,"ANNNNNNN");
+    
     setIsModalOpen(true); // Open the modal
   };
  

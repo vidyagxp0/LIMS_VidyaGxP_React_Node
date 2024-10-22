@@ -56,9 +56,11 @@ export const ProgressBar2 = (props) => {
       );
 
       if (!response.data.error) {
+        console.log(analystId,"AAAAAAAAAAAAAAAAAAAA");
+        
         await axios.post(
           `http://localhost:9000/analyst/${url}`,
-          { sampleId, comment },
+          { analystId, comment },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -97,7 +99,7 @@ export const ProgressBar2 = (props) => {
           {stage === 1 && (
             <button
               className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-              onClick={() => handleOpen("send-qa-review")}
+              onClick={() => handleOpen("send-review")}
             >
               Submit Analyst
             </button>
@@ -106,7 +108,7 @@ export const ProgressBar2 = (props) => {
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-supervisor")}
+                onClick={() => handleOpen("send-to-reviewer")}
               >
                 Qualification Complete
               </button>

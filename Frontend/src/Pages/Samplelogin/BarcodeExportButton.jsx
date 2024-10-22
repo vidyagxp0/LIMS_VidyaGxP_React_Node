@@ -72,7 +72,7 @@ const BarcodeExportButton = () => {
     <div className="flex items-center justify-between">
       {idForBarcode && (
         <div ref={barcodeRef}>
-          <Barcode displayValue={true} value={idForBarcode} />{" "}
+          <Barcode displayValue={false} value={idForBarcode} />{" "}
         </div>
       )}
       <button

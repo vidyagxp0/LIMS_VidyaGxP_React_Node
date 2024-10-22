@@ -259,6 +259,8 @@ function App() {
             <Route path="/storage-location" element={<StorageLocation />} />
             <Route path="/analyst-qualification" element={<AnalystQualification />} />
             <Route path="/analyst-qualification-modal" element={<AnalystQualificationModal />} />
+            <Route path="/analyst-qualification-edit/:id" element={<AnalystQualificationModal />} />
+
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/control-sample" element={<ControlSample />} />
             <Route path="/SpecificationStp" element={<SpecificationStp />} />

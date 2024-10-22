@@ -81,7 +81,81 @@ const AnalystQualificationModal = ({ onClose }) => {
     changeDescription: "",
     status: "",
   });
-  console.log(formData, "L<>?L<>?L<>?L<>?L<>?L<>?L<>?L");
+
+  const fetchAnalystData = async (id) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/analyst/get-analyst/${id}`);
+      if (response.status === 200) {
+        setFormData(response.data); // Assuming response.data contains the analyst data
+      } else {
+        toast.error("Failed to fetch analyst data.");
+      }
+    } catch (error) {
+      console.error("Error fetching analyst data:", error);
+      toast.error("Error fetching analyst data.");
+    }
+  };
+  useEffect(() => {
+    if (id) {
+      fetchAnalystData(id); // Fetch data for the specific analyst ID
+    } else {
+      // Reset to initial state if no ID is provided
+      setFormData({
+        analystId: "",
+        fullName: "",
+        dateOfBirth: "",
+        emailAddress: "",
+        phoneNumber: "",
+        department: "",
+        jobTitle: "",
+        supervisorManagerName: "",
+        qualificationId: "",
+        dateOfQualification: "",
+        qualifiedBy: "",
+        qualificationType: "",
+        expirationDate: "",
+        qualificationStatus: "",
+        trainingProgramName: "",
+        trainingStartDate: "",
+        trainingCompletionDate: "",
+        trainingCompletionStatus: "",
+        certificationNameNumber: "",
+        certificationBody: "",
+        certificationDate: "",
+        nextReCertificationDate: "",
+        competencyTestName: "",
+        testDate: "",
+        testResults: "",
+        testScore: "",
+        evaluatorName: "",
+        evaluatorComments: "",
+        techniqueSkillName: "",
+        qualificationDate: "",
+        skillLevel: "",
+        reQualificationRequired: "",
+        reQualificationDueDate: "",
+        instrumentNameId: "",
+        methodNameId: "",
+        qualificationLevel: "",
+        methodValidationDate: "",
+        sopNameId: "",
+        sopVersion: "",
+        dateAcknowledgedReviewed: "",
+        yearsOfExperience: "",
+        previousJobRoles: "",
+        previousLabsWorkedIn: "",
+        specializations: "",
+        approvalDate: "",
+        approverName: "",
+        approverSignature: "",
+        commentsNotes: "",
+        modificationDate: "",
+        modifiedBy: "",
+        changeDescription: "",
+        status: "Active",
+      });
+    }
+  }, [id]);
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -133,7 +207,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
-      // console.log(responseData);
+      console.log(responseData,"rrrrrrrrrrrrrrrr");
       setFormData(responseData);
       console.log(formData.stage);
     } catch (error) {
@@ -143,7 +217,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   };
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, []);
 
   const handleEdit = async () => {
     try {
