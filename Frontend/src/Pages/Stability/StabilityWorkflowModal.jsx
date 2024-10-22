@@ -257,7 +257,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
         if (response.status === 200) {
           toast.success("Stability Workflow added successfully.");
           setIsModalOpen(false);
-          navigate("/stabilityWorkflow");
+          navigate("/stabilityworkflow");
         } else {
           toast.error("Failed to add Stability Workflow.");
         }
