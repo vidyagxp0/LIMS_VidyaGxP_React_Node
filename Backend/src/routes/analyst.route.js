@@ -14,7 +14,7 @@ import {
 
 import { checkJwtToken } from "../middleware/authentication.js";
 
-import { generatePdfbyId } from "../controllers/report.controller.js";
+import { generatePdfAnalyst, generatePdfbyId } from "../controllers/report.controller.js";
 import { upload } from "../utils/multer.js";
 
 const analystRouter = express.Router();
@@ -45,6 +45,6 @@ analystRouter.post("/send-to-closed", checkJwtToken, submitToClosed);
 
 analystRouter.post("/send-to-open", checkJwtToken, ReviewToOpen);
 
-analystRouter.get("/generate-report/:id", generatePdfbyId);
+analystRouter.get("/generate-report/:id", generatePdfAnalyst);
 
 export default analystRouter;
