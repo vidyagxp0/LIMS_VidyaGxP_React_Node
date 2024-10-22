@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { randomSpecData } from "./SpecFunction";
 import SearchBar from "../components/ATM components/SearchBar/SearchBar";
 import { Dropdown } from "react-bootstrap";
@@ -7,8 +7,12 @@ import ATMButton from "../components/ATM components/Button/ATMButton";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import {BASE_URL} from "../config.json"
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { BASE_URL } from "../config.json";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 // import SpecificationSpecModal from "./Modals/SpecificationSpecModal";
 import SpecificationviewModel from "./SpecificationviewModel";
 import { randomData } from "./STP/demoStp";
@@ -20,17 +24,18 @@ import {
   CModalFooter,
   CButton,
   CFormInput,
+  CFormTextarea,
+  CFormSelect,
 } from "@coreui/react";
 randomSpecData;
 
 const SpecificationSpec = () => {
-  const [data , setData] = useState(randomSpecData)
+  const [data, setData] = useState(randomSpecData);
   const [editModalOpen, setEditModalOpen] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [viewdata ,setviewdata]=useState(null)
-  const [error , setError] = useState(null);
-
+  const [viewdata, setviewdata] = useState(null);
+  const [error, setError] = useState(null);
 
   const openEditModal = (data) => {
     setEditModalData(data);
@@ -50,74 +55,72 @@ const SpecificationSpec = () => {
     setIsModalOpen(true);
   };
 
-  const closeAddModal=()=>{
-    setIsModalOpen(false)
-  }
-  
+  const closeAddModal = () => {
+    setIsModalOpen(false);
+  };
+
   const handleChange = (e, setFormData, formData) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleModalSubmit = (newControlSample) => {
-    console.log(newControlSample,"newControlSample")
+    console.log(newControlSample, "newControlSample");
     const currentDate = new Date().toISOString().split("T")[0];
     if (editModalData) {
-      const updatedList = data.map((item) =>{
-        console.log(item , "ittteeemmm")
-        return (
-          item.productName === newControlSample.productName ? newControlSample : item
-        )
-      }
-       
-      );
+      const updatedList = data.map((item) => {
+        console.log(item, "ittteeemmm");
+        return item.productName === newControlSample.productName
+          ? newControlSample
+          : item;
+      });
       setData(updatedList);
     } else {
       setData((prevData) => [
         ...prevData,
         {
-          specId:newControlSample?.specId,
-          title:newControlSample.title,
-          version:newControlSample.version ,
-          attachment:newControlSample.attachment,
-          effectiveDate:newControlSample.effectiveDate,
-          creationDate:newControlSample.creationDate,
-          approvedBy:newControlSample.approvedBy,
-          productName:newControlSample.productName,
-          batchLotNumber:newControlSample.batchLotNumber,
-          productCategory:newControlSample.productCategory,
-          manufacturer:newControlSample.manufacturer,
-          description:newControlSample.description,
-          materialGrade:newControlSample.materialGrade,
-          molecularFormula:newControlSample.molecularFormula,
-          packagingRequirements:newControlSample.packagingRequirements,
-          storageConditions:newControlSample.storageConditions,
-          shelfLife:newControlSample.shelfLife,
-          labelingRequirements:newControlSample.labelingRequirements,
-          testParameter:newControlSample.testParameter,
-          testMethod:newControlSample.testMethod,
-          acceptanceCriteria:newControlSample.acceptanceCriteria,
-          unitsOfMeasurement:newControlSample.unitsOfMeasurement,
-          testFrequency:newControlSample.testFrequency,
-          controlSampleReference:newControlSample.controlSampleReference,
-          samplingPlan:newControlSample.samplingPlan,
-          testMethodValidation:newControlSample.testMethodValidation,
-          referenceStandards:newControlSample.referenceStandards,
-          resultInterpretation:newControlSample.resultInterpretation,
-          stabilityCriteria:newControlSample.stabilityCriteria,
-          reTestingInterval:newControlSample.reTestingInterval,
-          regulatoryRequirements:newControlSample.regulatoryRequirements,
-          certification:newControlSample.certification,
-          deviationHandling:newControlSample.deviationHandling,
-          auditTrail:newControlSample.auditTrail,
-          documentReference:newControlSample.documentReference,
-          revisionHistory:newControlSample.revisionHistory,
-          attachments:newControlSample.attachments,
-          comments:newControlSample.comments,
-          reviewFrequency:newControlSample.reviewFrequency,
-          expiryDate:newControlSample.expiryDate,
+          specId: newControlSample?.specId,
+          title: newControlSample.title,
+          version: newControlSample.version,
+          attachment: newControlSample.attachment,
+          effectiveDate: newControlSample.effectiveDate,
+          creationDate: newControlSample.creationDate,
+          approvedBy: newControlSample.approvedBy,
+          productName: newControlSample.productName,
+          batchLotNumber: newControlSample.batchLotNumber,
+          productCategory: newControlSample.productCategory,
+          manufacturer: newControlSample.manufacturer,
+          description: newControlSample.description,
+          materialGrade: newControlSample.materialGrade,
+          molecularFormula: newControlSample.molecularFormula,
+          packagingRequirements: newControlSample.packagingRequirements,
+          storageConditions: newControlSample.storageConditions,
+          shelfLife: newControlSample.shelfLife,
+          labelingRequirements: newControlSample.labelingRequirements,
+          testParameter: newControlSample.testParameter,
+          testMethod: newControlSample.testMethod,
+          acceptanceCriteria: newControlSample.acceptanceCriteria,
+          unitsOfMeasurement: newControlSample.unitsOfMeasurement,
+          testFrequency: newControlSample.testFrequency,
+          controlSampleReference: newControlSample.controlSampleReference,
+          samplingPlan: newControlSample.samplingPlan,
+          testMethodValidation: newControlSample.testMethodValidation,
+          referenceStandards: newControlSample.referenceStandards,
+          resultInterpretation: newControlSample.resultInterpretation,
+          stabilityCriteria: newControlSample.stabilityCriteria,
+          reTestingInterval: newControlSample.reTestingInterval,
+          regulatoryRequirements: newControlSample.regulatoryRequirements,
+          certification: newControlSample.certification,
+          deviationHandling: newControlSample.deviationHandling,
+          auditTrail: newControlSample.auditTrail,
+          documentReference: newControlSample.documentReference,
+          revisionHistory: newControlSample.revisionHistory,
+          attachments: newControlSample.attachments,
+          comments: newControlSample.comments,
+          reviewFrequency: newControlSample.reviewFrequency,
+          expiryDate: newControlSample.expiryDate,
         },
-      ]);         
+      ]);
     }
     closeSpecificationModal();
   };
@@ -162,117 +165,127 @@ const SpecificationSpec = () => {
     "attachments",
     "comments",
     "reviewFrequency",
-    "expiryDate"
+    "expiryDate",
   ];
-
- 
-  
 
   const onDeleteItem = (specIdToDelete) => {
     const filteredData = data.filter((item) => item.specId !== specIdToDelete);
     setData(filteredData);
   };
 
-  const onViewDetails=(data)=>{
-         setviewdata(data)
-  }
+  const onViewDetails = (data) => {
+    setviewdata(data);
+  };
 
-  const closeViewModal=()=>{
-       setviewdata(null)
-  }
-  
+  const closeViewModal = () => {
+    setviewdata(null);
+  };
+
   const handleStatusUpdate = (specId, newStatus) => {
     const updatedData = data.map((item) =>
       item.specId === specId ? { ...item, status: newStatus } : item
     );
     setData(updatedData);
   };
-  
-  
+
   const handleAddSPC = async (newSTP) => {
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTP);
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/STP`,
+        newSTP
+      );
       const addedSPC = response.data.updatedLIMS?.spc[0];
       if (addedSPC) {
-        setData(prevData => [...prevData, addedSPC]);
+        setData((prevData) => [...prevData, addedSPC]);
       }
       closeAddModal();
     } catch (err) {
-      setError('Error adding STP');
+      setError("Error adding STP");
     }
   };
-  
+
   const handleEditSave = async (updatedData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`, updatedData);
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`,
+        updatedData
+      );
       const updatedSPC = response.data.updatedLIMS?.spc[0];
       if (updatedSPC) {
-        setData(prevData => prevData.map(item => item.specId === updatedSPC.specId ? updatedSPC : item));
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.specId === updatedSPC.specId ? updatedSPC : item
+          )
+        );
       }
       setEditModalData(null);
     } catch (err) {
-      setError('Error updating STP');
+      setError("Error updating STP");
     }
   };
 
   const AddSPCModal = ({ visible, closeModal, onAdd }) => {
     const [formData, setFormData] = useState({
-     specId:"",
-    title:"",
-    version:"",
-    attachment:"",
-    effectiveDate:"",
-    creationDate:"",
-    approvedBy:"",
-    productName:"",
-    batchLotNumber:"",
-    productCategory:"",
-    manufacturer:"",
-    description:"",
-    materialGrade:"",
-    molecularFormula:"",
-    packagingRequirements:"",
-    storageConditions:"",
-    shelfLife:"",
-    labelingRequirements:"",
-    testParameter:"",
-    testMethod:"",
-    acceptanceCriteria:"",
-    unitsOfMeasurement:"",
-    testFrequency:"",
-    controlSampleReference:"",
-    samplingPlan:"",
-    testMethodValidation:"",
-    referenceStandards:"",
-    resultInterpretation:"",
-    stabilityCriteria:"",
-    reTestingInterval:"",
-    regulatoryRequirements:"",
-    certification:"",
-    deviationHandling:"",
-    auditTrail:"",
-    documentReference:"",
-    revisionHistory:"",
-    attachments:"",
-    comments:"",
-    reviewFrequency:"",
-    expiryDat:""
+      specId: "",
+      title: "",
+      version: "",
+      attachment: "",
+      effectiveDate: "",
+      creationDate: "",
+      approvedBy: "",
+      productName: "",
+      batchLotNumber: "",
+      productCategory: "",
+      manufacturer: "",
+      description: "",
+      materialGrade: "",
+      molecularFormula: "",
+      packagingRequirements: "",
+      storageConditions: "",
+      shelfLife: "",
+      labelingRequirements: "",
+      testParameter: "",
+      testMethod: "",
+      acceptanceCriteria: "",
+      unitsOfMeasurement: "",
+      testFrequency: "",
+      controlSampleReference: "",
+      samplingPlan: "",
+      testMethodValidation: "",
+      referenceStandards: "",
+      resultInterpretation: "",
+      stabilityCriteria: "",
+      reTestingInterval: "",
+      regulatoryRequirements: "",
+      certification: "",
+      deviationHandling: "",
+      auditTrail: "",
+      documentReference: "",
+      revisionHistory: "",
+      attachments: "",
+      comments: "",
+      reviewFrequency: "",
+      expiryDat: "",
     });
     const handleAdd = () => {
-     
       onAdd(formData);
       closeModal();
     };
 
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormInput
             className="mb-3"
-            type="text"
+            type="number"
             label="Specification ID"
             name="specId"
             value={formData.specId}
@@ -296,7 +309,7 @@ const SpecificationSpec = () => {
           />
           <CFormInput
             className="mb-3"
-            type="text"
+            type="file"
             label="Attachment"
             name="attachment"
             value={formData.attachment}
@@ -358,7 +371,7 @@ const SpecificationSpec = () => {
             value={formData.manufacturer}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          <CFormInput
+          <CFormTextarea
             className="mb-3"
             type="text"
             label="Description"
@@ -438,14 +451,19 @@ const SpecificationSpec = () => {
             value={formData.acceptanceCriteria}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          <CFormInput
+          <CFormSelect
             className="mb-3"
             type="text"
             label="Units of Measurement"
             name="unitsOfMeasurement"
             value={formData.unitsOfMeasurement}
             onChange={(e) => handleChange(e, setFormData, formData)}
-          />
+          >
+            <option value="">Select Unit</option>
+            <option value="gm">gm</option>
+            <option value="ml">ml</option>
+          </CFormSelect>
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -470,8 +488,8 @@ const SpecificationSpec = () => {
             value={formData.samplingPlan}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-       
-       <CFormInput
+
+          <CFormInput
             className="mb-3"
             type="text"
             label="Test Method Validation"
@@ -479,8 +497,7 @@ const SpecificationSpec = () => {
             value={formData.testmethodValidation}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-       
-          
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -489,8 +506,7 @@ const SpecificationSpec = () => {
             value={formData.referenceStandards}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          
-       
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -507,28 +523,25 @@ const SpecificationSpec = () => {
             value={formData.stabilityCriteria}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-       
-       
-       
+
           <CFormInput
             className="mb-3"
-            type="file"
+            type="text"
             label="Re Testing Interval"
             name="reTestingInterval"
             value={formData.reTestingInterval}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          
+
           <CFormInput
             className="mb-3"
-            type="file"
+            type="tesxt"
             label="Regulatory Requirements"
             name="regulatoryrequirements"
             value={formData.regulatoryrequirements}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          
-           
+
           <CFormInput
             className="mb-3"
             type="file"
@@ -537,17 +550,16 @@ const SpecificationSpec = () => {
             value={formData.certification}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-             
-             <CFormInput
+
+          <CFormInput
             className="mb-3"
-            type="file"
+            type="text"
             label="Deviation Handling"
             name="deviationHandling"
             value={formData.deviationHandling}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          
-             
+
           <CFormInput
             className="mb-3"
             type="file"
@@ -556,8 +568,7 @@ const SpecificationSpec = () => {
             value={formData.auditTrail}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          
-             
+
           <CFormInput
             className="mb-3"
             type="file"
@@ -566,18 +577,17 @@ const SpecificationSpec = () => {
             value={formData.documentReference}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-             
-             <CFormInput
+
+          <CFormInput
             className="mb-3"
-            type="file"
+            type="text"
             label="Revision History"
             name="revisionHistory"
             value={formData.revisionHistory}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-       
-          
-       <CFormInput
+
+          <CFormInput
             className="mb-3"
             type="file"
             label="Attachments"
@@ -585,34 +595,32 @@ const SpecificationSpec = () => {
             value={formData.attachments}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-             
-             <CFormInput
+
+          <CFormTextarea
             className="mb-3"
-            type="file"
+            type="text"
             label="Comments/Remarks"
             name="commentsremarks"
             value={formData.commentsremarks}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-              <CFormInput
+          <CFormInput
             className="mb-3"
-            type="file"
+            type="text"
             label="Specificaion Review Frequency"
             name="specificationreviewfrequency"
             value={formData.specificationreviewfrequency}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-     
-         <CFormInput
+
+          <CFormInput
             className="mb-3"
-            type="file"
+            type="dates"
             label="Specification Expiry"
             name="specificatioexpiry"
             value={formData.specificatioexpiry}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          
-       
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
@@ -632,7 +640,6 @@ const SpecificationSpec = () => {
     );
   }, [data]);
 
-  
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -648,7 +655,6 @@ const SpecificationSpec = () => {
     };
 
     const handleSave = () => {
-   
       onSave(formData);
     };
 
@@ -713,14 +719,10 @@ const SpecificationSpec = () => {
     );
   };
 
-  
- 
-  
   return (
     <>
       <LaunchQMS />
       <div>
-       
         <div className="m-5 mt-3 ">
           <div className="main-head">
             <h4 className="fw-bold ">Specification</h4>
@@ -739,7 +741,8 @@ const SpecificationSpec = () => {
               />
             </div>
             <div className="float-right flex gap-4">
-              <PDFDownload              columns={"'columns'"}
+              <PDFDownload
+                columns={"'columns'"}
                 data={"filteredData"}
                 title="Storage Location"
                 fileName="Storage_Location.pdf"
@@ -787,8 +790,8 @@ const SpecificationSpec = () => {
               </th>
             </tr>
             <tr className="">
-            <td className="bg-gray-800 text-white border  px-4 py-2">
-                   S No.
+              <td className="bg-gray-800 text-white border  px-4 py-2">
+                S No.
               </td>
               <td className="bg-gray-800 text-white border  px-4 py-2">
                 Specification ID
@@ -799,14 +802,18 @@ const SpecificationSpec = () => {
               <td className="bg-gray-800 text-white border  px-4 py-2">
                 Version Number
               </td>
-              <td className="bg-gray-800 text-white border  px-4 py-2">Attachment</td>
+              <td className="bg-gray-800 text-white border  px-4 py-2">
+                Attachment
+              </td>
               <td className="bg-gray-800 text-white border  px-4 py-2">
                 Effective Date
               </td>
               <td className="bg-gray-800 text-white  border px-4 py-2">
                 Creation Date
               </td>
-              <td className="bg-gray-800 text-white border  px-4 py-2">Approved By</td>
+              <td className="bg-gray-800 text-white border  px-4 py-2">
+                Approved By
+              </td>
               <td className="bg-gray-800 text-white border  px-4 py-2">
                 Product Name
               </td>
@@ -974,23 +981,23 @@ const SpecificationSpec = () => {
                 <td className="border px-4 py-2">{data.reviewFrequency}</td>
                 <td className="border px-4 py-2">{data.expiryDate}</td>
                 <td className="border px-4 py-2">
-                <>
-          <FontAwesomeIcon
-           icon={faEye}
-            className="mr-2 cursor-pointer" 
-            onClick={() => onViewDetails(data)} 
-            />
-          <FontAwesomeIcon
-           icon={faPenToSquare} 
-           className="mr-2 cursor-pointer" 
-           onClick={() => openEditModal(data)}
-            />
-          <FontAwesomeIcon 
-          icon={faTrashCan}
-           className="cursor-pointer" 
-           onClick={() => onDeleteItem(data.specId)} 
-           />
-                </>
+                  <>
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => onViewDetails(data)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => openEditModal(data)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className="cursor-pointer"
+                      onClick={() => onDeleteItem(data.specId)}
+                    />
+                  </>
                 </td>
               </tr>
             ))}
@@ -998,40 +1005,33 @@ const SpecificationSpec = () => {
         </table>
       </div>
 
-      {
-        viewdata &&(
-          <SpecificationviewModel
-           visible={viewdata !== null}
-           closeModal={closeViewModal}
-           data={viewdata}
-           fields={fields}
-           title="Specification Details"
-           updateStatus={handleStatusUpdate}
-          
-          />
-        )
-      }
-      
-      {
-        editModalOpen && (
-          <EditModal
-            visible={editModalOpen}
-            closeModal={closeEditModal}
-            data={editModalData}
-            onSave={handleEditSave}
-          />
-        )
-      }
-      {
-        isModalOpen && (
-         <AddSPCModal
+      {viewdata && (
+        <SpecificationviewModel
+          visible={viewdata !== null}
+          closeModal={closeViewModal}
+          data={viewdata}
+          fields={fields}
+          title="Specification Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
+      {isModalOpen && (
+        <AddSPCModal
           visible={isModalOpen}
           closeModal={closeAddModal}
-          onAdd ={handleAddSPC}
-         />
-        )
-      }
-   
+          onAdd={handleAddSPC}
+        />
+      )}
+
       {/* <SpecificationSpecModal 
        visible={isModalOpen}
        closeModal={closeSpecificationModal}
