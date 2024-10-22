@@ -49,7 +49,7 @@ const StabilityWorkFlow = () => {
 
   const openWorkflowModal = () => {
     setShowModal(true);
-    navigate("/sampleWorkflowModal");
+    navigate("/stabilityWorkflowModal");
   };
 
   const closeWorkflowModal = () => {
