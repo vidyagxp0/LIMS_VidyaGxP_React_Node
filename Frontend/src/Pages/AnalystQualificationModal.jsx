@@ -49,7 +49,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     certificationNameNumber: "",
     certificationBody: "",
     certificationDate: "",
-    nextRecertificationDate: "",
+    nextReCertificationDate: "",
     competencyTestName: "",
     testDate: "",
     testResults: "",
@@ -59,22 +59,22 @@ const AnalystQualificationModal = ({ onClose }) => {
     techniqueSkillName: "",
     qualificationDate: "",
     skillLevel: "",
-    requalificationRequired: "",
-    requalificationDueDate: "",
-    instrumentNameID: "",
-    methodNameID: "",
+    reQualificationRequired: "",
+    reQualificationDueDate: "",
+    instrumentNameId: "",
+    methodNameId: "",
     qualificationLevel: "",
     methodValidationDate: "",
-    sOPNameID: "",
-    sOPVersion: "",
+    sopNameId: "",
+    sopVersion: "",
     dateAcknowledgedReviewed: "",
     yearsOfExperience: "",
     previousJobRoles: "",
     previousLabsWorkedIn: "",
     specializations: "",
     approvalDate: "",
-    approversName: "",
-    approversSignature: "",
+    approverName: "",
+    approverSignature: "",
     commentsNotes: "",
     modificationDate: "",
     modifiedBy: "",
@@ -177,11 +177,11 @@ const AnalystQualificationModal = ({ onClose }) => {
         );
         console.log(response, "iddddddddddddddddddddddd");
         if (response.status === 200) {
-          toast.success("Sample Workflow added successfully.");
+          toast.success("Data added successfully.");
           setIsModalOpen(false);
           navigate("/analyst-qualification");
         } else {
-          toast.error("Failed to add Sample Workflow.");
+          toast.error("Failed to add Data.");
         }
       } catch (error) {
         toast.error(
@@ -420,9 +420,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
-                  name="nextRecertificationDate"
+                  name="nextReCertificationDate"
                   label="Next Recertification Date"
-                  value={formData?.nextRecertificationDate || ""}
+                  value={formData?.nextReCertificationDate || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -525,9 +525,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="requalificationRequired"
+                  name="reQualificationRequired"
                   label="Requalification Required?"
-                  value={formData?.requalificationRequired || ""}
+                  value={formData?.reQualificationRequired || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -537,18 +537,18 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
-                  name="requalificationDueDate"
+                  name="reQualificationDueDate"
                   label="Requalification Due Date"
-                  value={formData?.requalificationDueDate || ""}
+                  value={formData?.reQualificationDueDate || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="instrumentNameID"
+                  name="instrumentNameId"
                   label="Instrument Name/ID"
-                  value={formData?.instrumentNameID || ""}
+                  value={formData?.instrumentNameId || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -558,9 +558,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="methodNameID"
+                  name="methodNameId"
                   label="Method Name/ID"
-                  value={formData?.methodNameID || ""}
+                  value={formData?.methodNameId || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -588,9 +588,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="sOPNameID"
+                  name="sopNameId"
                   label="SOP Name/ID"
-                  value={formData?.sOPNameID || ""}
+                  value={formData?.sopNameId || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -600,9 +600,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="sOPVersion"
+                  name="sopVersion"
                   label="SOP Version"
-                  value={formData?.sOPVersion || ""}
+                  value={formData?.sopVersion || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -672,9 +672,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="approversName"
+                  name="approverName"
                   label="Approver's Name"
-                  value={formData?.approversName || ""}
+                  value={formData?.approverName || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -684,9 +684,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="approversSignature"
+                  name="approverSignature"
                   label="Approver's Signature"
-                  value={formData?.approversSignature || ""}
+                  value={formData?.approverSignature || ""}
                   onChange={handleInputChange}
                 />
               </CCol>

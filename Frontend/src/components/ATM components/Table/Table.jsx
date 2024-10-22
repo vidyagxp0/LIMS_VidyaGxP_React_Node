@@ -77,17 +77,19 @@ const Table = ({
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-[#6187d4] text-white">
-            <tr>
-              {columns?.map((column) => (
-                <th
-                  key={column.accessor}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
-                >
-                  {column.header}
-                </th>
-              ))}
-            </tr>
+          <tr>
+          {columns?.map((column) => (
+            <th
+              key={column.accessor}
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+              onClick={column.onClick ? column.onClick : undefined} // Attach the onClick if defined
+              style={{ cursor: column.onClick ? 'pointer' : 'default' }} // Change cursor if clickable
+            >
+              {column.header}
+            </th>
+          ))}
+        </tr>
           </thead>
           {currentData?.length === 0 ? (
             <div style={{ textAlign: "center",left:"44%",position:"absolute", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginTop: "5rem", columnGap: "0px", border:"none", color:"gray" }} >
@@ -102,6 +104,17 @@ const Table = ({
                   <td
                     key={column.accessor}
                     className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    
+                    onClick={
+                      column.accessor === "analystId" // Replace with actual accessor name for Analyst ID column
+                        ? () => handleAnalystIdClick(row) // Call this function when the Analyst ID column is clicked
+                        : undefined
+                    }
+                    style={
+                      column.accessor === "analystId"
+                        ? { cursor: 'pointer' } // Optionally, change cursor to pointer for better UX
+                        : {}
+                    }
                   >
                     {column.accessor === "checkbox" ? (
                       <input
