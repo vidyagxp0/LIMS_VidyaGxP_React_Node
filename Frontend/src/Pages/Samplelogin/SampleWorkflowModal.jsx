@@ -639,7 +639,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
                   onClick={toggleDropdown} // Toggle dropdown on input click
                 >
-                  {formData.requiredInstrument &&
+                  {Array.isArray(formData.requiredInstrument) &&
                   formData.requiredInstrument.length > 0 ? (
                     formData.requiredInstrument.map((instrument, index) => (
                       <span
