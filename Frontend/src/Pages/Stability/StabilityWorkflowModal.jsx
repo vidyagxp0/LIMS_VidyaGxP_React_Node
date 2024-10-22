@@ -134,6 +134,39 @@ const StabilityWorkflowModal = ({ onClose }) => {
     initiator: "",
   });
 
+  const [idForBarcode, setIdForBarcode] = useState(null);
+  console.log(idForBarcode);
+  const barcodeRef = useRef(null);
+
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 20);
+    }
+    return randomNumbers;
+  };
+
+  const fetchId = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-sample/sample`);
+      const responseData = Array.isArray(response.data)
+        ? response.data
+        : response.data.data;
+
+      const randomNumbers = generateRandomNumbers(16);
+      const idWithRandomNumbers = `${responseData[0]?.id}${randomNumbers}`;
+
+      setIdForBarcode(idWithRandomNumbers);
+    } catch (error) {
+      console.error("Error fetching barcode ID: ", error);
+      toast.error("Failed to fetch barcode ID");
+    }
+  };
+
+  useEffect(() => {
+    fetchId();
+  }, []);
+
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
@@ -440,7 +473,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={""}
+                  value={idForBarcode}
                   disabled
                 />
                 <div>
