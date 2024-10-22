@@ -14,17 +14,17 @@ import InstrumentMasterModal from "../Modals/InstrumentMasterModal.jsx";
 
 import ImportModal from "../Modals/importModal";
 import {
-CButton,
-CCol,
-CFormCheck,
-CFormInput,           
-CFormSelect,
-CModal,
-CModalBody,
-CModalFooter,
-CModalHeader,
-CModalTitle,
-CRow,
+  CButton,
+  CCol,
+  CFormCheck,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CRow,
 } from "@coreui/react";
 import { Button } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa6";
@@ -36,8 +36,6 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 
-
-
 const Registration = () => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,16 +44,10 @@ const Registration = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-    Active: 0,
-    Inactive: 0,
+    calibrated: 0,
+    nonCalibrated: 0,
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
-
 
   useEffect(() => {
     fetchProductData();
@@ -79,6 +71,9 @@ const Registration = () => {
               Model: condition.Model || "-",
               MenuNo: condition.MenuNo || "-",
               InstalledAt: condition.InstalledAt || "-",
+              calibrationDate: condition.calibrationDate || "-",
+              calibrationDueOn: condition.calibrationDueOn || "-",
+              calibrationStatus: condition.calibrationStatus || "calibrated",
               ExpiryOn: condition.ExpiryOn || "-",
               status: condition.status || "Active",
             })) || []
@@ -120,7 +115,7 @@ const Registration = () => {
         );
         toast.success("Product updated successfully.");
         setEditModalData(null);
-        closeModal()
+        closeModal();
       } else {
         toast.error("Failed to update Product.");
       }
@@ -308,6 +303,24 @@ const Registration = () => {
             onChange={handleChange}
           />
           <CFormInput
+            className="mb-3"
+            type="text"
+            label="Calibration Date"
+            placeholder="Calibration Date"
+            name="calibrationDate"
+            value={formData?.calibrationDate || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Calibration Due On"
+            placeholder="Calibration Due On"
+            name="calibrationDueOn"
+            value={formData?.calibrationDueOn || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
             type="date"
             label="Installed On"
             placeholder=" "
@@ -404,18 +417,14 @@ const Registration = () => {
 
   useEffect(() => {
     const counts = {
-      DROPPED: 0,
-      INITIATED: 0,
-      REINITIATED: 0,
-      APPROVED: 0,
-      REJECTED: 0,
-      Active: 0,
-      Inactive: 0,
+      calibrated: 0,
+      nonCalibrated: 0,
     };
 
     data.forEach((item) => {
-      if (item.CalibrationStatus === "Active") counts.Active++;
-      else if (item.CalibrationStatus === "Inactive") counts.Inactive++;
+      if (item.calibrationStatus === "calibrated") counts.calibrated++;
+      else if (item.calibrationStatus === "nonCalibrated")
+        counts.nonCalibrated++;
     });
 
     setCardCounts(counts);
@@ -443,16 +452,16 @@ const Registration = () => {
       })
     : [];
 
-    const onViewDetails = (rowData) => {
-      if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-        setIsViewModalOpen(false);
-        setViewModalData(null);
-      } else {
-        setViewModalData(rowData);
-        setIsViewModalOpen(true);
-      }
-    };
-  
+  const onViewDetails = (rowData) => {
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
+  };
+
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -468,13 +477,15 @@ const Registration = () => {
     { header: "Installed At", accessor: "InstalledAt" },
     { header: "Expiry On", accessor: "ExpiryOn" },
     { header: "Status", accessor: "status" },
+    { header: "Calibration Date", accessor: "calibrationDate" },
+    { header: "Calibration Due On", accessor: "calibrationDueOn" },
     {
       header: "Calibration Status",
-      accessor: "CalibrationStatus",
+      accessor: "calibrationStatus",
       Cell: ({ value }) => (
         <span
           style={{
-            backgroundColor: value === "Active" ? "green" : "red",
+            backgroundColor: value === "calibrated" ? "green" : "orange",
             color: "white",
             padding: "0.25em 0.5em",
             borderRadius: "4px",
@@ -521,9 +532,11 @@ const Registration = () => {
     { label: "Model", key: "Model" },
     { label: "MenuNo", key: "MenuNo" },
     { label: "InstalledAt", key: "InstalledAt" },
+    { label: "calibrationDueOn", key: "calibrationDueOn" },
+    { label: "calibrationStatus", key: "calibrationStatus" },
+    { label: "calibrationDate", key: "calibrationDate" },
     { label: "ExpiryOn", key: "ExpiryOn" },
     { label: "status", key: "status" },
-    { label: "CalibrationStatus", key: "CalibrationStatus" },
   ];
 
   const handleStatusUpdate = (testPlan, newStatus) => {
@@ -543,9 +556,11 @@ const Registration = () => {
       Model: item["Model"] || "",
       MenuNo: item["Manu No."] || "",
       InstalledAt: item["Installed At"] || "",
+      calibrationStatus: item["Calibration Status"] || "",
+      calibrationDueOn: item["Calibration Due Date"] || "",
+      calibrationDate: item["Calibration Date"] || "",
       ExpiryOn: item["Expiry On"] || "",
       status: item["Status"] || "",
-      CalibrationStatus: item["Calibration Status"] || "",
     }));
 
     const concatenatedData = [...updatedData];
@@ -567,12 +582,13 @@ const Registration = () => {
         Model: newInstrument.Model,
         MenuNo: newInstrument.manufacturerSerialNo,
         InstalledAt: newInstrument.InstalledAt,
+        calibrationStatus: newInstrument.calibrationStatus,
+        calibrationDueOn: newInstrument.calibrationDueOn,
+        calibrationDate: newInstrument.calibrationDate,
         ExpiryOn: newInstrument.warrantyExpiresOn,
         status: "INITIATED",
-        CalibrationStatus: "Active",
       },
     ];
-
 
     setData(updatedData);
   };
@@ -587,7 +603,7 @@ const Registration = () => {
   };
 
   const closeViewModal = () => {
-    setIsViewModalOpen(false); 
+    setIsViewModalOpen(false);
   };
 
   const handleDelete = async (item) => {
@@ -603,7 +619,8 @@ const Registration = () => {
       }
     } catch (error) {
       toast.error(
-        "Error deleting Registration: " + (error.response?.data || error.message)
+        "Error deleting Registration: " +
+          (error.response?.data || error.message)
       );
     }
   };
@@ -625,92 +642,100 @@ const Registration = () => {
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Instrument Registration</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Instrument Registration</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            {/* <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "calibrated", label: "Calibrated" },
+                { value: "nonCalibrated", label: "Non Calibrated" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+              className={`${
+                statusFilter === "calibrated"
+                  ? "bg-green-500"
+                  : statusFilter === "nonCalibrated"
+                  ? "bg-orange-500"
+                  : "bg-white"
+              } text-white p-2 rounded`}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Instrument_Master.pdf"
+              title="Instrument Master Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Instrument Registration"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-          <PDFDownload
-            columns={columns}
-            data={filteredData}
-            fileName="Instrument_Master.pdf"
-            title="Instrument Master Data"
-          />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Instrument Registration"
-            color="blue"
-            onClick={openModal}
-          />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={data}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <InstrumentMasterModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-
-      {isModalsOpen && (
-        <ImportModal
-          initialData={initialData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={data}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-      {viewModalData && (
-        <ReusableModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-          fields={fields}
-          title="InstrumentMasterReg."
-          updateStatus={handleStatusUpdate}
+        <InstrumentMasterModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
         />
-      )}
-     {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-    </div></>
+
+        {isModalsOpen && (
+          <ImportModal
+            initialData={initialData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {viewModalData && (
+          <ReusableModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            title="InstrumentMasterReg."
+            updateStatus={handleStatusUpdate}
+          />
+        )}
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

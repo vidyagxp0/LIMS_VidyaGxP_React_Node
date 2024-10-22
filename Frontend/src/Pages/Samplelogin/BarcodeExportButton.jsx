@@ -1,12 +1,47 @@
-import React, { useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import Barcode from "react-barcode";
 import { FaDownload } from "react-icons/fa6";
+import { toast } from "react-toastify";
+import { BASE_URL } from "../../config.json";
+import SampleWorkFlow from "./SampleWorkflow";
 
 const BarcodeExportButton = () => {
+  const [idForBarcode, setIdForBarcode] = useState(null);
+  console.log(idForBarcode);
   const barcodeRef = useRef(null);
 
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 20);
+    }
+    return randomNumbers;
+  };
+
+  const fetchId = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-sample/sample`);
+      const responseData = Array.isArray(response.data)
+        ? response.data
+        : response.data.data;
+
+      const randomNumbers = generateRandomNumbers(16);
+      const idWithRandomNumbers = `${responseData[0]?.id}${randomNumbers}`;
+
+      setIdForBarcode(idWithRandomNumbers);
+    } catch (error) {
+      console.error("Error fetching barcode ID: ", error);
+      toast.error("Failed to fetch barcode ID");
+    }
+  };
+
+  useEffect(() => {
+    fetchId();
+  }, []);
+
   const downloadBarcode = () => {
-    const svg = barcodeRef.current.querySelector("svg"); // Get the barcode as an SVG
+    const svg = barcodeRef.current.querySelector("svg");
     const svgData = new XMLSerializer().serializeToString(svg);
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -17,16 +52,14 @@ const BarcodeExportButton = () => {
     const url = URL.createObjectURL(svgBlob);
 
     img.onload = () => {
-      // Set canvas dimensions based on image size
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      // Create a link and trigger download
       const pngFile = canvas.toDataURL("image/png");
       const downloadLink = document.createElement("a");
       downloadLink.href = pngFile;
-      downloadLink.download = "barcode.png"; // File name for download
+      downloadLink.download = "barcode.png";
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -37,9 +70,11 @@ const BarcodeExportButton = () => {
 
   return (
     <div className="flex items-center justify-between">
-      <div ref={barcodeRef}>
-        <Barcode displayValue={false} value={"sdfghlkjhkjhg"} />
-      </div>
+      {idForBarcode && (
+        <div ref={barcodeRef}>
+          <Barcode displayValue={true} value={idForBarcode} />{" "}
+        </div>
+      )}
       <button
         className="text-center bg-slate-500 ml-10 p-2 text-white"
         onClick={downloadBarcode}

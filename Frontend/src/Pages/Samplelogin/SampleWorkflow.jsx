@@ -31,7 +31,7 @@ import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
 import Barcode from "react-barcode"; // Import Barcode component
 import BarcodeExportButton from "./BarcodeExportButton";
-const SampleWorkFlow = () => {
+const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -44,6 +44,14 @@ const SampleWorkFlow = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState({});
   const [selectedSampleId, setSelectedSamppleId] = useState(null);
+  const [samples, setSamples] = useState([]);
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 20);
+    }
+    return randomNumbers;
+  };
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -57,7 +65,7 @@ const SampleWorkFlow = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      console.log(response, "Sample Data for Pdf");
+      console.log(response, "5656565656565656");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -104,9 +112,10 @@ const SampleWorkFlow = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}`
+        `http://localhost:9000/generate-report/${sampleId}/sample`
       );
-      console.log("Response Status:", response.status);
+      console.log("Response", response);
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -476,8 +485,23 @@ const SampleWorkFlow = () => {
     "QaReviewerApprover",
     "QaReviewerComment",
     "QaReviewDate",
+    // "copyRow",
   ];
 
+  const handleCopyRow = (rowData) => {
+    // Concatenate all the row data into a single string
+    const rowText = Object.values(rowData).join("\t");
+
+    // Copy the row data to the clipboard
+    navigator.clipboard
+      .writeText(rowText)
+      .then(() => {
+        alert("Row data copied to clipboard!");
+      })
+      .catch((error) => {
+        console.error("Error copying text to clipboard: ", error);
+      });
+  };
   // const [loading, setLoading] = useState(false);
 
   // const handleRowClick = async (id) => {
@@ -506,6 +530,13 @@ const SampleWorkFlow = () => {
   return (
     <div className="m-5 mt-3">
       <LaunchQMS />
+      {/* <div>
+      <h3>Instrument Details</h3>
+      <p><strong>Instrument ID:</strong> {instrumentData?.InstrumentId}</p>
+      <p><strong>Category:</strong> {instrumentData?.Category}</p>
+      <p><strong>Make:</strong> {instrumentData?.Made}</p>
+      <p><strong>Model:</strong> {instrumentData?.Model}</p>
+    </div> */}
 
       <div className="">
         <div className="main-head">
@@ -556,25 +587,25 @@ const SampleWorkFlow = () => {
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
-            <th colSpan="25" className="px-4 py-2 bg-yellow-600">
-              Sample Planning Information
+            <th colSpan="30" className="px-4 py-2 bg-yellow-600">
+              Sample Registration
             </th>
-            <th colSpan="20" className="px-4 py-2 bg-green-600">
-              Testing Requirements
+            <th colSpan="31" className="px-4 py-2 bg-green-600">
+              Sample Analysis
             </th>
-            <th colSpan="9" className="px-4 py-2 bg-brown-600">
-              Personnel and Roles
+            <th colSpan="4" className="px-4 py-2 bg-brown-600">
+              Supervisor Review
             </th>
-            <th colSpan="6" className="px-4 py-2 bg-violet-600">
-              Schedule and Timeline
+            <th colSpan="10" className="px-4 py-2 bg-violet-600">
+              Stability Information
             </th>
-            <th colSpan="5" className="px-4 py-2 bg-red-600">
-              Logistics and Sample Handling
+            <th colSpan="4" className="px-4 py-2 bg-red-600">
+              QA Review
             </th>
             <th colSpan="5" className="px-4 py-2 bg-blue-600">
-              Quality and Compliance
+              Actions
             </th>
-            <th colSpan="4" className="px-4 py-2 bg-orange-600">
+            {/* <th colSpan="4" className="px-4 py-2 bg-orange-600">
               Resource Allocation
             </th>
             <th colSpan="4" className="px-4 py-2 bg-green-300">
@@ -582,7 +613,7 @@ const SampleWorkFlow = () => {
             </th>
             <th colSpan="16" className="px-4 py-2 bg-violet-500">
               Miscellaneous
-            </th>
+            </th> */}
           </tr>
           <tr className="bg-slate-600 text-white">
             <td className="border px-4 py-2">S.No</td>
@@ -674,6 +705,7 @@ const SampleWorkFlow = () => {
             <td className="border px-4 py-2">Status </td>
             <td className="border px-4 py-2">Sample Barcode</td>
             <td className="border px-4 py-2">Generate PDF </td>
+            <td className="border px-4 py-2">Copy Row </td>
             <td className="border px-4 py-2">Actions</td>
           </tr>
         </thead>
@@ -681,11 +713,14 @@ const SampleWorkFlow = () => {
           {data?.map((data, index) => (
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
-              <td className="border cursor-pointer  px-4 py-2">
-                {index + 1}
-              </td>
-              <Link to={`/sampleWorkflowEdit/${data.id}`} className="contents">
-                <td className="hover:bg-gray-200 border px-4 py-2">{data.samplePlanId}</td>
+              <td className="border cursor-pointer  px-4 ">{index + 1}</td>
+              <Link
+                to={`/sampleWorkflowEdit/${data.id}`}
+                className="contents mt-3"
+              >
+                <td className="hover:bg-gray-200 border px-4">
+                  {data.samplePlanId}
+                </td>
               </Link>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
@@ -700,10 +735,34 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.market}</td>
               <td className="border px-4 py-2">{data.specificationId}</td>
               <td className="border px-4 py-2">
-                {data.specificationAttachment}
+                {data.specificationAttachment ? (
+                  <a
+                    href={data.specificationAttachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
               </td>
               <td className="border px-4 py-2">{data.stpId}</td>
-              <td className="border px-4 py-2">{data.stpAttachment}</td>
+              <td className="border px-4 py-2">
+                {data.stpAttachment ? (
+                  <a
+                    href={data.stpAttachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
+              </td>
               <td className="border px-4 py-2">{data.testPlanId}</td>
               <td className="border px-4 py-2">{data.testName}</td>
               <td className="border px-4 py-2">{data.testMethod}</td>
@@ -755,7 +814,20 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2 text-wrap">
                 {data.commentNotes}
               </td>{" "}
-              <td className="border px-4 py-2">{data.attachment}</td>
+              <td className="border px-4 py-2">
+                {data.attachment ? (
+                  <a
+                    href={data.attachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    View File
+                  </a>
+                ) : (
+                  "No Attachment"
+                )}
+              </td>
               <td className="border px-4 py-2">{data.samplingFrequency}</td>
               <td className="border px-4 py-2">{data.sampleDisposition}</td>
               <td className="border px-4 py-2">
@@ -786,20 +858,30 @@ const SampleWorkFlow = () => {
               <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
               <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-              <td claossName="border px-4 py-2">{data.status}</td>{" "}
+              <td className="border px-4 py-2 ml-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
-                {data?.sampleBarCode && (
-                  <BarcodeExportButton barcodeValue={data.sampleBarCode} />
-                )}
+                <BarcodeExportButton />
               </td>
-              <td className="flex justify-center items-center px-4 py-2">
-                <FaFilePdf
-                  className="w-9 h-9 text-black cursor-pointer mt-16 transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
-                  onClick={() => generatePDF(data.sampleId)} // Click event handler
-                />
-                {loading[data.sampleId] && (
-                  <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
-                )}
+              <td className="border px-4 py-2">
+                {data.generatePDF}
+                <td className="flex justify-center items-center px-4 py-2">
+                  <FaFilePdf
+                    size={20}
+                    className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                    onClick={() => generatePDF(data.id)}
+                  />
+                  {loading[data.id] && (
+                    <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                  )}
+                </td>
+              </td>{" "}
+              <td className="border px-4 py-2">
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
+                  onClick={() => handleCopyRow(data)}
+                >
+                  Copy Row
+                </button>
               </td>
               <td className="border px-4 py-2 font-medium">
                 <div className="flex gap-2 font-medium">

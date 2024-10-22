@@ -7,7 +7,7 @@ import {
   CFormSelect,
 } from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -28,37 +28,48 @@ function Login(props) {
   };
 
   const handleLogin = async () => {
-    if (email === "" || passwd === "") {
-      toast.warning("Enter required credentials");
+    if (!email.trim()) {
+      toast.warning("Email is required");
+      return;
+    }
+    if (!passwd.trim()) {
+      toast.warning("Password is required");
       return;
     }
 
     try {
-      const apiUrl = userRole === "admin"
-        ? "http://localhost:9000/admin/admin-login"
-        : "http://localhost:9000/admin/user-login";
+      const response = await axios.post(
+        "http://localhost:9000/admin/user-login",
+        {
+          email,
+          password: passwd,
+        }
+      );
 
-      const response = await axios.post(apiUrl, {
-        email,
-        password: passwd,
-        role: userRole,
-      });
+      const { token, data } = response.data;
 
-      const { token, data } = response.data; // Extract token and user data
-      localStorage.setItem("token", token);
-      if (data) {
-        console.log("User details:", data.name); // Logging user details
-        localStorage.setItem("user", JSON.stringify(data.name)); // Store user details if needed
+      if (token) {
+        localStorage.setItem("token", token);
       }
-      
-      
-      localStorage.setItem("token", token);
-      toast.success("Login successfully");
+      if (data && data.name) {
+        localStorage.setItem("user", JSON.stringify(data.name));
+        console.log("User details:", data.name);
+      }
+
+      toast.success("Login successful");
+
       setTimeout(() => {
         navigate("/dashboard");
       }, 1000);
     } catch (error) {
-      toast.error("Invalid Credentials");
+      if (error.response && error.response.status === 401) {
+        toast.error("Invalid credentials. Please try again.");
+      } else if (error.response && error.response.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error("Network error. Please check your connection.");
+      }
+      console.error("Login error:", error);
     }
   };
 
@@ -96,29 +107,11 @@ function Login(props) {
               <div className="flex justify-center items-center mb-6">
                 <img src="login.png" width={"200px"} className="md:w-300px" />
               </div>
-              <h2 className="text-xl md:text-3xl md:text-white font-bold text-center ">
+              <h2 className="text-xl md:text-3xl md:text-white font-bold text-center mb-2">
                 Welcome To Laboratory Information Management System.
               </h2>
             </div>
             <CForm>
-              <div className="relative my-4 md:text-black outline-none mr-2">
-                <CFormSelect
-                  value={userRole}
-                  onChange={(e) => setUserRole(e.target.value)}
-                  onClick={handleToggle}
-                  className="p-3 rounded-full w-full bg-white border border-gray-400 outline-none appearance-none"
-                  style={{ paddingRight: "3rem" }}
-                >
-                  <option value="admin">Admin</option>
-                  <option value="supervisor">Supervisor</option>
-                  <option value="labTechnician">Lab Technician</option>
-                  <option value="allRoles">All Roles</option>
-                </CFormSelect>
-
-                <span className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none bg-white text-zinc-500">
-                  {isOpen ? <FaChevronUp /> : <FaChevronDown />}
-                </span>
-              </div>
               <div className="mb-4 md:text-white ">
                 <CFormInput
                   type="text"
@@ -159,20 +152,10 @@ function Login(props) {
                   LOGIN
                 </CButton>
               </div>
-              <div className="text-lg text-white text-center">
-                If you don't have an account?
-                <Link
-                  className="text-blue-600 hover:text-blue-800 underline font-medium"
-                  to="/signup"
-                >
-                  Signup
-                </Link>
-              </div>
             </CForm>
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 }

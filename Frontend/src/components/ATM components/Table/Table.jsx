@@ -15,7 +15,7 @@ const Table = ({
   onDelete,
   openEditModal,
 }) => {
-  const pageSize = 5;
+  const pageSize = 7;
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -40,6 +40,10 @@ const Table = ({
         return "bg-yellow-500 text-white  p-1 ";
       case "APPROVED":
         return "bg-green-500 text-white  p-1 ";
+        case "calibrated":
+          return "bg-green-500 text-white  p-1 ";
+          case "nonCalibrated":
+            return "bg-orange-500 text-white  p-1 ";
       default:
         return "";
     }
@@ -86,7 +90,7 @@ const Table = ({
             </tr>
           </thead>
           {currentData?.length === 0 ? (
-            <div style={{ textAlign: "center", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginBottom: "1rem", columnGap: "0px", border: "0px !important", color:"gray" }} >
+            <div style={{ textAlign: "center",left:"44%",position:"absolute", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginTop: "5rem", columnGap: "0px", border:"none", color:"gray" }} >
               No Data Available!
             </div>
           ) : (

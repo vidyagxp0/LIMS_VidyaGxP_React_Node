@@ -20,20 +20,10 @@ Role.addHook("afterSync", async () => {
       await Role.bulkCreate([
         { role: "Admin" },
         { role: "Initiator" },
-        { role: "Reviewer" },
-        { role: "Approver" },
-        { role: "Viewonly" },
+        { role: "Lab Technician" },
+        { role: "Supervisor" },
+        { role: "QA" },
         { role: "Fullpermission" },
-        { role: "QA Reviewer" },
-        { role: "QA Approver" },
-        { role: "QC Reviewer" },
-        { role: "QC Approver" },
-        { role: "CQA Reviewer" },
-        { role: "CQA Approver" },
-        { role: "CFT" },
-        { role: "Investigator" },
-        { role: "RA Reviewer" },
-        { role: "RA Approver" },
       ]);
       console.log("Roles created");
     } else {

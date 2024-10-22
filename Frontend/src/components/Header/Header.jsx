@@ -47,7 +47,7 @@ function Header({ toggleSidebarClass }) {
   return (
     <header
       id="head"
-      className=" text-gray-900 w-[100%] text-[16px] gap-10 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[86px] flex items-center  justify-center "
+      className=" text-gray-900 w-[100%] text-[16px] gap-10 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[86px] flex items-baseline  justify-center "
     >
       <div className="menuIconContainer  w-[10%] text-center text-blue font-extrabold text-xl  rounded-full">
         <button className="hidden xm:block" onClick={toggleSidebarClass}>
@@ -61,14 +61,14 @@ function Header({ toggleSidebarClass }) {
         </p>
       </div>
 
-      <div className="flex items-center    w-[20%]">
+      <div className="flex items-center w-[20%]">
         <div className="relative  mr-3">
           <button
             onClick={() => setNotification(!notification)}
             className="text-gray-100 hover:text-gray-300"
           >
             <FontAwesomeIcon icon={faBell} className="text-xl mr-4" />
-            <span className="absolute top-0 right-0 inline-flex mr-4 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+            <span className="absolute top-0 right-0 inline-flex mr-4 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full text-center">
               12
             </span>
           </button>
@@ -95,11 +95,11 @@ function Header({ toggleSidebarClass }) {
           </div>
         )}
 
-        <div className="relative mr-2">
+        <div className="relative mr-2 mb-1">
           <div ref={dropdownRef}>
             <button
               onClick={() => setDrop(!drop)}
-              className="text-center text-[0.5em] xsm:text-[0.6em] sm:text-[0.6em] md:text-[0.8em] lg:text-[0.8em] xl:text-[1em] text-white"
+              className="text-center text-[0.5em] xsm:text-[0.6em] sm:text-[0.6em] md:text-[0.8em] lg:text-[0.8em] xl:text-[1em] text-white mr-2"
             >
               <CAvatar
                 color="light"
@@ -109,11 +109,11 @@ function Header({ toggleSidebarClass }) {
               >
                 <img
                   className="rounded-full "
-                  // src="https://cdn-icons-png.freepik.com/512/5003/5003094.png"
+                  src="https://cdn-icons-png.freepik.com/512/5003/5003094.png"
                   alt=""
                 />
               </CAvatar>
-              {user}<FontAwesomeIcon icon={faAngleDown} />
+              <span className="mr-2">{user}</span><FontAwesomeIcon icon={faAngleDown} />
             </button>
 
             {drop && (
@@ -123,47 +123,57 @@ function Header({ toggleSidebarClass }) {
           </div>
 
           {drop && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-              <div className="py-2 px-4 bg-gray-800 text-gray-900 rounded-t-md flex items-center">
-                <img
-                  src="/images/logo.png"
-                  alt="Profile"
-                  className="w-8 h-8 rounded-full mr-2"
-                />
-                <span className="font-bold text-white">{user}</span>
-              </div>
+  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg z-10">
+    {/* Profile Section */}
+    <div className="py-3 px-4 bg-gray-800 text-white rounded-t-lg flex items-center">
+      <img
+        src="/images/logo.png"
+        alt="Profile"
+        className="w-10 h-10 rounded-full mr-3"
+      />
+      <span className="font-semibold">{user}</span>
+    </div>
 
-              <Link
-                to="/AuditTrail"
-                className="block py-2 px-4 hover:bg-gray-100"
-              >
-                <FontAwesomeIcon icon={faAudible} className="mr-2" />
-                Audit Trail
-              </Link>
-              <div
-                onClick={() => {
-                  setContact(!contact);
-                }}
-                className="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
-              >
-                <span className="mr-3">♣</span> About
-              </div>
-              {/* <Link
-                to="/admin-panel/userManagement"
-                className="block py-2 px-4 hover:bg-gray-100"
-              >
-                <span className="mr-3">◘</span> Admin Panel
-              </Link> */}
+    {/* Menu Links */}
+    <Link
+      to="/AuditTrail"
+      className="block py-2 px-4 text-gray-800 hover:bg-gray-100 transition-all duration-200"
+    >
+      <FontAwesomeIcon icon={faAudible} className="mr-2" />
+      Audit Trail
+    </Link>
 
-              <Link to="/" onClick={()=>localStorage.clear()} className="block py-2 px-4 hover:bg-gray-100">
-                <FontAwesomeIcon
-                  icon={faArrowRightFromBracket}
-                  className="mr-2"
-                />
-                Log Out
-              </Link>
-            </div>
-          )}
+    <div
+      onClick={() => {
+        setContact(!contact);
+      }}
+      className="block py-2 px-4 text-gray-800 hover:bg-gray-100 cursor-pointer transition-all duration-200"
+    >
+      <span className="mr-2">♣</span> About
+    </div>
+
+    {/* Admin Panel (Currently commented out) */}
+    {/* <Link
+      to="/admin-panel/userManagement"
+      className="block py-2 px-4 text-gray-800 hover:bg-gray-100 transition-all duration-200"
+    >
+      <span className="mr-2">◘</span> Admin Panel
+    </Link> */}
+
+    {/* Logout Link */}
+    <Link
+      to="/"
+      onClick={() => localStorage.clear()}
+      className="block py-2 px-4 text-gray-800 hover:bg-red-100 hover:text-red-600 transition-all duration-200 rounded-b-lg"
+    >
+      <FontAwesomeIcon
+        icon={faArrowRightFromBracket}
+        className="mr-2"
+      />
+      Log Out
+    </Link>
+  </div>
+)}
         </div>
       </div>
     </header>

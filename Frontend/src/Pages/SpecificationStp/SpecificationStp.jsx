@@ -31,6 +31,62 @@ import ReusableModal from "../Modals/ResusableModal";
 import { toast } from "react-toastify";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { Navigate } from "react-router-dom";
+import ChartContainer from "../../components/ChartContainer/ChartContainer";
+
+const lineChartData = [
+  ["Year", "Sales"],
+  ["2014", 1000],
+  ["2015", 1170],
+  ["2016", 660],
+  ["2017", 1030],
+];
+
+const barChartData = [
+  ["City", "2010 Population", "2000 Population"],
+  ["New York City, NY", 8175000, 8008000],
+  ["Los Angeles, CA", 3792000, 3694000],
+  ["Chicago, IL", 2695000, 2896000],
+];
+
+const pieChartData = [
+  ["Task", "Hours per Day"],
+  ["Work", 11],
+  ["Eat", 2],
+  ["Commute", 2],
+  ["Watch TV", 2],
+  ["Sleep", 7],
+];
+
+const areaChartData = [
+  ["Year", "", ""],
+  ["2014", 1000, 400],
+  ["2015", 1170, 460],
+  ["2016", 660, 1120],
+  ["2017", 1030, 540],
+];
+
+// Options for different charts
+const chartOptions = {
+  title: "My Chart",
+};
+
+const columnChartData = [
+  ["Year", "Sales", "Expenses"],
+  ["2014", 1000, 400],
+  ["2015", 1170, 460],
+  ["2016", 660, 1120],
+  ["2017", 1030, 540],
+];
+
+const scatterChartData = [
+  ["Age", "Weight"],
+  [8, 12],
+  [4, 5.5],
+  [11, 14],
+  [4, 5],
+  [3, 3.5],
+  [6.5, 7],
+];
 
 const fields = [
   { label: "Document Name", key: "documentName" },
@@ -52,44 +108,6 @@ const fields = [
   { label: "CC References", key: "ccReferences" },
 
   { label: "Status", key: "status" },
-];
-
-const initialData = [
-  {
-    sno: 1,
-    documentName: "DMS Demo 12 34",
-    documentType: "BPR",
-    department: "IT",
-    author: "Sunil Patel",
-    dueDate: "29-10-2024",
-    effectiveDate: "07-10-2024",
-    ccReferences: "Obsolete",
-    status: "Inactive",
-  },
-
-  {
-    sno: 2,
-    documentName: "Quality Assurance Process Update",
-    documentType: "SOP",
-    department: "CQC",
-    author: "Admin 1",
-    dueDate: "08-10-2024",
-    effectiveDate: "08-10-2024",
-    ccReferences: "Effective",
-    status: "Active",
-  },
-
-  {
-    sno: 3,
-    documentName: "Testing",
-    documentType: "SOP",
-    department: "CQA",
-    author: "Admin 1",
-    dueDate: "10-10-2024",
-    effectiveDate: "10-10-2024",
-    ccReferences: "Initiate",
-    status: "Active",
-  },
 ];
 
 function SpecificationStp() {
@@ -115,6 +133,54 @@ function SpecificationStp() {
 
   // 	Document Name,	Document Type,	Department,	Author,	Due Date,	Effective Date,	CC, References,	Status
   //  document_name, document_type_id, department_id, reviewers,due_dateDoc, effective_date, reference_record, status
+  const [lineChartData, setLineChartData] = useState([["Department", "Count"]]);
+
+  const [pieChartData, setPieChartData] = useState([["Status", "Count"]]);
+
+  const [areaChartData, setAreaChartData] = useState([
+    ["Year", "Documents Due"],
+  ]);
+
+  const processChartData = (filteredData) => {
+    // Extract Department Data for LineChart
+    const departmentCounts = filteredData.reduce((acc, item) => {
+      acc[item.department_id] = (acc[item.department_id] || 0) + 1;
+      return acc;
+    }, {});
+
+    const departmentChartData = [
+      ["Department", "Count"],
+      ...Object.entries(departmentCounts),
+    ];
+
+    // Extract Status Data for PieChart
+    const statusCounts = filteredData.reduce((acc, item) => {
+      acc[item.status] = (acc[item.status] || 0) + 1;
+      return acc;
+    }, {});
+
+    const statusChartData = [
+      ["Status", "Count"],
+      ...Object.entries(statusCounts),
+    ];
+
+    // Extract Due Date Data for BarChart
+    const dueDateCounts = filteredData.reduce((acc, item) => {
+      const dueDate = new Date(item.due_dateDoc).getFullYear();
+      acc[dueDate] = (acc[dueDate] || 0) + 1;
+      return acc;
+    }, {});
+
+    const dueDateChartData = [
+      ["Year", "Documents Due"],
+      ...Object.entries(dueDateCounts),
+    ];
+
+    // Update the chart data states
+    setLineChartData(departmentChartData);
+    setPieChartData(statusChartData);
+    setAreaChartData(dueDateChartData);
+  };
 
   useEffect(() => {
     openModal();
@@ -128,6 +194,7 @@ function SpecificationStp() {
         "https://dms.mydemosoftware.com/api/document"
       );
       const documents = response.data.body.document;
+      console.log(documents, "<>?<>?<>?<>??><?><?><?><");
 
       if (Array.isArray(documents)) {
         const indicesToRemove = [23, 21, 17, 13, 12, 10, 4];
@@ -138,7 +205,7 @@ function SpecificationStp() {
           }
         });
 
-        const filteredData = documents.map((document, index) => ({
+        const filteredData = documents?.map((document, index) => ({
           sno: index + 1,
           document_name: document.document_name,
           document_type_id: document.document_type_id,
@@ -150,6 +217,8 @@ function SpecificationStp() {
           status: document.status,
         }));
 
+        // Process data for charts
+        processChartData(filteredData);
         setApiData(filteredData);
       } else {
         console.warn("Expected an array, but got:", documents);
@@ -195,7 +264,7 @@ function SpecificationStp() {
   // };
 
   const handleClick = () => {
-    window.location.href = "https://ipc.mydemosoftware.com";
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const closeModal = () => {
@@ -205,23 +274,25 @@ function SpecificationStp() {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = async (item) => {
-    try {
-      const response = await axios.delete(
-        `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
-      );
+  const handleDelete = async () => {
+    window.location.href = "https://dms.mydemosoftware.com";
 
-      if (response.status === 200) {
-        const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
-        setApiData(newData);
-        toast.success(" deleted successfully");
+    // try {
+    //   const response = await axios.delete(
+    //     `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
+    //   );
 
-        console.log("Deleted item:", item);
-      }
-      fetchSpecificationStp();
-    } catch (error) {
-      console.error("Error deleting :", error);
-    }
+    //   if (response.status === 200) { 
+    //     const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
+    //     setApiData(newData);
+    //     toast.success(" deleted successfully");
+
+    //     console.log("Deleted item:", item);
+    //   }
+    //   fetchSpecificationStp();
+    // } catch (error) {
+    //   console.error("Error deleting :", error);
+    // }
   };
 
   const handleDateFromChange = (e) => {
@@ -287,7 +358,7 @@ function SpecificationStp() {
           <FontAwesomeIcon
             icon={faTrashCan}
             className="cursor-pointer"
-            onClick={() => handleDelete(row.original)}
+            onClick={() => handleDelete}
           />
         </>
       ),
@@ -543,8 +614,10 @@ function SpecificationStp() {
     // );
   };
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
+  const openEditModal = () => {
+    // setEditModalData(rowData);
+
+    window.location.href = "https://dms.mydemosoftware.com";
   };
 
   const closeEditModal = () => {
@@ -686,6 +759,7 @@ function SpecificationStp() {
   return (
     <>
       <LaunchQMS />
+
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Specification STP</h4>
@@ -700,9 +774,12 @@ function SpecificationStp() {
               <Dropdown
                 options={[
                   { value: "All", label: "All" },
-                  { value: "REJECTED", label: "Reject" },
-                  { value: "DROPPED", label: "Droped" },
+                  { value: "UnderTraining", label: "Under-Training" },
+                  { value: "InReview", label: "In Review" },
                   { value: "APPROVED", label: "Approved" },
+                  { value: "Draft", label: "Draft" },
+                  { value: "Effective", label: "Effective" },
+                  { value: "InAppoval", label: "In-Approval" },
                 ]}
                 value={statusFilter}
                 onChange={setStatusFilter}
@@ -745,6 +822,75 @@ function SpecificationStp() {
             onClick={handleClick}
             className="ml-auto"
           />
+        </div>
+        <div className="w-full px-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="w-full">
+              <h2 className="text-center text-lg font-semibold mb-2">
+                Department
+              </h2>
+              <ChartContainer
+                chartType="LineChart"
+                data={lineChartData}
+                options={chartOptions}
+              />
+            </div>
+
+            <div className="w-full">
+              <h2 className="text-center text-lg font-semibold mb-2">
+                Due Date
+              </h2>
+              <ChartContainer
+                chartType="ScatterChart"
+                data={areaChartData}
+                options={chartOptions}
+              />
+            </div>
+
+            <div className="w-full">
+              <h2 className="text-center text-lg font-semibold mb-2">
+                Current Status
+              </h2>
+              <ChartContainer
+                chartType="PieChart"
+                data={pieChartData}
+                options={chartOptions}
+              />
+            </div>
+
+            {/* <div className="w-full">
+            <h2 className="text-center text-lg font-semibold mb-2">
+              Area Chart
+            </h2>
+            <ChartContainer
+              chartType="AreaChart"
+              data={areaChartData}
+              options={chartOptions}
+            />
+          </div>
+
+          <div className="w-full">
+            <h2 className="text-center text-lg font-semibold mb-2">
+              Column Chart
+            </h2>
+            <ChartContainer
+              chartType="ColumnChart"
+              data={columnChartData}
+              options={chartOptions}
+            />
+          </div>
+
+          <div className="w-full">
+            <h2 className="text-center text-lg font-semibold mb-2">
+              Scatter Chart
+            </h2>
+            <ChartContainer
+              chartType="ScatterChart"
+              data={scatterChartData}
+              options={chartOptions}
+            />
+          </div> */}
+          </div>
         </div>
 
         <Table

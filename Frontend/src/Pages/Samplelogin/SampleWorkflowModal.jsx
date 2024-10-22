@@ -19,6 +19,8 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
+import { BASE_URL } from "../../config.json";
+import BarcodeExportButton from "./BarcodeExportButton";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -29,7 +31,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
     types: "sample",
     stage: "1",
-    samplePlanId: "",
+    samplePlanId: 1000,
     sampleId: "",
     sampleName: "",
     sampleType: "",
@@ -151,6 +153,12 @@ const SampleWorkflowModal = ({ onClose }) => {
         ...prevData,
         [name]: selectedInstruments,
       }));
+    } else if (e.target.type === "file") {
+      // Handle file input
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0], // Store the first file selected
+      }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
@@ -228,7 +236,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}`,
+        `http://localhost:9000/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -247,28 +255,36 @@ const SampleWorkflowModal = ({ onClose }) => {
   };
 
   const handleSave = async () => {
-    if (id) {
-      await handleEdit();
-    } else {
-      try {
+    const formDataToSend = new FormData(); // Create a new FormData object
+
+    // Append all form data to the FormData object
+    for (const key in formData) {
+      if (Array.isArray(formData[key])) {
+        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+      } else {
+        formDataToSend.append(key, formData[key]);
+      }
+    }
+
+    try {
+      if (id) {
+        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+      } else {
         const response = await axios.post(
           `http://localhost:9000/create-sample`,
-          formData
+          formDataToSend,
+          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
-        console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Sample Workflow added successfully.");
-          setIsModalOpen(false);
-          navigate("/sampleWorkflow");
-        } else {
-          toast.error("Failed to add Sample Workflow.");
-        }
-      } catch (error) {
-        toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
-        );
+        // Handle success response
+        toast.success("Sample Workflow added successfully.");
+        setIsModalOpen(false);
+        navigate("/sampleWorkflow");
       }
+    } catch (error) {
+      console.error("Error uploading file:", error); // Log the error
+      toast.error(
+        "Failed to upload file: " + (error.response?.data || error.message)
+      );
     }
   };
 
@@ -280,11 +296,12 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="samplePlanId"
                   label="Sample Plan ID"
-                  value={formData?.samplePlanId || ""}
+                  value={formData?.samplePlanId || 1000}
                   onChange={handleInputChange}
+                  min={1000}
                 />
               </CCol>
               <CCol md={6}>
@@ -442,21 +459,12 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={formData.sampleBarCode || ""}
-                  onChange={(e) => {
-                    const inputValue = e.target.value;
-                    if (/^\d*$/.test(inputValue) && inputValue.length <= 42) {
-                      handleInputChange(e);
-                    }
-                  }}
-                  maxLength={42}
+                  value={""}
+                  disabled
                 />
-
-                {formData.sampleBarCode && (
-                  <div>
-                    <Barcode value={formData.sampleBarCode} />
-                  </div>
-                )}
+                <div>
+                  <BarcodeExportButton />
+                </div>
               </CCol>
             </CRow>
             <CRow className="mb-3">
@@ -519,12 +527,23 @@ const SampleWorkflowModal = ({ onClose }) => {
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
-                <CFormInput
+                <CFormSelect
                   type="text"
                   name="testParameter"
                   label="Test Parameters"
                   value={formData.testParameter || ""}
                   onChange={handleInputChange}
+                  options={[
+                    "Select Tests",
+                    { label: "Description", value: "Description" },
+                    { label: "Weight Of 20 tablets", value: "Weight Of 20 tablets" },
+                    { label: "Average Weight ( mg )", value: "Average Weight ( mg )" },
+                    { label: "Thickness", value: "Thickness" },
+                    { label: "Disintigration Time", value:"Disintigration Time" },
+                    { label: "Hardness", value: "Hardness" },
+                    { label: "Diameter", value: "Diameter" },
+                    { label: "Friability", value: "Friability" },
+                  ]}
                 />
               </CCol>
               <CCol md={6}>
@@ -776,7 +795,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CCol md={12}>
               <CFormInput
                 type="file"
-                name="srSupportiveAttachment"
+                name="suSupportiveAttachment"
                 label="Supportive Attachment"
                 // value={formData?.srSupportiveAttachment || ""}
                 onChange={handleInputChange}
