@@ -52,7 +52,7 @@ function StorageLocation() {
         `${BASE_URL}/get-all-lims/storageLocation`
       );
       console.log(response);
-      const formattedData = response.data[0]?.storageLocation || []; // Adjust this based on your API response structure
+      const formattedData = response.data[0]?.storageLocation || [];
 
       const updatedData = formattedData.map((item, index) => ({
         ...item,

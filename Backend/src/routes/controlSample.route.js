@@ -13,7 +13,7 @@ import {
 
 import { checkJwtToken } from "../middleware/authentication.js";
 
-import { generatePdfbyId } from "../controllers/report.controller.js";
+import { generatePdfControlSample } from "../controllers/report.controller.js";
 import { upload } from "../utils/multer.js";
 import { submitToReviewer } from "../controllers/controlSample.controller.js";
 
@@ -45,6 +45,6 @@ controlSampleRouter.post("/send-to-closed", checkJwtToken, submitToClosed);
 
 controlSampleRouter.post("/send-to-open", checkJwtToken, ReviewToOpen);
 
-controlSampleRouter.get("/generate-report/:id", generatePdfbyId);
+controlSampleRouter.get("/generate-report/:id", generatePdfControlSample);
 
 export default controlSampleRouter;

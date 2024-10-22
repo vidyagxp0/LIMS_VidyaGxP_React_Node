@@ -55,6 +55,7 @@ const ControlSampleModal = ({ onClose }) => {
     destructionDate: "",
     remarks: "",
     status: "",
+    suSupportiveAttachment: "",
   });
 
   console.log(formData, "L<>?L<>?L<>?L<>?L<>?L<>?L<>?L");
@@ -169,271 +170,281 @@ const ControlSampleModal = ({ onClose }) => {
       case "Control Sample":
         return (
           <CForm>
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="sampleId"
-                label="Sample ID"
-                value={formData?.sampleId || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="productName"
-                label="Product Name"
-                value={formData?.productName || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="productCode"
-                label="Product Code"
-                value={formData?.productCode || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="sampleType"
-                label="Sample Type"
-                value={formData?.sampleType || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="market"
-                label="Market"
-                value={formData?.market || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="arNo"
-                label="AR No."
-                value={formData?.arNo || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="batchNo"
-                label="Batch No."
-                value={formData?.batchNo || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="date"
-                name="mfgDate"
-                label="Manufacturing Date"
-                value={formData?.mfgDate || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="date"
-                name="expiryDate"
-                label="Expiry Date"
-                value={formData?.expiryDate || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="quantity"
-                label="Quantity"
-                value={formData?.quantity || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="quantityWithdrawn"
-                label="Quantity Withdrawn"
-                value={formData?.quantityWithdrawn || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="currentQuantity"
-                label="Current Quantity"
-                value={formData?.currentQuantity || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="uom"
-                label="Unit of Measurement (UOM)"
-                value={formData?.uom || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="storageLocation"
-                label="Storage Location"
-                value={formData?.storageLocation || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="storageCondition"
-                label="Storage Condition"
-                value={formData?.storageCondition || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="date"
-                name="visualInspectionScheduledOn"
-                label="Visual Inspection Scheduled On"
-                value={formData?.visualInspectionScheduledOn || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="visualInspectionPerformedBy"
-                label="Visual Inspection Performed By"
-                value={formData?.visualInspectionPerformedBy || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="abnormalObservation"
-                label="Abnormal Observation"
-                value={formData?.abnormalObservation || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="date"
-                name="observationDate"
-                label="Observation Date"
-                value={formData?.observationDate || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="date"
-                name="destructionDueOn"
-                label="Destruction Due On"
-                value={formData?.destructionDueOn || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="destroyedBy"
-                label="Destroyed By"
-                value={formData?.destroyedBy || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="neutralizingAgent"
-                label="Neutralizing Agent"
-                value={formData?.neutralizingAgent || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="date"
-                name="destructionDate"
-                label="Destruction Date"
-                value={formData?.destructionDate || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-            <CCol md={6}>
-              <CFormInput
-                type="textarea"
-                name="remarks"
-                label="Remarks"
-                value={formData?.remarks || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        
-          <CRow className="mb-3">
-            <CCol md={6}>
-              <CFormInput
-                type="text"
-                name="status"
-                label="Status"
-                value={formData?.status || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CRow>
-        </CForm>
-        
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="sampleId"
+                  label="Sample ID"
+                  value={formData?.sampleId || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="productName"
+                  label="Product Name"
+                  value={formData?.productName || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="productCode"
+                  label="Product Code"
+                  value={formData?.productCode || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="sampleType"
+                  label="Sample Type"
+                  value={formData?.sampleType || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="market"
+                  label="Market"
+                  value={formData?.market || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="arNo"
+                  label="AR No."
+                  value={formData?.arNo || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="batchNo"
+                  label="Batch No."
+                  value={formData?.batchNo || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="mfgDate"
+                  label="Manufacturing Date"
+                  value={formData?.mfgDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="expiryDate"
+                  label="Expiry Date"
+                  value={formData?.expiryDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="quantity"
+                  label="Quantity"
+                  value={formData?.quantity || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="quantityWithdrawn"
+                  label="Quantity Withdrawn"
+                  value={formData?.quantityWithdrawn || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="currentQuantity"
+                  label="Current Quantity"
+                  value={formData?.currentQuantity || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="uom"
+                  label="Unit of Measurement (UOM)"
+                  value={formData?.uom || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="storageLocation"
+                  label="Storage Location"
+                  value={formData?.storageLocation || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="storageCondition"
+                  label="Storage Condition"
+                  value={formData?.storageCondition || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="visualInspectionScheduledOn"
+                  label="Visual Inspection Scheduled On"
+                  value={formData?.visualInspectionScheduledOn || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="visualInspectionPerformedBy"
+                  label="Visual Inspection Performed By"
+                  value={formData?.visualInspectionPerformedBy || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="abnormalObservation"
+                  label="Abnormal Observation"
+                  value={formData?.abnormalObservation || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="observationDate"
+                  label="Observation Date"
+                  value={formData?.observationDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="destructionDueOn"
+                  label="Destruction Due On"
+                  value={formData?.destructionDueOn || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="destroyedBy"
+                  label="Destroyed By"
+                  value={formData?.destroyedBy || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="neutralizingAgent"
+                  label="Neutralizing Agent"
+                  value={formData?.neutralizingAgent || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="date"
+                  name="destructionDate"
+                  label="Destruction Date"
+                  value={formData?.destructionDate || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              <CCol md={6}>
+                <CFormInput
+                  type="textarea"
+                  name="remarks"
+                  label="Remarks"
+                  value={formData?.remarks || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="text"
+                  name="status"
+                  label="Status"
+                  value={formData?.status || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  type="file"
+                  name="suSupportiveAttachment"
+                  label="Supportive Attachment"
+                  value={formData?.suSupportiveAttachment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CRow>
+          </CForm>
         );
       case "Activity Log":
         return (
