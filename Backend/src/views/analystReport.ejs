@@ -191,22 +191,35 @@
         </tr>
         <tr>
           <th>Previous Labs Worked In</th>
-          <td><%= reportData?.testResults || "Not Applicable" %></td>
-          <th>Test Score</th>
-          <td><%= reportData?.testScore || "Not Applicable" %></td>
+          <td><%= reportData?.previousLabsWorkedIn || "Not Applicable" %></td>
+          <th>Specializations</th>
+          <td><%= reportData?.specializations || "Not Applicable" %></td>
         </tr>
         <tr>
-          <th>Test Results</th>
-          <td><%= reportData?.testResults || "Not Applicable" %></td>
-          <th>Test Score</th>
-          <td><%= reportData?.testScore || "Not Applicable" %></td>
+          <th>Approval Date</th>
+          <td><%= reportData?.approvalDate || "Not Applicable" %></td>
+          <th>Approver Name</th>
+          <td><%= reportData?.approverName || "Not Applicable" %></td>
         </tr>
         <tr>
-          <th>Test Results</th>
-          <td><%= reportData?.testResults || "Not Applicable" %></td>
-          <th>Test Score</th>
-          <td><%= reportData?.testScore || "Not Applicable" %></td>
+          <th>Approver Signature</th>
+          <td><%= reportData?.approverSignature || "Not Applicable" %></td>
+          <th>Comments Notes</th>
+          <td><%= reportData?.commentsNotes || "Not Applicable" %></td>
         </tr>
+        <tr>
+          <th>Modification Date</th>
+          <td><%= reportData?.modificationDate || "Not Applicable" %></td>
+          <th>Modified By</th>
+          <td><%= reportData?.modifiedBy || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Stage</th>
+          <td><%= reportData?.stage || "Not Applicable" %></td>
+          <th>Status</th>
+          <td><%= reportData?.status || "Not Applicable" %></td>
+        </tr>
+        
       </table>
     </div>
     <div class="remarks">
