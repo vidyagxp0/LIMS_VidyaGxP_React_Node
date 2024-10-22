@@ -264,7 +264,7 @@ const AnalystQualification = () => {
   const handleDelete = async (item) => {
     try {
       await axios.delete(
-        `${BASE_URL}/delete-lims/analystPersonal/${item.uniqueId}`
+        `${BASE_URL}/analyst/delete-analyst/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.uniqueId !== item.uniqueId)

@@ -39,7 +39,7 @@ export const ProgressBar2 = (props) => {
     setIsModalOpen(true);
   };
 
-  const callApis = async (formData, sampleId) => {
+  const callApis = async (formData, analystId) => {
     try {
       const email = formData.username;
       const password = formData.password;

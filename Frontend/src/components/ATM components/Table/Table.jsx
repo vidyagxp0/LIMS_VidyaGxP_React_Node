@@ -105,7 +105,7 @@ const Table = ({
                 {columns?.map((column) => (
                   <td
                     key={column.accessor}
-                    className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900`}
                     
                     onClick={
                       column.accessor === "analystId" // Replace with actual accessor name for Analyst ID column
@@ -114,7 +114,7 @@ const Table = ({
                     }
                     style={
                       column.accessor === "analystId"
-                        ? { cursor: 'pointer' } // Optionally, change cursor to pointer for better UX
+                        ? { cursor: 'pointer', } // Optionally, change cursor to pointer for better UX
                         : {}
                     }
                   >
