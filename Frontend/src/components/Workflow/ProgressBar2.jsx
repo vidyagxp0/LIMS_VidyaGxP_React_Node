@@ -46,7 +46,7 @@ export const ProgressBar2 = (props) => {
       const comment = formData.comment;
 
       const response = await axios.post(
-        "http://localhost:9000/analyst/e-signature",
+        "http://localhost:9000/e-signature",
         { email, password },
         {
           headers: {

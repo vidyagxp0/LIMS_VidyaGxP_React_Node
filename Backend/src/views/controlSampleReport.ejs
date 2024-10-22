@@ -67,7 +67,7 @@
       </style>
     <body>
         <div class="remarks">
-            <h2 class="heading">Control Sample</h2>
+            <!-- <h2 class="heading">Control Sample</h2> -->
             <table>
                 <tr>
                     <th>Sample ID</th>
@@ -144,8 +144,6 @@
                     <td><%= reportData?.remarks || "Not Applicable" %></td>
                 </tr>
                 <tr>
-                    <th>Stage</th>
-                    <td><%= reportData?.stage || "Not Applicable" %></td>
                     <th>Status</th>
                     <td><%= reportData?.status || "Not Applicable" %></td>
                 </tr>
@@ -164,24 +162,16 @@
                 <tr>
                     <th>Initiator Review Date</th>
                     <td><%= reportData?.initiatorReviewDate || "Not Applicable" %></td>
-                    <th>Supervisor Name</th>
-                    <td><%= reportData?.supervisorName || "Not Applicable" %></td>
                 </tr>
                 <tr>
-                    <th>Supervisor Comment</th>
-                    <td><%= reportData?.supervisorComment || "Not Applicable" %></td>
-                    <th>Supervisor Review Date</th>
-                    <td><%= reportData?.supervisorReviewDate || "Not Applicable" %></td>
+                    <th>Reviewer Name</th>
+                    <td><%= reportData?.ReviewerName || "Not Applicable" %></td>
+                    <th>Reviewer Comment/th>
+                    <td><%= reportData?.ReviewerComment || "Not Applicable" %></td>
                 </tr>
                 <tr>
-                    <th>QA Reviewer Name</th>
-                    <td><%= reportData?.QaReviewerName || "Not Applicable" %></td>
-                    <th>QA Reviewer Comment/th>
-                    <td><%= reportData?.QaReviewerComment || "Not Applicable" %></td>
-                </tr>
-                <tr>
-                    <th>QA Review Date</th>
-                    <td><%= reportData?.QaReviewDate || "Not Applicable" %></td>
+                    <th>Review Date</th>
+                    <td><%= reportData?.ReviewDate || "Not Applicable" %></td>
                     
                 </tr>
               

@@ -29,12 +29,19 @@ const AnalystQualification = () => {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedAnalyst, setSelectedAnalyst] = useState(null);
   const navigate = useNavigate();
 
   const openWorkflowModal = () => {
     setShowModal(true);
     navigate("/analystQualificationModal");
   };
+  const handleEdit = (analyst) => {
+    setSelectedAnalyst(analyst); // Set the selected analyst data
+    setIsModalOpen(true); // Open the modal
+  };
+ 
+
 
   const closeWorkflowModal = () => {
     setShowModal(false);
@@ -42,16 +49,18 @@ const AnalystQualification = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/analyst/get-analyst`
-      );
-      console.log("API Response:", response.data);
+      const response = await axios.get(`${BASE_URL}/analyst/get-analyst`);
+      // console.log("API Response:", response.data);
 
-      const formattedData = response?.data[0]?.analystPersonal || [];
+      const formattedData = response?.data.data || [];
+      console.log(formattedData);
+
       const updatedData = formattedData.map((item, index) => ({
         sno: index + 1,
         ...item,
       }));
+      console.log(updatedData, "AAAAAAAaaa");
+
       setData(updatedData);
       console.log(updatedData);
     } catch (error) {
@@ -88,69 +97,76 @@ const AnalystQualification = () => {
       accessor: "checkbox",
     },
     { header: "Sr No", accessor: "sno" },
-    { header: "Analyst ID", accessor: "AnalystID" },
-    { header: "Full Name", accessor: "FullName" },
-    { header: "Date of Birth", accessor: "DateOfBirth" },
-    { header: "Email Address", accessor: "EmailAddress" },
-    { header: "Phone Number", accessor: "PhoneNumber" },
-    { header: "Department", accessor: "Department" },
-    { header: "Job Title", accessor: "JobTitle" },
-    { header: "Supervisor/Manager Name", accessor: "SupervisorManagerName" },
-    { header: "Qualification ID", accessor: "QualificationID" },
-    { header: "Date of Qualification", accessor: "DateOfQualification" },
-    { header: "Qualified By", accessor: "QualifiedBy" },
-    { header: "Qualification Type", accessor: "QualificationType" },
-    { header: "Expiration Date", accessor: "ExpirationDate" },
-    { header: "Qualification Status", accessor: "QualificationStatus" },
-    { header: "Training Program Name", accessor: "TrainingProgramName" },
-    { header: "Training Start Date", accessor: "TrainingStartDate" },
-    { header: "Training Completion Date", accessor: "TrainingCompletionDate" },
+    {
+      header: "Analyst ID",
+      accessor: "analystId",
+      onClick: () => {
+        // Your custom logic for handling click on "Analyst ID" header
+        console.log("Analyst ID header clicked!");
+      },
+    },
+    { header: "Full Name", accessor: "fullName" },
+    { header: "Date of Birth", accessor: "dateOfBirth" },
+    { header: "Email Address", accessor: "emailAddress" },
+    { header: "Phone Number", accessor: "phoneNumber" },
+    { header: "Department", accessor: "department" },
+    { header: "Job Title", accessor: "jobTitle" },
+    { header: "Supervisor/Manager Name", accessor: "supervisorManagerName" },
+    { header: "Qualification ID", accessor: "qualificationId" },
+    { header: "Date of Qualification", accessor: "dateOfQualification" },
+    { header: "Qualified By", accessor: "qualifiedBy" },
+    { header: "Qualification Type", accessor: "qualificationType" },
+    { header: "Expiration Date", accessor: "expirationDate" },
+    { header: "Qualification Status", accessor: "qualificationStatus" },
+    { header: "Training Program Name", accessor: "trainingProgramName" },
+    { header: "Training Start Date", accessor: "trainingStartDate" },
+    { header: "Training Completion Date", accessor: "trainingCompletionDate" },
     {
       header: "Training Completion Status",
-      accessor: "TrainingCompletionStatus",
+      accessor: "trainingCompletionStatus",
     },
     {
       header: "Certification Name/Number",
-      accessor: "CertificationNameNumber",
+      accessor: "certificationNameNumber",
     },
-    { header: "Certification Body", accessor: "CertificationBody" },
-    { header: "Certification Date", accessor: "CertificationDate" },
+    { header: "Certification Body", accessor: "certificationBody" },
+    { header: "Certification Date", accessor: "certificationDate" },
     {
       header: "Next Recertification Date",
-      accessor: "NextRecertificationDate",
+      accessor: "nextReCertificationDate",
     },
-    { header: "Competency Test Name", accessor: "CompetencyTestName" },
-    { header: "Test Date", accessor: "TestDate" },
-    { header: "Test Results", accessor: "TestResults" },
-    { header: "Test Score", accessor: "TestScore" },
-    { header: "Evaluator Name", accessor: "EvaluatorName" },
-    { header: "Evaluator Comments", accessor: "EvaluatorComments" },
-    { header: "Technique/Skill Name", accessor: "TechniqueSkillName" },
-    { header: "Qualification Date", accessor: "QualificationDate" },
-    { header: "Skill Level", accessor: "SkillLevel" },
-    { header: "Requalification Required", accessor: "RequalificationRequired" },
-    { header: "Requalification Due Date", accessor: "RequalificationDueDate" },
-    { header: "Instrument Name/ID", accessor: "InstrumentNameID" },
-    { header: "Method Name/ID", accessor: "MethodNameID" },
-    { header: "Qualification Level", accessor: "QualificationLevel" },
+    { header: "Competency Test Name", accessor: "competencyTestName" },
+    { header: "Test Date", accessor: "testDate" },
+    { header: "Test Results", accessor: "testResults" },
+    { header: "Test Score", accessor: "testScore" },
+    { header: "Evaluator Name", accessor: "evaluatorName" },
+    { header: "Evaluator Comments", accessor: "evaluatorComments" },
+    { header: "Technique/Skill Name", accessor: "techniqueSkillName" },
+    { header: "Qualification Date", accessor: "qualificationDate" },
+    { header: "Skill Level", accessor: "skillLevel" },
+    { header: "Requalification Required", accessor: "reQualificationRequired" },
+    { header: "Requalification Due Date", accessor: "reQualificationDueDate" },
+    { header: "Instrument Name/ID", accessor: "instrumentNameId" },
+    { header: "Method Name/ID", accessor: "methodNameId" },
+    { header: "Qualification Level", accessor: "qualificationLevel" },
     // {header: "Qualification Date", accessor: "QualificationDate"},
     // {header: "Calibration Due Date", accessor: "CalibrationDueDate"},
     // { header: "Method Validation Date", accessor: "MethodValidationDate" },
-    { header: "SOP Name/ID", accessor: "SOPNameID" },
-    { header: "SOP Version", accessor: "SOPVersion" },
+    { header: "SOP Name/ID", accessor: "sopNameId" },
+    { header: "SOP Version", accessor: "sopVersion" },
     // { header: "Date Acknowledged/Reviewed", accessor: "DateAcknowledgedReviewed" },
     // { header: "Revision Due Date", accessor: "RevisionDueDate" },
-    { header: "Years of Experience", accessor: "YearsOfExperience" },
-    { header: "Previous Job Roles", accessor: "PreviousJobRoles" },
-    { header: "Previous Labs Worked In", accessor: "PreviousLabsWorkedIn" },
-    { header: "Specializations", accessor: "Specializations" },
-    { header: "Approval Date", accessor: "ApprovalDate" },
-    { header: "Approver's Name", accessor: "ApproversName" },
-    { header: "Approver's Signature", accessor: "ApproversSignature" },
-    { header: "Comments/Notes", accessor: "CommentsNotes" },
-    { header: "Modification Date", accessor: "ModificationDate" },
-    { header: "Modified By", accessor: "ModifiedBy" },
-    { header: "Change Description", accessor: "ChangeDescription" },
+    { header: "Years of Experience", accessor: "yearsOfExperience" },
+    { header: "Previous Job Roles", accessor: "previousJobRoles" },
+    { header: "Previous Labs Worked In", accessor: "previousLabsWorkedIn" },
+    { header: "Specializations", accessor: "specializations" },
+    { header: "Approval Date", accessor: "approvalDate" },
+    { header: "Approver's Name", accessor: "approverName" },
+    { header: "Approver's Signature", accessor: "approverSignature" },
+    { header: "Comments/Notes", accessor: "commentsNotes" },
+    { header: "Modification Date", accessor: "modificationDate" },
+    { header: "Modified By", accessor: "modifiedBy" },
+    { header: "Change Description", accessor: "changeDescription" },
     {
       header: "Actions",
       accessor: "action",
@@ -228,9 +244,8 @@ const AnalystQualification = () => {
     "ModificationDate",
     "ModifiedBy",
     "ChangeDescription",
-    "status"
+    "status",
   ];
-  
 
   const openModal = () => {
     // setEditModalData(null);
@@ -337,6 +352,7 @@ const AnalystQualification = () => {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           openEditModal={openEditModal}
+          onEdit={handleEdit}
         />
       </div>
 
@@ -346,6 +362,13 @@ const AnalystQualification = () => {
           onClose={() => setIsImportModalOpen(false)}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {isModalOpen && (
+        <AnalystQualificationModal
+          visible={isModalOpen}
+          onClose={closeModal}
+          data={selectedAnalyst} // Pass the selected analyst data to the modal
         />
       )}
 
