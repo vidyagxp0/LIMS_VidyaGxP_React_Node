@@ -21,6 +21,7 @@ const generateBarcodeBase64 = async (barcodeText) => {
 };
 
 const sampleDatas = {};
+
 const setSampleData = (data) => {
   const sampleData = data.data;
 
@@ -144,6 +145,326 @@ export const generatePdfbyId = async (req, res) => {
     sampleData = await sample.json();
 
     setSampleData(sampleData);
+  } catch (error) {
+    console.error("Error fetching APQR data:", error);
+    return res.status(500).send("Error fetching APQR data");
+  }
+  let browser;
+  try {
+    const base64Logo = await getBase64Image("public/gxplogo.png");
+
+    if (!sampleData) {
+      return res
+        .status(404)
+        .json({ error: true, message: "Sample data not found" });
+    }
+
+    // Generate the barcode for the provided sample ID or any relevant string
+    const barcodeBase64 = await generateBarcodeBase64(
+      sampleDatas.sampleBarCode
+    );
+    // Render the main HTML with EJS
+    const htmlContent = await new Promise((resolve, reject) => {
+      req.app.render(
+        "report",
+        { reportData: sampleDatas, barcodeBase64: barcodeBase64 },
+        (err, html) => {
+          if (err) return reject(err);
+          resolve(html);
+        }
+      );
+    });
+
+    // Render the header and footer with EJS
+    const headerHtml = await new Promise((resolve, reject) => {
+      req.app.render(
+        "header",
+        { reportData: sampleDatas, base64Logo },
+        (err, html) => {
+          if (err) return reject(err);
+          resolve(html);
+        }
+      );
+    });
+
+    const footerHtml = await new Promise((resolve, reject) => {
+      req.app.render("footer", { reportData: sampleDatas }, (err, html) => {
+        if (err) return reject(err);
+        resolve(html);
+      });
+    });
+
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      displayHeaderFooter: true,
+      headerTemplate: headerHtml,
+      footerTemplate: footerHtml,
+      margin: {
+        top: "150px",
+        right: "50px",
+        bottom: "50px",
+        left: "50px",
+      },
+    });
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=APQR_Report.pdf"
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    return res.status(500).send("Error generating PDF", error);
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+};
+
+const setSampleDataControlSamp = (data) => {
+  const sampleData = data.data;
+
+  sampleDatas.id = sampleData?.id ?? "";
+  sampleDatas.sampleId = sampleData?.sampleId ?? "";
+  sampleDatas.productMaterialName = sampleData?.productMaterialName ?? "";
+  sampleDatas.productMaterialCode = sampleData?.productMaterialCode ?? "";
+  sampleDatas.sampleType = sampleData?.sampleType ?? "";
+  sampleDatas.market = sampleData?.market ?? "";
+  sampleDatas.arNo = sampleData?.arNo ?? "";
+  sampleDatas.batchNo = sampleData?.batchNo ?? "";
+  sampleDatas.mfgDate = sampleData?.mfgDate ?? "";
+  sampleDatas.expiryDate = sampleData?.expiryDate ?? "";
+  sampleDatas.quantity = sampleData?.quantity ?? "";
+  sampleDatas.quantityWithdrawn = sampleData?.quantityWithdrawn ?? "";
+  sampleDatas.currentQuantity = sampleData?.currentQuantity ?? "";
+  sampleDatas.uom = sampleData?.uom ?? "";
+  sampleDatas.storageLocation = sampleData?.storageLocation ?? "";
+  sampleDatas.storageCondition = sampleData?.storageCondition ?? "";
+  sampleDatas.visualInspectionSheduledOn =
+    sampleData?.visualInspectionSheduledOn ?? "";
+  sampleDatas.visualInspectionPerformedBy =
+    sampleData?.visualInspectionPerformedBy ?? "";
+  sampleDatas.anyAbnoramalObservation =
+    sampleData?.anyAbnoramalObservation ?? "";
+  sampleDatas.ObservationDate = sampleData?.ObservationDate ?? "";
+  sampleDatas.destructionDueOn = sampleData?.destructionDueOn ?? "";
+  sampleDatas.destroyedBy = sampleData?.destroyedBy ?? "";
+  sampleDatas.neutralizingAgent = sampleData?.neutralizingAgent ?? "";
+  sampleDatas.destructionDate = sampleData?.destructionDate ?? "";
+  sampleDatas.remarks = sampleData?.remarks ?? "";
+  sampleDatas.stage = sampleData?.stage ?? "1";
+  sampleDatas.status = sampleData?.status ?? "Under Initiation";
+  sampleDatas.initiatorName = sampleData?.initiatorName ?? "";
+  sampleDatas.initiatorComment = sampleData?.initiatorComment ?? "";
+  sampleDatas.initiatorReviewDate = sampleData?.initiatorReviewDate ?? "";
+  sampleDatas.supervisorName = sampleData?.supervisorName ?? "";
+  sampleDatas.supervisorComment = sampleData?.supervisorComment ?? "";
+  sampleDatas.supervisorReviewDate = sampleData?.supervisorReviewDate ?? "";
+  sampleDatas.QaReviewerName = sampleData?.QaReviewerName ?? "";
+  sampleDatas.QaReviewerComment = sampleData?.QaReviewerComment ?? "";
+  sampleDatas.QaReviewDate = sampleData?.QaReviewDate ?? "";
+};
+
+export const generatePdfControlSamp = async (req, res) => {
+  const sampleId = req.params.id;
+  const type = req.params.type;
+  let sampleData;
+  try {
+    const sample = await fetch(
+      `http://localhost:9000/get-Sample/${sampleId}/${type}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    sampleData = await sample.json();
+
+    setSampleDataControlSamp(sampleData);
+  } catch (error) {
+    console.error("Error fetching APQR data:", error);
+    return res.status(500).send("Error fetching APQR data");
+  }
+  let browser;
+  try {
+    const base64Logo = await getBase64Image("public/gxplogo.png");
+
+    if (!sampleData) {
+      return res
+        .status(404)
+        .json({ error: true, message: "Sample data not found" });
+    }
+
+    // Generate the barcode for the provided sample ID or any relevant string
+    const barcodeBase64 = await generateBarcodeBase64(
+      sampleDatas.sampleBarCode
+    );
+    // Render the main HTML with EJS
+    const htmlContent = await new Promise((resolve, reject) => {
+      req.app.render(
+        "report",
+        { reportData: sampleDatas, barcodeBase64: barcodeBase64 },
+        (err, html) => {
+          if (err) return reject(err);
+          resolve(html);
+        }
+      );
+    });
+
+    // Render the header and footer with EJS
+    const headerHtml = await new Promise((resolve, reject) => {
+      req.app.render(
+        "header",
+        { reportData: sampleDatas, base64Logo },
+        (err, html) => {
+          if (err) return reject(err);
+          resolve(html);
+        }
+      );
+    });
+
+    const footerHtml = await new Promise((resolve, reject) => {
+      req.app.render("footer", { reportData: sampleDatas }, (err, html) => {
+        if (err) return reject(err);
+        resolve(html);
+      });
+    });
+
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      displayHeaderFooter: true,
+      headerTemplate: headerHtml,
+      footerTemplate: footerHtml,
+      margin: {
+        top: "150px",
+        right: "50px",
+        bottom: "50px",
+        left: "50px",
+      },
+    });
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=APQR_Report.pdf"
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    return res.status(500).send("Error generating PDF", error);
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+};
+
+const setSampleDataAnalyst = (data) => {
+  const sampleData = data.data;
+
+  sampleDatas.id = sampleData?.id ?? "";
+  sampleDatas.analystId = sampleData?.analystId ?? "";
+  sampleDatas.fullName = sampleData?.fullName ?? "";
+  sampleDatas.dateOfBirth = sampleData?.dateOfBirth ?? "";
+  sampleDatas.emailAddress = sampleData?.emailAddress ?? "";
+  sampleDatas.phoneNumber = sampleData?.phoneNumber ?? "";
+  sampleDatas.department = sampleData?.department ?? "";
+  sampleDatas.jobTitle = sampleData?.jobTitle ?? "";
+  sampleDatas.supervisorManagerName = sampleData?.supervisorManagerName ?? "";
+  sampleDatas.qualificationId = sampleData?.qualificationId ?? "";
+  sampleDatas.dateOfQualification = sampleData?.dateOfQualification ?? "";
+  sampleDatas.qualifiedBy = sampleData?.qualifiedBy ?? "";
+  sampleDatas.qualificationType = sampleData?.qualificationType ?? "";
+  sampleDatas.expirationDate = sampleData?.expirationDate ?? "";
+  sampleDatas.qualificationStatus = sampleData?.qualificationStatus ?? "";
+  sampleDatas.trainingProgramName = sampleData?.trainingProgramName ?? "";
+  sampleDatas.trainingStartDate = sampleData?.trainingStartDate ?? "";
+  sampleDatas.trainingCompletionDate = sampleData?.trainingCompletionDate ?? "";
+  sampleDatas.trainingCompletionStatus =
+    sampleData?.trainingCompletionStatus ?? "";
+  sampleDatas.certificationNameNumber =
+    sampleData?.certificationNameNumber ?? "";
+  sampleDatas.certificationBody = sampleData?.certificationBody ?? "";
+  sampleDatas.certificationDate = sampleData?.certificationDate ?? "";
+  sampleDatas.nextReCertificationDate =
+    sampleData?.nextReCertificationDate ?? "";
+  sampleDatas.competencyTestName = sampleData?.competencyTestName ?? "";
+  sampleDatas.testDate = sampleData?.testDate ?? "";
+  sampleDatas.testResults = sampleData?.testResults ?? "";
+  sampleDatas.testScore = sampleData?.testScore ?? "";
+  sampleDatas.evaluatorName = sampleData?.evaluatorName ?? "";
+  sampleDatas.evaluatorComments = sampleData?.evaluatorComments ?? "";
+  sampleDatas.techniqueSkillName = sampleData?.techniqueSkillName ?? "";
+  sampleDatas.qualificationDate = sampleData?.qualificationDate ?? "";
+  sampleDatas.skillLevel = sampleData?.skillLevel ?? "";
+  sampleDatas.reQualificationRequired =
+    sampleData?.reQualificationRequired ?? "";
+  sampleDatas.reQualificationDueDate = sampleData?.reQualificationDueDate ?? "";
+  sampleDatas.instrumentNameId = sampleData?.instrumentNameId ?? "";
+  sampleDatas.methodNameId = sampleData?.methodNameId ?? "";
+  sampleDatas.qualificationLevel = sampleData?.qualificationLevel ?? "";
+  sampleDatas.sopNameId = sampleData?.sopNameId ?? "";
+  sampleDatas.sopVersion = sampleData?.sopVersion ?? "";
+  sampleDatas.yearsOfExperience = sampleData?.yearsOfExperience ?? "";
+  sampleDatas.previousJobRoles = sampleData?.previousJobRoles ?? "";
+  sampleDatas.previousLabsWorkedIn = sampleData?.previousLabsWorkedIn ?? "";
+  sampleDatas.specializations = sampleData?.specializations ?? "";
+  sampleDatas.approvalDate = sampleData?.approvalDate ?? "";
+  sampleDatas.approverName = sampleData?.approverName ?? "";
+  sampleDatas.approverSignature = sampleData?.approverSignature ?? "";
+  sampleDatas.commentsNotes = sampleData?.commentsNotes ?? "";
+  sampleDatas.modificationDate = sampleData?.modificationDate ?? "";
+  sampleDatas.modifiedBy = sampleData?.modifiedBy ?? "";
+  sampleDatas.changeDescription = sampleData?.changeDescription ?? "";
+  sampleDatas.stage = sampleData?.stage ?? "1";
+  sampleDatas.status = sampleData?.status ?? "Under Initiation";
+  sampleDatas.initiatorName = sampleData?.initiatorName ?? "";
+  sampleDatas.initiatorComment = sampleData?.initiatorComment ?? "";
+  sampleDatas.initiatorReviewDate = sampleData?.initiatorReviewDate ?? "";
+  sampleDatas.supervisorName = sampleData?.supervisorName ?? "";
+  sampleDatas.supervisorComment = sampleData?.supervisorComment ?? "";
+  sampleDatas.supervisorReviewDate = sampleData?.supervisorReviewDate ?? "";
+  sampleDatas.QaReviewerName = sampleData?.QaReviewerName ?? "";
+  sampleDatas.QaReviewerComment = sampleData?.QaReviewerComment ?? "";
+  sampleDatas.QaReviewDate = sampleData?.QaReviewDate ?? "";
+};
+
+export const generatePdfAnalyst = async (req, res) => {
+  const sampleId = req.params.id;
+  
+  let sampleData;
+  try {
+    const sample = await fetch(
+      `http://localhost:9000/analyst/get-analyst/${sampleId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    sampleData = await sample.json();
+
+    setSampleDataAnalyst(sampleData);
   } catch (error) {
     console.error("Error fetching APQR data:", error);
     return res.status(500).send("Error fetching APQR data");

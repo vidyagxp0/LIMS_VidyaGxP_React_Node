@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        margin: 20px;
+        line-height: 1.6;
+      }
+      .report-content {
+        margin-top: 30px; /* Increase margin top for more spacing */
+      }
+      h1,
+      h2 {
+        margin-bottom: 20px;
+        text-align: left; /* Align headings to the left */
+        clear: both; /* Clear floats to prevent overlap */
+      }
+      h1 {
+        font-size: 24px;
+      }
+      h2 {
+        font-size: 18px;
+        /* color: rgb(97 135 212); */
+        color: white;
+      }
+      p {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        margin-bottom: 30px; /* Increase margin bottom for more spacing */
+      }
+      th,
+      td {
+        padding: 10px; /* Adjusted padding for better spacing */
+        text-align: left;
+      }
+      th {
+        font-weight: bold;
+      }
+      .remarks {
+        page-break-inside: avoid;
+      }
+      .heading {
+        color: rgb(97 135 212);
+        border-bottom: rgb(97 135 212) solid 2px;
+        text-align: left;
+      }
+      .sub-heading {
+        padding: 5px;
+        padding-inline: 15px;
+        max-width: fit-content;
+        background-color: rgb(97 135 212);
+        text-align: center;
+        border-top-left-radius: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="remarks">
+      <h2 class="heading">Control Sample</h2>
+      <table>
+        <tr>
+          <th>Analyst Id</th>
+          <td><%= reportData?.analystId || "Not Applicable" %></td>
+          <th>Full Name</th>
+          <td><%= reportData?.fullName || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Date Of Birth</th>
+          <td><%= reportData?.dateOfBirth || "Not Applicable" %></td>
+          <th>Email Address</th>
+          <td><%= reportData?.emailAddress || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Phone Number</th>
+          <td><%= reportData?.phoneNumber || "Not Applicable" %></td>
+          <th>Department</th>
+          <td><%= reportData?.department || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Job Title</th>
+          <td><%= reportData?.jobTitle || "Not Applicable" %></td>
+          <th>Supervisor Manager Name</th>
+          <td><%= reportData?.supervisorManagerName || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Qualification Id</th>
+          <td><%= reportData?.qualificationId || "Not Applicable" %></td>
+          <th>Date Of Qualification</th>
+          <td><%= reportData?.dateOfQualification || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Qualified By</th>
+          <td><%= reportData?.qualifiedBy || "Not Applicable" %></td>
+          <th>Qualification Type</th>
+          <td><%= reportData?.qualificationType || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Expiration Date</th>
+          <td><%= reportData?.expirationDate || "Not Applicable" %></td>
+          <th>Qualification Status</th>
+          <td><%= reportData?.qualificationStatus || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Training Program Name</th>
+          <td><%= reportData?.trainingProgramName || "Not Applicable" %></td>
+          <th>Training Start Date</th>
+          <td>
+            <%= reportData?.trainingStartDate || "Not Applicable" %>
+          </td>
+        </tr>
+        <tr>
+          <th>Training Completion Date</th>
+          <td>
+            <%= reportData?.trainingCompletionDate || "Not Applicable" %>
+          </td>
+          <th>Training Completion Status</th>
+          <td>
+            <%= reportData?.trainingCompletionStatus || "Not Applicable" %>
+          </td>
+        </tr>
+        <tr>
+          <th>CertificationName Number</th>
+          <td><%= reportData?.certificationNameNumber || "Not Applicable" %></td>
+          <th>Certification Body</th>
+          <td><%= reportData?.certificationBody || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Certification Date</th>
+          <td><%= reportData?.certificationDate || "Not Applicable" %></td>
+          <th>Next ReCertification Date</th>
+          <td><%= reportData?.nextReCertificationDate || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Competency Test Name</th>
+          <td><%= reportData?.competencyTestName || "Not Applicable" %></td>
+          <th>Test Date</th>
+          <td><%= reportData?.testDate || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Test Results</th>
+          <td><%= reportData?.testResults || "Not Applicable" %></td>
+          <th>Test Score</th>
+          <td><%= reportData?.testScore || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Evaluator Name</th>
+          <td><%= reportData?.evaluatorName || "Not Applicable" %></td>
+          <th>Evaluator Comments</th>
+          <td><%= reportData?.evaluatorComments || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Technique Skill Name</th>
+          <td><%= reportData?.techniqueSkillName || "Not Applicable" %></td>
+          <th>qualificationDate</th>
+          <td><%= reportData?.qualificationDate || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Skill Level</th>
+          <td><%= reportData?.skillLevel || "Not Applicable" %></td>
+          <th>Re Qualification Required</th>
+          <td><%= reportData?.reQualificationRequired || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Re Qualification Due Date</th>
+          <td><%= reportData?.reQualificationDueDate || "Not Applicable" %></td>
+          <th>Instrument Name Id</th>
+          <td><%= reportData?.instrumentNameId || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Method Name Id</th>
+          <td><%= reportData?.methodNameId || "Not Applicable" %></td>
+          <th>Qualification Level</th>
+          <td><%= reportData?.qualificationLevel || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>SOP Name Id</th>
+          <td><%= reportData?.sopNameId || "Not Applicable" %></td>
+          <th>SOP Version</th>
+          <td><%= reportData?.sopVersion || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Years Of Experience</th>
+          <td><%= reportData?.yearsOfExperience || "Not Applicable" %></td>
+          <th>Previous Job Roles</th>
+          <td><%= reportData?.previousJobRoles || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Previous Labs Worked In</th>
+          <td><%= reportData?.previousLabsWorkedIn || "Not Applicable" %></td>
+          <th>Specializations</th>
+          <td><%= reportData?.specializations || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Approval Date</th>
+          <td><%= reportData?.approvalDate || "Not Applicable" %></td>
+          <th>Approver Name</th>
+          <td><%= reportData?.approverName || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Approver Signature</th>
+          <td><%= reportData?.approverSignature || "Not Applicable" %></td>
+          <th>Comments Notes</th>
+          <td><%= reportData?.commentsNotes || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Modification Date</th>
+          <td><%= reportData?.modificationDate || "Not Applicable" %></td>
+          <th>Modified By</th>
+          <td><%= reportData?.modifiedBy || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Stage</th>
+          <td><%= reportData?.stage || "Not Applicable" %></td>
+          <th>Status</th>
+          <td><%= reportData?.status || "Not Applicable" %></td>
+        </tr>
+        
+      </table>
+    </div>
+    <div class="remarks">
+      <h2 class="heading">Activity Log</h2>
+      <table>
+        <tr>
+          <th>Initiator Name</th>
+          <td><%= reportData?.initiatorName || "Not Applicable" %></td>
+          <th>Initiator Comment</th>
+          <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Initiator Review Date</th>
+          <td><%= reportData?.initiatorReviewDate || "Not Applicable" %></td>
+          <th>Supervisor Name</th>
+          <td><%= reportData?.supervisorName || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>Supervisor Comment</th>
+          <td><%= reportData?.supervisorComment || "Not Applicable" %></td>
+          <th>Supervisor Review Date</th>
+          <td><%= reportData?.supervisorReviewDate || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>QA Reviewer Name</th>
+          <td><%= reportData?.QaReviewerName || "Not Applicable" %></td>
+          <th>QA Reviewer Comment</th>
+          <td><%= reportData?.QaReviewerComment || "Not Applicable" %></td>
+        </tr>
+        <tr>
+          <th>QA Review Date</th>
+          <td><%= reportData?.QaReviewDate || "Not Applicable" %></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
