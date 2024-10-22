@@ -29,7 +29,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    types: "sample",
+    types: "stability",
     stage: "1",
     samplePlanId: "",
     sampleId: "",

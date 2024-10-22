@@ -18,10 +18,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
-import ProgressBar from "../components/Workflow/ProgressBar";
+import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
+// import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {
-  const [activeTab, setActiveTab] = useState("Sample Registration");
+  const [activeTab, setActiveTab] = useState("Analyst Qualification");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
   console.log(id, "ididididididididiidioidiidid");
@@ -125,7 +126,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `http://localhost:9000/analyst/get-analyst/${id}`
       );
       console.log(response.data);
 
@@ -147,7 +148,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/sample`,
+        `http://localhost:9000/analyst/edit-analyst/${id}`,
         formData
       );
       if (response.status === 200) {
@@ -171,7 +172,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     } else {
       try {
         const response = await axios.post(
-          `http://localhost:9000/create-sample/sample`,
+          `http://localhost:9000/analyst/create-analyst`,
           formData
         );
         console.log(response, "iddddddddddddddddddddddd");
@@ -834,7 +835,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   return (
     <>
       {id ? (
-        <ProgressBar
+        <ProgressBar2
           stage={Number(formData.stage)}
           sampleId={id}
           onStageClick={handleStageChange}
