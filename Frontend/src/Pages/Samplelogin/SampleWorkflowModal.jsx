@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CModal,
@@ -21,15 +21,15 @@ import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
-import TestParametersTable from "./TestParametersTable"; // Import the new component
+import TestParametersTable from "./TestParametersTable";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
-  const [testParameters, setTestParameters] = useState([]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [testParameters, setTestParameters] = useState([]);
+
   const handleAddRow = () => {
     setTestParameters([
       ...testParameters,
@@ -151,39 +151,6 @@ const SampleWorkflowModal = ({ onClose }) => {
     initiationDate: "",
     initiator: "",
   });
-
-  const [idForBarcode, setIdForBarcode] = useState(null);
-  console.log(idForBarcode);
-  const barcodeRef = useRef(null);
-
-  const generateRandomNumbers = (length) => {
-    let randomNumbers = "";
-    for (let i = 0; i < length; i++) {
-      randomNumbers += Math.floor(Math.random() * 20);
-    }
-    return randomNumbers;
-  };
-
-  const fetchId = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      const responseData = Array.isArray(response.data)
-        ? response.data
-        : response.data.data;
-
-      const randomNumbers = generateRandomNumbers(16);
-      const idWithRandomNumbers = `${responseData[0]?.id}${randomNumbers}`;
-
-      setIdForBarcode(idWithRandomNumbers);
-    } catch (error) {
-      console.error("Error fetching barcode ID: ", error);
-      toast.error("Failed to fetch barcode ID");
-    }
-  };
-
-  useEffect(() => {
-    fetchId();
-  }, []);
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -510,7 +477,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={idForBarcode}
+                  value={""}
                   disabled
                 />
                 <div>
@@ -639,7 +606,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
                   onClick={toggleDropdown} // Toggle dropdown on input click
                 >
-                  {Array.isArray(formData.requiredInstrument) &&
+                  {formData.requiredInstrument &&
                   formData.requiredInstrument.length > 0 ? (
                     formData.requiredInstrument.map((instrument, index) => (
                       <span
