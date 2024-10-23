@@ -279,23 +279,29 @@ const setStablityData = (data) => {
   stabilityDatas.turnAroundTime = sampleData?.turnAroundTime ?? "";
   stabilityDatas.sampleRetestingDate = sampleData?.sampleRetestingDate ?? "";
   stabilityDatas.reviewDate = sampleData?.reviewDate ?? "";
-  stabilityDatas.sampleStorageLocation = sampleData?.sampleStorageLocation ?? "";
+  stabilityDatas.sampleStorageLocation =
+    sampleData?.sampleStorageLocation ?? "";
   stabilityDatas.transportationMethod = sampleData?.transportationMethod ?? "";
   stabilityDatas.samplePreparationMethod =
     sampleData?.samplePreparationMethod ?? "";
-  stabilityDatas.samplePackagingDetail = sampleData?.samplePackagingDetail ?? "";
+  stabilityDatas.samplePackagingDetail =
+    sampleData?.samplePackagingDetail ?? "";
   stabilityDatas.sampleLabel = sampleData?.sampleLabel ?? "";
-  stabilityDatas.regulatoryRequirement = sampleData?.regulatoryRequirement ?? "";
+  stabilityDatas.regulatoryRequirement =
+    sampleData?.regulatoryRequirement ?? "";
   stabilityDatas.qualityControlCheck = sampleData?.qualityControlCheck ?? "";
-  stabilityDatas.controlSampleReference = sampleData?.controlSampleReference ?? "";
-  stabilityDatas.sampleIntegrityStatus = sampleData?.sampleIntegrityStatus ?? "";
+  stabilityDatas.controlSampleReference =
+    sampleData?.controlSampleReference ?? "";
+  stabilityDatas.sampleIntegrityStatus =
+    sampleData?.sampleIntegrityStatus ?? "";
   stabilityDatas.riskAssessment = sampleData?.riskAssessment ?? "";
   stabilityDatas.supervisor = sampleData?.supervisor ?? "";
   stabilityDatas.instrumentsReserved = sampleData?.instrumentsReserved ?? "";
   stabilityDatas.labAvailability = sampleData?.labAvailability ?? "";
   stabilityDatas.sampleCostEstimation = sampleData?.sampleCostEstimation ?? "";
   stabilityDatas.resourceUtilization = sampleData?.resourceUtilization ?? "";
-  stabilityDatas.sampleMovementHistory = sampleData?.sampleMovementHistory ?? "";
+  stabilityDatas.sampleMovementHistory =
+    sampleData?.sampleMovementHistory ?? "";
   stabilityDatas.testingProgress = sampleData?.testingProgress ?? "";
   stabilityDatas.alertNotification = sampleData?.alertNotification ?? "";
   stabilityDatas.deviationLog = sampleData?.deviationLog ?? "";
@@ -304,7 +310,8 @@ const setStablityData = (data) => {
   stabilityDatas.samplingFrequency = sampleData?.samplingFrequency ?? "";
   stabilityDatas.sampleDisposition = sampleData?.sampleDisposition ?? "";
   stabilityDatas.stabilityStudyType = sampleData?.stabilityStudyType ?? "";
-  stabilityDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
+  stabilityDatas.stabilityStudyProtocol =
+    sampleData?.stabilityStudyProtocol ?? "";
   stabilityDatas.stabilityProtocolApprovalDate =
     sampleData?.stabilityProtocolApprovalDate ?? "";
   stabilityDatas.countryOfRegulatorySubmissions =
@@ -320,12 +327,18 @@ const setStablityData = (data) => {
   stabilityDatas.analysisType = sampleData?.analysisType ?? "";
   stabilityDatas.analysisDate = sampleData?.analysisDate ?? "";
   stabilityDatas.analysisResult = sampleData?.analysisResult ?? "";
-  stabilityDatas.srSupportiveAttachment = sampleData?.srSupportiveAttachment ?? "";
-  stabilityDatas.qaSupportiveAttachment = sampleData?.qaSupportiveAttachment ?? "";
-  stabilityDatas.suSupportiveAttachment = sampleData?.suSupportiveAttachment ?? "";
-  stabilityDatas.saSupportiveAttachment = sampleData?.saSupportiveAttachment ?? "";
-  stabilityDatas.siSupportiveAttachment = sampleData?.siSupportiveAttachment ?? "";
-  stabilityDatas.stabilityStudyProtocol = sampleData?.stabilityStudyProtocol ?? "";
+  stabilityDatas.srSupportiveAttachment =
+    sampleData?.srSupportiveAttachment ?? "";
+  stabilityDatas.qaSupportiveAttachment =
+    sampleData?.qaSupportiveAttachment ?? "";
+  stabilityDatas.suSupportiveAttachment =
+    sampleData?.suSupportiveAttachment ?? "";
+  stabilityDatas.saSupportiveAttachment =
+    sampleData?.saSupportiveAttachment ?? "";
+  stabilityDatas.siSupportiveAttachment =
+    sampleData?.siSupportiveAttachment ?? "";
+  stabilityDatas.stabilityStudyProtocol =
+    sampleData?.stabilityStudyProtocol ?? "";
   stabilityDatas.initiatorComment = sampleData?.initiatorComment ?? "";
   stabilityDatas.labTechnicianComment = sampleData?.labTechnicianComment ?? "";
   stabilityDatas.reviewerComment = sampleData?.reviewerComment ?? "";
@@ -514,7 +527,7 @@ export const generatePdfControlSample = async (req, res) => {
     const htmlContent = await new Promise((resolve, reject) => {
       req.app.render(
         "controlSampleReport",
-        { reportData: sampleDatas},
+        { reportData: sampleDatas },
         (err, html) => {
           if (err) return reject(err);
           resolve(html);
@@ -702,6 +715,125 @@ export const generatePdfAnalyst = async (req, res) => {
 
     const footerHtml = await new Promise((resolve, reject) => {
       req.app.render("footer", { reportData: sampleDatas }, (err, html) => {
+        if (err) return reject(err);
+        resolve(html);
+      });
+    });
+
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      displayHeaderFooter: true,
+      headerTemplate: headerHtml,
+      footerTemplate: footerHtml,
+      margin: {
+        top: "150px",
+        right: "50px",
+        bottom: "50px",
+        left: "50px",
+      },
+    });
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=APQR_Report.pdf"
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    return res.status(500).send("Error generating PDF", error);
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+};
+
+const typeData = {};
+
+const setTypeData = (data) => {
+  typeData.Made = data.Made ?? "";
+  typeData.Model = data.Model ?? "";
+  typeData.sopNo = data.sopNo ?? "";
+  typeData.equipNo = data.equipNo ?? "";
+  typeData.Category = data.Category ?? "";
+  typeData.software = data.software ?? "";
+  typeData.uniqueId = data.uniqueId ?? "";
+  typeData.Instrument = data.Instrument ?? "";
+  typeData.suppliedBy = data.suppliedBy ?? "";
+  typeData.InstalledAt = data.InstalledAt ?? "";
+  typeData.description = data.description ?? "";
+  typeData.installedOn = data.installedOn ?? "";
+  typeData.InstrumentId = data.InstrumentId ?? "";
+  typeData.capacitySize = data.capacitySize ?? "";
+  typeData.containsModule = data.containsModule ?? "";
+  typeData.calibrationStatus = data.calibrationStatus ?? "";
+  typeData.warrantyExpiresOn = data.warrantyExpiresOn ?? "";
+  typeData.manufacturerSerialNo = data.manufacturerSerialNo ?? "";
+  typeData.instrumentCategoryDescription =
+    data.instrumentCategoryDescription ?? "";
+};
+
+export const generatePdfIMRegistration = async (req, res) => {
+  try {
+    const { type, id } = req.params;
+    const typeData = await fetch(
+      `http://localhost:9000/get-lims/${type}/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const imData = await typeData.json();
+    setTypeData(imData);
+  } catch (error) {
+    console.error("Error fetching:", error);
+    return res.status(500).send("Error fetching data");
+  }
+  let browser;
+  try {
+    const base64Logo = await getBase64Image("public/gxplogo.png");
+
+    if (!typeData) {
+      return res.status(404).json({ error: true, message: " Data not found" });
+    }
+
+    // Render the main HTML with EJS
+    const htmlContent = await new Promise((resolve, reject) => {
+      req.app.render(
+        "iMRegistrationReport",
+        { reportData: typeData },
+        (err, html) => {
+          if (err) return reject(err);
+          resolve(html);
+        }
+      );
+    });
+
+    // Render the header and footer with EJS
+    const headerHtml = await new Promise((resolve, reject) => {
+      req.app.render(
+        "typeDataHeader",
+        { reportData: typeData, base64Logo: base64Logo },
+        (err, html) => {
+          if (err) return reject(err);
+          resolve(html);
+        }
+      );
+    });
+
+    const footerHtml = await new Promise((resolve, reject) => {
+      req.app.render("footer", { reportData: typeData }, (err, html) => {
         if (err) return reject(err);
         resolve(html);
       });
