@@ -30,7 +30,7 @@ import {
 randomSpecData;
 
 const SpecificationSpec = () => {
-  const [data, setData] = useState(randomSpecData);
+  const [data, setData] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -191,7 +191,7 @@ const SpecificationSpec = () => {
   const handleAddSPC = async (newSTP) => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/STP`,
+        `${BASE_URL}/manage-lims/add/specificationSpec`,
         newSTP
       );
       const addedSPC = response.data.updatedLIMS?.spc[0];
@@ -207,7 +207,7 @@ const SpecificationSpec = () => {
   const handleEditSave = async (updatedData) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/manage-lims/:update/STP/${updatedData.stpId}`,
+        `${BASE_URL}/manage-lims/:update/specificationSpec/${updatedData.stpId}`,
         updatedData
       );
       const updatedSPC = response.data.updatedLIMS?.spc[0];
@@ -220,7 +220,7 @@ const SpecificationSpec = () => {
       }
       setEditModalData(null);
     } catch (err) {
-      setError("Error updating STP");
+      setError("Error updating specificationSpec");
     }
   };
 

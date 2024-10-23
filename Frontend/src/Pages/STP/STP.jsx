@@ -161,8 +161,8 @@ const STP = () => {
         newSTPData
       );
       if (response.status === 200 || response.status === 201) {
-        setData((prevData) => [...prevData, response.data]); // Ensure new data is appended
-        fetchSTPs();d
+        setData((prevData) => [...prevData, response.data]); 
+        fetchSTPs();
         toast.success("New STP added successfully!");
       } else {
         toast.error("Failed to add new STP. Please try again.");
