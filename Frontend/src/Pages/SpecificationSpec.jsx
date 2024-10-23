@@ -29,6 +29,7 @@ import {
   CForm,
 } from "@coreui/react";
 import { toast } from "react-toastify";
+import SpecificationviewModel from "./SpecificationviewModel";
 
 const SpecificationSpec = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -618,8 +619,8 @@ const SpecificationSpec = () => {
       </div>
 
       {/* Modals */}
-      {/* {viewModalData && (
-        <SpecificationViewModal
+      {viewModalData && (
+        <SpecificationviewModel
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
@@ -627,7 +628,7 @@ const SpecificationSpec = () => {
           title="Specification Details"
           updateStatus={handleStatusUpdate}
         />
-      )} */}
+      )}
       {isAddModalOpen && (
         <SpecificationSpecModal
           visible={isAddModalOpen}

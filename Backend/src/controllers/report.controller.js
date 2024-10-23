@@ -160,14 +160,14 @@ export const generatePdfbyId = async (req, res) => {
     }
 
     // Generate the barcode for the provided sample ID or any relevant string
-    const barcodeBase64 = await generateBarcodeBase64(
-      sampleDatas.sampleBarCode
-    );
+    // const barcodeBase64 = await generateBarcodeBase64(
+    //   sampleDatas.sampleBarCode
+    // );
     // Render the main HTML with EJS
     const htmlContent = await new Promise((resolve, reject) => {
       req.app.render(
         "report",
-        { reportData: sampleDatas, barcodeBase64: barcodeBase64 },
+        { reportData: sampleDatas, },
         (err, html) => {
           if (err) return reject(err);
           resolve(html);
@@ -383,14 +383,14 @@ export const generatePdfbyIdStability = async (req, res) => {
     }
 
     // Generate the barcode for the provided sample ID or any relevant string
-    const barcodeBase64 = await generateBarcodeBase64(
-      stabilityDatas.sampleBarCode
-    );
+    // const barcodeBase64 = await generateBarcodeBase64(
+    //   stabilityDatas.sampleBarCode
+    // );
     // Render the main HTML with EJS
     const htmlContent = await new Promise((resolve, reject) => {
       req.app.render(
         "stabilityReport",
-        { reportData: stabilityDatas, barcodeBase64: barcodeBase64 },
+        { reportData: stabilityDatas,  },
         (err, html) => {
           if (err) return reject(err);
           resolve(html);
