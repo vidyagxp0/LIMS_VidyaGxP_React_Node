@@ -2,6 +2,7 @@ import puppeteer from "puppeteer";
 import { getBase64Image } from "../../index.js";
 import bwipjs from "bwip-js";
 import { promisify } from "util";
+import config from "../config/config.json" assert { type: "json" };
 
 const generateBarcodeBase64 = async (barcodeText) => {
   try {
@@ -134,7 +135,7 @@ export const generatePdfbyId = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/get-Sample/${id}/sample`,
+      `${config.development.URL}/get-Sample/${id}/sample`,
       {
         method: "GET",
         headers: {
@@ -357,7 +358,7 @@ export const generatePdfbyIdStability = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/get-Sample/${id}/stability`,
+      `${config.development.URL}/get-Sample/${id}/stability`,
       {
         method: "GET",
         headers: {
@@ -498,7 +499,7 @@ export const generatePdfControlSample = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/controlSample/get-control-sample/${controlSampleId}`,
+      `${config.development.URL}/controlSample/get-control-sample/${controlSampleId}`,
       {
         method: "GET",
         headers: {
@@ -664,7 +665,7 @@ export const generatePdfAnalyst = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/analyst/get-analyst/${analystId}`,
+      `${config.development.URL}/analyst/get-analyst/${analystId}`,
       {
         method: "GET",
         headers: {
@@ -786,7 +787,7 @@ export const generatePdfIMRegistration = async (req, res) => {
   try {
     const { type, id } = req.params;
     const typeData = await fetch(
-      `http://localhost:9000/get-lims/${type}/${id}`,
+      `${config.development.URL}/get-lims/${type}/${id}`,
       {
         method: "GET",
         headers: {

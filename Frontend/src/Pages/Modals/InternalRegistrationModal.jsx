@@ -110,7 +110,7 @@ const InternalRegistrationModal = ({
 
     axios
       .post(
-        `http://localhost:9000/manage-lims/add/iWSInternalRegistration`,
+        `http://limsapi.vidyagxp.com/manage-lims/add/iWSInternalRegistration`,
         newSampleData
       )
       .then((response) => {

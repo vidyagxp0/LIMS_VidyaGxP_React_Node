@@ -40,7 +40,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     axios
-      .put(`http://localhost:9000/manage-lims/update/sLSamplePA/${formData.uniqueId}`, formData)
+      .put(`http://limsapi.vidyagxp.com/manage-lims/update/sLSamplePA/${formData.uniqueId}`, formData)
       .then((response) => {
         // console.log("Data updated successfully:", response.data);
         // updateRow(formData); 
