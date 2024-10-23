@@ -14,6 +14,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {BASE_URL} from "../../config.json";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ function Login(props) {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/admin/user-login",
+        `${BASE_URL}/admin/user-login`,
         {
           email,
           password: passwd,
