@@ -71,6 +71,9 @@ function StorageChamber() {
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
@@ -100,6 +103,32 @@ function StorageChamber() {
     } catch (error) {
       console.error("Error updating storage chamber:", error);
       toast.error("Error updating storage chamber");
+    }
+  };
+
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStorageChamber/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
     }
   };
 
@@ -169,6 +198,10 @@ function StorageChamber() {
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
 
   const handleDelete = async (item) => {
     try {
@@ -386,15 +419,6 @@ function StorageChamber() {
   };
 
 
-  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.samplingID === samplingConfiguration.samplingID
-        ? { ...item, status: newStatus }
-        : item
-    );
-    setData(updatedData);
-  };
-
   return (
     <>
       <LaunchQMS />
@@ -426,7 +450,7 @@ function StorageChamber() {
             <ATMButton
               text="Add Storage Chamber"
               color="blue"
-              // onClick={openModal}
+              onClick={openModal}
             />
           </div>
         </div>
@@ -454,6 +478,7 @@ function StorageChamber() {
           fields={fields}
           onClose={closeViewModal}
           title="Storage Chamber Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
  {isModalOpen && 

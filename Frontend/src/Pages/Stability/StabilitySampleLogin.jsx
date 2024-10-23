@@ -19,12 +19,22 @@ import {
 } from "@coreui/react";
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
+import ReusableModal from "../Modals/ResusableModal";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+
+const fields = [
+  { label: "Sample Type", key: "sampleType" },
+  { label: "Product/Material", key: "productMaterial" },
+  { label: "generic Name", key: "genericName" },
+  { label: "specification ID", key: "specificationId" },
+  { label: "Status", key: "status" },
+];
+
 const initialData = [
   {
     checkbox: false,
@@ -68,7 +78,7 @@ function StabilitySampleLogin() {
     try {
       const response = await axios.get(
         `http://localhost:9000/get-all-lims/sMSampleLogin`
-      );
+      );
       const fetchedData = response?.data[0]?.sMSampleLogin || [];
 
       const updatedData = fetchedData.map((item, index) => ({
@@ -90,6 +100,9 @@ function StabilitySampleLogin() {
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
+  };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
   const handleCloseModals = () => {
@@ -121,6 +134,34 @@ function StabilitySampleLogin() {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
+
+
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLogin/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
+    }
+  };
+
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -183,7 +224,7 @@ function StabilitySampleLogin() {
     setStatusFilter(status);
   };
 
- 
+
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -632,7 +673,7 @@ function StabilitySampleLogin() {
 
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Sample Log In</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
@@ -684,7 +725,7 @@ function StabilitySampleLogin() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login.pdf" title="Sample Login Data" />
+            <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login.pdf" title="Sample Login Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Sample LogIn"
@@ -701,6 +742,18 @@ function StabilitySampleLogin() {
           onViewDetails={onViewDetails}
           openEditModal={openEditModal}
         />
+
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            onClose={handleCloseModals}
+            title="Standard Protocol Details"
+            updateStatus={handleStatusUpdate}
+          />
+        )}
 
         {isModalOpen && (
           <StatusModal

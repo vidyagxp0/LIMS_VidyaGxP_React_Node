@@ -23,13 +23,19 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-
+const fields = [
+  { label: "Product Caption", key: "productCaption" },
+  { label: "Report Title", key: "reportTitle" },
+  { label: "Format No", key: "formatNo" },
+  { label: "Status", key: "status" },
+];
 const initialData = [
   {
     checkbox: false,
@@ -70,7 +76,7 @@ function SummaryReportHeader() {
     try {
       const response = await axios.get(
         `http://localhost:9000/get-all-lims/sMSummaryReportHeader`
-      );
+      );
       const fetchedData = response?.data[0]?.sMSummaryReportHeader || [];
 
       const updatedData = fetchedData.map((item, index) => ({
@@ -91,6 +97,9 @@ function SummaryReportHeader() {
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
+  };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
   const handleCloseModals = () => {
@@ -128,6 +137,34 @@ function SummaryReportHeader() {
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
+
+
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status"); ``
+    }
+  };
+
 
   const filteredData = data.filter((row) => {
     return (
@@ -200,43 +237,29 @@ function SummaryReportHeader() {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
 
-   const handleModalSubmit = async (newProduct) => {
-     try {
-       const response = await axios.post(
-         `${BASE_URL}/manage-lims/add/sMSummaryReportHeader`,
-         {
-           ...newProduct,
-           status: newProduct.status || "INITIATED",
-         }
-       );
-       if (response.status === 200) {
-         toast.success("Summary Report Header added successfully.");
-         setIsModalOpen(false);
-         fetchSummarReportHeaderData();
-       } else {
-         toast.error("Failed to add Summary Report Header.");
-       }
-     } catch (error) {
-       toast.error(
-         "Error adding Summary Report Header: " +
-           (error.response?.data || error.message)
-       );
-     }
-   };
-  // const addNewStorageCondition = (newCondition) => {
-  //   const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-  //   setData((prevData) => [
-  //     ...prevData,
-  //     {
-  //       ...newCondition,
-  //       sno: prevData.length + 1,
-  //       checkbox: false,
-  //       status: nextStatus,
-  //     },
-  //   ]);
-  //   setLastStatus(nextStatus);
-  //   setIsModalOpen(false);
-  // };
+  const handleModalSubmit = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/sMSummaryReportHeader`,
+        {
+          ...newProduct,
+          status: newProduct.status || "INITIATED",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Summary Report Header added successfully.");
+        setIsModalOpen(false);
+        fetchSummarReportHeaderData();
+      } else {
+        toast.error("Failed to add Summary Report Header.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding Summary Report Header: " +
+        (error.response?.data || error.message)
+      );
+    }
+  };
 
   const handleDelete = async (item) => {
     console.log(item);
@@ -270,6 +293,7 @@ function SummaryReportHeader() {
       );
       if (response.status === 200) {
         toast.success("Product added successfully.");
+        setViewModalData(null);
         fetchData();
         setIsModalOpen(false);
       } else {
@@ -379,6 +403,8 @@ function SummaryReportHeader() {
             value={reportTitle}
             onChange={(e) => setReportTitle(e.target.value)}
           />
+
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -483,6 +509,7 @@ function SummaryReportHeader() {
         );
         setData(newData);
         closeEditModal();
+        setViewModalData(null);
         toast.success("Data updated successfully");
         fetchData();
       } else {
@@ -760,6 +787,18 @@ function SummaryReportHeader() {
             visible={isModalOpen}
             closeModal={closeModal}
             onAdd={handleAdd}
+          />
+        )}
+
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            onClose={handleCloseModals}
+            fields={fields}
+            title="Standard Protocol Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

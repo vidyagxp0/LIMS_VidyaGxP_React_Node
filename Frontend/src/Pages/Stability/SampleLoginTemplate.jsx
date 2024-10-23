@@ -37,9 +37,14 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import ReusableModal from "../Modals/ResusableModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
+const fields = [
+  { label: "Template Title", key: "templateTitle" },
+  { label: "Status", key: "status" },
+];
 const initialData = [
   {
     checkbox: false,
@@ -102,6 +107,9 @@ const SampleLoginTemplate = () => {
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+  };
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
@@ -133,6 +141,33 @@ const SampleLoginTemplate = () => {
     setData(newData);
   };
 
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
+    }
+  };
+
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -147,9 +182,15 @@ const SampleLoginTemplate = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); // Set the data for ViewModal
-    setIsViewModalOpen(true); // Open the ViewModal
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
+
 
   const columns = [
     {
@@ -583,14 +624,7 @@ const SampleLoginTemplate = () => {
       toast.error("Error updating investigation");
     }
   };
-  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.samplingID === samplingConfiguration.samplingID
-        ? { ...item, status: newStatus }
-        : item
-    );
-    setData(updatedData);
-  };
+
 
   return (
     <>
@@ -674,6 +708,18 @@ const SampleLoginTemplate = () => {
             visible={isModalOpen}
             closeModal={closeModal}
             onAdd={handleAdd}
+          />
+        )}
+
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            onClose={handleCloseModals}
+            title="Standard Protocol Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

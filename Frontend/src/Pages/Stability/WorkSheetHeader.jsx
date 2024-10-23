@@ -24,10 +24,18 @@ import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
+import ReusableModal from "../Modals/ResusableModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
+const fields = [
+  { label: "Sample Type", key: "sampleType" },
+  { label: "Worksheet Type", key: "worksheetType" },
+  { label: "Report Title", key: "reportTitle" },
+  { label: "Product ", key: "productCaption" },
+  { label: "Status", key: "status" },
+];
 const initialData = [
   {
     checkbox: false,
@@ -48,9 +56,8 @@ const initialData = [
     status: "INITIATED",
   },
 ];
-
 function WorkSheetHeader() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,13 +73,13 @@ function WorkSheetHeader() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
-
+ 
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `http://localhost:9000/get-all-lims/sMWorkSheetHeader`
-      );
+      );
       const fetchedData = response?.data[0]?.sMWorkSheetHeader || [];
 
       const updatedData = fetchedData.map((item, index) => ({
@@ -82,6 +89,7 @@ function WorkSheetHeader() {
 
       setData(updatedData);
     } catch (error) {
+      
       console.error("Error fetching data:", error);
     }
   };
@@ -93,29 +101,14 @@ function WorkSheetHeader() {
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
+  const closeViewModal = () => {
+    setViewModalData(null);
+    setShowModal(false);
+  };
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
   };
-  useEffect(() => {
-    const counts = {
-      DROPPED: 0,
-      INITIATED: 0,
-      REINITIATED: 0,
-      APPROVED: 0,
-      REJECTED: 0,
-    };
-
-    data.forEach((item) => {
-      if (item.status === "DROPPED") counts.DROPPED++;
-      else if (item.status === "INITIATED") counts.INITIATED++;
-      else if (item.status === "REINITIATED") counts.REINITIATED++;
-      else if (item.status === "APPROVED") counts.APPROVED++;
-      else if (item.status === "REJECTED") counts.REJECTED++;
-    });
-
-    setCardCounts(counts);
-  }, [data]);
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -123,19 +116,52 @@ function WorkSheetHeader() {
     setData(newData);
   };
 
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+  
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/sMWorkSheetHeader/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal(); 
+        await fetchData(); 
+        setViewModalData(null);
+        
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
+  };
+  
+
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
+  const filteredData = (data || []).filter((row) => {
     return (
       row.sampleType.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
-
   const onViewDetails = (rowData) => {
     setViewModalData(rowData); // Set the data for ViewModal
     setIsViewModalOpen(true); // Open the ViewModal
@@ -249,6 +275,7 @@ function WorkSheetHeader() {
       if (response.status === 200) {
         toast.success("Product added successfully.");
         fetchData();
+        setViewModalData(null)
         setIsModalOpen(false);
       } else {
         toast.error("Failed to adsd Product.");
@@ -265,6 +292,7 @@ function WorkSheetHeader() {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(2);
+    const [productCaption,setProductCaption] = useState("")
     const [footerColumns, setFooterColumns] = useState(2);
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
@@ -414,7 +442,7 @@ function WorkSheetHeader() {
               })
             }
           />
-          <CFormInput
+          <CFormInput 
             className="mb-3"
             type="text"
             label="Product/Material Caption"
@@ -513,22 +541,24 @@ function WorkSheetHeader() {
   const handleEditSave = async (updatedData) => {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
+      // Optimistically update the data locally
+      const updatedIndex = data.findIndex(item => item.uniqueId === updatedData.uniqueId);
+      const updatedArray = [...data];
+      updatedArray[updatedIndex] = updatedData;
+      setData(updatedArray); // This should trigger the UI update
+  
+      // Now, make the API call
       const response = await axios.put(
         `http://localhost:9000/manage-lims/update/sMWorkSheetHeader/${updatedData.uniqueId}`,
         dataTosend
       );
+      
       if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId
-            ? { ...item, ...response.data }
-            : item
-        );
-        setData(newData);
+        // Sync the data again from server after update
+        await fetchData();
         closeEditModal();
         toast.success("Data updated successfully");
-        fetchData();
       } else {
-        console.error("Failed to update investigation:", response.statusText);
         toast.error("Failed to update investigation");
       }
     } catch (error) {
@@ -536,6 +566,7 @@ function WorkSheetHeader() {
       toast.error("Error updating investigation");
     }
   };
+  
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [headerRows, setHeaderRows] = useState(0);
@@ -761,7 +792,7 @@ function WorkSheetHeader() {
 
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Work Sheet Header</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
@@ -813,25 +844,37 @@ function WorkSheetHeader() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="WorkSheet_Header.pdf" title="WorkSheet Header Data" />
+            <PDFDownload columns={columns} data={filteredData} fileName="WorkSheet_Header.pdf" title="WorkSheet Header Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add WorkSheet" color="blue" onClick={openModal} />
           </div>
         </div>
-        <Table
-          columns={columns}
-          data={filteredData}
-          onDelete={handleDelete}
-          onCheckboxChange={handleCheckboxChange}
-          onViewDetails={onViewDetails}
-          openEditModal={openEditModal}
-        />
+          <Table
+            columns={columns}
+            data={filteredData}
+            onDelete={handleDelete}
+            onCheckboxChange={handleCheckboxChange}
+            onViewDetails={onViewDetails}
+            openEditModal={openEditModal}
+          />
 
         {isModalOpen && (
           <StatusModal
             visible={isModalOpen}
             closeModal={closeModal}
             onAdd={handleAdd}
+          />
+        )}
+
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            onClose={handleCloseModals}
+            title="Standard Protocol Details"
+            updateStatus={handleStatusUpdate}
+            fields={fields}
           />
         )}
         {isModalsOpen && (
