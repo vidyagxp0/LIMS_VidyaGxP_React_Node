@@ -198,7 +198,7 @@ function StorageLocation() {
       );
 
       if (response.status === 200) {
-        const addedStorageLocation = response.data.addLIMS; // Accessing the added item from the response
+         const addedStorageLocation = response.data.addLIMS; // Accessing the added item from the response
 
         setData((prevData) => [
           ...prevData,
