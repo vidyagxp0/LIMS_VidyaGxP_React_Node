@@ -49,10 +49,6 @@ const Registration = () => {
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
 
-  useEffect(() => {
-    fetchProductData();
-  }, []);
-
   const fetchProductData = async () => {
     try {
       const response = await axios.get(
@@ -87,6 +83,9 @@ const Registration = () => {
     }
   };
 
+  useEffect(() => {
+    fetchProductData();
+  }, []);
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
@@ -114,6 +113,7 @@ const Registration = () => {
           )
         );
         toast.success("Product updated successfully.");
+        fetchProductData();
         setEditModalData(null);
         closeModal();
       } else {
@@ -585,7 +585,7 @@ const Registration = () => {
         calibrationStatus: newInstrument.calibrationStatus,
         calibrationDueOn: newInstrument.calibrationDueOn,
         calibrationDate: newInstrument.calibrationDate,
-        ExpiryOn: newInstrument.warrantyExpiresOn,
+        ExpiryOn: newInstrument.ExpiryOn,
         status: "INITIATED",
       },
     ];
@@ -614,6 +614,7 @@ const Registration = () => {
       if (response.status === 200) {
         setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
         toast.success("Registration deleted successfully.");
+        fetchProductData();
       } else {
         toast.error("Failed to delete Registration.");
       }
