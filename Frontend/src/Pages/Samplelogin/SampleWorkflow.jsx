@@ -278,7 +278,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
       toast.success("Analyst deleted successfully");
     } catch (error) {
       console.error("Error deleting analyst:", error);
-      toast.error("Error deleting analyst");
+      // toast.error("Error deleting analyst");
     }
   };
 

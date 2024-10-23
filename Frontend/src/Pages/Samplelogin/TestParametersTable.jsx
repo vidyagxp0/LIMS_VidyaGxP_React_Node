@@ -43,6 +43,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
     // Default style
     return {};
   };
+  
 
   return (
     <CTable bordered hover>
