@@ -243,7 +243,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `http://limsapi.vidyagxp.com/get-Sample/${id}/sample`
       );
       console.log(response.data);
 
@@ -265,7 +265,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/sample`,
+        `http://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -309,7 +309,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit
       } else {
         const response = await axios.post(
-          `http://localhost:9000/create-sample`,
+          `http://limsapi.vidyagxp.com/create-sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );

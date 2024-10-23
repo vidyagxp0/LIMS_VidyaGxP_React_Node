@@ -25,12 +25,12 @@ export const checkJwtToken = (req, res, next) => {
 
 export const getFileUrl = (file) => {
   if (file) {
-    return `${config.development.URL}:${config.development.PORT}/documents/${file}`;
+    return `${config.development.URL}/documents/${file}`;
   }
 };
 export const getImageUrl = (file) => {
   if (file) {
-    return `${config.development.URL}:${config.development.PORT}/images/${file}`;
+    return `${config.development.URL}/images/${file}`;
   }
 };
 

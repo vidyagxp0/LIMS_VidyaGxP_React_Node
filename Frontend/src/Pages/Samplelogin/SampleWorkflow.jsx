@@ -112,7 +112,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}`
+        `http://limsapi.vidyagxp.com/generate-report/${sampleId}`
       );
       console.log("Response", response);
 
@@ -269,7 +269,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
+      await axios.delete(`http://limsapi.vidyagxp.com/delete-Sample/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -510,7 +510,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //     `http://limsapi.vidyagxp.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -892,7 +892,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
                     onClick={() => {
                       // Navigate to the specified URL
                       // window.location.href = "https://ipc.mydemosoftware.com";
-                      navigate(`/sampleWorkflowEdit/${data.id}`)
+                      navigate(`/sampleWorkflowEdit/${data.id}`);
                     }}
                   />
                   <FontAwesomeIcon
@@ -900,7 +900,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
                     className="mr-2 cursor-pointer"
                     onClick={() => {
                       // Navigate to the specified URL
-                      navigate(`/sampleWorkflowEdit/${data.id}`)
+                      navigate(`/sampleWorkflowEdit/${data.id}`);
                     }}
                   />
                   <FontAwesomeIcon
@@ -909,7 +909,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
                     onClick={() => {
                       // Navigate to the specified URL
                       // window.location.href = "https://ipc.mydemosoftware.com";
-                      handleDelete(data)
+                      handleDelete(data);
                     }}
                   />
                 </div>

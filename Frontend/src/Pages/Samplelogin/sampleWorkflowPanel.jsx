@@ -47,10 +47,10 @@ const SampleWorkflowPanel = ({ onClose }) => {
     console.log(id, "iddddddddddd");
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}`, // Replace :id with actual ID
+        `http://limsapi.vidyagxp.com/edit-sample/${id}`, // Replace :id with actual ID
         formData
       );
-      console.log(response,)
+      console.log(response);
       toast.success("Sample data saved successfully!");
       // navigate("/sampleWorkflowPanel");
     } catch (error) {
