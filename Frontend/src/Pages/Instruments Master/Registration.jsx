@@ -505,20 +505,20 @@ const Registration = () => {
         </span>
       ),
     },
-    {
-      header: "Report",
-      accessor: "report",
-      Cell: ({ row }) => (
-        <>
-          {/* View icon */}
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => generatePDF(row.id)}
-          />
-        </>
-      ),
-    },
+    // {
+    //   header: "Report",
+    //   accessor: "report",
+    //   Cell: ({ row }) => (
+    //     <>
+    //       {/* View icon */}
+    //       <FontAwesomeIcon
+    //         icon={faEye}
+    //         className="mr-2 cursor-pointer"
+    //         onClick={() => generatePDF(row.id)}
+    //       />
+    //     </>
+    //   ),
+    // },
     {
       header: "Actions",
       accessor: "action",
