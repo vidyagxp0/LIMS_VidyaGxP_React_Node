@@ -150,6 +150,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     labTechnician: "",
     initiationDate: "",
     initiator: "",
+    testParameters: [],
   });
 
   const handleTabClick = (tabName) => {
@@ -284,6 +285,15 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
 
+    // Manually append the test parameters as an array of objects
+    if (testParameters && testParameters.length > 0) {
+      formDataToSend.append(
+        "TestParametersTable",
+        JSON.stringify(testParameters)
+      );
+      console.log("Test Parameters being sent:", testParameters);
+    }
+
     try {
       if (id) {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit
@@ -291,6 +301,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         const response = await axios.post(
           `http://localhost:9000/create-sample`,
           formDataToSend,
+
           { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
         // Handle success response
@@ -606,7 +617,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
                   onClick={toggleDropdown} // Toggle dropdown on input click
                 >
-                  {formData.requiredInstrument &&
+                  {Array.isArray(formData.requiredInstrument) &&
                   formData.requiredInstrument.length > 0 ? (
                     formData.requiredInstrument.map((instrument, index) => (
                       <span
@@ -841,6 +852,8 @@ const SampleWorkflowModal = ({ onClose }) => {
             <TestParametersTable
               testParameters={testParameters}
               handleRowChange={handleRowChange}
+              value={formData?.testParameters || ""}
+              onChange={handleInputChange}
             />
             <CRow className="mb-3">
               <CCol md={6}>
