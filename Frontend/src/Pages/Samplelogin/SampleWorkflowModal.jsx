@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CModal,
@@ -21,12 +21,29 @@ import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
+import TestParametersTable from "./TestParametersTable";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [testParameters, setTestParameters] = useState([]);
+
+  const handleAddRow = () => {
+    setTestParameters([
+      ...testParameters,
+      { sno: "", testParameter: "", usl: "", lsl: "", result: "", remarks: "" },
+    ]);
+  };
+
+  const handleRowChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedRows = testParameters.map((row, idx) =>
+      idx === index ? { ...row, [name]: value } : row
+    );
+    setTestParameters(updatedRows);
+  };
 
   const [formData, setFormData] = useState({
     types: "sample",
@@ -133,40 +150,8 @@ const SampleWorkflowModal = ({ onClose }) => {
     labTechnician: "",
     initiationDate: "",
     initiator: "",
+    testParameters: [],
   });
-
-  const [idForBarcode, setIdForBarcode] = useState(null);
-  console.log(idForBarcode);
-  const barcodeRef = useRef(null);
-
-  const generateRandomNumbers = (length) => {
-    let randomNumbers = "";
-    for (let i = 0; i < length; i++) {
-      randomNumbers += Math.floor(Math.random() * 20);
-    }
-    return randomNumbers;
-  };
-
-  const fetchId = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      const responseData = Array.isArray(response.data)
-        ? response.data
-        : response.data.data;
-
-      const randomNumbers = generateRandomNumbers(16);
-      const idWithRandomNumbers = `${responseData[0]?.id}${randomNumbers}`;
-
-      setIdForBarcode(idWithRandomNumbers);
-    } catch (error) {
-      console.error("Error fetching barcode ID: ", error);
-      toast.error("Failed to fetch barcode ID");
-    }
-  };
-
-  useEffect(() => {
-    fetchId();
-  }, []);
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -300,6 +285,15 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
 
+    // Manually append the test parameters as an array of objects
+    if (testParameters && testParameters.length > 0) {
+      formDataToSend.append(
+        "TestParametersTable",
+        JSON.stringify(testParameters)
+      );
+      console.log("Test Parameters being sent:", testParameters);
+    }
+
     try {
       if (id) {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit
@@ -307,6 +301,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         const response = await axios.post(
           `http://localhost:9000/create-sample`,
           formDataToSend,
+
           { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
         // Handle success response
@@ -493,7 +488,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={idForBarcode}
+                  value={""}
                   disabled
                 />
                 <div>
@@ -849,6 +844,17 @@ const SampleWorkflowModal = ({ onClose }) => {
       case "Sample Analysis":
         return (
           <CForm>
+            <CButton color="primary" onClick={handleAddRow}>
+              Add Test Parameters Row
+            </CButton>
+
+            {/* Use the TestParametersTable component */}
+            <TestParametersTable
+              testParameters={testParameters}
+              handleRowChange={handleRowChange}
+              value={formData?.testParameters || ""}
+              onChange={handleInputChange}
+            />
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
