@@ -349,7 +349,7 @@ const SpecificationSpec = () => {
           />
           <CFormInput
             className="mb-3"
-            type="text"
+            type="number"
             label="Batch/Lot Number"
             name="batchLotNumber"
             value={formData.batchLotNumber}
@@ -427,20 +427,21 @@ const SpecificationSpec = () => {
             value={formData.labeling}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
-          <CFormInput
+          <CFormSelect
             className="mb-3"
             type="text"
             label="Test Parameter"
             name="testParameter"
             value={formData.testParameter}
             onChange={(e) => handleChange(e, setFormData, formData)}
+            // options={(value = "er")}
           />
           <CFormInput
             className="mb-3"
             type="text"
             label="Test Method"
             name="testmethod"
-            value={formData.testmethod}
+            value={formData.testMethod}
             onChange={(e) => handleChange(e, setFormData, formData)}
           />
           <CFormInput
