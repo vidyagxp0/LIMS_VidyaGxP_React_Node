@@ -171,7 +171,7 @@ const withTransaction = async (callback) => {
 export const manageLIMS = async (req, res) => {
   const filename =
     req?.files?.map((file) => file?.filename)[0] || req?.filename;
-    
+
   const { fieldName, uniqueId, add, update } = req.params;
   try {
     await withTransaction(async (t) => {
@@ -295,7 +295,9 @@ export const deleteStorageConditionById = async (req, res) => {
         .json({ error: `Field ${fieldName} is not valid or not an array` });
     }
 
-    const conditionIndex = field.findIndex((item) => item["uniqueId"] == uniqueId);
+    const conditionIndex = field.findIndex(
+      (item) => item["uniqueId"] == uniqueId
+    );
     if (conditionIndex === -1) {
       return res
         .status(404)
@@ -339,5 +341,45 @@ export const getDivision = async (req, res) => {
   } catch (error) {
     console.error("Error creating LIMS:", error);
     return res.status(500).json({ error: error.message });
+  }
+};
+
+export const getLIMSDataByTypeAndId = async (req, res) => {
+  try {
+    const { type, id } = req.params;
+    if (!type || !id) {
+      return res.status(400).json({
+        error: true,
+        message: "Type and ID are required",
+      });
+    }
+
+    const limsData = await LIMS.findAll({});
+
+    if (limsData.length === 0) {
+      return res.status(404).json({ error: true, message: "Data not found" });
+    }
+
+    // Search for the specific type and ID in the data
+    const filteredData = limsData
+      .map((data) => data.toJSON()) // Convert Sequelize data to JSON
+      .filter((limsRecord) => limsRecord[type]) // Ensure the type exists in the record
+      .flatMap((limsRecord) => limsRecord[type]) // Extract the array of the type
+      .filter((item) => item.uniqueId === parseInt(id)); // Match by uniqueId
+
+    if (filteredData.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: `No data found for type: ${type} and ID: ${id}`,
+      });
+    }
+    const uniqueId = filteredData[0];
+    res.status(200).json(uniqueId);
+  } catch (error) {
+    console.error("Error fetching LIMS data:", error);
+    res.status(500).json({
+      error: true,
+      message: "Failed to fetch LIMS data",
+    });
   }
 };

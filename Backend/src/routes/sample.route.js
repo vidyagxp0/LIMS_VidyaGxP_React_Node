@@ -19,7 +19,7 @@ import { upload } from "../utils/multer.js";
 
 import { checkJwtToken } from "../middleware/authentication.js";
 
-import { generatePdfbyId, generatePdfbyIdStability } from "../controllers/report.controller.js";
+import { generatePdfbyId, generatePdfbyIdStability, generatePdfIMRegistration } from "../controllers/report.controller.js";
 
 const sampleRouter = express.Router();
 
@@ -98,5 +98,7 @@ sampleRouter.post("/send-to-open", checkJwtToken, ReviewToOpen);
 sampleRouter.get("/generate-report/:id", generatePdfbyId);
 
 sampleRouter.get("/stability-generate-report/:id", generatePdfbyIdStability);
+
+sampleRouter.get("/generate-report/:type/:id", generatePdfIMRegistration);
 
 export default sampleRouter;
