@@ -61,7 +61,7 @@ const InstrumentMasterModal = ({
     manufacturerSerialNo: "",
     capacitySize: "",
     equipNo: "",
-    expriyOn:"",
+    ExpiryOn: "1",
     InstalledAt: "",
     installedOn: "",
     warrantyExpiresOn: "",
@@ -87,7 +87,7 @@ const InstrumentMasterModal = ({
       manufacturerSerialNo: "",
       capacitySize: "",
       equipNo: "",
-      expriyOn:"",
+      ExpiryOn: "",
       InstalledAt: "",
       installedOn: "",
       warrantyExpiresOn: "",
@@ -224,14 +224,18 @@ const InstrumentMasterModal = ({
             label="Calibration Due On"
             placeholder=" "
             value={instrumentData.calibrationDate}
-            onChange={(e) => handleInputChange("calibrationDate", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("calibrationDate", e.target.value)
+            }
           />
           <CFormInput
             type="date"
             label="Calibration Due On"
             placeholder=" "
             value={instrumentData.calibrationDueOn}
-            onChange={(e) => handleInputChange("calibrationDueOn", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("calibrationDueOn", e.target.value)
+            }
           />
           <CFormInput
             className="mb-3"
@@ -326,14 +330,17 @@ const InstrumentMasterModal = ({
             value={instrumentData.InstalledAt}
             onChange={(e) => handleInputChange("InstalledAt", e.target.value)}
           />
-           <CFormInput
+          <CFormInput
             className="mb-3"
             type="number"
             label="Expiry On"
             placeholder="Expiry On"
-            value={instrumentData.expriyOn}
-            onChange={(e) => handleInputChange("expriyOn", e.target.value)}
+            value={instrumentData.ExpiryOn}
+            onChange={(e) => handleInputChange("ExpiryOn", e.target.value)}
+            min={1}
+            max={10}
           />
+
           <CFormInput
             type="date"
             label="Installed On"

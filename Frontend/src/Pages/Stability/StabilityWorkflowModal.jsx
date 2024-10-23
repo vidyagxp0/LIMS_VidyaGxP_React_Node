@@ -296,7 +296,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     }
   };
   useEffect(() => {
-    const storedTestParameters = JSON.parse(localStorage.getItem("testParameters"));
+    const storedTestParameters = JSON.parse(localStorage.getItem("testParameterss"));
     if (storedTestParameters) {
       setTestParameters(storedTestParameters);
       console.log(storedTestParameters, "testParameters from localStorage");
@@ -321,7 +321,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
         console.log("Test Parameters being sent:", testParameters);
         
         // Save testParameters to local storage
-        localStorage.setItem("testParameters", JSON.stringify(testParameters));
+        localStorage.setItem("testParameterss", JSON.stringify(testParameters));
     }
     if (id) {
       await handleEdit();
