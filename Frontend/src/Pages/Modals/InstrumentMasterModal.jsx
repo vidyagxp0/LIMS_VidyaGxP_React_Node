@@ -54,11 +54,14 @@ const InstrumentMasterModal = ({
     InstrumentId: "",
     Made: "",
     calibrationStatus: "",
+    calibrationDate: "",
+    calibrationDueOn: "",
     Model: "",
     fields: [],
     manufacturerSerialNo: "",
     capacitySize: "",
     equipNo: "",
+    expriyOn:"",
     InstalledAt: "",
     installedOn: "",
     warrantyExpiresOn: "",
@@ -76,12 +79,15 @@ const InstrumentMasterModal = ({
       Instrument: "",
       InstrumentId: "",
       calibrationStatus: "",
+      calibrationDate: "",
+      calibrationDueOn: "",
       Made: "",
       Model: "",
       fields: [],
       manufacturerSerialNo: "",
       capacitySize: "",
       equipNo: "",
+      expriyOn:"",
       InstalledAt: "",
       installedOn: "",
       warrantyExpiresOn: "",
@@ -210,9 +216,23 @@ const InstrumentMasterModal = ({
             }
           >
             <option value="">Select...</option>
-            <option value="calibrated">Calibrated</option>
-            <option value="nonCalibrated">Non - Calibrated</option>
+            <option value="Calibrated">Calibrated</option>
+            <option value="Non - Calibrated">Non - Calibrated</option>
           </CFormSelect>
+          <CFormInput
+            type="date"
+            label="Calibration Due On"
+            placeholder=" "
+            value={instrumentData.calibrationDate}
+            onChange={(e) => handleInputChange("calibrationDate", e.target.value)}
+          />
+          <CFormInput
+            type="date"
+            label="Calibration Due On"
+            placeholder=" "
+            value={instrumentData.calibrationDueOn}
+            onChange={(e) => handleInputChange("calibrationDueOn", e.target.value)}
+          />
           <CFormInput
             className="mb-3"
             type="text"
@@ -305,6 +325,14 @@ const InstrumentMasterModal = ({
             placeholder="Installed At"
             value={instrumentData.InstalledAt}
             onChange={(e) => handleInputChange("InstalledAt", e.target.value)}
+          />
+           <CFormInput
+            className="mb-3"
+            type="number"
+            label="Expiry On"
+            placeholder="Expiry On"
+            value={instrumentData.expriyOn}
+            onChange={(e) => handleInputChange("expriyOn", e.target.value)}
           />
           <CFormInput
             type="date"

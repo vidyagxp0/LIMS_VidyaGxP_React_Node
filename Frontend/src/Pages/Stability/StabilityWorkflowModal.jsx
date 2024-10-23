@@ -21,10 +21,13 @@ import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
+import TestParametersTable from "./TestParametersTable";
 
 const StabilityWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [testParameters, setTestParameters] = useState([]);
+
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
@@ -144,6 +147,23 @@ const StabilityWorkflowModal = ({ onClose }) => {
     }
     return randomNumbers;
   };
+
+
+  const handleAddRow = () => {
+    setTestParameters([
+      ...testParameters,
+      { sno: "", testParameter: "", usl: "", lsl: "", result: "", remarks: "" },
+    ]);
+  };
+
+  const handleRowChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedRows = testParameters.map((row, idx) =>
+      idx === index ? { ...row, [name]: value } : row
+    );
+    setTestParameters(updatedRows);
+  };
+
 
   const fetchId = async () => {
     try {
@@ -275,8 +295,34 @@ const StabilityWorkflowModal = ({ onClose }) => {
       );
     }
   };
+  useEffect(() => {
+    const storedTestParameters = JSON.parse(localStorage.getItem("testParameters"));
+    if (storedTestParameters) {
+      setTestParameters(storedTestParameters);
+      console.log(storedTestParameters, "testParameters from localStorage");
+    }
+  }, []);
 
   const handleSave = async () => {
+    const formDataToSend = new FormData(); // Create a new FormData object
+
+    // Append all form data to the FormData object
+    for (const key in formData) {
+        if (Array.isArray(formData[key])) {
+            formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+        } else {
+            formDataToSend.append(key, formData[key]);
+        }
+    }
+
+    // Manually append the test parameters as an array of objects
+    if (testParameters && testParameters.length > 0) {
+        formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+        console.log("Test Parameters being sent:", testParameters);
+        
+        // Save testParameters to local storage
+        localStorage.setItem("testParameters", JSON.stringify(testParameters));
+    }
     if (id) {
       await handleEdit();
     } else {
@@ -806,6 +852,17 @@ const StabilityWorkflowModal = ({ onClose }) => {
       case "Sample Analysis":
         return (
           <CForm>
+            <CButton color="primary" onClick={handleAddRow}>
+              Add Test Parameters Row
+            </CButton>
+
+            {/* Use the TestParametersTable component */}
+            <TestParametersTable
+              testParameters={testParameters}
+              handleRowChange={handleRowChange}
+              value={formData?.testParameters || ""}
+              onChange={handleInputChange}
+            />
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
