@@ -22,7 +22,6 @@ import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
-import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -854,7 +853,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       case "Sample Analysis":
         return (
           <CForm>
-            <LaunchQMS />
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
@@ -1257,7 +1255,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       case "Stability Information":
         return (
           <CForm>
-            <LaunchQMS />
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">
                 <CFormSelect
@@ -1374,7 +1371,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       case "Supervisor Review":
         return (
           <CForm>
-            <LaunchQMS />
             {/* Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">
@@ -1419,7 +1415,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       case "QA Review":
         return (
           <CForm>
-            <LaunchQMS />
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">
@@ -1464,7 +1459,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       case "Activity Log":
         return (
           <CForm>
-            <LaunchQMS />
             {/* Activity Log Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">
