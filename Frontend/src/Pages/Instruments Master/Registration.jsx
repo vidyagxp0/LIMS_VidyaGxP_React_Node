@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InstrumentMasterModal from "../Modals/InstrumentMasterModal.jsx";
+import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
 import ImportModal from "../Modals/importModal";
 import {
@@ -86,6 +87,8 @@ const Registration = () => {
       );
     }
   };
+
+  
 
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -493,6 +496,20 @@ const Registration = () => {
         >
           {value}
         </span>
+      ),
+    },
+    {
+      header: "Report",
+      accessor: "report",
+      Cell: ({ row }) => (
+        <>
+          {/* View icon */}
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => generatePDF(row.id)}
+          />
+        </>
       ),
     },
     {

@@ -128,6 +128,7 @@ function SpecificationStp() {
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [documents, setDocuments] = useState([]);
 
   // console.log(apiData, "loooooooooooooo");
 
@@ -189,40 +190,37 @@ function SpecificationStp() {
   const openModal = async () => {
     setLoading(true);
     setError(null); // Reset error state
+
     try {
       const response = await axios.get(
-        "https://dms.mydemosoftware.com/api/document"
+        "https://ipc.mydemosoftware.com/api/documents"
       );
-      const documents = response.data.body.document;
-      console.log(documents, "<>?<>?<>?<>??><?><?><?><");
+      console.log(response.data, "Full API response"); // Check the complete response
 
-      if (Array.isArray(documents)) {
-        const indicesToRemove = [23, 21, 17, 13, 12, 10, 4];
+      const documents = response.data.body?.documents || []; // Adjust based on actual response structure
+      console.log(documents, "Documents Data"); // Log documents array
 
-        indicesToRemove.forEach((index) => {
-          if (index < documents.length) {
-            documents.splice(index, 1); // Removes 1 item at 'index'
-          }
-        });
-
-        const filteredData = documents?.map((document, index) => ({
-          sno: index + 1,
-          document_name: document.document_name,
-          document_type_id: document.document_type_id,
-          department_id: document.department_id,
-          reviewers: document.reviewers,
-          due_dateDoc: document.due_dateDoc,
-          effective_date: document.effective_date,
-          reference_record: document.reference_record,
-          status: document.status,
+      if (Array.isArray(documents) && documents.length > 0) {
+        // Prepare specific data for the table
+        const allData = documents.map((doc, index) => ({
+          sno: index + 1, // Add SrNo. dynamically
+          document_name: doc.document_name,
+          document_type_id: doc.document_type_id,
+          department_id: doc.department_id,
+          reviewers: doc.reviewers, // Join array to display as a string
+          due_dateDoc: doc.due_dateDoc,
+          effective_date: doc.effective_date,
+          reference_record: doc.reference_record,
+          status: doc.status,
         }));
 
-        // Process data for charts
-        processChartData(filteredData);
-        setApiData(filteredData);
+        console.log(allData, "All Document Data"); // Log all data
+
+        // Set state with all document data
+        setApiData(allData); // Set state with all data
       } else {
-        console.warn("Expected an array, but got:", documents);
-        setError("Unexpected data format.");
+        console.warn("No document found.");
+        setError("No document data available.");
       }
     } catch (error) {
       console.error("Error fetching the data:", error);
@@ -264,7 +262,8 @@ function SpecificationStp() {
   // };
 
   const handleClick = () => {
-    window.location.href = "https://dms.mydemosoftware.com";
+    window.location.href =
+      "https://ipc.mydemosoftware.com/rcms/qms-logs/document";
   };
 
   const closeModal = () => {
@@ -275,14 +274,15 @@ function SpecificationStp() {
   };
 
   const handleDelete = async () => {
-    window.location.href = "https://dms.mydemosoftware.com";
+    window.location.href =
+      "https://ipc.mydemosoftware.com/rcms/qms-logs/document";
 
     // try {
     //   const response = await axios.delete(
     //     `${BASE_URL}/delete-lims/specificationStp/${item.uniqueId}`
     //   );
 
-    //   if (response.status === 200) { 
+    //   if (response.status === 200) {
     //     const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
     //     setApiData(newData);
     //     toast.success(" deleted successfully");
@@ -321,23 +321,21 @@ function SpecificationStp() {
       header: "SrNo.",
       accessor: "sno",
     },
-
     { header: "Document Name", accessor: "document_name" },
     { header: "Document Type", accessor: "document_type_id" },
     {
       header: "Department",
       accessor: "department_id",
     },
-
     {
-      header: "Author ",
+      header: "Author",
       accessor: "reviewers",
     },
     {
       header: "Due Date",
       accessor: "due_dateDoc",
     },
-    { header: "Effective Date", accessor: "reviewers" },
+    { header: "Effective Date", accessor: "effective_date" }, // Updated here
     { header: "CC References", accessor: "reference_record" },
     { header: "Status", accessor: "status" },
     {
@@ -348,17 +346,17 @@ function SpecificationStp() {
           <FontAwesomeIcon
             icon={faEye}
             className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
+            onClick={() => onViewDetails(row.original)} // Pass the original row data
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
             className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row.original)}
+            onClick={() => openEditModal(row.original)} // Pass the original row data
           />
           <FontAwesomeIcon
             icon={faTrashCan}
             className="cursor-pointer"
-            onClick={() => handleDelete}
+            onClick={() => handleDelete(row.original)} // Call handleDelete with the original row data
           />
         </>
       ),
@@ -368,8 +366,7 @@ function SpecificationStp() {
   // Filtering logic
   const filteredData = Array.isArray(apiData)
     ? apiData.filter((row) => {
-        
-        const documentName = row.document_name || ""; 
+        const documentName = row.document_name || "";
         const matchesSearchQuery = documentName
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
@@ -403,7 +400,7 @@ function SpecificationStp() {
     } else if (typeof aValue === "number" && typeof bValue === "number") {
       return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
     }
-    return 0; 
+    return 0;
   });
 
   const onViewDetails = () => {
@@ -415,7 +412,8 @@ function SpecificationStp() {
     //   setIsViewModalOpen(true);
     // }
 
-    window.location.href = "https://dms.mydemosoftware.com";
+    window.location.href =
+      "https://ipc.mydemosoftware.com/rcms/qms-logs/document";
   };
 
   const handleCheckboxChange = (index) => {
@@ -458,20 +456,19 @@ function SpecificationStp() {
       );
 
       if (response.status === 200) {
-        const addedSpecificationStp = response.data.addLIMS; 
+        const addedSpecificationStp = response.data.addLIMS;
 
         setApiData((prevData) => [
           ...prevData,
           {
             ...addedSpecificationStp,
-            sno: addedSpecificationStp.uniqueId, 
+            sno: addedSpecificationStp.uniqueId,
             checkbox: false,
           },
         ]);
         closeModal();
 
         toast.success("Specification STP added successfully");
-       
       }
     } catch (error) {
       console.error("Error adding Specification STP", error);
@@ -619,7 +616,8 @@ function SpecificationStp() {
   const openEditModal = () => {
     // setEditModalData(rowData);
 
-    window.location.href = "https://dms.mydemosoftware.com";
+    window.location.href =
+      "https://ipc.mydemosoftware.com/rcms/qms-logs/document";
   };
 
   const closeEditModal = () => {
@@ -897,7 +895,7 @@ function SpecificationStp() {
 
         <Table
           columns={columns}
-          data={filteredData}
+          data={apiData} // Ensure this is the updated state containing all documents
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}
