@@ -231,7 +231,7 @@ export const ProgressBar3 = (props) => {
               className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
               onClick={() => handleOpen("send-review")}
             >
-              Sub
+              Submit
             </button>
           )}
           {stage === 2 && (
@@ -240,7 +240,7 @@ export const ProgressBar3 = (props) => {
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
                 onClick={() => handleOpen("send-to-reviewer")}
               >
-                Control Sample Inspection
+                Inspection Complete
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"

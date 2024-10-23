@@ -7,13 +7,14 @@ import {
   CFormSelect,
 } from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { BASE_URL } from "../../config.json";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -47,8 +48,7 @@ function Login(props) {
       );
 
       const { token, data } = response.data;
-      console.log(token,"Tokken");
-      
+      console.log(token, "Tokken");
 
       if (token) {
         localStorage.setItem("token", token);

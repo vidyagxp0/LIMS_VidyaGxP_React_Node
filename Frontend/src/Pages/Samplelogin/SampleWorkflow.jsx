@@ -714,12 +714,12 @@ const SampleWorkFlow = ({ instrumentData }) => {
           {data?.map((data, index) => (
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
-              <td className="border cursor-pointer  px-4 ">{index + 1}</td>
+              <td className="border px-4 py-2">{index + 1}</td>
               <Link
                 to={`/sampleWorkflowEdit/${data.id}`}
                 className="contents mt-3"
               >
-                <td className="hover:bg-gray-200 border px-4">
+                <td className="hover:bg-gray-200 border px-4 py-2">
                   {data.samplePlanId}
                 </td>
               </Link>
