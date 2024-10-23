@@ -267,18 +267,19 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setIsAddModalOpen(true);
   };
 
-  const handleDelete = (item) => {
-    // console.log(item);
-    axios
-      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.uniqueId}`)
-      .then((response) => {
-        // console.log(response.data.message);
-        toast.success("Record deleted successfully");
-        fetchData();
-      })
-      .catch((error) => {
-        console.error("There was an error deleting the record:", error);
-      });
+  const handleDelete = async (item) => {
+    try {
+      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
+      setData((prevData) =>
+        prevData.filter((dataItem) => dataItem.id !== item.id)
+      );
+      closeModal();
+      fetchData();
+      toast.success("Analyst deleted successfully");
+    } catch (error) {
+      console.error("Error deleting analyst:", error);
+      toast.error("Error deleting analyst");
+    }
   };
 
   const handleCheckboxChange = (index) => {
@@ -890,7 +891,8 @@ const SampleWorkFlow = ({ instrumentData }) => {
                     className="mr-2 cursor-pointer"
                     onClick={() => {
                       // Navigate to the specified URL
-                      window.location.href = "https://ipc.mydemosoftware.com";
+                      // window.location.href = "https://ipc.mydemosoftware.com";
+                      navigate(`/sampleWorkflowEdit/${data.id}`)
                     }}
                   />
                   <FontAwesomeIcon
@@ -898,7 +900,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
                     className="mr-2 cursor-pointer"
                     onClick={() => {
                       // Navigate to the specified URL
-                      window.location.href = "https://ipc.mydemosoftware.com";
+                      navigate(`/sampleWorkflowEdit/${data.id}`)
                     }}
                   />
                   <FontAwesomeIcon
@@ -906,7 +908,8 @@ const SampleWorkFlow = ({ instrumentData }) => {
                     className="cursor-pointer"
                     onClick={() => {
                       // Navigate to the specified URL
-                      window.location.href = "https://ipc.mydemosoftware.com";
+                      // window.location.href = "https://ipc.mydemosoftware.com";
+                      handleDelete(data)
                     }}
                   />
                 </div>
