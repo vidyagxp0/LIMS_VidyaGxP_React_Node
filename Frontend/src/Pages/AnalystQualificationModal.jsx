@@ -20,6 +20,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
 import {BASE_URL} from "../config.json";
+import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {

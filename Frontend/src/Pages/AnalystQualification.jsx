@@ -18,6 +18,7 @@ import SearchBar from "../components/ATM components/SearchBar/SearchBar.jsx";
 import AnalystQualificationModal from "../Pages/AnalystQualificationModal.jsx";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import LaunchQMS from "../components/ReusableButtons/LaunchQMS.jsx";
 
 const AnalystQualification = () => {
   const [data, setData] = useState([]);
@@ -308,6 +309,7 @@ const AnalystQualification = () => {
 
   return (
     <>
+    <LaunchQMS/>
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Analyst Qualification</h4>

@@ -109,7 +109,7 @@ export const ProgressBar2 = (props) => {
               className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
               onClick={() => handleOpen("send-review")}
             >
-              Submit Analyst
+              Submit
             </button>
           )}
           {stage === 2 && (
