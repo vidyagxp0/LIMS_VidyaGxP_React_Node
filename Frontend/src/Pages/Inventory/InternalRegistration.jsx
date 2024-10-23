@@ -13,14 +13,26 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import InternalRegistrationModal from "../Modals/InternalRegistrationModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-import {CButton,CForm,CFormCheck,CFormInput,CFormLabel,CFormSelect,CModal,CModalBody,CModalFooter,CModalHeader,CModalTitle,} from "@coreui/react";
+import {
+  CButton,
+  CForm,
+  CFormCheck,
+  CFormInput,
+  CFormLabel,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ReusableModal from "../Modals/ResusableModal";
 import axios from "axios";
 
-const initialData = JSON.parse(localStorage.getItem("internalRegistration")) || [];
-
+const initialData =
+  JSON.parse(localStorage.getItem("internalRegistration")) || [];
 
 // const generateRandomSymbolCode = () => {
 //   const characters =
@@ -40,12 +52,11 @@ const InternalRegistration = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://limsapi.vidyagxp.com/get-all-lims/iWSInternalRegistration`
+          `http://localhost:9000/get-all-lims/iWSInternalRegistration`
         );
         const fetchData = response?.data[0]?.iWSInternalRegistration || [];
         const updatedData = fetchData?.map((item, index) => ({
@@ -60,7 +71,6 @@ const InternalRegistration = () => {
     fetchData();
   }, []);
 
-  
   const addRow = (newRow) => {
     setData([...data, newRow]);
   };
@@ -116,25 +126,25 @@ const InternalRegistration = () => {
         <CModalBody>
           <p>Add Information and add new Internal</p>
           <CFormInput
-                type="text"
-                label="Product Name"
-                placeholder="Product Name"
-                className="custom-placeholder mb-3"
-                disabled
-                value={formData?.productname || ""}
-                name="productName"
-                onChange={handleChange}
-              />
-               <CFormInput
-                type="text"
-                label="Sequence no"
-                placeholder="sequenceNo"
-                className="custom-placeholder mb-3"
-                disabled
-                value={formData?.sequenceNo || ""}
-                name="sequenceNo"
-                onChange={handleChange}
-              />
+            type="text"
+            label="Product Name"
+            placeholder="Product Name"
+            className="custom-placeholder mb-3"
+            disabled
+            value={formData?.productname || ""}
+            name="productName"
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            label="Sequence no"
+            placeholder="sequenceNo"
+            className="custom-placeholder mb-3"
+            disabled
+            value={formData?.sequenceNo || ""}
+            name="sequenceNo"
+            onChange={handleChange}
+          />
           <CFormSelect
             label="Lot Type"
             value={formData?.lotType || ""}
@@ -511,7 +521,9 @@ const InternalRegistration = () => {
 
   const filteredData = data.filter((row) => {
     return (
-      row?.additionalPuritiesInformation?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
+      row?.additionalPuritiesInformation
+        ?.toLowerCase()
+        ?.includes(searchQuery.toLowerCase()) &&
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
@@ -637,11 +649,13 @@ const InternalRegistration = () => {
     { label: "Sno", key: "sno" },
     { label: "Name", key: "name" },
     { label: "Sequence", key: "sequence" },
-    { label: "Additional Purities Information", key: "additionalPuritiesInformation" },
+    {
+      label: "Additional Purities Information",
+      key: "additionalPuritiesInformation",
+    },
     { label: "Container Starting No", key: "containerStartingNo" },
     { label: "Sample Reference No", key: "sampleReferenceNo" },
-    { label: "Status", key: "status" }
-    
+    { label: "Status", key: "status" },
   ];
 
   const handleStatusUpdate = (internalReg, newStatus) => {
@@ -672,105 +686,106 @@ const InternalRegistration = () => {
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Working Standard Internal</h1>
-      <div className="grid grid-cols-5 gap-4 mb-4">
-        <Card
-          title="DROPPED"
-          count={cardCounts.DROPPED}
-          color="pink"
-          onClick={() => handleCardClick("DROPPED")}
-        />
-        <Card
-          title="INITIATED"
-          count={cardCounts.INITIATED}
-          color="blue"
-          onClick={() => handleCardClick("INITIATED")}
-        />
-        <Card
-          title="REINITIATED"
-          count={cardCounts.REINITIATED}
-          color="yellow"
-          onClick={() => handleCardClick("REINITIATED")}
-        />
-        <Card
-          title="APPROVED"
-          count={cardCounts.APPROVED}
-          color="green"
-          onClick={() => handleCardClick("APPROVED")}
-        />
-        <Card
-          title="REJECTED"
-          count={cardCounts.REJECTED}
-          color="red"
-          onClick={() => handleCardClick("REJECTED")}
-        />
-      </div>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Working Standard Internal</h1>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
+          />
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
+            color="blue"
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
           />
         </div>
-        <div className="float-right flex gap-4">
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Add Internal" color="blue" onClick={openModal} />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Internal" color="blue" onClick={openModal} />
+          </div>
         </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <InternalRegistrationModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-        addRow={addRow}
-      />
-      
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-     {viewModalData && (
-        <ReusableModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-          fields={fields}
-          title="InstrumentMasterReg."
-          updateStatus={handleStatusUpdate}
+        <InternalRegistrationModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
+          addRow={addRow}
         />
-      )}
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-    </div></>
+
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {viewModalData && (
+          <ReusableModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            title="InstrumentMasterReg."
+            updateStatus={handleStatusUpdate}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

@@ -26,7 +26,7 @@ const InstrumentMasterModal = ({
   visible,
   closeModal,
   handleSubmit,
-  fetchProductData
+  fetchProductData,
   // addRow,
 }) => {
   const [fields, setFields] = useState([]);
@@ -136,7 +136,7 @@ const InstrumentMasterModal = ({
     e.preventDefault();
     axios
       .post(
-        `http://limsapi.vidyagxp.com/manage-lims/add/iMRegistration`,
+        `http://localhost:9000/manage-lims/add/iMRegistration`,
         instrumentData
       )
       .then((response) => {

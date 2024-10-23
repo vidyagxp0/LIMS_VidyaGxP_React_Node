@@ -19,15 +19,20 @@ function Signup() {
     setter(data.target.value);
   };
 
-  const handleSignup = async () => { // Make this function async
+  const handleSignup = async () => {
+    // Make this function async
     if (username && email && passwd) {
       try {
-        const response = await axios.post("http://limsapi.vidyagxp.com/admin/add-user", { 
-          username,
-          email,
-          password: passwd,
-        });
-        if (response.status === 201) { // Check for successful response
+        const response = await axios.post(
+          "http://localhost:9000/admin/add-user",
+          {
+            username,
+            email,
+            password: passwd,
+          }
+        );
+        if (response.status === 201) {
+          // Check for successful response
           toast.success("Signup successful");
           setTimeout(() => {
             navigate("/"); // Redirect to home or login page
@@ -37,7 +42,8 @@ function Signup() {
         }
       } catch (error) {
         toast.error(
-          "Error during signup: " + (error.response?.data?.message || error.message)
+          "Error during signup: " +
+            (error.response?.data?.message || error.message)
         );
       }
     } else {
@@ -125,7 +131,13 @@ function Signup() {
                 </CButton>
               </div>
               <div className="text-lg text-white text-center">
-                If you have an account already, <Link to="/" className="text-blue-600 hover:text-blue-800 underline font-medium">Login</Link>
+                If you have an account already,{" "}
+                <Link
+                  to="/"
+                  className="text-blue-600 hover:text-blue-800 underline font-medium"
+                >
+                  Login
+                </Link>
               </div>
             </CForm>
           </div>
