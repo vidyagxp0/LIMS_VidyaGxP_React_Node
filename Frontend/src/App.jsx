@@ -307,6 +307,10 @@ function App() {
               element={<ControlSampleModal />}
             />
             <Route
+              path="/control-Sample-edit/:id"
+              element={<ControlSampleModal />}
+            />
+            <Route
               path="/stabilityWorkflowModal/"
               element={<StabilityWorkflowModal />}
             />

@@ -22,17 +22,17 @@ import Barcode from "react-barcode";
 import { ProgressBar3 } from "../../components/Workflow/ProgressBar2";
 
 const ControlSampleModal = ({ onClose }) => {
-  const [activeTab, setActiveTab] = useState("Sample Registration");
+  const [activeTab, setActiveTab] = useState("Control Sample");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
-  console.log(id, "ididididididididiidioidiidid");
+  // console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
     checkbox: false,
     sno: "",
     sampleId: "",
-    productName: "",
-    productCode: "",
+    productMaterialName: "",
+    productMaterialCode: "",
     sampleType: "",
     market: "",
     arNo: "",
@@ -45,10 +45,10 @@ const ControlSampleModal = ({ onClose }) => {
     uom: "",
     storageLocation: "",
     storageCondition: "",
-    visualInspectionScheduledOn: "",
+    visualInspectionSheduledOn: "",
     visualInspectionPerformedBy: "",
-    abnormalObservation: "",
-    observationDate: "",
+    anyAbnoramalObservation: "",
+    ObservationDate: "",
     destructionDueOn: "",
     destroyedBy: "",
     neutralizingAgent: "",
@@ -58,7 +58,7 @@ const ControlSampleModal = ({ onClose }) => {
     suSupportiveAttachment: "",
   });
 
-  console.log(formData, "L<>?L<>?L<>?L<>?L<>?L<>?L<>?L");
+  // console.log(formData, "L<>?L<>?L<>?L<>?L<>?L<>?L<>?L");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -99,16 +99,16 @@ const ControlSampleModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `http://localhost:9000/controlSample/get-control-sample/${id}`
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
       // console.log(responseData);
       setFormData(responseData);
-      console.log(formData.stage);
+      // console.log(formData.stage);
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -121,19 +121,19 @@ const ControlSampleModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/sample`,
+        `http://localhost:9000/controlSample/edit-control-sample/${id}`,
         formData
       );
       if (response.status === 200) {
-        toast.success("Sample Workflow updated successfully.");
+        toast.success("Data updated successfully.");
         setIsModalOpen(false);
-        navigate("/sampleWorkflow");
+        navigate("/control-sample");
       } else {
-        toast.error("Failed to update Sample Workflow.");
+        toast.error("Failed to update Data.");
       }
     } catch (error) {
       toast.error(
-        "Error updating Sample Workflow: " +
+        "Error updating Data: " +
           (error.response?.data || error.message)
       );
     }
@@ -145,14 +145,14 @@ const ControlSampleModal = ({ onClose }) => {
     } else {
       try {
         const response = await axios.post(
-          `http://localhost:9000/create-sample`,
+          `http://localhost:9000/controlSample/create-control-sample`,
           formData
         );
-        console.log(response, "iddddddddddddddddddddddd");
+        // console.log(response, "iddddddddddddddddddddddd");
         if (response.status === 200) {
           toast.success("Sample Workflow added successfully.");
           setIsModalOpen(false);
-          navigate("/control-Sample-modal");
+          navigate("/control-Sample");
         } else {
           toast.error("Failed to add Sample Workflow.");
         }
@@ -173,7 +173,7 @@ const ControlSampleModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="sampleId"
                   label="Sample ID"
                   value={formData?.sampleId || ""}
@@ -183,9 +183,9 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="productName"
+                  name="productMaterialName"
                   label="Product Name"
-                  value={formData?.productName || ""}
+                  value={formData?.productMaterialName || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -195,9 +195,9 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="productCode"
+                  name="productMaterialCode"
                   label="Product Code"
-                  value={formData?.productCode || ""}
+                  value={formData?.productMaterialCode || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -330,9 +330,9 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
-                  name="visualInspectionScheduledOn"
+                  name="visualInspectionSheduledOn"
                   label="Visual Inspection Scheduled On"
-                  value={formData?.visualInspectionScheduledOn || ""}
+                  value={formData?.visualInspectionSheduledOn || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -351,9 +351,9 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="text"
-                  name="abnormalObservation"
+                  name="anyAbnoramalObservation"
                   label="Abnormal Observation"
-                  value={formData?.abnormalObservation || ""}
+                  value={formData?.anyAbnoramalObservation || ""}
                   onChange={handleInputChange}
                 />
               </CCol>
@@ -363,9 +363,9 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
-                  name="observationDate"
+                  name="ObservationDate"
                   label="Observation Date"
-                  value={formData?.observationDate || ""}
+                  value={formData?.ObservationDate || ""}
                   onChange={handleInputChange}
                 />
               </CCol>

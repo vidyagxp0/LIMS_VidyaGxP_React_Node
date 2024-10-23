@@ -361,7 +361,7 @@ const handleDeleteConfirm = async () => {
     </div>
   );
 };
-const handleAddUser = async (newUser) => {
+const handleAddUser = async (newUser,props) => {
   try {
     const token = localStorage.getItem("token");
     const response = await axios.post(`${BASE_URL}/admin/add-user`, newUser, {
@@ -369,8 +369,8 @@ const handleAddUser = async (newUser) => {
         Authorization: `Bearer ${token}`,
       },
     });
-     fetchUsers();
-    setAddModal(false);
+     props.fetchUsers();
+    props.setAddModal(false);
     toast.success("User successfully added");
   } catch (error) {
     console.error("Error adding user:", error);

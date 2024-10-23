@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ESignatureModal from "./ESignature/ESignatureModal";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // Updated base stages to include only the specified stages
 const baseStages = [
@@ -41,10 +42,16 @@ export const ProgressBar2 = (props) => {
 
   const callApis = async (formData, analystId) => {
     try {
-      const email = formData.username;
-      const password = formData.password;
-      const comment = formData.comment;
-
+      const email = formData.username.trim();
+      const password = formData.password.trim();
+      const comment = formData.comment.trim();
+  
+      // Check for empty fields
+      if (!email || !password || !comment || !analystId) {
+        toast.error("Please fill in all required fields!");
+        return;
+      }
+  
       const response = await axios.post(
         "http://localhost:9000/e-signature",
         { email, password },
@@ -54,10 +61,10 @@ export const ProgressBar2 = (props) => {
           },
         }
       );
-
+  
       if (!response.data.error) {
-        console.log(analystId,"AAAAAAAAAAAAAAAAAAAA");
-        
+        console.log(analystId, "AAAAAAAAAAAAAAAAAAAA");
+  
         await axios.post(
           `http://localhost:9000/analyst/${url}`,
           { analystId, comment },
@@ -71,13 +78,14 @@ export const ProgressBar2 = (props) => {
       onStageClick();
     } catch (error) {
       console.error("API error:", error);
+      toast.error(error.response.data.message);
     }
   };
 
   return (
     <>
       <ESignatureModal open={isModalOpen} handleClose={handleClose} submitAction={handleSubmit} />
-      <div className="flex flex-col items-center p-4 pb-2 bg-slate-300">
+      <div className="flex flex-col items-center p-4 pb-2 bg-slate-300 shadow-lg">
         <div className="flex w-full max-w-4xl justify-between mb-2 ">
           {stages.map((stageName, index) => (
             <div
@@ -162,7 +170,7 @@ export const ProgressBar3 = (props) => {
 
   const token = localStorage.getItem("token");
 
-  const callApis = async (formData, sampleId) => {
+  const callApis = async (formData, controlSampleId) => {
     try {
       const email = formData.username;
       const password = formData.password;
@@ -180,8 +188,8 @@ export const ProgressBar3 = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `http://localhost:9000/${url}`,
-          { sampleId, comment },
+          `http://localhost:9000/controlSample/${url}`,
+          { controlSampleId, comment },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -206,8 +214,8 @@ export const ProgressBar3 = (props) => {
               className={`flex-1 text-center p-2 cursor-pointer border rounded 
               ${index < currentStage ? "bg-green-500 text-white" : ""} 
               ${index === currentStage && index !== 4 ? "bg-orange-500 text-white" : ""} 
-              ${index === 3 && currentStage === 3 ? "bg-orange-500 text-white" : ""} 
-              ${index === 4 && currentStage === 4 ? "bg-red-500 text-white" : ""} 
+              ${index === 2 && currentStage === 2 ? "bg-orange-500 text-white" : ""} 
+              ${index === 3 && currentStage === 3 ? "bg-red-500 text-white" : ""} 
               ${index > currentStage ? "bg-gray-200" : ""} 
               ${index < stages.length - 1 ? "mr-1" : ""}`}
             >
@@ -230,7 +238,7 @@ export const ProgressBar3 = (props) => {
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-supervisor")}
+                onClick={() => handleOpen("send-to-reviewer")}
               >
                 Control Sample Inspection
               </button>
@@ -246,28 +254,12 @@ export const ProgressBar3 = (props) => {
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
-                onClick={() => handleOpen("send-qa")}
+                onClick={() => handleOpen("send-to-closed")}
               >
                 Destruction Complete
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
-                onClick={() => handleOpen("send-to-open")}
-              >
-                More Info Required
-              </button>
-            </>
-          )}
-          {stage === 4 && (
-            <>
-              <button
-                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-qa-review")}
-              >
-                QA Review Complete
-              </button>
-              <button
-                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
                 onClick={() => handleOpen("send-to-open")}
               >
                 More Info Required
