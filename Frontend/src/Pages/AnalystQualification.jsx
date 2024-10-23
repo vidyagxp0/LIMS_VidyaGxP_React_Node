@@ -273,8 +273,9 @@ const AnalystQualification = () => {
   };
 
   const onViewDetails = (row) => {
-    setViewModalData(row);
+    // setViewModalData(row);
     setIsViewModalOpen(true);
+    navigate(`/analyst-qualification-edit/${row.id}`)
   };
 
   const closeViewModal = () => {
@@ -355,18 +356,6 @@ const AnalystQualification = () => {
           onEdit={handleEdit}
         />
       </div>
-      {viewModalData && (
-        <ReusableModal
-          visible={viewModalData !== null}
-          closeModal={closeViewModal}
-          data={viewModalData}
-          fields={columns
-            .map((col) => ({ key: col.accessor, label: col.header }))
-            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
-          title="Analyst Qualification Details"
-        //  updateStatus={handleStatusUpdate}
-        />
-      )}
 
       {isImportModalOpen && (
         <ImportModal

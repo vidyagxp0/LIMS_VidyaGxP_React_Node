@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CButton,
   CModal,
@@ -21,15 +21,15 @@ import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
-import TestParametersTable from "./TestParametersTable"; // Import the new component
+import TestParametersTable from "./TestParametersTable";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
-  const [testParameters, setTestParameters] = useState([]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [testParameters, setTestParameters] = useState([]);
+
   const handleAddRow = () => {
     setTestParameters([
       ...testParameters,
@@ -150,40 +150,8 @@ const SampleWorkflowModal = ({ onClose }) => {
     labTechnician: "",
     initiationDate: "",
     initiator: "",
+    testParameters: [],
   });
-
-  const [idForBarcode, setIdForBarcode] = useState(null);
-  console.log(idForBarcode);
-  const barcodeRef = useRef(null);
-
-  const generateRandomNumbers = (length) => {
-    let randomNumbers = "";
-    for (let i = 0; i < length; i++) {
-      randomNumbers += Math.floor(Math.random() * 20);
-    }
-    return randomNumbers;
-  };
-
-  const fetchId = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      const responseData = Array.isArray(response.data)
-        ? response.data
-        : response.data.data;
-
-      const randomNumbers = generateRandomNumbers(16);
-      const idWithRandomNumbers = `${responseData[0]?.id}${randomNumbers}`;
-
-      setIdForBarcode(idWithRandomNumbers);
-    } catch (error) {
-      console.error("Error fetching barcode ID: ", error);
-      toast.error("Failed to fetch barcode ID");
-    }
-  };
-
-  useEffect(() => {
-    fetchId();
-  }, []);
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -261,6 +229,14 @@ const SampleWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  useEffect(() => {
+    const storedTestParameters = JSON.parse(localStorage.getItem("testParameters"));
+    if (storedTestParameters) {
+      setTestParameters(storedTestParameters);
+      console.log(storedTestParameters, "testParameters from localStorage");
+    }
+  }, []);
+
   const fetchData = async () => {
     if (!id) return;
     try {
@@ -310,34 +286,43 @@ const SampleWorkflowModal = ({ onClose }) => {
 
     // Append all form data to the FormData object
     for (const key in formData) {
-      if (Array.isArray(formData[key])) {
-        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
-      } else {
-        formDataToSend.append(key, formData[key]);
-      }
+        if (Array.isArray(formData[key])) {
+            formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+        } else {
+            formDataToSend.append(key, formData[key]);
+        }
+    }
+
+    // Manually append the test parameters as an array of objects
+    if (testParameters && testParameters.length > 0) {
+        formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+        console.log("Test Parameters being sent:", testParameters);
+        
+        // Save testParameters to local storage
+        localStorage.setItem("testParameters", JSON.stringify(testParameters));
     }
 
     try {
-      if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit
-      } else {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
-        );
-        // Handle success response
-        toast.success("Sample Workflow added successfully.");
-        setIsModalOpen(false);
-        navigate("/sampleWorkflow");
-      }
+        if (id) {
+            await handleEdit(formDataToSend); // Pass FormData to handleEdit
+        } else {
+            const response = await axios.post(
+                `http://localhost:9000/create-sample`,
+                formDataToSend,
+                { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+            );
+            // Handle success response
+            toast.success("Sample Workflow added successfully.");
+            setIsModalOpen(false);
+            navigate("/sampleWorkflow");
+        }
     } catch (error) {
-      console.error("Error uploading file:", error); // Log the error
-      toast.error(
-        "Failed to upload file: " + (error.response?.data || error.message)
-      );
+        console.error("Error uploading file:", error); // Log the error
+        toast.error(
+            "Failed to upload file: " + (error.response?.data || error.message)
+        );
     }
-  };
+};
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -510,7 +495,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={idForBarcode}
+                  value={""}
                   disabled
                 />
                 <div>
@@ -874,6 +859,8 @@ const SampleWorkflowModal = ({ onClose }) => {
             <TestParametersTable
               testParameters={testParameters}
               handleRowChange={handleRowChange}
+              value={formData?.testParameters || ""}
+              onChange={handleInputChange}
             />
             <CRow className="mb-3">
               <CCol md={6}>

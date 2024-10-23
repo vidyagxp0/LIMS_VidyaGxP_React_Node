@@ -22,20 +22,25 @@ const testParameterOptions = [
 ];
 
 const TestParametersTable = ({ testParameters, handleRowChange }) => {
+  // Function to determine the background color for the result field
   const getResultCellStyle = (row) => {
     const { usl, lsl } = row;
 
+    // Ensure USL and LSL are numbers for comparison
     const uslValue = parseFloat(usl);
     const lslValue = parseFloat(lsl);
 
+    // Condition for green: Both USL <= 6 and LSL <= 2 (within limits)
     if (uslValue <= 6 && lslValue <= 2) {
       return { backgroundColor: "green" };
     }
 
+    // Condition for red: Both USL > 6 and LSL > 2 (exceeds limits)
     if (uslValue > 6 && lslValue > 2) {
       return { backgroundColor: "red" };
     }
 
+    // Condition for blue: One exceeds limit, the other doesn't
     if ((uslValue > 6 && lslValue <= 2) || (uslValue <= 6 && lslValue > 2)) {
       return { backgroundColor: "blue" };
     }
@@ -43,7 +48,6 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
     // Default style
     return {};
   };
-  
 
   return (
     <CTable bordered hover>
@@ -64,7 +68,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
               <CFormInput
                 type="text"
                 name="sno"
-                value={index + 1} 
+                value={index + 1} // Automatically assign serial number
                 disabled
               />
             </CTableDataCell>
@@ -88,7 +92,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
                 name="usl"
                 value={row.usl}
                 min={0}
-                max={6} 
+                max={6} // Prevent user from entering value greater than 6
                 onChange={(e) => handleRowChange(index, e)}
               />
             </CTableDataCell>
@@ -99,7 +103,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
                 name="lsl"
                 value={row.lsl}
                 min={0}
-                max={2} 
+                max={2} // Prevent user from entering value greater than 2
                 onChange={(e) => handleRowChange(index, e)}
               />
             </CTableDataCell>

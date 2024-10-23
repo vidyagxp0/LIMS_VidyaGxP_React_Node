@@ -289,7 +289,7 @@ const STP = () => {
                 inputType = "date";
               } else if (key.includes("date")) {
                 inputType = "date";
-              } else if (key.includes("number") || key === "version") {
+              } else if (key.includes("number") || key === "version" || key==="stpId") {
                 inputType = "number";
               } else if (key === "attachment" || key === "attachments") {
                 inputType = "file";
