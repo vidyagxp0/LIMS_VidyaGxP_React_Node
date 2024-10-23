@@ -99,7 +99,7 @@ const ControlSampleModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://limsapi.vidyagxp.com/controlSample/get-control-sample/${id}`
+        `http://localhost:9000/controlSample/get-control-sample/${id}`
       );
       // console.log(response.data);
 
@@ -121,7 +121,7 @@ const ControlSampleModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://limsapi.vidyagxp.com/controlSample/edit-control-sample/${id}`,
+        `http://localhost:9000/controlSample/edit-control-sample/${id}`,
         formData
       );
       if (response.status === 200) {
@@ -133,8 +133,7 @@ const ControlSampleModal = ({ onClose }) => {
       }
     } catch (error) {
       toast.error(
-        "Error updating Data: " +
-          (error.response?.data || error.message)
+        "Error updating Data: " + (error.response?.data || error.message)
       );
     }
   };
@@ -145,7 +144,7 @@ const ControlSampleModal = ({ onClose }) => {
     } else {
       try {
         const response = await axios.post(
-          `http://limsapi.vidyagxp.com/controlSample/create-control-sample`,
+          `http://localhost:9000/controlSample/create-control-sample`,
           formData
         );
         // console.log(response, "iddddddddddddddddddddddd");

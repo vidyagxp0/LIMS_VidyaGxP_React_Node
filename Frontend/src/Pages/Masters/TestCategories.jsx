@@ -38,9 +38,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-
-
-
 const fields = [
   { label: "Category Name", key: "categoryName" },
   { label: "	Unique Code", key: "uniqueCode" },
@@ -63,8 +60,6 @@ function Testcategories() {
   const [data, setData] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-
-
   useEffect(() => {
     fetchProductData();
   }, []);
@@ -86,7 +81,7 @@ function Testcategories() {
               uniqueCode: condition.uniqueCode || "No Generic Name",
               addedOn: condition.addedOn || "No Generic Name",
               reviewDate: condition.reviewDate || "No Generic Name",
-             
+
               status: condition.status || "Active",
             })) || []
         );
@@ -110,7 +105,7 @@ function Testcategories() {
   const addRow = (newRow) => {
     setData([...data, newRow]);
   };
-  
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -125,15 +120,15 @@ function Testcategories() {
   };
 
   const filteredData = Array.isArray(data)
-  ? data.filter((row) => {
-      console.log("Row:", row);
-      const productName = row.productName || "";
-      return (
-        productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        (statusFilter === "All" || row.status === statusFilter)
-      );
-    })
-  : [];
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const productName = row.productName || "";
+        return (
+          productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -209,7 +204,7 @@ function Testcategories() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `http://limsapi.vidyagxp.com/delete-lims/mTestCategories/${item.sno}`
+        `http://localhost:9000/delete-lims/mTestCategories/${item.sno}`
       );
       if (response?.status === 200) {
         const newData = data.filter((d) => d.sno !== item.sno);
@@ -256,7 +251,7 @@ function Testcategories() {
       );
       if (response.status === 200) {
         toast.success("Product added successfully.");
-        fetchProductData(); 
+        fetchProductData();
         setIsModalOpen(false);
       } else {
         toast.error("Failed to add Product.");
@@ -275,7 +270,7 @@ function Testcategories() {
     const [description, setDescription] = useState("");
     const [uniqueCode, setUniqueCode] = useState("");
     const [categoryName, setCategoryName] = useState("");
-  
+
     const handleProduct = () => {
       const newCondition = {
         reviewDate,
@@ -288,7 +283,7 @@ function Testcategories() {
       };
       onAdd(newCondition);
     };
-  
+
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
@@ -296,7 +291,7 @@ function Testcategories() {
         </CModalHeader>
         <CModalBody>
           <p>Add information of Test Category</p>
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -305,7 +300,7 @@ function Testcategories() {
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -314,7 +309,7 @@ function Testcategories() {
             value={uniqueCode}
             onChange={(e) => setUniqueCode(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -323,7 +318,7 @@ function Testcategories() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="date"
@@ -332,7 +327,7 @@ function Testcategories() {
             value={effectFrom}
             onChange={(e) => setEffectFrom(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="date"
@@ -341,7 +336,7 @@ function Testcategories() {
             value={reviewDate}
             onChange={(e) => setReviewDate(e.target.value)}
           />
-  
+
           <CButton color="primary" type="submit" onClick={handleProduct}>
             Submit
           </CButton>
@@ -354,7 +349,6 @@ function Testcategories() {
       </CModal>
     );
   };
-  
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -386,7 +380,6 @@ function Testcategories() {
       );
     }
   };
-  
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
@@ -407,20 +400,24 @@ function Testcategories() {
 
     const handleEditTestCategory = (e) => {
       e.preventDefault();
-    
+
       axios
         .put(
-          `http://limsapi.vidyagxp.com/manage-lims/update/mTestCategories/${formData.uniqueId}`,
+          `http://localhost:9000/manage-lims/update/mTestCategories/${formData.uniqueId}`,
           formData
         )
         .then((response) => {
-          toast.success(response.data.message || "Control Sample updated successfully!");
-    
+          toast.success(
+            response.data.message || "Control Sample updated successfully!"
+          );
+
           // Update the local state with the updated formData
           setData((prevData) =>
-            prevData.map((item) => (item.sno === formData.sno ? formData : item))
+            prevData.map((item) =>
+              item.sno === formData.sno ? formData : item
+            )
           );
-    
+
           closeModal();
         })
         .catch((err) => {
@@ -464,7 +461,7 @@ function Testcategories() {
             value={formData?.description || ""}
             onChange={handleChange}
           />
-            <CFormInput
+          <CFormInput
             className="mb-3"
             type="date"
             label="Effect From"
@@ -473,7 +470,7 @@ function Testcategories() {
             value={formData?.effectFrom || ""}
             onChange={handleChange}
           />
-            <CFormInput
+          <CFormInput
             className="mb-3"
             type="date"
             label="Review date"
@@ -559,7 +556,7 @@ function Testcategories() {
           closeModal={closeModal}
           addRow={addRow}
           onAdd={handleAdd}
-          addNewItem={ addNewItem }
+          addNewItem={addNewItem}
         />
       )}
       {viewModalData && (

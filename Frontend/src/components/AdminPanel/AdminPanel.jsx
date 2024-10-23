@@ -31,7 +31,7 @@ function AdminPanel(props) {
 
     try {
       const response = await axios.post(
-        "http://limsapi.vidyagxp.com/admin/admin-login",
+        "http://localhost:9000/admin/admin-login",
         {
           email,
           password: passwd,
@@ -39,8 +39,7 @@ function AdminPanel(props) {
       );
 
       const { token, data } = response.data;
-      console.log(token,data,"tttttt");
-      
+      console.log(token, data, "tttttt");
 
       if (token) {
         localStorage.setItem("token", token);
@@ -98,10 +97,7 @@ function AdminPanel(props) {
           >
             <div className="flex flex-col gap-2">
               <div className="flex justify-center items-center">
-                <img
-                  src="login.png"
-                  width={"300px"}
-                />
+                <img src="login.png" width={"300px"} />
               </div>
               <h2 className="text-3xl font-bold text-center text-dark mb-4">
                 Welcome To Admin Console

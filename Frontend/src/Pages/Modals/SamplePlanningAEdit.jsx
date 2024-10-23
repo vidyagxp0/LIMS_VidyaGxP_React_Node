@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect } from "react";
 import {
   CButton,
@@ -14,19 +10,17 @@ import {
   CFormInput,
   CFormTextarea,
 } from "@coreui/react";
-import axios from 'axios';
+import axios from "axios";
 import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
 
 const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
   const [formData, setFormData] = useState(data);
   // console.log(formData);
-  
 
   useEffect(() => {
-      setFormData(data );
+    setFormData(data);
   }, [data]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,15 +29,17 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
       [name]: value,
     }));
   };
-  
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     axios
-      .put(`http://limsapi.vidyagxp.com/manage-lims/update/sLSamplePA/${formData.uniqueId}`, formData)
+      .put(
+        `http://localhost:9000/manage-lims/update/sLSamplePA/${formData.uniqueId}`,
+        formData
+      )
       .then((response) => {
         // console.log("Data updated successfully:", response.data);
-        // updateRow(formData); 
+        // updateRow(formData);
         handleClose(); // Close the modal
         toast.success("Data updated successfully");
         fetchData();
@@ -59,7 +55,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
         <CModalTitle>Edit Sample Planning and Analytics</CModalTitle>
       </CModalHeader>
       <CModalBody>
-      <CForm onSubmit={handleSubmit}>
+        <CForm onSubmit={handleSubmit}>
           <CFormInput
             name="samplePlanId"
             label="Sample Plan ID"
@@ -477,7 +473,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
           />
 
           <CButton type="submit" color="primary" style={{ marginTop: "1rem" }}>
-          Update
+            Update
           </CButton>
         </CForm>
       </CModalBody>

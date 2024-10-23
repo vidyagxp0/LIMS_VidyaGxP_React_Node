@@ -29,7 +29,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../Modals/ResusableModal";
 
-
 const ControlSample = () => {
   const [data, setData] = useState([]);
   // console.log(data, "data");
@@ -43,8 +42,8 @@ const ControlSample = () => {
   const [editModalData, setEditModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const [selectedSample,setSelectedSample] = useState(null)
-  const navigate= useNavigate()
+  const [selectedSample, setSelectedSample] = useState(null);
+  const navigate = useNavigate();
 
   const filteredData = data.filter((row) => {
     const fullNameLower = row.FullName?.toLowerCase() || "";
@@ -54,7 +53,7 @@ const ControlSample = () => {
     );
   });
   // console.log(filteredData,"CONTROL SAMPLE FILTERED");
-  
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -63,15 +62,16 @@ const ControlSample = () => {
 
   const handleEdit = (controlSample) => {
     setSelectedSample(controlSample); // Set the selected analyst data
-    console.log(controlSample,"CONTROL SAMPLE EDIT");
-    
+    console.log(controlSample, "CONTROL SAMPLE EDIT");
+
     setIsModalOpen(true); // Open the modal
   };
 
-  
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://limsapi.vidyagxp.com/controlSample/get-control-sample`);
+      const response = await axios.get(
+        `http://localhost:9000/controlSample/get-control-sample`
+      );
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
         sno: index + 1,
@@ -79,13 +79,12 @@ const ControlSample = () => {
       }));
       setData(updatedData);
       // console.log(updatedData,"ControlSample");
-      
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Failed to fetch data.");
     }
   };
-    useEffect(() => {
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -103,7 +102,7 @@ const ControlSample = () => {
 
   const openControlModal = () => {
     setIsModalOpen(true);
-    navigate('/control-Sample-modal')
+    navigate("/control-Sample-modal");
   };
 
   const closeControlModal = () => {
@@ -187,8 +186,12 @@ const ControlSample = () => {
 
   const handleDeleteControl = async (item) => {
     try {
-      await axios.delete(`http://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`);
-      setData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
+      await axios.delete(
+        `http://localhost:9000/controlSample/delete-control-sample/${item.id}`
+      );
+      setData((prevData) =>
+        prevData.filter((dataItem) => dataItem.id !== item.id)
+      );
       toast.success("Control Sample deleted successfully!");
       fetchData();
     } catch (error) {
@@ -242,7 +245,6 @@ const ControlSample = () => {
     setIsModalsOpen(false); // Close the modal after data upload
   };
 
-
   const handleModalSubmit = (newControlSample) => {
     const currentDate = new Date().toISOString().split("T")[0];
     setData((prevData) => [
@@ -281,8 +283,8 @@ const ControlSample = () => {
     neutralizingAgent: "",
     destructionDate: "",
     remarks: "",
-    status: ""
-};
+    status: "",
+  };
 
   return (
     <>
@@ -324,7 +326,6 @@ const ControlSample = () => {
         <Table
           columns={columns}
           data={filteredData}
-          
           onDelete={handleDeleteControl}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
@@ -348,13 +349,15 @@ const ControlSample = () => {
           data={viewModalData}
           fields={columns
             .map((col) => ({ key: col.accessor, label: col.header }))
-            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+            .filter(
+              (field) => field.key !== "action" && field.key !== "checkbox"
+            )}
           title="Control Sample Details"
-        //  updateStatus={handleStatusUpdate}
+          //  updateStatus={handleStatusUpdate}
         />
       )}
 
-{viewModalData && (
+      {viewModalData && (
         <ControlSampleModal
           visible={viewModalData !== null}
           closeModal={closeViewModal}

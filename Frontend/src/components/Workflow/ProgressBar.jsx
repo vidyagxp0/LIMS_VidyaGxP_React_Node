@@ -43,7 +43,6 @@ const ProgressBar = (props) => {
   };
   const token = localStorage.getItem("token");
   // console.log(token,"ttttttttt");
-  
 
   const callApis = async (formData, sampleId) => {
     try {
@@ -52,7 +51,7 @@ const ProgressBar = (props) => {
       const comment = formData.comment;
 
       const response = await axios.post(
-        "http://limsapi.vidyagxp.com/e-signature",
+        "http://localhost:9000/e-signature",
         { email, password },
         {
           headers: {
@@ -63,7 +62,7 @@ const ProgressBar = (props) => {
 
       if (!response.data.error) {
         const response = await axios.post(
-          `http://limsapi.vidyagxp.com/${url}`,
+          `http://localhost:9000/${url}`,
           { sampleId, comment },
           {
             headers: {
@@ -79,7 +78,11 @@ const ProgressBar = (props) => {
   };
   return (
     <>
-      <ESignatureModal open={isModalOpen} handleClose={handleClose} submitAction={handleSubmit} />
+      <ESignatureModal
+        open={isModalOpen}
+        handleClose={handleClose}
+        submitAction={handleSubmit}
+      />
       <div className="flex flex-col items-center p-4 pb-2 bg-slate-300">
         <div className="flex w-full max-w-4xl justify-between mb-2 ">
           {stages.map((stageName, index) => (
@@ -87,9 +90,19 @@ const ProgressBar = (props) => {
               key={index}
               className={`flex-1 text-center p-2 cursor-pointer border rounded 
               ${index < currentStage ? "bg-green-500 text-white" : ""} 
-              ${index === currentStage && index !== 4 ? "bg-orange-500 text-white" : ""} 
-              ${index === 3 && currentStage === 3 ? "bg-orange-500 text-white" : ""}
-              ${index === 4 && currentStage === 4 ? "bg-red-500 text-white" : ""} 
+              ${
+                index === currentStage && index !== 4
+                  ? "bg-orange-500 text-white"
+                  : ""
+              } 
+              ${
+                index === 3 && currentStage === 3
+                  ? "bg-orange-500 text-white"
+                  : ""
+              }
+              ${
+                index === 4 && currentStage === 4 ? "bg-red-500 text-white" : ""
+              } 
               ${index > currentStage ? "bg-gray-200" : ""} 
               ${index < stages.length - 1 ? "mr-1" : ""}`}
             >

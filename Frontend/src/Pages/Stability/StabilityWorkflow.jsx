@@ -105,11 +105,10 @@ const StabilityWorkFlow = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://limsapi.vidyagxp.com/stability-generate-report/${sampleId}`
+        `http://localhost:9000/stability-generate-report/${sampleId}`
       );
       // console.log("Response", response);
-     
-      
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -264,7 +263,7 @@ const StabilityWorkFlow = () => {
   const handleDelete = (item) => {
     // console.log(item);
     axios
-      .delete(`http://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`)
+      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.uniqueId}`)
       .then((response) => {
         // console.log(response.data.message);
         toast.success("Record deleted successfully");
@@ -488,7 +487,7 @@ const StabilityWorkFlow = () => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `http://localhost:9000/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -557,7 +556,7 @@ const StabilityWorkFlow = () => {
       </div>
 
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
-      <thead>
+        <thead>
           <tr className="bg-yellow-600 text-white text-left">
             <th colSpan="30" className="px-4 py-2 bg-yellow-600">
               Sample Registration
@@ -685,7 +684,10 @@ const StabilityWorkFlow = () => {
             <tr key={index} className="border ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
               <td className="border cursor-pointer  px-4 py-2">{index + 1}</td>
-              <Link to={`/stabilityWorkflowEdit/${data.id}`} className="contents">
+              <Link
+                to={`/stabilityWorkflowEdit/${data.id}`}
+                className="contents"
+              >
                 <td className="hover:bg-gray-200 border px-4 py-2">
                   {data.samplePlanId}
                 </td>
@@ -793,16 +795,19 @@ const StabilityWorkFlow = () => {
               <td className="border px-4 py-2">
                 <BarcodeExportButton />
               </td>
-              <td className="border px-4 py-2">{data.generatePDF}
+              <td className="border px-4 py-2">
+                {data.generatePDF}
                 <td className="flex justify-center items-center px-4 py-2">
-                <FaFilePdf size={20}
-                  className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
-                  onClick={() => generatePDF(data.id)}
-                />
-                {loading[data.id] && (
-                  <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
-                )}
-              </td></td>{" "}
+                  <FaFilePdf
+                    size={20}
+                    className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                    onClick={() => generatePDF(data.id)}
+                  />
+                  {loading[data.id] && (
+                    <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                  )}
+                </td>
+              </td>{" "}
               <td className="border px-4 py-2 font-medium">
                 <div className="flex gap-2 font-medium">
                   <FontAwesomeIcon
