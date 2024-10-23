@@ -690,8 +690,8 @@ const Registration = () => {
             <Dropdown
               options={[
                 { value: "All", label: "All" },
-                { value: "calibrated", label: "Calibrated" },
-                { value: "nonCalibrated", label: "Non Calibrated" },
+                { value: "Calibrated", label: "Calibrated" },
+                { value: "Non Calibrated", label: "Non Calibrated" },
               ]}
               value={statusFilter}
               onChange={setStatusFilter}
