@@ -107,7 +107,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
 
             <CTableDataCell>
               <CFormInput
-                type="text"
+                type="number"
                 name="result"
                 value={row.result}
                 onChange={(e) => handleRowChange(index, e)}

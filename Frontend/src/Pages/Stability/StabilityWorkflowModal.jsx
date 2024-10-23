@@ -22,6 +22,7 @@ import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const StabilityWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -1414,6 +1415,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
       case "QA Review":
         return (
           <CForm>
+
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">

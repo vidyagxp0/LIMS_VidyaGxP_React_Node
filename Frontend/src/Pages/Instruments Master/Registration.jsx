@@ -604,7 +604,7 @@ const Registration = () => {
         Instrument: newInstrument.Instrument,
         Made: newInstrument.Made,
         Model: newInstrument.Model,
-        menuNo: newInstrument.manufacturerSerialNo,
+        MenuNo: newInstrument.MenuNo,
         InstalledAt: newInstrument.InstalledAt,
         calibrationStatus: newInstrument.calibrationStatus,
         calibrationDueOn: newInstrument.calibrationDueOn,
