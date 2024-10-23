@@ -71,7 +71,7 @@ const ControlSample = () => {
   
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/controlSample/get-control-sample`);
+      const response = await axios.get(`http://limsapi.vidyagxp.com/controlSample/get-control-sample`);
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
         sno: index + 1,
@@ -187,7 +187,7 @@ const ControlSample = () => {
 
   const handleDeleteControl = async (item) => {
     try {
-      await axios.delete(`http://localhost:9000/controlSample/delete-control-sample/${item.id}`);
+      await axios.delete(`http://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`);
       setData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
       toast.success("Control Sample deleted successfully!");
       fetchData();

@@ -134,7 +134,7 @@ export const generatePdfbyId = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/get-Sample/${id}/sample`,
+      `http://limsapi.vidyagxp.com/get-Sample/${id}/sample`,
       {
         method: "GET",
         headers: {
@@ -357,7 +357,7 @@ export const generatePdfbyIdStability = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/get-Sample/${id}/stability`,
+      `http://limsapi.vidyagxp.com/get-Sample/${id}/stability`,
       {
         method: "GET",
         headers: {
@@ -498,7 +498,7 @@ export const generatePdfControlSample = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/controlSample/get-control-sample/${controlSampleId}`,
+      `http://limsapi.vidyagxp.com/controlSample/get-control-sample/${controlSampleId}`,
       {
         method: "GET",
         headers: {
@@ -664,7 +664,7 @@ export const generatePdfAnalyst = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/analyst/get-analyst/${analystId}`,
+      `http://limsapi.vidyagxp.com/analyst/get-analyst/${analystId}`,
       {
         method: "GET",
         headers: {
@@ -786,7 +786,7 @@ export const generatePdfIMRegistration = async (req, res) => {
   try {
     const { type, id } = req.params;
     const typeData = await fetch(
-      `http://localhost:9000/get-lims/${type}/${id}`,
+      `http://limsapi.vidyagxp.com/get-lims/${type}/${id}`,
       {
         method: "GET",
         headers: {

@@ -22,7 +22,7 @@ function Signup() {
   const handleSignup = async () => { // Make this function async
     if (username && email && passwd) {
       try {
-        const response = await axios.post("http://localhost:9000/admin/add-user", { 
+        const response = await axios.post("http://limsapi.vidyagxp.com/admin/add-user", { 
           username,
           email,
           password: passwd,
