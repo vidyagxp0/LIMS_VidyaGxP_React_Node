@@ -24,7 +24,7 @@ function Signup() {
     if (username && email && passwd) {
       try {
         const response = await axios.post(
-          "http://localhost:9000/admin/add-user",
+          "http://limsapi.vidyagxp.com/admin/add-user",
           {
             username,
             email,
