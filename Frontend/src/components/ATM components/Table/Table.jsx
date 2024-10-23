@@ -85,8 +85,6 @@ const Table = ({
               key={column.accessor}
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
-              onClick={column.onClick ? column.onClick : undefined} // Attach the onClick if defined
-              style={{ cursor: column.onClick ? 'pointer' : 'default' }} // Change cursor if clickable
             >
               {column.header}
             </th>
@@ -105,18 +103,15 @@ const Table = ({
                 {columns?.map((column) => (
                   <td
                     key={column.accessor}
-                    className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ${column.accessor === 'analystId'||column.accessor === 'sampleId' ? 'hover:bg-zinc-200 cursor-pointer' : ''}`}
                     
-                    onClick={
-                      column.accessor === "analystId" // Replace with actual accessor name for Analyst ID column
-                        ? () => navigate(`/analyst-qualification-modal`) // Call this function when the Analyst ID column is clicked
-                        : undefined
-                    }
-                    style={
-                      column.accessor === "analystId"
-                        ? { cursor: 'pointer' } // Optionally, change cursor to pointer for better UX
-                        : {}
-                    }
+                    onClick={() => {
+                      if (column.accessor === "analystId") {
+                        navigate(`/analyst-qualification-edit/${row.id}`);
+                      } else if (column.accessor === "sampleId") {
+                        navigate(`/control-Sample-edit/${row.id}`);
+                      }
+                    }}
                   >
                     {column.accessor === "checkbox" ? (
                       <input

@@ -27,100 +27,12 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import ReusableModal from "../Modals/ResusableModal";
 
-// const storedData = JSON.parse(localStorage.getItem("controlSample")) || [];
-
-// const initialData = [
-//   {
-//     checkbox: false,
-//     sampleId: "SID001",
-//     productName: "Material 1",
-//     productCode: "MCode001",
-//     sampleType: "Type A",
-//     market: "Market A",
-//     arNo: "AR001",
-//     batchNo: "Batch001",
-//     mfgDate: "2023-10-01",
-//     expiryDate: "2025-10-01",
-//     quantity: "1000",
-//     quantityWithdrawn: "500",
-//     currentQuantity: "500",
-//     uom: "KG",
-//     storageLocation: "Loc001",
-//     storageCondition: "Cold Storage",
-//     visualInspectionScheduledOn: "2024-10-01",
-//     visualInspectionPerformedBy: "Inspector A",
-//     abnormalObservation: "No",
-//     observationDate: "2024-09-30",
-//     destructionDueOn: "2026-10-01",
-//     destroyedBy: "Staff A",
-//     neutralizingAgent: "Agent A",
-//     destructionDate: "2026-09-30",
-//     remarks: "No remarks",
-//     status: "Active",
-//   },
-//   {
-//     checkbox: false,
-//     sampleId: "SID002",
-//     productName: "Material 2",
-//     productCode: "MCode002",
-//     sampleType: "Type B",
-//     market: "Market B",
-//     arNo: "AR002",
-//     batchNo: "Batch002",
-//     mfgDate: "2023-11-01",
-//     expiryDate: "2025-11-01",
-//     quantity: "2000",
-//     quantityWithdrawn: "1000",
-//     currentQuantity: "1000",
-//     uom: "L",
-//     storageLocation: "Loc002",
-//     storageCondition: "Room Temperature",
-//     visualInspectionScheduledOn: "2024-11-01",
-//     visualInspectionPerformedBy: "Inspector B",
-//     abnormalObservation: "No",
-//     observationDate: "2024-10-31",
-//     destructionDueOn: "2026-11-01",
-//     destroyedBy: "Staff B",
-//     neutralizingAgent: "Agent B",
-//     destructionDate: "2026-10-31",
-//     remarks: "Minor observation",
-//     status: "Inactive",
-//   },
-//   {
-//     checkbox: false,
-//     sampleId: "SID003",
-//     productName: "Material 3",
-//     productCode: "MCode003",
-//     sampleType: "Type C",
-//     market: "Market C",
-//     arNo: "AR003",
-//     batchNo: "Batch003",
-//     mfgDate: "2023-12-01",
-//     expiryDate: "2025-12-01",
-//     quantity: "3000",
-//     quantityWithdrawn: "1500",
-//     currentQuantity: "1500",
-//     uom: "g",
-//     storageLocation: "Loc003",
-//     storageCondition: "Freezer",
-//     visualInspectionScheduledOn: "2024-12-01",
-//     visualInspectionPerformedBy: "Inspector C",
-//     abnormalObservation: "Yes",
-//     observationDate: "2024-11-30",
-//     destructionDueOn: "2026-12-01",
-//     destroyedBy: "Staff C",
-//     neutralizingAgent: "Agent C",
-//     destructionDate: "2026-11-30",
-//     remarks: "Requires follow-up",
-//     status: "Active",
-//   },
-//   ...storedData, // Add the data from localStorage (if any) at the end
-// ];
 
 const ControlSample = () => {
   const [data, setData] = useState([]);
-  console.log(data, "data");
+  // console.log(data, "data");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalsOpen, setIsModalsOpen] = useState(false);
@@ -130,36 +42,50 @@ const ControlSample = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [selectedSample,setSelectedSample] = useState(null)
   const navigate= useNavigate()
 
   const filteredData = data.filter((row) => {
+    const fullNameLower = row.FullName?.toLowerCase() || "";
     return (
-      row.productName?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
+      fullNameLower.includes(searchQuery.toLowerCase()) &&
+      (statusFilter === "All" || row.QualificationStatus === statusFilter)
     );
   });
+  // console.log(filteredData,"CONTROL SAMPLE FILTERED");
+  
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/get-all-lims/controlSampleManagement`
-        );
-        const fetchData = response?.data[0]?.controlSampleManagement || [];
-        const updatedData = fetchData?.map((item, index) => ({
-          ...item,
-          sno: index + 1,
-        }));
-        setData(updatedData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const handleEdit = (controlSample) => {
+    setSelectedSample(controlSample); // Set the selected analyst data
+    console.log(controlSample,"CONTROL SAMPLE EDIT");
+    
+    setIsModalOpen(true); // Open the modal
+  };
+
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:9000/controlSample/get-control-sample`);
+      const fetchData = response?.data.data || [];
+      const updatedData = fetchData?.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+      setData(updatedData);
+      // console.log(updatedData,"ControlSample");
+      
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to fetch data.");
+    }
+  };
+    useEffect(() => {
     fetchData();
   }, []);
 
@@ -190,8 +116,8 @@ const ControlSample = () => {
     },
     { header: "Sr No", accessor: "sno" },
     { header: "Sample ID", accessor: "sampleId" },
-    { header: "Product/ Material Name", accessor: "productName" },
-    { header: "Product/ Material Code", accessor: "productCode" },
+    { header: "Product/ Material Name", accessor: "productMaterialName" },
+    { header: "Product/ Material Code", accessor: "productMaterialCode" },
     { header: "Sample Type", accessor: "sampleType" },
     { header: "Market", accessor: "market" },
     { header: "AR No.", accessor: "arNo" },
@@ -206,14 +132,14 @@ const ControlSample = () => {
     { header: "Storage Condition", accessor: "storageCondition" },
     {
       header: "Visual Inspection Scheduled On",
-      accessor: "visualInspectionScheduledOn",
+      accessor: "visualInspectionSheduledOn",
     },
     {
       header: "Visual Inspection Performed By",
       accessor: "visualInspectionPerformedBy",
     },
-    { header: "Any Abnormal Observation", accessor: "abnormalObservation" },
-    { header: "Observation Date", accessor: "observationDate" },
+    { header: "Any Abnormal Observation", accessor: "anyAbnoramalObservation" },
+    { header: "Observation Date", accessor: "ObservationDate" },
     { header: "Destruction Due On", accessor: "destructionDueOn" },
     { header: "Destroyed By", accessor: "destroyedBy" },
     { header: "Neutralizing Agent", accessor: "neutralizingAgent" },
@@ -229,11 +155,6 @@ const ControlSample = () => {
             icon={faEye}
             className="mr-2 cursor-pointer"
             onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-            onClick={() => openEditModal(row)}
           />
           <FontAwesomeIcon
             icon={faTrashCan}
@@ -261,24 +182,20 @@ const ControlSample = () => {
   const handleDelete = (item) => {
     const newData = data.filter((d) => d !== item);
     setData(newData);
-    console.log("Deleted item:", item);
+    // console.log("Deleted item:", item);
   };
 
-  const handleDeleteControl = (item) => {
-    console.log(item , "item")
-    axios
-      .delete(`http://localhost:9000/delete-lims/controlSampleManagement/${item.uniqueId}`)
-      .then((response) => {
-        toast.success(response.data.message || "Control Sample deleted successfully!");
-  
-        closeModal(); 
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error("Error deleting Control Sample.");
-      });
+  const handleDeleteControl = async (item) => {
+    try {
+      await axios.delete(`http://localhost:9000/controlSample/delete-control-sample/${item.id}`);
+      setData((prevData) => prevData.filter((dataItem) => dataItem.id !== item.id));
+      toast.success("Control Sample deleted successfully!");
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting Control Sample:", error);
+      toast.error("Error deleting Control Sample.");
+    }
   };
-  
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -287,7 +204,7 @@ const ControlSample = () => {
   };
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
-    setIsViewModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const handleExcelDataUpload = (excelData) => {
@@ -324,63 +241,18 @@ const ControlSample = () => {
     setData(updatedData);
     setIsModalsOpen(false); // Close the modal after data upload
   };
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-    setEditModalOpen(true);
-  };``
 
-  const closeEditModal = () => {
-    setEditModalOpen(false);
-    setEditModalData(null);
-  };
 
   const handleModalSubmit = (newControlSample) => {
-    console.log(newControlSample, "newControlSample");
     const currentDate = new Date().toISOString().split("T")[0];
-    if (editModalData) {
-      const updatedList = data.map((item) => {
-        console.log(item, "ittteeemmm");
-        return item.productName === newControlSample.productName
-          ? newControlSample
-          : item;
-      });
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
-        {
-          checkbox: false,
-          sampleId: newControlSample?.sampleId,
-          productName: newControlSample.productName,
-          productCode: newControlSample.productCode,
-          sampleType: newControlSample.sampleType,
-          market: newControlSample.market,
-          arNo: newControlSample.arNo,
-          batchNo: newControlSample.batchNo,
-          mfgDate: newControlSample.mfgDate,
-          expiryDate: newControlSample.expiryDate,
-          quantity: newControlSample.quantity,
-          quantityWithdrawn: newControlSample.quantityWithdrawn,
-          currentQuantity: newControlSample.currentQuantity,
-          uom: newControlSample.uom,
-          storageLocation: newControlSample.storageLocation,
-          storageCondition: newControlSample.storageCondition,
-          visualInspectionScheduledOn:
-            newControlSample.visualInspectionScheduledOn,
-          visualInspectionPerformedBy:
-            newControlSample.visualInspectionPerformedBy,
-          abnormalObservation: newControlSample.abnormalObservation,
-          observationDate: newControlSample.observationDate,
-          destructionDueOn: newControlSample.destructionDueOn,
-          destroyedBy: newControlSample.destroyedBy,
-          neutralizingAgent: newControlSample.neutralizingAgent,
-          destructionDate: newControlSample.destructionDate,
-          remarks: newControlSample.remarks,
-          status: "Active",
-        },
-      ]);
-    }
-    closeControlModal();
+    setData((prevData) => [
+      ...prevData,
+      {
+        ...newControlSample,
+        createdAt: currentDate,
+      },
+    ]);
+    setIsModalOpen(false);
   };
   const fields = {
     checkbox: false,
@@ -411,314 +283,6 @@ const ControlSample = () => {
     remarks: "",
     status: ""
 };
-
-
-  const handleEditSave = (updatedData) => {
-    console.log(updatedData, "updatedData");
-    const updatedList = data.map((item) =>
-      item.productName === updatedData.productName ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
-  };
-
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [formData, setFormData] = useState(data);
-
-    useEffect(() => {
-      setFormData(data);
-    }, [data]);
-
-    // Handle form input changes
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    };
-
-    const handleEditControlSample = (e) => {
-      e.preventDefault();
-    
-      axios
-        .put(
-          `http://localhost:9000/manage-lims/update/controlSampleManagement/${formData.uniqueId}`,
-          formData
-        )
-        .then((response) => {
-          toast.success(response.data.message || "Control Sample updated successfully!");
-    
-          // Update the local state with the updated formData
-          setData((prevData) =>
-            prevData.map((item) => (item.sno === formData.sno ? formData : item))
-          );
-    
-          closeModal();
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Error while updating Control Sample");
-        });
-    };
-    
-
-    useEffect(() => {
-      setFormData(data);
-    }, [data]);
-
-    // const handleChange = (e) => {
-    //   const { name, value } = e.target;
-    //   setFormData({ ...formData, [name]: value });
-    // };
-
-    const handleSave = () => {
-      onSave(formData);
-    };
-
-    return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Instrument</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>Edit information and register new Control Sample</p>
-          <CForm onSubmit={handleEditControlSample}>
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Sample Id"
-              placeholder="Sample Id"
-              value={formData?.sampleId || ""}
-              onChange={handleChange}
-              name="sampleId"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Product Name"
-              placeholder="Product Name"
-              value={formData?.productName || ""}
-              onChange={handleChange}
-              name="productName"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Product Code"
-              placeholder="Product Code"
-              value={formData?.productCode || ""}
-              onChange={handleChange}
-              name="productCode"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Sample Type"
-              placeholder="Sample Type"
-              value={formData?.sampleType || ""}
-              onChange={handleChange}
-              name="sampleType"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Market"
-              placeholder="Market"
-              value={formData?.market || ""}
-              onChange={handleChange}
-              name="market"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Batch No"
-              placeholder="Batch No"
-              value={formData?.batchNo || ""}
-              onChange={handleChange}
-              name="batchNo"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="AR No"
-              placeholder="AR No"
-              value={formData?.arNo || ""}
-              onChange={handleChange}
-              name="arNo"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Mfg Date"
-              placeholder="Mfg Date"
-              value={formData?.mfgDate || ""}
-              onChange={handleChange}
-              name="mfgDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Expiry Date"
-              placeholder="Expiry Date"
-              value={formData?.expiryDate || ""}
-              onChange={handleChange}
-              name="expiryDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="number"
-              label="Quantity"
-              placeholder="Quantity"
-              value={formData?.quantity || ""}
-              onChange={handleChange}
-              name="quantity"
-            />
-            <CFormInput
-              className="mb-3"
-              type="number"
-              label="Quantity Withdrawn"
-              placeholder="Quantity Withdrawn"
-              value={formData?.quantityWithdrawn || ""}
-              onChange={handleChange}
-              name="quantityWithdrawn"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Current Quantity"
-              placeholder="Current Quantity"
-              value={formData?.currentQuantity || ""}
-              onChange={handleChange}
-              name="currentQuantity"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="UOM"
-              placeholder="UOM"
-              value={formData?.uom || ""}
-              onChange={handleChange}
-              name="uom"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Storage Location"
-              placeholder="Storage Location"
-              value={formData?.storageLocation || ""}
-              onChange={handleChange}
-              name="storageLocation"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Storage Condition"
-              placeholder="Storage Condition"
-              value={formData?.storageCondition || ""}
-              onChange={handleChange}
-              name="storageCondition"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Visual Inspection Scheduled On"
-              placeholder="Visual Inspection Scheduled On"
-              value={formData?.visualInspectionScheduledOn || ""}
-              onChange={handleChange}
-              name="visualInspectionScheduledOn"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Visual Inspection Performed By"
-              placeholder="Visual Inspection Performed By"
-              value={formData?.visualInspectionPerformedBy || ""}
-              onChange={handleChange}
-              name="visualInspectionPerformedBy"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Abnormal Observation"
-              placeholder="Abnormal Observation"
-              value={formData?.abnormalObservation || ""}
-              onChange={handleChange}
-              name="abnormalObservation"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Observation Date"
-              placeholder="Observation Date"
-              value={formData?.observationDate || ""}
-              onChange={handleChange}
-              name="observationDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Destruction Due On"
-              placeholder="Destruction Due On"
-              value={formData?.destructionDueOn || ""}
-              onChange={handleChange}
-              name="destructionDueOn"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Destroyed By"
-              placeholder="Destroyed By"
-              value={formData?.destroyedBy || ""}
-              onChange={handleChange}
-              name="destroyedBy"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Neutralizing Agent"
-              placeholder="Neutralizing Agent"
-              value={formData?.neutralizingAgent || ""}
-              onChange={handleChange}
-              name="neutralizingAgent"
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Destruction Date"
-              placeholder="Destruction Date"
-              value={formData?.destructionDate || ""}
-              onChange={handleChange}
-              name="destructionDate"
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Remarks"
-              placeholder="Remarks"
-              value={formData?.remarks || ""}
-              onChange={handleChange}
-              name="remarks"
-            />
-            <CButton color="primary" type="submit">
-              Save changes
-            </CButton>
-          </CForm>
-        </CModalBody>
-
-        <CModalFooter>
-          <CButton color="secondary" onClick={closeModal}>
-            Close
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
-  };
 
   return (
     <>
@@ -756,13 +320,16 @@ const ControlSample = () => {
             />
           </div>
         </div>
+        {/* {console.log(filteredData,"TABLE KO SEND")} */}
         <Table
           columns={columns}
           data={filteredData}
+          
           onDelete={handleDeleteControl}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
-          openEditModal={openEditModal}
+          // openEditModal={openEditModal}
+          onEdit={handleEdit}
         />
       </div>
       {isModalsOpen && (
@@ -772,6 +339,18 @@ const ControlSample = () => {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+          title="Control Sample Details"
+        //  updateStatus={handleStatusUpdate}
         />
       )}
 
@@ -787,15 +366,6 @@ const ControlSample = () => {
       )}
 
       {showModal && <ControlSampleModal onClose={closeWorkflowModal} />}
-
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
     </>
   );
 };

@@ -229,6 +229,14 @@ const SampleWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  useEffect(() => {
+    const storedTestParameters = JSON.parse(localStorage.getItem("testParameters"));
+    if (storedTestParameters) {
+      setTestParameters(storedTestParameters);
+      console.log(storedTestParameters, "testParameters from localStorage");
+    }
+  }, []);
+
   const fetchData = async () => {
     if (!id) return;
     try {
@@ -278,44 +286,43 @@ const SampleWorkflowModal = ({ onClose }) => {
 
     // Append all form data to the FormData object
     for (const key in formData) {
-      if (Array.isArray(formData[key])) {
-        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
-      } else {
-        formDataToSend.append(key, formData[key]);
-      }
+        if (Array.isArray(formData[key])) {
+            formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+        } else {
+            formDataToSend.append(key, formData[key]);
+        }
     }
 
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
-      formDataToSend.append(
-        "TestParametersTable",
-        JSON.stringify(testParameters)
-      );
-      console.log("Test Parameters being sent:", testParameters);
+        formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+        console.log("Test Parameters being sent:", testParameters);
+        
+        // Save testParameters to local storage
+        localStorage.setItem("testParameters", JSON.stringify(testParameters));
     }
 
     try {
-      if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit
-      } else {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formDataToSend,
-
-          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
-        );
-        // Handle success response
-        toast.success("Sample Workflow added successfully.");
-        setIsModalOpen(false);
-        navigate("/sampleWorkflow");
-      }
+        if (id) {
+            await handleEdit(formDataToSend); // Pass FormData to handleEdit
+        } else {
+            const response = await axios.post(
+                `http://localhost:9000/create-sample`,
+                formDataToSend,
+                { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+            );
+            // Handle success response
+            toast.success("Sample Workflow added successfully.");
+            setIsModalOpen(false);
+            navigate("/sampleWorkflow");
+        }
     } catch (error) {
-      console.error("Error uploading file:", error); // Log the error
-      toast.error(
-        "Failed to upload file: " + (error.response?.data || error.message)
-      );
+        console.error("Error uploading file:", error); // Log the error
+        toast.error(
+            "Failed to upload file: " + (error.response?.data || error.message)
+        );
     }
-  };
+};
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -619,7 +626,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 >
                   {Array.isArray(formData.requiredInstrument) &&
                   formData.requiredInstrument.length > 0 ? (
-                    formData.requiredInstrument.map((instrument, index) => (
+                    formData?.requiredInstrument?.map((instrument, index) => (
                       <span
                         key={index}
                         className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"

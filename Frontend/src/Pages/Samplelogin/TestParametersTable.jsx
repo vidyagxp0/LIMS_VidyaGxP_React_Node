@@ -23,25 +23,34 @@ const testParameterOptions = [
 
 const TestParametersTable = ({ testParameters, handleRowChange }) => {
   const getResultCellStyle = (row) => {
-    const { usl, lsl } = row;
-
+    const { usl, lsl, result } = row;
     const uslValue = parseFloat(usl);
     const lslValue = parseFloat(lsl);
+    const resultValue = parseFloat(result);
 
-    if (uslValue <= 6 && lslValue <= 2) {
-      return { backgroundColor: "green" };
+    if (isNaN(resultValue)) {
+      return {}; // No styling if result is not a valid number
     }
 
-    if (uslValue > 6 && lslValue > 2) {
-      return { backgroundColor: "red" };
+    if (resultValue < lslValue || resultValue > uslValue) {
+      return { border: "4px solid red" }; // Red border if result is outside range
     }
 
-    if ((uslValue > 6 && lslValue <= 2) || (uslValue <= 6 && lslValue > 2)) {
-      return { backgroundColor: "blue" };
+    if (resultValue >= lslValue && resultValue <= uslValue) {
+      return { border: "4px solid green" }; // Green border if result is within range
     }
 
     // Default style
     return {};
+  };
+
+  const isResultEditable = (row) => {
+    const { usl, lsl } = row;
+    const uslValue = parseFloat(usl);
+    const lslValue = parseFloat(lsl);
+
+    // Result field is only editable if both USL and LSL are valid numbers and LSL <= USL
+    return !isNaN(uslValue) && !isNaN(lslValue) && lslValue <= uslValue;
   };
 
   return (
@@ -50,8 +59,8 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
         <CTableRow>
           <CTableHeaderCell scope="col">Sno.</CTableHeaderCell>
           <CTableHeaderCell scope="col">Test Parameter</CTableHeaderCell>
-          <CTableHeaderCell scope="col">USL</CTableHeaderCell>
           <CTableHeaderCell scope="col">LSL</CTableHeaderCell>
+          <CTableHeaderCell scope="col">USL</CTableHeaderCell>
           <CTableHeaderCell scope="col">Result</CTableHeaderCell>
           <CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
         </CTableRow>
@@ -84,10 +93,9 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
             <CTableDataCell>
               <CFormInput
                 type="number"
-                name="usl"
-                value={row.usl}
+                name="lsl"
+                value={row.lsl}
                 min={0}
-                max={6} 
                 onChange={(e) => handleRowChange(index, e)}
               />
             </CTableDataCell>
@@ -95,20 +103,21 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
             <CTableDataCell>
               <CFormInput
                 type="number"
-                name="lsl"
-                value={row.lsl}
+                name="usl"
+                value={row.usl}                
                 min={0}
-                max={2} 
                 onChange={(e) => handleRowChange(index, e)}
               />
             </CTableDataCell>
 
-            <CTableDataCell style={getResultCellStyle(row)}>
+            <CTableDataCell>
               <CFormInput
                 type="text"
                 name="result"
                 value={row.result}
                 onChange={(e) => handleRowChange(index, e)}
+                style={getResultCellStyle(row)} // Apply dynamic border color
+                disabled={!isResultEditable(row)} // Disable if LSL/USL are invalid
               />
             </CTableDataCell>
             <CTableDataCell>

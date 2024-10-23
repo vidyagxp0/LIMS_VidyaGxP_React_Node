@@ -26,6 +26,7 @@ const InstrumentMasterModal = ({
   visible,
   closeModal,
   handleSubmit,
+  fetchProductData
   // addRow,
 }) => {
   const [fields, setFields] = useState([]);
@@ -378,9 +379,9 @@ const InstrumentMasterModal = ({
               onChange={(content) => handleInputChange("description", content)}
             />
           </div>
-          {instrumentData.calibrationStatus === "calibrated" && (
+          {/* {instrumentData.calibrationStatus === "calibrated" && (
             <SampleWorkFlow instrumentData={instrumentData} />
-          )}
+          )} */}
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>

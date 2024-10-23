@@ -107,7 +107,7 @@ const StabilityWorkFlow = () => {
       const response = await fetch(
         `http://localhost:9000/stability-generate-report/${sampleId}`
       );
-      console.log("Response", response);
+      // console.log("Response", response);
      
       
       if (!response.ok) {
@@ -682,7 +682,7 @@ const StabilityWorkFlow = () => {
         </thead>
         <tbody>
           {data?.map((data, index) => (
-            <tr key={index} className=" ">
+            <tr key={index} className="border ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
               <td className="border cursor-pointer  px-4 py-2">{index + 1}</td>
               <Link to={`/stabilityWorkflowEdit/${data.id}`} className="contents">
@@ -789,7 +789,7 @@ const StabilityWorkFlow = () => {
               <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
               <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-              <td claossName="border spx-4 py-2">{data.status}</td>{" "}
+              <td claossName="border px-4 py-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
                 <BarcodeExportButton />
               </td>

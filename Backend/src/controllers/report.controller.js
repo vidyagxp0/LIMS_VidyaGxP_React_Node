@@ -2,6 +2,7 @@ import puppeteer from "puppeteer";
 import { getBase64Image } from "../../index.js";
 import bwipjs from "bwip-js";
 import { promisify } from "util";
+import config from "../config/config.json" assert { type: "json" };
 
 const generateBarcodeBase64 = async (barcodeText) => {
   try {
@@ -134,7 +135,7 @@ export const generatePdfbyId = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/get-Sample/${id}/sample`,
+      `${config.development.URL}:${config.development.PORT}/get-Sample/${id}/sample`,
       {
         method: "GET",
         headers: {
@@ -160,14 +161,14 @@ export const generatePdfbyId = async (req, res) => {
     }
 
     // Generate the barcode for the provided sample ID or any relevant string
-    const barcodeBase64 = await generateBarcodeBase64(
-      sampleDatas.sampleBarCode
-    );
+    // const barcodeBase64 = await generateBarcodeBase64(
+    //   sampleDatas.sampleBarCode
+    // );
     // Render the main HTML with EJS
     const htmlContent = await new Promise((resolve, reject) => {
       req.app.render(
         "report",
-        { reportData: sampleDatas, barcodeBase64: barcodeBase64 },
+        { reportData: sampleDatas, },
         (err, html) => {
           if (err) return reject(err);
           resolve(html);
@@ -357,7 +358,7 @@ export const generatePdfbyIdStability = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/get-Sample/${id}/stability`,
+      `${config.development.URL}:${config.development.PORT}/get-Sample/${id}/stability`,
       {
         method: "GET",
         headers: {
@@ -383,14 +384,14 @@ export const generatePdfbyIdStability = async (req, res) => {
     }
 
     // Generate the barcode for the provided sample ID or any relevant string
-    const barcodeBase64 = await generateBarcodeBase64(
-      stabilityDatas.sampleBarCode
-    );
+    // const barcodeBase64 = await generateBarcodeBase64(
+    //   stabilityDatas.sampleBarCode
+    // );
     // Render the main HTML with EJS
     const htmlContent = await new Promise((resolve, reject) => {
       req.app.render(
         "stabilityReport",
-        { reportData: stabilityDatas, barcodeBase64: barcodeBase64 },
+        { reportData: stabilityDatas },
         (err, html) => {
           if (err) return reject(err);
           resolve(html);
@@ -498,7 +499,7 @@ export const generatePdfControlSample = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/controlSample/get-control-sample/${controlSampleId}`,
+      `${config.development.URL}:${config.development.PORT}/controlSample/get-control-sample/${controlSampleId}`,
       {
         method: "GET",
         headers: {
@@ -664,7 +665,7 @@ export const generatePdfAnalyst = async (req, res) => {
   let sampleData;
   try {
     const sample = await fetch(
-      `http://localhost:9000/analyst/get-analyst/${analystId}`,
+      `${config.development.URL}:${config.development.PORT}/analyst/get-analyst/${analystId}`,
       {
         method: "GET",
         headers: {
@@ -786,7 +787,7 @@ export const generatePdfIMRegistration = async (req, res) => {
   try {
     const { type, id } = req.params;
     const typeData = await fetch(
-      `http://localhost:9000/get-lims/${type}/${id}`,
+      `${config.development.URL}:${config.development.PORT}/get-lims/${type}/${id}`,
       {
         method: "GET",
         headers: {

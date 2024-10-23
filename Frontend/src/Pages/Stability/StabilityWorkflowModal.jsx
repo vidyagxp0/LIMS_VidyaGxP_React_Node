@@ -134,7 +134,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
   });
 
   const [idForBarcode, setIdForBarcode] = useState(null);
-  console.log(idForBarcode);
+  // console.log(idForBarcode);
   const barcodeRef = useRef(null);
 
   const generateRandomNumbers = (length) => {
@@ -238,14 +238,14 @@ const StabilityWorkflowModal = ({ onClose }) => {
       const response = await axios.get(
         `http://localhost:9000/get-Sample/${id}/stability`
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
       // console.log(responseData);
       setFormData(responseData);
-      console.log(formData.stage);
+      // console.log(formData.stage);
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -285,7 +285,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
           `http://localhost:9000/create-sample`,
           formData
         );
-        console.log(response, "iddddddddddddddddddddddd");
+        // console.log(response, "iddddddddddddddddddddddd");
         if (response.status === 200) {
           toast.success("Stability Workflow added successfully.");
           setIsModalOpen(false);

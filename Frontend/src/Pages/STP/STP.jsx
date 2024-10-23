@@ -162,7 +162,7 @@ const STP = () => {
       );
       if (response.status === 200 || response.status === 201) {
         setData((prevData) => [...prevData, response.data]); // Ensure new data is appended
-        fetchSTPs();d
+        fetchSTPs();
         toast.success("New STP added successfully!");
       } else {
         toast.error("Failed to add new STP. Please try again.");
@@ -289,7 +289,7 @@ const STP = () => {
                 inputType = "date";
               } else if (key.includes("date")) {
                 inputType = "date";
-              } else if (key.includes("number") || key === "version") {
+              } else if (key.includes("number") || key === "version" || key==="stpId") {
                 inputType = "number";
               } else if (key === "attachment" || key === "attachments") {
                 inputType = "file";
