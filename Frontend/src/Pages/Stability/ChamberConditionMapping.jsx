@@ -47,7 +47,7 @@ function ChamberConditionMapping() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/get-all-lims/sMChamberConditionMapping`
+        `http://localhost:9000/get-all-lims/sMChamberConditionMapping`
       );
       const fetchedData = response?.data[0]?.sMChamberConditionMapping || [];
 
@@ -62,10 +62,10 @@ function ChamberConditionMapping() {
       toast.error("Failed to fetch chamber condition mapping data");
     }
   };
-
-  useEffect(() => {
+  useEffect(()=>{
     fetchData();
-  }, []);
+  },[])
+
   
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -75,32 +75,52 @@ function ChamberConditionMapping() {
     setIsModalsOpen(false);
   };
 
-  const handleEditSave = async (updatedData) => {
-    const { sno, checkbox, ...dataToSend } = updatedData;
+  const handleStatusUpdate = async (newStatus) => {
     try {
-      const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/sMChamberConditionMapping/${updatedData.uniqueId}`,
-        dataToSend
-      );
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMChamberConditionMapping/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
       if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId
-            ? { ...item, ...response.data }
-            : item
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
         );
-        setData(newData);
-        closeEditModal();
-        toast.success("Chamber condition mapping updated successfully");
-        fetchData();
+        toast.success("Approval status updated successfully");
+        closeViewModal();
       } else {
-        console.error("Failed to update chamber condition mapping:", response.statusText);
-        toast.error("Failed to update chamber condition mapping");
+        toast.error("Failed to update Approval status");
       }
     } catch (error) {
-      console.error("Error updating chamber condition mapping:", error);
-      toast.error("Error updating chamber condition mapping");
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
     }
   };
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const {sno,...dataToSend}=updatedData;
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMChamberConditionMapping/${updatedData.uniqueId}`, dataToSend);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+        );
+        toast.success("Approval updated successfully");
+        closeEditModal();
+      } else {
+        toast.error("Failed to update Approval");
+      }
+    } catch (error) {
+      console.error("Error updating Approval:", error);
+      toast.error("Error updating Approval");
+    }
+    setEditModalData(null);
+  };
+
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -178,7 +198,7 @@ function ChamberConditionMapping() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/sMChamberConditionMapping/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMChamberConditionMapping/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -198,7 +218,7 @@ function ChamberConditionMapping() {
   const handleAdd = async (newChamberConditionMapping) => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/sMChamberConditionMapping`,
+        `http://localhost:9000/manage-lims/add/sMChamberConditionMapping`,
         {
           ...newChamberConditionMapping,
           initiatedOn: new Date().toISOString().split("T")[0],
@@ -208,6 +228,7 @@ function ChamberConditionMapping() {
       if (response.status === 200) {
         toast.success("Chamber condition mapping added successfully");
         fetchData();
+        closeModal();
         setIsModalOpen(false);
       } else {
         toast.error("Failed to add chamber condition mapping");
@@ -218,11 +239,11 @@ function ChamberConditionMapping() {
       );
     }
   };
-
+ 
   const handleExcelDataUpload = async (excelData) => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/manage-lims/bulk-add/sMChamberConditionMapping`,
+        `http://localhost:9000/manage-lims/bulk-add/sMChamberConditionMapping`,
         excelData
       );
       if (response.status === 200) {
@@ -296,11 +317,9 @@ function ChamberConditionMapping() {
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
-
     useEffect(() => {
       setFormData(data);
     }, [data]);
-
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
@@ -309,7 +328,6 @@ function ChamberConditionMapping() {
     const handleSave = () => {
       onSave(formData);
     };
-
     return (
       <>
         <CModal alignment="center" visible={visible} onClose={closeModal}>
@@ -323,7 +341,7 @@ function ChamberConditionMapping() {
               label="Chamber ID"
               name="chamberId"
               value={formData?.chamberId || ""}
-              onChange={handleChange}
+              onChange={handleChange}  
             />
             <CFormInput
               className="mb-3"
@@ -361,7 +379,7 @@ function ChamberConditionMapping() {
         </CModal>
       </>
     );
-  };
+  }
 
   return (
     <>
@@ -425,6 +443,7 @@ function ChamberConditionMapping() {
           fields={fields}
           onClose={closeViewModal}
           title="Chamber Condition Mapping Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (

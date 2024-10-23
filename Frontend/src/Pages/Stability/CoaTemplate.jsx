@@ -41,7 +41,6 @@ function CoaTemplate() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState("");
   const [formData,setFormData] = useState([])
-  const [newChamber, setNewChamber] = useState([]);
   const [cardCounts, setCardCounts] = useState({
     DROPPED: 0,
     INITIATED: 0,
@@ -313,15 +312,31 @@ function CoaTemplate() {
       toast.error("Error updating investigation");
     }
   };
-  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.samplingID === samplingConfiguration.samplingID
-        ? { ...item, status: newStatus }
-        : item
-    );
-    setData(updatedData);
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
+    }
   };
-
 
 
   const StatusModal = ({ visible, closeModal, onAdd,onSave }) => {
@@ -330,16 +345,19 @@ function CoaTemplate() {
     const [headerColumns, setHeaderColumns] = useState(1);
     const [footerColumns, setFooterColumns] = useState(1);
     const [sampleType, setSampleType] = useState("");
+    const [protocolType, setProtocolType] = useState("")
     const [coaType, setCoaType] = useState("");
+    const [chamberID, setChamberID] = useState("");
     const [reportTitle, setReportTitle] = useState("");
     const [productMaterialCaption, setProductMaterialCaption] = useState("");
+    const [actualQuantity, setActualQuantity] = useState("")
     const [formatNo, setFormatNo] = useState("");
     const handleSave = () => {
       const newCondition = {
         productName: productMaterialCaption,
-        chamberID: "0000",  // Use appropriate values
-        actualQuantity: "000",
-        availableQuantity: "0000",
+        chamberID: "",  // Use appropriate values
+        actualQuantity: "",
+        availableQuantity: "",
         protocolType: coaType,
         status: "active",
 
@@ -408,7 +426,7 @@ function CoaTemplate() {
           <CFormSelect
             className="mb-3"
             type="select"
-            label="Sample Type"
+            label="Protocol Type"
             placeholder="Select..."
             options={[
               "Select...",
@@ -417,8 +435,8 @@ function CoaTemplate() {
               { label: "Petrochemical" },
               { label: "Initial Product" },
             ]}
-            value={sampleType}
-            onChange={(e) => setSampleType(e.target.value)}
+            value={protocolType}
+            onChange={(e) => setProtocolType(e.target.value)}
           />
           <CFormSelect
             type="select"
@@ -436,10 +454,10 @@ function CoaTemplate() {
           <CFormInput
             className="mb-3"
             type="text"
-            label="Report Title"
-            placeholder="Report Title"
-            value={reportTitle}
-            onChange={(e) => setReportTitle(e.target.value)}
+            label="Chamber ID"
+            placeholder="Chamber ID"
+            value={chamberID}
+            onChange={(e) => setChamberID(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -452,10 +470,10 @@ function CoaTemplate() {
           <CFormInput
             className="mb-3"
               type="text"
-            label="Format No."
-            placeholder="Format No."
-            value={formatNo}
-            onChange={(e) => setFormatNo(e.target.value)}
+            label="Actual Quantity"
+            placeholder="Actual Quantity"
+            value={actualQuantity}
+            onChange={(e) => setActualQuantity(e.target.value)}
           />
           <CHeader className="bg-secondary text-light mb-3 p-2">Header</CHeader>
           <div className="d-flex pb-2">
@@ -630,7 +648,7 @@ function CoaTemplate() {
         size="lg"
       >
         <CModalHeader>
-          <CModalTitle>Add Coa Template</CModalTitle>
+          <CModalTitle>Update Coa Template</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CFormSelect

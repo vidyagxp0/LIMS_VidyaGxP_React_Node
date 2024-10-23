@@ -25,8 +25,6 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ReusableModal from "../Modals/ResusableModal";
 import { BASE_URL } from "../../config.json";
-
-
 function StandardProtocol() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -44,12 +42,16 @@ function StandardProtocol() {
     { label: "Standard Protocol Description", key: "StandardProtocolDescription" },
     { label: "Status", key: "status" },
   ];
+
+ 
   
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `http://localhost:9000/get-all-lims/sMStandardProtocol`
       );
+      console.log(response.data); // Debugging to check if data is coming
+
       const fetchedData = response?.data[0]?.sMStandardProtocol || [];
 
       const updatedData = fetchedData.map((item, index) => ({
@@ -62,11 +64,6 @@ function StandardProtocol() {
       console.error("Error fetching data:", error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-  
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -92,13 +89,11 @@ function StandardProtocol() {
 
 
   const handleStatusUpdate = async (newStatus) => {
-   
-    
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/approval/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -116,55 +111,6 @@ function StandardProtocol() {
     } catch (error) {
       console.error("Error updating Approval status:", error);
       toast.error("Error updating Approval status");``
-    }
-  };
-
-  const addNewApproval = async (newApproval) => {
-    try {
-      const response = await axios.post(`http://localhost:9000/manage-lims/add/approval`, newApproval);
-      if (response.status === 200) {
-        const addedApproval = response.data;
-        setData((prevData) => [
-          {
-            ...addedApproval,
-            checkbox: false,
-          },
-          ...prevData,
-        ]);
-        toast.success("Approval added successfully");
-        fetchApprovalData();
-      }
-    } catch (error) {
-      console.error("Error adding Approval:", error);
-      toast.error("Failed to add Approval");
-    }
-    setIsModalOpen(false);
-  };
-  
-  const handleEditSave = async (updatedData) => {
-    const { sno, checkbox, ...dataTosend } = updatedData;
-    try {
-      const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`,
-        dataTosend
-      );
-      if (response.status === 200) {
-        const newData = data.map((item) =>
-          item.uniqueId === updatedData.uniqueId
-            ? { ...item, ...response.data }
-            : item
-        );
-        setData(newData);
-        closeEditModal();
-        toast.success("Data updated successfully");
-        fetchData();
-      } else {
-        console.error("Failed to update standard protocol:", response.statusText);
-        toast.error("Failed to update standard protocol");
-      }
-    } catch (error) {
-      console.error("Error updating standard protocol:", error);
-      toast.error("Error updating standard protocol");
     }
   };
 
@@ -202,6 +148,24 @@ function StandardProtocol() {
     setData(newData);
   };
   
+  const handleEditSave = async (updatedData) => {
+    try {
+      const {sno,...dataToSend}=updatedData;
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`, dataToSend);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+        );
+        toast.success("Approval updated successfully");
+      } else {
+        toast.error("Failed to update Approval");
+      }
+    } catch (error) {
+      console.error("Error updating Approval:", error);
+      toast.error("Error updating Approval");
+    }
+    setEditModalData(null);
+  };
 
 
   
@@ -309,20 +273,34 @@ function StandardProtocol() {
     }
   };
 
+  
+
   const handleAdd = async (newStandardProtocol) => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/sMStandardProtocol`,
+        `http://localhost:9000/manage-lims/add/sMStandardProtocol`,
         {
           ...newStandardProtocol,
           addDate: new Date().toISOString().split("T")[0],
           status: newStandardProtocol.status || "Active",
         }
       );
+
       if (response.status === 200) {
         toast.success("Standard protocol added successfully.");
-        fetchData(); // Refresh data after adding
-        setIsModalOpen(false);
+        
+        // Instead of waiting for a fetchData call, immediately update the state
+        setData((prevData) => [
+          ...prevData,
+          {
+            sno: prevData.length + 1, // Add new serial number
+            ...newStandardProtocol,   // Spread new protocol data
+            uniqueId: response.data.uniqueId, // Ensure uniqueId from response is added
+            addDate: new Date().toISOString().split("T")[0], // Add current date
+          },
+        ]);
+
+        setIsModalOpen(false); // Close the modal after updating the state
       } else {
         toast.error("Failed to add standard protocol.");
       }
@@ -332,7 +310,12 @@ function StandardProtocol() {
       );
     }
   };
-  
+
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+ 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -353,7 +336,7 @@ function StandardProtocol() {
       <>
         <CModal alignment="center" visible={visible} onClose={closeModal}>
           <CModalHeader>
-            <CModalTitle>New Condition</CModalTitle>
+            <CModalTitle>Update Condition</CModalTitle>
           </CModalHeader>
           <CModalBody>
             <CFormInput
