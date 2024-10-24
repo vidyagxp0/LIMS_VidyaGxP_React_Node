@@ -234,12 +234,8 @@ const Admin = () => {
     }
   };
 
-  // const handleStatusUpdate = (admin, newStatus) => {
-  //   const updatedData = data.map((item) =>
-  //     item.employeeId === admin.employeeId ? { ...item, status: newStatus } : item
-  //   );
-  //   setData(updatedData);
-  // };
+
+  
   const handleStatusUpdate = async (newStatus) => {
     if (!newStatus) {
       console.error("New status is undefined");
