@@ -428,6 +428,17 @@ function StorageCondition() {
           <CModalTitle>New Storage Condition</CModalTitle>
         </CModalHeader>
         <CModalBody>
+          
+        <CFormInput
+            type="text" 
+            label="Condition Code"
+            placeholder="Condition Code"
+            value={formData?.conditionCode || ""}
+            onChange={handleChange}
+            name="conditionCode"
+          />
+          
+          
           <CFormInput
             type="text"
             label="Storage Name"
@@ -436,14 +447,7 @@ function StorageCondition() {
             onChange={handleChange}
             name="name"
           />
-          <CFormInput
-            type="text"
-            label="Condition Code"
-            placeholder="Condition Code"
-            value={formData?.conditionCode || ""}
-            onChange={handleChange}
-            name="conditionCode"
-          />
+    
           <CFormInput
             type="text"
             label="Storage condition"
