@@ -29,7 +29,6 @@ import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
-import Barcode from "react-barcode"; // Import Barcode component
 import BarcodeExportButton from "./BarcodeExportButton";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);

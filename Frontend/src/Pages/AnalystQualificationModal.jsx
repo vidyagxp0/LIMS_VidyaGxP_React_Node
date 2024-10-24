@@ -15,12 +15,13 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
 import { BASE_URL } from "../config.json";
-import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
+import ToastContainer from "../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {
@@ -29,7 +30,6 @@ const AnalystQualificationModal = ({ onClose }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { id } = useParams();
-  // console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
     analystId: "",
@@ -169,42 +169,52 @@ const AnalystQualificationModal = ({ onClose }) => {
 
   const handleEdit = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:9000/analyst/edit-analyst/${id}`,
-        formData
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
+      await toast.promise(
+        Promise.all([
+          axios.put(`http://localhost:9000/analyst/edit-analyst/${id}`, formData),
+          delay(1300),
+        ]).then(([response]) => response),
+        {
+          loading: 'Updating data...',
+          success: <b>Data updated successfully.</b>,
+          error: <b>Failed to update data.</b>,
+        }
       );
-      if (response.status === 200) {
-        toast.success("Data updated successfully.");
-        setIsModalOpen(false);
-        navigate("/analyst-qualification");
-      } else {
-        toast.error("Failed to update Data.");
-      }
+      setIsModalOpen(false);
+      navigate("/analyst-qualification");
     } catch (error) {
       toast.error(
         "Error updating Data: " + (error.response?.data || error.message)
       );
     }
   };
+  
 
   const handleSave = async () => {
     if (id) {
       await handleEdit();
     } else {
       try {
-        const response = await axios.post(
-          `http://localhost:9000/analyst/create-analyst`,
-          formData
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
+        await toast.promise(
+          Promise.all([
+            axios.post(`http://localhost:9000/analyst/create-analyst`, formData),
+            delay(1300), // Optional delay for smoother loading effect
+          ]).then(([response]) => response),
+          {
+            loading: 'Saving data...', // Loading message
+            success: <b>Data added successfully.</b>, // Success message
+            error: <b>Failed to add data.</b>, // Error message
+          }
         );
-        // console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Data added successfully.");
-          setIsModalOpen(false);
-          navigate("/analyst-qualification");
-        } else {
-          toast.error("Failed to add Data.");
-        }
+  toast.success("Data added successfully.");
+        setIsModalOpen(false); // Close the modal on success
+        navigate("/analyst-qualification"); // Navigate to another page on success
       } catch (error) {
+        // Handle error
         toast.error(
           "Error adding Sample Workflow: " +
             (error.response?.data || error.message)
@@ -212,6 +222,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       }
     }
   };
+  
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -967,6 +978,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   };
   return (
     <>
+    <div><ToastContainer/></div>
       {id ? (
         <ProgressBar2
           stage={Number(formData.stage)}
@@ -1023,7 +1035,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               {id ? "Update" : "Save"}
             </CButton>
             <CButton
-              onClick={onClose}
+              onClick={() => {
+                navigate(-1);
+              }}
               className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
             >
               Exit

@@ -39,11 +39,17 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleRowChange = (index, e) => {
     const { name, value } = e.target;
-    const updatedRows = testParameters.map((row, idx) =>
-      idx === index ? { ...row, [name]: value } : row
-    );
-    setTestParameters(updatedRows);
+  
+    if (Array.isArray(testParameters)) {
+      const updatedRows = testParameters.map((row, idx) =>
+        idx === index ? { ...row, [name]: value } : row
+      );
+      setTestParameters(updatedRows);
+    } else {
+      console.error("testParameters is not an array:", testParameters);
+    }
   };
+  
 
   const [formData, setFormData] = useState({
     types: "sample",
@@ -229,15 +235,15 @@ const SampleWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  useEffect(() => {
-    const storedTestParameters = JSON.parse(
-      localStorage.getItem("testParameters")
-    );
-    if (storedTestParameters) {
-      setTestParameters(storedTestParameters);
-      console.log(storedTestParameters, "testParameters from localStorage");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedTestParameters = JSON.parse(
+  //     localStorage.getItem("testParameters")
+  //   );
+  //   if (storedTestParameters) {
+  //     setTestParameters(storedTestParameters);
+  //     console.log(storedTestParameters, "testParameters from localStorage");
+  //   }
+  // }, []);
 
   const fetchData = async () => {
     if (!id) return;
@@ -246,13 +252,21 @@ const SampleWorkflowModal = ({ onClose }) => {
         `http://localhost:9000/get-Sample/${id}/sample`
       );
       console.log(response.data);
-
+  
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
-      // console.log(responseData);
-      setFormData(responseData);
-      console.log(formData.stage);
+
+      const testParamterResponse=responseData.testParameters[1];
+      const fetchedData= JSON.parse(testParamterResponse); 
+
+ setTestParameters(fetchedData.length > 0 ? fetchedData : []);
+       setFormData((prevData) => ({
+        ...prevData,
+        ...responseData,
+        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+      }));
+  
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -295,13 +309,11 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
 
-    // Manually append the test parameters as an array of objects
+   // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
       console.log("Test Parameters being sent:", testParameters);
 
-      // Save testParameters to local storage
-      localStorage.setItem("testParameters", JSON.stringify(testParameters));
     }
 
     try {
@@ -617,7 +629,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={12} className="mt-3 relative">
                 <label
                   htmlFor="requiredInstrument"
-                  className="block text-gray-700 text-md font-medium mb-2"
+                  className="block text-gray-700 text-sm font-medium mb-2"
                 >
                   Select Required Instruments
                 </label>
@@ -859,7 +871,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-
+{console.log(testParameters,"TESTPARAMETER")}
             {/* Use the TestParametersTable component */}
             <TestParametersTable
               testParameters={testParameters}
@@ -1674,7 +1686,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               {id ? "Update" : "Save"}
             </CButton>
             <CButton
-              onClick={onClose}
+              onClick={() => {
+                navigate(-1);
+              }}
               className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
             >
               Exit
