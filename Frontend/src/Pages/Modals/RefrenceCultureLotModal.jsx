@@ -47,9 +47,24 @@ const RefrenceCultureLotModal = (_props) => {
               ]}
             />
           </div>
-          <CFormInput type="date" label="Received By" placeholder="" />
-          <CFormInput type="date" label="Received On" placeholder="" />{" "}
-          <CFormInput type="date" label="Valid Upto" placeholder="" />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Received By"
+            placeholder=""
+          />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Received On"
+            placeholder=""
+          />{" "}
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Valid Upto"
+            placeholder=""
+          />
           <CFormInput type="text" label="Delivery Receipt No" placeholder="" />
           <CFormSelect type="text" label="Supplied By" placeholder="" />
           <CFormInput type="text" label="Certificate No" placeholder="" />

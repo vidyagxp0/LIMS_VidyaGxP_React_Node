@@ -1014,12 +1014,16 @@ import React from "react";
 //           />
 //           <CFormInput
 //             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
 //             label="W.s Validate On"
 //             placeholder=" "
 //             className="custom-placeholder"
 //           />
 //           <CFormInput
 //             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
 //             label="Lot Valid Upto"
 //             placeholder=""
 //             className="custom-placeholder"

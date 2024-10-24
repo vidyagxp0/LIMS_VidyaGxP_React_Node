@@ -60,12 +60,13 @@ const InstrumentModuleModal = ({ visible, closeModal, handleSubmit }) => {
   const handleFormSubmit = () => {
     const instrumentDetails = { ...moduleData, fields };
 
-    const existingInstruments = JSON.parse(localStorage.getItem("instruments")) || [];
+    const existingInstruments =
+      JSON.parse(localStorage.getItem("instruments")) || [];
     const updatedInstruments = [...existingInstruments, instrumentDetails];
     localStorage.setItem("instruments", JSON.stringify(updatedInstruments));
-  
+
     handleSubmit(instrumentDetails);
-    
+
     closeModal();
   };
 
@@ -159,6 +160,7 @@ const InstrumentModuleModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Installed On"
             placeholder="05/10/2024"
             value={moduleData.InstallOn}
@@ -169,6 +171,7 @@ const InstrumentModuleModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Warranty Expires On"
             placeholder="05/05/2023"
             value={moduleData.ExpiresOn}

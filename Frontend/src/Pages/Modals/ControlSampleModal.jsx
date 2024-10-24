@@ -245,6 +245,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="mfgDate"
                   label="Manufacturing Date"
                   value={formData?.mfgDate || ""}
@@ -257,6 +258,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="expiryDate"
                   label="Expiry Date"
                   value={formData?.expiryDate || ""}
@@ -329,6 +331,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="visualInspectionSheduledOn"
                   label="Visual Inspection Scheduled On"
                   value={formData?.visualInspectionSheduledOn || ""}
@@ -362,6 +365,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="ObservationDate"
                   label="Observation Date"
                   value={formData?.ObservationDate || ""}
@@ -371,6 +375,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="destructionDueOn"
                   label="Destruction Due On"
                   value={formData?.destructionDueOn || ""}
@@ -404,6 +409,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="destructionDate"
                   label="Destruction Date"
                   value={formData?.destructionDate || ""}
@@ -462,6 +468,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
                   label=" Date of Initiation"
                   value={formData?.initiationDate || ""}
@@ -480,6 +487,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="labTechnicianDate"
                   label="Date of Lab Technician Review"
                   value={formData?.labTechnicianDate || ""}
@@ -498,6 +506,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
                   label="Date of Supervision Review "
                   value={formData?.supervisionDate || ""}
@@ -516,6 +525,7 @@ const ControlSampleModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="Date of QA Review"
                   value={formData?.qaReviewDate || ""}

@@ -135,6 +135,7 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effective Date"
             placeholder="Effective Date"
             value={usageData.effectiveDate}
@@ -144,6 +145,7 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Creation Date"
             placeholder="Creation Date"
             value={usageData.creationDate}
@@ -297,6 +299,7 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Test Frequency"
             placeholder="Test Frequency"
             value={usageData.testFrequency}
@@ -456,6 +459,7 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Expiry Date"
             placeholder="Expiry Date"
             value={usageData.expiryDate}

@@ -742,6 +742,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingDeadline"
                   label="Testing Deadline"
                   value={formData.testingDeadline || ""}
@@ -771,6 +772,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="plannedDate"
                   label="Planned Date"
                   value={formData.plannedDate || ""}
@@ -831,6 +833,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 <CCol md={6}>
                   <CFormInput
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     name="sampleCollectionDate"
                     label="Sample Collection Date"
                     value={formData.sampleCollectionDate || ""}
@@ -888,6 +891,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="analysisDate"
                   label="Analysis Date"
                   value={formData.analysisDate || ""}
@@ -897,6 +901,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingStartDate"
                   label="Testing Start Date"
                   value={formData.testingStartDate || ""}
@@ -908,6 +913,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingEndDate"
                   label="Testing End Date"
                   value={formData.testingEndDate || ""}
@@ -979,6 +985,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleRetestingDate"
                   label="Sample Retesting Date"
                   value={formData.sampleRetestingDate || ""}
@@ -990,6 +997,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData.reviewDate || ""}
@@ -1154,6 +1162,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleDate"
                   label="Sample Date"
                   value={formData.sampleDate || ""}
@@ -1285,6 +1294,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="stabilityProtocolApprovalDate"
                   label="Stability Protocol Approval Date"
                   value={formData?.stabilityProtocolApprovalDate || ""}
@@ -1394,6 +1404,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData?.reviewDate || ""}
@@ -1438,6 +1449,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="QaReviewDate"
                   label="QA Review Date"
                   value={formData?.QaReviewDate || ""}
@@ -1473,6 +1485,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
                   label=" Date of Initiation"
                   value={formData?.initiationDate || ""}
@@ -1491,6 +1504,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="labTechnicianDate"
                   label="Date of Lab Technician Review"
                   value={formData?.labTechnicianDate || ""}
@@ -1509,6 +1523,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
                   label="Date of Supervision Review "
                   value={formData?.supervisionDate || ""}
@@ -1527,6 +1542,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="Date of QA Review"
                   value={formData?.qaReviewDate || ""}

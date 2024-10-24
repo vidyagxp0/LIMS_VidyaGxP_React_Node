@@ -83,6 +83,7 @@ const MediaLotUsageModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Mfg. Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -91,6 +92,7 @@ const MediaLotUsageModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Container Expiry Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -99,6 +101,7 @@ const MediaLotUsageModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Lot Expiry Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -135,6 +138,7 @@ const MediaLotUsageModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Used On"
                 placeholder=""
                 className="custom-placeholder"

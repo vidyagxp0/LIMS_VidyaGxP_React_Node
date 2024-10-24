@@ -60,6 +60,7 @@ const UsageRegistrationModal = (_props) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Delivery Receipt Date"
             placeholder=""
             className="mb-4"
@@ -72,6 +73,7 @@ const UsageRegistrationModal = (_props) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Received On"
             placeholder=""
             className="mb-4"
@@ -79,6 +81,7 @@ const UsageRegistrationModal = (_props) => {
 
           <CFormSelect
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Valid Upto"
             placeholder=""
             className="mb-4"
@@ -152,6 +155,7 @@ const UsageRegistrationModal = (_props) => {
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used On"
             name="batchNumber"
             placeholder=""

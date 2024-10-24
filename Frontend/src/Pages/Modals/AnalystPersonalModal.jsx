@@ -220,6 +220,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Date of Birth"
             value={analystData.DateOfBirth}
             onChange={(e) => handleInputChange("DateOfBirth", e.target.value)}
@@ -279,6 +280,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Date of Qualification"
             value={analystData.DateOfQualification}
             onChange={(e) =>
@@ -309,6 +311,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Expiration Date"
             value={analystData.ExpirationDate}
             onChange={(e) =>
@@ -342,6 +345,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Training Start Date"
             value={analystData.TrainingStartDate}
             onChange={(e) =>
@@ -351,6 +355,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Training Completion Date"
             value={analystData.TrainingCompletionDate}
             onChange={(e) =>
@@ -393,6 +398,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Certification Date"
             value={analystData.CertificationDate}
             onChange={(e) =>
@@ -402,6 +408,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Next Recertification Date"
             value={analystData.NextRecertificationDate}
             onChange={(e) =>
@@ -420,6 +427,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Test Date"
             value={analystData.TestDate}
             onChange={(e) => handleInputChange("TestDate", e.target.value)}
@@ -472,6 +480,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Qualification Date"
             value={analystData.QualificationDate}
             onChange={(e) =>
@@ -506,6 +515,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Requalification Due Date"
             value={analystData.RequalificationDueDate}
             onChange={(e) =>
@@ -545,6 +555,8 @@ const AnalystPersonalModal = ({
           {/* <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
             label="Calibration Due Date"
             value={analystData.CalibrationDueDate}
             onChange={(e) =>
@@ -554,6 +566,8 @@ const AnalystPersonalModal = ({
           {/* <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
             label="Method Validation Date"
             value={analystData.MethodValidationDate}
             onChange={(e) =>
@@ -577,6 +591,8 @@ const AnalystPersonalModal = ({
           {/* <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
             label="Date Acknowledged/Reviewed"
             value={analystData.DateAcknowledgedReviewed}
             onChange={(e) =>
@@ -586,6 +602,8 @@ const AnalystPersonalModal = ({
           {/* <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
             label="Revision Due Date"
             value={analystData.RevisionDueDate}
             onChange={(e) =>
@@ -632,6 +650,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Approval Date"
             value={analystData.ApprovalDate}
             onChange={(e) => handleInputChange("ApprovalDate", e.target.value)}
@@ -662,6 +681,7 @@ const AnalystPersonalModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Modification Date"
             value={analystData.ModificationDate}
             onChange={(e) =>

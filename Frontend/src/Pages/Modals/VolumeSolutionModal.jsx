@@ -121,6 +121,7 @@ const VolumeSolutionModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Preparation Method"
             placeholder=""
             value={volumeData.preparationMethod}

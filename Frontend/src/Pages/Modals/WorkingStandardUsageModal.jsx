@@ -126,6 +126,7 @@ const WorkingStandardUsageModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Lot Created Date"
             placeholder="Lot Created Date "
             className="custom-placeholder mb-3"
@@ -137,6 +138,7 @@ const WorkingStandardUsageModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Lot Exp. Date"
             placeholder=" "
             className="custom-placeholder mb-3"
@@ -170,6 +172,7 @@ const WorkingStandardUsageModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Container Issued On"
             placeholder=" "
             className="custom-placeholder mb-3"
@@ -181,6 +184,7 @@ const WorkingStandardUsageModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Container Valid Upto"
             placeholder=""
             className="custom-placeholder mb-3"
@@ -263,6 +267,7 @@ const WorkingStandardUsageModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used On"
             placeholder="Select..."
             className="custom-placeholder mb-3"

@@ -64,6 +64,7 @@ const BathSampleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Date of Monitoring
 
                 "
@@ -130,6 +131,7 @@ const BathSampleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Membrance Holder Sterilized On
 
                 "
@@ -150,6 +152,7 @@ const BathSampleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Use Before
 
                 "

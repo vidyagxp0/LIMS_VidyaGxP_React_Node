@@ -71,7 +71,12 @@ const ColumnRegistrationModal = (_props) => {
             <CFormInput type="number" label="UOM" className="mb-4 flex-1" />
           </div>
           <CFormInput type="number" label="Outer Diameter" className="mb-4" />
-          <CFormInput type="date" label="Received On" className="mb-4" />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Received On"
+            className="mb-4"
+          />
           <CForm className="mb-3">
             <CFormLabel>Certificate Received</CFormLabel>
             <div className="flex justify-around w-14 gap-2">

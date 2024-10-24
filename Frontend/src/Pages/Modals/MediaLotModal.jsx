@@ -65,9 +65,24 @@ const MediaLotModal = (props) => {
           <CFormInput type="text" label="Mode Of Preparation" placeholder="" />
           <CFormInput type="text" label="Manufacturer(Code)" placeholder="" />
           <CFormInput type="text" label="Batch No." placeholder="" />
-          <CFormInput type="date" label="Mfg. Date" placeholder="" />
-          <CFormInput type="date" label="Exp. Date" placeholder="" />
-          <CFormInput type="date" label="Received On" placeholder="" />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Mfg. Date"
+            placeholder=""
+          />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Exp. Date"
+            placeholder=""
+          />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Received On"
+            placeholder=""
+          />
           <CFormInput
             type="file"
             label="Certificate"
