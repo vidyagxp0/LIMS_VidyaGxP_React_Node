@@ -12,10 +12,9 @@ import {
   CFormSelect,
   CFormCheck,
 } from "@coreui/react";
-import axios from 'axios';
-import BASE_URL from "../../config.json"
+import axios from "axios";
+import BASE_URL from "../../config.json";
 import { toast } from "react-toastify";
-
 
 const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
   const [formData, setFormData] = useState({
@@ -87,9 +86,9 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
     e.preventDefault();
 
     axios
-      .post(`http://localhost:9000/manage-lims/add/sLSamplePA`, formData) 
+      .post(`http://limsapi.vidyagxp.com/manage-lims/add/sLSamplePA`, formData)
       .then((response) => {
-        addRow(formData); 
+        addRow(formData);
         handleClose();
         toast.success("Data added successfully");
       })
@@ -158,7 +157,6 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
     });
   };
 
-
   return (
     <CModal alignment="center" visible={open} onClose={handleClose} size="lg">
       <CModalHeader>
@@ -194,7 +192,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             onChange={handleChange}
           />
           <CFormInput
-          type="number"
+            type="number"
             name="batchLotNumber"
             label="Batch/Lot Number"
             value={formData.batchLotNumber}
@@ -222,7 +220,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             onChange={handleChange}
           />
           <CFormInput
-          type="number"
+            type="number"
             name="sampleQuantity"
             label="Sample Quantity"
             value={formData.sampleQuantity}
@@ -243,7 +241,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             placeholder="Enter Storage Condition"
           />
           <CFormInput
-          type="file"
+            type="file"
             name="specificationAttachment"
             label="Specification Attachment"
             value={formData.specificationAttachment}
@@ -257,7 +255,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             placeholder="Enter Sample Temperature"
           />
           <CFormInput
-          type="file"
+            type="file"
             name="stpAttachment"
             label="STP Attachment"
             value={formData.stpAttachment}
@@ -268,28 +266,24 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Test Plan Id"
             value={formData.testPlanId}
             onChange={handleChange}
-            
           />
           <CFormInput
             name="testName"
             label="Test Name"
             value={formData.testName}
             onChange={handleChange}
-            
           />
           <CFormInput
             name="testMethod"
             label="Test Method"
             value={formData.testMethod}
             onChange={handleChange}
-            
           />
           <CFormInput
             name="testParameters"
             label="Test Parameters"
             value={formData.testParameters}
             onChange={handleChange}
-
           />
           <CFormInput
             name="testingFrequency"
@@ -374,7 +368,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             onChange={handleChange}
           />
           <CFormInput
-          type="date"
+            type="date"
             name="testingStartDate"
             label="Testing Start Date"
             value={formData.testingStartDate}

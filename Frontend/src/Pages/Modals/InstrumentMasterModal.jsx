@@ -20,11 +20,13 @@ import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
+import SampleWorkFlow from "../Samplelogin/SampleWorkflow";
 
 const InstrumentMasterModal = ({
   visible,
   closeModal,
   handleSubmit,
+  fetchProductData,
   // addRow,
 }) => {
   const [fields, setFields] = useState([]);
@@ -52,11 +54,15 @@ const InstrumentMasterModal = ({
     InstrumentId: "",
     Made: "",
     calibrationStatus: "",
+    calibrationDate: "",
+    calibrationDueOn: "",
     Model: "",
+    MenuNo:"",
     fields: [],
     manufacturerSerialNo: "",
     capacitySize: "",
     equipNo: "",
+    ExpiryOn: "1",
     InstalledAt: "",
     installedOn: "",
     warrantyExpiresOn: "",
@@ -74,12 +80,16 @@ const InstrumentMasterModal = ({
       Instrument: "",
       InstrumentId: "",
       calibrationStatus: "",
+      calibrationDate: "",
+      calibrationDueOn: "",
       Made: "",
       Model: "",
+      MenuNo:"",
       fields: [],
       manufacturerSerialNo: "",
       capacitySize: "",
       equipNo: "",
+      ExpiryOn: "",
       InstalledAt: "",
       installedOn: "",
       warrantyExpiresOn: "",
@@ -134,7 +144,7 @@ const InstrumentMasterModal = ({
     e.preventDefault();
     axios
       .post(
-        `http://localhost:9000/manage-lims/add/iMRegistration`,
+        `http://limsapi.vidyagxp.com/manage-lims/add/iMRegistration`,
         instrumentData
       )
       .then((response) => {
@@ -142,6 +152,7 @@ const InstrumentMasterModal = ({
           response.data.message || "Instrument Data added successfully!"
         );
         instrumentData;
+        fetchProductData();
         closeModal();
       })
       .catch((err) => {
@@ -208,9 +219,27 @@ const InstrumentMasterModal = ({
             }
           >
             <option value="">Select...</option>
-            <option value="calibrated">Calibrated</option>
-            <option value="nonCalibrated">Non - Calibrated</option>
+            <option value="Calibrated">Calibrated</option>
+            <option value="Non - Calibrated">Non - Calibrated</option>
           </CFormSelect>
+          <CFormInput
+            type="date"
+            label="Calibration Due On"
+            placeholder=" "
+            value={instrumentData.calibrationDate}
+            onChange={(e) =>
+              handleInputChange("calibrationDate", e.target.value)
+            }
+          />
+          <CFormInput
+            type="date"
+            label="Calibration Due On"
+            placeholder=" "
+            value={instrumentData.calibrationDueOn}
+            onChange={(e) =>
+              handleInputChange("calibrationDueOn", e.target.value)
+            }
+          />
           <CFormInput
             className="mb-3"
             type="text"
@@ -219,6 +248,14 @@ const InstrumentMasterModal = ({
             value={instrumentData.Made}
             onChange={(e) => handleInputChange("Made", e.target.value)}
           />
+              <CFormInput
+                className="mb-3"
+                type="number"
+                label="MenuNo"
+                placeholder="MenuNo"
+                value={instrumentData.MenuNo}
+                onChange={(e) => handleInputChange("MenuNo", e.target.value)}
+              />
           <CRow className="d-flex align-items-center justify-content-center">
             <CCol sm={8}>
               <CFormInput
@@ -305,6 +342,17 @@ const InstrumentMasterModal = ({
             onChange={(e) => handleInputChange("InstalledAt", e.target.value)}
           />
           <CFormInput
+            className="mb-3"
+            type="number"
+            label="Expiry On"
+            placeholder="Expiry On"
+            value={instrumentData.ExpiryOn}
+            onChange={(e) => handleInputChange("ExpiryOn", e.target.value)}
+            min={1}
+            max={10}
+          />
+
+          <CFormInput
             type="date"
             label="Installed On"
             placeholder=" "
@@ -377,6 +425,9 @@ const InstrumentMasterModal = ({
               onChange={(content) => handleInputChange("description", content)}
             />
           </div>
+          {/* {instrumentData.calibrationStatus === "calibrated" && (
+            <SampleWorkFlow instrumentData={instrumentData} />
+          )} */}
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>

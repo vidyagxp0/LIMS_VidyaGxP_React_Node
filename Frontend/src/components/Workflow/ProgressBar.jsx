@@ -19,9 +19,6 @@ const ProgressBar = (props) => {
   const [stages, setStages] = useState(baseStages);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState("");
-  // const token = localStorage.getItem("token");
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGVzIjpbeyJ1c2VyUm9sZV9pZCI6MTksInJvbGVfaWQiOjIsInVzZXJfaWQiOjQsInJvbGUiOiJJbml0aWF0b3IiLCJjcmVhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoifSx7InVzZXJSb2xlX2lkIjoyMCwicm9sZV9pZCI6MywidXNlcl9pZCI6NCwicm9sZSI6IlJldmlld2VyIiwiY3JlYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIn0seyJ1c2VyUm9sZV9pZCI6MjEsInJvbGVfaWQiOjQsInVzZXJfaWQiOjQsInJvbGUiOiJBcHByb3ZlciIsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMThUMTE6MzM6MDQuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMThUMTE6MzM6MDQuMDAwWiJ9LHsidXNlclJvbGVfaWQiOjIyLCJyb2xlX2lkIjo1LCJ1c2VyX2lkIjo0LCJyb2xlIjoiVmlld29ubHkiLCJjcmVhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTEwLTE4VDExOjMzOjA0LjAwMFoifSx7InVzZXJSb2xlX2lkIjoyMywicm9sZV9pZCI6NiwidXNlcl9pZCI6NCwicm9sZSI6IkZ1bGxwZXJtaXNzaW9uIiwiY3JlYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIiwidXBkYXRlZEF0IjoiMjAyNC0xMC0xOFQxMTozMzowNC4wMDBaIn1dLCJpYXQiOjE3MjkyNTEyMzQsImV4cCI6MTcyOTMzNzYzNH0.9MW4KFce_eizbvURp4XEaurDiPiQIkK5cJSlWqQdLlY";
   useEffect(() => {
     setCurrentStage(stage - 1);
     console.log(stage);
@@ -44,6 +41,8 @@ const ProgressBar = (props) => {
     setUrl(url);
     setIsModalOpen(true);
   };
+  const token = localStorage.getItem("token");
+  // console.log(token,"ttttttttt");
 
   const callApis = async (formData, sampleId) => {
     try {
@@ -52,7 +51,7 @@ const ProgressBar = (props) => {
       const comment = formData.comment;
 
       const response = await axios.post(
-        "http://localhost:9000/e-signature",
+        "http://limsapi.vidyagxp.com/e-signature",
         { email, password },
         {
           headers: {
@@ -63,7 +62,7 @@ const ProgressBar = (props) => {
 
       if (!response.data.error) {
         const response = await axios.post(
-          `http://localhost:9000/${url}`,
+          `http://limsapi.vidyagxp.com/${url}`,
           { sampleId, comment },
           {
             headers: {
@@ -79,7 +78,11 @@ const ProgressBar = (props) => {
   };
   return (
     <>
-      <ESignatureModal open={isModalOpen} handleClose={handleClose} submitAction={handleSubmit} />
+      <ESignatureModal
+        open={isModalOpen}
+        handleClose={handleClose}
+        submitAction={handleSubmit}
+      />
       <div className="flex flex-col items-center p-4 pb-2 bg-slate-300">
         <div className="flex w-full max-w-4xl justify-between mb-2 ">
           {stages.map((stageName, index) => (
@@ -87,9 +90,19 @@ const ProgressBar = (props) => {
               key={index}
               className={`flex-1 text-center p-2 cursor-pointer border rounded 
               ${index < currentStage ? "bg-green-500 text-white" : ""} 
-              ${index === currentStage && index !== 4 ? "bg-orange-500 text-white" : ""} 
-              ${index === 3 && currentStage === 3 ? "bg-orange-500 text-white" : ""}
-              ${index === 4 && currentStage === 4 ? "bg-red-500 text-white" : ""} 
+              ${
+                index === currentStage && index !== 4
+                  ? "bg-orange-500 text-white"
+                  : ""
+              } 
+              ${
+                index === 3 && currentStage === 3
+                  ? "bg-orange-500 text-white"
+                  : ""
+              }
+              ${
+                index === 4 && currentStage === 4 ? "bg-red-500 text-white" : ""
+              } 
               ${index > currentStage ? "bg-gray-200" : ""} 
               ${index < stages.length - 1 ? "mr-1" : ""}`}
             >

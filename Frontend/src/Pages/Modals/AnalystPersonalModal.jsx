@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchData }) => {
   const [analystData, setAnalystData] = useState({

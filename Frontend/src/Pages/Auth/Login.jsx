@@ -7,13 +7,14 @@ import {
   CFormSelect,
 } from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { BASE_URL } from "../../config.json";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ function Login(props) {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/admin/user-login",
+        "http://limsapi.vidyagxp.com/admin/user-login",
         {
           email,
           password: passwd,
@@ -47,6 +48,7 @@ function Login(props) {
       );
 
       const { token, data } = response.data;
+      console.log(token, "Tokken");
 
       if (token) {
         localStorage.setItem("token", token);
@@ -107,7 +109,7 @@ function Login(props) {
               <div className="flex justify-center items-center mb-6">
                 <img src="login.png" width={"200px"} className="md:w-300px" />
               </div>
-              <h2 className="text-xl md:text-3xl md:text-white font-bold text-center ">
+              <h2 className="text-xl md:text-3xl md:text-white font-bold text-center mb-2">
                 Welcome To Laboratory Information Management System.
               </h2>
             </div>
@@ -151,15 +153,6 @@ function Login(props) {
                 >
                   LOGIN
                 </CButton>
-              </div>
-              <div className="text-lg text-white text-center">
-                If you don't have an account?
-                <Link
-                  className="text-blue-600 hover:text-blue-800 underline font-medium"
-                  to="/signup"
-                >
-                  Signup
-                </Link>
               </div>
             </CForm>
           </div>

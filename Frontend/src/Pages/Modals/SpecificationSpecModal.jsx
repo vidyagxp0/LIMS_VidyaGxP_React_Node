@@ -12,46 +12,46 @@ import {
 
 const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
   const [usageData, setUsagedata] = useState({
-    specId:"",
-    title:"",
-    version:"",
-    attachment:"",
-    effectiveDate:"",
-    creationDate:"",
-    approvedBy:"",
-    productName:"",
-    batchLotNumber:"",
-    productCategory:"",
-    manufacturer:"",
-    description:"",
-    materialGrade:"",
-    molecularFormula:"",
-    packagingRequirements:"",
-    storageConditions:"",
-    shelfLife:"",
-    labelingRequirements:"",
-    testParameter:"",
-    testMethod:"",
-    acceptanceCriteria:"",
-    unitsOfMeasurement:"",
-    testFrequency:"",
-    controlSampleReference:"",
-    samplingPlan:"",
-    testMethodValidation:"",
-    referenceStandards:"",
-    resultInterpretation:"",
-    stabilityCriteria:"",
-    reTestingInterval:"",
-    regulatoryRequirements:"",
-    certification:"",
-    deviationHandling:"",
-    auditTrail:"",
-    documentReference:"",
-    revisionHistory:'',
-    attachments:"",
-    comments:"",
-    reviewFrequency:"",
-    expiryDat:""
+    specId: "",
+    title: "",
+    version: "",
+    attachment: "",
+    effectiveDate: "",
+    creationDate: "",
+    approvedBy: "",
+    productName: "",
+    batchLotNumber: "",
+    productCategory: "",
+    manufacturer: "",
+    description: "",
+    materialGrade: "",
+    molecularFormula: "",
+    packagingRequirements: "",
+    storageConditions: "",
+    shelfLife: "",
+    labelingRequirements: "",
+    testParameter: "",
+    testMethod: "",
+    acceptanceCriteria: "",
+    unitsOfMeasurement: "",
+    testFrequency: "",
+    controlSampleReference: "",
+    samplingPlan: "",
+    testMethodValidation: "",
+    referenceStandards: "",
+    resultInterpretation: "",
+    stabilityCriteria: "",
+    reTestingInterval: "",
+    regulatoryRequirements: "",
+    certification: "",
+    deviationHandling: "",
+    auditTrail: "",
+    documentReference: "",
+    revisionHistory: "",
+    attachments: "",
+    comments: "",
+    reviewFrequency: "",
+    expiryDat: "",
   });
 
   const resetForm = () => {
@@ -67,9 +67,9 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
   }, [visible]);
 
   const handleInputChange = (field, value) => {
-    setUsagedata(prevData => ({
+    setUsagedata((prevData) => ({
       ...prevData,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -77,19 +77,17 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
   //   handleSubmit(usageData);
   //   closeModal();
   // };
- 
+
   const handleFormSubmit = () => {
     const formData = new FormData();
     Object.entries(usageData).forEach(([key, value]) => {
       formData.append(key, value);
     });
-  
-    handleSubmit(formData); 
+
+    handleSubmit(formData);
     closeModal();
   };
-  
-  
-  
+
   return (
     <div>
       <CModal

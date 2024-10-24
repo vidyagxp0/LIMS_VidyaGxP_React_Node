@@ -77,7 +77,7 @@ const PORT = config.development.PORT || 9000;
 app.listen(PORT, "0.0.0.0", async () => {
   try {
     await connectToDB();
-    console.log(`Server is running on ${config.development.URL}:${PORT}`);
+    console.log(`Server is running on ${config.development.URL}`);
   } catch (e) {
     console.log("Error in database connection", e);
   }
