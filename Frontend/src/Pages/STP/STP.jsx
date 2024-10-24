@@ -93,50 +93,50 @@ const STP = () => {
 
       const filteredData = stpData.map((item, index) => ({
         sno: item.uniqueId,
-        stpId: item.stpId || "No STP ID",
-        title: item.title || "No Title",
-        attachment: item.attachment || "No Attachment",
-        version: item.version || "No Version",
+        stpId: item.stpId || "-",
+        title: item.title || "-",
+        attachment: item.attachment || "-",
+        version: item.version || "-",
         effectiveDate: item.effectiveDate
           ? new Date(item.effectiveDate).toISOString().split("T")[0]
-          : "No Effective Date",
+          : "-",
         creationDate: item.creationDate
           ? new Date(item.creationDate).toISOString().split("T")[0]
-          : "No Creation Date",
-        reviewedBy: item.reviewedBy || "No Reviewer",
-        approvedBy: item.approvedBy || "No Approver",
-        department: item.department || "No Department",
-        objective: item.objective || "No Objective",
+          : "-",
+        reviewedBy: item.reviewedBy || "-",
+        approvedBy: item.approvedBy || "-",
+        department: item.department || "-",
+        objective: item.objective || "-",
         testProcedureDescription:
-          item.testProcedureDescription || "No Procedure Description",
-        testType: item.testType || "No Test Type",
-        testMethodReference: item.testMethodReference || "No Method Reference",
-        samplePreparation: item.samplePreparation || "No Sample Preparation",
-        reagents: item.reagents || "No Reagents",
-        equipment: item.equipment || "No Equipment",
-        calibration: item.calibration || "No Calibration",
-        environmental: item.environmental || "No Environmental Info",
-        controlSample: item.controlSample || "No Control Sample",
-        testParameters: item.testParameters || "No Test Parameters",
-        safetyPrecautions: item.safetyPrecautions || "No Safety Precautions",
+          item.testProcedureDescription || "-",
+        testType: item.testType || "-",
+        testMethodReference: item.testMethodReference || "-",
+        samplePreparation: item.samplePreparation || "-",
+        reagents: item.reagents || "-",
+        equipment: item.equipment || "-",
+        calibration: item.calibration || "-",
+        environmental: item.environmental || "-",
+        controlSample: item.controlSample || "-",
+        testParameters: item.testParameters || "-",
+        safetyPrecautions: item.safetyPrecautions || "-",
         validationRequirements:
-          item.validationRequirements || "No Validation Requirements",
-        calculationFormula: item.calculationFormula || "No Calculation Formula",
-        lsl: item.lsl || "No LSL",
-        usl: item.usl || "No USL",
+          item.validationRequirements || "-",
+        calculationFormula: item.calculationFormula || "-",
+        lsl: item.lsl || "-",
+        usl: item.usl || "-",
         resultInterpretation:
-          item.resultInterpretation || "No Result Interpretation",
-        expectedResults: item.expectedResults || "No Expected Results",
-        reportTemplate: item.reportTemplate || "No Report Template",
-        dataRecording: item.dataRecording || "No Data Recording",
-        testFrequency: item.testFrequency || "No Test Frequency",
+          item.resultInterpretation || "-",
+        expectedResults: item.expectedResults || "-",
+        reportTemplate: item.reportTemplate || "-",
+        dataRecording: item.dataRecording || "-",
+        testFrequency: item.testFrequency || "-",
         testReportSubmission:
-          item.testReportSubmission || "No Report Submission",
-        deviationHandling: item.deviationHandling || "No Deviation Handling",
-        auditTrail: item.auditTrail || "No Audit Trail",
-        revisionHistory: item.revisionHistory || "No Revision History",
-        attachments: item.attachments || "No Attachments",
-        remarks: item.remarks || "No Remarks",
+          item.testReportSubmission || "-",
+        deviationHandling: item.deviationHandling || "-",
+        auditTrail: item.auditTrail || "-",
+        revisionHistory: item.revisionHistory || "-",
+        attachments: item.attachments || "-",
+        remarks: item.remarks || "-",
       }));
 
       console.log(filteredData, "Filtered STP Data");
@@ -251,22 +251,20 @@ const STP = () => {
       }
     };
 
-    const validateForm = () => {
-      const newErrors = {};
-      Object.keys(formData).forEach((key) => {
-        if (!formData[key] && key !== "attachment" && key !== "attachments") {
-          newErrors[key] = "This field is required";
-        }
-      });
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
-    };
+    // const validateForm = () => {
+    //   const newErrors = {};
+    //   Object.keys(formData).forEach((key) => {
+    //     if (!formData[key] && key !== "attachment" && key !== "attachments") {
+    //       newErrors[key] = "This field is required";
+    //     }
+    //   });
+    //   setErrors(newErrors);
+    //   return Object.keys(newErrors).length === 0;
+    // };
 
     const handleAdd = () => {
-      if (validateForm()) {
         onAdd(formData);
         closeModal();
-      }
     };
 
     return (
@@ -285,16 +283,14 @@ const STP = () => {
               let inputType = "text";
 
               // Set input type based on key
-              if (key === "effectiveDate") {
+              if (
+                key === "effectiveDate" ||
+                key === "creationDate" ||
+                key.includes("date")
+              ) {
                 inputType = "date";
-              } else if (key === "creationDate") {
-                inputType = "date";
-              } else if (key === "lsl") {
+              } else if (key === "lsl" || key === "usl") {
                 inputType = "number";
-              } else if (key === "usl") {
-                inputType = "number";
-              } else if (key.includes("date")) {
-                inputType = "date";
               } else if (
                 key.includes("number") ||
                 key === "version" ||
@@ -342,8 +338,6 @@ const STP = () => {
                   </CFormSelect>
                 );
               }
-
-              // Default return for other input types
               return (
                 <CFormInput
                   key={key}
@@ -361,6 +355,9 @@ const STP = () => {
                   onChange={handleChange}
                   invalid={!!errors[key]}
                   feedback={errors[key]}
+                  {...(inputType === "date"
+                    ? { onFocus: (e) => e.target.showPicker() }
+                    : {})}
                 />
               );
             })}
@@ -403,21 +400,20 @@ const STP = () => {
       }
     };
 
-    const validateForm = () => {
-      const newErrors = {};
-      Object.keys(formData).forEach((key) => {
-        if (!formData[key] && key !== "uniqueId" && key !== "sno") {
-          newErrors[key] = "This field is required";
-        }
-      });
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
-    };
+    // const validateForm = () => {
+    //   const newErrors = {};
+    //   Object.keys(formData).forEach((key) => {
+    //     if (!formData[key] && key !== "uniqueId" && key !== "sno") {
+    //       newErrors[key] = "This field is required";
+    //     }
+    //   });
+    //   setErrors(newErrors);
+    //   return Object.keys(newErrors).length === 0;
+    // };
 
     const handleSave = async (e) => {
       e.preventDefault();
-      if (!validateForm()) return;
-
+    
       setIsLoading(true);
       try {
         await onSave({ ...formData, sno: formData.sno });
@@ -429,6 +425,7 @@ const STP = () => {
         setIsLoading(false);
       }
     };
+    
 
     if (!visible) return null;
 
