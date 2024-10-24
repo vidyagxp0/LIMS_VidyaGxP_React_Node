@@ -250,7 +250,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <CNavItem
                 href="#"
                 className={isActive("/sampleWorkflow")}
-                style={{ ...isActive("/samplelogin") }}
+                style={{ ...isActive("/sampleWorkflow") }}
               >
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>

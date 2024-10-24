@@ -309,7 +309,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit
       } else {
         const response = await axios.post(
-          `http://limsapi.vidyagxp.com/create-sample`,
+          `http://localhost:9000/create-sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
@@ -1658,7 +1658,9 @@ const SampleWorkflowModal = ({ onClose }) => {
               {id ? "Update" : "Save"}
             </CButton>
             <CButton
-              onClick={onClose}
+              onClick={() => {
+                navigate(-1);
+              }}
               className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
             >
               Exit

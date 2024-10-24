@@ -19,8 +19,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
-import {BASE_URL} from "../config.json";
-import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
+import { BASE_URL } from "../config.json";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {
@@ -1005,7 +1004,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               {id ? "Update" : "Save"}
             </CButton>
             <CButton
-              onClick={onClose}
+              onClick={() => {
+                navigate(-1);
+              }}
               className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
             >
               Exit
