@@ -39,7 +39,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleRowChange = (index, e) => {
     const { name, value } = e.target;
-  
+
     if (Array.isArray(testParameters)) {
       const updatedRows = testParameters.map((row, idx) =>
         idx === index ? { ...row, [name]: value } : row
@@ -49,7 +49,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       console.error("testParameters is not an array:", testParameters);
     }
   };
-  
 
   const [formData, setFormData] = useState({
     types: "sample",
@@ -249,24 +248,23 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `http://limsapi.vidyagxp.com/get-Sample/${id}/sample`
       );
       console.log(response.data);
-  
+
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
 
-      const testParamterResponse=responseData.testParameters[1];
-      const fetchedData= JSON.parse(testParamterResponse); 
+      const testParamterResponse = responseData.testParameters[1];
+      const fetchedData = JSON.parse(testParamterResponse);
 
- setTestParameters(fetchedData.length > 0 ? fetchedData : []);
-       setFormData((prevData) => ({
+      setTestParameters(fetchedData.length > 0 ? fetchedData : []);
+      setFormData((prevData) => ({
         ...prevData,
         ...responseData,
         testParameters: responseData.testParameters || [], // Ensure testParameters are set
       }));
-  
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -279,7 +277,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/sample`,
+        `http://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -309,11 +307,10 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
 
-   // Manually append the test parameters as an array of objects
+    // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
       console.log("Test Parameters being sent:", testParameters);
-
     }
 
     try {
@@ -321,7 +318,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit
       } else {
         const response = await axios.post(
-          `http://localhost:9000/create-sample`,
+          `http://limsapi.vidyagxp.com/create-sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
@@ -871,7 +868,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-{console.log(testParameters,"TESTPARAMETER")}
+            {console.log(testParameters, "TESTPARAMETER")}
             {/* Use the TestParametersTable component */}
             <TestParametersTable
               testParameters={testParameters}

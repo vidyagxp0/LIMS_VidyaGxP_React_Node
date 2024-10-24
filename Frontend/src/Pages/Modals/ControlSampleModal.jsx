@@ -105,7 +105,7 @@ const ControlSampleModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/controlSample/get-control-sample/${id}`
+        `http://limsapi.vidyagxp.com/controlSample/get-control-sample/${id}`
       );
       // console.log(response.data);
 
@@ -127,7 +127,7 @@ const ControlSampleModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/controlSample/edit-control-sample/${id}`,
+        `http://limsapi.vidyagxp.com/controlSample/edit-control-sample/${id}`,
         formData
       );
       if (response.status === 200) {
@@ -155,7 +155,7 @@ const ControlSampleModal = ({ onClose }) => {
         };
 
         const response = await axios.post(
-          `http://localhost:9000/controlSample/create-control-sample`,
+          `http://limsapi.vidyagxp.com/controlSample/create-control-sample`,
           updatedFormData
         );
         // console.log(response, "iddddddddddddddddddddddd");

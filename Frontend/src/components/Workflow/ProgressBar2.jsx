@@ -45,14 +45,14 @@ export const ProgressBar2 = (props) => {
       const email = formData.username.trim();
       const password = formData.password.trim();
       const comment = formData.comment.trim();
-  
+
       // Check if email and password are provided
       if (!email || !password) {
         toast.error("All fields are required!");
         return false;
       }
-        const response = await axios.post(
-        "http://localhost:9000/e-signature",
+      const response = await axios.post(
+        "http://limsapi.vidyagxp.com/e-signature",
         { email, password },
         {
           headers: {
@@ -60,10 +60,10 @@ export const ProgressBar2 = (props) => {
           },
         }
       );
-  
+
       if (!response.data.error) {
         await axios.post(
-          `http://localhost:9000/analyst/${url}`,
+          `http://limsapi.vidyagxp.com/analyst/${url}`,
           { analystId, comment },
           {
             headers: {
@@ -71,7 +71,7 @@ export const ProgressBar2 = (props) => {
             },
           }
         );
-  
+
         toast.success("Review Submitted!");
         onStageClick();
         return true;
@@ -85,10 +85,12 @@ export const ProgressBar2 = (props) => {
       return false;
     }
   };
-  
+
   return (
     <>
-    <div><ToastContainer/></div>
+      <div>
+        <ToastContainer />
+      </div>
       <ESignatureModal
         open={isModalOpen}
         handleClose={handleClose}
@@ -151,7 +153,6 @@ export const ProgressBar2 = (props) => {
   );
 };
 
-
 const baseStages2 = [
   "Opened",
   "Pending Inspection of Control Sample",
@@ -202,7 +203,7 @@ export const ProgressBar3 = (props) => {
       }
 
       const response = await axios.post(
-        "http://localhost:9000/e-signature",
+        "http://limsapi.vidyagxp.com/e-signature",
         { email, password },
         {
           headers: {
@@ -213,7 +214,7 @@ export const ProgressBar3 = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `http://localhost:9000/controlSample/${url}`,
+          `http://limsapi.vidyagxp.com/controlSample/${url}`,
           { controlSampleId, comment },
           {
             headers: {
@@ -224,11 +225,11 @@ export const ProgressBar3 = (props) => {
         toast.success("Review Submitted!");
         onStageClick();
         return true;
-      }else {
+      } else {
         toast.error("Incorrect email or password. Please try again.");
         return false;
       }
-    }catch (error) {
+    } catch (error) {
       toast.error(error.response?.data?.message || "Error during request");
       return false;
     }
@@ -236,7 +237,9 @@ export const ProgressBar3 = (props) => {
 
   return (
     <>
-        <div><ToastContainer/></div>
+      <div>
+        <ToastContainer />
+      </div>
       <ESignatureModal
         open={isModalOpen}
         handleClose={handleClose}

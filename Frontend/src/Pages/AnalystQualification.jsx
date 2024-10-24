@@ -95,8 +95,6 @@ const AnalystQualification = () => {
     );
   };
 
- 
-
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -278,7 +276,7 @@ const AnalystQualification = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/analyst/get-analyst/${analystId}`
+        `http://limsapi.vidyagxp.com/analyst/get-analyst/${analystId}`
       );
       console.log("Response", response);
 

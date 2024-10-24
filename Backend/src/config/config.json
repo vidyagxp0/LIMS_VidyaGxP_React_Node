@@ -8,7 +8,7 @@
     "host": "localhost",
     "JWT_SECRET": "LIMSVidyagxp",
     "JWT_ADMIN_SECRET": "LIMSVidyagxpAdmin",
-    "URL": "http://localhost.com:9000"
+    "URL": "http://limsapi.vidyagxp.com"
   },
-  "production": {}
+  "production": {}  
 }
