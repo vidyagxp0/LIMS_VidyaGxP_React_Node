@@ -617,7 +617,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 <CCol md={12} className="mt-3 relative">
                   <label
                     htmlFor="requiredInstrument"
-                    className="block text-gray-700 text-sm font-medium mb-2"
+                    className="block text-gray-700 text-md font-medium mb-2"
                   >
                     Select Required Instruments
                   </label>

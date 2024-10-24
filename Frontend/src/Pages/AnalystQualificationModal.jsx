@@ -274,7 +274,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="text"
                   name="department"
-                  label="department"
+                  label="Department"
                   value={formData?.department || ""}
                   onChange={handleInputChange}
                 />
@@ -317,7 +317,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="date"
                   name="dateOfQualification"
-                  label="Date of Qualification"
+                  label="Date Of Qualification"
                   value={formData?.dateOfQualification || ""}
                   onChange={handleInputChange}
                 />
@@ -674,7 +674,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="text"
                   name="specializations"
-                  label="specializations"
+                  label="Specializations"
                   value={formData?.specializations || ""}
                   onChange={handleInputChange}
                 />

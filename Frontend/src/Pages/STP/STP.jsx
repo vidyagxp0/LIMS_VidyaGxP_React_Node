@@ -23,6 +23,7 @@ import {
   CButton,
   CFormInput,
   CForm,
+  CFormSelect,
 } from "@coreui/react";
 import { toast } from "react-toastify";
 
@@ -276,17 +277,22 @@ const STP = () => {
         size="xl"
       >
         <CModalHeader>
-          <CModalTitle>Add STP</CModalTitle>
+          <CModalTitle className="font-bold">Add STP</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CForm>
             {Object.entries(formData).map(([key, value]) => {
               let inputType = "text";
 
+              // Set input type based on key
               if (key === "effectiveDate") {
                 inputType = "date";
               } else if (key === "creationDate") {
                 inputType = "date";
+              } else if (key === "lsl") {
+                inputType = "number";
+              } else if (key === "usl") {
+                inputType = "number";
               } else if (key.includes("date")) {
                 inputType = "date";
               } else if (
@@ -299,6 +305,45 @@ const STP = () => {
                 inputType = "file";
               }
 
+              // Render CFormSelect for testParameters key
+              if (key === "testParameters") {
+                return (
+                  <CFormSelect
+                    key={key}
+                    className="mb-3"
+                    label={
+                      key.charAt(0).toUpperCase() +
+                      key
+                        .slice(1)
+                        .replace(/([A-Z])/g, " $1")
+                        .trim()
+                    }
+                    name={key}
+                    value={value}
+                    onChange={handleChange}
+                    invalid={!!errors[key]}
+                    feedback={errors[key]}
+                  >
+                    <option value="">Select Test Parameter</option>
+                    <option value="Description">Description</option>
+                    <option value="Weight of 20 Tablets">
+                      Weight of 20 Tablets
+                    </option>
+                    <option value="Average Weight ( mg )">
+                      Average Weight (mg)
+                    </option>
+                    <option value="Thickness">Thickness</option>
+                    <option value="Disintegration Time">
+                      Disintegration Time
+                    </option>
+                    <option value="Hardness">Hardness</option>
+                    <option value="Diameter">Diameter</option>
+                    <option value="Friability">Friability</option>
+                  </CFormSelect>
+                );
+              }
+
+              // Default return for other input types
               return (
                 <CFormInput
                   key={key}

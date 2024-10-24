@@ -51,7 +51,7 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
     attachments: "",
     comments: "",
     reviewFrequency: "",
-    expiryDat: "",
+    expiryDate: "",
   });
 
   const resetForm = () => {
@@ -94,83 +94,81 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size="lg"
+        size="xl"
       >
         <CModalHeader>
-          <CModalTitle>Add Specification</CModalTitle>
+            <p className="font-bold ml-4">Add Specification</p>
         </CModalHeader>
         <CModalBody>
-          <p>Add Specification</p>
-
           <CFormInput
             className="mb-3"
             type="text"
-            label="specId"
-            placeholder="specId"
+            label="SpecId"
+            placeholder="SpecId"
             value={usageData.specId}
             onChange={(e) => handleInputChange("specId", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="title"
-            placeholder="title"
+            label="Title"
+            placeholder="Title"
             value={usageData.title}
             onChange={(e) => handleInputChange("title", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="version"
-            placeholder="version"
+            label="Version"
+            placeholder="Version"
             value={usageData.version}
             onChange={(e) => handleInputChange("version", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="file"
-            label="attachment"
-            placeholder="attachment"
+            label="Attachment"
+            placeholder="Attachment"
             value={usageData.attachment}
             onChange={(e) => handleInputChange("attachment", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="date"
-            label="effectiveDate"
-            placeholder="effectiveDate"
+            label="Effective Date"
+            placeholder="Effective Date"
             value={usageData.effectiveDate}
             onChange={(e) => handleInputChange("effectiveDate", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="date"
-            label="creationDate"
-            placeholder="creationDate"
+            label="Creation Date"
+            placeholder="Creation Date"
             value={usageData.creationDate}
             onChange={(e) => handleInputChange("creationDate", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="approvedBy"
-            placeholder="approvedBy"
+            label="Approved By"
+            placeholder="Approved By"
             value={usageData.approvedBy}
             onChange={(e) => handleInputChange("approvedBy", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="productName"
-            placeholder="productName"
+            label="Product Name"
+            placeholder="Product Name"
             value={usageData.productName}
             onChange={(e) => handleInputChange("productName", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="batchLotNumber"
-            placeholder="batchLotNumber"
+            label="Batch Lot Number"
+            placeholder="Batch Lot Number"
             value={usageData.batchLotNumber}
             onChange={(e) =>
               handleInputChange("batchLotNumber", e.target.value)
@@ -179,8 +177,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="productCategory"
-            placeholder="productCategory"
+            label="Product Category"
+            placeholder="Product Category"
             value={usageData.productCategory}
             onChange={(e) =>
               handleInputChange("productCategory", e.target.value)
@@ -189,32 +187,32 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="manufacturer"
-            placeholder="manufacturer"
+            label="Manufacturer"
+            placeholder="Manufacturer"
             value={usageData.manufacturer}
             onChange={(e) => handleInputChange("manufacturer", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="description"
-            placeholder="description"
+            label="Description"
+            placeholder="Description"
             value={usageData.description}
             onChange={(e) => handleInputChange("description", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="materialGrade"
-            placeholder="materialGrade"
+            label="Material Grade"
+            placeholder="Material Grade"
             value={usageData.materialGrade}
             onChange={(e) => handleInputChange("materialGrade", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="molecularFormula"
-            placeholder="molecularFormula"
+            label="Molecular Formula"
+            placeholder="Molecular Formula"
             value={usageData.molecularFormula}
             onChange={(e) =>
               handleInputChange("molecularFormula", e.target.value)
@@ -223,8 +221,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="packagingRequirements"
-            placeholder="packagingRequirements"
+            label="Packaging Requirements"
+            placeholder="Packaging Requirements"
             value={usageData.packagingRequirements}
             onChange={(e) =>
               handleInputChange("packagingRequirements", e.target.value)
@@ -233,8 +231,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="storageConditions"
-            placeholder="storageConditions"
+            label="Storage Conditions"
+            placeholder="Storage Conditions"
             value={usageData.storageConditions}
             onChange={(e) =>
               handleInputChange("storageConditions", e.target.value)
@@ -243,16 +241,16 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="shelfLife"
-            placeholder="shelfLife"
+            label="Shelf Life"
+            placeholder="Shelf Life"
             value={usageData.shelfLife}
             onChange={(e) => handleInputChange("shelfLife", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="labelingRequirements"
-            placeholder="labelingRequirements"
+            label="Labeling Requirements"
+            placeholder="Labeling Requirements"
             value={usageData.labelingRequirements}
             onChange={(e) =>
               handleInputChange("labelingRequirements", e.target.value)
@@ -261,24 +259,24 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="testParameter"
-            placeholder="testParameter"
+            label="Test Parameter"
+            placeholder="Test Parameter"
             value={usageData.testParameter}
             onChange={(e) => handleInputChange("testParameter", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="testMethod"
-            placeholder="testMethod"
+            label="Test Method"
+            placeholder="Test Method"
             value={usageData.testMethod}
             onChange={(e) => handleInputChange("testMethod", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="acceptanceCriteria"
-            placeholder="acceptanceCriteria"
+            label="Acceptance Criteria"
+            placeholder="Acceptance Criteria"
             value={usageData.acceptanceCriteria}
             onChange={(e) =>
               handleInputChange("acceptanceCriteria", e.target.value)
@@ -287,8 +285,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="unitsOfMeasurement"
-            placeholder="unitsOfMeasurement"
+            label="Units Of Measurement"
+            placeholder="Units Of Measurement"
             value={usageData.unitsOfMeasurement}
             onChange={(e) =>
               handleInputChange("unitsOfMeasurement", e.target.value)
@@ -297,16 +295,16 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
-            label="testFrequency"
-            placeholder="testFrequency"
+            label="Test Frequency"
+            placeholder="Test Frequency"
             value={usageData.testFrequency}
             onChange={(e) => handleInputChange("testFrequency", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="controlSampleReference"
-            placeholder="controlSampleReference"
+            label="Control Sample Reference"
+            placeholder="Control Sample Reference"
             value={usageData.controlSampleReference}
             onChange={(e) =>
               handleInputChange("controlSampleReference", e.target.value)
@@ -315,16 +313,16 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="samplingPlan"
-            placeholder="samplingPlan"
+            label="Sampling Plan"
+            placeholder="Sampling Plan"
             value={usageData.samplingPlan}
             onChange={(e) => handleInputChange("samplingPlan", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="testMethodValidation"
-            placeholder="testMethodValidation"
+            label="Test Method Validation"
+            placeholder="Test Method Validation"
             value={usageData.testMethodValidation}
             onChange={(e) =>
               handleInputChange("testMethodValidation", e.target.value)
@@ -333,8 +331,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="referenceStandards"
-            placeholder="referenceStandards"
+            label="Reference Standards"
+            placeholder="Reference Standards"
             value={usageData.referenceStandards}
             onChange={(e) =>
               handleInputChange("referenceStandards", e.target.value)
@@ -343,8 +341,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="resultInterpretation"
-            placeholder="resultInterpretation"
+            label="Result Interpretation"
+            placeholder="Result Interpretation"
             value={usageData.resultInterpretation}
             onChange={(e) =>
               handleInputChange("resultInterpretation", e.target.value)
@@ -353,8 +351,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="stabilityCriteria"
-            placeholder="stabilityCriteria"
+            label="Stability Criteria"
+            placeholder="Stability Criteria"
             value={usageData.stabilityCriteria}
             onChange={(e) =>
               handleInputChange("stabilityCriteria", e.target.value)
@@ -363,8 +361,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="reTestingInterval"
-            placeholder="reTestingInterval"
+            label="Re Testing Interval"
+            placeholder="Re Testing Interval"
             value={usageData.reTestingInterval}
             onChange={(e) =>
               handleInputChange("reTestingInterval", e.target.value)
@@ -373,8 +371,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="regulatoryRequirements"
-            placeholder="regulatoryRequirements"
+            label="Regulatory Requirements"
+            placeholder="Regulatory Requirements"
             value={usageData.regulatoryRequirements}
             onChange={(e) =>
               handleInputChange("regulatoryRequirements", e.target.value)
@@ -383,16 +381,16 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="certification"
-            placeholder="certification"
+            label="Certification"
+            placeholder="Certification"
             value={usageData.certification}
             onChange={(e) => handleInputChange("certification", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="deviationHandling"
-            placeholder="deviationHandling"
+            label="Deviation Handling"
+            placeholder="Deviation Handling"
             value={usageData.deviationHandling}
             onChange={(e) =>
               handleInputChange("deviationHandling", e.target.value)
@@ -401,16 +399,16 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="auditTrail"
-            placeholder="auditTrail"
+            label="Audit Trail"
+            placeholder="Audit Trail"
             value={usageData.auditTrail}
             onChange={(e) => handleInputChange("auditTrail", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="documentReference"
-            placeholder="documentReference"
+            label="Document Reference"
+            placeholder="Document Reference"
             value={usageData.documentReference}
             onChange={(e) =>
               handleInputChange("documentReference", e.target.value)
@@ -419,8 +417,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="revisionHistory"
-            placeholder="revisionHistory"
+            label="Revision History"
+            placeholder="Revision History"
             value={usageData.revisionHistory}
             onChange={(e) =>
               handleInputChange("revisionHistory", e.target.value)
@@ -429,24 +427,24 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="text"
-            label="attachments"
-            placeholder="attachments"
+            label="Attachments"
+            placeholder="Attachments"
             value={usageData.attachments}
             onChange={(e) => handleInputChange("attachments", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="comments"
-            placeholder="comments"
+            label="Comments"
+            placeholder="Comments"
             value={usageData.comments}
             onChange={(e) => handleInputChange("comments", e.target.value)}
           />
           <CFormInput
             className="mb-3"
             type="text"
-            label="reviewFrequency"
-            placeholder="reviewFrequency"
+            label="Review Frequency"
+            placeholder="Review Frequency"
             value={usageData.reviewFrequency}
             onChange={(e) =>
               handleInputChange("reviewFrequency", e.target.value)
@@ -455,8 +453,8 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
-            label="expiryDate"
-            placeholder="expiryDate"
+            label="Expiry Date"
+            placeholder="Expiry Date"
             value={usageData.expiryDate}
             onChange={(e) => handleInputChange("expiryDate", e.target.value)}
           />
