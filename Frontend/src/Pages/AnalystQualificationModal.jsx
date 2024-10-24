@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
-import {BASE_URL} from "../config.json";
+import { BASE_URL } from "../config.json";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
@@ -274,7 +274,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="text"
                   name="department"
-                  label="department"
+                  label="Department"
                   value={formData?.department || ""}
                   onChange={handleInputChange}
                 />
@@ -317,7 +317,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="date"
                   name="dateOfQualification"
-                  label="Date of Qualification"
+                  label="Date Of Qualification"
                   value={formData?.dateOfQualification || ""}
                   onChange={handleInputChange}
                 />
@@ -674,7 +674,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="text"
                   name="specializations"
-                  label="specializations"
+                  label="Specializations"
                   value={formData?.specializations || ""}
                   onChange={handleInputChange}
                 />

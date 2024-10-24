@@ -149,7 +149,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     return randomNumbers;
   };
 
-
   const handleAddRow = () => {
     setTestParameters([
       ...testParameters,
@@ -164,7 +163,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     );
     setTestParameters(updatedRows);
   };
-
 
   const fetchId = async () => {
     try {
@@ -297,7 +295,9 @@ const StabilityWorkflowModal = ({ onClose }) => {
     }
   };
   useEffect(() => {
-    const storedTestParameters = JSON.parse(localStorage.getItem("testParameterss"));
+    const storedTestParameters = JSON.parse(
+      localStorage.getItem("testParameterss")
+    );
     if (storedTestParameters) {
       setTestParameters(storedTestParameters);
       console.log(storedTestParameters, "testParameters from localStorage");
@@ -309,20 +309,20 @@ const StabilityWorkflowModal = ({ onClose }) => {
 
     // Append all form data to the FormData object
     for (const key in formData) {
-        if (Array.isArray(formData[key])) {
-            formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
-        } else {
-            formDataToSend.append(key, formData[key]);
-        }
+      if (Array.isArray(formData[key])) {
+        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+      } else {
+        formDataToSend.append(key, formData[key]);
+      }
     }
 
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
-        formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
-        console.log("Test Parameters being sent:", testParameters);
-        
-        // Save testParameters to local storage
-        localStorage.setItem("testParameterss", JSON.stringify(testParameters));
+      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+      console.log("Test Parameters being sent:", testParameters);
+
+      // Save testParameters to local storage
+      localStorage.setItem("testParameterss", JSON.stringify(testParameters));
     }
     if (id) {
       await handleEdit();
@@ -1415,7 +1415,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
       case "QA Review":
         return (
           <CForm>
-
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">
