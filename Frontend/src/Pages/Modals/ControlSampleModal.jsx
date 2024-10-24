@@ -24,6 +24,8 @@ import { ProgressBar3 } from "../../components/Workflow/ProgressBar2";
 const ControlSampleModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Control Sample");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const { id } = useParams();
   // console.log(id, "ididididididididiidioidiidid");
 
@@ -56,12 +58,16 @@ const ControlSampleModal = ({ onClose }) => {
     remarks: "",
     status: "",
     suSupportiveAttachment: "",
+    requiredInstrument: [],
   });
 
   // console.log(formData, "L<>?L<>?L<>?L<>?L<>?L<>?L<>?L");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
+  };
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
   const navigate = useNavigate();
 
@@ -143,9 +149,14 @@ const ControlSampleModal = ({ onClose }) => {
       await handleEdit();
     } else {
       try {
+        const updatedFormData = {
+          ...formData,
+          status: "Under Initiation", // Static status
+        };
+
         const response = await axios.post(
           `http://localhost:9000/controlSample/create-control-sample`,
-          formData
+          updatedFormData
         );
         // console.log(response, "iddddddddddddddddddddddd");
         if (response.status === 200) {
@@ -262,6 +273,98 @@ const ControlSampleModal = ({ onClose }) => {
                   value={formData?.expiryDate || ""}
                   onChange={handleInputChange}
                 />
+              </CCol>
+              <CCol md={8} className="mt-1 relative p-2">
+                <label
+                  htmlFor="requiredInstrument"
+                  className="block text-gray-700 text-sm font-medium mb-2"
+                >
+                  Select Required Instruments
+                </label>
+
+                <div
+                  className="form-control flex items-center flex-wrap gap-2 p-2 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
+                  onClick={toggleDropdown} // Toggle dropdown on input click
+                >
+                  {formData.requiredInstrument &&
+                  formData.requiredInstrument.length > 0 ? (
+                    formData.requiredInstrument.map((instrument, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"
+                      >
+                        {instrument}
+                        <button
+                          type="button"
+                          className="text-red-500 hover:text-red-700"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent closing dropdown when removing item
+                            setFormData((prevData) => ({
+                              ...prevData,
+                              requiredInstrument:
+                                prevData.requiredInstrument.filter(
+                                  (item) => item !== instrument
+                                ),
+                            }));
+                          }}
+                        >
+                          &times;
+                        </button>
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-gray-500">Select Instruments...</p> // Placeholder when nothing is selected
+                  )}
+                </div>
+
+                {dropdownOpen && (
+                  <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-10 transition-all duration-200 ease-in-out">
+                    {[
+                      "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+                      "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+                      "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+                      "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+                      "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+                      "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+                      "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+                      "Moisture Analyzers – For determining the moisture content in products.",
+                      "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+                      "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+                      "Autoclaves – For sterilizing lab equipment and samples.",
+                      "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+                      "Karl Fischer Titrator – For measuring water content in samples.",
+                      "Refractometer – For determining the refractive index of liquids.",
+                      "Polarimeter – For measuring the optical rotation of a substance.",
+                      "Melting Point Apparatus – For determining the melting point of substances.",
+                      "Viscometer – For measuring the viscosity of liquid samples.",
+                      "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+                      "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+                      "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+                      "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+                    ].map((instrument, index) => (
+                      <div
+                        key={index}
+                        className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition-colors duration-150"
+                        onClick={() => {
+                          if (
+                            !formData.requiredInstrument.includes(instrument)
+                          ) {
+                            setFormData((prevData) => ({
+                              ...prevData,
+                              requiredInstrument: [
+                                ...prevData.requiredInstrument,
+                                instrument,
+                              ],
+                            }));
+                          }
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {instrument}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CCol>
               <CCol md={6}>
                 <CFormInput
@@ -421,7 +524,7 @@ const ControlSampleModal = ({ onClose }) => {
               </CCol>
             </CRow>
 
-            <CRow className="mb-3">
+            {/* <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
                   type="text"
@@ -431,7 +534,7 @@ const ControlSampleModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
-            </CRow>
+            </CRow> */}
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
