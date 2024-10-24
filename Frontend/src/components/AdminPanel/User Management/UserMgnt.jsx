@@ -32,7 +32,7 @@ const UserMgnt = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
-  const fetchUsers = useCallback(async() => {
+  const fetchUsers = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(`${BASE_URL}/admin/get-all-users`, {
@@ -45,9 +45,9 @@ const UserMgnt = () => {
     } catch (error) {
       console.error("Error fetching users:", error);
     }
-},[]);
+  }, []);
 
-  const fetchRoles = useCallback( async () => {
+  const fetchRoles = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(`${BASE_URL}/admin/get-all-roles`, {
@@ -56,15 +56,15 @@ const UserMgnt = () => {
         },
       });
       console.log(response.data.response, "ROlessssss");
-      setRoles(response.data.response); // Assuming the response data is an array of roles
+      setRoles(response.data.response);
     } catch (error) {
       console.error("Error fetching roles:", error);
     }
-  },[]);
+  }, []);
   useEffect(() => {
     fetchUsers();
     fetchRoles();
-  }, [fetchUsers,fetchRoles]);
+  }, [fetchUsers, fetchRoles]);
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
@@ -84,24 +84,24 @@ const UserMgnt = () => {
     setDeleteModal(true);
   };
 
-const handleDeleteConfirm = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    await axios.delete(`${BASE_URL}/admin/delete-user/${deleteId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setData(data.filter((item) => item.id !== deleteId));
-    setDeleteModal(false);
-    toast.success("User successfully deleted");
-    fetchUsers();
-    fetchRoles();
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    toast.error("Failed to delete user");
-  }
-};
+  const handleDeleteConfirm = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${BASE_URL}/admin/delete-user/${deleteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setData(data.filter((item) => item.id !== deleteId));
+      setDeleteModal(false);
+      toast.success("User successfully deleted");
+      fetchUsers();
+      fetchRoles();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    }
+  };
 
   const handleEditClick = (item) => {
     setEditData(item);
@@ -114,17 +114,23 @@ const handleDeleteConfirm = async () => {
   };
 
   const handleEditConfirm = async (updatedData) => {
-    console.log(updatedData.user_id,"Updated");
-    
+    console.log(updatedData.user_id, "Updated");
+
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(`${BASE_URL}/admin/edit-user/${updatedData.user_id}`, updatedData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.put(
+        `${BASE_URL}/admin/edit-user/${updatedData.user_id}`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setData(
-        data.map((item) => (item.id === response.data.id ? response.data : item))
+        data.map((item) =>
+          item.id === response.data.id ? response.data : item
+        )
       );
       setEditModal(false);
       toast.success("User successfully updated");
@@ -135,7 +141,6 @@ const handleDeleteConfirm = async () => {
       toast.error("Failed to update user");
     }
   };
-  
 
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -361,7 +366,7 @@ const handleDeleteConfirm = async () => {
     </div>
   );
 };
-const handleAddUser = async (newUser,props) => {
+const handleAddUser = async (newUser, props) => {
   try {
     const token = localStorage.getItem("token");
     const response = await axios.post(`${BASE_URL}/admin/add-user`, newUser, {
@@ -369,7 +374,7 @@ const handleAddUser = async (newUser,props) => {
         Authorization: `Bearer ${token}`,
       },
     });
-     props.fetchUsers();
+    props.fetchUsers();
     props.setAddModal(false);
     toast.success("User successfully added");
   } catch (error) {
@@ -380,7 +385,11 @@ const handleAddUser = async (newUser,props) => {
 
 const ViewPermissionModal = (props) => {
   return (
-    <CModal alignment="center" visible={props.visible} onClose={props.closeModal}>
+    <CModal
+      alignment="center"
+      visible={props.visible}
+      onClose={props.closeModal}
+    >
       <CModalHeader className="flex justify-center">
         <CModalTitle className="text-center text-2xl font-semibold">
           View Permissions for {props.data?.name || "User"}
@@ -410,8 +419,6 @@ const ViewPermissionModal = (props) => {
     </CModal>
   );
 };
-
-
 
 const DeleteModal = (props) => {
   return (
@@ -458,19 +465,30 @@ const DeleteModal = (props) => {
     </CModal>
   );
 };
+
 const EditModal = (props) => {
   const [formData, setFormData] = useState({ ...props.data });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     if (name === "rolesArray") {
-      const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
-        Number(option.value)
-      ); // Convert to numbers
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: selectedRoles,
-      }));
+      if (value === "selectAll") {
+        // Select all roles
+        const allRoles = props.roles.map((role) => role.role_id);
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: allRoles,
+        }));
+      } else {
+        const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
+          Number(option.value)
+        ); // Convert to numbers
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: selectedRoles,
+        }));
+      }
     } else {
       setFormData((prevData) => ({
         ...prevData,
@@ -517,14 +535,6 @@ const EditModal = (props) => {
           value={formData.email}
           onChange={handleChange}
         />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Designation"
-          name="designation"
-          value={formData.designation}
-          onChange={handleChange}
-        />
         <CFormSelect
           className="mb-3"
           label="Gender"
@@ -536,20 +546,6 @@ const EditModal = (props) => {
             { label: "Male", value: "Male" },
             { label: "Female", value: "Female" },
             { label: "Other", value: "Other" },
-          ]}
-        />
-        <CFormSelect
-          className="mb-3"
-          label="User Type"
-          name="user_type" // Ensure this matches the state key
-          value={formData.user_type} // Bind to the correct state variable
-          onChange={handleChange}
-          options={[
-            { label: "Select User Type", value: "" },
-            { label: "Admin", value: "admin" },
-            { label: "Supervisor", value: "supervisor" },
-            { label: "Initiator", value: "initiator" },
-            { label: "QA", value: "qa" },
           ]}
         />
         <CFormInput
@@ -567,14 +563,16 @@ const EditModal = (props) => {
         <CFormSelect
           className="mb-3"
           label="Roles"
-          name="rolesArray" // Updated to rolesArray
-          value={formData.rolesArray} // This will be an array
+          name="rolesArray"
+          value={formData.rolesArray}
           onChange={handleChange}
+          multiple
           options={[
             { label: "Select Role", value: "" },
+            { label: "Select All", value: "selectAll" },
             ...props.roles.map((role) => ({
               label: role.role,
-              value: role.role_id, // Ensure this is a number
+              value: role.role_id,
             })),
           ]}
         />
@@ -590,6 +588,7 @@ const EditModal = (props) => {
     </CModal>
   );
 };
+
 const StatusModal = (props) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -603,14 +602,24 @@ const StatusModal = (props) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     if (name === "rolesArray") {
-      const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
-        Number(option.value)
-      ); // Convert to numbers
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: selectedRoles,
-      }));
+      if (value === "selectAll") {
+        // Select all roles
+        const allRoles = props.roles.map((role) => role.role_id);
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: allRoles,
+        }));
+      } else {
+        const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
+          Number(option.value)
+        ); // Convert to numbers
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: selectedRoles,
+        }));
+      }
     } else {
       setFormData((prevData) => ({
         ...prevData,
@@ -620,7 +629,7 @@ const StatusModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    await handleAddUser(formData);
+    await props.handleAddUser(formData); // Assume handleAddUser is passed as a prop
   };
 
   return (
@@ -657,14 +666,6 @@ const StatusModal = (props) => {
           value={formData.email}
           onChange={handleChange}
         />
-        <CFormInput
-          className="mb-3"
-          type="text"
-          label="Designation"
-          name="designation"
-          value={formData.designation}
-          onChange={handleChange}
-        />
         <CFormSelect
           className="mb-3"
           label="Gender"
@@ -676,20 +677,6 @@ const StatusModal = (props) => {
             { label: "Male", value: "Male" },
             { label: "Female", value: "Female" },
             { label: "Other", value: "Other" },
-          ]}
-        />
-        <CFormSelect
-          className="mb-3"
-          label="User Type" // New label for user type
-          name="user_type"
-          value={formData.user_type}
-          onChange={handleChange}
-          options={[
-            { label: "Select User Type", value: "" },
-            { label: "Admin", value: "admin" },
-            { label: "Supervisor", value: "supervisor" },
-            { label: "Initiator", value: "initiator" },
-            { label: "QA", value: "qa" },
           ]}
         />
         <CFormInput
@@ -707,14 +694,16 @@ const StatusModal = (props) => {
         <CFormSelect
           className="mb-3"
           label="Roles"
-          name="rolesArray" // Updated to rolesArray
-          value={formData.rolesArray} // This will be an array
+          name="rolesArray"
+          value={formData.rolesArray}
           onChange={handleChange}
+          multiple
           options={[
             { label: "Select Role", value: "" },
+            { label: "Select All", value: "selectAll" },
             ...props.roles.map((role) => ({
               label: role.role,
-              value: role.role_id, // Ensure this is a number
+              value: role.role_id,
             })),
           ]}
         />
