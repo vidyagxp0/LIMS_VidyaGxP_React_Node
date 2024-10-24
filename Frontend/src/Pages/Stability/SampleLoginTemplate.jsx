@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
+import axios from "axios";
 import {
   faEye,
   faPenToSquare,
@@ -35,9 +37,14 @@ import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
+import ReusableModal from "../Modals/ResusableModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
+const fields = [
+  { label: "Template Title", key: "templateTitle" },
+  { label: "Status", key: "status" },
+];
 const initialData = [
   {
     checkbox: false,
@@ -72,8 +79,36 @@ const SampleLoginTemplate = () => {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-all-lims/sMSampleLoginTemplate`
+      );
+      const fetchedData = response?.data[0]?.sMSampleLoginTemplate || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
+  };
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
   const handleCloseModals = () => {
@@ -106,6 +141,33 @@ const SampleLoginTemplate = () => {
     setData(newData);
   };
 
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
+    }
+  };
+
+
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
@@ -120,9 +182,15 @@ const SampleLoginTemplate = () => {
   });
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); // Set the data for ViewModal
-    setIsViewModalOpen(true); // Open the ViewModal
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
   };
+
 
   const columns = [
     {
@@ -165,12 +233,6 @@ const SampleLoginTemplate = () => {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -200,6 +262,54 @@ const SampleLoginTemplate = () => {
     setLastStatus(nextStatus);
     setIsModalOpen(false);
   };
+  const handleDelete = async (item) => {
+    console.log(item);
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/sMSampleLoginTemplate/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
+  };
+
+
+
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:9000/manage-lims/add/sMSampleLoginTemplate`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to adsd Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
+  };
+
+
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [inputValue, setInputValue] = useState(0);
     const [templateTitle, setTemplateTitle] = useState("");
@@ -346,13 +456,7 @@ const SampleLoginTemplate = () => {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
-  };
+
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
@@ -371,13 +475,6 @@ const SampleLoginTemplate = () => {
 
     const handleSave = () => {
       onSave(formData);
-    };
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
     };
 
     return (
@@ -500,6 +597,35 @@ const SampleLoginTemplate = () => {
     );
   };
 
+
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataTosend } = updatedData;
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`,
+        dataTosend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Data updated successfully");
+        fetchData();
+      } else {
+        console.error("Failed to update investigation:", response.statusText);
+        toast.error("Failed to update investigation");
+      }
+    } catch (error) {
+      console.error("Error updating investigation:", error);
+      toast.error("Error updating investigation");
+    }
+  };
+
+
   return (
     <>
       <LaunchQMS />
@@ -581,7 +707,19 @@ const SampleLoginTemplate = () => {
           <StatusModal
             visible={isModalOpen}
             closeModal={closeModal}
-            onAdd={addNewStorageCondition}
+            onAdd={handleAdd}
+          />
+        )}
+
+        {viewModalData && (
+          <ReusableModal
+            visible={viewModalData !== null}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            onClose={handleCloseModals}
+            title="Standard Protocol Details"
+            updateStatus={handleStatusUpdate}
           />
         )}
         {isModalsOpen && (

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 import {
   CButton,
   CFormInput,
@@ -20,6 +22,7 @@ import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import "../../Pages/StorageCondition/StorageCondition.css";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import ReusableModal from "../Modals/ResusableModal";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
@@ -27,6 +30,14 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+
+
+const fields = [
+  { label: "Standard Protocol Name", key: "StandardProtocolName" },
+  { label: "Standard Protocol Id", key: "StandardProtocolId" },
+  { label: "Standard Protocol Description", key: "StandardProtocolDescription" },
+  { label: "Status", key: "status" },
+];
 
 const initialData = [
   {
@@ -58,12 +69,62 @@ function SampleAcceptanceTemplate() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null)
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-all-lims/sMSampleAcceptanceTemplate`
+      );
+      const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
+  };
+
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log("===========",dataToSend);
+      
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");``
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -98,6 +159,50 @@ function SampleAcceptanceTemplate() {
     setLastStatus(nextStatus)
     setIsModalOpen(false);
   }
+
+  const handleDelete = async (item) => {
+    console.log(item);
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:9000/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
+  };
+
+  const handleAdd = async (newProduct) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:9000/manage-lims/add/sMSampleAcceptanceTemplate`,
+        {
+          ...newProduct,
+          addDate: new Date().toISOString().split("T")[0],
+          status: newProduct.status || "Active",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Product added successfully.");
+        fetchData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to adsd Product.");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding product: " + (error.response?.data || error.message)
+      );
+    }
+  };
 
   const StatusModal = ({visible , closeModal,onAdd}) => {
     const [numOfCheckItems, setNumOfCheckItems] = useState(0);
@@ -252,24 +357,11 @@ function SampleAcceptanceTemplate() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
 
   const closeEditModal = () => {
-    setEditModalData(null);
-  };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
     setEditModalData(null);
   };
 
@@ -407,12 +499,30 @@ function SampleAcceptanceTemplate() {
         <Table
           columns={columns}
           data={filteredData}
+          onDelete={handleDelete}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
-          onDelete={handleDelete}
           openEditModal={openEditModal}
         />
       </div>
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={handleAdd}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          onClose={handleCloseModals}
+          title="Standard Protocol Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -421,12 +531,6 @@ function SampleAcceptanceTemplate() {
           columns={columns}
           onDataUpload={handleExcelDataUpload}
         />
-      )}
-      {isModalOpen && (
-        <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
-      )}
-      {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
       )}
       {editModalData && (
         <EditModal

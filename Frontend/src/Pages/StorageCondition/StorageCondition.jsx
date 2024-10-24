@@ -88,10 +88,7 @@ function StorageCondition() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
-
+ 
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
@@ -197,15 +194,10 @@ function StorageCondition() {
     : [];
 
   const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      // If the modal is already open for the same item, close it
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
-      // Otherwise, open it with the new data
-      setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
+    setViewModalData(rowData);
+  }
+  const closeViewModal = () => {
+    setViewModalData(null);
   };
 
   const handleCheckboxChange = (index) => {
@@ -228,6 +220,42 @@ function StorageCondition() {
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
     setIsModalsOpen(false); // Update data state with parsed Excel data
+  };
+
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+      
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
   };
 
   // Function to add a new storage condition
@@ -269,14 +297,14 @@ function StorageCondition() {
     setIsModalOpen(false);
   };
 
-  const handleStatusUpdate = (testPlan, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.storageCondition === StorageCondition
-        ? { ...item, status: newStatus }
-        : item
-    );
-    setData(updatedData);
-  };
+  // const handleStatusUpdate = (testPlan, newStatus) => {
+  //   const updatedData = data.map((item) =>
+  //     item.storageCondition === StorageCondition
+  //       ? { ...item, status: newStatus }
+  //       : item
+  //   );
+  //   setData(updatedData);
+  // };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [name, setname] = useState("");
