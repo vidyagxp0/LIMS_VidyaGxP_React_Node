@@ -30,7 +30,6 @@ const AnalystQualificationModal = ({ onClose }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { id } = useParams();
-  // console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
     analystId: "",

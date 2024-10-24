@@ -35,8 +35,6 @@ export const ProgressBar2 = (props) => {
       setIsModalOpen(true);
     }
   };
-  
-
   const handleOpen = (url) => {
     setUrl(url);
     setIsModalOpen(true);
@@ -153,13 +151,13 @@ export const ProgressBar2 = (props) => {
   );
 };
 
+
 const baseStages2 = [
   "Opened",
   "Pending Inspection of Control Sample",
   "Pending Destruction",
   "Closed Done",
 ];
-
 export const ProgressBar3 = (props) => {
   const navigate = useNavigate();
   const { stage = 1, sampleId = 1, onStageClick } = props;
@@ -195,13 +193,12 @@ export const ProgressBar3 = (props) => {
 
   const callApis = async (formData, controlSampleId) => {
     try {
-      const email = formData.username;
-      const password = formData.password;
-      const comment = formData.comment;
+      const email = formData.username.trim();
+      const password = formData.password.trim();
+      const comment = formData.comment.trim();
       if (!email || !password) {
-        toast.error("Please fill in all required fields!");
-        setIsModalOpen(true);
-        return;
+        toast.error("All fields are required!");
+        return false;
       }
 
       const response = await axios.post(
@@ -224,15 +221,22 @@ export const ProgressBar3 = (props) => {
             },
           }
         );
+        toast.success("Review Submitted!");
+        onStageClick();
+        return true;
+      }else {
+        toast.error("Incorrect email or password. Please try again.");
+        return false;
       }
-      onStageClick();
-    } catch (error) {
-      console.error("API error:", error);
+    }catch (error) {
+      toast.error(error.response?.data?.message || "Error during request");
+      return false;
     }
   };
 
   return (
     <>
+        <div><ToastContainer/></div>
       <ESignatureModal
         open={isModalOpen}
         handleClose={handleClose}
