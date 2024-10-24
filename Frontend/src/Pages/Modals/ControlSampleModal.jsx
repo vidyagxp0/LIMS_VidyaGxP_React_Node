@@ -589,7 +589,9 @@ const ControlSampleModal = ({ onClose }) => {
               {id ? "Update" : "Save"}
             </CButton>
             <CButton
-              onClick={onClose}
+              onClick={() => {
+                navigate(-1);
+              }}
               className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
             >
               Exit

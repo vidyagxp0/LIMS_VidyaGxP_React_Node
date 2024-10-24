@@ -3,7 +3,7 @@
     "PORT": 9000,
     "dbName": "lims_vidyagxp",
     "username": "root",
-    "password": "puri2002",
+    "password": "root",
     "dialect": "mysql",
     "host": "localhost",
     "JWT_SECRET": "LIMSVidyagxp",
