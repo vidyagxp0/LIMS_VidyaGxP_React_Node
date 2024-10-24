@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import { BASE_URL } from "../../../config.json";
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 const UserMgnt = () => {
   const [addModal, setAddModal] = useState(false);
@@ -203,18 +204,18 @@ const UserMgnt = () => {
               >
                 Name
               </CTableHeaderCell>
-              <CTableHeaderCell
+              {/* <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
               >
                 Designation
-              </CTableHeaderCell>
-              <CTableHeaderCell
+              </CTableHeaderCell> */}
+              {/* <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
               >
                 Gender
-              </CTableHeaderCell>
+              </CTableHeaderCell> */}
               <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
@@ -247,17 +248,17 @@ const UserMgnt = () => {
                 <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                 <CTableDataCell>{item.user_id}</CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
-                {item.designation ? (
+                {/* {item.designation ? (
                   <CTableDataCell>{item.designation}</CTableDataCell>
                 ) : (
                   <CTableDataCell>Null</CTableDataCell>
-                )}
+                )} */}
                 {/* <CTableDataCell>{item.designation}</CTableDataCell> */}
-                {item.gender ? (
+                {/* {item.gender ? (
                   <CTableDataCell>{item.gender}</CTableDataCell>
                 ) : (
                   <CTableDataCell>Null</CTableDataCell>
-                )}
+                )} */}
                 {/* <CTableDataCell>{item.gender}</CTableDataCell> */}
                 <CTableDataCell>{formatDate(item.createdAt)}</CTableDataCell>
                 <CTableDataCell>{item.email}</CTableDataCell>
@@ -336,10 +337,11 @@ const UserMgnt = () => {
         <StatusModal
           visible={addModal}
           closeModal={() => setAddModal(false)}
-          addUser={handleAddUser}
+          handleAddUser={handleAddUser} // Ensure this function is defined
           roles={roles}
         />
       )}
+
       {editModal && (
         <EditModal
           visible={editModal}
@@ -366,20 +368,20 @@ const UserMgnt = () => {
     </div>
   );
 };
-const handleAddUser = async (newUser, props) => {
+const handleAddUser = async (newUserData) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.post(`${BASE_URL}/admin/add-user`, newUser, {
+    const response = await axios.post(`${BASE_URL}/admin/add-user`, newUserData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    props.fetchUsers();
-    props.setAddModal(false);
+    setData((prevData) => [...prevData, response.data]); // Update the state with the new user
     toast.success("User successfully added");
+    fetchUsers(); // Fetch the latest users
   } catch (error) {
     console.error("Error adding user:", error);
-    toast.error(error.response?.data.message);
+    toast.error("Failed to add user");
   }
 };
 
@@ -472,34 +474,44 @@ const EditModal = (props) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "rolesArray") {
-      if (value === "selectAll") {
-        // Select all roles
-        const allRoles = props.roles.map((role) => role.role_id);
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: allRoles,
-        }));
-      } else {
-        const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
-          Number(option.value)
-        ); // Convert to numbers
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: selectedRoles,
-        }));
-      }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle roles selection with react-select
+  const handleRolesChange = (selectedOptions) => {
+    if (selectedOptions.some((option) => option.value === "selectAll")) {
+      const allRoles = props.roles.map((role) => ({
+        label: role.role,
+        value: role.role_id,
+      }));
+      setFormData((prevData) => ({
+        ...prevData,
+        rolesArray: allRoles.map((role) => role.value),
+      }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
+        rolesArray: selectedOptions.map((option) => option.value),
       }));
     }
   };
 
-  const handleSubmit = () => {
-    props.confirmEdit(formData);
+  const handleSubmit = async () => {
+    await props.handleUpdateUser(formData); // Assuming you have a different handler for updating users
+    props.closeModal(); // Close modal after updating user
   };
+
+  // Mapping roles for react-select
+  const roleOptions = [
+    { label: "Select All", value: "selectAll" },
+    ...props.roles.map((role) => ({
+      label: role.role,
+      value: role.role_id,
+    })),
+  ];
 
   return (
     <CModal
@@ -535,19 +547,6 @@ const EditModal = (props) => {
           value={formData.email}
           onChange={handleChange}
         />
-        <CFormSelect
-          className="mb-3"
-          label="Gender"
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          options={[
-            { label: "Select", value: "" },
-            { label: "Male", value: "Male" },
-            { label: "Female", value: "Female" },
-            { label: "Other", value: "Other" },
-          ]}
-        />
         <CFormInput
           className="mb-3"
           type="password"
@@ -560,21 +559,16 @@ const EditModal = (props) => {
           value={formData.password}
           onChange={handleChange}
         />
-        <CFormSelect
+        <Select
           className="mb-3"
-          label="Roles"
+          isMulti
           name="rolesArray"
-          value={formData.rolesArray}
-          onChange={handleChange}
-          multiple
-          options={[
-            { label: "Select Role", value: "" },
-            { label: "Select All", value: "selectAll" },
-            ...props.roles.map((role) => ({
-              label: role.role,
-              value: role.role_id,
-            })),
-          ]}
+          options={roleOptions}
+          value={roleOptions?.filter((option) =>
+            formData?.rolesArray?.includes(option.value)
+          )}
+          onChange={handleRolesChange}
+          placeholder="Select Roles"
         />
       </CModalBody>
       <CModalFooter>
@@ -593,44 +587,55 @@ const StatusModal = (props) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    designation: "",
-    gender: "",
+    // designation: "",
+    // gender: "",
     password: "",
-    user_type: "",
+    // user_type: "",
     rolesArray: [],
   });
+  console.log(formData, "0000000000000000");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-    if (name === "rolesArray") {
-      if (value === "selectAll") {
-        // Select all roles
-        const allRoles = props.roles.map((role) => role.role_id);
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: allRoles,
-        }));
-      } else {
-        const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
-          Number(option.value)
-        ); // Convert to numbers
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: selectedRoles,
-        }));
-      }
+  // Handle roles selection with react-select
+  const handleRolesChange = (selectedOptions) => {
+    if (selectedOptions.some((option) => option.value === "selectAll")) {
+      const allRoles = props.roles.map((role) => ({
+        label: role.role,
+        value: role.role_id,
+      }));
+      setFormData((prevData) => ({
+        ...prevData,
+        rolesArray: allRoles.map((role) => role.value),
+      }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
+        rolesArray: selectedOptions.map((option) => option.value),
       }));
     }
   };
 
   const handleSubmit = async () => {
-    await props.handleAddUser(formData); // Assume handleAddUser is passed as a prop
+    await props.handleAddUser(formData); // This line should now work if handleAddUser is passed correctly
+    props.closeModal();
   };
+  
+
+  // Mapping roles for react-select
+  const roleOptions = [
+    { label: "Select All", value: "selectAll" },
+    ...props.roles.map((role) => ({
+      label: role.role,
+      value: role.role_id,
+    })),
+  ];
 
   return (
     <CModal
@@ -666,19 +671,6 @@ const StatusModal = (props) => {
           value={formData.email}
           onChange={handleChange}
         />
-        <CFormSelect
-          className="mb-3"
-          label="Gender"
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          options={[
-            { label: "Select", value: "" },
-            { label: "Male", value: "Male" },
-            { label: "Female", value: "Female" },
-            { label: "Other", value: "Other" },
-          ]}
-        />
         <CFormInput
           className="mb-3"
           type="password"
@@ -691,21 +683,16 @@ const StatusModal = (props) => {
           value={formData.password}
           onChange={handleChange}
         />
-        <CFormSelect
+        <Select
           className="mb-3"
-          label="Roles"
+          isMulti
           name="rolesArray"
-          value={formData.rolesArray}
-          onChange={handleChange}
-          multiple
-          options={[
-            { label: "Select Role", value: "" },
-            { label: "Select All", value: "selectAll" },
-            ...props.roles.map((role) => ({
-              label: role.role,
-              value: role.role_id,
-            })),
-          ]}
+          options={roleOptions}
+          value={roleOptions.filter((option) =>
+            formData.rolesArray.includes(option.value)
+          )}
+          onChange={handleRolesChange}
+          placeholder="Select Roles"
         />
       </CModalBody>
       <CModalFooter>
