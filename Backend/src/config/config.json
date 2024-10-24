@@ -3,12 +3,12 @@
     "PORT": 9000,
     "dbName": "lims_vidyagxp",
     "username": "root",
-    "password": "puri2002",
+    "password": "Mysql@00000000",
     "dialect": "mysql",
     "host": "localhost",
     "JWT_SECRET": "LIMSVidyagxp",
     "JWT_ADMIN_SECRET": "LIMSVidyagxpAdmin",
-    "URL": "http://localhost"
+    "URL": "http://lims.vidyagxp.com"
   },
   "production": {}
 }

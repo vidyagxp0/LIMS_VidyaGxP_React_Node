@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 // import { randomSpecData } from "./SpecFunction";
 import SearchBar from "../components/ATM components/SearchBar/SearchBar";
@@ -12,7 +11,6 @@ import Dropdown from "../components/ATM components/Dropdown/Dropdown";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import SpecificationViewModal from "./SpecificationViewModal";
 import { BASE_URL } from "../config.json";
 import {
   faEye,
@@ -31,6 +29,7 @@ import {
   CForm,
 } from "@coreui/react";
 import { toast } from "react-toastify";
+import SpecificationviewModel from "./SpecificationviewModel";
 
 const SpecificationSpec = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,24 +67,18 @@ const SpecificationSpec = () => {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  
-  
-  
-  
-  
-  
-  
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-  
+
     useEffect(() => {
       if (data) {
         setFormData(data);
       }
     }, [data]);
-  
+
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -93,25 +86,25 @@ const SpecificationSpec = () => {
         setErrors((prev) => ({ ...prev, [name]: null }));
       }
     };
-  
+
     const validateForm = () => {
       const newErrors = {};
-      Object.keys(formData).forEach(key => {
-        if (!formData[key] && key !== 'uniqueId' && key !== 'sno') {
+      Object.keys(formData).forEach((key) => {
+        if (!formData[key] && key !== "uniqueId" && key !== "sno") {
           newErrors[key] = "This field is required";
         }
       });
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
     };
-  
+
     const handleSave = async (e) => {
       e.preventDefault();
       if (!validateForm()) return;
-  
+
       setIsLoading(true);
       try {
-        await onSave({...formData,sno:formData.sno});
+        await onSave({ ...formData, sno: formData.sno });
         closeModal();
       } catch (error) {
         console.error("Error updating STP:", error);
@@ -120,11 +113,16 @@ const SpecificationSpec = () => {
         setIsLoading(false);
       }
     };
-  
+
     if (!visible) return null;
-  
+
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>Edit STP</CModalTitle>
         </CModalHeader>
@@ -146,7 +144,7 @@ const SpecificationSpec = () => {
                     </div>
                   );
                 }
-  
+
                 let inputType = "text";
                 if (key.includes("date")) {
                   inputType = "date";
@@ -155,13 +153,19 @@ const SpecificationSpec = () => {
                 } else if (key === "attachment" || key === "attachments") {
                   inputType = "file";
                 }
-  
+
                 return (
                   <div key={key}>
                     <CFormInput
                       className="mb-3"
                       type={inputType}
-                      label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1").trim()}
+                      label={
+                        key.charAt(0).toUpperCase() +
+                        key
+                          .slice(1)
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()
+                      }
                       name={key}
                       value={inputType !== "file" ? value : undefined}
                       onChange={handleChange}
@@ -186,62 +190,67 @@ const SpecificationSpec = () => {
     );
   };
 
-
   // GET API - Fetch all Specifications
   const fetchSpecifications = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BASE_URL}/get-all-lims/specification`);
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/specification`
+      );
       console.log(response.data, "response");
 
       const specData = response.data[0]?.specification || [];
 
-      const filteredData = specData.map((item) => (
-        {
-          sno: item.uniqueId || "No Unique ID",
-          specId: item.specId || "No Spec ID",
-          title: item.title || "No Title",
-          version: item.version || "No Version",
-          attachment: item.attachment || "No Attachment",
-          effectiveDate: item.effectiveDate || "No Effective Date",
-          creationDate: item.creationDate || "No Creation Date",
-          approvedBy: item.approvedBy || "No Approval",
-          productName: item.productName || "No Product Name",
-          batchLotNumber: item.batchLotNumber || "No Batch/Lot Number",
-          productCategory: item.productCategory || "No Product Category",
-          manufacturer: item.manufacturer || "No Manufacturer",
-          description: item.description || "No Description",
-          materialGrade: item.materialGrade || "No Material Grade",
-          molecularFormula: item.molecularFormula || "No Molecular Formula",
-          packagingRequirements: item.packagingRequirements || "No Packaging Requirements",
-          storageConditions: item.storageConditions || "No Storage Conditions",
-          shelfLife: item.shelfLife || "No Shelf Life",
-          labelingRequirements: item.labelingRequirements || "No Labeling Requirements",
-          testParameter: item.testParameter || "No Test Parameter",
-          testMethod: item.testMethod || "No Test Method",
-          acceptanceCriteria: item.acceptanceCriteria || "No Acceptance Criteria",
-          unitsOfMeasurement: item.unitsOfMeasurement || "No Units Of Measurement",
-          testFrequency: item.testFrequency || "No Test Frequency",
-          controlSampleReference: item.controlSampleReference || "No Control Sample Reference",
-          samplingPlan: item.samplingPlan || "No Sampling Plan",
-          testMethodValidation: item.testMethodValidation || "No Test Method Validation",
-          referenceStandards: item.referenceStandards || "No Reference Standards",
-          resultInterpretation: item.resultInterpretation || "No Result Interpretation",
-          stabilityCriteria: item.stabilityCriteria || "No Stability Criteria",
-          reTestingInterval: item.reTestingInterval || "No Re-Testing Interval",
-          regulatoryRequirements: item.regulatoryRequirements || "No Regulatory Requirements",
-          certification: item.certification || "No Certification",
-          deviationHandling: item.deviationHandling || "No Deviation Handling",
-          auditTrail: item.auditTrail || "No Audit Trail",
-          documentReference: item.documentReference || "No Document Reference",
-          revisionHistory: item.revisionHistory || "No Revision History",
-          attachments: item.attachments || "No Attachments",
-          comments: item.comments || "No Comments",
-          reviewFrequency: item.reviewFrequency || "No Review Frequency",
-          expiryDate: item.expiryDate || "No Expiry Date"
-      }
-      
-      ));
+      const filteredData = specData.map((item) => ({
+        sno: item.uniqueId || "No Unique ID",
+        specId: item.specId || "No Spec ID",
+        title: item.title || "No Title",
+        version: item.version || "No Version",
+        attachment: item.attachment || "No Attachment",
+        effectiveDate: item.effectiveDate || "No Effective Date",
+        creationDate: item.creationDate || "No Creation Date",
+        approvedBy: item.approvedBy || "No Approval",
+        productName: item.productName || "No Product Name",
+        batchLotNumber: item.batchLotNumber || "No Batch/Lot Number",
+        productCategory: item.productCategory || "No Product Category",
+        manufacturer: item.manufacturer || "No Manufacturer",
+        description: item.description || "No Description",
+        materialGrade: item.materialGrade || "No Material Grade",
+        molecularFormula: item.molecularFormula || "No Molecular Formula",
+        packagingRequirements:
+          item.packagingRequirements || "No Packaging Requirements",
+        storageConditions: item.storageConditions || "No Storage Conditions",
+        shelfLife: item.shelfLife || "No Shelf Life",
+        labelingRequirements:
+          item.labelingRequirements || "No Labeling Requirements",
+        testParameter: item.testParameter || "No Test Parameter",
+        testMethod: item.testMethod || "No Test Method",
+        acceptanceCriteria: item.acceptanceCriteria || "No Acceptance Criteria",
+        unitsOfMeasurement:
+          item.unitsOfMeasurement || "No Units Of Measurement",
+        testFrequency: item.testFrequency || "No Test Frequency",
+        controlSampleReference:
+          item.controlSampleReference || "No Control Sample Reference",
+        samplingPlan: item.samplingPlan || "No Sampling Plan",
+        testMethodValidation:
+          item.testMethodValidation || "No Test Method Validation",
+        referenceStandards: item.referenceStandards || "No Reference Standards",
+        resultInterpretation:
+          item.resultInterpretation || "No Result Interpretation",
+        stabilityCriteria: item.stabilityCriteria || "No Stability Criteria",
+        reTestingInterval: item.reTestingInterval || "No Re-Testing Interval",
+        regulatoryRequirements:
+          item.regulatoryRequirements || "No Regulatory Requirements",
+        certification: item.certification || "No Certification",
+        deviationHandling: item.deviationHandling || "No Deviation Handling",
+        auditTrail: item.auditTrail || "No Audit Trail",
+        documentReference: item.documentReference || "No Document Reference",
+        revisionHistory: item.revisionHistory || "No Revision History",
+        attachments: item.attachments || "No Attachments",
+        comments: item.comments || "No Comments",
+        reviewFrequency: item.reviewFrequency || "No Review Frequency",
+        expiryDate: item.expiryDate || "No Expiry Date",
+      }));
 
       console.log(filteredData, "Filtered Specification Data");
 
@@ -262,7 +271,10 @@ const SpecificationSpec = () => {
   const handleAddSpecification = async (newSpecData) => {
     setIsLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/add/specification`,newSpecData );
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/specification`,
+        newSpecData
+      );
       if (response.status === 200 || response.status === 201) {
         setDataChanged(true); // Trigger a re-fetch of data
         toast.success("New Specification added successfully!");
@@ -277,7 +289,6 @@ const SpecificationSpec = () => {
       setIsLoading(false);
     }
   };
-
 
   // PUT API - Edit Specification
   const handleEditSave = async (updatedData) => {
@@ -306,7 +317,9 @@ const SpecificationSpec = () => {
   // DELETE API - Delete Specification
   const handleDelete = async (item) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/delete-lims/specification/${item.sno}`);
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/specification/${item.sno}`
+      );
       if (response.status === 200) {
         const updatedData = data.filter(
           (dataItem) => dataItem.sno !== item.sno
@@ -319,7 +332,10 @@ const SpecificationSpec = () => {
       }
     } catch (error) {
       console.error("Error deleting Specification:", error);
-      toast.error("Error deleting Specification: " + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error deleting Specification: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -332,8 +348,7 @@ const SpecificationSpec = () => {
   };
 
   // ... (other utility functions)
-  
-  
+
   const handleStatusUpdate = (stpId, newStatus) => {
     const updatedData = data.map((item) =>
       item.stpId === stpId ? { ...item, status: newStatus } : item
@@ -342,7 +357,7 @@ const SpecificationSpec = () => {
   };
 
   const headers = [
-    "S.No", 
+    "S.No",
     "specId",
     "title",
     "version",
@@ -383,7 +398,7 @@ const SpecificationSpec = () => {
     "comments",
     "reviewFrequency",
     "expiryDate",
-    "actions"
+    "actions",
   ];
 
   const fields = [
@@ -426,7 +441,7 @@ const SpecificationSpec = () => {
     "attachments",
     "comments",
     "reviewFrequency",
-    "expiryDate"
+    "expiryDate",
   ];
 
   return (
@@ -504,9 +519,7 @@ const SpecificationSpec = () => {
               <th colSpan="2" className="px-4 py-2 bg-blue-500">
                 Miscellaneous
               </th>
-              <th  className="px-4 py-2 bg-green-500">
-                Actions
-              </th>
+              <th className="px-4 py-2 bg-green-500">Actions</th>
             </tr>
             <tr className="bg-slate-800 text-white sticky top-[126px]">
               {headers.map((header, index) => (
@@ -607,7 +620,7 @@ const SpecificationSpec = () => {
 
       {/* Modals */}
       {viewModalData && (
-        <SpecificationViewModal
+        <SpecificationviewModel
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
@@ -616,21 +629,21 @@ const SpecificationSpec = () => {
           updateStatus={handleStatusUpdate}
         />
       )}
-     {isAddModalOpen && (
-      <SpecificationSpecModal
-        visible={isAddModalOpen}
-        closeModal={closeAddModal}
-        handleSubmit={handleAddSpecification}
-      />
-    )}
-    {editModalData && (
-         <EditModal
-         visible={Boolean(editModalData)}
-         closeModal={() => setEditModalData(null)}
-         data={editModalData}
-         onSave={handleEditSave}
-       />
-    )}
+      {isAddModalOpen && (
+        <SpecificationSpecModal
+          visible={isAddModalOpen}
+          closeModal={closeAddModal}
+          handleSubmit={handleAddSpecification}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={() => setEditModalData(null)}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </div>
   );
 };

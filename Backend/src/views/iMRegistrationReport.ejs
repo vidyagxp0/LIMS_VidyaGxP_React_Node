@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+        font-family:Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        margin: 20px;
+        line-height: 1.6;
+      }
+      .report-content {
+        margin-top: 30px; /* Increase margin top for more spacing */
+      }
+      h1, h2 {
+        margin-bottom: 20px;
+        text-align: left; /* Align headings to the left */
+        clear: both; /* Clear floats to prevent overlap */
+      }   
+      h1 {
+        font-size: 24px;
+      }      
+      h2 {
+        font-size: 18px;
+        /* color: rgb(97 135 212); */
+        color: white;
+      }
+      p {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        /* border-collapse: collapse; */
+        margin-bottom: 30px; /* Increase margin bottom for more spacing */
+        /* border: 1px solid #000;  */
+      }
+      th, td {
+        /* border: 1px solid #000;  */
+        padding: 10px; /* Adjusted padding for better spacing */
+        text-align: left;
+      }
+      th {
+        /* background-color: #f8f8f8; */
+        font-weight: bold;
+      }
+      .remarks {
+       page-break-inside: avoid;
+      }
+      .heading
+      {
+        /* padding-top: 35px; */
+        color: rgb(97 135 212);
+        border-bottom: rgb(97 135 212) solid 2px;
+        /* background-color: rgb(97 135 212); */
+        text-align: left;
+      }
+      .sub-heading
+      {
+        /* padding-top: 35px; */
+        padding: 5px;
+        padding-inline: 15px;
+        max-width: fit-content;
+        background-color: rgb(97 135 212);
+        text-align: center;
+        border-top-left-radius: 20px;
+      }
+      </style>
+    <body>
+        <div class="remarks">
+            <!-- <h2 class="heading">Control Sample</h2> -->
+            <table>
+                <tr>
+                    <th>Made</th>
+                    <td><%= reportData?.Made || "Not Applicable" %></td>
+                    <th>Instrument Category Description</th>
+                    <td><%= reportData?.instrumentCategoryDescription || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Model</th>
+                    <td><%= reportData?.Model || "Not Applicable" %></td>
+                    <th>sopNo</th>
+                    <td><%= reportData?.sopNo || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Equipment No</th>
+                    <td><%= reportData?.equipNo || "Not Applicable" %></td>
+                    <th>Category</th>
+                    <td><%= reportData?.Category || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Software</th>
+                    <td><%= reportData?.software || "Not Applicable" %></td>
+                    <th>Instrument</th>
+                    <td><%= reportData?.Instrument || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Supplied By</th>
+                    <td><%= reportData?.suppliedBy || "Not Applicable" %></td>
+                    <th>Installed Date</th>
+                    <td><%= reportData?.InstalledAt || "Not Applicable" %></td>
+                </tr>
+              
+                <tr>
+                    <th>Description</th>
+                    <td><%= reportData?.description || "Not Applicable" %></td>
+                    <th>Installed On</th>
+                    <td><%= reportData?.installedOn || "Not Applicable" %> </td>
+                </tr>
+                <tr>
+                    <th>Instrument Id</th>
+                    <td><%= reportData?.InstrumentId || "Not Applicable" %></td>
+                    <th>Capacity Size</th>
+                    <td><%= reportData?.capacitySize || "Not Applicable" %></td>
+                 
+                </tr>
+                <tr>
+                    <th>Contains Module</th>
+                    <td><%= reportData?.containsModule || "Not Applicable" %></td>
+                    <th>Calibration Status</th>
+                    <td><%= reportData?.calibrationStatus || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Warranty Expires On</th>
+                    <td><%= reportData?.warrantyExpiresOn || "Not Applicable" %></td>
+                    <th>Manufacturer Serial No</th>
+                    <td><%= reportData?.manufacturerSerialNo || "Not Applicable" %></td>
+                </tr>
+                       
+            </table>
+        </div>
+        <!-- <div class="remarks">
+            <h2 class="heading">Activity Log</h2>
+            <table>
+                <tr>
+                    <th>Initiator Name</th>
+                    <td><%= reportData?.initiatorName || "Not Applicable" %></td>
+                    <th>Initiator Comment</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Initiator Review Date</th>
+                    <td><%= reportData?.initiatorReviewDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Reviewer Name</th>
+                    <td><%= reportData?.ReviewerName || "Not Applicable" %></td>
+                    <th>Reviewer Comment/th>
+                    <td><%= reportData?.ReviewerComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Review Date</th>
+                    <td><%= reportData?.ReviewDate || "Not Applicable" %></td>
+                    
+                </tr>
+              
+            </table>
+        </div> -->
+</body>
+</html>

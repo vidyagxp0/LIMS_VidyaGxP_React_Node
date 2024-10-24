@@ -96,15 +96,14 @@
                 <tr>
                     <th>UOM</th>
                     <td><%= reportData?.UOM || "Not Applicable" %></td>
-                    <th></th>
-                    <td></td>
-                </tr>
-                <tr>
                     <th>Market</th>
                     <td><%= reportData?.market || "Not Applicable" %></td>
-                    <th>Sample Barcode</th>
-                    <td><%= reportData?.sampleBarCode || "Not Applicable" %></td>
                 </tr>
+                <tr class="barcode-row">
+                  <th>Sample Barcode</th>
+                  <td colspan="5">
+                  </td>  
+               </tr>
                 <tr>
                     <th>Specification Id</th>
                     <td><%= reportData?.specificationId || "Not Applicable" %></td>

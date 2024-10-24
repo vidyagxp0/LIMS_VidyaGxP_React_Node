@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+        font-family:Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        margin: 20px;
+        line-height: 1.6;
+      }
+      .report-content {
+        margin-top: 30px; /* Increase margin top for more spacing */
+      }
+      h1, h2 {
+        margin-bottom: 20px;
+        text-align: left; /* Align headings to the left */
+        clear: both; /* Clear floats to prevent overlap */
+      }   
+      h1 {
+        font-size: 24px;
+      }      
+      h2 {
+        font-size: 18px;
+        /* color: rgb(97 135 212); */
+        color: white;
+      }
+      p {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        /* border-collapse: collapse; */
+        margin-bottom: 30px; /* Increase margin bottom for more spacing */
+        /* border: 1px solid #000;  */
+      }
+      th, td {
+        /* border: 1px solid #000;  */
+        padding: 10px; /* Adjusted padding for better spacing */
+        text-align: left;
+      }
+      th {
+        /* background-color: #f8f8f8; */
+        font-weight: bold;
+      }
+      .remarks {
+       page-break-inside: avoid;
+      }
+      .heading
+      {
+        /* padding-top: 35px; */
+        color: rgb(97 135 212);
+        border-bottom: rgb(97 135 212) solid 2px;
+        /* background-color: rgb(97 135 212); */
+        text-align: left;
+      }
+      .sub-heading
+      {
+        /* padding-top: 35px; */
+        padding: 5px;
+        padding-inline: 15px;
+        max-width: fit-content;
+        background-color: rgb(97 135 212);
+        text-align: center;
+        border-top-left-radius: 20px;
+      }
+      </style>
+    <body>
+        <div class="remarks">
+            <!-- <h2 class="heading">Control Sample</h2> -->
+            <table>
+                <tr>
+                    <th>Sample ID</th>
+                    <td><%= reportData?.sampleId || "Not Applicable" %></td>
+                    <th>Product Material Name</th>
+                    <td><%= reportData?.productMaterialName || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Product Material Code</th>
+                    <td><%= reportData?.productMaterialCode || "Not Applicable" %></td>
+                    <th>Sample Type</th>
+                    <td><%= reportData?.sampleType || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Market</th>
+                    <td><%= reportData?.market || "Not Applicable" %></td>
+                    <th>AR No.</th>
+                    <td><%= reportData?.arNo || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Batch Number</th>
+                    <td><%= reportData?.batchNo || "Not Applicable" %></td>
+                    <th>MFG Date</th>
+                    <td><%= reportData?.mfgDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Expiry Date</th>
+                    <td><%= reportData?.expiryDate || "Not Applicable" %></td>
+                    <th>Quantity</th>
+                    <td><%= reportData?.quantity || "Not Applicable" %></td>
+                </tr>
+              
+                <tr>
+                    <th>Quantity Withdrawn</th>
+                    <td><%= reportData?.quantityWithdrawn || "Not Applicable" %></td>
+                    <th>Current Quantity</th>
+                    <td><%= reportData?.currentQuantity || "Not Applicable" %> </td>
+                </tr>
+                <tr>
+                    <th>UOM</th>
+                    <td><%= reportData?.uom || "Not Applicable" %></td>
+                    <th>Storage Location</th>
+                    <td><%= reportData?.storageLocation || "Not Applicable" %></td>
+                 
+                </tr>
+                <tr>
+                    <th>Storage Condition</th>
+                    <td><%= reportData?.storageCondition || "Not Applicable" %></td>
+                    <th>Visual Inspection Sheduled On</th>
+                    <td><%= reportData?.visualInspectionSheduledOn || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Visual Inspection Sheduled By</th>
+                    <td><%= reportData?.visualInspectionPerformedBy || "Not Applicable" %></td>
+                    <th>Any Abnormal Obersvation</th>
+                    <td><%= reportData?.anyAbnoramalObservation || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Observation Date</th>
+                    <td><%= reportData?.ObservationDate || "Not Applicable" %></td>
+                    <th>Destruction Due On</th>
+                    <td><%= reportData?.destructionDueOn || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Destroyed By</th>
+                    <td><%= reportData?.destroyedBy || "Not Applicable" %></td>
+                    <th> Neutralizing Agent</th>
+                    <td><%= reportData?.neutralizingAgent || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Destruction Date</th>
+                    <td><%= reportData?.destructionDate || "Not Applicable" %></td>
+                    <th>Remarks</th>
+                    <td><%= reportData?.remarks || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td><%= reportData?.status || "Not Applicable" %></td>
+                </tr>
+                       
+            </table>
+        </div>
+        <div class="remarks">
+            <h2 class="heading">Activity Log</h2>
+            <table>
+                <tr>
+                    <th>Initiator Name</th>
+                    <td><%= reportData?.initiatorName || "Not Applicable" %></td>
+                    <th>Initiator Comment</th>
+                    <td><%= reportData?.initiatorComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Initiator Review Date</th>
+                    <td><%= reportData?.initiatorReviewDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Reviewer Name</th>
+                    <td><%= reportData?.ReviewerName || "Not Applicable" %></td>
+                    <th>Reviewer Comment/th>
+                    <td><%= reportData?.ReviewerComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Review Date</th>
+                    <td><%= reportData?.ReviewDate || "Not Applicable" %></td>
+                    
+                </tr>
+              
+            </table>
+        </div>
+</body>
+</html>

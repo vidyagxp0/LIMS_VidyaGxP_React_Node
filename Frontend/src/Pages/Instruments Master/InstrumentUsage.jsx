@@ -24,9 +24,11 @@ import {
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import ReusableModal from "../Modals/ResusableModal.jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { BASE_URL } from "../../config.json";
 
 const initialData = JSON.parse(localStorage.getItem("instruments")) || [];
-
 
 const InstrumentUsage = () => {
   const [data, setData] = useState(initialData);
@@ -36,6 +38,32 @@ const InstrumentUsage = () => {
   const [rows, setRows] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    fetchInstrumentUsage();
+  }, []);
+
+  const fetchInstrumentUsage = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/iMInstrumentUsage`
+      );
+      console.log(response);
+      const formattedData = response.data[0]?.iMInstrumentUsage || []; // Adjust this based on your API response structure
+
+      const updatedData = formattedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching Instrument Usage", error);
+      toast.error("Failed to fetch Instrument Usage");
+    }
+  };
 
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -50,12 +78,30 @@ const InstrumentUsage = () => {
     setEditModalData(null);
   };
 
-  const handleEditSave = (updatedData) => {
-    const updatedList = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(updatedList);
-    closeEditModal();
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/iMInstrumentUsage/${updatedData.uniqueId}`,
+        updatedData
+      );
+
+      if (response.status === 200) {
+        const newData = apiData.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...updatedData }
+            : item
+        );
+
+        setApiData(newData);
+        fetchInstrumentUsage();
+        toast.success(" updated successfully");
+      }
+    } catch (error) {
+      console.error("Error updating ", error);
+      toast.error("Failed to update");
+    } finally {
+      setEditModalData(null);
+    }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -302,13 +348,13 @@ const InstrumentUsage = () => {
     { label: "status", key: "status" },
   ];
 
-  const handleStatusUpdate = (sampleType, newStatus) => {
-    setRows((prevRows) =>
-      prevRows.map((row) =>
-        row.sampleType === sampleType ? { ...row, status: newStatus } : row
-      )
-    );
-  };
+  // const handleStatusUpdate = (sampleType, newStatus) => {
+  //   setRows((prevRows) =>
+  //     prevRows.map((row) =>
+  //       row.sampleType === sampleType ? { ...row, status: newStatus } : row
+  //     )
+  //   );
+  // };
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -330,18 +376,13 @@ const InstrumentUsage = () => {
   };
 
   //********************************Fetch data from Modal and added to the new row**************************************************************** */
-  const handleModalSubmit = (newInstrument) => {
-    if (editModalData) {
-      const updatedList = data.map((item) =>
-        item.sno === newInstrument.sno ? newInstrument : item
-      );
-      setData(updatedList);
-    } else {
-      setData((prevData) => [
-        ...prevData,
+
+  const handleModalSubmit = async (newInstrument) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/iMInstrumentUsage`,
         {
-          checkbox: false,
-          sno: prevData.length + 1,
           InstrumentID: newInstrument.InstrumentID,
           InstrumentCategory: newInstrument.InstrumentCategory,
           UsageCode: newInstrument.UsageCode,
@@ -353,12 +394,33 @@ const InstrumentUsage = () => {
           UsedTo: newInstrument.UsedTo,
           comment: newInstrument.Comment,
           status: "Active",
-        },
-      ]);
-    }
-    closeModal();
-  };
+        }
+      );
 
+      if (response.status === 200) {
+        const addedCalibration = response.data.addLIMS; // Accessing the added item from the response
+
+        setData((prevData) => [
+          ...prevData,
+          {
+            ...addedCalibration,
+            sno: addedCalibration.uniqueId, // Using uniqueId as sno
+            checkbox: false,
+          },
+        ]);
+
+        toast.success("Added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding:", error);
+      toast.error("Failed to add ");
+    }
+
+    setIsModalOpen(false);
+  };
+  useEffect(() => {
+    fetchInstrumentUsage();
+  }, []);
   //************************************************************************************************ */
 
   const openModal = () => {
@@ -373,83 +435,160 @@ const InstrumentUsage = () => {
     setIsViewModalOpen(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/iMInstrumentUsage/${item.uniqueId}`
+      );
+
+      if (response.status === 200) {
+        const newData = apiData.filter((d) => d.uniqueId !== item.uniqueId);
+        setApiData(newData);
+        toast.success(" deleted successfully");
+
+        console.log("Deleted item:", item);
+      }
+      fetchInstrumentUsage();
+    } catch (error) {
+      console.error("Error deleting :", error);
+    }
   };
 
+  let isToastShown = false;
+
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData) {
+      console.error("No data selected for update");
+      toast.error("No data selected for update");
+      return;
+    }
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/iMInstrumentUsage/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
+      if (response.status === 200) {
+        setApiData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        fetchInstrumentUsage();
+
+        // Only show toast if not already shown
+        if (!isToastShown) {
+          toast.success("Approval status updated successfully");
+          isToastShown = true; // Set flag to true to prevent re-showing
+        }
+
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
+  };
+
+  const StatusModal = ({ visible, closeModal, onAdd }) => {};
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Instrument Usage</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Instrument Usage</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Instrument_Usage.pdf"
+              title="Instrument Usage Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Instrument Usage"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-          <PDFDownload
-            columns={columns}
-            data={filteredData}
-            fileName="Instrument_Usage.pdf"
-            title="Instrument Usage Data"
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
+        <InstrumentUsageModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
+        />
+
+        {isModalOpen && (
+          <StatusModal
+            visible={isModalOpen}
+            closeModal={closeModal}
+            onAdd={handleModalSubmit}
           />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton text="Instrument Usage" color="blue" onClick={openModal} />
-        </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <InstrumentUsageModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-      {viewModalData && (
+        )}
+
         <ReusableModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}
-          title="InstrumentMasterReg."
+          title="Test Plan Details"
           updateStatus={handleStatusUpdate}
         />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-          onDataUpload={handleExcelDataUpload}
-        />
-      )}
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-    </div></>
+
+        {editModalData && (
+          <EditModal
+            visible={Boolean(editModalData)}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+      </div>
+    </>
   );
 };
 export default InstrumentUsage;

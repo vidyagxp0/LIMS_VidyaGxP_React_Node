@@ -13,8 +13,15 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchData }) => {
+const AnalystPersonalModal = ({
+  visible,
+  closeModal,
+  handleSubmit,
+  data,
+  fetchData,
+}) => {
   const [analystData, setAnalystData] = useState({
     AnalystID: "",
     FullName: "",
@@ -52,12 +59,12 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
     InstrumentNameID: "",
     MethodNameID: "",
     QualificationLevel: "",
-    CalibrationDueDate: "",
+    // CalibrationDueDate: "",
     MethodValidationDate: "",
     SOPNameID: "",
     SOPVersion: "",
     DateAcknowledgedReviewed: "",
-    RevisionDueDate: "",
+    // RevisionDueDate: "",
     YearsOfExperience: "",
     PreviousJobRoles: "",
     PreviousLabsWorkedIn: "",
@@ -114,11 +121,11 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
         MethodNameID: "",
         QualificationLevel: "",
         CalibrationDueDate: "",
-        MethodValidationDate: "",
+        // MethodValidationDate: "",
         SOPNameID: "",
         SOPVersion: "",
-        DateAcknowledgedReviewed: "",
-        RevisionDueDate: "",
+        // DateAcknowledgedReviewed: "",
+        // RevisionDueDate: "",
         YearsOfExperience: "",
         PreviousJobRoles: "",
         PreviousLabsWorkedIn: "",
@@ -319,8 +326,8 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
               "Select...",
               { label: "Qualified", value: "Qualified" },
               { label: "Pending", value: "Pending" },
-              {label: "Revoked", value: "Revoked"},
-              {label: "Expired", value: "Expired"}
+              { label: "Revoked", value: "Revoked" },
+              { label: "Expired", value: "Expired" },
             ]}
           />
           <CFormInput
@@ -535,7 +542,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
               // Add more options as needed
             ]}
           />
-          <CFormInput
+          {/* <CFormInput
             className="mb-3"
             type="date"
             label="Calibration Due Date"
@@ -543,8 +550,8 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
             onChange={(e) =>
               handleInputChange("CalibrationDueDate", e.target.value)
             }
-          />
-          <CFormInput
+          /> */}
+          {/* <CFormInput
             className="mb-3"
             type="date"
             label="Method Validation Date"
@@ -552,7 +559,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
             onChange={(e) =>
               handleInputChange("MethodValidationDate", e.target.value)
             }
-          />
+          /> */}
           <CFormInput
             className="mb-3"
             type="text"
@@ -567,7 +574,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
             value={analystData.SOPVersion}
             onChange={(e) => handleInputChange("SOPVersion", e.target.value)}
           />
-          <CFormInput
+          {/* <CFormInput
             className="mb-3"
             type="date"
             label="Date Acknowledged/Reviewed"
@@ -575,8 +582,8 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
             onChange={(e) =>
               handleInputChange("DateAcknowledgedReviewed", e.target.value)
             }
-          />
-          <CFormInput
+          /> */}
+          {/* <CFormInput
             className="mb-3"
             type="date"
             label="Revision Due Date"
@@ -584,7 +591,7 @@ const AnalystPersonalModal = ({ visible, closeModal, handleSubmit, data,fetchDat
             onChange={(e) =>
               handleInputChange("RevisionDueDate", e.target.value)
             }
-          />
+          /> */}
           <CFormInput
             className="mb-3"
             type="number"

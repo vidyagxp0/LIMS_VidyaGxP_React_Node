@@ -6,6 +6,7 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal";
+import { useNavigate } from "react-router-dom";
 
 const Table = ({
   columns,
@@ -23,6 +24,7 @@ const Table = ({
   const startIndex = (currentPage - 1) * pageSize;
   const currentData = data?.slice(startIndex, startIndex + pageSize);
   const attachmentInput = useRef([]);
+  const navigate =useNavigate();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -40,6 +42,10 @@ const Table = ({
         return "bg-yellow-500 text-white  p-1 ";
       case "APPROVED":
         return "bg-green-500 text-white  p-1 ";
+        case "calibrated":
+          return "bg-green-500 text-white  p-1 ";
+          case "nonCalibrated":
+            return "bg-orange-500 text-white  p-1 ";
       default:
         return "";
     }
@@ -73,17 +79,17 @@ const Table = ({
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-[#6187d4] text-white">
-            <tr>
-              {columns?.map((column) => (
-                <th
-                  key={column.accessor}
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
-                >
-                  {column.header}
-                </th>
-              ))}
-            </tr>
+          <tr>
+          {columns?.map((column) => (
+            <th
+              key={column.accessor}
+              scope="col"
+              className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+            >
+              {column.header}
+            </th>
+          ))}
+        </tr>
           </thead>
           {currentData?.length === 0 ? (
             <div style={{ textAlign: "center",left:"44%",position:"absolute", fontSize: "1.2rem", fontWeight: "500", lineHeight: "1.5", marginTop: "5rem", columnGap: "0px", border:"none", color:"gray" }} >
@@ -92,68 +98,75 @@ const Table = ({
           ) : (
           
           <tbody className="bg-white divide-y divide-gray-200">
-          {currentData?.map((row, rowIndex) => (
-  <tr key={rowIndex}>
-    {columns?.map((column) => (
-      <td
-        key={column.accessor}
-        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-      >
-        {column.accessor === "checkbox" ? (
-          <input
-            type="checkbox"
-            checked={Boolean(row.checkbox)} // Ensure it is always a boolean
-            onChange={() => onCheckboxChange(rowIndex + startIndex)}
-          />
-        ) : column.accessor === "status" ? (
-          <span
-            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-              row.status
-            )}`}
-          >
-            {row.status}
-          </span>
-        ) : column.accessor === "action" ? (
-          <div className="flex space-x-2">
-            <FontAwesomeIcon
-              icon={faEye}
-              className="mr-2 cursor-pointer"
-              onClick={() => onViewDetails(row)}
-            />
-            <FontAwesomeIcon
-              icon={faPenToSquare}
-              className="mr-2 cursor-pointer"
-              onClick={() => openEditModal(row)}
-            />
-            <FontAwesomeIcon
-              icon={faTrashCan}
-              className="cursor-pointer"
-              onClick={() => openDeleteModal(row)}
-            />
-          </div>
-        ) : column.accessor === "attachment" ? (
-          <div>
-            <button
-              className="bg-blue-500 text-white px-2 py-1 rounded"
-              onClick={() => handleAttachmentClick(rowIndex)}
-            >
-              Add Attachment
-            </button>
-            <input
-              type="file"
-              style={{ display: "none" }}
-              ref={(el) => (attachmentInput.current[rowIndex] = el)}
-              onChange={(e) => console.log(e.target.files[0])} 
-            />
-          </div>
-        ) : (
-          row[column.accessor] // Directly displaying the value from the data
-        )}
-      </td>
-    ))}
-  </tr>
-))}
-
+            {currentData?.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {columns?.map((column) => (
+                  <td
+                    key={column.accessor}
+                    className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ${column.accessor === 'analystId'||column.accessor === 'sampleId' ? 'hover:bg-zinc-200 cursor-pointer' : ''}`}
+                    
+                    onClick={() => {
+                      if (column.accessor === "analystId") {
+                        navigate(`/analyst-qualification-edit/${row.id}`);
+                      } else if (column.accessor === "sampleId") {
+                        navigate(`/control-Sample-edit/${row.id}`);
+                      }
+                    }}
+                  >
+                    {column.accessor === "checkbox" ? (
+                      <input
+                        type="checkbox"
+                        checked={row.checkbox}
+                        onChange={() => onCheckboxChange(rowIndex + startIndex)}
+                      />
+                    ) : column.accessor === "status" ? (
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+                          row.status
+                        )}`}
+                      >
+                        {row.status}
+                      </span>
+                    ) : column.accessor === "action" ? (
+                      <div className="flex space-x-2">
+                        <FontAwesomeIcon
+                          icon={faEye}
+                          className="mr-2 cursor-pointer"
+                          onClick={() => onViewDetails(row)}
+                        />
+                        <FontAwesomeIcon
+                          icon={faPenToSquare}
+                          className="mr-2 cursor-pointer"
+                          onClick={() => openEditModal(row)}
+                        />
+                        <FontAwesomeIcon
+                          icon={faTrashCan}
+                          className="cursor-pointer"
+                          onClick={() => openDeleteModal(row)}
+                        />
+                      </div>
+                    ) : column.accessor === "attachment" ? (
+                      <div>
+                        <button
+                          className="bg-blue-500 text-white px-2 py-1 rounded"
+                          onClick={() => handleAttachmentClick(rowIndex)}
+                        >
+                          Add Attachment
+                        </button>
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          ref={(el) => (attachmentInput.current[rowIndex] = el)}
+                          onChange={(e) => console.log(e.target.files[0])} // Handle file upload logic here
+                        />
+                      </div>
+                    ) : (
+                      row[column.accessor]
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
 
 )}

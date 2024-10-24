@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+        font-family:Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        margin: 20px;
+        line-height: 1.6;
+      }
+      .report-content {
+        margin-top: 30px; /* Increase margin top for more spacing */
+      }
+      h1, h2 {
+        margin-bottom: 20px;
+        text-align: left; /* Align headings to the left */
+        clear: both; /* Clear floats to prevent overlap */
+      }   
+      h1 {
+        font-size: 24px;
+      }      
+      h2 {
+        font-size: 18px;
+        /* color: rgb(97 135 212); */
+        color: white;
+      }
+      p {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      table {
+        width: 100%;
+        /* border-collapse: collapse; */
+        margin-bottom: 30px; /* Increase margin bottom for more spacing */
+        /* border: 1px solid #000;  */
+      }
+      th, td {
+        /* border: 1px solid #000;  */
+        padding: 10px; /* Adjusted padding for better spacing */
+        text-align: left;
+      }
+      th {
+        /* background-color: #f8f8f8; */
+        font-weight: bold;
+      }
+      .remarks {
+       page-break-inside: avoid;
+      }
+      .heading
+      {
+        /* padding-top: 35px; */
+        color: rgb(97 135 212);
+        border-bottom: rgb(97 135 212) solid 2px;
+        /* background-color: rgb(97 135 212); */
+        text-align: left;
+      }
+      .sub-heading
+      {
+        /* padding-top: 35px; */
+        padding: 5px;
+        padding-inline: 15px;
+        max-width: fit-content;
+        background-color: rgb(97 135 212);
+        text-align: center;
+        border-top-left-radius: 20px;
+      }
+      </style>
+    <body>
+        <div class="remarks">
+            <h2 class="heading">Stability Registration</h2>
+            <table>
+                <tr>
+                    <th>Sample Plan ID</th>
+                    <td><%= reportData?.samplePlanId || "Not Applicable" %></td>
+                    <th>Sample ID</th>
+                    <td><%= reportData?.sampleId || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Name</th>
+                    <td><%= reportData?.sampleName || "Not Applicable" %></td>
+                    <th>Sample Type</th>
+                    <td><%= reportData?.sampleType || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Product/Material Name</th>
+                    <td><%= reportData?.productMaterialName || "Not Applicable" %></td>
+                    <th>Batch/Lot Number</th>
+                    <td><%= reportData?.batchlotNumber || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Priority</th>
+                    <td><%= reportData?.samplePriority || "Not Applicable" %></td>
+                    <th>Sample Quantity</th>
+                    <td><%= reportData?.sampleQuantity || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>UOM</th>
+                    <td><%= reportData?.UOM || "Not Applicable" %></td>
+                    <th>Market</th>
+                    <td><%= reportData?.market || "Not Applicable" %></td>
+                </tr>
+                <tr class="barcode-row">
+                  <th>Sample Barcode</th>
+                  <td colspan="5">
+                  </td>  
+               </tr>
+                <tr>
+                    <th>Specification Id</th>
+                    <td><%= reportData?.specificationId || "Not Applicable" %></td>
+                    <th>Specification Attachment</th>
+                    <td> <% if (reportData?.specificationAttachment) { %>
+                        <a href="<%= reportData.specificationAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>
+                <tr>
+                    <th>STP Id</th>
+                    <td><%= reportData?.stpId || "Not Applicable" %></td>
+                    <th>STP Attachment</th>
+                    <td> <% if (reportData?.stpAttachment) { %>
+                        <a href="<%= reportData.stpAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>
+                <tr>
+                    <th>Test Name</th>
+                    <td><%= reportData?.testName || "Not Applicable" %></td>
+                    <th>Test Method</th>
+                    <td><%= reportData?.testMethod || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Test Parameters</th>
+                    <td><%= reportData?.testParameter || "Not Applicable" %></td>
+                    <th>Testing Frequency</th>
+                    <td><%= reportData?.testingFrequency || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing Location</th>
+                    <td><%= reportData?.testingLocation || "Not Applicable" %></td>
+                    <th>Required Instruments</th>
+                    <td><%= reportData?.requiredInstrument || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Test Grouping</th>
+                    <td><%= reportData?.testGrouping || "Not Applicable" %></td>
+                    <th></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>LSL</th>
+                    <td><%= reportData?.lsl || "Not Applicable" %></td>
+                    <th>USL</th>
+                    <td><%= reportData?.usl || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing Deadline</th>
+                    <td><%= reportData?.testingDeadline || "Not Applicable" %></td>
+                    <th>Planner Name</th>
+                    <td><%= reportData?.plannerName || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Source</th>
+                    <td><%= reportData?.sampleSource || "Not Applicable" %></td>
+                    <th>Planned Date</th>
+                    <td><%= reportData?.sampleDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Planned Date</th>
+                    <td><%= reportData?.plannedDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Lab Technician</th>
+                    <td><%= reportData?.labTechnician || "Not Applicable" %></td>
+                    <th>Assigned Department</th>
+                    <td><%= reportData?.assignedDepartment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Collection Date</th>
+                    <td><%= reportData?.sampleCollectionDate || "Not Applicable" %></td>
+                </tr>             
+                <tr>
+                    <th>Sample Collection Date</th>
+                    <td><%= reportData?.sampleCollectionDate || "Not Applicable" %></td>
+                </tr>     
+                <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.srSupportiveAttachment) { %>
+                        <a href="<%= reportData.srSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>        
+            </table>
+        </div>
+        <div class="remarks">
+            <h2 class="heading">Sample Analysis</h2>
+            <table>
+                <tr>
+                    <th>Analysis Type</th>
+                    <td><%= reportData?.analysisType || "Not Applicable" %></td>
+                    <th>Analysis Result</th>
+                    <td><%= reportData?.analysisResult || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Analysis Date</th>
+                    <td><%= reportData?.analysisDate || "Not Applicable" %></td>
+                    <th>Testing Start Date</th>
+                    <td><%= reportData?.testingStartDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing End Date</th>
+                    <td><%= reportData?.testingOutCome || "Not Applicable" %></td>
+                    <th>Delay Justification</th>
+                    <td><%= reportData?.delayJustification || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Testing Outcome</th>
+                    <td><%= reportData?.testingOutCome || "Not Applicable" %></td>
+                    <th>Test Plan ID</th>
+                    <td><%= reportData?.testPlanId || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Turnaround Time (TAT)</th>
+                    <td><%= reportData?.turnAroundTime || "Not Applicable" %></td>
+                    <th>Sample Retesting Date</th>
+                    <td><%= reportData?.sampleRetestingDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Review Date</th>
+                    <td><%= reportData?.reviewDate || "Not Applicable" %></td>
+                    <th>Sample Storage Location</th>
+                    <td><%= reportData?.sampleStorageLocation || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Transportation Method</th>
+                    <td><%= reportData?.transportationMethod || "Not Applicable" %></td>
+                    <th>Sample Preparation Method</th>
+                   <td><%= reportData?.samplePreparationMethod || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Packaging Details</th>
+                    <td><%= reportData?.samplePackagingDetail || "Not Applicable" %></td>
+                    <th>Sample Label</th>
+                    <td><%= reportData?.sampleLabel || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Regulatory Requirements</th>
+                    <td><%= reportData?.regulatoryRequirement || "Not Applicable" %></td>
+                    <th>Quality Control Checks</th>
+                    <td><%= reportData?.qualityControlCheck || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Control Sample</th>
+                    <td><%= reportData?.controlSampleReference || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Integrity Status</th>
+                    <td><%= reportData?.sampleIntegrityStatus || "Not Applicable" %></td>
+                    <th>Assigned Department</th>
+                    <td><%= reportData?.assignedDepartment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Risk Assessment</th>
+                    <td><%= reportData?.riskAssessment || "Not Applicable" %></td>
+                    <th>Supervisor</th>
+                    <td><%= reportData?.supervisor || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Instruments Reserved</th>
+                    <td><%= reportData?.instrumentsReserved || "Not Applicable" %></td>
+                    <th>Lab Availability</th>
+                    <td><%= reportData?.labAvailability || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Cost Estimation</th>
+                    <td><%= reportData?.sampleCostEstimation || "Not Applicable" %></td>
+                    <th>Resource Utilization</th>
+                    <td><%= reportData?.resourceUtilization || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Sample Movement History</th>
+                    <td><%= reportData?.sampleMovementHistory || "Not Applicable" %></td>
+                    <th>Testing Progress</th>
+                    <td><%= reportData?.testingProgress || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Alerts/Notifications</th>
+                    <td><%= reportData?.alertNotification || "Not Applicable" %></td>
+                    <th>Deviation Logs</th>
+                    <td><%= reportData?.deviationLog || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Comments/Notes</th>
+                    <td><%= reportData?.commentNotes || "Not Applicable" %></td>
+                    <th>Attachments</th>
+                    <td> <% if (reportData?.attachment) { %>
+                        <a href="<%= reportData.attachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>
+                <tr>
+                    <th>Sampling Frequency</th>
+                    <td><%= reportData?.samplingFrequency || "Not Applicable" %></td>
+                    <th>Sample Disposition</th>
+                    <td><%= reportData?.sampleDisposition || "Not Applicable" %></td>
+                </tr> 
+                <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.saSupportiveAttachment) { %>
+                        <a href="<%= reportData.saSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>            
+            </table>
+        </div>
+        <div class="remarks">
+            <h2 class="heading">Supervisor</h2>
+            <table>
+                <tr>
+                    <th>Stability Study Type</th>
+                    <td><%= reportData?.stabilityStudyType || "Not Applicable" %></td>
+                    <th>Stability Study Protocol</th>
+                    <td><%= reportData?.stabilityStudyProtocol || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Stability Protocol Approval Date</th>
+                    <td><%= reportData?.stabilityProtocolApprovalDate || "Not Applicable" %></td>
+                    <th>Country of Regulatory Submissions</th>
+                    <td><%= reportData?.countryOfRegulatorySubmissions || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>ICH Zone</th>
+                    <td><%= reportData?.ichZone || "Not Applicable" %></td>
+                    <th>Photostability Testing Results</th>
+                    <td><%= reportData?.photoStabilityTestingResult || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Reconstitution Stability</th>
+                    <td><%= reportData?.reConstitutionStability || "Not Applicable" %></td>
+                    <th>Testing Interval (months)</th>
+                    <td><%= reportData?.testingInterval || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Shelf Life Recommendation</th>
+                    <td><%= reportData?.shelfLifeRecommendation || "Not Applicable" %></td>
+                </tr>    
+                  <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.suSupportiveAttachment) { %>
+                        <a href="<%= reportData.suSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>         
+            </table>
+        </div>
+        <div class="remarks">
+            <h2 class="heading">Stability Information</h2>
+            <table>
+                <tr>
+                    <th>Reviewer/Approver</th>
+                    <td><%= reportData?.reviewerApprover || "Not Applicable" %></td>
+                    <th>Reviewer Comment</th>
+                    <td><%= reportData?.reviewerComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Review Date</th>
+                    <td><%= reportData?.reviewDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>QA Reviewer/Approver</th>
+                    <td><%= reportData?.QaReviewerApprover || "Not Applicable" %></td>
+                    <th>QA Reviewer Comment</th>
+                    <td><%= reportData?.QaReviewerComment || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>QA Review Date</th>
+                    <td><%= reportData?.QaReviewDate || "Not Applicable" %></td>
+                </tr>
+                <tr>
+                    <th>Supportive Attachment</th>
+                    <td> <% if (reportData?.siSupportiveAttachment) { %>
+                        <a href="<%= reportData.siSupportiveAttachment %>" target="_blank">View File</a>
+                    <% } else { %>
+                        Not Applicable
+                    <% } %></td>
+                </tr>         
+            </table>
+        </div>
+</body>
+</html>

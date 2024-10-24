@@ -21,16 +21,34 @@ import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
+import TestParametersTable from "./TestParametersTable";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [testParameters, setTestParameters] = useState([]);
+
+  const handleAddRow = () => {
+    setTestParameters([
+      ...testParameters,
+      { sno: "", testParameter: "", usl: "", lsl: "", result: "", remarks: "" },
+    ]);
+  };
+
+  const handleRowChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedRows = testParameters.map((row, idx) =>
+      idx === index ? { ...row, [name]: value } : row
+    );
+    setTestParameters(updatedRows);
+  };
 
   const [formData, setFormData] = useState({
     types: "sample",
     stage: "1",
-    samplePlanId: "",
+    samplePlanId: 1000,
     sampleId: "",
     sampleName: "",
     sampleType: "",
@@ -122,6 +140,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     QaReviewerApprover: "",
     QaReviewerComment: "",
     QaReviewDate: "",
+    suSupportiveAttachment: "",
 
     qaReviewDate: "",
     qaReview: "",
@@ -131,6 +150,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     labTechnician: "",
     initiationDate: "",
     initiator: "",
+    testParameters: [],
   });
 
   const handleTabClick = (tabName) => {
@@ -151,6 +171,12 @@ const SampleWorkflowModal = ({ onClose }) => {
       setFormData((prevData) => ({
         ...prevData,
         [name]: selectedInstruments,
+      }));
+    } else if (e.target.type === "file") {
+      // Handle file input
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0], // Store the first file selected
       }));
     } else {
       setFormData((prevData) => ({
@@ -191,6 +217,10 @@ const SampleWorkflowModal = ({ onClose }) => {
     return options;
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   const getCurrentDate = () => {
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -199,11 +229,21 @@ const SampleWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  useEffect(() => {
+    const storedTestParameters = JSON.parse(
+      localStorage.getItem("testParameters")
+    );
+    if (storedTestParameters) {
+      setTestParameters(storedTestParameters);
+      console.log(storedTestParameters, "testParameters from localStorage");
+    }
+  }, []);
+
   const fetchData = async () => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `http://limsapi.vidyagxp.com/get-Sample/${id}/sample`
       );
       console.log(response.data);
 
@@ -225,7 +265,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/sample`,
+        `http://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -244,28 +284,45 @@ const SampleWorkflowModal = ({ onClose }) => {
   };
 
   const handleSave = async () => {
-    if (id) {
-      await handleEdit();
-    } else {
-      try {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formData
-        );
-        console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Sample Workflow added successfully.");
-          setIsModalOpen(false);
-          navigate("/sampleWorkflow");
-        } else {
-          toast.error("Failed to add Sample Workflow.");
-        }
-      } catch (error) {
-        toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
-        );
+    const formDataToSend = new FormData(); // Create a new FormData object
+
+    // Append all form data to the FormData object
+    for (const key in formData) {
+      if (Array.isArray(formData[key])) {
+        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+      } else {
+        formDataToSend.append(key, formData[key]);
       }
+    }
+
+    // Manually append the test parameters as an array of objects
+    if (testParameters && testParameters.length > 0) {
+      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+      console.log("Test Parameters being sent:", testParameters);
+
+      // Save testParameters to local storage
+      localStorage.setItem("testParameters", JSON.stringify(testParameters));
+    }
+
+    try {
+      if (id) {
+        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+      } else {
+        const response = await axios.post(
+          `http://limsapi.vidyagxp.com/create-sample`,
+          formDataToSend,
+          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+        );
+        // Handle success response
+        toast.success("Sample Workflow added successfully.");
+        setIsModalOpen(false);
+        navigate("/sampleWorkflow");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error); // Log the error
+      toast.error(
+        "Failed to upload file: " + (error.response?.data || error.message)
+      );
     }
   };
 
@@ -273,472 +330,384 @@ const SampleWorkflowModal = ({ onClose }) => {
     switch (tab) {
       case "Sample Registration":
         return (
-          <CForm>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="samplePlanId"
-                  label="Sample Plan ID"
-                  value={formData?.samplePlanId || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="number"
-                  name="sampleId"
-                  label="Sample ID"
-                  value={formData.sampleId || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="sampleName"
-                  label="Sample Name"
-                  value={formData.sampleName || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="sampleType"
-                  label="Sample Type"
-                  value={formData.sampleType || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="productMaterialName"
-                  label="Product / Material Name"
-                  value={formData.productMaterialName || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="batchLotNumber"
-                  label="Batch/Lot Number"
-                  value={formData.batchLotNumber || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol
-                md={12}
-                style={{
-                  marginBottom: "3px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ width: "100%" }}>
-                  <CFormLabel htmlFor="samplePriority">
-                    Sample Priority
-                  </CFormLabel>
-                  <CFormSelect
-                    name="samplePriority"
-                    value={formData.samplePriority || ""}
+            <CForm>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="number"
+                    name="samplePlanId"
+                    label="Sample Plan ID"
+                    value={formData?.samplePlanId || 1000}
                     onChange={handleInputChange}
-                  >
-                    <option value="">Select Priority</option>
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                  </CFormSelect>
-                </div>
-
-                {formData.samplePriority && (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "45px",
-                      marginTop: "25px",
-                      padding: "5px 10px",
-                      backgroundColor: "#f0f0f0",
-                      borderRadius: "20px",
-                      boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        backgroundColor: getPriorityColor(
-                          formData.samplePriority
-                        ),
-                        width: "40px",
-                        height: "10px",
-                        borderRadius: "5px",
-                        marginRight: "10px",
-                        transition: "background-color 0.3s ease",
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "14px",
-                        color: getPriorityColor(formData.samplePriority),
-                      }}
-                    >
-                      {formData.samplePriority} Priority
-                    </span>
-                  </div>
-                )}
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="number"
-                  name="sampleQuantity"
-                  label="Sample Quantity"
-                  value={formData.sampleQuantity || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormSelect
-                  type="text"
-                  name="UOM"
-                  label="UOM"
-                  value={formData.UOM || ""}
-                  onChange={handleInputChange}
-                  options={[
-                    "Select Unit",
-                    { label: "gm", value: "Gm" },
-                    { label: "ml", value: "Ml" },
-                  ]}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3"></CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="market"
-                  label="Market"
-                  value={formData.market || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormLabel>Sample Barcode</CFormLabel>
-
-                <CFormInput
-                  type="text"
-                  name="sampleBarCode"
-                  label=""
-                  value={""}
-                  disabled
-                />
-                <div>
-                  <BarcodeExportButton />
-                </div>
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="specificationId"
-                  label="Specification Id"
-                  value={formData.specificationId || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="file"
-                  name="specificationAttachment"
-                  label="Specification Attachment"
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="stpId"
-                  label="STP Id"
-                  value={formData.stpId || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="file"
-                  name="stpAttachment"
-                  label="STP Attachment"
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testName"
-                  label="Test Name"
-                  value={formData.testName || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testMethod"
-                  label="Test Method"
-                  value={formData.testMethod || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testParameter"
-                  label="Test Parameters"
-                  value={formData.testParameter || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testingFrequency"
-                  label="Testing Frequency"
-                  value={formData.testingFrequency || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testingLocation"
-                  label="Testing Location"
-                  value={formData.testingLocation || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-
-              <CCol md={12} className="mt-3">
-                {/* Label and selected instruments display */}
-                <label htmlFor="requiredInstrument">
-                  Select Required Instruments
-                </label>
-
-                {/* Display selected instruments with the option to remove */}
-                <div className="flex flex-wrap gap-2 mb-2 mt-2">
-                  {formData.requiredInstrument &&
-                  formData.requiredInstrument.length > 0 ? (
-                    formData.requiredInstrument.map((instrument, index) => (
-                      <span
-                        key={index}
-                        className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center"
-                      >
-                        {instrument}
-                        <button
-                          type="button"
-                          className="ml-2 text-red-500"
-                          onClick={() => {
-                            setFormData((prevData) => ({
-                              ...prevData,
-                              requiredInstrument:
-                                prevData.requiredInstrument.filter(
-                                  (item) => item !== instrument
-                                ),
-                            }));
-                          }}
-                        >
-                          &times; {/* Cross icon */}
-                        </button>
-                      </span>
-                    ))
-                  ) : (
-                    <p className="text-gray-500">
-                      No instruments selected yet.
-                    </p>
-                  )}
-                </div>
-
-                {/* Dropdown for selecting instruments */}
-                <CFormSelect
-                  name="requiredInstrument"
-                  value="" // Keep empty so it resets after each selection
-                  onChange={(e) => {
-                    const selectedInstrument = e.target.value;
-                    if (
-                      selectedInstrument &&
-                      !formData.requiredInstrument.includes(selectedInstrument)
-                    ) {
-                      setFormData((prevData) => ({
-                        ...prevData,
-                        requiredInstrument: [
-                          ...prevData.requiredInstrument,
-                          selectedInstrument,
-                        ],
-                      }));
-                    }
+                    min={1000}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="number"
+                    name="sampleId"
+                    label="Sample ID"
+                    value={formData.sampleId || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="sampleName"
+                    label="Sample Name"
+                    value={formData.sampleName || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="sampleType"
+                    label="Sample Type"
+                    value={formData.sampleType || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="productMaterialName"
+                    label="Product / Material Name"
+                    value={formData.productMaterialName || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="batchLotNumber"
+                    label="Batch/Lot Number"
+                    value={formData.batchLotNumber || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol
+                  md={12}
+                  style={{
+                    marginBottom: "3px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <option value="">Select an Instrument</option>
-                  {[
-                    "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
-                    "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
-                    "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
-                    "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
-                    "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
-                    "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
-                    "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
-                    "Moisture Analyzers – For determining the moisture content in products.",
-                    "Conductivity Meter – For measuring the electrical conductivity in solutions.",
-                    "Microbial Incubators – For cultivating and maintaining microbial cultures.",
-                    "Autoclaves – For sterilizing lab equipment and samples.",
-                    "Balances (Analytical and Microbalances) – For precise weighing of samples.",
-                    "Karl Fischer Titrator – For measuring water content in samples.",
-                    "Refractometer – For determining the refractive index of liquids.",
-                    "Polarimeter – For measuring the optical rotation of a substance.",
-                    "Melting Point Apparatus – For determining the melting point of substances.",
-                    "Viscometer – For measuring the viscosity of liquid samples.",
-                    "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
-                    "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
-                    "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
-                    "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
-                  ].map((instrument, index) => (
-                    <option key={index} value={instrument}>
-                      {instrument}
-                    </option>
-                  ))}
-                </CFormSelect>
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="testGrouping"
-                  label="Test Grouping"
-                  value={formData.testGrouping || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="number"
-                  name="lsl"
-                  label="LSL"
-                  value={formData.lsl || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="number"
-                  name="usl"
-                  label="USL"
-                  value={formData.usl || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="date"
-                  name="testingDeadline"
-                  label="Testing Deadline"
-                  value={formData.testingDeadline || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="plannerName"
-                  label="Planner Name"
-                  value={formData.plannerName || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="sampleSource"
-                  label="Sample Source"
-                  value={formData.sampleSource || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="date"
-                  name="plannedDate"
-                  label="Planned Date"
-                  value={formData.plannedDate || ""}
-                  onChange={handleInputChange}
-                  min={getCurrentDate()}
-                />
-              </CCol>
-            </CRow>
-            <CRow className="mb-3">
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="labTechnician"
-                  label="Lab Technician"
-                  value={formData.labTechnician || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="sampleCostEstimation"
-                  label="Sample Cost Estimation"
-                  value={formData.sampleCostEstimation || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-            </CRow>
-            <CRow>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="resourceUtilization"
-                  label="Resource Utilization"
-                  value={formData.resourceUtilization || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CCol md={6}>
-                <CFormInput
-                  type="text"
-                  name="assignedDepartment"
-                  label="Assigned Department"
-                  value={formData.assignedDepartment || ""}
-                  onChange={handleInputChange}
-                />
-              </CCol>
-              <CRow className="mt-3 mb-3">
+                  <div style={{ width: "100%" }}>
+                    <CFormLabel htmlFor="samplePriority">
+                      Sample Priority
+                    </CFormLabel>
+                    <CFormSelect
+                      name="samplePriority"
+                      value={formData.samplePriority || ""}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select Priority</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
+                    </CFormSelect>
+                  </div>
+
+                  {formData.samplePriority && (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginLeft: "45px",
+                        marginTop: "25px",
+                        padding: "5px 10px",
+                        backgroundColor: "#f0f0f0",
+                        borderRadius: "20px",
+                        boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: getPriorityColor(
+                            formData.samplePriority
+                          ),
+                          width: "40px",
+                          height: "10px",
+                          borderRadius: "5px",
+                          marginRight: "10px",
+                          transition: "background-color 0.3s ease",
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "14px",
+                          color: getPriorityColor(formData.samplePriority),
+                        }}
+                      >
+                        {formData.samplePriority} Priority
+                      </span>
+                    </div>
+                  )}
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="number"
+                    name="sampleQuantity"
+                    label="Sample Quantity"
+                    value={formData.sampleQuantity || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormSelect
+                    type="text"
+                    name="UOM"
+                    label="UOM"
+                    value={formData.UOM || ""}
+                    onChange={handleInputChange}
+                    options={[
+                      "Select Unit",
+                      { label: "gm", value: "Gm" },
+                      { label: "ml", value: "Ml" },
+                    ]}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3"></CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="market"
+                    label="Market"
+                    value={formData.market || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormLabel>Sample Barcode</CFormLabel>
+
+                  <CFormInput
+                    type="text"
+                    name="sampleBarCode"
+                    label=""
+                    value={""}
+                    disabled
+                  />
+                  <div>
+                    <BarcodeExportButton />
+                  </div>
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="specificationId"
+                    label="Specification Id"
+                    value={formData.specificationId || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="file"
+                    name="specificationAttachment"
+                    label="Specification Attachment"
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="stpId"
+                    label="STP Id"
+                    value={formData.stpId || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="file"
+                    name="stpAttachment"
+                    label="STP Attachment"
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="testName"
+                    label="Test Name"
+                    value={formData.testName || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="testMethod"
+                    label="Test Method"
+                    value={formData.testMethod || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormSelect
+                    type="text"
+                    name="testParameter"
+                    label="Test Parameters"
+                    value={formData.testParameter || ""}
+                    onChange={handleInputChange}
+                    options={[
+                      "Select Tests",
+                      { label: "Description", value: "Description" },
+                      {
+                        label: "Weight Of 20 tablets",
+                        value: "Weight Of 20 tablets",
+                      },
+                      {
+                        label: "Average Weight ( mg )",
+                        value: "Average Weight ( mg )",
+                      },
+                      { label: "Thickness", value: "Thickness" },
+                      {
+                        label: "Disintigration Time",
+                        value: "Disintigration Time",
+                      },
+                      { label: "Hardness", value: "Hardness" },
+                      { label: "Diameter", value: "Diameter" },
+                      { label: "Friability", value: "Friability" },
+                    ]}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="testingFrequency"
+                    label="Testing Frequency"
+                    value={formData.testingFrequency || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="testingLocation"
+                    label="Testing Location"
+                    value={formData.testingLocation || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+
+                <CCol md={12} className="mt-3 relative">
+                  <label
+                    htmlFor="requiredInstrument"
+                    className="block text-gray-700 text-sm font-medium mb-2"
+                  >
+                    Select Required Instruments
+                  </label>
+
+                  <div
+                    className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
+                    onClick={toggleDropdown} // Toggle dropdown on input click
+                  >
+                    {Array.isArray(formData.requiredInstrument) &&
+                    formData.requiredInstrument.length > 0 ? (
+                      formData?.requiredInstrument?.map((instrument, index) => (
+                        <span
+                          key={index}
+                          className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"
+                        >
+                          {instrument}
+                          <button
+                            type="button"
+                            className="text-red-500 hover:text-red-700"
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent closing dropdown when removing item
+                              setFormData((prevData) => ({
+                                ...prevData,
+                                requiredInstrument:
+                                  prevData.requiredInstrument.filter(
+                                    (item) => item !== instrument
+                                  ),
+                              }));
+                            }}
+                          >
+                            &times;
+                          </button>
+                        </span>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">Select Instruments...</p> // Placeholder when nothing is selected
+                    )}
+                  </div>
+
+                  {dropdownOpen && (
+                    <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-10 transition-all duration-200 ease-in-out">
+                      {[
+                        "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+                        "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+                        "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+                        "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+                        "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+                        "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+                        "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+                        "Moisture Analyzers – For determining the moisture content in products.",
+                        "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+                        "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+                        "Autoclaves – For sterilizing lab equipment and samples.",
+                        "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+                        "Karl Fischer Titrator – For measuring water content in samples.",
+                        "Refractometer – For determining the refractive index of liquids.",
+                        "Polarimeter – For measuring the optical rotation of a substance.",
+                        "Melting Point Apparatus – For determining the melting point of substances.",
+                        "Viscometer – For measuring the viscosity of liquid samples.",
+                        "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+                        "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+                        "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+                        "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+                      ].map((instrument, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition-colors duration-150"
+                          onClick={() => {
+                            if (
+                              !formData.requiredInstrument.includes(instrument)
+                            ) {
+                              setFormData((prevData) => ({
+                                ...prevData,
+                                requiredInstrument: [
+                                  ...prevData.requiredInstrument,
+                                  instrument,
+                                ],
+                              }));
+                            }
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          {instrument}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
                 <CCol md={6}>
                   <CFormInput
                     type="text"
@@ -748,31 +717,153 @@ const SampleWorkflowModal = ({ onClose }) => {
                     onChange={handleInputChange}
                   />
                 </CCol>
+              </CRow>
+              <CRow className="mb-3">
                 <CCol md={6}>
                   <CFormInput
-                    type="date"
-                    name="sampleCollectionDate"
-                    label="Sample Collection Date"
-                    value={formData.sampleCollectionDate || ""}
+                    type="number"
+                    name="lsl"
+                    label="LSL"
+                    value={formData.lsl || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="number"
+                    name="usl"
+                    label="USL"
+                    value={formData.usl || ""}
                     onChange={handleInputChange}
                   />
                 </CCol>
               </CRow>
-            </CRow>
-            <CCol md={12}>
-              <CFormInput
-                type="file"
-                name="srSupportiveAttachment"
-                label="Supportive Attachment"
-                // value={formData?.srSupportiveAttachment || ""}
-                onChange={handleInputChange}
-              />
-            </CCol>
-          </CForm>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="date"
+                    name="testingDeadline"
+                    label="Testing Deadline"
+                    value={formData.testingDeadline || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="plannerName"
+                    label="Planner Name"
+                    value={formData.plannerName || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="sampleSource"
+                    label="Sample Source"
+                    value={formData.sampleSource || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="date"
+                    name="plannedDate"
+                    label="Planned Date"
+                    value={formData.plannedDate || ""}
+                    onChange={handleInputChange}
+                    min={getCurrentDate()}
+                  />
+                </CCol>
+              </CRow>
+              <CRow className="mb-3">
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="labTechnician"
+                    label="Lab Technician"
+                    value={formData.labTechnician || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="sampleCostEstimation"
+                    label="Sample Cost Estimation"
+                    value={formData.sampleCostEstimation || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="resourceUtilization"
+                    label="Resource Utilization"
+                    value={formData.resourceUtilization || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CCol md={6}>
+                  <CFormInput
+                    type="text"
+                    name="assignedDepartment"
+                    label="Assigned Department"
+                    value={formData.assignedDepartment || ""}
+                    onChange={handleInputChange}
+                  />
+                </CCol>
+                <CRow className="mt-3 mb-3">
+                  <CCol md={6}>
+                    <CFormInput
+                      type="text"
+                      name="testGrouping"
+                      label="Test Grouping"
+                      value={formData.testGrouping || ""}
+                      onChange={handleInputChange}
+                    />
+                  </CCol>
+                  <CCol md={6}>
+                    <CFormInput
+                      type="date"
+                      name="sampleCollectionDate"
+                      label="Sample Collection Date"
+                      value={formData.sampleCollectionDate || ""}
+                      onChange={handleInputChange}
+                    />
+                  </CCol>
+                </CRow>
+              </CRow>
+              <CCol md={12}>
+                <CFormInput
+                  type="file"
+                  name="suSupportiveAttachment"
+                  label="Supportive Attachment"
+                  // value={formData?.srSupportiveAttachment || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+            </CForm>
         );
       case "Sample Analysis":
         return (
           <CForm>
+            <CButton color="primary" onClick={handleAddRow}>
+              Add Test Parameters Row
+            </CButton>
+
+            {/* Use the TestParametersTable component */}
+            <TestParametersTable
+              testParameters={testParameters}
+              handleRowChange={handleRowChange}
+              value={formData?.testParameters || ""}
+              onChange={handleInputChange}
+            />
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput

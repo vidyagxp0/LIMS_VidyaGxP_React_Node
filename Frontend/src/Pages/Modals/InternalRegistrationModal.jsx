@@ -38,8 +38,8 @@ const InternalRegistrationModal = ({
     directionOfUsage: "",
     sequence: "",
     noOfPurities: "",
-    productname:"",
-    sequenceNo:"",
+    productname: "",
+    sequenceNo: "",
     uom: "",
     purityDetails: [{ sno: 1, purity: "", valueUom: "" }],
     additionalPuritiesInformation: "",
@@ -64,8 +64,8 @@ const InternalRegistrationModal = ({
       containerType: "",
       storageCondition: "",
       wsBatchQuantity: "",
-      productname:"",
-    sequenceNo:"",
+      productname: "",
+      sequenceNo: "",
       availableQuantity: "",
       lotQuantity: "",
       wsValidateOn: "",
@@ -110,7 +110,7 @@ const InternalRegistrationModal = ({
 
     axios
       .post(
-        `http://localhost:9000/manage-lims/add/iWSInternalRegistration`,
+        `http://limsapi.vidyagxp.com/manage-lims/add/iWSInternalRegistration`,
         newSampleData
       )
       .then((response) => {
@@ -147,14 +147,12 @@ const InternalRegistrationModal = ({
             value={internalData.productname}
             onChange={(e) => handleInputChange("productname", e.target.value)}
             className="mb-3"
-           
           />
-           <CFormInput
+          <CFormInput
             label="Sequence No."
             value={internalData.sequenceNo}
             onChange={(e) => handleInputChange("sequenceNo", e.target.value)}
             className="mb-3"
-           
           />
           <CFormSelect
             label="Lot Type"

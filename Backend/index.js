@@ -9,6 +9,8 @@ import helmet from "helmet";
 import { connectToDB } from "./src/config/db.js";
 import config from "./src/config/config.json" assert { type: "json" };
 import fs from "fs/promises"; // Use fs/promises for ES module support
+import analystRouter from "./src/routes/analyst.route.js";
+import controlSampleRouter from "./src/routes/controlSample.route.js";
 
 const app = express();
 
@@ -48,6 +50,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", limsRouter);
 app.use("/admin", adminRouter);
 app.use("/", sampleRouter);
+app.use("/analyst", analystRouter);
+app.use("/controlSample", controlSampleRouter);
 
 // Helper function to get base64 encoded image
 const getBase64Image = async (filePath) => {
@@ -77,7 +81,7 @@ const PORT = config.development.PORT || 9000;
 app.listen(PORT, "0.0.0.0", async () => {
   try {
     await connectToDB();
-    console.log(`Server is running on ${config.development.URL}:${PORT}`);
+    console.log(`Server is running on ${config.development.URL}`);
   } catch (e) {
     console.log("Error in database connection", e);
   }

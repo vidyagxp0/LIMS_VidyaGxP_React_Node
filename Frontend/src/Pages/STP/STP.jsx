@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
-import ImportModal from "../Modals/importModal";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import { randomData } from "./demoStp";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
@@ -34,7 +33,6 @@ const STP = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
   const [editModalData, setEditModalData] = useState(null);
-  const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [dataChanged, setDataChanged] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   // const [data, setData] = useState(() => {
@@ -154,83 +152,18 @@ const STP = () => {
     fetchSTPs();
   }, [dataChanged]);
 
-  const handleSelectAll = (e) => {
-    const checked = e.target.checked;
-    const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    setData(newData);
-  };
-
-    const columns = [
-      {
-        header: <input type="checkbox" onChange={handleSelectAll} />,
-        accessor: "checkbox",
-      },
-      { header: "SrNo.", accessor: "sno" },
-      { header: "Storage Code", accessor: "storageCode" },
-      { header: "Storage Name", accessor: "storageName" },
-      { header: "attachment", accessor: "attachment" },
-      { header: "Status", accessor: "status" },
-      {
-        header: "Actions",
-        accessor: "action",
-        Cell: ({ row }) => (
-          <>
-            <FontAwesomeIcon
-              icon={faEye}
-              className="mr-2 cursor-pointer"
-              onClick={() => onViewDetails(row)}
-            />
-            <FontAwesomeIcon
-              icon={faPenToSquare}
-              className="mr-2 cursor-pointer"
-            />
-            <FontAwesomeIcon
-              icon={faTrashCan}
-              className="cursor-pointer"
-              onClick={() => onDeleteItem(row)}
-            />
-          </>
-        ),
-      },
-    ];
-
-
-
-  // const filteredData = Array.isArray(data)
-  //   ? data.filter((row) => {
-  //     console.log("Row:", row); // Log each row to see its structure
-  //     const productName = row.productName || "";
-  //     return (
-  //       productName.toLowerCase().includes(searchQuery.toLowerCase()) &&
-  //       (statusFilter === "All" || row.status === statusFilter)
-  //     );
-  //   })
-  //   : [];
-
-
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno: index + 1,
-      storageName: item["Storage Name"] || "",
-      StorageCode: item["Storage Code"] || "",
-      attachment: item["attachment"] || "",
-      status: item["Status"] || "Active",
-    }));
-
-    const concatenatedData = [...updatedData];
-    setData(concatenatedData);
-    setIsModalsOpen(false);
-  };
-
+  // POST API - Add new STP
   const handleAddSTP = async (newSTPData) => {
     setIsLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/add/STP`, newSTPData);
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/STP`,
+        newSTPData
+      );
       if (response.status === 200 || response.status === 201) {
-        setData(prevData => [...prevData, response.data]);  // Ensure new data is appended
-        toast.success("New STP added successfully!");
+        setData((prevData) => [...prevData, response.data]);
         fetchSTPs();
+        toast.success("New STP added successfully!");
       } else {
         toast.error("Failed to add new STP. Please try again.");
       }
@@ -267,7 +200,6 @@ const STP = () => {
       setIsLoading(false);
     }
   };
-
 
   const AddSTPModal = ({ visible, closeModal, onAdd }) => {
     const [formData, setFormData] = useState({
@@ -320,8 +252,8 @@ const STP = () => {
 
     const validateForm = () => {
       const newErrors = {};
-      Object.keys(formData).forEach(key => {
-        if (!formData[key] && key !== 'attachment' && key !== 'attachments') {
+      Object.keys(formData).forEach((key) => {
+        if (!formData[key] && key !== "attachment" && key !== "attachments") {
           newErrors[key] = "This field is required";
         }
       });
@@ -331,14 +263,18 @@ const STP = () => {
 
     const handleAdd = () => {
       if (validateForm()) {
-
         onAdd(formData);
         closeModal();
       }
     };
 
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="md">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>Add STP</CModalTitle>
         </CModalHeader>
@@ -346,9 +282,18 @@ const STP = () => {
           <CForm>
             {Object.entries(formData).map(([key, value]) => {
               let inputType = "text";
-              if (key.includes("date")) {
+
+              if (key === "effectiveDate") {
                 inputType = "date";
-              } else if (key.includes("number") || key === "version") {
+              } else if (key === "creationDate") {
+                inputType = "date";
+              } else if (key.includes("date")) {
+                inputType = "date";
+              } else if (
+                key.includes("number") ||
+                key === "version" ||
+                key === "stpId"
+              ) {
                 inputType = "number";
               } else if (key === "attachment" || key === "attachments") {
                 inputType = "file";
@@ -359,7 +304,13 @@ const STP = () => {
                   key={key}
                   className="mb-3"
                   type={inputType}
-                  label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1").trim()}
+                  label={
+                    key.charAt(0).toUpperCase() +
+                    key
+                      .slice(1)
+                      .replace(/([A-Z])/g, " $1")
+                      .trim()
+                  }
                   name={key}
                   value={inputType !== "file" ? value : undefined}
                   onChange={handleChange}
@@ -409,8 +360,8 @@ const STP = () => {
 
     const validateForm = () => {
       const newErrors = {};
-      Object.keys(formData).forEach(key => {
-        if (!formData[key] && key !== 'uniqueId' && key !== 'sno') {
+      Object.keys(formData).forEach((key) => {
+        if (!formData[key] && key !== "uniqueId" && key !== "sno") {
           newErrors[key] = "This field is required";
         }
       });
@@ -437,7 +388,12 @@ const STP = () => {
     if (!visible) return null;
 
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="xl">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>Edit STP</CModalTitle>
         </CModalHeader>
@@ -474,7 +430,13 @@ const STP = () => {
                     <CFormInput
                       className="mb-3"
                       type={inputType}
-                      label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, " $1").trim()}
+                      label={
+                        key.charAt(0).toUpperCase() +
+                        key
+                          .slice(1)
+                          .replace(/([A-Z])/g, " $1")
+                          .trim()
+                      }
                       name={key}
                       value={inputType !== "file" ? value : undefined}
                       onChange={handleChange}
@@ -502,36 +464,32 @@ const STP = () => {
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
-  const openModal = () => {
-    setIsModalsOpen(true);
-  };
-  const handleCloseModals = () => {
-    setIsModalsOpen(false);
-  };
 
   const closeViewModal = () => {
     setViewModalData(null);
   };
 
-  // const openModal = (mode, item = null) => {
-  //   setModalMode(mode);
-  //   setCurrentItem(item);
-  //   if (mode === "edit" || mode === "view") {
-  //     setNewStorageLocation(item);
-  //   } else {
-  //     setNewStorageLocation({
-  //       stpId: "",
-  //       title: "",
-  //       attachment: "",
-  //       // ... (reset all other fields)
-  //     });
-  //   }
-  //   setIsModalOpen(true);
-  // };
+  const openModal = (mode, item = null) => {
+    setModalMode(mode);
+    setCurrentItem(item);
+    if (mode === "edit" || mode === "view") {
+      setNewStorageLocation(item);
+    } else {
+      setNewStorageLocation({
+        stpId: "",
+        title: "",
+        attachment: "",
+        // ... (reset all other fields)
+      });
+    }
+    setIsModalOpen(true);
+  };
 
   const handleDelete = async (item) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/delete-lims/STP/${item.sno}`);
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/STP/${item.sno}`
+      );
       if (response.status === 200) {
         const updatedData = data.filter(
           (dataItem) => dataItem.sno !== item.sno
@@ -544,7 +502,10 @@ const STP = () => {
       }
     } catch (error) {
       console.error("Error deleting STP:", error);
-      toast.error("Error deleting STP: " + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error deleting STP: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -675,10 +636,9 @@ const STP = () => {
                 { value: "Inactive", label: "Inactive" },
               ]}
               value={""}
-              onChange={(newValue) => console.log(newValue)}  // yahan ek function pass karo
+              onChange={""}
               className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             />
-
           </div>
 
           <div className="flex justify-end space-x-4 text-nowrap">
@@ -692,7 +652,7 @@ const STP = () => {
             <ATMButton
               text="Import"
               color="pink"
-              onClick={openModal} // Open the modal correctly
+              onClick={"handleOpenModals"}
               className="px-4 py-2 bg-pink-500 text-white rounded-md shadow hover:bg-pink-600 transition"
             />
             <ATMButton
@@ -780,8 +740,9 @@ const STP = () => {
               onClick={() =>
                 handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
               }
-              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-                }`}
+              className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+                currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
               disabled={currentPage === 1}
             >
               Previous
@@ -790,10 +751,11 @@ const STP = () => {
               <button
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
-                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${currentPage === index + 1
-                  ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                  : "hover:text-blue-500"
-                  }`}
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
+                  currentPage === index + 1
+                    ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                    : "hover:text-blue-500"
+                }`}
               >
                 {index + 1}
               </button>
@@ -806,10 +768,11 @@ const STP = () => {
                     : totalPageCount
                 )
               }
-              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${currentPage === totalPageCount
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
-                }`}
+              className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+                currentPage === totalPageCount
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
               disabled={currentPage === totalPageCount}
             >
               Next
@@ -842,16 +805,6 @@ const STP = () => {
           onSave={handleEditSave}
         />
       )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-          onDataUpload={handleExcelDataUpload}
-        />
-      )}
-
     </div>
   );
 };
