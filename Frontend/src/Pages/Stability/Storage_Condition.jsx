@@ -40,6 +40,12 @@ function Storage_Condition() {
   console.log(data, "datatatatatatata");
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
+  const fields = [
+    { label: "Condition Code", key: "conditionCode" },
+    { label: "Stability Condition", key: "stabilityCondition" },
+    { label: "Description", key: "description" },
+    { label: "Status", key: "status" },
+  ];
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -156,9 +162,20 @@ function Storage_Condition() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+           icon={faEye} 
+           className="mr-2 cursor-pointer" 
+           onClick={() => onViewDetails(row)} 
+           />
+          <FontAwesomeIcon
+           icon={faPenToSquare}
+            onClick={() => openEditModal(row.original)} 
+            className="mr-2 cursor-pointer" 
+            />
+          <FontAwesomeIcon 
+          icon={faTrashCan} 
+          className="cursor-pointer" 
+          />
         </>
       ),
     },
@@ -241,6 +258,44 @@ function Storage_Condition() {
       );
     }
   };
+  
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData || !viewModalData.uniqueId) {
+      console.error("No valid admin data selected for update");
+      toast.error("No valid data selected for update");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`,
+        { status: newStatus }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Status updated successfully");
+        closeViewModal();
+        fetchData(); // Refresh the data after update
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };  
+  
+  
+  
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [stabilityCondition, setStabilityCondition] = useState("");
@@ -418,7 +473,7 @@ function Storage_Condition() {
       )}
       {viewModalData && (
         <ReusableModal
-          visible={viewModalData !== null}
+          visible={viewModalData}
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}

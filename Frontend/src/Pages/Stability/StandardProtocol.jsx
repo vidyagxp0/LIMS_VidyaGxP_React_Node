@@ -153,6 +153,41 @@ function StandardProtocol() {
   };
   
 
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData || !viewModalData.uniqueId) {
+      console.error("No valid admin data selected for update");
+      toast.error("No valid data selected for update");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`,
+        { status: newStatus }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Status updated successfully");
+        closeViewModal();
+        fetchData(); // Refresh the data after update
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };  
+  
 
   
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -409,7 +444,7 @@ function StandardProtocol() {
           fields={fields}
           onClose={handleCloseModals}
           title="Standard Protocol Details"
-          // updateStatus={handleStatusUpdate}
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (
