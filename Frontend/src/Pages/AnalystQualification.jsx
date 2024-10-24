@@ -23,7 +23,7 @@ import toast from "react-hot-toast";
 
 const AnalystQualification = () => {
   const [data, setData] = useState([]);
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,11 +42,9 @@ const AnalystQualification = () => {
   const handleEdit = (analyst) => {
     setSelectedAnalyst(analyst); // Set the selected analyst data
     // console.log(analyst,"ANNNNNNN");
-    
+
     setIsModalOpen(true); // Open the modal
   };
- 
-
 
   const closeWorkflowModal = () => {
     setShowModal(false);
@@ -85,7 +83,6 @@ const AnalystQualification = () => {
     );
   });
   // console.log(filteredData,"FILTERED DATA");
-  
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -97,6 +94,8 @@ const AnalystQualification = () => {
       data.map((d) => (d === item ? { ...d, checkbox: e.target.checked } : d))
     );
   };
+
+ 
 
   const columns = [
     {
@@ -170,6 +169,8 @@ const AnalystQualification = () => {
     { header: "Modification Date", accessor: "modificationDate" },
     { header: "Modified By", accessor: "modifiedBy" },
     { header: "Change Description", accessor: "changeDescription" },
+    { header: "Status", accessor: "status" },
+    { header: "Generate PDf", accessor: "report" },
     {
       header: "Actions",
       accessor: "action",
@@ -259,9 +260,7 @@ const AnalystQualification = () => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(
-        `${BASE_URL}/analyst/delete-analyst/${item.id}`
-      );
+      await axios.delete(`${BASE_URL}/analyst/delete-analyst/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -274,10 +273,36 @@ const AnalystQualification = () => {
     }
   };
 
+  const generatePDF = async (analystId) => {
+    console.log("Generating PDF for analyst ID:", analystId);
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
+    try {
+      const response = await fetch(
+        `http://localhost:9000/analyst/get-analyst/${analystId}`
+      );
+      console.log("Response", response);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Sample_Report_${analystId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
+  };
+
   const onViewDetails = (row) => {
     // setViewModalData(row);
     setIsViewModalOpen(true);
-    navigate(`/analyst-qualification-edit/${row.id}`)
+    navigate(`/analyst-qualification-edit/${row.id}`);
   };
 
   const closeViewModal = () => {
@@ -310,8 +335,7 @@ const AnalystQualification = () => {
 
   return (
     <>
-    <div><ToastContainer/></div>
-    <LaunchQMS/>
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Analyst Qualification</h4>
@@ -349,7 +373,7 @@ const AnalystQualification = () => {
           </div>
         </div>
         {/* {console.log(filteredData, "Table Ko Sendd")} */}
-        
+
         <Table
           columns={columns}
           data={filteredData}
