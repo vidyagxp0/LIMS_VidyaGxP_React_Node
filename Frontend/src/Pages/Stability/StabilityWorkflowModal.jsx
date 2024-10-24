@@ -21,10 +21,14 @@ import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
+import TestParametersTable from "./TestParametersTable";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const StabilityWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [testParameters, setTestParameters] = useState([]);
+
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
@@ -145,6 +149,23 @@ const StabilityWorkflowModal = ({ onClose }) => {
     return randomNumbers;
   };
 
+
+  const handleAddRow = () => {
+    setTestParameters([
+      ...testParameters,
+      { sno: "", testParameter: "", usl: "", lsl: "", result: "", remarks: "" },
+    ]);
+  };
+
+  const handleRowChange = (index, e) => {
+    const { name, value } = e.target;
+    const updatedRows = testParameters.map((row, idx) =>
+      idx === index ? { ...row, [name]: value } : row
+    );
+    setTestParameters(updatedRows);
+  };
+
+
   const fetchId = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/sample`);
@@ -236,7 +257,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/stability`
+        `http://limsapi.vidyagxp.com/get-Sample/${id}/stability`
       );
       // console.log(response.data);
 
@@ -258,7 +279,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/stability`,
+        `http://limsapi.vidyagxp.com/edit-sample/${id}/stability`,
         formData
       );
       if (response.status === 200) {
@@ -275,14 +296,40 @@ const StabilityWorkflowModal = ({ onClose }) => {
       );
     }
   };
+  useEffect(() => {
+    const storedTestParameters = JSON.parse(localStorage.getItem("testParameterss"));
+    if (storedTestParameters) {
+      setTestParameters(storedTestParameters);
+      console.log(storedTestParameters, "testParameters from localStorage");
+    }
+  }, []);
 
   const handleSave = async () => {
+    const formDataToSend = new FormData(); // Create a new FormData object
+
+    // Append all form data to the FormData object
+    for (const key in formData) {
+        if (Array.isArray(formData[key])) {
+            formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+        } else {
+            formDataToSend.append(key, formData[key]);
+        }
+    }
+
+    // Manually append the test parameters as an array of objects
+    if (testParameters && testParameters.length > 0) {
+        formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+        console.log("Test Parameters being sent:", testParameters);
+        
+        // Save testParameters to local storage
+        localStorage.setItem("testParameterss", JSON.stringify(testParameters));
+    }
     if (id) {
       await handleEdit();
     } else {
       try {
         const response = await axios.post(
-          `http://localhost:9000/create-sample`,
+          `http://limsapi.vidyagxp.com/create-sample`,
           formData
         );
         // console.log(response, "iddddddddddddddddddddddd");
@@ -806,6 +853,17 @@ const StabilityWorkflowModal = ({ onClose }) => {
       case "Sample Analysis":
         return (
           <CForm>
+            <CButton color="primary" onClick={handleAddRow}>
+              Add Test Parameters Row
+            </CButton>
+
+            {/* Use the TestParametersTable component */}
+            <TestParametersTable
+              testParameters={testParameters}
+              handleRowChange={handleRowChange}
+              value={formData?.testParameters || ""}
+              onChange={handleInputChange}
+            />
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -1357,6 +1415,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
       case "QA Review":
         return (
           <CForm>
+
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">

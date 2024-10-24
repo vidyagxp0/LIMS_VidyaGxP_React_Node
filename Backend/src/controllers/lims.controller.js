@@ -13,6 +13,7 @@ const commonFeilds = [
   "specification",
   "storageCondition",
   "specificationStp",
+  "specificationSpec",
   "storageLocation",
   "STP",
   "analystPersonal",

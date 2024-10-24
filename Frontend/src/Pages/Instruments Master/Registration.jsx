@@ -50,10 +50,6 @@ const Registration = () => {
   });
   const [lastStatus, setLastStatus] = useState("INITIATED");
 
-  useEffect(() => {
-    fetchProductData();
-  }, []);
-
   const fetchProductData = async () => {
     try {
       const response = await axios.get(
@@ -70,12 +66,12 @@ const Registration = () => {
               Instrument: condition.Instrument || "",
               Made: condition.Made || "-",
               Model: condition.Model || "-",
-              MenuNo: condition.MenuNo || "-",
+              menuNo: condition.menuNo || "-",
               InstalledAt: condition.InstalledAt || "-",
               calibrationDate: condition.calibrationDate || "-",
               calibrationDueOn: condition.calibrationDueOn || "-",
               calibrationStatus: condition.calibrationStatus || "calibrated",
-              ExpiryOn: condition.ExpiryOn || "-",
+              expiryOn: condition.expiryOn || "-",
               status: condition.status || "Active",
             })) || []
         );
@@ -88,8 +84,9 @@ const Registration = () => {
     }
   };
 
-  
-
+  useEffect(() => {
+    fetchProductData();
+  }, []);
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
@@ -117,6 +114,7 @@ const Registration = () => {
           )
         );
         toast.success("Product updated successfully.");
+        fetchProductData();
         setEditModalData(null);
         closeModal();
       } else {
@@ -314,6 +312,15 @@ const Registration = () => {
             value={formData?.calibrationDate || ""}
             onChange={handleChange}
           />
+           <CFormInput
+            className="mb-3"
+            type="text"
+            label="Menu No."
+            placeholder="menuNo"
+            name="menuNo"
+            value={formData?.menuNo || ""}
+            onChange={handleChange}
+          />
           <CFormInput
             className="mb-3"
             type="text"
@@ -476,9 +483,9 @@ const Registration = () => {
     { header: "Instrument", accessor: "Instrument" },
     { header: "Made", accessor: "Made" },
     { header: "Model", accessor: "Model" },
-    { header: "Menu No.", accessor: "MenuNo" },
+    { header: "Menu No.", accessor: "menuNo" },
     { header: "Installed At", accessor: "InstalledAt" },
-    { header: "Expiry On", accessor: "ExpiryOn" },
+    { header: "Expiry On", accessor: "expiryOn" },
     { header: "Status", accessor: "status" },
     { header: "Calibration Date", accessor: "calibrationDate" },
     { header: "Calibration Due On", accessor: "calibrationDueOn" },
@@ -498,20 +505,20 @@ const Registration = () => {
         </span>
       ),
     },
-    {
-      header: "Report",
-      accessor: "report",
-      Cell: ({ row }) => (
-        <>
-          {/* View icon */}
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => generatePDF(row.id)}
-          />
-        </>
-      ),
-    },
+    // {
+    //   header: "Report",
+    //   accessor: "report",
+    //   Cell: ({ row }) => (
+    //     <>
+    //       {/* View icon */}
+    //       <FontAwesomeIcon
+    //         icon={faEye}
+    //         className="mr-2 cursor-pointer"
+    //         onClick={() => generatePDF(row.id)}
+    //       />
+    //     </>
+    //   ),
+    // },
     {
       header: "Actions",
       accessor: "action",
@@ -547,12 +554,12 @@ const Registration = () => {
     { label: "Instrument", key: "Instrument" },
     { label: "Made", key: "Made" },
     { label: "Model", key: "Model" },
-    { label: "MenuNo", key: "MenuNo" },
+    { label: "menuNo", key: "menuNo" },
     { label: "InstalledAt", key: "InstalledAt" },
     { label: "calibrationDueOn", key: "calibrationDueOn" },
     { label: "calibrationStatus", key: "calibrationStatus" },
     { label: "calibrationDate", key: "calibrationDate" },
-    { label: "ExpiryOn", key: "ExpiryOn" },
+    { label: "expiryOn", key: "expiryOn" },
     { label: "status", key: "status" },
   ];
 
@@ -571,12 +578,12 @@ const Registration = () => {
       Instrument: item["Instrument"] || "",
       Made: item["Made"] || "",
       Model: item["Model"] || "",
-      MenuNo: item["Manu No."] || "",
+      menuNo: item["Manu No."] || "",
       InstalledAt: item["Installed At"] || "",
       calibrationStatus: item["Calibration Status"] || "",
       calibrationDueOn: item["Calibration Due Date"] || "",
       calibrationDate: item["Calibration Date"] || "",
-      ExpiryOn: item["Expiry On"] || "",
+      expiryOn: item["Expiry On"] || "",
       status: item["Status"] || "",
     }));
 
@@ -597,12 +604,12 @@ const Registration = () => {
         Instrument: newInstrument.Instrument,
         Made: newInstrument.Made,
         Model: newInstrument.Model,
-        MenuNo: newInstrument.manufacturerSerialNo,
+        MenuNo: newInstrument.MenuNo,
         InstalledAt: newInstrument.InstalledAt,
         calibrationStatus: newInstrument.calibrationStatus,
         calibrationDueOn: newInstrument.calibrationDueOn,
         calibrationDate: newInstrument.calibrationDate,
-        ExpiryOn: newInstrument.warrantyExpiresOn,
+        ExpiryOn: newInstrument.ExpiryOn,
         status: "INITIATED",
       },
     ];
@@ -631,6 +638,7 @@ const Registration = () => {
       if (response.status === 200) {
         setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
         toast.success("Registration deleted successfully.");
+        fetchProductData();
       } else {
         toast.error("Failed to delete Registration.");
       }
@@ -681,8 +689,8 @@ const Registration = () => {
             <Dropdown
               options={[
                 { value: "All", label: "All" },
-                { value: "calibrated", label: "Calibrated" },
-                { value: "nonCalibrated", label: "Non Calibrated" },
+                { value: "Calibrated", label: "Calibrated" },
+                { value: "Non Calibrated", label: "Non Calibrated" },
               ]}
               value={statusFilter}
               onChange={setStatusFilter}

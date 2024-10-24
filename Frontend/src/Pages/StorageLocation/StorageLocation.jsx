@@ -283,7 +283,7 @@ function StorageLocation() {
         <CModalBody>
           <CFormInput
             type="text"
-            label="Name"
+            label="Storage Name"
             placeholder="Storage Name"
             value={storageName}
             onChange={(e) => setstorageName(e.target.value)}

@@ -6,7 +6,7 @@ function LaunchQMS() {
   return (
     <div>
       {" "}
-      <div className="fixed top-3/4 right-0 z-10 flex flex-col">
+      <div className="fixed top-[65%] right-0 z-10 flex flex-col">
         {/* Launch QMS Button */}
         <div>
           <button
@@ -71,6 +71,22 @@ function LaunchQMS() {
                       onClick={() => navigate("ipc.mydemosoftware.com")}
                     >
                       Risk Assissment
+                    </button>
+                  </a>
+                  <a href="https://ipc.mydemosoftware.com">
+                    <button
+                      className="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-700 min-w-[200px]"
+                      onClick={() => navigate("ipc.mydemosoftware.com")}
+                    >
+                      OOS
+                    </button>
+                  </a>
+                  <a href="https://ipc.mydemosoftware.com">
+                    <button
+                      className="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-700 min-w-[200px]"
+                      onClick={() => navigate("ipc.mydemosoftware.com")}
+                    >
+                      OOT
                     </button>
                   </a>
 

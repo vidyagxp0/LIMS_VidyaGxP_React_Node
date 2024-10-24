@@ -33,11 +33,11 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
     }
 
     if (resultValue < lslValue || resultValue > uslValue) {
-      return { border: "4px solid red" }; // Red border if result is outside range
+      return { border: "4px solid red", color: "red" }; // Red border and text color if result is outside range
     }
 
     if (resultValue >= lslValue && resultValue <= uslValue) {
-      return { border: "4px solid green" }; // Green border if result is within range
+      return { border: "4px solid green", color: "green" }; // Green border and text color if result is within range
     }
 
     // Default style
@@ -69,12 +69,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
         {testParameters.map((row, index) => (
           <CTableRow key={index}>
             <CTableDataCell>
-              <CFormInput
-                type="text"
-                name="sno"
-                value={index + 1} 
-                disabled
-              />
+              <CFormInput type="text" name="sno" value={index + 1} disabled />
             </CTableDataCell>
             <CTableDataCell>
               <CFormSelect
@@ -104,7 +99,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
               <CFormInput
                 type="number"
                 name="usl"
-                value={row.usl}                
+                value={row.usl}
                 min={0}
                 onChange={(e) => handleRowChange(index, e)}
               />
@@ -112,11 +107,11 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
 
             <CTableDataCell>
               <CFormInput
-                type="text"
+                type="number"
                 name="result"
                 value={row.result}
                 onChange={(e) => handleRowChange(index, e)}
-                style={getResultCellStyle(row)} // Apply dynamic border color
+                style={getResultCellStyle(row)} // Apply dynamic border and text color
                 disabled={!isResultEditable(row)} // Disable if LSL/USL are invalid
               />
             </CTableDataCell>
