@@ -57,7 +57,7 @@ const InstrumentMasterModal = ({
     calibrationDate: "",
     calibrationDueOn: "",
     Model: "",
-    MenuNo:"",
+    MenuNo: "",
     fields: [],
     manufacturerSerialNo: "",
     capacitySize: "",
@@ -84,7 +84,7 @@ const InstrumentMasterModal = ({
       calibrationDueOn: "",
       Made: "",
       Model: "",
-      MenuNo:"",
+      MenuNo: "",
       fields: [],
       manufacturerSerialNo: "",
       capacitySize: "",
@@ -144,7 +144,7 @@ const InstrumentMasterModal = ({
     e.preventDefault();
     axios
       .post(
-        `http://limsapi.vidyagxp.com/manage-lims/add/iMRegistration`,
+        `http://localhost:9000/manage-lims/add/iMRegistration`,
         instrumentData
       )
       .then((response) => {
@@ -248,14 +248,14 @@ const InstrumentMasterModal = ({
             value={instrumentData.Made}
             onChange={(e) => handleInputChange("Made", e.target.value)}
           />
-              <CFormInput
-                className="mb-3"
-                type="number"
-                label="MenuNo"
-                placeholder="MenuNo"
-                value={instrumentData.MenuNo}
-                onChange={(e) => handleInputChange("MenuNo", e.target.value)}
-              />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="MenuNo"
+            placeholder="MenuNo"
+            value={instrumentData.MenuNo}
+            onChange={(e) => handleInputChange("MenuNo", e.target.value)}
+          />
           <CRow className="d-flex align-items-center justify-content-center">
             <CCol sm={8}>
               <CFormInput
