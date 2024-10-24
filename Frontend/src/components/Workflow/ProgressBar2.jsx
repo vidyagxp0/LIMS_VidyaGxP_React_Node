@@ -49,7 +49,7 @@ export const ProgressBar2 = (props) => {
       }
 
       const response = await axios.post(
-        "http://limsapi.vidyagxp.com/e-signature",
+        "http://localhost:9000/e-signature",
         { email, password },
         {
           headers: {
@@ -62,7 +62,7 @@ export const ProgressBar2 = (props) => {
         console.log(analystId, "AAAAAAAAAAAAAAAAAAAA");
 
         await axios.post(
-          `http://limsapi.vidyagxp.com/analyst/${url}`,
+          `http://localhost:9000/analyst/${url}`,
           { analystId, comment },
           {
             headers: {
@@ -185,7 +185,7 @@ export const ProgressBar3 = (props) => {
       const comment = formData.comment;
 
       const response = await axios.post(
-        "http://limsapi.vidyagxp.com/e-signature",
+        "http://localhost:9000/e-signature",
         { email, password },
         {
           headers: {
@@ -196,7 +196,7 @@ export const ProgressBar3 = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `http://limsapi.vidyagxp.com/controlSample/${url}`,
+          `http://localhost:9000/controlSample/${url}`,
           { controlSampleId, comment },
           {
             headers: {

@@ -40,11 +40,11 @@ function Login(props) {
 
     try {
       const response = await axios.post(
-        "http://limsapi.vidyagxp.com/admin/user-login",
+        "http://localhost:9000/admin/user-login",
         {
           email,
           password: passwd,
-        }
+        } 
       );
 
       const { token, data } = response.data;

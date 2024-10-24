@@ -209,6 +209,42 @@ function SampleLogin() {
 
   const closeViewModal = () => setViewModalData(null);
 
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData || !viewModalData.uniqueId) {
+      console.error("No valid admin data selected for update");
+      toast.error("No valid data selected for update");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sL/${viewModalData.uniqueId}`,
+        { status: newStatus }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Status updated successfully");
+        closeViewModal();
+        fetchSamples(); // Refresh the data after update
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };  
+
+  
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [sampleData, setSampleData] = useState({
       sampleType: "",
@@ -532,6 +568,7 @@ function SampleLogin() {
           data={viewModalData}
           fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action' && field.key !== 'checkbox')}
           title="Sample Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
 
