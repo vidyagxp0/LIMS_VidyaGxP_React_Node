@@ -357,7 +357,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="samplePlanId"
                   label="Sample Plan ID"
                   value={formData?.samplePlanId || ""}
@@ -519,7 +519,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={idForBarcode}
+                  // value={idForBarcode}
                   disabled
                 />
                 <div>
