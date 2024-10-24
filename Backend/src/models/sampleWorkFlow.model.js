@@ -308,6 +308,10 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  testParameters: {
+    type: DataTypes.JSON,
+    allowNull: true,
+  },
   analysisType: {
     type: DataTypes.TEXT,
     allowNull: true,

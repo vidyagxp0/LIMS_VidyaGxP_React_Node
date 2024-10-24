@@ -229,15 +229,15 @@ const SampleWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  useEffect(() => {
-    const storedTestParameters = JSON.parse(
-      localStorage.getItem("testParameters")
-    );
-    if (storedTestParameters) {
-      setTestParameters(storedTestParameters);
-      console.log(storedTestParameters, "testParameters from localStorage");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedTestParameters = JSON.parse(
+  //     localStorage.getItem("testParameters")
+  //   );
+  //   if (storedTestParameters) {
+  //     setTestParameters(storedTestParameters);
+  //     console.log(storedTestParameters, "testParameters from localStorage");
+  //   }
+  // }, []);
 
   const fetchData = async () => {
     if (!id) return;
@@ -295,13 +295,11 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
 
-    // Manually append the test parameters as an array of objects
+   // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
       console.log("Test Parameters being sent:", testParameters);
 
-      // Save testParameters to local storage
-      localStorage.setItem("testParameters", JSON.stringify(testParameters));
     }
 
     try {
