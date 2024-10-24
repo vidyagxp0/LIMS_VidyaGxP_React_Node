@@ -31,7 +31,7 @@ function AdminPanel(props) {
 
     try {
       const response = await axios.post(
-        "http://limsapi.vidyagxp.com/admin/admin-login",
+        "http://localhost:9000/admin/admin-login",
         {
           email,
           password: passwd,
