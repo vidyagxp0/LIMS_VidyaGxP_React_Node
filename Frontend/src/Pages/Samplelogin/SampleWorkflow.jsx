@@ -29,9 +29,28 @@ import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
-import BarcodeExportButton from "./BarcodeExportButton";
+// import BarcodeExportButton from "./BarcodeExportButton";
+import Barcode from "react-barcode";
+
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
+  const [barcodeID, setBarcodeID] = useState([]);
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 10);
+    }
+    return randomNumbers;
+  };
+
+  useEffect(() => {
+    const idsWithRandomNumbers = data.map((item) => {
+      const randomSuffix = generateRandomNumbers(15);
+      return item.id + randomSuffix;
+    });
+    setBarcodeID(idsWithRandomNumbers);
+  }, [data]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -44,13 +63,6 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const [loading, setLoading] = useState({});
   const [selectedSampleId, setSelectedSamppleId] = useState(null);
   const [samples, setSamples] = useState([]);
-  const generateRandomNumbers = (length) => {
-    let randomNumbers = "";
-    for (let i = 0; i < length; i++) {
-      randomNumbers += Math.floor(Math.random() * 20);
-    }
-    return randomNumbers;
-  };
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -64,7 +76,6 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      console.log(response, "5656565656565656");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -860,7 +871,11 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
               <td className="border px-4 py-2 ml-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
-                <BarcodeExportButton />
+                {barcodeID[index] ? (
+                  <Barcode value={barcodeID[index]} />
+                ) : (
+                  "No Barcode"
+                )}
               </td>
               <td className="border px-4 py-2">
                 {data.generatePDF}
