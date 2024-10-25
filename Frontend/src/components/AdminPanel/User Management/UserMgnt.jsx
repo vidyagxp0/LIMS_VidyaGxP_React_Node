@@ -598,10 +598,10 @@ const StatusModal = (props) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    designation: "Manager",
+    designation: "Unknown",
     gender: "Male",
     password: "",
-    user_type: "Admin",
+    user_type: "User",
     rolesArray: [],
   });
   // console.log(formData, "0000000000000000");
