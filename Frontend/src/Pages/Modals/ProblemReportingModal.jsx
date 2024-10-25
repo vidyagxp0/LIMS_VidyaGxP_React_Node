@@ -1,5 +1,15 @@
-import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React, { useState, useEffect } from 'react'
+import {
+  CButton,
+  CFormCheck,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React, { useState, useEffect } from "react";
 
 const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
   const [problemData, setProblemData] = useState({
@@ -13,8 +23,7 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
     occurredOn: "",
     reportedOn: "",
     problemInDetails: "",
-
-  })
+  });
   const handleInputChange = (field, value) => {
     const updatedData = { ...problemData, [field]: value };
     setProblemData(updatedData);
@@ -52,7 +61,7 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size='xl'
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Add Problem Reporting</CModalTitle>
@@ -81,18 +90,18 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
             className="mb-3"
             label="Instrument Category"
             placeholder="weighing balance "
-            name='InstrumentCategory'
+            name="InstrumentCategory"
             value={problemData.InstrumentCategory}
-            onChange={(e) => handleInputChange("InstrumentCategory", e.target.value)}
-
-
+            onChange={(e) =>
+              handleInputChange("InstrumentCategory", e.target.value)
+            }
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Supplied By"
             placeholder="Supplied By "
-            name='SuppliedBy'
+            name="SuppliedBy"
             value={problemData.suppliedBy}
             onChange={(e) => handleInputChange("suppliedBy", e.target.value)}
           />
@@ -101,10 +110,9 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
             className="mb-3"
             label="Problem ID"
             placeholder="Problem ID"
-            name='ProblemID'
+            name="ProblemID"
             value={problemData.problemId}
             onChange={(e) => handleInputChange("problemId", e.target.value)}
-
           />
           <label>Problem In</label>
           <CFormCheck
@@ -114,7 +122,6 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
             label="Instrument"
             value={problemData.problemIn}
             onChange={(e) => handleInputChange("problemIn", e.target.value)}
-
           />
           <CFormCheck
             type="radio"
@@ -123,69 +130,75 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
             name="ProblemIn"
             label="Module"
             value={problemData.problemInBrief}
-            onChange={(e) => handleInputChange("problemInBrief", e.target.value)}
-
+            onChange={(e) =>
+              handleInputChange("problemInBrief", e.target.value)
+            }
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Problem In Brief"
             placeholder=" Problem In Brief"
-            name='ProblemInBrief'
+            name="ProblemInBrief"
             value={problemData.problemInBrief}
-            onChange={(e) => handleInputChange("problemInBrief", e.target.value)}
-
+            onChange={(e) =>
+              handleInputChange("problemInBrief", e.target.value)
+            }
           />
           <CFormInput
             type="file"
             className="mb-3"
             label="Reference Document"
             placeholder="choose file"
-            name='ReferenceDocument'
+            name="ReferenceDocument"
             value={problemData.referenceDocument}
-            onChange={(e) => handleInputChange("referenceDocument", e.target.value)}
-
+            onChange={(e) =>
+              handleInputChange("referenceDocument", e.target.value)
+            }
           />
-          <CFormInput type="date"
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Occurred On"
             placeholder=" "
-            name='OccurredOn'
+            name="OccurredOn"
             value={problemData.occurredOn}
             onChange={(e) => handleInputChange("occurredOn", e.target.value)}
           />
 
-
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Reported On"
             placeholder=" "
-            name='ReportedOn'
+            name="ReportedOn"
             value={problemData.reportedOn}
             onChange={(e) => handleInputChange("reportedOn", e.target.value)}
-
           />
           <CFormInput
             type="text"
             className="mb-3"
             label="Problem In Details"
             placeholder=" Problem In Details"
-            name='ProblemInDetails'
+            name="ProblemInDetails"
             value={problemData.problemInDetails}
-            onChange={(e) => handleInputChange("problemInDetails", e.target.value)}
-
+            onChange={(e) =>
+              handleInputChange("problemInDetails", e.target.value)
+            }
           />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white" onClick={handleFormSubmit}>Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
-
     </div>
-  )
-}
+  );
+};
 
-export default ProblemReportingModal
+export default ProblemReportingModal;

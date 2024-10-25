@@ -115,6 +115,7 @@ const SolutionUsageModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             name="usedOn"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used On"
             placeholder="Solution Expiry Period"
             value={formData.usedOn}
@@ -126,6 +127,7 @@ const SolutionUsageModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             name="preparationDate"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Preparation Date"
             placeholder="Solution Quantity"
             value={formData.preparationDate}
@@ -137,6 +139,7 @@ const SolutionUsageModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             name="standardizationDate"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Standardization Date"
             placeholder="Standardization Schedule"
             value={formData.standardizationDate}

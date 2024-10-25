@@ -262,6 +262,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="dateOfBirth"
                   label="Date of Birth"
                   value={formData?.dateOfBirth || ""}
@@ -293,7 +294,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="text"
                   name="department"
-                  label="department"
+                  label="Department"
                   value={formData?.department || ""}
                   onChange={handleInputChange}
                 />
@@ -335,8 +336,9 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="dateOfQualification"
-                  label="Date of Qualification"
+                  label="Date Of Qualification"
                   value={formData?.dateOfQualification || ""}
                   onChange={handleInputChange}
                 />
@@ -368,6 +370,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="expirationDate"
                   label="Expiration Date"
                   value={formData?.expirationDate || ""}
@@ -398,6 +401,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="trainingStartDate"
                   label="Training Start Date"
                   value={formData?.trainingStartDate || ""}
@@ -410,6 +414,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="trainingCompletionDate"
                   label="Training Completion Date"
                   value={formData?.trainingCompletionDate || ""}
@@ -452,6 +457,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="certificationDate"
                   label="Certification Date"
                   value={formData?.certificationDate || ""}
@@ -461,6 +467,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="nextReCertificationDate"
                   label="Next Recertification Date"
                   value={formData?.nextReCertificationDate || ""}
@@ -482,6 +489,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testDate"
                   label="Test Date"
                   value={formData?.testDate || ""}
@@ -545,6 +553,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qualificationDate"
                   label="Qualification Date"
                   value={formData?.qualificationDate || ""}
@@ -578,6 +587,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reQualificationDueDate"
                   label="Requalification Due Date"
                   value={formData?.reQualificationDueDate || ""}
@@ -620,6 +630,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="methodValidationDate"
                   label="Method Validation Date"
                   value={formData?.methodValidationDate || ""}
@@ -741,6 +752,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="dateAcknowledgedReviewed"
                   label="Date Acknowledged/Reviewed"
                   value={formData?.dateAcknowledgedReviewed || ""}
@@ -784,7 +796,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 <CFormInput
                   type="text"
                   name="specializations"
-                  label="specializations"
+                  label="Specializations"
                   value={formData?.specializations || ""}
                   onChange={handleInputChange}
                 />
@@ -795,6 +807,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="approvalDate"
                   label="Approval Date"
                   value={formData?.approvalDate || ""}
@@ -837,6 +850,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="modificationDate"
                   label="Modification Date"
                   value={formData?.modificationDate || ""}
@@ -894,6 +908,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
                   label=" Date of Initiation"
                   value={formData?.initiationDate || ""}
@@ -912,6 +927,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="labTechnicianDate"
                   label="Date of Lab Technician Review"
                   value={formData?.labTechnicianDate || ""}
@@ -930,6 +946,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
                   label="Date of Supervision Review "
                   value={formData?.supervisionDate || ""}
@@ -948,6 +965,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="Date of QA Review"
                   value={formData?.qaReviewDate || ""}

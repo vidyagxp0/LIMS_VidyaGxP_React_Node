@@ -145,6 +145,7 @@ const ChemicalUsageModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Issued On"
             className="custom-placeholder mb-3"
             name="issuedOn"
@@ -274,6 +275,7 @@ const ChemicalUsageModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used On"
             className="mb-3"
             name="usedOn"
@@ -295,6 +297,7 @@ const ChemicalUsageModal = ({ visible, closeModal, handleSubmit }) => {
           ></CFormSelect>
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Valid Upto"
             className="mb-3"
             name="validUpto"

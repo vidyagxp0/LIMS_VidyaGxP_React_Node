@@ -185,6 +185,7 @@ const ChemicalUsage = () => {
             />
             <CFormInput
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Issued On"
               className="custom-placeholder mb-3"
               name="issuedOn"
@@ -305,6 +306,7 @@ const ChemicalUsage = () => {
             />
             <CFormInput
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Used On"
               className="mb-3"
               name="usedOn"
@@ -323,6 +325,7 @@ const ChemicalUsage = () => {
             </CFormSelect>
             <CFormInput
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Valid Upto"
               className="mb-3"
               name="validUpto"
@@ -565,110 +568,111 @@ const ChemicalUsage = () => {
 
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Chemical Usage</h1>
-      <div className="grid grid-cols-5 gap-4 mb-4">
-        <Card
-          title="DROPPED"
-          count={cardCounts.DROPPED}
-          color="pink"
-          onClick={() => handleCardClick("DROPPED")}
-        />
-        <Card
-          title="INITIATED"
-          count={cardCounts.INITIATED}
-          color="blue"
-          onClick={() => handleCardClick("INITIATED")}
-        />
-        <Card
-          title="REINITIATED"
-          count={cardCounts.REINITIATED}
-          color="yellow"
-          onClick={() => handleCardClick("REINITIATED")}
-        />
-        <Card
-          title="APPROVED"
-          count={cardCounts.APPROVED}
-          color="green"
-          onClick={() => handleCardClick("APPROVED")}
-        />
-        <Card
-          title="REJECTED"
-          count={cardCounts.REJECTED}
-          color="red"
-          onClick={() => handleCardClick("REJECTED")}
-        />
-      </div>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "DROPPED", label: "DROPPED" },
-              { value: "INITIATED", label: "INITIATED" },
-              { value: "REINITIATED", label: "REINITIATED" },
-              { value: "APPROVED", label: "APPROVED" },
-              { value: "REJECTED", label: "REJECTED" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Chemical Usage</h1>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
           />
-        </div>
-        <div className="float-right flex gap-4">
-          <PDFDownload
-            columns={columns}
-            data={filteredData}
-            fileName="Group_Name.pdf"
-            title="Group Name Data"
-          />
-          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-          <ATMButton
-            text="Add Chemical Usage"
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
             color="blue"
-            onClick={openModal}
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
           />
         </div>
-      </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <ChemicalUsageModal
-        visible={isModalOpen}
-        handleSubmit={handleModalSubmit}
-        closeModal={closeModal}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-        />
-      )}
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "DROPPED", label: "DROPPED" },
+                { value: "INITIATED", label: "INITIATED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "APPROVED", label: "APPROVED" },
+                { value: "REJECTED", label: "REJECTED" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Group_Name.pdf"
+              title="Group Name Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton
+              text="Add Chemical Usage"
+              color="blue"
+              onClick={openModal}
+            />
+          </div>
+        </div>
+        <Table
           columns={columns}
-          onDataUpload={handleExcelDataUpload}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
         />
-      )}
-      {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
+        <ChemicalUsageModal
+          visible={isModalOpen}
+          handleSubmit={handleModalSubmit}
+          closeModal={closeModal}
         />
-      )}
-    </div></>
+        {isViewModalOpen && (
+          <ViewModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+          />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

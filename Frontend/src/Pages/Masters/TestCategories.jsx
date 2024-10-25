@@ -322,6 +322,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effect From"
             placeholder="Effect From"
             value={effectFrom}
@@ -331,6 +332,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review Date"
             placeholder="Review Date"
             value={reviewDate}
@@ -464,6 +466,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effect From"
             placeholder="Effect From"
             name="effectfrom"
@@ -473,6 +476,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review date"
             placeholder="Review date"
             name="reviewDate"

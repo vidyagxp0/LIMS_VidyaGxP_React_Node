@@ -13,7 +13,17 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ProblemReportingModal from "../Modals/ProblemReportingModal.jsx";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal.jsx";
-import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle ,} from "@coreui/react";
+import {
+  CButton,
+  CFormCheck,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
@@ -42,7 +52,6 @@ const initialData = [
     OccuredOn: "2024-06-02",
     status: "Inactive",
   },
-
 ];
 
 const ProblemReporting = () => {
@@ -57,15 +66,11 @@ const ProblemReporting = () => {
     Inactive: 0,
   });
 
-
   // *********************Edit ****************************
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
-
-
   // *********************Edit ****************************
-
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
@@ -257,12 +262,11 @@ const ProblemReporting = () => {
     };
 
     return (
-
       <CModal
         alignment="center"
         visible={visible}
         onClose={closeModal}
-        size='xl'
+        size="xl"
       >
         <CModalHeader>
           <CModalTitle>Add Problem Reporting</CModalTitle>
@@ -285,7 +289,6 @@ const ProblemReporting = () => {
             name="InstrumentId"
             value={formData?.InstrumentId || ""}
             onChange={handleChange}
-
           />
           <CFormInput
             type="text"
@@ -295,8 +298,6 @@ const ProblemReporting = () => {
             name="InstrumentCategory"
             value={formData?.InstrumentCategory || ""}
             onChange={handleChange}
-
-
           />
           <CFormInput
             type="text"
@@ -306,9 +307,6 @@ const ProblemReporting = () => {
             name="SuppliedBy"
             value={formData?.SuppliedBy || ""}
             onChange={handleChange}
-
-
-
           />
           <CFormInput
             type="text"
@@ -318,7 +316,6 @@ const ProblemReporting = () => {
             name="ProblemId"
             value={formData?.ProblemId || ""}
             onChange={handleChange}
-
           />
           <label>Problem In</label>
           <CFormCheck
@@ -337,7 +334,6 @@ const ProblemReporting = () => {
             label="Module"
             value={formData?.ProblemIn || ""}
             onChange={handleChange}
-
           />
           <CFormInput
             type="text"
@@ -347,7 +343,6 @@ const ProblemReporting = () => {
             placeholder=" Problem In Brief"
             value={formData?.ProblemInBrief || ""}
             onChange={handleChange}
-
           />
           <CFormInput
             type="file"
@@ -357,9 +352,10 @@ const ProblemReporting = () => {
             name="ReferenceDocument"
             value={formData?.ReferenceDocument || ""}
             onChange={handleChange}
-
           />
-          <CFormInput type="date"
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Occurred On"
             name=""
             placeholder="OccurredOn"
@@ -367,16 +363,15 @@ const ProblemReporting = () => {
             onChange={handleChange}
           />
 
-
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Reported On"
             name="ReportedOn"
             placeholder=" "
             value={formData?.ReportedOn || ""}
             onChange={handleChange}
-
           />
           <CFormInput
             type="text"
@@ -386,81 +381,88 @@ const ProblemReporting = () => {
             name="ProblemInDetails"
             value={formData?.ProblemInDetails || ""}
             onChange={handleChange}
-
           />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
   return (
     <>
-    <LaunchQMS/>
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Problem Reporting</h1>
+      <LaunchQMS />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Problem Reporting</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex space-x-4">
-          {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
-          <Dropdown
-            options={[
-              { value: "All", label: "All" },
-              { value: "Active", label: "Active" },
-              { value: "Inactive", label: "Inactive" },
-            ]}
-            value={statusFilter}
-            onChange={setStatusFilter}
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex space-x-4">
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
+            <Dropdown
+              options={[
+                { value: "All", label: "All" },
+                { value: "Active", label: "Active" },
+                { value: "Inactive", label: "Inactive" },
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+            />
+          </div>
+          <div className="float-right flex gap-4">
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Problem_Reporting.pdf"
+              title="Problem Reporting Data"
+            />
+            <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+            <ATMButton text="Add Problem" color="blue" onClick={openModal} />
+          </div>
         </div>
-        <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Problem_Reporting.pdf" title="Problem Reporting Data" />
-          <ATMButton
-            text="Import"
-            color='pink'
-            onClick={handleOpenModals}
-
+        <Table
+          columns={columns}
+          data={filteredData}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          onDelete={handleDelete}
+          openEditModal={openEditModal}
+        />
+        <ProblemReportingModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
+        />
+        {isViewModalOpen && (
+          <ViewModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
           />
-          <ATMButton text="Add Problem" color="blue" onClick={openModal} />
-        </div>
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
-      <Table
-        columns={columns}
-        data={filteredData}
-        onCheckboxChange={handleCheckboxChange}
-        onViewDetails={onViewDetails}
-        onDelete={handleDelete}
-        openEditModal={openEditModal}
-      />
-      <ProblemReportingModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        handleSubmit={handleModalSubmit}
-      />
-      {isViewModalOpen && (
-        <ViewModal
-          visible={isViewModalOpen}
-          closeModal={closeViewModal}
-          data={viewModalData}
-
-        />
-      )}
-       {isModalsOpen && (
-        <ImportModal initialData = {filteredData} isOpen={isModalsOpen} onClose={handleCloseModals} columns={columns} onDataUpload={handleExcelDataUpload} />
-      )}
-       {editModalOpen && (
-        <EditModal
-          visible={editModalOpen}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
-    </div></>
+    </>
   );
 };
 export default ProblemReporting;

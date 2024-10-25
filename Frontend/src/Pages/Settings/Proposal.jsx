@@ -1,6 +1,6 @@
 // const StatusModal = (_props) => {
 //   return (
-  
+
 //   );
 // };
 
@@ -90,8 +90,6 @@ const initialData = [
     InitiatedOn: "BA-003",
     status: "Active",
   },
- 
- 
 ];
 
 const Proposal = () => {
@@ -108,8 +106,6 @@ const Proposal = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-
-  
 
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INACTIVE");
@@ -201,7 +197,6 @@ const Proposal = () => {
               value={formData?.TestTechnique || ""}
               onChange={handleChange}
               name="TestTechnique"
-              
             />
             <CFormSelect
               type="text"
@@ -224,6 +219,7 @@ const Proposal = () => {
             />
             <CFormInput
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               className="mb-3"
               label="Due Date"
               placeholder="Due Date"
@@ -245,13 +241,15 @@ const Proposal = () => {
             <CButton color="light" onClick={closeModal}>
               Back
             </CButton>
-            <CButton className="bg-info text-white" onClick={handleSave}>Submit</CButton>
+            <CButton className="bg-info text-white" onClick={handleSave}>
+              Submit
+            </CButton>
           </CModalFooter>
         </CModal>
       </div>
     );
   };
-  
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -304,21 +302,20 @@ const Proposal = () => {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      sno:  index + 1,
+      sno: index + 1,
       TrainingConfirmationId: item["Training Confirmation ID"] || "",
       Analyst: item["Analyst"] || "",
       EmployeeId: item["Employee ID"] || "",
       TestTechnique: item["Test Technique"] || "",
       TestTechniqueType: item["Test Technique Type"] || "",
       InitiatedOn: item["Initiated On"] || "",
-        status: item["Status"] || "",
-      }));
+      status: item["Status"] || "",
+    }));
 
-      const concatenateData = [...updatedData];
-      setData(concatenateData); // Update data state with parsed Excel data
-      setIsModalsOpen(false); // Close the import modal after data upload
-    };
-
+    const concatenateData = [...updatedData];
+    setData(concatenateData); // Update data state with parsed Excel data
+    setIsModalsOpen(false); // Close the import modal after data upload
+  };
 
   const columns = [
     {
@@ -392,16 +389,16 @@ const Proposal = () => {
         {
           checkbox: false,
           sno: prevData.length + 1,
-          Analyst:proposal.analyst,
-          TestTechnique:proposal.testTechnique,
-          EmployeeId:proposal.employeeId,
-          TrainingConfirmationId:proposal.trainingConfirmationId,
-          TestOfTechnique:proposal.testOfTechnique,
-          TestPlan:proposal.testPlan,
-          ArNo:proposal.arNo,
-          Comments:proposal.comments,
-          DueDate:proposal.dueDate,
-          TestTechniqueType:"BA-001",
+          Analyst: proposal.analyst,
+          TestTechnique: proposal.testTechnique,
+          EmployeeId: proposal.employeeId,
+          TrainingConfirmationId: proposal.trainingConfirmationId,
+          TestOfTechnique: proposal.testOfTechnique,
+          TestPlan: proposal.testPlan,
+          ArNo: proposal.arNo,
+          Comments: proposal.comments,
+          DueDate: proposal.dueDate,
+          TestTechniqueType: "BA-001",
           InitiatedOn: currentDate,
           status: "Active",
         },
@@ -459,8 +456,13 @@ const Proposal = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Proposal.pdf" title="Proposal Data" />
-        <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Proposal.pdf"
+            title="Proposal Data"
+          />
+          <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton text="Add Confirmation" color="blue" onClick={openModal} />
         </div>
@@ -472,7 +474,6 @@ const Proposal = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
         openEditModal={openEditModal}
-
       />
       <ProposalModal
         visible={isModalOpen}
@@ -486,7 +487,7 @@ const Proposal = () => {
           data={viewModalData}
         />
       )}
-       {isModalsOpen && (
+      {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}
           onClose={handleCloseModals}
@@ -494,14 +495,14 @@ const Proposal = () => {
           onDataUpload={handleExcelDataUpload}
         />
       )}
-        {editModalOpen && (
-          <EditModal
-            visible={editModalOpen}
-            closeModal={closeEditModal}
-            data={editModalData}
-            onSave={handleEditSave}
-          />
-        )}
+      {editModalOpen && (
+        <EditModal
+          visible={editModalOpen}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </div>
   );
 };

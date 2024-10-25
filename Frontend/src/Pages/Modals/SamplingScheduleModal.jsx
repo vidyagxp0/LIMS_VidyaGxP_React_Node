@@ -1,10 +1,19 @@
-import { CButton, CForm, CFormInput, CFormSelect, CModal, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const SamplingScheduleModal = (_props) => {
   return (
     <div>
-         <CModal
+      <CModal
         alignment="center"
         visible={_props.visible}
         onClose={_props.closeModal}
@@ -59,6 +68,7 @@ const SamplingScheduleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Start Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -68,6 +78,7 @@ const SamplingScheduleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="End Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -185,6 +196,7 @@ const SamplingScheduleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Date of Monitoring
                 "
                 placeholder=""
@@ -214,9 +226,8 @@ const SamplingScheduleModal = (_props) => {
           </CButton>
         </CModalFooter>
       </CModal>
-      
     </div>
-  )
-}
+  );
+};
 
-export default SamplingScheduleModal
+export default SamplingScheduleModal;

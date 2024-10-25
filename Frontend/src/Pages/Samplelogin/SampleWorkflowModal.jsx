@@ -39,7 +39,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleRowChange = (index, e) => {
     const { name, value } = e.target;
-  
+
     if (Array.isArray(testParameters)) {
       const updatedRows = testParameters.map((row, idx) =>
         idx === index ? { ...row, [name]: value } : row
@@ -49,7 +49,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       console.error("testParameters is not an array:", testParameters);
     }
   };
-  
 
   const [formData, setFormData] = useState({
     types: "sample",
@@ -252,21 +251,20 @@ const SampleWorkflowModal = ({ onClose }) => {
         `http://localhost:9000/get-Sample/${id}/sample`
       );
       console.log(response.data);
-  
+
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
 
-      const testParamterResponse=responseData.testParameters[1];
-      const fetchedData= JSON.parse(testParamterResponse); 
+      const testParamterResponse = responseData.testParameters[1];
+      const fetchedData = JSON.parse(testParamterResponse);
 
- setTestParameters(fetchedData.length > 0 ? fetchedData : []);
-       setFormData((prevData) => ({
+      setTestParameters(fetchedData.length > 0 ? fetchedData : []);
+      setFormData((prevData) => ({
         ...prevData,
         ...responseData,
         testParameters: responseData.testParameters || [], // Ensure testParameters are set
       }));
-  
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -309,11 +307,10 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
 
-   // Manually append the test parameters as an array of objects
+    // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
       console.log("Test Parameters being sent:", testParameters);
-
     }
 
     try {
@@ -754,6 +751,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingDeadline"
                   label="Testing Deadline"
                   value={formData.testingDeadline || ""}
@@ -783,6 +781,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="plannedDate"
                   label="Planned Date"
                   value={formData.plannedDate || ""}
@@ -843,6 +842,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 <CCol md={6}>
                   <CFormInput
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     name="sampleCollectionDate"
                     label="Sample Collection Date"
                     value={formData.sampleCollectionDate || ""}
@@ -868,7 +868,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-{console.log(testParameters,"TESTPARAMETER")}
+            {console.log(testParameters, "TESTPARAMETER")}
             {/* Use the TestParametersTable component */}
             <TestParametersTable
               testParameters={testParameters}
@@ -900,6 +900,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="analysisDate"
                   label="Analysis Date"
                   value={formData.analysisDate || ""}
@@ -909,6 +910,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingStartDate"
                   label="Testing Start Date"
                   value={formData.testingStartDate || ""}
@@ -920,6 +922,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingEndDate"
                   label="Testing End Date"
                   value={formData.testingEndDate || ""}
@@ -991,6 +994,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleRetestingDate"
                   label="Sample Retesting Date"
                   value={formData.sampleRetestingDate || ""}
@@ -1002,6 +1006,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData.reviewDate || ""}
@@ -1166,6 +1171,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleDate"
                   label="Sample Date"
                   value={formData.sampleDate || ""}
@@ -1297,6 +1303,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="stabilityProtocolApprovalDate"
                   label="Stability Protocol Approval Date"
                   value={formData?.stabilityProtocolApprovalDate || ""}
@@ -1406,6 +1413,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData?.reviewDate || ""}
@@ -1450,6 +1458,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="QaReviewDate"
                   label="QA Review Date"
                   value={formData?.QaReviewDate || ""}
@@ -1485,6 +1494,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
                   label=" Date of Initiation"
                   value={formData?.initiationDate || ""}
@@ -1503,6 +1513,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="labTechnicianDate"
                   label="Date of Lab Technician Review"
                   value={formData?.labTechnicianDate || ""}
@@ -1521,6 +1532,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
                   label="Date of Supervision Review "
                   value={formData?.supervisionDate || ""}
@@ -1539,6 +1551,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="Date of QA Review"
                   value={formData?.qaReviewDate || ""}

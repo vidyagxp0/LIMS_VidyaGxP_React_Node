@@ -377,6 +377,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Manufacturing Date"
               placeholder=" "
               value={manufacturingDate}
@@ -440,6 +441,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Starting Date"
               placeholder=""
               value={startDate}
@@ -818,6 +820,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Manufacturing Date"
               placeholder=" "
               value={formData?.manufacturingDate || ""}
@@ -881,6 +884,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Starting Date"
               placeholder=""
               value={formData?.startDate || ""}
@@ -1108,7 +1112,7 @@ function StabilityProtocol() {
 
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
@@ -1160,7 +1164,12 @@ function StabilityProtocol() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Stability_Protocol.pdf" title="Stability Protocol Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Stability_Protocol.pdf"
+              title="Stability Protocol Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add Protocol" color="blue" onClick={openModal} />
           </div>

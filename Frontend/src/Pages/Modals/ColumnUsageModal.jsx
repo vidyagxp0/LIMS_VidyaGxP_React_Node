@@ -106,6 +106,7 @@ const ColumnUsageModal = (_props) => {
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label=" Recieved On"
             placeholder=""
             className="custom-placeholder"

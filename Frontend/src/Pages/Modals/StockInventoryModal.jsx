@@ -70,6 +70,7 @@ const StockInventoryModal = ({ visible, closeModal, handleSubmit }) => {
             label="Received Date"
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             placeholder="Received Date"
             value={stockInventory.revisedDate}
             onChange={(e) => handleChange("revisedDate", e.target.value)}

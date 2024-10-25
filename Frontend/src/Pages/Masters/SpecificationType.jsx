@@ -34,8 +34,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-
-
 const fields = [
   { label: "Specification Type", key: "specificationType" },
   { label: "Added On", key: "addedOn" },
@@ -52,7 +50,6 @@ function specficationtype() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-
 
   const [data, setData] = useState([]);
 
@@ -90,8 +87,6 @@ function specficationtype() {
     setData([...data, newRow]);
   };
 
-
-
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -102,7 +97,7 @@ function specficationtype() {
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
-    console.log(newData,"000000000000")
+    console.log(newData, "000000000000");
     setData(newData);
   };
 
@@ -114,15 +109,15 @@ function specficationtype() {
       (statusFilter === "All" || row.status === statusFilter)
     );
   });
-    const onViewDetails = (rowData) => {
-      if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-        setIsViewModalOpen(false);
-        setViewModalData(null);
-      } else {
-        setViewModalData(rowData);
-        setIsViewModalOpen(true);
-      }
-    };
+  const onViewDetails = (rowData) => {
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
+  };
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -247,10 +242,9 @@ function specficationtype() {
     setData(updatedData);
   };
 
-
   const StatusModal = ({ visible, closeModal, onAdd }) => {
-   const[specificationType, setSpecificationType]=useState("")
-   const[addedOn, setAddedOn]=useState("")
+    const [specificationType, setSpecificationType] = useState("");
+    const [addedOn, setAddedOn] = useState("");
     const handleSpecification = () => {
       const newCondition = {
         specificationType,
@@ -265,29 +259,29 @@ function specficationtype() {
           <CModalTitle>Specification Type</CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Specification Type"
-              placeholder=" Specification Type"
-              name="specificationType"
-              value={specificationType}
-              onChange={(e) => setSpecificationType(e.target.value)}
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Specification Type"
+            placeholder=" Specification Type"
+            name="specificationType"
+            value={specificationType}
+            onChange={(e) => setSpecificationType(e.target.value)}
+          />
+          <CFormInput
+            className="mb-3"
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Add On"
+            placeholder="Add On "
+            name="addedOn"
+            value={addedOn}
+            onChange={(e) => setAddedOn(e.target.value)}
+          />
 
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Add On"
-              placeholder="Add On "
-              name="addedOn"
-              value={addedOn}
-              onChange={(e) => setAddedOn( e.target.value)}
-            />
-
-            <CButton color="primary" onClick={handleSpecification}>
-              Submit
-            </CButton>
+          <CButton color="primary" onClick={handleSpecification}>
+            Submit
+          </CButton>
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
@@ -374,6 +368,7 @@ function specficationtype() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Add On"
             placeholder="Add On "
             name="addedOn"
@@ -442,10 +437,10 @@ function specficationtype() {
 
       {isModalOpen && (
         <StatusModal
-        visible={isModalOpen}
-        closeModal={closeModal}
-        onAdd={handleAdd}
-      />
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={handleAdd}
+        />
       )}
       {viewModalData && (
         <ReusableModal
