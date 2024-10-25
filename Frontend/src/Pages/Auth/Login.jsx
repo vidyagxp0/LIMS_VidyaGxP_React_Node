@@ -48,14 +48,12 @@ function Login(props) {
       );
 
       const { token, data } = response.data;
-      console.log(token, "Tokken");
 
       if (token) {
         localStorage.setItem("token", token);
       }
       if (data && data.name) {
         localStorage.setItem("user", JSON.stringify(data.name));
-        console.log("User details:", data.name);
       }
 
       toast.success("Login successful");

@@ -41,7 +41,7 @@ const UserMgnt = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data.response);
+      // console.log(response.data.response);
       setData(response.data.response);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -56,7 +56,7 @@ const UserMgnt = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data.response, "ROlessssss");
+      // console.log(response.data.response, "ROlessssss");
       setRoles(response.data.response);
     } catch (error) {
       console.error("Error fetching roles:", error);
@@ -66,6 +66,25 @@ const UserMgnt = () => {
     fetchUsers();
     fetchRoles();
   }, [fetchUsers, fetchRoles]);
+
+  const handleAddUser = async (newUserData) => {
+    console.log(newUserData,"NEWDATA");
+    
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(`${BASE_URL}/admin/add-user`, newUserData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setData((prevData) => [...prevData, response.data]); // Update the state with the new user
+      toast.success("User successfully added");
+      fetchUsers(); // Fetch the latest users
+    } catch (error) {
+      console.error("Error adding user:", error);
+      toast.error("Failed to add user");
+    }
+  };
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
@@ -114,8 +133,8 @@ const UserMgnt = () => {
     setViewPermissionModal(true);
   };
 
-  const handleEditConfirm = async (updatedData) => {
-    console.log(updatedData.user_id, "Updated");
+  const handleUpdateUser = async (updatedData) => {
+    console.log(updatedData, "Updated");
 
     try {
       const token = localStorage.getItem("token");
@@ -192,12 +211,12 @@ const UserMgnt = () => {
               >
                 S.No
               </CTableHeaderCell>
-              <CTableHeaderCell
+              {/* <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
               >
                 ID
-              </CTableHeaderCell>
+              </CTableHeaderCell> */}
               <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
@@ -228,12 +247,12 @@ const UserMgnt = () => {
               >
                 Email
               </CTableHeaderCell>
-              <CTableHeaderCell
+              {/* <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
               >
                 Role
-              </CTableHeaderCell>
+              </CTableHeaderCell> */}
               <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
@@ -246,7 +265,7 @@ const UserMgnt = () => {
             {paginatedData.map((item, index) => (
               <CTableRow key={item.id}>
                 <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
-                <CTableDataCell>{item.user_id}</CTableDataCell>
+                {/* <CTableDataCell>{item.user_id}</CTableDataCell> */}
                 <CTableDataCell>{item.name}</CTableDataCell>
                 {/* {item.designation ? (
                   <CTableDataCell>{item.designation}</CTableDataCell>
@@ -262,23 +281,24 @@ const UserMgnt = () => {
                 {/* <CTableDataCell>{item.gender}</CTableDataCell> */}
                 <CTableDataCell>{formatDate(item.createdAt)}</CTableDataCell>
                 <CTableDataCell>{item.email}</CTableDataCell>
-                <CTableDataCell>
+                {/* <CTableDataCell>
                   {item.UserRoles && item.UserRoles.length > 0
                     ? item.UserRoles[0].role
                     : "No Role"}
-                </CTableDataCell>
-
+                    </CTableDataCell> */}
+                    {console.log(item)}
                 <CTableDataCell>
                   <div className="d-flex gap-3">
                     <button
                       className="btn btn-success text-light cursor-pointer"
                       onClick={() => handleViewPermissionClick(item)}
-                    >
+                      >
                       View Permission
                     </button>
                     <button
                       className="btn btn-primary text-light cursor-pointer"
                       onClick={() => handleEditClick(item)}
+                      
                     >
                       Edit
                     </button>
@@ -339,6 +359,7 @@ const UserMgnt = () => {
           closeModal={() => setAddModal(false)}
           handleAddUser={handleAddUser} // Ensure this function is defined
           roles={roles}
+          fetchUsers={fetchUsers}
         />
       )}
 
@@ -347,7 +368,7 @@ const UserMgnt = () => {
           visible={editModal}
           closeModal={() => setEditModal(false)}
           data={editData}
-          confirmEdit={handleEditConfirm}
+          handleUpdateUser={handleUpdateUser}
           roles={roles}
         />
       )}
@@ -368,22 +389,7 @@ const UserMgnt = () => {
     </div>
   );
 };
-const handleAddUser = async (newUserData) => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.post(`${BASE_URL}/admin/add-user`, newUserData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setData((prevData) => [...prevData, response.data]); // Update the state with the new user
-    toast.success("User successfully added");
-    fetchUsers(); // Fetch the latest users
-  } catch (error) {
-    console.error("Error adding user:", error);
-    toast.error("Failed to add user");
-  }
-};
+
 
 const ViewPermissionModal = (props) => {
   return (
@@ -469,7 +475,7 @@ const DeleteModal = (props) => {
 };
 
 const EditModal = (props) => {
-  const [formData, setFormData] = useState({ ...props.data });
+  const [formData, setFormData] = useState({ ...props.data, rolesArray: props.data.UserRoles ? props.data.UserRoles.map(role => role.role_id) : [] });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -481,20 +487,24 @@ const EditModal = (props) => {
   };
 
   // Handle roles selection with react-select
+  console.log(props.data.UserRoles, "DATA");
+  
   const handleRolesChange = (selectedOptions) => {
-    if (selectedOptions.some((option) => option.value === "selectAll")) {
-      const allRoles = props.roles.map((role) => ({
-        label: role.role,
-        value: role.role_id,
-      }));
+    if (selectedOptions.some(option => option.value === "selectAll")) {
+      // If "Select All" is selected, set rolesArray to all role IDs
+      const allRoleIds = props.data.UserRoles.map(role => role.role);
+      console.log(allRoleIds,"ROLLLLLL");
+      
       setFormData((prevData) => ({
         ...prevData,
-        rolesArray: allRoles.map((role) => role.value),
+        rolesArray: allRoleIds,
       }));
     } else {
+      // Otherwise, just set the selected role IDs
+      const selectedRoleIds = selectedOptions.map(option => option.value);
       setFormData((prevData) => ({
         ...prevData,
-        rolesArray: selectedOptions.map((option) => option.value),
+        rolesArray: selectedRoleIds,
       }));
     }
   };
@@ -550,6 +560,7 @@ const EditModal = (props) => {
         <CFormInput
           className="mb-3"
           type="password"
+          minLength={8}
           label={
             <>
               Password <span style={{ color: "red" }}>*</span>
@@ -593,7 +604,7 @@ const StatusModal = (props) => {
     // user_type: "",
     rolesArray: [],
   });
-  console.log(formData, "0000000000000000");
+  // console.log(formData, "0000000000000000");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -672,8 +683,9 @@ const StatusModal = (props) => {
           onChange={handleChange}
         />
         <CFormInput
-          className="mb-3"
+          className="mb-4"
           type="password"
+          required
           label={
             <>
               Password <span style={{ color: "red" }}>*</span>
@@ -684,7 +696,7 @@ const StatusModal = (props) => {
           onChange={handleChange}
         />
         <Select
-          className="mb-3"
+          className="mb-1"
           isMulti
           name="rolesArray"
           options={roleOptions}
