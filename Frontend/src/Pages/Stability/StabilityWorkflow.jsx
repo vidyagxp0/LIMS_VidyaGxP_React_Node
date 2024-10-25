@@ -816,7 +816,7 @@ const StabilityWorkFlow = () => {
                 ) : (
                   "No Barcode"
                 )}
-              </td>
+               </td>
               <td className="border px-4 py-2">
                 {data.generatePDF}
                 <td className="flex justify-center items-center px-4 py-2">
