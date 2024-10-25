@@ -15,11 +15,12 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 // import ProgressBar from "../../components/Workflow/ProgressBar";
 import { ProgressBar3 } from "../../components/Workflow/ProgressBar2";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 
 const ControlSampleModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Control Sample");
@@ -166,14 +167,17 @@ const ControlSampleModal = ({ onClose }) => {
         } else {
           toast.error("Failed to add Sample Workflow.");
         }
-      } catch (error) {
-        toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
-        );
-      }
+toast.success("Data added successfully.");
+      setIsModalOpen(false);
+      navigate("/control-Sample");
+    } catch (error) {
+      toast.error(
+        "Error adding Data: " + (error.response?.data || error.message)
+      );
     }
-  };
+  }
+};
+
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -648,6 +652,7 @@ const ControlSampleModal = ({ onClose }) => {
   };
   return (
     <>
+    <div><ToastContainer/></div>
       {id ? (
         <ProgressBar3
           stage={Number(formData.stage)}

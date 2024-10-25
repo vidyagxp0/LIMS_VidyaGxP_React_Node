@@ -25,13 +25,15 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
 // import BarcodeExportButton from "./BarcodeExportButton";
 import Barcode from "react-barcode";
 
+import BarcodeExportButton from "./BarcodeExportButton";
+import toast from "react-hot-toast";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
   const [barcodeID, setBarcodeID] = useState([]);

@@ -120,14 +120,14 @@ const Table = ({
                       key={column.accessor}
                       className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ${
                         column.accessor === "analystId" ||
-                        column.accessor === "analystId"
+                        column.accessor === "sampleId"
                           ? "hover:bg-zinc-200 cursor-pointer"
                           : ""
                       }`}
                       onClick={() => {
                         if (column.accessor === "analystId") {
                           navigate(`/analyst-qualification-edit/${row.id}`);
-                        } else if (column.accessor === "analystId") {
+                        } else if (column.accessor === "sampleId") {
                           navigate(`/control-Sample-edit/${row.id}`);
                         }
                       }}

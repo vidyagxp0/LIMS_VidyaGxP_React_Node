@@ -105,6 +105,31 @@ const AnalystQualificationModal = ({ onClose }) => {
   //   fetchAnalystData();
   // }, [id]);
 
+  const user=JSON.parse(localStorage.getItem("user"));
+  console.log(user);
+
+  const [roles, setRoles] = useState([]);
+  console.log(roles,"ROLLLLLL");
+  
+  useEffect(() => {
+    fetchRoles();
+  },[])
+  const fetchRoles = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_URL}/admin/get-all-roles`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(response.data.response, "ROlessssss");
+      setRoles(response.data.response);
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+    }
+  }
+  
+
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
@@ -225,7 +250,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       } catch (error) {
         // Handle error
         toast.error(
-          "Error adding Sample Workflow: " +
+          "Error adding Data: " +
             (error.response?.data || error.message)
         );
       }
@@ -901,8 +926,9 @@ const AnalystQualificationModal = ({ onClose }) => {
                   type="text"
                   name="initiator"
                   label="Initiator Name"
-                  value={formData?.initiator || ""}
-                  onChange={handleInputChange}
+                  value={user || ""}
+                  // onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
