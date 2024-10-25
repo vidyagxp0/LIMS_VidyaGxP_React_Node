@@ -71,7 +71,7 @@ const ControlSample = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/controlSample/get-control-sample`
+        `https://limsapi.vidyagxp.com/controlSample/get-control-sample`
       );
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
@@ -116,7 +116,7 @@ const ControlSample = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:9000/controlSample/generate-report/${ControlSampId}`
+        `https://limsapi.vidyagxp.com/controlSample/generate-report/${ControlSampId}`
       );
       console.log("Response:", response);
 
@@ -227,7 +227,7 @@ const ControlSample = () => {
   const handleDeleteControl = async (item) => {
     try {
       await axios.delete(
-        `http://localhost:9000/controlSample/delete-control-sample/${item.id}`
+        `https://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
