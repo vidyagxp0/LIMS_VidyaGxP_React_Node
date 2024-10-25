@@ -199,13 +199,17 @@ const AnalystQualificationModal = ({ onClose }) => {
       await handleEdit();
     } else {
       try {
+        const updatedFormData = {
+          ...formData,
+          status: "Under Initiation", // Static status
+        };
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
         await toast.promise(
           Promise.all([
             axios.post(
               `http://localhost:9000/analyst/create-analyst`,
-              formData
+              updatedFormData
             ),
             delay(1300), // Optional delay for smoother loading effect
           ]).then(([response]) => response),
