@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { toast } from "react-toastify";
 import {
   faEye,
   faPenToSquare,
@@ -7,28 +9,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   CButton,
-  CContainer,
   CFormInput,
-  CFormLabel,
-  CFormTextarea,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CRow,
-  CCol,
   CFormSelect,
   CFormCheck,
-  CHeader,
-  CFooter,
 } from "@coreui/react";
+
 import Card from "../../components/ATM components/Card/Card";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
@@ -37,26 +27,10 @@ import Table from "../../components/ATM components/Table/Table";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    templateTitle: "Template 1",
-    addedOn: "2024-01-01",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    templateTitle: "Template 2",
-    addedOn: "2024-01-02",
-    status: "INITIATED",
-  },
-];
-
-const SampleLoginTemplate = () => {
-  const [data, setData] = useState(initialData);
+function SampleLoginTemplate() {
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,9 +43,16 @@ const SampleLoginTemplate = () => {
     APPROVED: 0,
     REJECTED: 0,
   });
-  const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+
+  const fields = [
+    { label: "S.No", key: "sno" },
+    { label: "Template Title", key: "templateTitle" },
+    { label: "Added On", key: "addedOn" },
+    { label: "Status", key: "status" },
+  ];
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -90,11 +71,9 @@ const SampleLoginTemplate = () => {
     };
 
     data.forEach((item) => {
-      if (item.status === "DROPPED") counts.DROPPED++;
-      else if (item.status === "INITIATED") counts.INITIATED++;
-      else if (item.status === "REINITIATED") counts.REINITIATED++;
-      else if (item.status === "APPROVED") counts.APPROVED++;
-      else if (item.status === "REJECTED") counts.REJECTED++;
+      if (counts.hasOwnProperty(item.status)) {
+        counts[item.status]++;
+      }
     });
 
     setCardCounts(counts);
@@ -112,46 +91,132 @@ const SampleLoginTemplate = () => {
     setData(newData);
   };
 
+  // const filteredData = data.filter((row) => {
+  //   return (
+  //     row.templateTitle.toLowerCase().includes(searchQuery.toLowerCase()) &&
+  //     (statusFilter === "All" || row.status === statusFilter)
+  //   );
+  // });
+  
+  
   const filteredData = data.filter((row) => {
-    return (
-      row.templateTitle.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
+    const titleMatch = row.templateTitle && row.templateTitle.toLowerCase().includes(searchQuery.toLowerCase());
+    const statusMatch = statusFilter === "All" || row.status === statusFilter;
+    return titleMatch && statusMatch;
   });
 
+  console.log("fiterdata", filteredData);
+  
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); // Set the data for ViewModal
-    setIsViewModalOpen(true); // Open the ViewModal
+    setViewModalData(rowData);
+    setIsViewModalOpen(true);
   };
 
-  const columns = [
-    {
-      header: <input type="checkbox" onChange={handleSelectAll} />,
-      accessor: "checkbox",
-    },
-    { header: "SrNo.", accessor: "sno" },
-    { header: "Template Title", accessor: "templateTitle" },
-    { header: "Added On", accessor: "addedOn" },
-    { header: "Status", accessor: "status" },
-    {
-      header: "Actions",
-      accessor: "action",
-      Cell: ({ row }) => (
-        <>
-          <FontAwesomeIcon
-            icon={faEye}
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)}
-          />
-          <FontAwesomeIcon
-            icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
-          />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
-        </>
-      ),
-    },
-  ];
+  
+  
+  // const columns = [
+  //   {
+  //     header: <input type="checkbox" onChange={handleSelectAll} />,
+  //     accessor: "checkbox",
+  //     Cell: ({ row }) => (
+  //       <input
+  //         type="checkbox"
+  //         checked={row.original.checkbox || false}
+  //         onChange={() => handleCheckboxChange(row.index)}
+  //       />
+  //     ),
+  //   },
+  //   { header: "SrNo.", accessor: "sno" },
+  //   { header: "Template Title", accessor: "templateTitle" },
+  //   { header: "Added On", accessor: "addedOn" },
+  //   { header: "Status", accessor: "status" },
+  //   {
+  //     header: "Actions",
+  //     accessor: "action",
+  //     Cell: ({ row }) => (
+  //       <>
+  //         <FontAwesomeIcon
+  //           icon={faEye}
+  //           className="mr-2 cursor-pointer"
+  //           onClick={() => onViewDetails(row.original)}
+  //         />
+  //         <FontAwesomeIcon
+  //           icon={faPenToSquare}
+  //           className="mr-2 cursor-pointer"
+  //           onClick={() => openEditModal(row.original)}
+  //         />
+  //         <FontAwesomeIcon
+  //           icon={faTrashCan}
+  //           className="cursor-pointer"
+  //           onClick={() => handleDelete(row.original)}
+  //         />
+  //       </>
+  //     ),
+  //   },
+  // ];
+  
+  
+  
+  // ... existing code ...
+
+const columns = [
+  {
+    header: <input type="checkbox" onChange={handleSelectAll} />,
+    accessor: "checkbox",
+    Cell: ({ row }) => (
+      <input
+        type="checkbox"
+        checked={row.original.checkbox || false}
+        onChange={() => handleCheckboxChange(row.index)}
+      />
+    ),
+  },
+  { header: "SrNo.", accessor: "sno" },
+  { header: "Template Title", accessor: "templateTitle" },
+  { header: "Added On", accessor: "addedOn" },
+  { header: "Status", accessor: "status" },
+  {
+    header: "Actions",
+    accessor: "action",
+    Cell: ({ row }) => (
+      <div className="flex space-x-2">
+        <FontAwesomeIcon
+          icon={faEye}
+          className="cursor-pointer text-blue-500 hover:text-blue-700"
+          onClick={(e) => {
+            e.stopPropagation();
+            onViewDetails(row.original);
+          }}
+        />
+        <FontAwesomeIcon
+          icon={faPenToSquare}
+          className="cursor-pointer text-green-500 hover:text-green-700"
+          onClick={(e) => {
+            e.stopPropagation();
+            openEditModal(row.original);
+          }}
+        />
+        <FontAwesomeIcon
+          icon={faTrashCan}
+          className="cursor-pointer text-red-500 hover:text-red-700"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete(row.original);
+          }}
+        />
+      </div>
+    ),
+  },
+];
+
+// ... rest of the code ...
+  
+  
+  
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
+    setViewModalData(null);
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -165,59 +230,154 @@ const SampleLoginTemplate = () => {
     setStatusFilter(status);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-
-      sno: initialData.length + index + 1,
+      sno: data.length + index + 1,
       templateTitle: item["Template Title"] || "",
-      addedOn: item["Added On"] || "",
-      status: item["Status"] || "",
+      addedOn: item["Added On"] || new Date().toISOString().split('T')[0],
+      status: item["Status"] || "INITIATED",
     }));
 
-    const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+    setData((prevData) => [...prevData, ...updatedData]);
+    setIsModalsOpen(false);
+    toast.success("Data imported successfully");
   };
 
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newCondition,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-      },
-    ]);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
-  };
-  const StatusModal = ({ visible, closeModal, onAdd }) => {
-    const [inputValue, setInputValue] = useState(0);
-    const [templateTitle, setTemplateTitle] = useState("");
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(`http://localhost:9000/delete-lims/sMSampleLoginTemplate/${item.uniqueId}`);
+      if (response.status === 200) {
+        setData((prevData) => {
+          const updatedData = prevData
+            .filter((d) => d.uniqueId !== item.uniqueId)
+            .map((d, index) => ({ ...d, sno: index + 1 }));
+          return updatedData;
+        });
+        toast.success("Sample Login Template deleted successfully");
       }
+    } catch (error) {
+      console.error("Error deleting sample login template:", error);
+      toast.error("Failed to delete Sample Login Template");
+    }
+  };
+
+  const addNewSampleLoginTemplate = async (newTemplate) => {
+    try {
+      const response = await axios.post(`http://localhost:9000/manage-lims/add/sMSampleLoginTemplate`, {
+        ...newTemplate,
+        addedOn: new Date().toISOString().split("T")[0],
+        status: "INITIATED",
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        setData((prevData) => [...prevData, { ...response.data, sno: prevData.length + 1 }]);
+        toast.success("Sample Login Template added successfully");
+        setIsModalOpen(false);
+      } else {
+        console.error("Failed to add sample login template:", response.status);
+      }
+    } catch (error) {
+      console.error("Error adding sample login template:", error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/get-all-lims/sMSampleLoginTemplate`
+      );
+      const fetchedData = response?.data[0]?.sMSampleLoginTemplate || [];
+
+      const updatedData = fetchedData?.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+    }
+  };
+
+  const handleEditSave = async (updatedData) => {
+    try {
+      const { sno, ...dataToSend } = updatedData;
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`, dataToSend);
+      
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => 
+            item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item
+          )
+        );
+        toast.success("Sample Login Template updated successfully");
+      } else {
+        toast.error("Failed to update Sample Login Template");
+      }
+    } catch (error) {
+      console.error("Error updating Sample Login Template:", error);
+      toast.error("Error updating Sample Login Template");
+    }
+    setEditModalData(null);
+  };
+
+  const StatusModal = ({ visible, closeModal, onSave }) => {
+    const [templateTitle, setTemplateTitle] = useState("");
+    const [checkboxes, setCheckboxes] = useState({
+      referenceProtocolNo: false,
+      customer: false,
+      studyLocation: false,
+      proposedMarket: false,
+      batchType: false,
+      batchNo: false,
+      manufacturingDate: false,
+      manufacturedAt: false,
+      expiryRetestDate: false,
+      packedAt: false,
+      noOfAPIs: false,
+      sourceOfAPI: false,
+    });
+    const [autoDetection, setAutoDetection] = useState("");
+
+    const handleCheckboxChange = (e) => {
+      setCheckboxes({ ...checkboxes, [e.target.id]: e.target.checked });
     };
 
-    const handleAdd = () => {
-      const newCondition = {
-        templateTitle: templateTitle,
-        addedOn: "2024-01-02",
-        action: [],
+    const handleSave = () => {
+      const newTemplate = {
+        templateTitle,
+        ...checkboxes,
+        autoDetection,
       };
-      onAdd(newCondition);
+      onSave(newTemplate);
+      closeModal();
     };
 
     return (
@@ -235,103 +395,119 @@ const SampleLoginTemplate = () => {
             className="mb-3"
             type="text"
             label="Template Title"
-            placeholder="template title "
+            placeholder="Template title"
             value={templateTitle}
             onChange={(e) => setTemplateTitle(e.target.value)}
           />
-          <CFormCheck
+          {Object.entries(checkboxes).map(([key, value]) => (
+            <CFormCheck
+              key={key}
+              className="mb-3"
+              type="checkbox"
+              id={key}
+              label={key.replace(/([A-Z])/, ' $1').replace(/^./, str => str.toUpperCase())}
+              checked={value}
+              onChange={handleCheckboxChange}
+            />
+          ))}
+          <CFormSelect
             className="mb-3"
-            type="checkbox"
-            id="checkbox1"
-            label="Reference Protocol No."
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox2"
-            label="Customer"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox3"
-            label="Study Location"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox4"
-            label="Proposed Market"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox5"
-            label="Batch Type"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox6"
-            label="Batch No."
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox7"
-            label="Manufacturing Date"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox8"
-            label="Manufactured At"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox9"
-            label="Expiry / Retest Date"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox10"
-            label="Packed At"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox11"
-            label="No. Of API's"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox12"
-            label="Source of API"
-          />
-          <label className="mb-3">Auto Detection Required</label>
-          <CFormCheck
-            className="mb-3"
-            type="radio"
-            id="AutoDetectionYes"
-            name="AutoDetection"
-            label="Yes"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="radio"
-            id="AutoDetectionNo"
-            name="AutoDetection"
-            label="No"
+            label="Auto Detection Required"
+            options={[
+              "Select...",
+              { label: "Yes", value: "Yes" },
+              { label: "No", value: "No" },
+            ]}
+            value={autoDetection}
+            onChange={(e) => setAutoDetection(e.target.value)}
           />
         </CModalBody>
         <CModalFooter>
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
+        </CModalFooter>
+      </CModal>
+    );
+  };
+
+  const EditModal = ({ visible, closeModal, data, onSave }) => {
+    const [formData, setFormData] = useState(data);
+  
+    useEffect(() => {
+      setFormData(data);
+    }, [data]);
+  
+    const handleChange = (e) => {
+      const { name, value, type, checked } = e.target;
+      setFormData({ 
+        ...formData, 
+        [name]: type === 'checkbox' ? checked : value 
+      });
+    };
+  
+    const handleSave = () => {
+      onSave(formData);
+    };
+  
+    return (
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
+        <CModalHeader>
+          <CModalTitle>Update Sample Login Template</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            className="mb-3"
+            type="text"
+            label="Template Title"
+            placeholder="Template title"
+            name="templateTitle"
+            value={formData?.templateTitle || ""}
+            onChange={handleChange}
+          />
+          {Object.entries(formData || {}).map(([key, value]) => {
+            if (typeof value === 'boolean') {
+              return (
+                <CFormCheck
+                  key={key}
+                  className="mb-3"
+                  type="checkbox"
+                  id={key}
+                  name={key}
+                  label={key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                  checked={value}
+                  onChange={handleChange}
+                />
+              );
+            }
+            return null;
+          })}
+          <CFormSelect
+            className="mb-3"
+            label="Auto Detection Required"
+            name="autoDetection"
+            options={[
+              "Select...",
+              { label: "Yes", value: "Yes" },
+              { label: "No", value: "No" },
+            ]}
+            value={formData?.autoDetection || ""}
+            onChange={handleChange}
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleSave}>
             Submit
           </CButton>
         </CModalFooter>
@@ -345,159 +521,6 @@ const SampleLoginTemplate = () => {
 
   const closeEditModal = () => {
     setEditModalData(null);
-  };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
-  };
-
-  const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [inputValue, setInputValue] = useState(0);
-    const [formData, setFormData] = useState(data);
-
-    useEffect(() => {
-      if (data) {
-        setFormData(data);
-      }
-    }, [data]);
-
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSave = () => {
-      onSave(formData);
-    };
-
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-
-    return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Sample Login Template</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Template Title"
-            placeholder="template title "
-            name="templateTitle"
-            value={formData?.templateTitle || ""}
-            onChange={handleChange}
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox1"
-            label="Reference Protocol No."
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox2"
-            label="Customer"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox3"
-            label="Study Location"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox4"
-            label="Proposed Market"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox5"
-            label="Batch Type"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox6"
-            label="Batch No."
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox7"
-            label="Manufacturing Date"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox8"
-            label="Manufactured At"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox9"
-            label="Expiry / Retest Date"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox10"
-            label="Packed At"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox11"
-            label="No. Of API's"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="checkbox"
-            id="checkbox12"
-            label="Source of API"
-          />
-          <label className="mb-3">Auto Detection Required</label>
-          <CFormCheck
-            className="mb-3"
-            type="radio"
-            id="AutoDetectionYes"
-            name="AutoDetection"
-            label="Yes"
-          />
-          <CFormCheck
-            className="mb-3"
-            type="radio"
-            id="AutoDetectionNo"
-            name="AutoDetection"
-            label="No"
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
-          </CButton>
-          <CButton color="primary" onClick={handleSave}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    );
   };
 
   return (
@@ -539,7 +562,7 @@ const SampleLoginTemplate = () => {
         </div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            <SearchBar value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             <Dropdown
               options={[
                 { value: "All", label: "All" },
@@ -554,15 +577,10 @@ const SampleLoginTemplate = () => {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload
-              columns={columns}
-              data={filteredData}
-              fileName="Sample_Login_Template.pdf"
-              title="Sample Login Template Data"
-            />
+            <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login_Template.pdf" title="Sample Login Template Data" />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
-              text="Add Sample LogIn"
+              text="Add Sample Login Template"
               color="blue"
               onClick={openModal}
             />
@@ -581,18 +599,19 @@ const SampleLoginTemplate = () => {
           <StatusModal
             visible={isModalOpen}
             closeModal={closeModal}
-            onAdd={addNewStorageCondition}
+            onSave={addNewSampleLoginTemplate}
           />
         )}
         {isModalsOpen && (
           <ImportModal
-            initialData={initialData}
+            initialData={data}
             isOpen={isModalsOpen}
             onClose={handleCloseModals}
             columns={columns}
             onDataUpload={handleExcelDataUpload}
           />
         )}
+
         {editModalData && (
           <EditModal
             visible={Boolean(editModalData)}
@@ -601,8 +620,20 @@ const SampleLoginTemplate = () => {
             onSave={handleEditSave}
           />
         )}
+        {viewModalData && (
+          <ReusableModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
+            fields={fields}
+            onClose={closeViewModal}
+            title="Sample Login Template Details"
+            updateStatus={handleStatusUpdate}
+          />
+        )}
       </div>
     </>
   );
-};
+}
+
 export default SampleLoginTemplate;
