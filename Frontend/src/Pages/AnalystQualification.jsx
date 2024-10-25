@@ -33,6 +33,9 @@ const AnalystQualification = () => {
   const [editModalData, setEditModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedAnalyst, setSelectedAnalyst] = useState(null);
+  const [loading, setLoading] = useState({});
+
+
   const navigate = useNavigate();
 
   const openWorkflowModal = () => {
@@ -93,6 +96,43 @@ const AnalystQualification = () => {
     setData(
       data.map((d) => (d === item ? { ...d, checkbox: e.target.checked } : d))
     );
+  };
+
+ 
+
+  const handlePdfGenerate = async (analystId) => {
+    console.log("Generating PDF for analyst ID:", analystId);
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
+
+    try {
+      const response = await fetch(
+        `http://localhost:9000/analyst/generate-report/${analystId}`
+      );
+      console.log("Response:", response);
+
+      // Check if the response is actually a PDF
+      if (
+        !response.ok ||
+        response.headers.get("content-type") !== "application/pdf"
+      ) {
+        const errorText = await response.text();
+        console.error("Error Response Text:", errorText);
+        throw new Error("Network response was not ok or not a PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Analyst_Report_${analystId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
   };
 
   const columns = [
@@ -168,7 +208,11 @@ const AnalystQualification = () => {
     { header: "Modified By", accessor: "modifiedBy" },
     { header: "Change Description", accessor: "changeDescription" },
     { header: "Status", accessor: "status" },
-    { header: "Generate PDf", accessor: "report" },
+    {
+      header: "Genrate PDf",
+      accessor: "report",
+    },
+
     {
       header: "Actions",
       accessor: "action",
@@ -271,32 +315,6 @@ const AnalystQualification = () => {
     }
   };
 
-  const generatePDF = async (analystId) => {
-    console.log("Generating PDF for analyst ID:", analystId);
-    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
-    try {
-      const response = await fetch(
-        `http://limsapi.vidyagxp.com/analyst/get-analyst/${analystId}`
-      );
-      console.log("Response", response);
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `Sample_Report_${analystId}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-    }
-    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
-  };
-
   const onViewDetails = (row) => {
     // setViewModalData(row);
     setIsViewModalOpen(true);
@@ -333,6 +351,9 @@ const AnalystQualification = () => {
 
   return (
     <>
+      <div>
+        <ToastContainer />
+      </div>
       <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
@@ -379,6 +400,7 @@ const AnalystQualification = () => {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           // openEditModal={openEditModal}
+          onPdfGenerate={handlePdfGenerate}
           onEdit={handleEdit}
         />
       </div>

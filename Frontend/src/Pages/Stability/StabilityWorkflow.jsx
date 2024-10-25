@@ -105,7 +105,7 @@ const StabilityWorkFlow = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://limsapi.vidyagxp.com/stability-generate-report/${sampleId}`
+        `http://localhost:9000/stability-generate-report/${sampleId}`
       );
       // console.log("Response", response);
 
@@ -264,7 +264,7 @@ const StabilityWorkFlow = () => {
     // console.log(item);
     axios
       .delete(
-        `http://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sLSamplePA/${item.uniqueId}`
       )
       .then((response) => {
         // console.log(response.data.message);
@@ -489,7 +489,7 @@ const StabilityWorkFlow = () => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `http://localhost:9000/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);

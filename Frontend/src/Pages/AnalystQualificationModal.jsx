@@ -148,7 +148,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
+        `http://localhost:9000/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -174,7 +174,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       await toast.promise(
         Promise.all([
           axios.put(
-            `http://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
+            `http://localhost:9000/analyst/edit-analyst/${id}`,
             formData
           ),
           delay(1300),
@@ -203,10 +203,21 @@ const AnalystQualificationModal = ({ onClose }) => {
           ...formData,
           status: "Under Initiation", // Static status
         };
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-        const response = await axios.post(
-          `http://limsapi.vidyagxp.com/analyst/create-analyst`,
-          updatedFormData
+        await toast.promise(
+          Promise.all([
+            axios.post(
+              `http://localhost:9000/analyst/create-analyst`,
+              updatedFormData
+            ),
+            delay(1300), // Optional delay for smoother loading effect
+          ]).then(([response]) => response),
+          {
+            loading: "Saving data...", // Loading message
+            success: <b>Data added successfully.</b>, // Success message
+            error: <b>Failed to add data.</b>, // Error message
+          }
         );
         toast.success("Data added successfully.");
         setIsModalOpen(false); // Close the modal on success

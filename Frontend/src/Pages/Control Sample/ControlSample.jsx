@@ -43,6 +43,7 @@ const ControlSample = () => {
   const [showModal, setShowModal] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [selectedSample, setSelectedSample] = useState(null);
+  const [loading, setLoading] = useState({});
   const navigate = useNavigate();
 
   const filteredData = data.filter((row) => {
@@ -70,7 +71,7 @@ const ControlSample = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://limsapi.vidyagxp.com/controlSample/get-control-sample`
+        `http://localhost:9000/controlSample/get-control-sample`
       );
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
@@ -108,6 +109,44 @@ const ControlSample = () => {
   const closeControlModal = () => {
     setIsModalOpen(false);
   };
+
+  const handlePdfGenerate = async (ControlSampId) => {
+    console.log("Generating PDF for Control Sample ID:", ControlSampId);
+    setLoading((prevLoading) => ({ ...prevLoading, [ControlSampId]: true }));
+
+    try {
+      const response = await fetch(
+        `http://localhost:9000/controlSample/generate-report/${ControlSampId}`
+      );
+      console.log("Response:", response);
+
+      // Check if the response is actually a PDF
+      if (
+        !response.ok ||
+        response.headers.get("content-type") !== "application/pdf"
+      ) {
+        const errorText = await response.text();
+        console.error("Error Response Text:", errorText);
+        throw new Error("Network response was not ok or not a PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `ControlSample_Report_${ControlSampId}.pdf`
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+
+    setLoading((prevLoading) => ({ ...prevLoading, [ControlSampId]: false }));
+  };
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -144,6 +183,7 @@ const ControlSample = () => {
     { header: "Neutralizing Agent", accessor: "neutralizingAgent" },
     { header: "Destruction Date", accessor: "destructionDate" },
     { header: "Remarks", accessor: "remarks" },
+    { header: "Generate PDF", accessor: "report" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -187,7 +227,7 @@ const ControlSample = () => {
   const handleDeleteControl = async (item) => {
     try {
       await axios.delete(
-        `http://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`
+        `http://localhost:9000/controlSample/delete-control-sample/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
@@ -329,6 +369,7 @@ const ControlSample = () => {
           onDelete={handleDeleteControl}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          onPdfGenerate={handlePdfGenerate}
           // openEditModal={openEditModal}
           onEdit={handleEdit}
         />
