@@ -33,7 +33,6 @@ import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import { toast } from "react-toastify";
 
-
 const fields = [
   { label: "Product Name", key: "productName" },
   { label: "Specification ID", key: "specificationID" },
@@ -73,8 +72,10 @@ function Specifications() {
               sno: condition.uniqueId,
               productCode: condition.productCode || "No product Code",
               productName: condition.productName || "No product Name",
-              specificationID: condition.specificationID || "No Specification ID",
-              specificationName: condition.specificationName || "No Specification Name",
+              specificationID:
+                condition.specificationID || "No Specification ID",
+              specificationName:
+                condition.specificationName || "No Specification Name",
               effectFrom: condition.effectFrom || "No Effective Date",
               reviewDate: condition.reviewDate || "No Review Date",
               status: condition.status || "Active",
@@ -114,7 +115,7 @@ function Specifications() {
       })
     : [];
 
-   const onViewDetails = (rowData) => {
+  const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
       setIsViewModalOpen(false);
       setViewModalData(null);
@@ -213,7 +214,6 @@ function Specifications() {
     }
   };
 
-
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
     const newData = [
@@ -274,7 +274,7 @@ function Specifications() {
     const [supersedes, setSupersedes] = useState("");
     const [standardTestProcedureNo, setStandardTestProcedureNo] = useState("");
     const [document, setDocument] = useState(null);
-  
+
     const handleAdd = () => {
       const newSpecification = {
         productCode,
@@ -291,7 +291,7 @@ function Specifications() {
       };
       onAdd(newSpecification);
     };
-  
+
     const materialCode = [
       { label: "PRD-001" },
       { label: "PRD-002" },
@@ -304,15 +304,21 @@ function Specifications() {
       { label: "PRD-005" },
       { label: "MAT-005" },
     ];
-    
-  
+
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
         <CModalHeader>
           <CModalTitle>Add Specification</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <label className="mb-3" htmlFor="">Product/Material Code</label>
+          <label className="mb-3" htmlFor="">
+            Product/Material Code
+          </label>
           <Autocomplete
             className="mb-3"
             disablePortal
@@ -322,7 +328,7 @@ function Specifications() {
             value={productCode}
             onChange={(e, newValue) => setProductCode(newValue?.label || "")}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -331,7 +337,7 @@ function Specifications() {
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -340,7 +346,7 @@ function Specifications() {
             value={specificationName}
             onChange={(e) => setSpecificationName(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -349,7 +355,7 @@ function Specifications() {
             value={specificationID}
             onChange={(e) => setSpecificationID(e.target.value)}
           />
-  
+
           <CFormSelect
             className="mb-3"
             label="Sample Type"
@@ -362,7 +368,7 @@ function Specifications() {
               { label: "Petrochemical", value: "Petrochemical" },
             ]}
           />
-  
+
           <CFormSelect
             className="mb-3"
             label="Specification Type"
@@ -375,23 +381,25 @@ function Specifications() {
               { label: "working-standard", value: "working-standard" },
             ]}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effective From"
             value={effectFrom}
             onChange={(e) => setEffectFrom(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review Date"
             value={reviewDate}
             onChange={(e) => setReviewDate(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -399,7 +407,7 @@ function Specifications() {
             value={supersedes}
             onChange={(e) => setSupersedes(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -407,7 +415,7 @@ function Specifications() {
             value={standardTestProcedureNo}
             onChange={(e) => setStandardTestProcedureNo(e.target.value)}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="file"
@@ -416,13 +424,16 @@ function Specifications() {
           />
         </CModalBody>
         <CModalFooter>
-          <CButton color="light" onClick={closeModal}>Back</CButton>
-          <CButton color="primary" onClick={handleAdd}>Add Specifications</CButton>
+          <CButton color="light" onClick={closeModal}>
+            Back
+          </CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Add Specifications
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
-  
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -479,15 +490,15 @@ function Specifications() {
     };
 
     const materialCode = [
-      { label: "PRD-001" }, 
-      { label: "PRD-002" }, 
-      { label: "MAT-001" }, 
-      { label: "MAT-002" }, 
-      { label: "PRD-003" }, 
-      { label: "MAT-003" }, 
-      { label: "PRD-004" }, 
-      { label: "MAT-004" }, 
-      { label: "PRD-005" }, 
+      { label: "PRD-001" },
+      { label: "PRD-002" },
+      { label: "MAT-001" },
+      { label: "MAT-002" },
+      { label: "PRD-003" },
+      { label: "MAT-003" },
+      { label: "PRD-004" },
+      { label: "MAT-004" },
+      { label: "PRD-005" },
       { label: "MAT-005" },
     ];
 
@@ -590,6 +601,7 @@ function Specifications() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effective From"
             placeholder=""
             value={formData?.effectFrom || ""}
@@ -599,6 +611,7 @@ function Specifications() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review Date"
             placeholder=""
             value={formData?.reviewDate || ""}

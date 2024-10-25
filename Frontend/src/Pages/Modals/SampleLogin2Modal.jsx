@@ -149,6 +149,7 @@ const SampleLogin2Modal = (_props) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Analysis Date"
             placeholder=""
@@ -163,6 +164,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder="Prefix"
@@ -193,6 +195,7 @@ const SampleLogin2Modal = (_props) => {
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -258,6 +261,7 @@ const SampleLogin2Modal = (_props) => {
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -305,12 +309,14 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="date sampled"
                 placeholder=""
@@ -329,6 +335,7 @@ const SampleLogin2Modal = (_props) => {
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -474,6 +481,7 @@ const SampleLogin2Modal = (_props) => {
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="manufacturing date"
                 placeholder=""
@@ -530,6 +538,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -578,6 +587,7 @@ const SampleLogin2Modal = (_props) => {
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="manufacturing date"
                 placeholder=""
@@ -799,6 +809,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -847,6 +858,7 @@ const SampleLogin2Modal = (_props) => {
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="manufacturing date"
                 placeholder=""
@@ -1068,6 +1080,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -1153,6 +1166,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -1230,6 +1244,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -1323,6 +1338,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -1365,6 +1381,7 @@ const SampleLogin2Modal = (_props) => {
               />{" "}
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -1432,6 +1449,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -1474,6 +1492,7 @@ const SampleLogin2Modal = (_props) => {
               />{" "}
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -1549,6 +1568,7 @@ const SampleLogin2Modal = (_props) => {
             <>
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="expiry date"
                 placeholder=""
@@ -1597,6 +1617,7 @@ const SampleLogin2Modal = (_props) => {
               />
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -1646,6 +1667,7 @@ const SampleLogin2Modal = (_props) => {
               />{" "}
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -1735,6 +1757,7 @@ const SampleLogin2Modal = (_props) => {
               />{" "}
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -1840,6 +1863,7 @@ const SampleLogin2Modal = (_props) => {
               />{" "}
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""
@@ -1937,6 +1961,7 @@ const SampleLogin2Modal = (_props) => {
               />{" "}
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="mb-3"
                 label="Manufacturing Date"
                 placeholder=""

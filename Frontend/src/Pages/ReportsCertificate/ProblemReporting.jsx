@@ -18,16 +18,52 @@ import {
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
-import Table from "../../components/ATM components/Table/Table";
-import ReusableModal from "../Modals/ResusableModal";
-import ImportModal from "../Modals/importModal";
-import PDFDownload from "../PDFComponent/PDFDownload ";
-import ProblemReportingModal from "../Modals/ProblemReportingModal";
-import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
-import { BASE_URL } from "../../config.json";
+import ProblemReportingModal from "../Modals/ProblemReportingModal.jsx";
+import ViewModal from "../Modals/ViewModal";
+import ImportModal from "../Modals/importModal.jsx";
+import {
+  CButton,
+  CFormCheck,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import PDFDownload from "../PDFComponent/PDFDownload .jsx";
+import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
 
-function ProblemReporting() {
-  const [data, setData] = useState([]);
+const initialData = [
+  {
+    checkbox: false,
+    sno: 1,
+    InstrumentId: "INST-001",
+    InstrumentCategory: "Cat-001",
+    SuppliedBy: "Supplier A",
+    ProblemId: "PRB-001",
+    ProblemInBrief: "Brief description 1",
+    ProblemInDetails: "Detailed description 1",
+    OccuredOn: "2024-06-01",
+    status: "Active",
+  },
+  {
+    checkbox: false,
+    sno: 2,
+    InstrumentId: "INST-002",
+    InstrumentCategory: "Cat-002",
+    SuppliedBy: "Supplier B",
+    ProblemId: "PRB-002",
+    ProblemInBrief: "Brief description 2",
+    ProblemInDetails: "Detailed description 2",
+    OccuredOn: "2024-06-02",
+    status: "Inactive",
+  },
+];
+
+const ProblemReporting = () => {
+  const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
@@ -94,92 +130,126 @@ function ProblemReporting() {
     };
 
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal}>
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="xl"
+      >
         <CModalHeader>
           <CModalTitle>Edit Problem Reporting</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CForm>
-            <CFormSelect
-              className="mb-3"
-              label="Instrument ID"
-              onChange={handleChange}
-              name="instrumentId"
-              value={formData.instrumentId}
-              options={[
-                "Select...",
-                { label: "eqi/eng/163", value: "eqi/eng/163" },
-                { label: "arzph001", value: "arzph001" },
-                { label: "arz003", value: "arz003" },
-                { label: "qc/bal/0011", value: "qc/bal/0011" },
-                { label: "hplc", value: "hplc" },
-                { label: "qc/bal/02", value: "qc/bal/02" },
-              ]}
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Instrument Category"
-              name="InstrumentCategory"
-              value={formData.InstrumentCategory}
-              onChange={handleChange}
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Supplied By"
-              name="suppliedBy"
-              value={formData.suppliedBy}
-              onChange={handleChange}
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Problem ID"
-              name="problemId"
-              value={formData.problemId}
-              onChange={handleChange}
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Problem In Brief"
-              name="problemInBrief"
-              value={formData.problemInBrief}
-              onChange={handleChange}
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Problem In Details"
-              name="problemInDetails"
-              value={formData.problemInDetails}
-              onChange={handleChange}
-            />
-            <CFormInput
-              className="mb-3"
-              type="date"
-              label="Occurred On"
-              name="occurredOn"
-              value={formData.occurredOn}
-              onChange={handleChange}
-            />
-            <CFormSelect
-              className="mb-3 "
-              label="Status"
-              name="Active"
-              value={formData.Active}
-              onChange={handleChange}
-              options={[
-                {
-                  className:"px-3 py-2 bg-green-500 rounded-md text-stone-50",
-                  label: "Active", value: "Active" },
-                { 
-                  className:"px-3 py-2 bg-red-500 rounded-md text-stone-50",
-                  label: "Inactive", value: "Inactive" },
-              ]}
-            />
-          </CForm>
+          <p>Add information and Add Problem Reporting</p>
+          <CFormSelect
+            type="text"
+            label="Instrument (Instrument ID)"
+            options={[
+              "Select...",
+              { label: "eqi/eng/163" },
+              { label: "arzph001" },
+              { label: "arz003" },
+              { label: "qc/bal/0011" },
+              { label: "hplc" },
+              { label: "qc/bal/02" },
+            ]}
+            placeholder="Select... "
+            name="InstrumentId"
+            value={formData?.InstrumentId || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Instrument Category"
+            placeholder="weighing balance "
+            name="InstrumentCategory"
+            value={formData?.InstrumentCategory || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Supplied By"
+            placeholder="Supplied By "
+            name="SuppliedBy"
+            value={formData?.SuppliedBy || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Problem ID"
+            placeholder="Problem ID"
+            name="ProblemId"
+            value={formData?.ProblemId || ""}
+            onChange={handleChange}
+          />
+          <label>Problem In</label>
+          <CFormCheck
+            type="radio"
+            id="ProblemInInstrument"
+            name="ProblemIn"
+            label="Instrument"
+            value={formData?.ProblemIn || ""}
+            onChange={handleChange}
+          />
+          <CFormCheck
+            type="radio"
+            className="mb-3"
+            id="ProblemInModule"
+            name="ProblemIn"
+            label="Module"
+            value={formData?.ProblemIn || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            name="ProblemInBrief"
+            label="Problem In Brief"
+            placeholder=" Problem In Brief"
+            value={formData?.ProblemInBrief || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="file"
+            className="mb-3"
+            label="Reference Document"
+            placeholder=" choose file"
+            name="ReferenceDocument"
+            value={formData?.ReferenceDocument || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Occurred On"
+            name=""
+            placeholder="OccurredOn"
+            value={formData?.OccurredOn || ""}
+            onChange={handleChange}
+          />
+
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            className="mb-3"
+            label="Reported On"
+            name="ReportedOn"
+            placeholder=" "
+            value={formData?.ReportedOn || ""}
+            onChange={handleChange}
+          />
+          <CFormInput
+            type="text"
+            className="mb-3"
+            label="Problem In Details"
+            placeholder=" Problem In Details"
+            name="ProblemInDetails"
+            value={formData?.ProblemInDetails || ""}
+            onChange={handleChange}
+          />
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={closeModal}>
@@ -187,6 +257,9 @@ function ProblemReporting() {
           </CButton>
           <CButton color="primary" onClick={handleSave}>
             Save Changes
+          </CButton>
+          <CButton className="bg-info text-white" onClick={handleSave}>
+            Submit
           </CButton>
         </CModalFooter>
       </CModal>
@@ -357,13 +430,12 @@ function ProblemReporting() {
   return (
     <>
       <LaunchQMS />
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Problem Reporting</h4>
-        </div>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Problem Reporting</h1>
+
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
-            <SearchBar value={searchQuery} onChange={setSearchQuery} />
+            {/* <SearchBar value={searchQuery} onChange={setSearchQuery} /> */}
             <Dropdown
               options={[
                 { value: "All", label: "All" },
@@ -382,60 +454,47 @@ function ProblemReporting() {
               title="Problem Reporting Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton
-              text="Add Problem Report"
-              color="blue"
-              onClick={openModal}
-            />
+            <ATMButton text="Add Problem" color="blue" onClick={openModal} />
           </div>
         </div>
         <Table
           columns={columns}
           data={filteredData}
-          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          onDelete={handleDelete}
           openEditModal={openEditModal}
+        />
+        <ProblemReportingModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          handleSubmit={handleModalSubmit}
+        />
+        {isViewModalOpen && (
+          <ViewModal
+            visible={isViewModalOpen}
+            closeModal={closeViewModal}
+            data={viewModalData}
           />
+        )}
+        {isModalsOpen && (
+          <ImportModal
+            initialData={filteredData}
+            isOpen={isModalsOpen}
+            onClose={handleCloseModals}
+            columns={columns}
+            onDataUpload={handleExcelDataUpload}
+          />
+        )}
+        {editModalOpen && (
+          <EditModal
+            visible={editModalOpen}
+            closeModal={closeEditModal}
+            data={editModalData}
+            onSave={handleEditSave}
+          />
+        )}
       </div>
-      
-      {viewModalData && (
-        <ReusableModal
-          visible={viewModalData !== null}
-          closeModal={closeViewModal}
-          data={viewModalData}
-          fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action')}
-          title="Problem Report Details"
-          updateStatus={handleStatusUpdate}
-        />
-      )}
-      
-      {isModalOpen && (
- 
-      <ProblemReportingModal
-      visible={isModalOpen}
-      closeModal={closeModal}
-      handleSubmit={addNewProblemReport}
-    />
-      )}
-      
-      {isModalsOpen && (
-        <ImportModal
-          initialData={filteredData}
-          isOpen={isModalsOpen}
-          onClose={handleCloseModals}
-          columns={columns}
-          onDataUpload={handleExcelDataUpload}
-        />
-      )}
-      
-      {editModalData && (
-        <EditModal
-          visible={Boolean(editModalData)}
-          closeModal={closeEditModal}
-          data={editModalData}
-          onSave={handleEditSave}
-        />
-      )}
     </>
   );
 }

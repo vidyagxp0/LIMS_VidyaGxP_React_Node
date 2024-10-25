@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import { BASE_URL } from "../../../config.json";
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 const UserMgnt = () => {
   const [addModal, setAddModal] = useState(false);
@@ -32,7 +33,7 @@ const UserMgnt = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
-  const fetchUsers = useCallback(async() => {
+  const fetchUsers = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(`${BASE_URL}/admin/get-all-users`, {
@@ -45,9 +46,9 @@ const UserMgnt = () => {
     } catch (error) {
       console.error("Error fetching users:", error);
     }
-},[]);
+  }, []);
 
-  const fetchRoles = useCallback( async () => {
+  const fetchRoles = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(`${BASE_URL}/admin/get-all-roles`, {
@@ -56,15 +57,15 @@ const UserMgnt = () => {
         },
       });
       console.log(response.data.response, "ROlessssss");
-      setRoles(response.data.response); // Assuming the response data is an array of roles
+      setRoles(response.data.response);
     } catch (error) {
       console.error("Error fetching roles:", error);
     }
-  },[]);
+  }, []);
   useEffect(() => {
     fetchUsers();
     fetchRoles();
-  }, [fetchUsers,fetchRoles]);
+  }, [fetchUsers, fetchRoles]);
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
@@ -84,24 +85,24 @@ const UserMgnt = () => {
     setDeleteModal(true);
   };
 
-const handleDeleteConfirm = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    await axios.delete(`${BASE_URL}/admin/delete-user/${deleteId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setData(data.filter((item) => item.id !== deleteId));
-    setDeleteModal(false);
-    toast.success("User successfully deleted");
-    fetchUsers();
-    fetchRoles();
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    toast.error("Failed to delete user");
-  }
-};
+  const handleDeleteConfirm = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${BASE_URL}/admin/delete-user/${deleteId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setData(data.filter((item) => item.id !== deleteId));
+      setDeleteModal(false);
+      toast.success("User successfully deleted");
+      fetchUsers();
+      fetchRoles();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    }
+  };
 
   const handleEditClick = (item) => {
     setEditData(item);
@@ -114,17 +115,23 @@ const handleDeleteConfirm = async () => {
   };
 
   const handleEditConfirm = async (updatedData) => {
-    console.log(updatedData.user_id,"Updated");
-    
+    console.log(updatedData.user_id, "Updated");
+
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(`${BASE_URL}/admin/edit-user/${updatedData.user_id}`, updatedData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.put(
+        `${BASE_URL}/admin/edit-user/${updatedData.user_id}`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setData(
-        data.map((item) => (item.id === response.data.id ? response.data : item))
+        data.map((item) =>
+          item.id === response.data.id ? response.data : item
+        )
       );
       setEditModal(false);
       toast.success("User successfully updated");
@@ -135,7 +142,6 @@ const handleDeleteConfirm = async () => {
       toast.error("Failed to update user");
     }
   };
-  
 
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -198,18 +204,18 @@ const handleDeleteConfirm = async () => {
               >
                 Name
               </CTableHeaderCell>
-              <CTableHeaderCell
+              {/* <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
               >
                 Designation
-              </CTableHeaderCell>
-              <CTableHeaderCell
+              </CTableHeaderCell> */}
+              {/* <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
               >
                 Gender
-              </CTableHeaderCell>
+              </CTableHeaderCell> */}
               <CTableHeaderCell
                 style={{ background: "#5D76A9", color: "white" }}
                 scope="col"
@@ -242,17 +248,17 @@ const handleDeleteConfirm = async () => {
                 <CTableDataCell>{startIndex + index + 1}</CTableDataCell>
                 <CTableDataCell>{item.user_id}</CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
-                {item.designation ? (
+                {/* {item.designation ? (
                   <CTableDataCell>{item.designation}</CTableDataCell>
                 ) : (
                   <CTableDataCell>Null</CTableDataCell>
-                )}
+                )} */}
                 {/* <CTableDataCell>{item.designation}</CTableDataCell> */}
-                {item.gender ? (
+                {/* {item.gender ? (
                   <CTableDataCell>{item.gender}</CTableDataCell>
                 ) : (
                   <CTableDataCell>Null</CTableDataCell>
-                )}
+                )} */}
                 {/* <CTableDataCell>{item.gender}</CTableDataCell> */}
                 <CTableDataCell>{formatDate(item.createdAt)}</CTableDataCell>
                 <CTableDataCell>{item.email}</CTableDataCell>
@@ -331,10 +337,11 @@ const handleDeleteConfirm = async () => {
         <StatusModal
           visible={addModal}
           closeModal={() => setAddModal(false)}
-          addUser={handleAddUser}
+          handleAddUser={handleAddUser} // Ensure this function is defined
           roles={roles}
         />
       )}
+
       {editModal && (
         <EditModal
           visible={editModal}
@@ -361,26 +368,30 @@ const handleDeleteConfirm = async () => {
     </div>
   );
 };
-const handleAddUser = async (newUser,props) => {
+const handleAddUser = async (newUserData) => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.post(`${BASE_URL}/admin/add-user`, newUser, {
+    const response = await axios.post(`${BASE_URL}/admin/add-user`, newUserData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-     props.fetchUsers();
-    props.setAddModal(false);
+    setData((prevData) => [...prevData, response.data]); // Update the state with the new user
     toast.success("User successfully added");
+    fetchUsers(); // Fetch the latest users
   } catch (error) {
     console.error("Error adding user:", error);
-    toast.error(error.response?.data.message);
+    toast.error("Failed to add user");
   }
 };
 
 const ViewPermissionModal = (props) => {
   return (
-    <CModal alignment="center" visible={props.visible} onClose={props.closeModal}>
+    <CModal
+      alignment="center"
+      visible={props.visible}
+      onClose={props.closeModal}
+    >
       <CModalHeader className="flex justify-center">
         <CModalTitle className="text-center text-2xl font-semibold">
           View Permissions for {props.data?.name || "User"}
@@ -410,8 +421,6 @@ const ViewPermissionModal = (props) => {
     </CModal>
   );
 };
-
-
 
 const DeleteModal = (props) => {
   return (
@@ -458,30 +467,51 @@ const DeleteModal = (props) => {
     </CModal>
   );
 };
+
 const EditModal = (props) => {
   const [formData, setFormData] = useState({ ...props.data });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "rolesArray") {
-      const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
-        Number(option.value)
-      ); // Convert to numbers
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle roles selection with react-select
+  const handleRolesChange = (selectedOptions) => {
+    if (selectedOptions.some((option) => option.value === "selectAll")) {
+      const allRoles = props.roles.map((role) => ({
+        label: role.role,
+        value: role.role_id,
+      }));
       setFormData((prevData) => ({
         ...prevData,
-        [name]: selectedRoles,
+        rolesArray: allRoles.map((role) => role.value),
       }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
+        rolesArray: selectedOptions.map((option) => option.value),
       }));
     }
   };
 
-  const handleSubmit = () => {
-    props.confirmEdit(formData);
+  const handleSubmit = async () => {
+    await props.handleUpdateUser(formData); // Assuming you have a different handler for updating users
+    props.closeModal(); // Close modal after updating user
   };
+
+  // Mapping roles for react-select
+  const roleOptions = [
+    { label: "Select All", value: "selectAll" },
+    ...props.roles.map((role) => ({
+      label: role.role,
+      value: role.role_id,
+    })),
+  ];
 
   return (
     <CModal
@@ -519,41 +549,6 @@ const EditModal = (props) => {
         />
         <CFormInput
           className="mb-3"
-          type="text"
-          label="Designation"
-          name="designation"
-          value={formData.designation}
-          onChange={handleChange}
-        />
-        <CFormSelect
-          className="mb-3"
-          label="Gender"
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          options={[
-            { label: "Select", value: "" },
-            { label: "Male", value: "Male" },
-            { label: "Female", value: "Female" },
-            { label: "Other", value: "Other" },
-          ]}
-        />
-        <CFormSelect
-          className="mb-3"
-          label="User Type"
-          name="user_type" // Ensure this matches the state key
-          value={formData.user_type} // Bind to the correct state variable
-          onChange={handleChange}
-          options={[
-            { label: "Select User Type", value: "" },
-            { label: "Admin", value: "admin" },
-            { label: "Supervisor", value: "supervisor" },
-            { label: "Initiator", value: "initiator" },
-            { label: "QA", value: "qa" },
-          ]}
-        />
-        <CFormInput
-          className="mb-3"
           type="password"
           label={
             <>
@@ -564,19 +559,16 @@ const EditModal = (props) => {
           value={formData.password}
           onChange={handleChange}
         />
-        <CFormSelect
+        <Select
           className="mb-3"
-          label="Roles"
-          name="rolesArray" // Updated to rolesArray
-          value={formData.rolesArray} // This will be an array
-          onChange={handleChange}
-          options={[
-            { label: "Select Role", value: "" },
-            ...props.roles.map((role) => ({
-              label: role.role,
-              value: role.role_id, // Ensure this is a number
-            })),
-          ]}
+          isMulti
+          name="rolesArray"
+          options={roleOptions}
+          value={roleOptions?.filter((option) =>
+            formData?.rolesArray?.includes(option.value)
+          )}
+          onChange={handleRolesChange}
+          placeholder="Select Roles"
         />
       </CModalBody>
       <CModalFooter>
@@ -590,38 +582,60 @@ const EditModal = (props) => {
     </CModal>
   );
 };
+
 const StatusModal = (props) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    designation: "",
-    gender: "",
+    // designation: "",
+    // gender: "",
     password: "",
-    user_type: "",
+    // user_type: "",
     rolesArray: [],
   });
+  console.log(formData, "0000000000000000");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "rolesArray") {
-      const selectedRoles = Array.from(e.target.selectedOptions, (option) =>
-        Number(option.value)
-      ); // Convert to numbers
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Handle roles selection with react-select
+  const handleRolesChange = (selectedOptions) => {
+    if (selectedOptions.some((option) => option.value === "selectAll")) {
+      const allRoles = props.roles.map((role) => ({
+        label: role.role,
+        value: role.role_id,
+      }));
       setFormData((prevData) => ({
         ...prevData,
-        [name]: selectedRoles,
+        rolesArray: allRoles.map((role) => role.value),
       }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
+        rolesArray: selectedOptions.map((option) => option.value),
       }));
     }
   };
 
   const handleSubmit = async () => {
-    await handleAddUser(formData);
+    await props.handleAddUser(formData); // This line should now work if handleAddUser is passed correctly
+    props.closeModal();
   };
+  
+
+  // Mapping roles for react-select
+  const roleOptions = [
+    { label: "Select All", value: "selectAll" },
+    ...props.roles.map((role) => ({
+      label: role.role,
+      value: role.role_id,
+    })),
+  ];
 
   return (
     <CModal
@@ -659,41 +673,6 @@ const StatusModal = (props) => {
         />
         <CFormInput
           className="mb-3"
-          type="text"
-          label="Designation"
-          name="designation"
-          value={formData.designation}
-          onChange={handleChange}
-        />
-        <CFormSelect
-          className="mb-3"
-          label="Gender"
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          options={[
-            { label: "Select", value: "" },
-            { label: "Male", value: "Male" },
-            { label: "Female", value: "Female" },
-            { label: "Other", value: "Other" },
-          ]}
-        />
-        <CFormSelect
-          className="mb-3"
-          label="User Type" // New label for user type
-          name="user_type"
-          value={formData.user_type}
-          onChange={handleChange}
-          options={[
-            { label: "Select User Type", value: "" },
-            { label: "Admin", value: "admin" },
-            { label: "Supervisor", value: "supervisor" },
-            { label: "Initiator", value: "initiator" },
-            { label: "QA", value: "qa" },
-          ]}
-        />
-        <CFormInput
-          className="mb-3"
           type="password"
           label={
             <>
@@ -704,19 +683,16 @@ const StatusModal = (props) => {
           value={formData.password}
           onChange={handleChange}
         />
-        <CFormSelect
+        <Select
           className="mb-3"
-          label="Roles"
-          name="rolesArray" // Updated to rolesArray
-          value={formData.rolesArray} // This will be an array
-          onChange={handleChange}
-          options={[
-            { label: "Select Role", value: "" },
-            ...props.roles.map((role) => ({
-              label: role.role,
-              value: role.role_id, // Ensure this is a number
-            })),
-          ]}
+          isMulti
+          name="rolesArray"
+          options={roleOptions}
+          value={roleOptions.filter((option) =>
+            formData.rolesArray.includes(option.value)
+          )}
+          onChange={handleRolesChange}
+          placeholder="Select Roles"
         />
       </CModalBody>
       <CModalFooter>

@@ -110,6 +110,7 @@ const ChemicalIssueModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Lot Received On"
             placeholder="Select"
             className="custom-placeholder mb-3"
@@ -140,6 +141,7 @@ const ChemicalIssueModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Expiry Date"
             placeholder="Select"
             className="mb-3"

@@ -66,6 +66,7 @@ const TestParametersTable = ({ testParameters, handleRowChange }) => {
         </CTableRow>
       </CTableHead>
       <CTableBody>
+        {console.log(testParameters,"ttttttttttttttttt")}
         {testParameters.map((row, index) => (
           <CTableRow key={index}>
             <CTableDataCell>

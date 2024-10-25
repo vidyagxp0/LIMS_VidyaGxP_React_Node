@@ -30,16 +30,16 @@ const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
   const resetForm = () => {
     setUsagedata({
       InstrumentID: "",
-    InstrumentCategory: "",
-    UsageCode: "",
-    ProductName: "",
-    ARNO: "",
-    UsedFor: "",
-    UsedBy: "",
-    UsedFrom: "",
-    UsedTo: "",
-    comment: "",
-    status: "",
+      InstrumentCategory: "",
+      UsageCode: "",
+      ProductName: "",
+      ARNO: "",
+      UsedFor: "",
+      UsedBy: "",
+      UsedFrom: "",
+      UsedTo: "",
+      comment: "",
+      status: "",
     });
   };
 
@@ -55,20 +55,20 @@ const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
     console.log(updatedData);
   };
 
-   // !+++++++++++++++++++++++
-   const handleFormSubmit = () => {
+  // !+++++++++++++++++++++++
+  const handleFormSubmit = () => {
     const instrumentDetails = { ...usageData, fields };
-    
-    const existingInstruments = JSON.parse(localStorage.getItem("instruments")) || [];
+
+    const existingInstruments =
+      JSON.parse(localStorage.getItem("instruments")) || [];
     const updatedInstruments = [...existingInstruments, instrumentDetails];
     localStorage.setItem("instruments", JSON.stringify(updatedInstruments));
-  
+
     handleSubmit(instrumentDetails);
-    
+
     closeModal();
   };
   // !+++++++++++++++++++++++
-
 
   return (
     <div>
@@ -172,6 +172,7 @@ const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used From"
             placeholder=""
             value={usageData.UsedFrom}
@@ -182,6 +183,7 @@ const InstrumentUsageModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used To"
             placeholder=""
             value={usageData.UsedTo}

@@ -86,6 +86,7 @@ const UNscheduleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Start Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -94,6 +95,7 @@ const UNscheduleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="End Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -102,6 +104,7 @@ const UNscheduleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Test Plan"
                 placeholder=""
                 className="custom-placeholder"
@@ -135,9 +138,27 @@ const UNscheduleModal = (_props) => {
               </thead>
               <tbody>
                 {[
-                  { sno: 1, system: "ps1", area: "Area 1", prefix: "SP1", description: "Description 1" },
-                  { sno: 2, system: "ps1", area: "Area 2", prefix: "SP2", description: "Description 2" },
-                  { sno: 3, system: "ps1", area: "Area 3", prefix: "SP3", description: "Description 3" },
+                  {
+                    sno: 1,
+                    system: "ps1",
+                    area: "Area 1",
+                    prefix: "SP1",
+                    description: "Description 1",
+                  },
+                  {
+                    sno: 2,
+                    system: "ps1",
+                    area: "Area 2",
+                    prefix: "SP2",
+                    description: "Description 2",
+                  },
+                  {
+                    sno: 3,
+                    system: "ps1",
+                    area: "Area 3",
+                    prefix: "SP3",
+                    description: "Description 3",
+                  },
                 ].map((row, index) => (
                   <tr key={index}>
                     <td className="border px-4 py-2">{row.sno}</td>

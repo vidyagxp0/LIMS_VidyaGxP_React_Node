@@ -263,7 +263,9 @@ const StabilityWorkFlow = () => {
   const handleDelete = (item) => {
     // console.log(item);
     axios
-      .delete(`http://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`)
+      .delete(
+        `http://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`
+      )
       .then((response) => {
         // console.log(response.data.message);
         toast.success("Record deleted successfully");

@@ -12,14 +12,14 @@ export const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  designation: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  gender: {
-    type: DataTypes.ENUM("Male", "Female", "Other"),
-    allowNull: true,
-  },
+  // designation: {
+  //   type: DataTypes.STRING,
+  //   allowNull: true,
+  // },
+  // gender: {
+  //   type: DataTypes.ENUM("Male", "Female", "Other"),
+  //   allowNull: true,
+  // },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -45,10 +45,10 @@ export const User = sequelize.define("User", {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
-  user_type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
+  // user_type: {
+  //   type: DataTypes.STRING,
+  //   allowNull: false,
+  // },
 });
 
 User.addHook("afterSync", async () => {
@@ -63,19 +63,19 @@ User.addHook("afterSync", async () => {
           name: "Admin",
           email: "admin@vidyagxp.com",
           password: hashpass,
-          user_type: "admin",
+          // user_type: "admin",
         },
         {
           name: "Amit",
           email: "amit@gmail.com",
           password: commonPass,
-          user_type: "user",
+          // user_type: "user",
         },
         {
           name: "User",
           email: "user@gmail.com",
           password: commonPass,
-          user_type: "user",
+          // user_type: "user",
         },
       ]);
       console.log("Admin User created");

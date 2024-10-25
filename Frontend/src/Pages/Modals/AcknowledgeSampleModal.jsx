@@ -46,6 +46,7 @@ const AcknowledgeSampleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Date of Monitoring
 
 +
@@ -114,6 +115,7 @@ const AcknowledgeSampleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Membrane Holder Sterilized On
 
                 "
@@ -134,6 +136,7 @@ const AcknowledgeSampleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Use Before
 
                 "
@@ -190,6 +193,7 @@ const AcknowledgeSampleModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Sterilized On
                 "
                 placeholder=""

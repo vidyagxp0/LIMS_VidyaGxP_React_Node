@@ -176,6 +176,7 @@ const QualificationModal = (_props) => {
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label=" Recieved On"
             className="custom-placeholder"
             disabled

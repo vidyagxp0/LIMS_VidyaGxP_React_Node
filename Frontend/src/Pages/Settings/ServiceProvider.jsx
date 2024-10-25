@@ -143,6 +143,7 @@ const ServiceProvider = () => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Valid Upto            "
             placeholder=" "
             className="custom-placeholder"
@@ -519,7 +520,12 @@ const ServiceProvider = () => {
           />
         </div>
         <div className="float-right flex gap-4">
-        <PDFDownload columns={columns} data={filteredData} fileName="Service_Provider.pdf" title="Service Provider Data" />
+          <PDFDownload
+            columns={columns}
+            data={filteredData}
+            fileName="Service_Provider.pdf"
+            title="Service Provider Data"
+          />
           <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
 
           <ATMButton

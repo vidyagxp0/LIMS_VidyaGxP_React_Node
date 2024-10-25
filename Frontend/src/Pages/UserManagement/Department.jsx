@@ -72,7 +72,7 @@ const Department = () => {
             <div className="card-body">
               <h5 className="card-title">Store</h5>
               <div className="justify-container">
-                <p className="card-text">2 Employee</p>
+                <p className="card-text mr-14s">2 Employee</p>
                 <Link to="/department/store" className="btn btn-secondary">
                   <img src="/images/plus-icon.svg" />
                 </Link>

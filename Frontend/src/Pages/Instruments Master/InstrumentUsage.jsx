@@ -214,6 +214,7 @@ const InstrumentUsage = () => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used From"
             placeholder=""
             name="UsedFor"
@@ -223,6 +224,7 @@ const InstrumentUsage = () => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Used To"
             placeholder=""
             name="UsedTo"

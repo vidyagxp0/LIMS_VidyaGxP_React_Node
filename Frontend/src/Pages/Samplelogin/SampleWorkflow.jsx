@@ -29,7 +29,6 @@ import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
-import Barcode from "react-barcode"; // Import Barcode component
 import BarcodeExportButton from "./BarcodeExportButton";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
@@ -269,7 +268,9 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`http://limsapi.vidyagxp.com/delete-Sample/${item.id}`);
+      await axios.delete(
+        `http://limsapi.vidyagxp.com/delete-Sample/${item.id}`
+      );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );

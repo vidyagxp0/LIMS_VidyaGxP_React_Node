@@ -8,7 +8,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
   const [serviceReporting, setServiceReporting] = useState({
@@ -17,10 +17,10 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
     moduleId: "",
     problemInBrief: "",
     problemInDetail: "",
-    jobDetails: ""
-   });
-   
-   const handleInputChange = (field, value) => {
+    jobDetails: "",
+  });
+
+  const handleInputChange = (field, value) => {
     const updatedData = { ...serviceReporting, [field]: value };
     setServiceReporting(updatedData);
     console.log(updatedData);
@@ -38,7 +38,7 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
       moduleId: "",
       problemInBrief: "",
       problemInDetail: "",
-      jobDetails: ""
+      jobDetails: "",
     });
   };
 
@@ -112,24 +112,28 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Occurred On"
             placeholder=" "
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Reported On"
             placeholder=" "
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Attended On"
             placeholder=" "
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Expected Closure Date"
             placeholder=" "
@@ -157,4 +161,3 @@ const ServiceReportingModal = ({ visible, closeModal, handleSubmit }) => {
 };
 
 export default ServiceReportingModal;
-

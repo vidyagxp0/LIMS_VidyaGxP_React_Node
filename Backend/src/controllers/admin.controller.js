@@ -85,21 +85,14 @@ export const signUp = async (req, res) => {
     const {
       password,
       email,
-      gender,
+      // gender,
       name,
       rolesArray,
-      designation,
-      user_type,
+      // designation,
+      // user_type,
     } = req.body;
 
-    if (
-      !password ||
-      !email ||
-      !name ||
-      !designation ||
-      !rolesArray ||
-      !user_type
-    ) {
+    if (!password || !email || !name || !rolesArray) {
       return res.status(400).json({
         error: true,
         message: "Please provide proper user details!",
@@ -126,10 +119,10 @@ export const signUp = async (req, res) => {
         {
           name: name,
           email: email,
-          gender: gender,
-          designation: designation,
+          // gender: gender,
+          // designation: designation,
           password: hashPassword,
-          user_type: user_type,
+          // user_type: user_type,
           // profile_pic: getImageUrl(req?.file),
         },
         { transaction }

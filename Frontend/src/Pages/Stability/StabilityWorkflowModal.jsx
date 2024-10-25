@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import {
   CButton,
   CModal,
@@ -14,27 +15,56 @@ import {
   CCol,
   CFormLabel,
 } from "@coreui/react";
+
 import axios from "axios";
+
 import { toast } from "react-toastify";
+
 import { useNavigate, useParams } from "react-router-dom";
+
 import Barcode from "react-barcode";
+
 import ProgressBar from "../../components/Workflow/ProgressBar";
+
 import { BASE_URL } from "../../config.json";
+
 import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
+
 import TestParametersTable from "./TestParametersTable";
+
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 const StabilityWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { id } = useParams();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [testParameters, setTestParameters] = useState([]);
 
-  const { id } = useParams();
+  const handleAddRow = () => {
+    setTestParameters([
+      ...testParameters,
+      { sno: "", testParameter: "", usl: "", lsl: "", result: "", remarks: "" },
+    ]);
+  };
+
+  const handleRowChange = (index, e) => {
+    const { name, value } = e.target;
+
+    if (Array.isArray(testParameters)) {
+      const updatedRows = testParameters.map((row, idx) =>
+        idx === index ? { ...row, [name]: value } : row
+      );
+      setTestParameters(updatedRows);
+    } else {
+      console.error("testParameters is not an array:", testParameters);
+    }
+  };
 
   const [formData, setFormData] = useState({
     types: "stability",
     stage: "1",
-    samplePlanId: "",
+    samplePlanId: 1000,
     sampleId: "",
     sampleName: "",
     sampleType: "",
@@ -126,6 +156,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     QaReviewerApprover: "",
     QaReviewerComment: "",
     QaReviewDate: "",
+    suSupportiveAttachment: "",
 
     qaReviewDate: "",
     qaReview: "",
@@ -135,57 +166,8 @@ const StabilityWorkflowModal = ({ onClose }) => {
     labTechnician: "",
     initiationDate: "",
     initiator: "",
+    testParameters: [],
   });
-
-  const [idForBarcode, setIdForBarcode] = useState(null);
-  // console.log(idForBarcode);
-  const barcodeRef = useRef(null);
-
-  const generateRandomNumbers = (length) => {
-    let randomNumbers = "";
-    for (let i = 0; i < length; i++) {
-      randomNumbers += Math.floor(Math.random() * 20);
-    }
-    return randomNumbers;
-  };
-
-
-  const handleAddRow = () => {
-    setTestParameters([
-      ...testParameters,
-      { sno: "", testParameter: "", usl: "", lsl: "", result: "", remarks: "" },
-    ]);
-  };
-
-  const handleRowChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedRows = testParameters.map((row, idx) =>
-      idx === index ? { ...row, [name]: value } : row
-    );
-    setTestParameters(updatedRows);
-  };
-
-
-  const fetchId = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      const responseData = Array.isArray(response.data)
-        ? response.data
-        : response.data.data;
-
-      const randomNumbers = generateRandomNumbers(16);
-      const idWithRandomNumbers = `${responseData[0]?.id}${randomNumbers}`;
-
-      setIdForBarcode(idWithRandomNumbers);
-    } catch (error) {
-      console.error("Error fetching barcode ID: ", error);
-      toast.error("Failed to fetch barcode ID");
-    }
-  };
-
-  useEffect(() => {
-    fetchId();
-  }, []);
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -205,6 +187,12 @@ const StabilityWorkflowModal = ({ onClose }) => {
       setFormData((prevData) => ({
         ...prevData,
         [name]: selectedInstruments,
+      }));
+    } else if (e.target.type === "file") {
+      // Handle file input
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0], // Store the first file selected
       }));
     } else {
       setFormData((prevData) => ({
@@ -245,6 +233,10 @@ const StabilityWorkflowModal = ({ onClose }) => {
     return options;
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
   const getCurrentDate = () => {
     const today = new Date();
     const yyyy = today.getFullYear();
@@ -253,20 +245,37 @@ const StabilityWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
+  // useEffect(() => {
+  //   const storedTestParameters = JSON.parse(
+  //     localStorage.getItem("testParameters")
+  //   );
+  //   if (storedTestParameters) {
+  //     setTestParameters(storedTestParameters);
+  //     console.log(storedTestParameters, "testParameters from localStorage");
+  //   }
+  // }, []);
+
   const fetchData = async () => {
     if (!id) return;
     try {
       const response = await axios.get(
         `http://limsapi.vidyagxp.com/get-Sample/${id}/stability`
       );
-      // console.log(response.data);
+      console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
-      // console.log(responseData);
-      setFormData(responseData);
-      // console.log(formData.stage);
+
+      const testParamterResponse = responseData.testParameters[1];
+      const fetchedData = JSON.parse(testParamterResponse);
+
+      setTestParameters(fetchedData.length > 0 ? fetchedData : []);
+      setFormData((prevData) => ({
+        ...prevData,
+        ...responseData,
+        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+      }));
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -283,69 +292,57 @@ const StabilityWorkflowModal = ({ onClose }) => {
         formData
       );
       if (response.status === 200) {
-        toast.success("Stability Workflow updated successfully.");
+        toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
-        navigate("/sampleWorkflow");
+        navigate("/stabilityWorkflow");
       } else {
-        toast.error("Failed to update Stability Workflow.");
+        toast.error("Failed to update Sample Workflow.");
       }
     } catch (error) {
       toast.error(
-        "Error updating Stability Workflow: " +
+        "Error updating Sample Workflow: " +
           (error.response?.data || error.message)
       );
     }
   };
-  useEffect(() => {
-    const storedTestParameters = JSON.parse(localStorage.getItem("testParameterss"));
-    if (storedTestParameters) {
-      setTestParameters(storedTestParameters);
-      console.log(storedTestParameters, "testParameters from localStorage");
-    }
-  }, []);
 
   const handleSave = async () => {
     const formDataToSend = new FormData(); // Create a new FormData object
 
     // Append all form data to the FormData object
     for (const key in formData) {
-        if (Array.isArray(formData[key])) {
-            formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
-        } else {
-            formDataToSend.append(key, formData[key]);
-        }
+      if (Array.isArray(formData[key])) {
+        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+      } else {
+        formDataToSend.append(key, formData[key]);
+      }
     }
 
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
-        formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
-        console.log("Test Parameters being sent:", testParameters);
-        
-        // Save testParameters to local storage
-        localStorage.setItem("testParameterss", JSON.stringify(testParameters));
+      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+      console.log("Test Parameters being sent:", testParameters);
     }
-    if (id) {
-      await handleEdit();
-    } else {
-      try {
+
+    try {
+      if (id) {
+        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+      } else {
         const response = await axios.post(
           `http://limsapi.vidyagxp.com/create-sample`,
-          formData
+          formDataToSend,
+          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
-        // console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Stability Workflow added successfully.");
-          setIsModalOpen(false);
-          navigate("/stabilityworkflow");
-        } else {
-          toast.error("Failed to add Stability Workflow.");
-        }
-      } catch (error) {
-        toast.error(
-          "Error adding Stability Workflow: " +
-            (error.response?.data || error.message)
-        );
+        // Handle success response
+        toast.success("Sample Workflow added successfully.");
+        setIsModalOpen(false);
+        navigate("/stabilityWorkflow");
       }
+    } catch (error) {
+      console.error("Error uploading file:", error); // Log the error
+      toast.error(
+        "Failed to upload file: " + (error.response?.data || error.message)
+      );
     }
   };
 
@@ -357,11 +354,12 @@ const StabilityWorkflowModal = ({ onClose }) => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  type="text"
+                  type="number"
                   name="samplePlanId"
                   label="Sample Plan ID"
-                  value={formData?.samplePlanId || ""}
+                  value={formData?.samplePlanId || 1000}
                   onChange={handleInputChange}
+                  min={1000}
                 />
               </CCol>
               <CCol md={6}>
@@ -519,7 +517,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
                   type="text"
                   name="sampleBarCode"
                   label=""
-                  value={idForBarcode}
+                  value={""}
                   disabled
                 />
                 <div>
@@ -587,12 +585,32 @@ const StabilityWorkflowModal = ({ onClose }) => {
             </CRow>
             <CRow className="mb-3">
               <CCol md={6}>
-                <CFormInput
+                <CFormSelect
                   type="text"
                   name="testParameter"
                   label="Test Parameters"
                   value={formData.testParameter || ""}
                   onChange={handleInputChange}
+                  options={[
+                    "Select Tests",
+                    { label: "Description", value: "Description" },
+                    {
+                      label: "Weight Of 20 tablets",
+                      value: "Weight Of 20 tablets",
+                    },
+                    {
+                      label: "Average Weight ( mg )",
+                      value: "Average Weight ( mg )",
+                    },
+                    { label: "Thickness", value: "Thickness" },
+                    {
+                      label: "Disintigration Time",
+                      value: "Disintigration Time",
+                    },
+                    { label: "Hardness", value: "Hardness" },
+                    { label: "Diameter", value: "Diameter" },
+                    { label: "Friability", value: "Friability" },
+                  ]}
                 />
               </CCol>
               <CCol md={6}>
@@ -616,26 +634,31 @@ const StabilityWorkflowModal = ({ onClose }) => {
                 />
               </CCol>
 
-              <CCol md={12} className="mt-3">
-                {/* Label and selected instruments display */}
-                <label htmlFor="requiredInstrument">
+              <CCol md={12} className="mt-3 relative">
+                <label
+                  htmlFor="requiredInstrument"
+                  className="block text-gray-700 text-sm font-medium mb-2"
+                >
                   Select Required Instruments
                 </label>
 
-                {/* Display selected instruments with the option to remove */}
-                <div className="flex flex-wrap gap-2 mb-2 mt-2">
-                  {formData.requiredInstrument &&
+                <div
+                  className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
+                  onClick={toggleDropdown} // Toggle dropdown on input click
+                >
+                  {Array.isArray(formData.requiredInstrument) &&
                   formData.requiredInstrument.length > 0 ? (
-                    formData.requiredInstrument.map((instrument, index) => (
+                    formData?.requiredInstrument?.map((instrument, index) => (
                       <span
                         key={index}
-                        className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center"
+                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"
                       >
                         {instrument}
                         <button
                           type="button"
-                          className="ml-2 text-red-500"
-                          onClick={() => {
+                          className="text-red-500 hover:text-red-700"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent closing dropdown when removing item
                             setFormData((prevData) => ({
                               ...prevData,
                               requiredInstrument:
@@ -645,66 +668,63 @@ const StabilityWorkflowModal = ({ onClose }) => {
                             }));
                           }}
                         >
-                          &times; {/* Cross icon */}
+                          &times;
                         </button>
                       </span>
                     ))
                   ) : (
-                    <p className="text-gray-500">
-                      No instruments selected yet.
-                    </p>
+                    <p className="text-gray-500">Select Instruments...</p> // Placeholder when nothing is selected
                   )}
                 </div>
 
-                {/* Dropdown for selecting instruments */}
-                <CFormSelect
-                  name="requiredInstrument"
-                  value="" // Keep empty so it resets after each selection
-                  onChange={(e) => {
-                    const selectedInstrument = e.target.value;
-                    if (
-                      selectedInstrument &&
-                      !formData.requiredInstrument.includes(selectedInstrument)
-                    ) {
-                      setFormData((prevData) => ({
-                        ...prevData,
-                        requiredInstrument: [
-                          ...prevData.requiredInstrument,
-                          selectedInstrument,
-                        ],
-                      }));
-                    }
-                  }}
-                >
-                  <option value="">Select an Instrument</option>
-                  {[
-                    "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
-                    "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
-                    "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
-                    "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
-                    "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
-                    "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
-                    "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
-                    "Moisture Analyzers – For determining the moisture content in products.",
-                    "Conductivity Meter – For measuring the electrical conductivity in solutions.",
-                    "Microbial Incubators – For cultivating and maintaining microbial cultures.",
-                    "Autoclaves – For sterilizing lab equipment and samples.",
-                    "Balances (Analytical and Microbalances) – For precise weighing of samples.",
-                    "Karl Fischer Titrator – For measuring water content in samples.",
-                    "Refractometer – For determining the refractive index of liquids.",
-                    "Polarimeter – For measuring the optical rotation of a substance.",
-                    "Melting Point Apparatus – For determining the melting point of substances.",
-                    "Viscometer – For measuring the viscosity of liquid samples.",
-                    "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
-                    "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
-                    "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
-                    "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
-                  ].map((instrument, index) => (
-                    <option key={index} value={instrument}>
-                      {instrument}
-                    </option>
-                  ))}
-                </CFormSelect>
+                {dropdownOpen && (
+                  <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-10 transition-all duration-200 ease-in-out">
+                    {[
+                      "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+                      "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+                      "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+                      "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+                      "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+                      "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+                      "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+                      "Moisture Analyzers – For determining the moisture content in products.",
+                      "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+                      "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+                      "Autoclaves – For sterilizing lab equipment and samples.",
+                      "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+                      "Karl Fischer Titrator – For measuring water content in samples.",
+                      "Refractometer – For determining the refractive index of liquids.",
+                      "Polarimeter – For measuring the optical rotation of a substance.",
+                      "Melting Point Apparatus – For determining the melting point of substances.",
+                      "Viscometer – For measuring the viscosity of liquid samples.",
+                      "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+                      "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+                      "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+                      "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+                    ].map((instrument, index) => (
+                      <div
+                        key={index}
+                        className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition-colors duration-150"
+                        onClick={() => {
+                          if (
+                            !formData.requiredInstrument.includes(instrument)
+                          ) {
+                            setFormData((prevData) => ({
+                              ...prevData,
+                              requiredInstrument: [
+                                ...prevData.requiredInstrument,
+                                instrument,
+                              ],
+                            }));
+                          }
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {instrument}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CCol>
             </CRow>
             <CRow className="mb-3">
@@ -742,6 +762,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingDeadline"
                   label="Testing Deadline"
                   value={formData.testingDeadline || ""}
@@ -771,6 +792,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="plannedDate"
                   label="Planned Date"
                   value={formData.plannedDate || ""}
@@ -831,6 +853,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
                 <CCol md={6}>
                   <CFormInput
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     name="sampleCollectionDate"
                     label="Sample Collection Date"
                     value={formData.sampleCollectionDate || ""}
@@ -842,7 +865,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
             <CCol md={12}>
               <CFormInput
                 type="file"
-                name="srSupportiveAttachment"
+                name="suSupportiveAttachment"
                 label="Supportive Attachment"
                 // value={formData?.srSupportiveAttachment || ""}
                 onChange={handleInputChange}
@@ -856,7 +879,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-
+            {console.log(testParameters, "TESTPARAMETER")}
             {/* Use the TestParametersTable component */}
             <TestParametersTable
               testParameters={testParameters}
@@ -888,6 +911,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="analysisDate"
                   label="Analysis Date"
                   value={formData.analysisDate || ""}
@@ -897,6 +921,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingStartDate"
                   label="Testing Start Date"
                   value={formData.testingStartDate || ""}
@@ -908,6 +933,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingEndDate"
                   label="Testing End Date"
                   value={formData.testingEndDate || ""}
@@ -979,6 +1005,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleRetestingDate"
                   label="Sample Retesting Date"
                   value={formData.sampleRetestingDate || ""}
@@ -990,6 +1017,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData.reviewDate || ""}
@@ -1154,6 +1182,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleDate"
                   label="Sample Date"
                   value={formData.sampleDate || ""}
@@ -1285,6 +1314,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="stabilityProtocolApprovalDate"
                   label="Stability Protocol Approval Date"
                   value={formData?.stabilityProtocolApprovalDate || ""}
@@ -1394,6 +1424,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData?.reviewDate || ""}
@@ -1415,7 +1446,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
       case "QA Review":
         return (
           <CForm>
-
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">
@@ -1439,6 +1469,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="QaReviewDate"
                   label="QA Review Date"
                   value={formData?.QaReviewDate || ""}
@@ -1474,6 +1505,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
                   label=" Date of Initiation"
                   value={formData?.initiationDate || ""}
@@ -1492,6 +1524,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="labTechnicianDate"
                   label="Date of Lab Technician Review"
                   value={formData?.labTechnicianDate || ""}
@@ -1510,6 +1543,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
                   label="Date of Supervision Review "
                   value={formData?.supervisionDate || ""}
@@ -1528,6 +1562,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="Date of QA Review"
                   value={formData?.qaReviewDate || ""}
@@ -1659,7 +1694,9 @@ const StabilityWorkflowModal = ({ onClose }) => {
               {id ? "Update" : "Save"}
             </CButton>
             <CButton
-              onClick={onClose}
+              onClick={() => {
+                navigate(-1);
+              }}
               className=" bg-red-500 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-red-400 transition-all duration-300"
             >
               Exit
@@ -1670,5 +1707,4 @@ const StabilityWorkflowModal = ({ onClose }) => {
     </>
   );
 };
-
 export default StabilityWorkflowModal;

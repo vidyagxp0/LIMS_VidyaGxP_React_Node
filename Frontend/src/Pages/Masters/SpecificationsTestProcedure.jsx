@@ -274,7 +274,7 @@ function SpecificationsTestProcedure() {
       standardTestProcedureNo: "",
       document: null,
     });
-  
+
     const materialCode = [
       { label: "PRD-001" },
       { label: "PRD-002" },
@@ -287,7 +287,7 @@ function SpecificationsTestProcedure() {
       { label: "PRD-005" },
       { label: "MAT-005" },
     ];
-  
+
     const handleProduct = () => {
       const newCondition = {
         ...specificationData,
@@ -296,7 +296,7 @@ function SpecificationsTestProcedure() {
       onAdd(newCondition);
       closeModal(); // Close modal after adding specification
     };
-  
+
     const handleInputChange = (e) => {
       const { name, value, files } = e.target;
       setSpecificationData({
@@ -304,7 +304,7 @@ function SpecificationsTestProcedure() {
         [name]: files ? files[0] : value,
       });
     };
-  
+
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
@@ -319,7 +319,9 @@ function SpecificationsTestProcedure() {
             disablePortal
             id="combo-box-demo"
             options={materialCode}
-            renderInput={(params) => <TextField {...params} label="Product Code" />}
+            renderInput={(params) => (
+              <TextField {...params} label="Product Code" />
+            )}
             value={specificationData.productCode}
             onChange={(e, newValue) =>
               setSpecificationData({
@@ -328,7 +330,7 @@ function SpecificationsTestProcedure() {
               })
             }
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -338,7 +340,7 @@ function SpecificationsTestProcedure() {
             value={specificationData.productName}
             onChange={handleInputChange}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -348,7 +350,7 @@ function SpecificationsTestProcedure() {
             value={specificationData.specificationName}
             onChange={handleInputChange}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -358,7 +360,7 @@ function SpecificationsTestProcedure() {
             value={specificationData.specificationID}
             onChange={handleInputChange}
           />
-  
+
           <CFormSelect
             className="mb-3"
             label="Sample Type"
@@ -379,7 +381,7 @@ function SpecificationsTestProcedure() {
               { label: "FG Template", value: "FG Template" },
             ]}
           />
-  
+
           <CFormSelect
             className="mb-3"
             label="Specification Type"
@@ -400,25 +402,27 @@ function SpecificationsTestProcedure() {
               { label: "Shelf Life", value: "Shelf Life" },
             ]}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effective From"
             name="effectFrom"
             value={specificationData.effectFrom}
             onChange={handleInputChange}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review Date"
             name="reviewDate"
             value={specificationData.reviewDate}
             onChange={handleInputChange}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -428,7 +432,7 @@ function SpecificationsTestProcedure() {
             value={specificationData.supersedes}
             onChange={handleInputChange}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="text"
@@ -438,7 +442,7 @@ function SpecificationsTestProcedure() {
             value={specificationData.standardTestProcedureNo}
             onChange={handleInputChange}
           />
-  
+
           <CFormInput
             className="mb-3"
             type="file"
@@ -458,7 +462,6 @@ function SpecificationsTestProcedure() {
       </CModal>
     );
   };
-  
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -621,6 +624,7 @@ function SpecificationsTestProcedure() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effective From"
             placeholder=""
             value={formData?.effectFrom || ""}
@@ -630,6 +634,7 @@ function SpecificationsTestProcedure() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review Date"
             placeholder=""
             value={formData?.reviewDate || ""}
