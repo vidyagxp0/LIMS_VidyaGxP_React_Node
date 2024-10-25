@@ -67,6 +67,28 @@ const UserMgnt = () => {
     fetchRoles();
   }, [fetchUsers, fetchRoles]);
 
+
+  const handleAddUser = async (newUserData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${BASE_URL}/admin/add-user`,
+        newUserData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setData((prevData) => [...prevData, response.data]); // Update the state with the new user
+      toast.success("User successfully added");
+      fetchUsers(); // Fetch the latest users
+    } catch (error) {
+      console.error("Error adding user:", error);
+      toast.error("Failed to add user");
+    }
+  };
+
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, data.length);
   const totalPages = Math.ceil(data.length / pageSize);
@@ -339,6 +361,7 @@ const UserMgnt = () => {
           closeModal={() => setAddModal(false)}
           handleAddUser={handleAddUser} // Ensure this function is defined
           roles={roles}
+          fetchUsers={fetchUsers} // Pass fetchUsers as a prop
         />
       )}
 
@@ -368,22 +391,7 @@ const UserMgnt = () => {
     </div>
   );
 };
-const handleAddUser = async (newUserData) => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.post(`${BASE_URL}/admin/add-user`, newUserData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setData((prevData) => [...prevData, response.data]); // Update the state with the new user
-    toast.success("User successfully added");
-    fetchUsers(); // Fetch the latest users
-  } catch (error) {
-    console.error("Error adding user:", error);
-    toast.error("Failed to add user");
-  }
-};
+
 
 const ViewPermissionModal = (props) => {
   return (
@@ -500,7 +508,7 @@ const EditModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    await props.handleUpdateUser(formData); // Assuming you have a different handler for updating users
+    await props.handleAddUser(formData, props.fetchUsers); // Pass fetchUsers to handleAddUser
     props.closeModal(); // Close modal after updating user
   };
 
@@ -626,7 +634,6 @@ const StatusModal = (props) => {
     await props.handleAddUser(formData); // This line should now work if handleAddUser is passed correctly
     props.closeModal();
   };
-  
 
   // Mapping roles for react-select
   const roleOptions = [
