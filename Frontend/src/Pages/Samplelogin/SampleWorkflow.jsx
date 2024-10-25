@@ -111,7 +111,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://limsapi.vidyagxp.com/generate-report/${sampleId}`
+        `${BASE_URL}/generate-report/${sampleId}`
       );
       console.log("Response", response);
 

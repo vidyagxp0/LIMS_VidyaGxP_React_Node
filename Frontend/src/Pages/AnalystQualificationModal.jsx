@@ -205,9 +205,9 @@ const AnalystQualificationModal = ({ onClose }) => {
             delay(1300), // Optional delay for smoother loading effect
           ]).then(([response]) => response),
           {
-            loading: 'Saving data...', // Loading message
-            success: <b>Data added successfully.</b>, // Success message
-            error: <b>Failed to add data.</b>, // Error message
+            loading: 'Saving data...',
+            success: <b>Data added successfully.</b>, 
+            error: <b>Failed to add data.</b>, 
           }
         );
   toast.success("Data added successfully.");
@@ -216,7 +216,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       } catch (error) {
         // Handle error
         toast.error(
-          "Error adding Sample Workflow: " +
+          "Error adding Data: " +
             (error.response?.data || error.message)
         );
       }

@@ -1556,6 +1556,14 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleStageChange = () => {
     fetchData();
   };
+  const [loading, setLoading] = useState(false);
+  const handleClick = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1300);
+  };
+
   return (
     <>
       {id ? (
@@ -1663,12 +1671,16 @@ const SampleWorkflowModal = ({ onClose }) => {
           </div>
 
           <div className="flex flex-col gap-3 justify-end mt-6 fixed bottom-24 left-[95%]">
-            <CButton
-              type="submit"
-              className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
-            >
-              {id ? "Update" : "Save"}
-            </CButton>
+          <CButton
+        type="submit"
+        className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center"
+        onClick={handleClick}
+      >
+        {id ? "Update" : "Save"}
+        {loading && (
+          <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-3"></div>
+        )}
+      </CButton>
             <CButton
               onClick={() => {
                 navigate(-1);

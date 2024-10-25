@@ -15,11 +15,12 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 // import ProgressBar from "../../components/Workflow/ProgressBar";
 import { ProgressBar3 } from "../../components/Workflow/ProgressBar2";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 
 const ControlSampleModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Control Sample");
@@ -138,31 +139,38 @@ const ControlSampleModal = ({ onClose }) => {
     }
   };
 
-  const handleSave = async () => {
-    if (id) {
-      await handleEdit();
-    } else {
-      try {
-        const response = await axios.post(
-          `http://localhost:9000/controlSample/create-control-sample`,
-          formData
-        );
-        // console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Sample Workflow added successfully.");
-          setIsModalOpen(false);
-          navigate("/control-Sample");
-        } else {
-          toast.error("Failed to add Sample Workflow.");
+ const handleSave = async () => {
+  if (id) {
+    await handleEdit();
+  } else {
+    try {
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      await toast.promise(
+        Promise.all([
+          axios.post(
+            `http://localhost:9000/controlSample/create-control-sample`,
+            formData
+          ),
+          delay(1300),
+        ]).then(([response]) => response),
+        {
+          loading: 'Saving data...',
+          success: <b>Data added successfully.</b>,
+          error: <b>Failed to add Data.</b>,
         }
-      } catch (error) {
-        toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
-        );
-      }
+      );
+toast.success("Data added successfully.");
+      setIsModalOpen(false);
+      navigate("/control-Sample");
+    } catch (error) {
+      toast.error(
+        "Error adding Data: " + (error.response?.data || error.message)
+      );
     }
-  };
+  }
+};
+
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -535,6 +543,7 @@ const ControlSampleModal = ({ onClose }) => {
   };
   return (
     <>
+    <div><ToastContainer/></div>
       {id ? (
         <ProgressBar3
           stage={Number(formData.stage)}
