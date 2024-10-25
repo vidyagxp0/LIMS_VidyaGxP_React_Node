@@ -170,14 +170,17 @@ const AnalystQualificationModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
       await toast.promise(
         Promise.all([
-          axios.put(`http://localhost:9000/analyst/edit-analyst/${id}`, formData),
+          axios.put(
+            `http://localhost:9000/analyst/edit-analyst/${id}`,
+            formData
+          ),
           delay(1300),
         ]).then(([response]) => response),
         {
-          loading: 'Updating data...',
+          loading: "Updating data...",
           success: <b>Data updated successfully.</b>,
           error: <b>Failed to update data.</b>,
         }
@@ -190,7 +193,6 @@ const AnalystQualificationModal = ({ onClose }) => {
       );
     }
   };
-  
 
   const handleSave = async () => {
     if (id) {
@@ -198,19 +200,22 @@ const AnalystQualificationModal = ({ onClose }) => {
     } else {
       try {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
         await toast.promise(
           Promise.all([
-            axios.post(`http://localhost:9000/analyst/create-analyst`, formData),
+            axios.post(
+              `http://localhost:9000/analyst/create-analyst`,
+              formData
+            ),
             delay(1300), // Optional delay for smoother loading effect
           ]).then(([response]) => response),
           {
-            loading: 'Saving data...', // Loading message
+            loading: "Saving data...", // Loading message
             success: <b>Data added successfully.</b>, // Success message
             error: <b>Failed to add data.</b>, // Error message
           }
         );
-  toast.success("Data added successfully.");
+        toast.success("Data added successfully.");
         setIsModalOpen(false); // Close the modal on success
         navigate("/analyst-qualification"); // Navigate to another page on success
       } catch (error) {
@@ -222,7 +227,6 @@ const AnalystQualificationModal = ({ onClose }) => {
       }
     }
   };
-  
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -959,7 +963,9 @@ const AnalystQualificationModal = ({ onClose }) => {
   };
   return (
     <>
-    <div><ToastContainer/></div>
+      <div>
+        <ToastContainer />
+      </div>
       {id ? (
         <ProgressBar2
           stage={Number(formData.stage)}

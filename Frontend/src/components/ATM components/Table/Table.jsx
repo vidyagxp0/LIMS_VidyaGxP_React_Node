@@ -16,6 +16,7 @@ const Table = ({
   onViewDetails,
   onDelete,
   openEditModal,
+  onPdfGenerate,
 }) => {
   const pageSize = 7;
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,41 +75,6 @@ const Table = ({
   const handleDelete = (item) => {
     onDelete(item);
     closeDeleteModal();
-  };
-
-  const generatePDF = async (analystId) => {
-    console.log("Generating PDF for analyst ID:", analystId);
-    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
-
-    try {
-      const response = await fetch(
-        `http://localhost:9000/analyst/generate-report/${analystId}`
-      );
-      console.log("Response:", response);
-
-      // Check if the response is actually a PDF
-      if (
-        !response.ok ||
-        response.headers.get("content-type") !== "application/pdf"
-      ) {
-        const errorText = await response.text();
-        console.error("Error Response Text:", errorText);
-        throw new Error("Network response was not ok or not a PDF");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `Analyst_Report_${analystId}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-    }
-
-    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
   };
 
   return (
@@ -205,7 +171,7 @@ const Table = ({
                           <FaFilePdf
                             size={20}
                             className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
-                            onClick={() => generatePDF(row.id)}
+                            onClick={() => onPdfGenerate(row.id)}
                           />
                           {loading[data.id] && (
                             <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
