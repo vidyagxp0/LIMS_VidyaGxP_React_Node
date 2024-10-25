@@ -16,9 +16,10 @@ import { BASE_URL } from "../config.json";
 import SearchBar from "../components/ATM components/SearchBar/SearchBar.jsx";
 // import AnalystPersonalModal from "./Modals/AnalystPersonalModal.jsx";
 import AnalystQualificationModal from "../Pages/AnalystQualificationModal.jsx";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS.jsx";
+import ToastContainer from "../components/HotToaster/ToastContainer.jsx";
+import toast from "react-hot-toast";
 
 const AnalystQualification = () => {
   const [data, setData] = useState([]);
@@ -267,10 +268,10 @@ const AnalystQualification = () => {
       );
       closeModal();
       fetchData();
-      toast.success("Analyst deleted successfully");
+      toast.success("Data deleted successfully");
     } catch (error) {
-      console.error("Error deleting analyst:", error);
-      toast.error("Error deleting analyst");
+      // console.error("Error deleting Data:", error);
+      toast.error("Error deleting Data");
     }
   };
 
@@ -310,7 +311,8 @@ const AnalystQualification = () => {
 
   return (
     <>
-      <LaunchQMS />
+    <div><ToastContainer/></div>
+    <LaunchQMS/>
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Analyst Qualification</h4>

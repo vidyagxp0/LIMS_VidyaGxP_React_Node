@@ -39,11 +39,17 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleRowChange = (index, e) => {
     const { name, value } = e.target;
-    const updatedRows = testParameters.map((row, idx) =>
-      idx === index ? { ...row, [name]: value } : row
-    );
-    setTestParameters(updatedRows);
+  
+    if (Array.isArray(testParameters)) {
+      const updatedRows = testParameters.map((row, idx) =>
+        idx === index ? { ...row, [name]: value } : row
+      );
+      setTestParameters(updatedRows);
+    } else {
+      console.error("testParameters is not an array:", testParameters);
+    }
   };
+  
 
   const [formData, setFormData] = useState({
     types: "sample",
@@ -246,13 +252,21 @@ const SampleWorkflowModal = ({ onClose }) => {
         `http://localhost:9000/get-Sample/${id}/sample`
       );
       console.log(response.data);
-
+  
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
-      // console.log(responseData);
-      setFormData(responseData);
-      console.log(formData.stage);
+
+      const testParamterResponse=responseData.testParameters[1];
+      const fetchedData= JSON.parse(testParamterResponse); 
+
+ setTestParameters(fetchedData.length > 0 ? fetchedData : []);
+       setFormData((prevData) => ({
+        ...prevData,
+        ...responseData,
+        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+      }));
+  
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -854,7 +868,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-
+{console.log(testParameters,"TESTPARAMETER")}
             {/* Use the TestParametersTable component */}
             <TestParametersTable
               testParameters={testParameters}

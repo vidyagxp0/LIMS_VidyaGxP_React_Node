@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CForm, CFormInput, CFormSelect } from "@coreui/react";
@@ -13,6 +13,7 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import { BASE_URL } from "../../config.json";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 
 function Approval() {
   const [data, setData] = useState([]);
@@ -61,14 +62,14 @@ function Approval() {
       const response = await axios.delete(`${BASE_URL}/delete-lims/approval/${item.uniqueId}`);
       if (response?.status === 200) {
         setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
-        toast.success("Approval data deleted successfully");
+        toast.success("Data deleted successfully");
         fetchApprovalData();
       } else {
-        toast.error("Failed to delete Approval data");
+        toast.error("Failed to delete Data");
       }
     } catch (error) {
-      console.error("Error deleting Approval data:", error);
-      toast.error("Error deleting Approval data");
+      // console.error("Error deleting Approval data:", error);
+      toast.error("Error deleting Data");
     }
   };
 
@@ -110,7 +111,19 @@ function Approval() {
 
   const addNewApproval = async (newApproval) => {
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/add/approval`, newApproval);
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const response = await toast.promise(
+        Promise.all([
+          axios.post(`${BASE_URL}/manage-lims/add/approval`, newApproval),
+          delay(1300),
+        ]).then(([response]) => response),
+        {
+          loading: 'Saving...',
+          success: <b>Data added successfully.</b>,
+          error: <b>Couldn't add Data.</b>,
+        }
+      );
+  
       if (response.status === 200) {
         const addedApproval = response.data;
         setData((prevData) => [
@@ -120,15 +133,19 @@ function Approval() {
           },
           ...prevData,
         ]);
-        toast.success("Approval added successfully");
+  
         fetchApprovalData();
       }
     } catch (error) {
       console.error("Error adding Approval:", error);
-      toast.error("Failed to add Approval");
+      toast.error("Failed to add Data");
     }
+  
     setIsModalOpen(false);
   };
+  
+  
+  
 
   const handleEditSave = async (updatedData) => {
     try {
@@ -138,13 +155,13 @@ function Approval() {
         setData((prevData) =>
           prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
         );
-        toast.success("Approval updated successfully");
+        toast.success("Data updated successfully");
       } else {
-        toast.error("Failed to update Approval");
+        toast.error("Failed to update Data");
       }
     } catch (error) {
-      console.error("Error updating Approval:", error);
-      toast.error("Error updating Approval");
+      // console.error("Error updating Approval:", error);
+      toast.error("Error updating Data");
     }
     setEditModalData(null);
   };
@@ -377,6 +394,7 @@ function Approval() {
   return (
     <>
       <div className="m-5 mt-3">
+        <div><ToastContainer/></div>
         <div className="main-head">
           <h4 className="fw-bold">Approval</h4>
         </div>

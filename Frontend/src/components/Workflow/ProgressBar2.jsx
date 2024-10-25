@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ESignatureModal from "./ESignature/ESignatureModal";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import ToastContainer from "../HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 
 // Updated base stages to include only the specified stages
 const baseStages = ["Opened", "Pending Qualification", "Closed Done"];
@@ -26,11 +27,14 @@ export const ProgressBar2 = (props) => {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = (formData) => {
-    setIsModalOpen(false);
-    callApis(formData, sampleId);
+  const handleSubmit = async (formData) => {
+    const isSuccess = await callApis(formData, sampleId);
+    if (isSuccess) {
+      setIsModalOpen(false);
+    } else {
+      setIsModalOpen(true);
+    }
   };
-
   const handleOpen = (url) => {
     setUrl(url);
     setIsModalOpen(true);
@@ -41,14 +45,13 @@ export const ProgressBar2 = (props) => {
       const email = formData.username.trim();
       const password = formData.password.trim();
       const comment = formData.comment.trim();
-
-      // Check for empty fields
-      if (!email || !password || !comment || !analystId) {
-        toast.error("Please fill in all required fields!");
-        return;
+  
+      // Check if email and password are provided
+      if (!email || !password) {
+        toast.error("All fields are required!");
+        return false;
       }
-
-      const response = await axios.post(
+        const response = await axios.post(
         "http://localhost:9000/e-signature",
         { email, password },
         {
@@ -57,10 +60,8 @@ export const ProgressBar2 = (props) => {
           },
         }
       );
-
+  
       if (!response.data.error) {
-        console.log(analystId, "AAAAAAAAAAAAAAAAAAAA");
-
         await axios.post(
           `http://localhost:9000/analyst/${url}`,
           { analystId, comment },
@@ -70,16 +71,24 @@ export const ProgressBar2 = (props) => {
             },
           }
         );
+  
+        toast.success("Review Submitted!");
+        onStageClick();
+        return true;
+      } else {
+        toast.error("Incorrect email or password. Please try again.");
+        return false;
       }
-      onStageClick();
     } catch (error) {
-      console.error("API error:", error);
-      toast.error(error.response.data.message);
+      // console.error("API error:", error);
+      toast.error(error.response?.data?.message || "Error during request");
+      return false;
     }
   };
-
+  
   return (
     <>
+    <div><ToastContainer/></div>
       <ESignatureModal
         open={isModalOpen}
         handleClose={handleClose}
@@ -142,13 +151,13 @@ export const ProgressBar2 = (props) => {
   );
 };
 
+
 const baseStages2 = [
   "Opened",
   "Pending Inspection of Control Sample",
   "Pending Destruction",
   "Closed Done",
 ];
-
 export const ProgressBar3 = (props) => {
   const navigate = useNavigate();
   const { stage = 1, sampleId = 1, onStageClick } = props;
@@ -166,9 +175,13 @@ export const ProgressBar3 = (props) => {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = (formData) => {
-    setIsModalOpen(false);
-    callApis(formData, sampleId);
+  const handleSubmit = async (formData) => {
+    const isSuccess = await callApis(formData, sampleId);
+    if (isSuccess) {
+      setIsModalOpen(false);
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   const handleOpen = (url) => {
@@ -180,9 +193,13 @@ export const ProgressBar3 = (props) => {
 
   const callApis = async (formData, controlSampleId) => {
     try {
-      const email = formData.username;
-      const password = formData.password;
-      const comment = formData.comment;
+      const email = formData.username.trim();
+      const password = formData.password.trim();
+      const comment = formData.comment.trim();
+      if (!email || !password) {
+        toast.error("All fields are required!");
+        return false;
+      }
 
       const response = await axios.post(
         "http://localhost:9000/e-signature",
@@ -204,15 +221,22 @@ export const ProgressBar3 = (props) => {
             },
           }
         );
+        toast.success("Review Submitted!");
+        onStageClick();
+        return true;
+      }else {
+        toast.error("Incorrect email or password. Please try again.");
+        return false;
       }
-      onStageClick();
-    } catch (error) {
-      console.error("API error:", error);
+    }catch (error) {
+      toast.error(error.response?.data?.message || "Error during request");
+      return false;
     }
   };
 
   return (
     <>
+        <div><ToastContainer/></div>
       <ESignatureModal
         open={isModalOpen}
         handleClose={handleClose}
